@@ -724,7 +724,7 @@ type RequestData: string;
 - 없음
 ### users
 - 접속 상태인 유저 목록을 불러옵니다.
-- `usert-to-client`로 데이터를 받을 수 있습니다.
+- `users-to-client`로 데이터를 받을 수 있습니다.
 
 요청 데이터
 - 없음 
