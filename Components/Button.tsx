@@ -14,7 +14,14 @@ const HomeButton = ({ buttonName }: ButtonProps) => {
 		setCount(count + 1);
 	};
 
-	return <Button className=" bg-primary">{buttonName}</Button>;
+	return (
+		<Button
+			className=" bg-primary"
+			onClick={handleClick}
+		>
+			{buttonName}
+		</Button>
+	);
 };
 
 export default HomeButton;
