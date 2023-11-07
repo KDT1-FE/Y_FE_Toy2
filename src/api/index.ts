@@ -26,3 +26,23 @@ export const signup = async (
     console.log(error);
   }
 };
+
+export const login = async (id: string, password: string) => {
+  const authData = {
+    id,
+    password,
+  };
+  try {
+    const response = await axios.post(`${SERVER_URL}/login`, authData, {
+      headers: {
+        'content-type': CONTENT_TYPE,
+        serverId: SERVER_ID,
+      },
+    });
+    const { accessToken } = response.data;
+    localStorage.setItem('jwt', accessToken);
+    console.log('Login successful');
+  } catch (error) {
+    console.error('Login failed:', error);
+  }
+};
