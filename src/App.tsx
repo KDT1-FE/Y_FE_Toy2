@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import PageNotFound from "./PageNotFound";
+import PageNotFound from "./components/PageNotFound";
 import styled from "styled-components";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
