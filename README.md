@@ -101,7 +101,8 @@ interface Message {
 사용자가 `id`에 종속되어 회원가입합니다.
 
 - 사용자 비밀번호는 암호화해 저장합니다.
-- 프로필 이미지는 url 형식이어야 합니다.
+- 프로필 이미지는 url or base64 형식이어야 합니다.
+- 프로필 이미지는 1MB 이하여야 합니다.
 
 ```curl
 curl https://fastcampus-chat.net/signup
@@ -115,7 +116,7 @@ interface RequestBody {
   id: string // 사용자 아이디 (필수!, 영어만)
   password: string // 사용자 비밀번호, 5자 이상 (필수!)
   name: string // 사용자 이름, 20자 이하 (필수!)
-  picture?: string // 사용자 이미지(url)
+  picture?: string // 사용자 이미지(url or base64, under 1MB)
 }
 ```
 
@@ -221,6 +222,9 @@ interface ResponseValue {
 
 ### 사용자 정보 수정
 
+- 프로필 이미지는 url or base64 형식이어야 합니다.
+- 프로필 이미지는 1MB 이하여야 합니다.
+
 ```curl
 curl https://fastcampus-chat.net/user
   \ -X 'PATCH'
@@ -232,7 +236,7 @@ curl https://fastcampus-chat.net/user
 ```ts
 interface RequestBody {
   name?: string // 새로운 표시 이름
-  picture?: string // 사용자 프로필 이미지(url)
+  picture?: string // 사용자 프로필 이미지(url or base64)
 }
 ```
 
