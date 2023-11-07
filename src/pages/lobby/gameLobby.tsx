@@ -1,4 +1,3 @@
-import React from 'react';
 import { getAllUsers } from '../../api/index';
 const GameLobby = () => {
   const token: string | null = localStorage.getItem('jwt');
