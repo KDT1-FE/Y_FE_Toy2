@@ -1,18 +1,25 @@
 import React from 'react';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import Layout from './components/common/Layout';
+import Auth from './components/auth';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edited <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route element={<Layout />}>
+        {/* 상원님 부분 */}
+        <Route path="/game" />
+        {/* 은지님 부분 */}
+        <Route path="/mypage" />
+        {/* 홍규님 부분 */}
+        <Route path="chat" />
+        {/* 성겸 부분 */}
+        <Route index element={<Auth />} />
+      </Route>
+
+      
+    </Routes>
   );
 }
 
