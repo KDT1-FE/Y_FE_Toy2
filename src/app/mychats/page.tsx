@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { BsSearch } from 'react-icons/bs';
 import { BiSolidMessageRoundedAdd } from 'react-icons/bi';
 import SearchMyChat from '@/components/mychats/SearchMyChat';
+import AddChat from '../../../public/assets/addChat.svg';
 
 const MyChats = () => {
     return (
@@ -57,10 +58,10 @@ const SearchIcon = styled(BsSearch)`
     height: 26px;
 `;
 
-const AddChatIcon = styled(BiSolidMessageRoundedAdd)`
+const AddChatIcon = styled(AddChat)`
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    /* width: 30px;
+    height: 30px; */
 `;
 
 const ChatContainer = styled.div`
