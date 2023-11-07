@@ -1,6 +1,6 @@
 # FastMind
 
-[![Deployment](https://img.shields.io/badge/deploy-배포링크-38B2AC.svg)](https://example.com)
+[![Deployment](https://img.shields.io/badge/deploy-배포링크-38B2AC.svg)](https://fastmind.vercel.app/)
 
 ### 0️⃣ Git convention
 
