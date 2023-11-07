@@ -1,3 +1,5 @@
+import { Routes, Route } from "react-router-dom";
+import PageNotFound from "./components/PageNotFound";
 import styled from "styled-components";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -5,15 +7,23 @@ import { Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <Wrapper>
-      <Header />
-      <MainBanner>
-        <h2>메인 배너</h2>
-      </MainBanner>
-      <MainContent />
-      <Outlet />
-      <Footer />
-    </Wrapper>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Wrapper>
+            <Header />
+            <MainBanner>
+              <h2>메인 배너</h2>
+            </MainBanner>
+            <MainContent />
+            <Outlet />
+            <Footer />
+          </Wrapper>
+        }
+      />
+      <Route path="*" element={<PageNotFound></PageNotFound>} />
+    </Routes>
   );
 }
 
