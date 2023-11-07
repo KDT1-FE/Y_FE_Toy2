@@ -15,10 +15,7 @@ const HomeButton = ({ buttonName }: ButtonProps) => {
 	};
 
 	return (
-		<Button
-			className=" bg-primary"
-			onClick={handleClick}
-		>
+		<Button className=" bg-primary" onClick={handleClick}>
 			{buttonName}
 		</Button>
 	);
