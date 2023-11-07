@@ -4,10 +4,10 @@ import { theme } from "./theme";
 interface ButtonStyleProps {
   backgroundColor: "red" | "white";
   size: "s" | "m" | "l";
-  text: string;
+  children?: React.ReactNode;
 }
 
-const ButtonStyleComponents = styled.button<ButtonStyleProps>`
+const StyledButton = styled.button<ButtonStyleProps>`
   width: ${(props) => {
     switch (props.size) {
       case "s":
@@ -42,7 +42,8 @@ const ButtonStyleComponents = styled.button<ButtonStyleProps>`
   background-color: ${(props) =>
     props.backgroundColor === "red" ? theme.mainColor : "#FFF"};
   color: ${(props) => (props.backgroundColor === "red" ? "#fff" : "#383535")};
-  font-size: ${(props) => {
+  font-size: 16px;
+  font-weight: ${(props) => {
     switch (props.size) {
       case "s":
         return "400";
@@ -52,7 +53,6 @@ const ButtonStyleComponents = styled.button<ButtonStyleProps>`
         return "700";
     }
   }};
-  font-weight: bold;
 
   cursor: pointer;
   transition: background-color 0.3s;
@@ -61,9 +61,6 @@ const ButtonStyleComponents = styled.button<ButtonStyleProps>`
       props.backgroundColor === "red" ? "#fc2520" : "#F5F5F5"};
   }
 `;
+StyledButton.shouldForwardProp = (prop) => prop !== "backgroundColor";
 
-function ButtonStyle(props: ButtonStyleProps) {
-  return <ButtonStyleComponents {...props}>{props.text}</ButtonStyleComponents>;
-}
-
-export default ButtonStyle;
+export default StyledButton;
