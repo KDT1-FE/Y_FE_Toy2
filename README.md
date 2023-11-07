@@ -807,3 +807,44 @@ interface ResponseData {
   user: string[]; // 참가자들 id
 }
 ```
+
+## server 연결
+```ts
+socket.on(`https://fastcampus-chat.net/server`,
+  {
+    extraHeaders: {
+      Authorization: "Bearer <accessToken>",
+      serverId: "test",
+    },
+  })
+```
+
+## emit Event(client -> server)
+### example
+```ts
+socket.emit('users-server')
+```
+### users-server
+- 같은 방에 있는 사람들에게 메세지를 전달합니다.
+- `users-server-to-client`로 데이터를 받을 수 있습니다.
+
+요청 데이터
+- 없음
+
+## on Event(server -> client)
+### example
+```ts
+socket.on('message-to-client', (messageObject) => {
+  console.log(messageObject);
+})
+```
+
+### users-server-to-client
+- 접속 상태인 유저 목록을 불러옵니다.
+
+응답 데이터
+```ts
+interface ResponseData {
+  user: string[]; // 참가자들 id
+}
+```
