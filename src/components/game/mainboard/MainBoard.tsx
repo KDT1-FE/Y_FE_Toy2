@@ -16,7 +16,7 @@ export default function MainBoard() {
     <MainWrapper>
       <SearchButton
         onClick={() => {
-          search('red');
+          search('second');
         }}
       >
         search

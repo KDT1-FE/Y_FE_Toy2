@@ -15,7 +15,11 @@ const search = async (word: string) => {
         },
       })
       .then((res) => {
-        console.log(res);
+        if (res.data.items.length > 0) {
+          console.log(res.data.items[0].title);
+        } else {
+          console.log('해당 단어는 존재하지 않습니다!');
+        }
       });
   } catch (error) {
     console.log(error);
