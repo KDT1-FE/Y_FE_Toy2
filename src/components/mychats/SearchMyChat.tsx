@@ -19,8 +19,11 @@ const Wrapper = styled.div`
 `;
 
 const SearchItem = styled.input`
-    border: 1px solid black;
-    border-radius: 1rem;
     width: 80vw;
-    padding: 0.5rem 0.5rem;
+    height: 3rem;
+    border: none;
+    padding: 0.5rem 0.7rem;
+    background: #fffefe;
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
 `;

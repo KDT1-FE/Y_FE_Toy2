@@ -3,11 +3,10 @@
 import MyChatItem from '@/components/mychats/MyChatItem';
 import React from 'react';
 import styled from 'styled-components';
-import { BsSearch } from 'react-icons/bs';
-import { BiSolidMessageRoundedAdd } from 'react-icons/bi';
 import SearchMyChat from '@/components/mychats/SearchMyChat';
+// svg 가져오기
 import AddChat from '../../../public/assets/addChat.svg';
-
+import Search from '../../../public/assets/search.svg';
 const MyChats = () => {
     return (
         <Wrapper>
@@ -20,7 +19,7 @@ const MyChats = () => {
             </Header>
             <ChatContainer>
                 <SearchMyChat />
-                <div>하이</div>
+                <MyChatItem />
             </ChatContainer>
         </Wrapper>
     );
@@ -52,16 +51,12 @@ const IconBar = styled.div`
     display: flex;
     gap: 1.5rem;
 `;
-const SearchIcon = styled(BsSearch)`
+const SearchIcon = styled(Search)`
     cursor: pointer;
-    width: 26px;
-    height: 26px;
 `;
 
 const AddChatIcon = styled(AddChat)`
     cursor: pointer;
-    /* width: 30px;
-    height: 30px; */
 `;
 
 const ChatContainer = styled.div`

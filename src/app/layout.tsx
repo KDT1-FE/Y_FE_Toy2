@@ -2,13 +2,17 @@
 
 import styled from 'styled-components';
 import StyledComponentsRegistry from '../lib/registry';
+import Navigation from '@/components/Navigation';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
             <StyledComponentsRegistry>
                 <Body>
-                    <Container>{children}</Container>
+                    <Container>
+                        {children}
+                        <Navigation />
+                    </Container>
                 </Body>
             </StyledComponentsRegistry>
         </html>
