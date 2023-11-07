@@ -1,63 +1,33 @@
 import axios from 'axios';
-import { SERVER_URL, CONTENT_TYPE, SERVER_ID } from '../constant';
+import { CONTENT_TYPE, SERVER_ID, SERVER_URL } from '../constant';
+import { JoinData } from '../interfaces/interface';
 
-export const signup = async (
-  id: string,
-  password: string,
-  name: string,
-  picture?: string,
-) => {
-  const authData = {
-    id,
-    password,
-    name,
-    picture,
-  };
-  console.log(authData);
+const client = axios.create({
+  baseURL: SERVER_URL,
+  headers: {
+    'content-type': CONTENT_TYPE,
+    serverId: SERVER_ID,
+  },
+});
 
-  try {
-    return await axios.post(`${SERVER_URL}/signup`, authData, {
-      headers: {
-        'content-type': CONTENT_TYPE,
-        serverId: SERVER_ID,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
+export const postLogin = async (id: string, password: string) => {
+  const res = await client.post('/login', {
+    id: id,
+    password: password,
+  });
+  return res;
 };
 
-export const login = async (id: string, password: string) => {
-  const authData = {
-    id,
-    password,
-  };
-  try {
-    const response = await axios.post(`${SERVER_URL}/login`, authData, {
-      headers: {
-        'content-type': CONTENT_TYPE,
-        serverId: SERVER_ID,
-      },
-    });
-    const { accessToken } = response.data;
-    localStorage.setItem('jwt', accessToken);
-    console.log('Login successful');
-  } catch (error) {
-    console.error('Login failed:', error);
-  }
+export const postJoin = async (joinData: JoinData) => {
+  const res = await client.post('/signup', joinData);
+  return res;
 };
 
 export const getAllUsers = async (accessToken: string) => {
-  try {
-    const response = await axios.get(`${SERVER_URL}/users`, {
-      headers: {
-        'content-type': CONTENT_TYPE,
-        serverId: SERVER_ID,
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    console.log(response.data);
-  } catch (error) {
-    console.log(error);
-  }
+  const res = await client.get('/users', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return res;
 };
