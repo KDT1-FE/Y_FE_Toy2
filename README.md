@@ -319,18 +319,7 @@ interface RequestBody{
 ```json
 {
   "name": "test chat",
-  "users": [
-    {
-      "id": "user1",
-      "name": "lgh",
-      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-    },
-    {
-      "id": "user2",
-      "name": "ldj",
-      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-    }
-  ],
+  "users": ["user1", "user2"]
 }
 ```
 
