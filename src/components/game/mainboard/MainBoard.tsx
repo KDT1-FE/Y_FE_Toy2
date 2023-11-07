@@ -1,26 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import search from './searchWord';
+import InputWord from './InputWord';
 
 const MainWrapper = styled.div`
   flex: 2;
 `;
-const SearchButton = styled.button`
-  width: 150px;
-  height: 100px;
-  background-color: red;
-`;
 
 export default function MainBoard() {
+  const [words, setWords] = useState<string[] | []>([]);
   return (
     <MainWrapper>
-      <SearchButton
-        onClick={() => {
-          search('second');
-        }}
-      >
-        search
-      </SearchButton>
+      {words.length !== 0 ? words.map((e) => <h2>{e}</h2>) : <h2>없음</h2>}
+      <InputWord setWords={setWords} words={words} />
     </MainWrapper>
   );
 }
