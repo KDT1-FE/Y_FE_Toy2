@@ -13,7 +13,7 @@ function requestInterceptor(config: AxiosRequestConfig): any {
             ...config,
             headers: {
                 'content-type': 'application/json',
-                serverId: `${process.env.API_SERVER_KEY}`,
+                serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
                 Authorization: `Bearer ${accessToken}`,
             },
         };
@@ -22,7 +22,7 @@ function requestInterceptor(config: AxiosRequestConfig): any {
             ...config,
             headers: {
                 'content-type': 'application/json',
-                serverId: `${process.env.API_SERVER_KEY}`,
+                serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
             },
         };
     }
