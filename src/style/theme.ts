@@ -15,5 +15,6 @@ export const theme = {
   secondColor: "#FF8A7A",
   whiteColor: "#FEEBEA",
   blackColor: "#383535",
-  grayColor: "#999696"
+  grayColor: "#999696",
+  asdColor: "#222222"
 };
