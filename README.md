@@ -706,7 +706,13 @@ interface User {
 - Socket 연결시에도 headers는 유지해야 합니다.
 ## 기본 연결
 ```ts
-socket.on(`https://fastcampus-chat.net/chat?chatId=${chatId}`)
+socket.on(`https://fastcampus-chat.net/chat?chatId=${chatId}`,
+  {
+    extraHeaders: {
+      Authorization: "Bearer <accessToken>",
+      serverId: "test",
+    },
+  })
 ```
 
 ## emit Event(client -> server)
