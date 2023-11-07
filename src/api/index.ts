@@ -46,3 +46,18 @@ export const login = async (id: string, password: string) => {
     console.error('Login failed:', error);
   }
 };
+
+export const getAllUsers = async (accessToken: string) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/users`, {
+      headers: {
+        'content-type': CONTENT_TYPE,
+        serverId: SERVER_ID,
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
