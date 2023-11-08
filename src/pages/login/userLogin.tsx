@@ -4,7 +4,6 @@ import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   Center,
   Flex,
-  Img,
   FormControl,
   FormLabel,
   Link,
@@ -43,56 +42,39 @@ const UserLogin = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Center flexDirection={'column'}>
-        <Box>
-          <Img
-            height={'250px'}
-            marginBottom={'10px'}
-            src="/main.webp"
-            alt="mainImg"
-          />
-        </Box>
-        <Box flexDirection={'column'} textAlign={'center'} margin={'auto'}>
-          <form onSubmit={handleLoginSubmit}>
-            <FormControl
-              display={'flex'}
-              flexDirection={'column'}
-              alignItems={'center'}>
-              <Box>
-                <FormLabel width={250} marginTop={10}>
-                  아이디
-                </FormLabel>
-                <Input
-                  marginBottom={5}
-                  placeholder="아이디를 입력해주세요"
-                  type="text"
-                  value={id}
-                  onChange={(e) => setId(e.target.value)}
-                />
-              </Box>
-              <Box>
-                <FormLabel width={250}>비밀번호</FormLabel>
-                <Input
-                  marginBottom={10}
-                  placeholder="비밀번호를 입력해주세요"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Box>
-              <Button
-                width={350}
-                marginBottom={20}
-                height={50}
-                type="submit"
-                colorScheme="teal"
-                size="lg"
-                isDisabled={!id || !password}>
-                로그인
-              </Button>
-            </FormControl>
-          </form>
-        </Box>
+      <Center flexDirection={'column'} alignItems={'center'} marginTop={10}>
+        <form onSubmit={handleLoginSubmit}>
+          <FormControl width={250} margin={'auto'}>
+            <FormLabel>아이디</FormLabel>
+            <Input
+              marginBottom={5}
+              placeholder="아이디를 입력해주세요"
+              type="text"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+            />
+          </FormControl>
+          <FormControl width={250} margin={'auto'}>
+            <FormLabel>비밀번호</FormLabel>
+            <Input
+              marginBottom={10}
+              placeholder="비밀번호를 입력해주세요"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormControl>
+          <Button
+            width={350}
+            marginBottom={20}
+            height={50}
+            type="submit"
+            colorScheme="teal"
+            size="lg"
+            isDisabled={!id || !password}>
+            로그인
+          </Button>
+        </form>
 
         <Flex justifyContent={'center'} gap="10px" padding="10">
           <Link as={ReactRouterLink} to="join" marginRight={2}>
