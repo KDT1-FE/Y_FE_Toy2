@@ -24,7 +24,7 @@ export const postJoin = async (joinData: JoinData) => {
 };
 
 export const getAllUsers = async (accessToken: string) => {
-  const res = await client.get('/users', {
+  const res = await client.get('users', {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

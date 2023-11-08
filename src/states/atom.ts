@@ -12,5 +12,5 @@ export const allRoomState = atom<any[]>({
 
 export const onlineUserState = atom<any>({
   key: 'onlineUserState',
-  default: null,
+  default: [],
 });

@@ -12,12 +12,11 @@ export const loginSocket = (accessToken: string) => {
     socket.emit('users-server');
   });
   socket.on('users-server-to-client', (data) => {
-    // console.log('Received users from server:', data);
+    console.log('Received users from server:', data);
   });
 
-  // 'message-to-client' 이벤트 핸들러 추가
   socket.on('message-to-client', (messageObject) => {
-    // console.log('Received message from server:', messageObject);
+    const usersArr = messageObject.users;
   });
 
   return socket;
