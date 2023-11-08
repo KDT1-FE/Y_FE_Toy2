@@ -3,7 +3,7 @@ import SignUpInput from "../SignUpInput/SignUpInput";
 import { useEffect, useState } from "react";
 import FormInputBtn from "../FormInputBtn/FormInputBtn";
 import Loader from "../Loader/Loader";
-import { postSignUp } from "../../utils/postSignUp";
+import { postSignUp } from "../../utils/SignUp/postSignUp";
 
 const initialErrorData = {
   id: "",

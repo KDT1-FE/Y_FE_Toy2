@@ -1,12 +1,7 @@
-import { apiHeader } from "./apiHeader";
+import { postApi } from "../postApi";
 
 export const postSignUp = (requestBody: {}, loading: void) => {
-  fetch("https://fastcampus-chat.net/signp", {
-    method: "POST",
-    headers: apiHeader,
-    body: JSON.stringify(requestBody)
-  })
-    .then((response) => response.json())
+  postApi("https://fastcampus-chat.net/signp", requestBody)
     .then((data) => {
       if (data.message === "User created") {
         console.log("회원가입 성공");

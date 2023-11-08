@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { apiHeader } from "../../utils/apiHeader";
+import { postApi } from "../../utils/postApi";
 
 const ID_REGEX = new RegExp("^[A-Za-z0-9]{5,20}$"); // 5~20글자 영문자만 입력 가능
 const PW_REGEX = new RegExp("^[A-Za-z0-9]{8,16}$"); // 8~16글자 영문자, 숫자만 입력 가능
@@ -27,29 +27,36 @@ function SignUpInput({
 }: FormInputProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  let result: string | true;
   const checkRegex = (inputId: keyof ErrorData) => {
+    let result: string | true;
+
     const value = formData[inputId];
+
     if (value.length === 0) {
       result = "required";
     } else {
       switch (inputId) {
         case "id":
-          result = ID_REGEX.test(value) ? "passed" : "invalidId";
+          result = validateInput(ID_REGEX, value, "invalidId");
           break;
+
         case "name":
-          result = NAME_REGEX.test(value) ? "passed" : "invalidName";
+          result = validateInput(NAME_REGEX, value, "invalidName");
           break;
+
         case "password":
-          result = PW_REGEX.test(value) ? "passed" : "invalidPw";
+          result = validateInput(PW_REGEX, value, "invalidPw");
           checkRegex("confirmPw");
           break;
+
         case "confirmPw":
-          result =
-            value === formData["password"] && PW_REGEX.test(value)
-              ? "passed"
-              : "invalidPwCheck";
+          result = validateConfirmPw(
+            value,
+            formData["password"],
+            "invalidPwCheck"
+          );
           break;
+
         default:
           return;
       }
@@ -61,16 +68,23 @@ function SignUpInput({
     }));
   };
 
+  const validateInput = (regex: RegExp, value: string, errorType: string) => {
+    return regex.test(value) ? "passed" : errorType;
+  };
+
+  const validateConfirmPw = (
+    value: string,
+    password: string,
+    errorType: string
+  ) => {
+    return value === password && PW_REGEX.test(value) ? "passed" : errorType;
+  };
+
   const checkDuplicateId = async (inputId: keyof ErrorData) => {
     if (inputId === "id") {
       const { id } = formData;
       const requestBody = { id };
-      fetch("https://fastcampus-chat.net/check/id", {
-        method: "POST",
-        headers: apiHeader,
-        body: JSON.stringify(requestBody)
-      })
-        .then((response) => response.json())
+      postApi("https://fastcampus-chat.net/check/id", requestBody)
         .then((data) => {
           if (data.isDuplicated) {
             setErrorData((prev) => ({
