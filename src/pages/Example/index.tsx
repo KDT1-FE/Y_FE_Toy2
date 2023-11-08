@@ -5,7 +5,7 @@ import useFetch from "../../hooks/useFetch";
 
 const Example = () => {
   const fireFetch = useFireFetch();
-  const notice = fireFetch.getAll("notice");
+  const notice = fireFetch.useGetAll("notice");
   const [result, loading, statusCode] = useFetch({
     url: "https://fastcampus-chat.net/users",
     method: "GET",
@@ -20,7 +20,7 @@ const Example = () => {
   };
 
   const postData = () => {
-    fireFetch.postData("notice", noticeData.id, noticeData, () => {
+    fireFetch.usePostData("notice", noticeData.id, noticeData, () => {
       const copy = [...notice.data];
       copy.push(noticeData);
       notice.setData(copy);

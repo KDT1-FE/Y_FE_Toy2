@@ -31,7 +31,7 @@ interface Victory {
 }
 
 const useFireFetch = () => {
-  const getAll = (
+  const useGetAll = (
     initialCollection: string,
     order: OrderByDirection = "desc",
     callback: (() => void) | null = null,
@@ -70,7 +70,7 @@ const useFireFetch = () => {
     return { data, setData };
   };
 
-  const getSome = (
+  const useGetSome = (
     initialCollection: string,
     key: string,
     value: string,
@@ -115,7 +115,7 @@ const useFireFetch = () => {
     return { data, setData };
   };
 
-  const postData = (
+  const usePostData = (
     initialCollection: string,
     id: string,
     data: Notice | Victory,
@@ -176,7 +176,7 @@ const useFireFetch = () => {
     update();
   };
 
-  return { getAll, getSome, postData, deleteById, updateData };
+  return { useGetAll, useGetSome, usePostData, deleteById, updateData };
 };
 
 export default useFireFetch;
