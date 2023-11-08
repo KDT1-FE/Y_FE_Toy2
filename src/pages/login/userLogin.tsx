@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/index';
-const userLogin = () => {
+import { socketLogin } from '../../api/socket';
+
+const UserLogin = () => {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const token: any = localStorage.getItem('jwt');
 
   const onChangeId = (e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
   };
+
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
@@ -16,7 +20,7 @@ const userLogin = () => {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const check = await login(id, password);
-    if (check !== undefined) {
+    if (check === undefined) {
       alert('아이디나 비밀번호 다시 쳐주세요');
     } else {
       alert('로그인 성공.');
@@ -55,4 +59,4 @@ const userLogin = () => {
   );
 };
 
-export default userLogin;
+export default UserLogin;
