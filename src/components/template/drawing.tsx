@@ -7,6 +7,7 @@ const Drawing = () => {
     { x: number; y: number } | undefined
   >(undefined);
   const [color, setColor] = useState('black');
+  const [lineWidth, setLineWidth] = useState(4);
 
   const canvasRef = useRef<HTMLCanvasElement>(null); // 캔버스 (도화지)
   const contextRef = useRef<CanvasRenderingContext2D | null>(null); // 그림 (내용)
@@ -22,18 +23,25 @@ const Drawing = () => {
       canvas.style.height = `500px`;
       canvas.style.backgroundColor = `skyblue`;
 
+      // 그리기
       const ctx = canvas.getContext('2d');
       ctx!.scale(1, 1);
       ctx!.lineCap = 'round';
-      ctx!.lineWidth = 4;
+      ctx!.lineWidth = lineWidth;
       contextRef.current = ctx;
     }
 
+    // 색상 변경
     const ctx = contextRef.current; // context Ref
     if (ctx) {
       ctx.strokeStyle = color;
     }
-  }, [color]);
+
+    // 굵기 변경
+    if (canvas && ctx) {
+      ctx.lineWidth = lineWidth;
+    }
+  }, [color, lineWidth]);
 
   /// 색상 변경 함수 (여기에 부분 지우개 배경색으로 넣음)
   const changeColor = (newColor: string) => {
@@ -48,6 +56,8 @@ const Drawing = () => {
     ctx!.fillStyle = 'skyblue';
     ctx!.fillRect(0, 0, 500, 500);
   };
+
+  /// 굵기 변경 함수
 
   /// 마우스 이동 감지 + 그리는 역할
   const getDrawing = (
@@ -131,10 +141,19 @@ const Drawing = () => {
         <button onClick={() => changeColor('skyblue')}>Erase</button>
 
         <button onClick={() => EraseAll()}>EraseAll</button>
+
+        <input
+          onChange={(e) => setLineWidth(Number(e.target.value))}
+          type="range"
+          min="2"
+          max="6"
+          step="0.1"
+          value={lineWidth}
+        />
       </div>
     </>
   );
-  // addEventListener를 포함한 useEffect를 제거하고 이렇게 간략화했습니닷.
+  // addEventListener를 포함한 useEffect를 제거하고 이렇게 간략화했습니다
 };
 
 export default Drawing;
