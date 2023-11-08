@@ -2,48 +2,29 @@ import CreateGameRoom from '../../components/layout/createGameRoom';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
 // import OnlineUserList from '../../components/layout/onineUserList';
 // import UserList from '../../components/layout/userList';
+import { getAllUsers } from '../../api';
+import { Button } from '@chakra-ui/react';
+import { useRecoilValue } from 'recoil';
+import { accessTokenState } from '../../states/atom';
+
 const GameLobby = () => {
+  const accessToken = useRecoilValue(accessTokenState);
+
   const handleGetAllUsers = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('jwt');
-    if (!token) {
-      alert('인증 토큰이 없습니다. 로그인이 필요합니다.');
-      return;
-    }
-
     try {
-      // 닉네임 중복 핸들링 로직 필요
-      const res = await getAllUsers(token);
-      console.log(res.data);
-      alert('성공');
-    } catch (e: any) {
-      console.error('에러:', e.response || e);
-      alert('에러 발생');
+      const res = await getAllUsers(accessToken);
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+      alert('사용자 정보를 가져오는데 실패했습니다.');
     }
   };
 
-  // const [allUsers, setAllUsers] = useRecoilState(allUserState);
-  // const [allRooms, setAllRooms] = useRecoilState(allRoomState);
-  // const token: any = localStorage.getItem('jwt');
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const allUsersData = await getAllUsers(token);
-  //       setAllUsers(allUsersData);
-  //       const allRoomsData = await getAllGameRooms(token);
-  //       setAllRooms(allRoomsData.chats);
-  //     } catch (error) {
-  //       console.error('데이터 가져오기 오류:', error);
-  //     }
-  //   }
-
-
-  //   fetchData();
-  // }, []);
   return (
     <>
+      <Button onClick={handleGetAllUsers}>모든유저보기</Button>
       {/* <UserList></UserList> */}
       <br></br>
       {/* <OnlineUserList /> */}

@@ -4,7 +4,6 @@ import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   Center,
   Flex,
-  Img,
   FormControl,
   FormLabel,
   Link,
@@ -12,7 +11,8 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react';
-
+import { useSetRecoilState } from 'recoil';
+import { accessTokenState } from '../../states/atom';
 import { postLogin } from '../../api/index';
 
 const UserLogin = () => {
@@ -20,18 +20,27 @@ const UserLogin = () => {
 
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const token: any = localStorage.getItem('jwt');
+  const setAccessToken = useSetRecoilState(accessTokenState);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const res = await postLogin(id, password);
       const { accessToken, refreshToken } = res.data;
-      localStorage.setItem('accessToken', accessToken);
+      setAccessToken(accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
       alert('로그인에 성공했습니다.');
       navigate('/lobby');
-    } catch {
-      console.log('에러');
+    } catch (e: any) {
+      console.log(e.message);
+      if (e.message === 'Request failed with status code 401') {
+        alert('비밀번호를 일치하지않습니다.');
+      } else if (e.message === 'Request failed with status code 400') {
+        alert('일치하는 아이디가 없습니다.');
+      } else {
+        alert(`로그인에 실패했습니다. 오류코드: ${e.message}`);
+      }
     }
   };
 
@@ -44,14 +53,7 @@ const UserLogin = () => {
         alignItems: 'center',
       }}>
       <Center flexDirection={'column'}>
-        <Box>
-          <Img
-            height={'250px'}
-            marginBottom={'10px'}
-            src="/main.webp"
-            alt="mainImg"
-          />
-        </Box>
+        <Box></Box>
         <Box flexDirection={'column'} textAlign={'center'} margin={'auto'}>
           <form onSubmit={handleLoginSubmit}>
             <FormControl
