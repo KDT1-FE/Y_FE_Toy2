@@ -15,7 +15,6 @@ import {
 
 import { postLogin } from '../../api/index';
 
-
 const UserLogin = () => {
   const navigate = useNavigate();
 
@@ -30,7 +29,11 @@ const UserLogin = () => {
       const { accessToken, refreshToken } = res.data;
       localStorage.setItem('accessToken', accessToken);
       alert('로그인에 성공했습니다.');
-
+      navigate('/lobby');
+    } catch {
+      console.log('에러');
+    }
+  };
 
   return (
     <div

@@ -9,8 +9,8 @@ function App() {
     <ChakraProvider>
       <RecoilRoot>
         <BrowserRouter>
-          <LoginRouter />
           <MainRouter />
+          <LoginRouter />
         </BrowserRouter>
       </RecoilRoot>
     </ChakraProvider>
