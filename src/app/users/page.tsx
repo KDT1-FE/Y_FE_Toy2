@@ -37,7 +37,9 @@ export default function Users() {
             <UserList>
                 {users &&
                     users.map((user: User) => {
-                        return <UserItem key={user.id} user={user} />;
+                        if (user.id !== sessionStorage.getItem('userId')) {
+                            return <UserItem key={user.id} user={user} />;
+                        }
                     })}
             </UserList>
         </UsersWrap>
