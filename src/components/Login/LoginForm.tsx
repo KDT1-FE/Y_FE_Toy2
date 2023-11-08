@@ -30,10 +30,13 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const res = await instance.post('login', formData);
-            // 로그인 검증
-            setCheckLogin(Object.keys(res).includes('accessToken'));
-            if (checkLogin) sessionStorage.setItem('userId', formData.id);
-            router.push('/');
+            // 로그인 검증(userId => sessionStorage)
+            const isLoggedIn = Object.keys(res).includes('accessToken');
+            setCheckLogin(isLoggedIn);
+            if (isLoggedIn) {
+                sessionStorage.setItem('userId', formData.id);
+                router.push('/');
+            }
         } catch (e) {
             console.error(e);
         }

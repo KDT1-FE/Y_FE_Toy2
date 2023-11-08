@@ -123,7 +123,7 @@ export default function Chating() {
                 'content-type': 'application/json',
                 serverId: '53b9f98a',
                 Authorization:
-                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzYjlmOThhOnRlc3QxMCIsImlhdCI6MTY5OTI4NDYzNSwiZXhwIjoxNjk5ODg5NDM1fQ.DWlYHCXfZd8UEBP2z-Xqlvzvx1cjYYlW_TAcPyPjfAA',
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzYjlmOThhOnRlc3QxMiIsImlhdCI6MTY5OTQ1ODk1OCwiZXhwIjoxNzAwMDYzNzU4fQ.En3l3DmwuobExOdcMvcdR738CSQEbYz0qFm11IQBAZ4',
             },
         });
         const data = await response.json();

@@ -2,16 +2,17 @@
 
 import styled from 'styled-components';
 import React, { useState } from 'react';
-import { socket } from '@/api/socketIo';
 
-export default function MessageContainer() {
+export default function MessageContainer(props: any) {
     const [message, setMessage] = useState<string>('');
 
     function MessageSend(e: any) {
         e.preventDefault();
 
-        socket.emit('message-to-server', message);
-        setMessage('');
+        if (message != '') {
+            props.socket.emit('message-to-server', message);
+            setMessage('');
+        }
     }
 
     return (
