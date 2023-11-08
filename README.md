@@ -262,6 +262,40 @@ interface ResponseValue {
 ```
 
 ## 채팅
+### 특정 유저 조회
+- 특정 유저를 조회합니다.
+```curl
+curl https://fastcampus-chat.net/user?userId=${userId}
+  \ -X 'GET'
+  \ -H 'Authorization: Bearer <accessToken>'
+```
+요청 데이터 타입 및 예시:
+- 없음
+- 조회하고 싶은 id는 query string으로 사용합니다.
+
+응답 데이터 타입 및 예시:
+```ts
+type ResponseValue = {
+  user: User;
+}
+
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+```
+
+```json
+{
+  "user": {
+    "id": "user1",
+    "name": "lgh",
+    "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
+  }
+}
+```
+
 ### 모든 유저 조회
 - 현재 존재하는 모든 유저를 조회합니다.
 ```curl
