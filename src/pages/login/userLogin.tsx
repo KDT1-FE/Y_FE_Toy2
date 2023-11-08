@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   Center,
@@ -14,11 +15,13 @@ import {
 
 import { postLogin } from '../../api/index';
 
+
 const UserLogin = () => {
   const navigate = useNavigate();
 
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const token: any = localStorage.getItem('jwt');
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,18 +30,7 @@ const UserLogin = () => {
       const { accessToken, refreshToken } = res.data;
       localStorage.setItem('accessToken', accessToken);
       alert('로그인에 성공했습니다.');
-      navigate('/lobby');
-    } catch (e: any) {
-      console.log(e.message);
-      if (e.message === 'Request failed with status code 400') {
-        alert('아이디를 확인해주세요.');
-      } else if (e.message === 'Request failed with status code 401') {
-        alert('비밀번호를 확인해주세요.');
-      } else {
-        alert('로그인에 실패했습니다.');
-      }
-    }
-  };
+
 
   return (
     <div
