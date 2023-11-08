@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Box, Button, Container, TextField } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Link as MuiLink } from '@mui/material';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { publicApi } from '../../libs/axios';
@@ -36,33 +36,38 @@ function SignIn() {
   };
 
   return (
-    <Container>
-      <Box component="form" noValidate autoComplete="off" onSubmit={onSubmit}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          label="아이디"
-          value={uid}
-          onChange={(e) => setUid(e.target.value)}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          type="password"
-          variant="outlined"
-          label="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          margin="normal"
-        />
-        <p>{errorMsg}</p>
-        <Button variant="contained" type="submit">
-          로그인
-        </Button>
+    <Container sx={{ height: '100%' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '80%',
+        }}
+      >
+        <Box component="form" noValidate autoComplete="off" onSubmit={onSubmit}>
+          <Typography variant="h4">로그인</Typography>
+          <Typography color="text.secondary" variant="body1" sx={{ my: 3 }}>
+            계정이 없으신가요? &nbsp;
+            <MuiLink component={Link} to="/signup" underline="hover" variant="subtitle2">
+              회원가입
+            </MuiLink>
+          </Typography>
+          <TextField fullWidth label="아이디" value={uid} onChange={(e) => setUid(e.target.value)} margin="normal" />
+          <TextField
+            fullWidth
+            type="password"
+            label="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            margin="normal"
+          />
+          <p>{errorMsg}</p>
+          <Button fullWidth type="submit" size="large" variant="contained" sx={{ mt: 3 }}>
+            로그인
+          </Button>
+        </Box>
       </Box>
-      <p>
-        <Link to="/signup">회원가입</Link>
-      </p>
     </Container>
   );
 }
