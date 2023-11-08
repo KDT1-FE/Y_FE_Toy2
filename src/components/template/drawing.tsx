@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
 
 const Drawing = () => {
   const [isPainting, setIsPainting] = useState(false);
@@ -19,9 +20,9 @@ const Drawing = () => {
       // 최초 마운트 시에만 실행
       canvas.width = 500;
       canvas.height = 500;
-      canvas.style.width = `500px`;
-      canvas.style.height = `500px`;
-      canvas.style.backgroundColor = `skyblue`;
+      canvas.style.width = '500px';
+      canvas.style.height = '500px';
+      canvas.style.backgroundColor = 'white';
 
       // 그리기
       const ctx = canvas.getContext('2d');
@@ -53,7 +54,7 @@ const Drawing = () => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
 
-    ctx!.fillStyle = 'skyblue';
+    ctx!.fillStyle = 'white';
     ctx!.fillRect(0, 0, 500, 500);
   };
 
@@ -124,13 +125,16 @@ const Drawing = () => {
   /// JSX
   return (
     <>
-      <canvas
-        ref={canvasRef}
-        onMouseDown={startPaint}
-        onMouseMove={paint}
-        onMouseUp={exitPaint}
-        onMouseLeave={exitPaint}
-      />
+      <DrawingCanvas>
+        <canvas
+          ref={canvasRef}
+          onMouseDown={startPaint}
+          onMouseMove={paint}
+          onMouseUp={exitPaint}
+          onMouseLeave={exitPaint}
+          className="canvas"
+        />
+      </DrawingCanvas>
       <div>
         <button onClick={() => changeColor('red')}>Red</button>
         <button onClick={() => changeColor('yellow')}>Yellow</button>
@@ -138,7 +142,7 @@ const Drawing = () => {
         <button onClick={() => changeColor('blue')}>blue</button>
         <button onClick={() => changeColor('purple')}>purple</button>
         <button onClick={() => changeColor('black')}>Black</button>
-        <button onClick={() => changeColor('skyblue')}>Erase</button>
+        <button onClick={() => changeColor('white')}>Erase</button>
 
         <button onClick={() => EraseAll()}>EraseAll</button>
 
@@ -155,5 +159,12 @@ const Drawing = () => {
   );
   // addEventListener를 포함한 useEffect를 제거하고 이렇게 간략화했습니다
 };
+
+const DrawingCanvas = styled.div`
+  .canvas {
+    border: 1px solid black;
+    margin: 0 auto;
+  }
+`;
 
 export default Drawing;
