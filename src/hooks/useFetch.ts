@@ -13,15 +13,18 @@ type PostProps = {
   method: "POST" | "PATCH";
   data: object;
 };
+
 type ConditionalProps = GetProps | PostProps;
 type Props = BaseProps & ConditionalProps;
 
-const useFetch = ({
-  url,
-  method,
-  data,
-  start,
-}: Props): [object | undefined, boolean, number, () => void] => {
+interface Return {
+  result: any;
+  loading: boolean;
+  statusCode: number;
+  refresh: () => void;
+}
+
+const useFetch = ({ url, method, data, start }: Props): Return => {
   const [result, setResult] = useState<object>();
   const [loading, setLoading] = useState(false);
   const [statusCode, setCode] = useState(-1);
@@ -104,7 +107,7 @@ const useFetch = ({
     await fetchData();
   };
 
-  return [result, loading, statusCode, refresh];
+  return { result, loading, statusCode, refresh };
 };
 
 export default useFetch;
