@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch } from 'react';
 import search from './searchWord';
 
 type WordsType = {
@@ -7,19 +7,18 @@ type WordsType = {
 };
 
 export default function InputWord({ words, setWords }: WordsType) {
-  const [exist, setExist] = useState(0);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const inputValue = (e.target as HTMLFormElement).querySelector('input')?.value;
+    const inputElement = (e.target as HTMLFormElement).querySelector('input');
+    const inputValue = inputElement?.value;
     if (inputValue) {
       if (words.length === 0) {
         setWords([...words, inputValue]);
-        console.log(words);
+        inputElement.value = '';
+        return;
       }
       if (words[words.length - 1].charAt(words[words.length - 1].length - 1) === inputValue.charAt(0)) {
         setWords([...words, inputValue]);
-        console.log(words);
+        inputElement.value = '';
       } else {
         console.log('끝말이 이어지지 않습니다');
       }
@@ -31,16 +30,15 @@ export default function InputWord({ words, setWords }: WordsType) {
   return (
     <div>
       <form
-        onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+        onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
           e.preventDefault();
           const inputValue = (e.target as HTMLFormElement).querySelector('input')?.value;
           if (inputValue) {
-            search(inputValue, setExist);
-            if (exist) {
+            const isRealWord = await search(inputValue);
+            if (isRealWord) {
               handleSubmit(e);
             }
           }
-          setExist(0);
         }}
       >
         <input type="text" />
