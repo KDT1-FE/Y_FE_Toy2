@@ -729,7 +729,7 @@ interface User {
 - Socket 연결시에도 headers는 유지해야 합니다.
 ## 기본 연결
 ```ts
-socket.on(`https://fastcampus-chat.net/chat?chatId=${chatId}`,
+io(`https://fastcampus-chat.net/chat?chatId=${chatId}`,
   {
     extraHeaders: {
       Authorization: "Bearer <accessToken>",
@@ -844,7 +844,7 @@ interface ResponseData {
 
 ## server 연결
 ```ts
-socket.on(`https://fastcampus-chat.net/server`,
+io(`https://fastcampus-chat.net/server`,
   {
     extraHeaders: {
       Authorization: "Bearer <accessToken>",
