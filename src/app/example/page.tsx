@@ -3,25 +3,9 @@
 import React, { useEffect } from 'react';
 import io from 'socket.io-client';
 
+const chatId = '7aaf3ab8-d85d-4441-b770-dcaac583eba6';
+
 export default function Chating() {
-    useEffect(() => {
-        socketInitilizer();
-    }, []);
-
-    async function socketInitilizer() {
-        const socket = await io('https://fastcampus-chat.net', {
-            path: '/chat',
-            query: {
-                chatId: '7aaf3ab8-d85d-4441-b770-dcaac583eba6',
-            },
-            extraHeaders: {
-                'content-type': 'application/json',
-                serverId: '53b9f98a',
-            },
-            transports: ['websocket'],
-        });
-    }
-
     const SignUp = async () => {
         const response = await fetch('https://fastcampus-chat.net/signup', {
             method: 'POST',
@@ -74,17 +58,17 @@ export default function Chating() {
         const response = await fetch('https://fastcampus-chat.net/chat', {
             method: 'POST',
             body: JSON.stringify({
-                name: 'testChat09',
+                name: 'testChat12',
                 users: [
                     {
-                        id: 'test09',
-                        name: 'test09',
+                        id: 'test12',
+                        name: '테스트12',
                         picture: 'https://gravatar.com/avatar/cba9a2c84d258bba340f336e2cd538ba?s=200&d=retro',
                     },
 
                     {
-                        id: 'test10',
-                        name: 'test10',
+                        id: 'test13',
+                        name: '테스트13',
                         picture: 'https://gravatar.com/avatar/cba9a2c84d258bba340f336e2cd538ba?s=200&d=retro',
                     },
                 ],
@@ -94,7 +78,7 @@ export default function Chating() {
                 'content-type': 'application/json',
                 serverId: '53b9f98a',
                 Authorization:
-                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzYjlmOThhOnRlc3QwOSIsImlhdCI6MTY5OTI4NDM2NywiZXhwIjoxNjk5ODg5MTY3fQ.NhoDlvb724HSCCnPg2vGIlv_BeNeOlsiv67C17UvZSE',
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVuZGVmaW5lZDp0ZXN0MTIiLCJpYXQiOjE2OTk0MjI1ODcsImV4cCI6MTcwMDAyNzM4N30.-FhHRVUD1WY6KbMc2OygUFJiOzExMEs0tz6iUCJZEnY',
             },
         });
         const data = await response.json();
@@ -139,7 +123,7 @@ export default function Chating() {
                 'content-type': 'application/json',
                 serverId: '53b9f98a',
                 Authorization:
-                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzYjlmOThhOnRlc3QxMCIsImlhdCI6MTY5OTI4NDYzNSwiZXhwIjoxNjk5ODg5NDM1fQ.DWlYHCXfZd8UEBP2z-Xqlvzvx1cjYYlW_TAcPyPjfAA',
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzYjlmOThhOnRlc3QxMiIsImlhdCI6MTY5OTQ1ODk1OCwiZXhwIjoxNzAwMDYzNzU4fQ.En3l3DmwuobExOdcMvcdR738CSQEbYz0qFm11IQBAZ4',
             },
         });
         const data = await response.json();
