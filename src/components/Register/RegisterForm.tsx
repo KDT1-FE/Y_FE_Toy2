@@ -32,7 +32,7 @@ const RegisterForm = () => {
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const res = await instance.post('/signup', formData);
+            await instance.post('/signup', formData);
             router.push('/login');
         } catch (e) {
             console.error(e);

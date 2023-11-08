@@ -17,6 +17,7 @@ const LoginForm = () => {
         id: '',
         password: '',
     });
+    const [checkLogin, setCheckLogin] = useState<boolean>(false);
 
     const router = useRouter();
 
@@ -28,8 +29,14 @@ const LoginForm = () => {
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await instance.post('login', formData);
-            router.push('/');
+            const res = await instance.post('login', formData);
+            // 로그인 검증(userId => sessionStorage)
+            const isLoggedIn = Object.keys(res).includes('accessToken');
+            setCheckLogin(isLoggedIn);
+            if (isLoggedIn) {
+                sessionStorage.setItem('userId', formData.id);
+                router.push('/');
+            }
         } catch (e) {
             console.error(e);
         }
