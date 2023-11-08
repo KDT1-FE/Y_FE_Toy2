@@ -29,7 +29,6 @@ function SignUpInput({
 
   const checkRegex = (inputId: keyof ErrorData) => {
     let result: string | true;
-
     const value = formData[inputId];
 
     if (value.length === 0) {
@@ -37,26 +36,20 @@ function SignUpInput({
     } else {
       switch (inputId) {
         case "id":
-          result = validateInput(ID_REGEX, value, "invalidId");
+          result = ID_REGEX.test(value) ? "passed" : "invalidId";
           break;
-
         case "name":
-          result = validateInput(NAME_REGEX, value, "invalidName");
+          result = NAME_REGEX.test(value) ? "passed" : "invalidName";
           break;
-
         case "password":
-          result = validateInput(PW_REGEX, value, "invalidPw");
-          checkRegex("confirmPw");
+          result = PW_REGEX.test(value) ? "passed" : "invalidPw";
+          result === "passed" && formData["confirmPw"].length !== 0
+            ? checkRegex("confirmPw")
+            : "";
           break;
-
         case "confirmPw":
-          result = validateConfirmPw(
-            value,
-            formData["password"],
-            "invalidPwCheck"
-          );
+          result = value === formData["password"] ? "passed" : "invalidPwCheck";
           break;
-
         default:
           return;
       }
@@ -68,20 +61,8 @@ function SignUpInput({
     }));
   };
 
-  const validateInput = (regex: RegExp, value: string, errorType: string) => {
-    return regex.test(value) ? "passed" : errorType;
-  };
-
-  const validateConfirmPw = (
-    value: string,
-    password: string,
-    errorType: string
-  ) => {
-    return value === password && PW_REGEX.test(value) ? "passed" : errorType;
-  };
-
   const checkDuplicateId = async (inputId: keyof ErrorData) => {
-    if (inputId === "id") {
+    if (inputId === "id" && errorData.id !== "required") {
       const { id } = formData;
       const requestBody = { id };
       postApi("https://fastcampus-chat.net/check/id", requestBody)
@@ -118,7 +99,6 @@ function SignUpInput({
         className={className}
         id={id}
         ref={inputRef}
-        value={formData[id]}
         onChange={(e) =>
           setFormData((prev) => ({ ...prev, [id]: e.target.value }))
         }
