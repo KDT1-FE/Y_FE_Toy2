@@ -34,7 +34,7 @@ function UserLogin() {
       const token: any = localStorage.getItem('accessToken');
       const socket = io(`${SERVER_URL}/server`, {
         extraHeaders: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
           serverId: SERVER_ID,
         },
       });

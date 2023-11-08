@@ -11,12 +11,9 @@ import {
 } from '@chakra-ui/react';
 
 import { ValidationInput, FormData } from '../../interfaces/interface';
-import { useRecoilState } from 'recoil';
-import { allUserState } from '../../states/atom';
 
 const UserJoin = () => {
   const navigate = useNavigate();
-  const [allUsers, setAllUsersState] = useRecoilState(allUserState);
 
   const [formData, setFormData] = useState({
     id: '',
