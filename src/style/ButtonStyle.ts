@@ -3,7 +3,7 @@ import { theme } from "./theme";
 
 interface ButtonStyleProps {
   backgroundColor: "red" | "white";
-  size: "s" | "m" | "l";
+  size: "s" | "m";
   children?: React.ReactNode;
 }
 
