@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/common/Layout';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
+import AuthLayout from './components/common/AuthLayout';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route path="/mypage" />
         {/* 홍규님 부분 */}
         <Route path="chat" />
+      </Route>
+      <Route element={<AuthLayout />}>
         {/* 성겸 부분 */}
         <Route index element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
