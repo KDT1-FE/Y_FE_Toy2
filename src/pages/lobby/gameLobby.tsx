@@ -1,8 +1,9 @@
 import CreateGameRoom from '../../components/layout/createGameRoom';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
-// import OnlineUserList from '../../components/layout/onineUserList';
+import OnlineUserList from '../../components/layout/onlineUserList';
 import UserList from '../../components/layout/userList';
 import { getAllUsers } from '../../api';
+
 const GameLobby = () => {
   const handleGetAllUsers = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +47,7 @@ const GameLobby = () => {
     <>
       <UserList></UserList>
       <br></br>
-      {/* <OnlineUserList /> */}
+      <OnlineUserList />
       <br></br>
       <CreateGameRoom></CreateGameRoom>
       <br></br>

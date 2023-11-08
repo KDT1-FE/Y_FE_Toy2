@@ -106,7 +106,7 @@ const UserJoin = () => {
       const res = await postJoin(formData);
       console.log(res);
       alert('회원가입에 성공했습니다.');
-      navigate('/lobby');
+      navigate('/');
     } catch (e: any) {
       if (e.message === 'Request failed with status code 401') {
         alert('중복된 아이디가 있습니다.');
