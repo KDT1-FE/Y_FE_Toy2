@@ -35,6 +35,7 @@ interface ChatRoom {
   users: string[];
   isPrivate?: boolean;
   num?: number;
+  bg?: string;
 }
 
 const useFireFetch = () => {

@@ -43,12 +43,12 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
     ) {
       headers = {
         "content-type": "application/json",
-        serverId: "6603aca7",
+        serverId: import.meta.env.VITE_APP_SERVER_ID,
       };
     } else {
       headers = {
         "content-type": "application/json",
-        serverId: "6603aca7",
+        serverId: import.meta.env.VITE_APP_SERVER_ID,
         Authorization: `Bearer ${token.accessToken}`,
       };
     }
@@ -79,7 +79,6 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
       }
 
       setLoading(false);
-      return response;
     } else if (method === "PATCH") {
       const response = await axios.patch(url, data, {
         headers: headers,
@@ -103,8 +102,8 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, url]);
 
-  const refresh = async () => {
-    await fetchData();
+  const refresh = () => {
+    fetchData();
   };
 
   return { result, loading, statusCode, refresh };
