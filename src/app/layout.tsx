@@ -2,7 +2,6 @@
 
 import styled from 'styled-components';
 import StyledComponentsRegistry from '../lib/registry';
-import Navigation from '@/components/Navigation';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -11,7 +10,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Body>
                     <Container>
                         {children}
-                        <Navigation />
                     </Container>
                 </Body>
             </StyledComponentsRegistry>
