@@ -5,3 +5,10 @@ export interface User {
   picture: string;
   chats: string[]; // chat id만 속합니다.
 }
+
+export type FbUser = Omit<User, 'chats'> & {
+  intro: string;
+  language: string;
+  level: string;
+  hashtag: string[];
+};

@@ -1,8 +1,11 @@
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, Button, Container, TextField, Typography, Link as MuiLink } from '@mui/material';
-import React, { useState } from 'react';
+import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { publicApi } from '../../libs/axios';
+import { accessTokenState } from '../../atoms';
 
 interface ResponseValue {
   accessToken: string; // 사용자 접근 토큰
@@ -10,30 +13,33 @@ interface ResponseValue {
 }
 
 function SignIn() {
-  const [uid, setUid] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const setAccessTokenState = useSetRecoilState(accessTokenState);
+  const formik = useFormik({
+    initialValues: {
+      id: '',
+      password: '',
+    },
+    onSubmit: async (values) => {
+      try {
+        const { id, password } = values;
+        const res = await publicApi.post<ResponseValue>('login', {
+          id,
+          password,
+        });
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const res = await publicApi.post<ResponseValue>('login', {
-        id: uid,
-        password,
-      });
-
-      localStorage.setItem('accessToken', res.data.accessToken);
-      localStorage.setItem('refreshToken', res.data.refreshToken);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // axios에서 발생한 error
-        if (error.code === 'ERR_BAD_REQUEST') {
-          setErrorMsg('아이디 혹은 비밀번호를 잘못 입력하셨습니다.');
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+        setAccessTokenState(res.data.accessToken);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          // axios에서 발생한 error
+          if (error.code === 'ERR_BAD_REQUEST') {
+            // setErrorMsg('아이디 혹은 비밀번호를 잘못 입력하셨습니다.');
+          }
         }
       }
-    }
-  };
+    },
+  });
 
   return (
     <Container sx={{ height: '100%' }}>
@@ -45,7 +51,7 @@ function SignIn() {
           minHeight: '80%',
         }}
       >
-        <Box component="form" noValidate autoComplete="off" onSubmit={onSubmit}>
+        <Box component="form" noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
           <Typography variant="h4">로그인</Typography>
           <Typography color="text.secondary" variant="body1" sx={{ my: 3 }}>
             계정이 없으신가요? &nbsp;
@@ -53,16 +59,25 @@ function SignIn() {
               회원가입
             </MuiLink>
           </Typography>
-          <TextField fullWidth label="아이디" value={uid} onChange={(e) => setUid(e.target.value)} margin="normal" />
+          <TextField
+            fullWidth
+            label="아이디"
+            id="id"
+            name="id"
+            value={formik.values.id}
+            onChange={formik.handleChange}
+            margin="normal"
+          />
           <TextField
             fullWidth
             type="password"
             label="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            id="password"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
             margin="normal"
           />
-          <p>{errorMsg}</p>
           <Button fullWidth type="submit" size="large" variant="contained" sx={{ mt: 3 }}>
             로그인
           </Button>
