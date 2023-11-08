@@ -31,7 +31,7 @@ const Login = () => {
     copy.password = pwInput.value;
 
     setData(copy);
-  }, [idInput.value, pwInput.value]);
+  }, [idInput.value, pwInput.value, data]);
 
   const handleLogin = () => {
     refresh();
@@ -43,7 +43,7 @@ const Login = () => {
       localStorage.setItem("token", text);
     }
     console.log(result, loading, statusCode);
-  }, [result]);
+  }, [result, loading, statusCode]);
 
   return (
     <>

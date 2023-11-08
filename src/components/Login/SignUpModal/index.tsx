@@ -28,7 +28,7 @@ const SignUpModal = () => {
     copy.name = nameInput.value;
 
     setData(copy);
-  }, [idInput.value, pwInput.value, nameInput.value]);
+  }, [idInput.value, pwInput.value, nameInput.value, data]);
 
   const handleSignup = () => {
     axios

@@ -65,6 +65,7 @@ const useFireFetch = () => {
           callback();
         }
       });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [initialCollection]);
 
     return { data, setData };
@@ -110,6 +111,7 @@ const useFireFetch = () => {
           callback();
         }
       });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
     return { data, setData };

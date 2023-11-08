@@ -97,6 +97,7 @@ const useFetch = ({
     if (start) {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, url]);
 
   const refresh = async () => {
