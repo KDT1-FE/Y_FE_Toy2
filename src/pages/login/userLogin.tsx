@@ -49,6 +49,7 @@ const UserLogin = () => {
             <Input
               marginBottom={5}
               placeholder="아이디를 입력해주세요"
+              autoComplete="on"
               type="text"
               value={id}
               onChange={(e) => setId(e.target.value)}
@@ -59,6 +60,7 @@ const UserLogin = () => {
             <Input
               marginBottom={10}
               placeholder="비밀번호를 입력해주세요"
+              autoComplete="current-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

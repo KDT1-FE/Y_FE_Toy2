@@ -139,6 +139,7 @@ const UserJoin = () => {
             <FormLabel>아이디</FormLabel>
             <Input
               type="text"
+              autoComplete="off"
               value={formData.id}
               onChange={(e) => setFormData({ ...formData, id: e.target.value })}
             />
@@ -154,6 +155,7 @@ const UserJoin = () => {
             <FormLabel>비밀번호</FormLabel>
             <Input
               type="password"
+              autoComplete="new-password"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
@@ -173,6 +175,7 @@ const UserJoin = () => {
             <FormLabel>비밀번호 확인</FormLabel>
             <Input
               type="password"
+              autoComplete="new-password"
               value={formData.confirmPassword}
               onChange={(e) =>
                 setFormData({ ...formData, confirmPassword: e.target.value })
@@ -192,6 +195,7 @@ const UserJoin = () => {
             <FormLabel>닉네임</FormLabel>
             <Input
               type="text"
+              autoComplete="off"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
