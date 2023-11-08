@@ -5,15 +5,12 @@ import { getAllUsers } from '../../api';
 
 const UserList = () => {
   const [allUsers, setAllUsers] = useRecoilState(allUserState);
-  // const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const token: any = localStorage.getItem('jwt');
-  // const allUsers = useRecoilValue(allUserState);
-  console.log(allUsers);
   useEffect(() => {
     async function fetchData() {
       try {
         const allUsersData = await getAllUsers(token);
-        setAllUsers(allUsersData);
+        setAllUsers(allUsersData.data);
       } catch (error) {
         console.error('데이터 가져오기 오류:', error);
       }
@@ -24,6 +21,7 @@ const UserList = () => {
 
   return (
     <>
+      <div>Signup Users</div>
       {allUsers.map((element, index) => (
         <div key={index}>{element.name}</div>
       ))}

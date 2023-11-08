@@ -48,7 +48,7 @@ const UserLogin = () => {
           <Img
             height={'250px'}
             marginBottom={'10px'}
-            src="/main.webp"
+            // src="/main.webp"
             alt="mainImg"
           />
         </Box>
