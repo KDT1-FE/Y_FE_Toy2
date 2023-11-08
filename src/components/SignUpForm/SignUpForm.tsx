@@ -3,7 +3,7 @@ import FormInput from "../SignUpInput/SignUpInput";
 import { FormInputBtn } from "../FormInputBtn/FormInputBtn";
 import { useState } from "react";
 
-const initialErrorData: ErrorDataType = {
+const initialErrorData: ErrorData = {
   id: "",
   name: "",
   pw: "",
@@ -47,7 +47,7 @@ function SignUpForm() {
         setErrorData={setErrorData}
         inputProps={{
           type: "text",
-          placeholder: "이름을 입력해주세요."
+          placeholder: "2글자 이상 입력해주세요."
         }}
       />
       <FormInput
@@ -81,20 +81,20 @@ function SignUpForm() {
 
 export default SignUpForm;
 
-export interface FormInputPropsType {
+export interface FormInputProps {
   id: string;
   label: string;
-  formData: FormDataType;
-  setFormData: (data: FormDataType) => void;
-  errorData: ErrorDataType;
-  setErrorData: (error: ErrorDataType) => void;
+  formData: FormData;
+  setFormData: (data: FormData) => void;
+  errorData: ErrorData;
+  setErrorData: (error: ErrorData) => void;
   inputProps: {
     type: string;
     placeholder: string;
   };
 }
 
-interface FormDataType {
+interface FormData {
   id: string;
   name: string;
   pw: string;
@@ -102,7 +102,7 @@ interface FormDataType {
   [key: string]: string;
 }
 
-export interface ErrorDataType {
+export interface ErrorData {
   id: string;
   name: string;
   pw: string;

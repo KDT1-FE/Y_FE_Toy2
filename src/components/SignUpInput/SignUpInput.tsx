@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { ErrorDataType, FormInputPropsType } from "../SignUpForm/SignUpForm";
+import { ErrorData, FormInputProps } from "../SignUpForm/SignUpForm";
 
 const ID_REGEX = new RegExp("[A-Za-z]{5,20}"); // 5~20글자 영문자만 입력 가능
 const PW_REGEX = new RegExp("^[A-Za-z0-9]{8,16}$"); // 8~16글자 영문자, 숫자만 입력 가능
@@ -22,10 +22,10 @@ function SignUpInput({
   setFormData,
   errorData,
   setErrorData
-}: FormInputPropsType) {
+}: FormInputProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const checkRegex = (inputId: keyof ErrorDataType) => {
+  const checkRegex = (inputId: keyof ErrorData) => {
     let result: string | true;
     const value = formData[inputId];
     if (value.length === 0) {
@@ -70,7 +70,7 @@ function SignUpInput({
         value={formData[id]}
         onChange={(e) => setFormData({ ...formData, [id]: e.target.value })}
         onBlur={() => {
-          checkRegex(id as keyof ErrorDataType);
+          checkRegex(id as keyof ErrorData);
         }}
         required
         {...inputProps}
