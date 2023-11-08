@@ -145,11 +145,7 @@ interface ResponseValue {
 
 ### id 중복 체크
 
-사용자가 `id`에 종속되어 회원가입합니다.
-
-- 사용자 비밀번호는 암호화해 저장합니다.
-- 프로필 이미지는 url or base64 형식이어야 합니다.
-- 프로필 이미지는 1MB 이하여야 합니다.
+`id` 중복 체크를 합니다.
 
 ```curl
 curl https://fastcampus-chat.net/check/id
@@ -222,6 +218,45 @@ interface ResponseValue {
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlQS3I...(생략)",
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlQS3I...(생략)"
+}
+```
+
+### 인증 확인
+
+`id` 중복 체크를 합니다.
+
+```curl
+curl https://fastcampus-chat.net/auth/me
+  \ -X 'GET'
+  \ -H 'Authorization: Bearer <accessToken>'
+```
+
+요청 데이터 타입 및 예시:
+- 없음
+
+응답 데이터 타입 및 예시:
+
+```ts
+interface ResponseValue {
+  auth: boolean;
+  user?: User;
+}
+
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+```
+
+```json
+{
+  "auth": true,
+  "user": {
+    "id": "test1",
+    "name": "abcde",
+    "picture": "https://avatars.githubusercontent.com/u/42333366?v=4"    
+  }
 }
 ```
 
