@@ -28,7 +28,8 @@ const SignUpModal = () => {
     copy.name = nameInput.value;
 
     setData(copy);
-  }, [idInput.value, pwInput.value, nameInput.value, data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idInput.value, pwInput.value, nameInput.value]);
 
   const handleSignup = () => {
     axios

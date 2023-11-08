@@ -31,7 +31,8 @@ const Login = () => {
     copy.password = pwInput.value;
 
     setData(copy);
-  }, [idInput.value, pwInput.value, data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idInput.value, pwInput.value]);
 
   const handleLogin = () => {
     refresh();
@@ -43,7 +44,7 @@ const Login = () => {
       localStorage.setItem("token", text);
     }
     console.log(result, loading, statusCode);
-  }, [result, loading, statusCode]);
+  }, [result]);
 
   return (
     <>
