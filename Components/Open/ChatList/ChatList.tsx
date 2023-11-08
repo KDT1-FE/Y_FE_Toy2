@@ -12,22 +12,23 @@ import {
 } from '@material-tailwind/react';
 import { Chat } from '@/app/open/open.type';
 
-const ChatList = ({ initialData }: ChatListProps) => {
+const ChatList = ({ filteredChatList, chatCatImageListUrl }: ChatListProps) => {
+	console.log(chatCatImageListUrl);
 	return (
 		<Card>
 			<List>
-				{initialData.map((chat: Chat) => {
+				{filteredChatList.map((chat: Chat, index: number) => {
 					return (
 						<ListItem key={chat.id}>
 							<ListItemPrefix>
 								<Avatar
 									variant="circular"
 									alt="candice"
-									src="/img/face-1.jpg"
+									src={chatCatImageListUrl[index]}
 								/>
 								<div>
 									<Typography variant="h6" color="blue-gray">
-										Tania Andrew
+										{index}
 									</Typography>
 									<Typography
 										variant="small"
