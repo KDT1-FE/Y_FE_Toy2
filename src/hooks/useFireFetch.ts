@@ -30,6 +30,13 @@ interface Victory {
   num?: number;
 }
 
+interface ChatRoom {
+  name: string;
+  users: string[];
+  isPrivate?: boolean;
+  num?: number;
+}
+
 const useFireFetch = () => {
   const useGetAll = (
     initialCollection: string,
@@ -120,7 +127,7 @@ const useFireFetch = () => {
   const usePostData = (
     initialCollection: string,
     id: string,
-    data: Notice | Victory,
+    data: Notice | Victory | ChatRoom,
     callback: (() => void) | null = null,
   ) => {
     const post = async () => {

@@ -6,7 +6,7 @@ import useFetch from "../../hooks/useFetch";
 const Example = () => {
   const fireFetch = useFireFetch();
   const notice = fireFetch.useGetAll("notice");
-  const [result, loading, statusCode] = useFetch({
+  const users = useFetch({
     url: "https://fastcampus-chat.net/users",
     method: "GET",
     start: true,
@@ -63,7 +63,7 @@ const Example = () => {
   };
 
   const getData_A = () => {
-    console.log(result, loading, statusCode);
+    console.log(users.result, users.loading, users.statusCode);
   };
 
   const updateData_A = () => {
