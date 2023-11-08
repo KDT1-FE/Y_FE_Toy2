@@ -1,85 +1,16 @@
-import { Button } from "@chakra-ui/react";
-import { serverTimestamp } from "firebase/firestore";
-import useFireFetch from "./hooks/useFireFetch";
+import { Routes, Route } from "react-router-dom";
+import AdminMain from "./pages/Main/user";
+import Login from "./pages/Login";
+import Example from "./pages/Example";
 
 const App = () => {
-  const fireFetch = useFireFetch();
-  const notice = fireFetch.getAll("notice");
-
-  const data = {
-    id: "asdasdasdasdasd",
-    title: "Asdasda",
-    body: "asdasdasdw",
-    createdAt: serverTimestamp(),
-  };
-
-  const postData = () => {
-    fireFetch.postData("notice", data.id, data, () => {
-      const copy = [...notice.data];
-      copy.push(data);
-      notice.setData(copy);
-    });
-  };
-
-  const deleteData = () => {
-    fireFetch.deleteById("notice", "asdasdasdasdasd");
-    const copy = [...notice.data];
-    const deleted = copy.filter((v) => v.id !== "asdasdasdasdasd");
-
-    notice.setData(deleted);
-  };
-
-  const getData = () => {
-    console.log(notice.data);
-  };
-
-  const updateData = () => {
-    const newData = {
-      id: "asdasdasdasdasd",
-      title: "Asdasda",
-      body: "updated",
-      createdAt: serverTimestamp(),
-    };
-    fireFetch.updateData("notice", "asdasdasdasdasd", newData);
-    const copy = [...notice.data];
-    const index = copy.findIndex((v) => v.id === "asdasdasdasdasd");
-    copy[index] = newData;
-
-    notice.setData(copy);
-  };
-
-  const postData_A = () => {
-    console.log(1);
-  };
-
-  const deleteData_A = () => {
-    console.log(2);
-  };
-
-  const getData_A = () => {
-    console.log(3);
-  };
-
-  const updateData_A = () => {
-    console.log(4);
-  };
-
   return (
     <>
-      <h1>라이어 게임</h1>
-      <div>
-        <Button onClick={postData}>Post</Button>
-        <Button onClick={deleteData}>Delete</Button>
-        <Button onClick={getData}>Get</Button>
-        <Button onClick={updateData}>update</Button>
-      </div>
-
-      <div>
-        <Button onClick={postData_A}>Post</Button>
-        <Button onClick={deleteData_A}>Delete</Button>
-        <Button onClick={getData_A}>Get</Button>
-        <Button onClick={updateData_A}>Update</Button>
-      </div>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/main" element={<AdminMain />} />
+        <Route path="/example" element={<Example />} />
+      </Routes>
     </>
   );
 };
