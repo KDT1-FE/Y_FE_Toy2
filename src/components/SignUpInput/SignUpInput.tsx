@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { ErrorData, FormInputProps } from "../SignUpForm/SignUpForm";
 
 const ID_REGEX = new RegExp("[A-Za-z]{5,20}"); // 5~20글자 영문자만 입력 가능
 const PW_REGEX = new RegExp("^[A-Za-z0-9]{8,16}$"); // 8~16글자 영문자, 숫자만 입력 가능
@@ -86,6 +85,35 @@ function SignUpInput({
 
 export default SignUpInput;
 
+interface FormInputProps {
+  id: string;
+  label: string;
+  formData: FormData;
+  setFormData: (data: FormData) => void;
+  errorData: ErrorData;
+  setErrorData: (error: ErrorData) => void;
+  inputProps: {
+    type: string;
+    placeholder: string;
+  };
+}
+
+interface FormData {
+  id: string;
+  name: string;
+  pw: string;
+  confirmPw: string;
+  [key: string]: string;
+}
+
+interface ErrorData {
+  id: string;
+  name: string;
+  pw: string;
+  confirmPw: string;
+  [key: string]: string | true;
+}
+
 const SignUpInputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -117,7 +145,7 @@ const Input = styled.input`
 `;
 
 const ErrorMessage = styled.p`
-  font-size: 10px;
+  font-size: 12px;
   color: red;
   font-weight: 500;
 `;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Outlet } from "react-router-dom";
-import SignUp from "./pages/SignUp/SignUp";
+import Login from "./pages/Login/Login";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
         }
       />
       <Route path="*" element={<PageNotFound></PageNotFound>} />
-      <Route path="/signup" element={<SignUp />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }

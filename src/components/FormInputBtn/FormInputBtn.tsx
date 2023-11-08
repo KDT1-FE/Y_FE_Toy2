@@ -1,12 +1,17 @@
 import styled from "styled-components";
 
-export const FormInputBtn = ({ value }) => {
+function FormInputBtn({ value }: FormInputBtnProps) {
   return (
     <>
       <Input type="submit" value={value} />
     </>
   );
-};
+}
+
+export default FormInputBtn;
+interface FormInputBtnProps {
+  value: string;
+}
 
 const Input = styled.input`
   margin-top: 12px;

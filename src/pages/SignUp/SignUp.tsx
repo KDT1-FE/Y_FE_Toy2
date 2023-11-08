@@ -27,5 +27,4 @@ const SignUpContainer = styled.div`
 const Title = styled.h2`
   font-size: 24px;
   text-align: center;
-  margin: 0;
 `;
