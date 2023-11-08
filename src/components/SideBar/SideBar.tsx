@@ -5,13 +5,13 @@ import { AddIcon, EditIcon, ArrowRightIcon, ChatIcon } from '@chakra-ui/icons';
 const SideBar = () => {
   return (
     <Box
-      w="250px" // 너비 설정
-      h="100vh" // 높이 설정
-      bg="gray.50" // 배경색 설정
-      color="black" // 글자색 설정
-      p={10} // 안쪽 패딩 설정
-      position="fixed" // 고정 위치 설정
-      left={0} // 왼쪽 위치
+      w="250px"
+      h="100vh"
+      bg="gray.50"
+      color="black"
+      p={10}
+      position="fixed"
+      left={0}
       boxShadow="xl"
     >
       <Text fontSize="4xl" fontWeight="extrabold" mb={6}>
