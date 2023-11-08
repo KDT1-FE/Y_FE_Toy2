@@ -2,46 +2,19 @@
 
 import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
-import { socket } from '@/api/socketIo';
 
 interface Message {
     id: string;
     text: string;
-    userId: string; // 메세지를 보낸 사람의 id
-    createdAt: string;
+    userId: string;
+    createdAt: string; // Date?
 }
 
-export default function Messages() {
-    const [messages, setMessages] = useState<Message[]>([]);
-
-    useEffect(() => {
-        socketInitilizer();
-    }, []);
-
-    const socketInitilizer = () => {
-        socket.on('connect', () => {
-            console.log('Socket connected');
-        });
-
-        socket.emit('fetch-messages');
-
-        socket.on('messages-to-client', (messageObject) => {
-            setMessages(messageObject.messages);
-        });
-    };
-
-    console.log(messages);
-
-    socket.on('message-to-client', (messageObject) => {
-        setMessages([messageObject, ...messages]);
-    });
-
-    socket.emit('users');
-
+export default function Messages(props: any) {
     return (
         <MessagesContainer>
-            {messages
-                ? messages.map((message) => (
+            {props.messages
+                ? props.messages.map((message: Message) => (
                       <MessageWrapper>
                           <MessageName>{message.userId}</MessageName>
                           <MessageText>{message.text}</MessageText>

@@ -58,17 +58,17 @@ export default function Chating() {
         const response = await fetch('https://fastcampus-chat.net/chat', {
             method: 'POST',
             body: JSON.stringify({
-                name: 'testChat09',
+                name: 'testChat12',
                 users: [
                     {
-                        id: 'test09',
-                        name: 'test09',
+                        id: 'test12',
+                        name: '테스트12',
                         picture: 'https://gravatar.com/avatar/cba9a2c84d258bba340f336e2cd538ba?s=200&d=retro',
                     },
 
                     {
-                        id: 'test10',
-                        name: 'test10',
+                        id: 'test13',
+                        name: '테스트13',
                         picture: 'https://gravatar.com/avatar/cba9a2c84d258bba340f336e2cd538ba?s=200&d=retro',
                     },
                 ],
@@ -78,7 +78,7 @@ export default function Chating() {
                 'content-type': 'application/json',
                 serverId: '53b9f98a',
                 Authorization:
-                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzYjlmOThhOnRlc3QwOSIsImlhdCI6MTY5OTI4NDM2NywiZXhwIjoxNjk5ODg5MTY3fQ.NhoDlvb724HSCCnPg2vGIlv_BeNeOlsiv67C17UvZSE',
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVuZGVmaW5lZDp0ZXN0MTIiLCJpYXQiOjE2OTk0MjI1ODcsImV4cCI6MTcwMDAyNzM4N30.-FhHRVUD1WY6KbMc2OygUFJiOzExMEs0tz6iUCJZEnY',
             },
         });
         const data = await response.json();
