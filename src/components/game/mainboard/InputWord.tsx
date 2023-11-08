@@ -1,10 +1,25 @@
 import React, { Dispatch } from 'react';
+import styled from 'styled-components';
 import search from './searchWord';
 
 type WordsType = {
   words: string[];
   setWords: Dispatch<React.SetStateAction<string[]>>;
 };
+
+const SubmitBtn = styled.button`
+  width: 50px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: #1d3557;
+  color: #fff;
+`;
+
+const GameInput = styled.input`
+  width: 200px;
+  height: 25px;
+  border-radius: 5px;
+`;
 
 export default function InputWord({ words, setWords }: WordsType) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,8 +56,8 @@ export default function InputWord({ words, setWords }: WordsType) {
           }
         }}
       >
-        <input type="text" />
-        <button type="submit">검사</button>
+        <GameInput type="text" />
+        <SubmitBtn type="submit">검사</SubmitBtn>
       </form>
     </div>
   );
