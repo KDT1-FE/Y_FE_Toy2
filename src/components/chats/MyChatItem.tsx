@@ -1,27 +1,27 @@
 // 'use client';
 import React from 'react';
 import styled from 'styled-components';
-import { ChatItem } from './api';
+import { Chat } from './interfaces';
+import { formatCreatedAt } from '@/hooks/chatsList/useFormatCreatedAt';
 
-const MyChatItem = ({ name, latestMessage, users }: ChatItem) => {
-    const formatCreatedAt = (createdAt: Date) => {
-        const date = new Date(createdAt);
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const amOrPm = hours >= 12 ? '오후' : '오전';
-        const formattedHours = hours % 12 || 12;
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-        return `${amOrPm} ${formattedHours}시 ${formattedMinutes}분`;
-    };
-    const userPicture = users && users.length > 0 ? users[0].picture : '';
+const MyChatItem = ({ name, latestMessage, users }: Chat) => {
+    const chatsPicture = users && users.length > 0 ? users[0].picture : '';
+    const usersNumber = users && users.length > 0 ? users.length : '';
+    const chatsName = users && users.length === 1 ? users[0].username : name;
     return (
         <Wrapper>
             <ChatBox>
                 <ChatDescContainer>
                     <ChatInfo>
-                        <ChatImage>{userPicture}</ChatImage>
+                        <ChatImage>
+                            <img src={chatsPicture} alt="chats picutre" />
+                        </ChatImage>
                         <ChatDesc>
-                            <ChatName>{name}</ChatName>
+                            <ChatPart>
+                                <ChatName>
+                                    {chatsName} <span>{usersNumber}</span>
+                                </ChatName>
+                            </ChatPart>
                             <LateMessage>{latestMessage ? latestMessage.text : ''} </LateMessage>
                         </ChatDesc>
                     </ChatInfo>
@@ -67,16 +67,12 @@ const ChatInfo = styled.div`
     display: flex;
 `;
 const ChatImage = styled.div`
-    /* img {
+    img {
         width: 3rem;
         height: 3rem;
+        margin: 2rem 0.5rem 2rem 2rem;
         border-radius: 1rem;
-        background-color: #000;
-    } */
-    width: 3rem;
-    height: 3rem;
-    margin: 2rem 0.5rem 2rem 2rem;
-    border-radius: 1rem;
+    }
 `;
 
 const ChatDesc = styled.div`
@@ -88,12 +84,22 @@ const ChatDesc = styled.div`
     margin-top: 0.5rem;
 `;
 
+const ChatPart = styled.div`
+    display: flex;
+`;
+
 const ChatName = styled.p`
     font-size: 1.2rem;
     font-weight: bold;
     color: #000;
     padding: 0;
     margin: 0;
+
+    span {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #626262;
+    }
 `;
 
 const LateMessage = styled.p`

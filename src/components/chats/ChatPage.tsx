@@ -7,7 +7,7 @@ import SearchMyChat from '@/components/chats/SearchMyChat';
 // svg 가져오기
 import AddChat from '../../../public/assets/addChat.svg';
 import Search from '../../../public/assets/search.svg';
-import { Chat } from './api';
+import { Chat } from './interfaces';
 import { instance } from '@/lib/api';
 
 const MyChats = ({ userType }: any) => {
@@ -27,9 +27,9 @@ const MyChats = ({ userType }: any) => {
         getAllChats();
     }, []);
     // 확인용
-    useEffect(() => {
-        console.log(allChats);
-    }, [allChats]);
+    // useEffect(() => {
+    //     console.log(allChats);
+    // }, [allChats]);
 
     const onSearchHandler = () => {
         setSearchOpen(!searchOpen);
@@ -46,7 +46,7 @@ const MyChats = ({ userType }: any) => {
             <ChatContainer>
                 {searchOpen ? <SearchMyChat /> : null}
                 {allChats.map((chat) => (
-                    <MyChatItem key={chat.id} name={chat.name} latestMessage={chat.latestMessage} />
+                    <MyChatItem key={chat.id} name={chat.name} latestMessage={chat.latestMessage} users={chat.users} />
                 ))}
             </ChatContainer>
         </Wrapper>
