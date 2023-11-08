@@ -1,5 +1,5 @@
 import { Request, AllOpenChat } from './search.type';
-import { GET, CONTENT_TYPE, BASE_URL, GET_ALL_CHAT } from './search.constant';
+import { GET, CONTENT_TYPE, BASE_URL, GET_CHAT_ALL } from './search.constant';
 
 export const fetchAllOpenChat = async (accessToken: string) => {
 	const Request: Request = {
@@ -11,7 +11,7 @@ export const fetchAllOpenChat = async (accessToken: string) => {
 		},
 	};
 
-	const res = await fetch(`${BASE_URL}${GET_ALL_CHAT}`, Request);
+	const res = await fetch(`${BASE_URL}${GET_CHAT_ALL}`, Request);
 	const allOpenChat: AllOpenChat = await res.json();
 
 	return allOpenChat;
