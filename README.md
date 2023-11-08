@@ -143,6 +143,47 @@ interface ResponseValue {
 }
 ```
 
+### id 중복 체크
+
+사용자가 `id`에 종속되어 회원가입합니다.
+
+- 사용자 비밀번호는 암호화해 저장합니다.
+- 프로필 이미지는 url or base64 형식이어야 합니다.
+- 프로필 이미지는 1MB 이하여야 합니다.
+
+```curl
+curl https://fastcampus-chat.net/check/id
+  \ -X 'POST'
+```
+
+요청 데이터 타입 및 예시:
+
+```ts
+interface RequestBody {
+  id: string // 사용자 아이디 (필수!, 영어와 숫자만)
+}
+```
+
+```json
+{
+  "id": "abcd",
+}
+```
+
+응답 데이터 타입 및 예시:
+
+```ts
+interface ResponseValue {
+  isDuplicated: boolean
+}
+```
+
+```json
+{
+  "isDuplicated": false
+}
+```
+
 ### 로그인
 
 - 발급된 `accessToken`은 7일 후 만료됩니다.
