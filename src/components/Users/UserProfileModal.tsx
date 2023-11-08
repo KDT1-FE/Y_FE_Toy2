@@ -4,6 +4,7 @@ import { ImBubble } from 'react-icons/im';
 import { MdClose } from 'react-icons/md';
 import Link from 'next/link';
 
+// types 폴더 나중에 만들어서 type 빼놓기
 interface User {
     id: string;
     password: string;
@@ -24,8 +25,10 @@ const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: 
                     <UserImg src={picture} />
                     <UserInfo>
                         <UserName>{name}</UserName>
+                        {/* 접속 상태 추후 개발필요. 현재는 하드코딩 */}
                         <p>online</p>
                     </UserInfo>
+                    {/* 임시로 chating으로 이동하도록 해둠 */}
                     <Link href="/chating" className="link">
                         <ToChating>
                             <ImBubble size="40" className="chatIcon" />
