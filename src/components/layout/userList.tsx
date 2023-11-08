@@ -12,7 +12,9 @@ const UserList = () => {
     try {
       const token: any = localStorage.getItem('accessToken');
       const allUsersData = await getAllUsers(token);
-      setAllUsers(allUsersData.data);
+      if (JSON.stringify(allUsersData.data) !== JSON.stringify(allUsers)) {
+        setAllUsers(allUsersData.data);
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
@@ -28,7 +30,7 @@ const UserList = () => {
     return () => {
       clearInterval(pollingId);
     };
-  }, []);
+  }, [setAllUsers, fetchData]);
 
   return (
     <>

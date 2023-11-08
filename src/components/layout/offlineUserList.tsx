@@ -10,12 +10,14 @@ const OfflineUserList = () => {
     return !onlineUsers.includes(element.name);
   });
 
-  const [offlineUsers, setOfflineUsers] = useState<string[]>([]); // Specify the type as string[]
+  const [offlineUsers, setOfflineUsers] = useState<string[]>([]);
 
   useEffect(() => {
     const offlineUserNames = differentNames.map((element) => element.name);
-    setOfflineUsers(offlineUserNames);
-  }, [differentNames]);
+    if (JSON.stringify(offlineUserNames) !== JSON.stringify(offlineUsers)) {
+      setOfflineUsers(offlineUserNames);
+    }
+  }, [differentNames, offlineUsers]);
 
   return (
     <div>
