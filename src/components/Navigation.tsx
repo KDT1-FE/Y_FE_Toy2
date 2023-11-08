@@ -6,13 +6,13 @@ export default function Navigation() {
     return (
         <NavigationContainer>
             <NavigationBox>
-                <NavigationAnchor href="#">1</NavigationAnchor>
+                <NavigationAnchor href="users">유저</NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
                 <NavigationAnchor href="#">2</NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">3</NavigationAnchor>
+                <NavigationAnchor href="allchats">모든</NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
                 <NavigationAnchor href="#">4</NavigationAnchor>
@@ -30,8 +30,8 @@ const NavigationContainer = styled.div`
 
     display: flex;
 
-    background-color: #00956e;
-    border-top: 1px solid black;
+    background-color: #fff;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
 const NavigationBox = styled.div`
@@ -40,7 +40,7 @@ const NavigationBox = styled.div`
 `;
 
 const NavigationAnchor = styled.a`
-    color: white;
+    color: black;
     width: 100%;
     height: 100%;
 
@@ -50,6 +50,6 @@ const NavigationAnchor = styled.a`
 
     text-decoration: none;
     &:hover {
-        color: #efefef;
+        color: #00956e;
     }
 `;
