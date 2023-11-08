@@ -1,28 +1,30 @@
 import axios from 'axios';
 
-const search = async (word: string) => {
+const search = async (word: string): Promise<boolean> => {
   const id = '5QAJk_1jsPDcB6gwYULW';
   const secret = 'lHciGgxJik';
   try {
-    await axios
-      .get('/v1/search/encyc.json', {
-        params: {
-          query: word,
-        },
-        headers: {
-          'X-Naver-Client-Id': id,
-          'X-Naver-Client-Secret': secret,
-        },
-      })
-      .then((res) => {
-        if (res.data.items.length > 0) {
-          console.log(res.data.items[0].title);
-        } else {
-          console.log('해당 단어는 존재하지 않습니다!');
-        }
-      });
+    const response = await axios.get('/v1/search/encyc.json', {
+      params: {
+        query: word,
+      },
+      headers: {
+        'X-Naver-Client-Id': id,
+        'X-Naver-Client-Secret': secret,
+      },
+    });
+
+    const responseData = response.data.items;
+    if (responseData.length === 0) {
+      console.log('해당 단어는 존재하지 않습니다!');
+      return false;
+    }
+    console.log(responseData);
+
+    return true;
   } catch (error) {
     console.log(error);
+    throw error; // You can also handle or rethrow the error as needed.
   }
 };
 
