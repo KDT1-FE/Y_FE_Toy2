@@ -935,7 +935,7 @@ io(`https://fastcampus-chat.net/server`,
 socket.emit('users-server')
 ```
 ### users-server
-- 같은 방에 있는 사람들에게 메세지를 전달합니다.
+- 같은 serverId를 사용하는 online 사용자를 불러옵니다.
 - `users-server-to-client`로 데이터를 받을 수 있습니다.
 
 요청 데이터
@@ -950,7 +950,7 @@ socket.on('message-to-client', (messageObject) => {
 ```
 
 ### users-server-to-client
-- 접속 상태인 유저 목록을 불러옵니다.
+- 같은 serverId를 사용하는 접속 상태인 유저 목록을 불러옵니다.
 
 응답 데이터
 ```ts
