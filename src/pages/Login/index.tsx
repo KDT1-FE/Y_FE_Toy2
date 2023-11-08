@@ -44,6 +44,7 @@ const Login = () => {
       localStorage.setItem("token", text);
     }
     console.log(result, loading, statusCode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
   return (
