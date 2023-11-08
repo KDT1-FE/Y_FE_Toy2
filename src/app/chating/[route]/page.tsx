@@ -1,13 +1,12 @@
-'use client';
-
 import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
+import Messages from '@/components/chating/Messages';
+import MessageContainer from '@/components/chating/MessageContainer';
+import { socket } from '@/api/socketIo';
 import io from 'socket.io-client';
 
-const chatId = '7aaf3ab8-d85d-4441-b770-dcaac583eba6';
-
 export default function Chating() {
-    const [message, setMessage] = useState<string>('');
+    const chatId = 1;
 
     const socket = io(`wss://fastcampus-chat.net/chat?chatId=${chatId}`, {
         extraHeaders: {
@@ -16,17 +15,10 @@ export default function Chating() {
             serverId: '53b9f98a',
         },
     });
-
-    socket.on('connect', () => {
-        console.log('Socket connected');
-    });
-    socket.on('message-to-client', (messageObject) => {
-        console.log(messageObject);
-    });
-
     return (
         <main>
-            <div>1</div>
+            <Messages />
+            <MessageContainer />
         </main>
     );
 }
