@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Outlet } from "react-router-dom";
-
+import ProfilePage from "./pages/Profile/ProfilePage";
 function App() {
   return (
     <Routes>
@@ -22,6 +22,7 @@ function App() {
           </Wrapper>
         }
       />
+      <Route path="/profiles/:userid" element={<ProfilePage></ProfilePage>} />
       <Route path="*" element={<PageNotFound></PageNotFound>} />
     </Routes>
   );
