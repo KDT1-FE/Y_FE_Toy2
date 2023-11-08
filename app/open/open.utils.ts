@@ -1,4 +1,4 @@
-export const fetchAllChat = async (token: string, userId: string) => {
+export const fetchAllChat = async (token: string) => {
 	const res = await fetch('https://fastcampus-chat.net/chat', {
 		method: 'GET',
 		headers: {
