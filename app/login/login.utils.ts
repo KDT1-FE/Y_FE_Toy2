@@ -21,4 +21,8 @@ export const fetchLogin = async (id: string, password: string) => {
 	// 응답 데이터를 JSON 형식으로 파싱한 다음 data 변수 저장
 	const { accessToken, refreshToken } = await res.json();
 	console.log('accessToken:', accessToken, 'refreshToken:', refreshToken);
+	accessToken.cookie('jwt', accessToken.accessToken, { httpOnly: true });
+	return accessToken.send({
+		message: 'success',
+	});
 };
