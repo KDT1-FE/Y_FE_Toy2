@@ -2,7 +2,6 @@ import axios from 'axios';
 import { CONTENT_TYPE, SERVER_ID, SERVER_URL } from '../constant';
 import { JoinData } from '../interfaces/interface';
 
-
 const client = axios.create({
   baseURL: SERVER_URL,
   headers: {
@@ -31,6 +30,7 @@ export const getAllUsers = async (accessToken: string) => {
     },
   });
   return res;
+};
 
 export const createGameRooms = async (
   accessToken: string,
