@@ -4,23 +4,23 @@ import React, { useEffect } from 'react';
 import io from 'socket.io-client';
 
 export default function Chating() {
-    useEffect(() => {
-        socketInitilizer();
-    }, []);
+    // useEffect(() => {
+    //     socketInitilizer();
+    // }, []);
 
-    async function socketInitilizer() {
-        const socket = await io('https://fastcampus-chat.net', {
-            path: '/chat',
-            query: {
-                chatId: '7aaf3ab8-d85d-4441-b770-dcaac583eba6',
-            },
-            extraHeaders: {
-                'content-type': 'application/json',
-                serverId: '53b9f98a',
-            },
-            transports: ['websocket'],
-        });
-    }
+    // async function socketInitilizer() {
+    //     const socket = await io('https://fastcampus-chat.net', {
+    //         path: '/chat',
+    //         query: {
+    //             chatId: '7aaf3ab8-d85d-4441-b770-dcaac583eba6',
+    //         },
+    //         extraHeaders: {
+    //             'content-type': 'application/json',
+    //             serverId: '53b9f98a',
+    //         },
+    //         transports: ['websocket'],
+    //     });
+    // }
 
     const SignUp = async () => {
         const response = await fetch('https://fastcampus-chat.net/signup', {
