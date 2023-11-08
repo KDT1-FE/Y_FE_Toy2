@@ -6,27 +6,50 @@ const Drawing = () => {
   const [mousePosition, setMousePosition] = useState<
     { x: number; y: number } | undefined
   >(undefined);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
+  const [color, setColor] = useState('black');
 
+  const canvasRef = useRef<HTMLCanvasElement>(null); // 캔버스 (도화지)
+  const contextRef = useRef<CanvasRenderingContext2D | null>(null); // 그림 (내용)
+
+  // useEffect 하나 쓰려고 if문 썼습니다
   useEffect(() => {
+    const canvas = canvasRef.current; // 캔버스 Ref
+    if (canvas && !contextRef.current) {
+      // 최초 마운트 시에만 실행
+      canvas.width = 500;
+      canvas.height = 500;
+      canvas.style.width = `500px`;
+      canvas.style.height = `500px`;
+      canvas.style.backgroundColor = `skyblue`;
+
+      const ctx = canvas.getContext('2d');
+      ctx!.scale(1, 1);
+      ctx!.lineCap = 'round';
+      ctx!.lineWidth = 4;
+      contextRef.current = ctx;
+    }
+
+    const ctx = contextRef.current; // context Ref
+    if (ctx) {
+      ctx.strokeStyle = color;
+    }
+  }, [color]);
+
+  /// 색상 변경 함수 (여기에 부분 지우개 배경색으로 넣음)
+  const changeColor = (newColor: string) => {
+    setColor(newColor);
+  };
+
+  /// 전체 지우개 함수
+  const EraseAll = () => {
     const canvas = canvasRef.current;
-    canvas!.width = 500;
-    canvas!.height = 500;
-    canvas!.style.width = `500px`;
-    canvas!.style.height = `500px`;
-    canvas!.style.backgroundColor = `skyblue`;
+    const ctx = canvas?.getContext('2d');
 
-    const ctx = canvas!.getContext('2d');
-    ctx!.scale(1, 1);
-    ctx!.lineCap = 'round';
-    ctx!.strokeStyle = 'black'; //색상
-    ctx!.lineWidth = 4; // 굵기
-    contextRef.current = ctx;
-  }, []);
+    ctx!.fillStyle = 'skyblue';
+    ctx!.fillRect(0, 0, 500, 500);
+  };
 
-  ///
-
+  /// 마우스 이동 감지 + 그리는 역할
   const getDrawing = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
   ) => {
@@ -44,8 +67,7 @@ const Drawing = () => {
     };
   };
 
-  ///
-
+  /// mousedown 했을 때 좌표 저장 + 페인팅 시작 상태값 변경
   const startPaint = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const paint = getDrawing(event);
     console.log(paint);
@@ -56,8 +78,7 @@ const Drawing = () => {
     }
   };
 
-  ///
-
+  /// 그리기 (현재 좌표 -> 움직인 좌표로 이동)
   const paint = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (isPainting) {
       // 그리는 상태가 true일 때
@@ -68,14 +89,13 @@ const Drawing = () => {
       }
     }
   };
-  // 여기서 그리기를 줄 수 있음
 
-  ///
-
+  /// 그리기 끝내기 (mouseUp, exit)
   const exitPaint = () => {
     setIsPainting(false);
   };
 
+  /// 그리는 함수 (canvasAPI 메서드)
   const draw = (
     originalMousePosition: { x: number; y: number },
     newMousePosition: { x: number; y: number },
@@ -91,17 +111,30 @@ const Drawing = () => {
     }
   };
 
-  ///
-
+  /// JSX
   return (
-    <canvas
-      ref={canvasRef}
-      onMouseDown={startPaint}
-      onMouseMove={paint}
-      onMouseUp={exitPaint}
-      onMouseLeave={exitPaint}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        onMouseDown={startPaint}
+        onMouseMove={paint}
+        onMouseUp={exitPaint}
+        onMouseLeave={exitPaint}
+      />
+      <div>
+        <button onClick={() => changeColor('red')}>Red</button>
+        <button onClick={() => changeColor('yellow')}>Yellow</button>
+        <button onClick={() => changeColor('green')}>Green</button>
+        <button onClick={() => changeColor('blue')}>blue</button>
+        <button onClick={() => changeColor('purple')}>purple</button>
+        <button onClick={() => changeColor('black')}>Black</button>
+        <button onClick={() => changeColor('skyblue')}>Erase</button>
+
+        <button onClick={() => EraseAll()}>EraseAll</button>
+      </div>
+    </>
   );
+  // addEventListener를 포함한 useEffect를 제거하고 이렇게 간략화했습니닷.
 };
 
 export default Drawing;
