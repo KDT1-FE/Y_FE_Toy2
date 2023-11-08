@@ -1,9 +1,8 @@
-import useInput from "../../hooks/useInput";
-import SignUpModal from "../../components/Login/SignUpModal";
-import { Input } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
+import { Button, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import SignUpModal from "../../components/Login/SignUpModal";
 import useFetch from "../../hooks/useFetch";
+import useInput from "../../hooks/useInput";
 
 interface Data {
   id: string;
