@@ -51,11 +51,14 @@ const Example = () => {
       copy.text = messageObject.text;
       setMessage(copy);
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
   useEffect(() => {
     if (message.id !== "") console.log(message);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message.text]);
 
   // 파이어 베이스에 저장할 데이터
