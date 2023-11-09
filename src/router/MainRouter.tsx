@@ -7,11 +7,16 @@ import Header from '../components/layout/header';
 import Footer from '../components/layout/footer';
 function Dashboard() {
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}>
       <Header></Header>
       <Outlet></Outlet>
       <Footer></Footer>
-    </>
+    </div>
   );
 }
 const MainRouter = () => {
