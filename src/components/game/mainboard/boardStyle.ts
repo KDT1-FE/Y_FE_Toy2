@@ -9,7 +9,6 @@ export const MainWrapper = styled.div`
   border-left: 1px solid #dadada;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   box-sizing: border-box;
 `;
 

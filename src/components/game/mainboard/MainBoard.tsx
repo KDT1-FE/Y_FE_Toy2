@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { Visibility } from '@mui/icons-material';
 import { WordsType } from './InputWord';
-import { Answers, Board, BoardFrame, MainWrapper, NoticeBox } from './boardStyle';
+import {
+  Answers,
+  Board,
+  BoardFrame,
+  MainWrapper,
+  NoticeBox,
+} from './boardStyle';
 import Notice from './Notice';
 import SearchBar from './SearchBar';
 
