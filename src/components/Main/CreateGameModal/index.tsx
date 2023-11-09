@@ -204,13 +204,11 @@ const CreateGameModal = ({ setModal }: Props) => {
         id: createGame.result.id,
         host: token.id,
         createdAt: serverTimestamp(),
-      };
-
-      fireFetch.usePostData("game", createGame.result.id, {
-        ...newData,
         bg: "⭐",
         status: "대기중",
-      });
+      };
+
+      fireFetch.usePostData("game", createGame.result.id, newData);
 
       // const roomText = [...JSON.stringify(newData)];
 
