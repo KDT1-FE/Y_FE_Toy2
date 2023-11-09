@@ -1,55 +1,75 @@
-import { Routes, Route } from "react-router-dom";
+// import { useState } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import { GlobalStyle } from "./style/GlobalStyle";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Layout from "./components/Layout";
 import PageNotFound from "./components/PageNotFound";
-import styled from "styled-components";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import { Outlet } from "react-router-dom";
+import { darkTheme, lightTheme } from "./style/theme";
+import { useEffect, useState } from "react";
+import { DarkModeProvider } from "./hooks/useDarkMode";
+import Profile from "./components/Profile/Profile";
+import MainContents from "./Pages/MainContents";
+import ProfilePage from "./Pages/Profile/ProfilePage";
+import ProfileEditPage from "./Pages/Profile/ProfileEditPage";
+import Chat from "./Pages/Chat";
+import Login from "./Pages/Login/Login";
+import SignUp from "./Pages/SignUp/SignUp";
 
-import Chat from "./pages/chat";
-
-import ProfilePage from "./pages/Profile/ProfilePage";
-import ProfileEdit from "./pages/Profile/ProfileEditPage";
-import Login from "./pages/Login/Login";
-import SignUp from "./pages/SignUp/SignUp";
+const router = createBrowserRouter([
+  {
+    path: "",
+    element: <Layout />,
+    children: [
+      { path: "", element: <MainContents /> },
+      {
+        path: "profiles",
+        element: <Profile />
+      },
+      {
+        path: "profiles/:userid",
+        element: <ProfilePage />
+      },
+      { path: "profiles/:userid/edit", element: <ProfileEditPage /> },
+      {
+        path: "chat",
+        element: <Chat />
+      },
+      {
+        path: "login",
+        element: <Login />
+      },
+      {
+        path: "signup",
+        element: <SignUp />
+      }
+    ]
+  },
+  {
+    path: "*",
+    element: <PageNotFound />
+  }
+]);
 
 function App() {
+  const [isDarkMode, setisDarkMode] = useState(false);
+
+  useEffect(() => {
+    const storedMode = window.localStorage.getItem("isDarkMode");
+    if (storedMode) {
+      setisDarkMode(storedMode === "true");
+    }
+  }, []);
+
+  const theme = isDarkMode ? darkTheme : lightTheme;
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Wrapper>
-            <Header />
-            <MainBanner>
-              <h2>메인 배너</h2>
-            </MainBanner>
-            <MainContent />
-            <Outlet />
-            <Footer />
-          </Wrapper>
-        }
-      />
-      <Route
-        path="/chat"
-        element={
-          <div>
-            <Header />
-            <MainContent>
-              <Chat />
-            </MainContent>
-          </div>
-        }
-      />
-      <Route path="/profiles/:userid" element={<ProfilePage></ProfilePage>} />
-      <Route
-        path="/profiles/:userid/edit"
-        element={<ProfileEdit></ProfileEdit>}
-      />
-      <Route path="/profiles/:userid/:feedId" element={<div>feedId</div>} />
-      <Route path="*" element={<PageNotFound></PageNotFound>} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-    </Routes>
+    <DarkModeProvider>
+      <Wrapper>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </Wrapper>
+    </DarkModeProvider>
   );
 }
 
@@ -57,21 +77,6 @@ export default App;
 
 const Wrapper = styled.div`
   display: grid;
+  grid-template-rows: 1fr auto;
   grid-template-rows: auto 1fr auto 2fr;
-`
-
-const MainContent = styled.div`
-  width: 100%;
-  /* height: calc(100vh - 20rem); */
-  height: 100%;
-  max-width:1200px;
-  margin: 0 auto;
-`
-
-const MainBanner = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #d9d9d9;
-`
+`;
