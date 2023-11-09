@@ -201,6 +201,7 @@ const CreateGameModal = ({ setModal }: Props) => {
       );
       setUserList(filter);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users.result]);
 
   // 방제목 input 저장
