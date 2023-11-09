@@ -13,8 +13,12 @@ import ChatGeneratorMenu from './ChatGeneratorMenu/ChatGeneratorMenu';
 import { chatModalAtom } from '@/atoms/chatModalAtom';
 import { useRecoilState } from 'recoil';
 import { Inputs } from './ChatGenerator.type';
+import { useFetchPostNewChat } from '@/hooks/Open/useFetchPostNewChat';
 
 const ChatGenerator = () => {
+	const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN as string;
+	const mutation = useFetchPostNewChat(accessToken);
+
 	const modalRef = useRef(null);
 	const [chatModal, setChatModal] = useRecoilState(chatModalAtom);
 	const {
@@ -23,7 +27,14 @@ const ChatGenerator = () => {
 		formState: { errors },
 	} = useForm<Inputs>();
 
-	const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+	const onSubmit: SubmitHandler<Inputs> = (data) => {
+		console.log(data.name);
+		console.log(data.users);
+		mutation.mutate({
+			name: data.name,
+			users: data.users,
+		});
+	};
 
 	const handleModalClose = () => {
 		setChatModal(false);
