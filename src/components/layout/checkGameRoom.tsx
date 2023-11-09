@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { allRoomState } from '../../states/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { accessTokenState, allRoomState } from '../../states/atom';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
 
 const POLLING_INTERVAL = 30000;
 
 const CheckGameRoom = () => {
-  const token: any = localStorage.getItem('accessToken');
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
+  const accessToken: any = useRecoilValue(accessTokenState);
   const fetchData = async () => {
     try {
-      const allRoomsData = await getAllGameRooms(token);
+      const allRoomsData = await getAllGameRooms(accessToken);
       setAllRooms(allRoomsData.chats);
     } catch (error) {
       console.error('데이터 가져오기 오류:', error);
@@ -37,7 +37,7 @@ const CheckGameRoom = () => {
     if (numberOfPeople === 4) {
       alert('방이 꽉 찼어요.');
     } else {
-      await participateGameRoom(chatId, token);
+      await participateGameRoom(chatId, accessToken);
       navigate(`/room/${chatId}`);
     }
   };
