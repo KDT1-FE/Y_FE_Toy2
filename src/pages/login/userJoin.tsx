@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { postJoin } from '../../api/index';
-import { useNavigate } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   Center,
   FormControl,
@@ -8,8 +8,11 @@ import {
   FormErrorMessage,
   Button,
   Input,
+  Flex,
+  Img,
+  Link,
+  Box,
 } from '@chakra-ui/react';
-
 import { ValidationInput, FormData } from '../../interfaces/interface';
 
 const UserJoin = () => {
@@ -120,14 +123,38 @@ const UserJoin = () => {
   };
 
   return (
-    <div
-      style={{
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Center flexDirection={'column'}>
+    <Flex
+      justifyContent={'center'}
+      alignItems={'center'}
+      flexDirection={'column'}
+      backgroundColor="#f8fafc"
+      height={'100vh'}>
+      <label
+        htmlFor="fileInput"
+        style={{ cursor: 'pointer', position: 'relative' }}>
+        <Img
+          src="public/assets/inputImg.svg"
+          position="relative"
+          bottom={-170}
+          alt="inputImg"
+        />
+        <Input
+          id="fileInput"
+          type="file"
+          style={{ position: 'absolute', width: 0, height: 0, opacity: 0 }}
+          onChange={(e) => console.log(e.target.files)} // 바꿔줘야함
+        />
+      </label>
+
+      <Center
+        margin={100}
+        backgroundColor={'white'}
+        borderRadius={10}
+        boxShadow="lg"
+        flexDirection={'column'}
+        width={450}
+        minHeight={730}
+        justifyContent={'flex-end'}>
         <form onSubmit={handleJoinSubmit}>
           <FormControl
             isRequired
@@ -137,6 +164,9 @@ const UserJoin = () => {
             width={250}>
             <FormLabel>아이디</FormLabel>
             <Input
+              placeholder="알파벳만 가능합니다"
+              _placeholder={{ fontSize: 'sm' }}
+              borderColor="gray.400"
               type="text"
               autoComplete="off"
               value={formData.id}
@@ -147,12 +177,38 @@ const UserJoin = () => {
 
           <FormControl
             isRequired
+            isInvalid={isError.name}
+            marginBottom={5}
+            marginLeft={7}
+            width={250}>
+            <FormLabel>닉네임</FormLabel>
+            <Input
+              placeholder="2자이상 20자 이하로 입력해주세요"
+              _placeholder={{ fontSize: 'sm' }}
+              borderColor="gray.400"
+              type="text"
+              autoComplete="off"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+            />
+            <FormErrorMessage textAlign={'left'}>
+              {errors.name}
+            </FormErrorMessage>
+          </FormControl>
+
+          <FormControl
+            isRequired
             isInvalid={isError.password}
             marginBottom={5}
             marginLeft={7}
             width={250}>
             <FormLabel>비밀번호</FormLabel>
             <Input
+              placeholder="5자 이상 입력해주세요"
+              _placeholder={{ fontSize: 'sm' }}
+              borderColor="gray.400"
               type="password"
               autoComplete="new-password"
               value={formData.password}
@@ -168,11 +224,14 @@ const UserJoin = () => {
           <FormControl
             isRequired
             isInvalid={isError.confirmPassword}
-            marginBottom={5}
+            marginBottom={10}
             marginLeft={7}
             width={250}>
             <FormLabel>비밀번호 확인</FormLabel>
             <Input
+              placeholder="5자 이상 입력해주세요"
+              _placeholder={{ fontSize: 'sm' }}
+              borderColor="gray.400"
               type="password"
               autoComplete="new-password"
               value={formData.confirmPassword}
@@ -184,30 +243,8 @@ const UserJoin = () => {
               {errors.confirmPassword}
             </FormErrorMessage>
           </FormControl>
-
-          <FormControl
-            isRequired
-            isInvalid={isError.name}
-            marginBottom={10}
-            marginLeft={7}
-            width={250}>
-            <FormLabel>닉네임</FormLabel>
-            <Input
-              type="text"
-              autoComplete="off"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-            />
-            <FormErrorMessage textAlign={'left'}>
-              {errors.name}
-            </FormErrorMessage>
-          </FormControl>
-
           <Button
             width={300}
-            marginBottom={10}
             type="submit"
             colorScheme="teal"
             size="lg"
@@ -215,8 +252,19 @@ const UserJoin = () => {
             가입하기
           </Button>
         </form>
+        <Flex justifyContent={'center'} gap="10px" padding="10">
+          이미 가입하셨나요?
+          <Link
+            as={ReactRouterLink}
+            to="/"
+            marginRight={2}
+            color="teal.500"
+            fontWeight={700}>
+            로그인
+          </Link>
+        </Flex>
       </Center>
-    </div>
+    </Flex>
   );
 };
 
