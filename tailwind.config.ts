@@ -18,7 +18,11 @@ const config: Config = withMT({
 		},
 		extend: {
 			colors: {
-				primary: '#FF6363',
+				primary: '#E7700D',
+				secondary: '#F5F5F5',
+				success: '#198754',
+				info: '#0DCAF0',
+				warning: '#FFC107',
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

@@ -18,7 +18,7 @@ export type Chat = {
 	name: string;
 	isPrivate: boolean;
 	users: User[];
-	messages: []; // message 객체가 속합니다.
+	messages: Message[]; // message 객체가 속합니다.
 
 	updatedAt: Date;
 };
