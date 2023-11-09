@@ -13,7 +13,8 @@ export const theme = {
   darkTheme,
   mainColor: "#F43630",
   secondColor: "#FF8A7A",
-  whiteColor: "#FEEBEA",
+  pinkColor: "#FEEBEA",
   blackColor: "#383535",
-  grayColor: "#999696"
+  grayColor: "#999696",
+  blueColor: "#3B89FF"
 };
