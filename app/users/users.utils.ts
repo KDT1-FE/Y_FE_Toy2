@@ -21,11 +21,5 @@ export const fetchMyUser = async (token: string) => {
 		},
 	});
 	const data = await res.json();
-	return data;
+	return data.user;
 };
-
-/* 
-curl https://fastcampus-chat.net/auth/me
-  \ -X 'GET'
-  \ -H 'Authorization: Bearer <accessToken>'
-  */
