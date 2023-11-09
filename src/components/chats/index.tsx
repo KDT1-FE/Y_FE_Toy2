@@ -1,11 +1,12 @@
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
+import { Message } from '../../@types/message';
 
-const Chat = () => {
+const Chat = ({ name, createdAt, text, picture }: Omit<Message, 'id'>) => {
   return (
     <Flex w="full" pt="2" pb="3">
       <Avatar
         name="Dan Abrahmov"
-        src="https://bit.ly/dan-abramov"
+        src={picture}
         w="3.125rem"
         h="3.125rem"
         borderRadius="full"
@@ -14,7 +15,7 @@ const Chat = () => {
       <Box>
         <Flex>
           <Text fontSize="md" fontWeight="semibold">
-            새콤달콤
+            {name}
           </Text>
           <Text
             alignSelf="end"
@@ -23,12 +24,12 @@ const Chat = () => {
             color="RGBA(0, 0, 0, 0.48)
     "
           >
-            2022.03.01
+            {createdAt}
           </Text>
         </Flex>
 
         <Text fontSize="0.85rem" margin="0" pt="0.5">
-          안녕하세요 테스트입니다
+          {text}
         </Text>
       </Box>
     </Flex>
