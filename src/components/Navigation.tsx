@@ -1,21 +1,34 @@
 'use client';
 
 import styled from 'styled-components';
-
+// svg 가져오기
+import userSvg from '../../public/assets/user.svg';
+import mychatSvg from '../../public/assets/mychats.svg';
+import allChatSvg from '../../public/assets/allchats.svg';
+import mypageSvg from '../../public/assets/mypage.svg';
 export default function Navigation() {
+    const userId = sessionStorage.getItem('userId');
     return (
         <NavigationContainer>
             <NavigationBox>
-                <NavigationAnchor href="#">1</NavigationAnchor>
+                <NavigationAnchor href="users">
+                    <UserIcon />
+                </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">2</NavigationAnchor>
+                <NavigationAnchor href={`${userId}`}>
+                    <MyChatIcon />
+                </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">3</NavigationAnchor>
+                <NavigationAnchor href="allchats">
+                    <AllChatsIcon />
+                </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">4</NavigationAnchor>
+                <NavigationAnchor href="#">
+                    <MyPageIcon />
+                </NavigationAnchor>
             </NavigationBox>
         </NavigationContainer>
     );
@@ -31,7 +44,7 @@ const NavigationContainer = styled.div`
     display: flex;
 
     background-color: #00956e;
-    border-top: 1px solid black;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
 const NavigationBox = styled.div`
@@ -40,7 +53,7 @@ const NavigationBox = styled.div`
 `;
 
 const NavigationAnchor = styled.a`
-    color: white;
+    color: black;
     width: 100%;
     height: 100%;
 
@@ -50,6 +63,22 @@ const NavigationAnchor = styled.a`
 
     text-decoration: none;
     &:hover {
-        color: #efefef;
+        color: #00956e;
     }
+`;
+
+const UserIcon = styled(userSvg)`
+    cursor: pointer;
+`;
+
+const MyChatIcon = styled(mychatSvg)`
+    cursor: pointer;
+`;
+
+const AllChatsIcon = styled(allChatSvg)`
+    cursor: pointer;
+`;
+
+const MyPageIcon = styled(mypageSvg)`
+    cursor: pointer;
 `;
