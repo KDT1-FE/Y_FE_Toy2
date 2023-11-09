@@ -1,5 +1,5 @@
+import JoinForm from '@/Components/Join/JoinForm';
 import React from 'react';
-import JoinForm from './JoinForm';
 
 const Join = () => {
 	return (

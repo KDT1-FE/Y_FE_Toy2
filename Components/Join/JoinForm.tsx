@@ -9,7 +9,7 @@ type RequestBody = {
 	password: string; // 사용자 비밀번호, 5자 이상 (필수!)
 	name: string; // 사용자 이름, 20자 이하 (필수!)
 	picture: string; // 사용자 이미지(url or base64, under 1MB)
-	image: string;
+	// image: string;
 };
 
 const JoinForm = () => {
@@ -24,16 +24,15 @@ const JoinForm = () => {
 
 	const [imagePreview, setImagePreview] = useState('');
 
-	const fileReader = new FileReader();
-	fileReader.readAsDataURL;
-	const picture = watch('picture');
+	const image = watch('picture');
+
 	useEffect(() => {
-		if (picture && picture.length > 0) {
-			const file = picture[0];
-			console.log(picture);
+		if (image && image.length > 0) {
+			const file = image[0];
+			console.log(URL.createObjectURL(file));
 			setImagePreview(URL.createObjectURL(file));
 		}
-	}, [picture]);
+	}, [image]);
 
 	return (
 		<>
@@ -69,7 +68,7 @@ const JoinForm = () => {
 					{/* id */}
 					<div className="relative m-3 group">
 						<input
-							placeholder=" dd"
+							placeholder=" "
 							{...register('id', {
 								required: true,
 								pattern: /^[a-zA-Z0-9]*$/,

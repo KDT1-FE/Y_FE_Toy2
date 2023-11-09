@@ -2,17 +2,14 @@
 
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { fetchLogin } from './login.utils';
-import { useCookies } from 'react-cookie';
-
+import { fetchLogin } from '../../app/login/login.utils';
+import { setCookie } from '@/Components/Login/Cookie';
 type IFormInput = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
 	password: string; // 사용자 비밀번호, 5자 이상 (필수!)
 };
 
-const Form = () => {
-	const [cookies, setCookie] = useCookies(['accessToken']);
-
+const LoginForm = () => {
 	const {
 		register,
 		handleSubmit,
@@ -25,11 +22,9 @@ const Form = () => {
 		const { accessToken, refreshToken } = await fetchLogin(id, password);
 		console.log('accessToken:', accessToken);
 		console.log('refreshToken:', refreshToken);
-		// console.log(res);
-		// const {accessToken, refreshToken} = res
 		setCookie('accessToken', accessToken, { path: '/' });
 	};
-	console.log(cookies);
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<label>id</label>
@@ -49,4 +44,4 @@ const Form = () => {
 	);
 };
 
-export default Form;
+export default LoginForm;
