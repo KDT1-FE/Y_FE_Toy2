@@ -4,8 +4,8 @@ import SideBar from './components/SideBar/SideBar';
 const Layout = (props: { children: React.ReactNode }) => {
   return (
     <Center>
-      <Container maxW={1280}>
-        <Flex w={1280}>
+      <Container maxW="container.xl">
+        <Flex w="container.xl">
           <SideBar />
           {props.children}
         </Flex>
