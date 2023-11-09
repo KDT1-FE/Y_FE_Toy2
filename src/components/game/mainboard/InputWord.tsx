@@ -50,8 +50,17 @@ export default function InputWord({ words, setWords }: WordsType) {
           const inputValue = (e.target as HTMLFormElement).querySelector('input')?.value;
           if (inputValue) {
             const isRealWord = await search(inputValue);
-            if (isRealWord) {
-              handleSubmit(e);
+            const isPossible = /^(?=(?:.*[a-z]){3,})(?!.*([a-z])\1{2,})[a-z]*$/.test(inputValue);
+            console.log(isPossible);
+
+            if (isPossible) {
+              if (isRealWord) {
+                handleSubmit(e);
+              } else {
+                alert('존재하지 않는 단어입니다!');
+              }
+            } else {
+              alert('형식에 맞지 않는 입력입니다!');
             }
           }
         }}

@@ -16,7 +16,6 @@ const search = async (word: string): Promise<boolean> => {
 
     const responseData = response.data.items;
     if (responseData.length === 0) {
-      console.log('해당 단어는 존재하지 않습니다!');
       return false;
     }
     console.log(responseData);
