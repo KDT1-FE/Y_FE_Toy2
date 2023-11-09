@@ -40,10 +40,13 @@ const NavigationWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    z-index: 1;
 `;
 
 const ChatTitle = styled.div`
     font-size: 30px;
+    font-weight: 700;
 `;
 
 const BackIcon = styled(Back)`

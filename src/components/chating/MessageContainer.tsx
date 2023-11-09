@@ -37,6 +37,8 @@ const MessageWrapper = styled.form`
     position: absolute;
     bottom: 0;
 
+    z-index: 1;
+
     display: flex;
     justify-content: space-around;
     align-items: center;

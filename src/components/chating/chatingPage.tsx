@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import MessageContainer from './MessageContainer';
 import io from 'socket.io-client';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { formatCreatedAt } from '@/hooks/chatsList/useFormatCreatedAt';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
@@ -18,6 +18,11 @@ interface Message {
 
 export default function ChatingPage() {
     const [messages, setMessages] = useState<Message[]>([]);
+    const searchParams = useSearchParams();
+
+    const getChatName = searchParams.get('name');
+    const getChatUsers = searchParams.get('Users');
+    console.log(getChatName, getChatUsers);
 
     useEffect(() => {
         socketInitilizer();
