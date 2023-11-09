@@ -1,10 +1,12 @@
+// search.type.ts
+
 export type AllOpenChat = Chat[];
 
 export type AllOpenChatJSON = {
 	chats: AllOpenChat;
 };
 
-type Chat = {
+export type Chat = {
 	id: string;
 	name: string;
 	users: User[];
@@ -13,7 +15,7 @@ type Chat = {
 	updatedAt: Date;
 };
 
-type User = {
+export type User = {
 	id: string;
 	name: string;
 	picture: string;
