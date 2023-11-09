@@ -164,14 +164,17 @@ const CreateGameModal = ({ setModal }: Props) => {
     name: "",
     users: [],
     isPrivate: false,
-    num: 1,
+    num: 6,
   });
 
   // 방제목 빈값이면 true
   const [inputAction, setInpuAction] = useState(false);
 
-  // 방제목 input 초기화
+  const [userList, setUserList] = useState<UserType[]>([]);
+
+  // input 초기화
   const titleInput = useInput("");
+  const searchInput = useInput("");
 
   // 유저정보 요청
   const users = useFetch({
@@ -191,18 +194,39 @@ const CreateGameModal = ({ setModal }: Props) => {
     start: false,
   });
 
+  useEffect(() => {
+    if (users.result) {
+      const filter = users.result.filter(
+        (value: UserType) => value.id !== token.id,
+      );
+      setUserList(filter);
+    }
+  }, [users.result]);
+
   // 방제목 input 저장
   useEffect(() => {
     const copy = { ...roomData };
     copy.name = titleInput.value;
     setRoomData(copy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [titleInput.value, titleInput.value]);
+  }, [titleInput.value]);
+
+  // 유조 검색 기능
+  useEffect(() => {
+    if (users.result) {
+      const filter = users.result.filter((value: UserType) =>
+        value.name.includes(searchInput.value),
+      );
+      setUserList(filter);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchInput.value, users.result]);
 
   // 게임 생성 함수
   const handleMakeRoom = () => {
     if (roomData.name === "") {
       setInpuAction(true);
+      console.log(roomData);
     } else {
       // 게임 생성 POST 호출
       createGame.refresh();
@@ -273,7 +297,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="1"
                   name="drone"
                   value="1"
-                  defaultChecked
+                  // checked={roomData.num === 1}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="1">1</label>
@@ -284,7 +308,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="2"
                   name="drone"
                   value="2"
-                  checked={roomData.num === 2}
+                  // checked={roomData.num === 2}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="2">2</label>
@@ -295,7 +319,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="3"
                   name="drone"
                   value="3"
-                  checked={roomData.num === 3}
+                  // checked={roomData.num === 3}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="3">3</label>
@@ -306,7 +330,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="4"
                   name="drone"
                   value="4"
-                  checked={roomData.num === 4}
+                  // checked={roomData.num === 4}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="4">4</label>
@@ -317,7 +341,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="5"
                   name="drone"
                   value="5"
-                  checked={roomData.num === 5}
+                  // checked={roomData.num === 5}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="5">5</label>
@@ -328,7 +352,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="6"
                   name="drone"
                   value="6"
-                  checked={roomData.num === 6}
+                  checked
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="6">6</label>
@@ -358,20 +382,21 @@ const CreateGameModal = ({ setModal }: Props) => {
               placeholder="검색"
               textAlign="center"
               marginBottom="1rem"
+              height="2rem"
+              value={searchInput.value}
+              onChange={searchInput.onChange}
             />
             {users.result &&
-              users.result
-                .filter((value: UserType) => value.id !== token.id)
-                .map((value: UserType) => {
-                  return (
-                    <UserCard
-                      key={value.id}
-                      {...value}
-                      setRoomData={setRoomData}
-                      roomData={roomData}
-                    />
-                  );
-                })}
+              userList.map((value: UserType) => {
+                return (
+                  <UserCard
+                    key={value.id}
+                    {...value}
+                    setRoomData={setRoomData}
+                    roomData={roomData}
+                  />
+                );
+              })}
           </div>
         </Section>
       </Wrap>
