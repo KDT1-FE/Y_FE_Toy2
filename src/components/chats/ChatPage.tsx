@@ -22,7 +22,9 @@ const MyChats = ({ userType }: any) => {
 
     const enterChatRoom = (chat: Chat) => {
         if (chat.id && chat.users) {
-            const users = chat.users.map((user) => `[name:${user.username}, id:${user.id}]`).join(',');
+            const users = chat.users
+                .map((user) => `[name:${user.username}, id:${user.id}, picture:${user.picture}]`)
+                .join(',');
             const latestMessageQuery = JSON.stringify(chat.latestMessage);
 
             router.push(

@@ -15,15 +15,6 @@ interface Message {
 
 export default function Chating() {
     const [messages, setMessages] = useState<Message[]>([]);
-    // const searchParams = useSearchParams();
-    // const getName = searchParams.get('name');
-    // const getUsers = searchParams.get('users');
-    // const getLatestMessage = searchParams.get('latestMessage');
-    // const getUpdatedAt = searchParams.get('updatedAt');
-    // console.log(getName);
-    // console.log(getUsers);
-    // console.log(getLatestMessage);
-    // console.log(getUpdatedAt);
 
     useEffect(() => {
         socketInitilizer();
@@ -34,7 +25,6 @@ export default function Chating() {
 
     const pathname = usePathname();
     const chatId = pathname.split('/')[2];
-    console.log(chatId);
 
     const socket = io(`wss://fastcampus-chat.net/chat?chatId=${chatId}`, {
         extraHeaders: {
