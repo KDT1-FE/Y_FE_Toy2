@@ -4,18 +4,29 @@ import {
 	Button,
 	Card,
 	Checkbox,
+	Chip,
 	Input,
 	Typography,
 } from '@material-tailwind/react';
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import ChatGeneratorMenu from './ChatGeneratorMenu/ChatGeneratorMenu';
+import chatModalAtom from '@/atoms/chatModalAtom';
+import { useRecoilState } from 'recoil';
 
 type Inputs = {
 	name: string;
 };
+const checkIsOpen = (chatModal: boolean) => {
+	if (chatModal) {
+		return 'visible';
+	} else {
+		return 'invisible';
+	}
+};
 
 const ChatGenerator = () => {
+	const [chatModal, setChatModal] = useRecoilState(chatModalAtom);
 	const {
 		register,
 		handleSubmit,
@@ -24,12 +35,22 @@ const ChatGenerator = () => {
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
+	const handleModalClose = () => {
+		setChatModal(false);
+	};
+
 	return (
-		<div className="absolute w-full inset-0 flex flex-col items-center justify-center bg-white border-4 box-border">
+		<div
+			className={`${checkIsOpen(
+				chatModal,
+			)} absolute w-full  inset-0 flex flex-col items-center justify-center bg-white border-4 box-border`}
+		>
+			<Chip
+				value="X"
+				className="absolute bg-primary top-0 left-0"
+				onClick={handleModalClose}
+			/>
 			<Card color="transparent" shadow={false}>
-				<Typography variant="h4" color="blue-gray">
-					채팅방 만들기
-				</Typography>
 				<Typography color="gray" className="mt-1 font-normal">
 					채팅방 주제 잘 정하고 만드세요!
 				</Typography>
