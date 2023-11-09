@@ -16,6 +16,7 @@
     "axios": "^1.6.0",
     "next": "14.0.1",
     "react": "^18",
+    "react-cookie": "^6.1.1",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
     "recoil": "^0.7.7",

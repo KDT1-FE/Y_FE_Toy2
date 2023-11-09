@@ -3,6 +3,7 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { fetchLogin } from './login.utils';
+import { useCookies } from 'react-cookie';
 
 type IFormInput = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -10,18 +11,25 @@ type IFormInput = {
 };
 
 const Form = () => {
+	const [cookies, setCookie] = useCookies(['accessToken']);
+
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<IFormInput>();
-	// 로그인 시 api 요청
-	const onSubmit: SubmitHandler<IFormInput> = ({ id, password }) => {
-		console.log('id: ', id, 'password:', password);
-		const res = fetchLogin(id, password);
-		console.log(res);
-	};
 
+	// 로그인 시 api 요청
+	const onSubmit: SubmitHandler<IFormInput> = async ({ id, password }) => {
+		console.log('id: ', id, 'password:', password);
+		const { accessToken, refreshToken } = await fetchLogin(id, password);
+		console.log('accessToken:', accessToken);
+		console.log('refreshToken:', refreshToken);
+		// console.log(res);
+		// const {accessToken, refreshToken} = res
+		setCookie('accessToken', accessToken, { path: '/' });
+	};
+	console.log(cookies);
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<label>id</label>
