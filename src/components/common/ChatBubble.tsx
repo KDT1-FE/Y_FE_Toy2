@@ -1,5 +1,15 @@
+import { BoxProps, Container, Text } from "@chakra-ui/react";
 import React from "react";
-import { Box, Text, BoxProps, Container } from "@chakra-ui/react";
+import styled from "styled-components";
+
+const Bubble = styled.div`
+  margin: 8px 0px 12px;
+  padding: 8px;
+  background-color: #e2e8f0;
+  width: fit-content;
+  max-width: 300px;
+  border-radius: 0 12px 12px 12px;
+`;
 
 interface ChatBubbleProps extends BoxProps {
   userId?: string;
@@ -9,17 +19,12 @@ interface ChatBubbleProps extends BoxProps {
 const ChatBubble: React.FC<ChatBubbleProps> = ({ userId, text, ...rest }) => {
   return (
     <Container>
-      <Text fontWeight="bold">{userId && `${userId}`}</Text>
-      <Box
-        my={2}
-        p={2}
-        borderRadius="md"
-        bgColor={userId ? "blue.200" : "gray.200"}
-        {...rest}
-        maxW="200px"
-      >
+      <Text fontWeight="bold" mb="0px">
+        {userId && `${userId}`}
+      </Text>
+      <Bubble>
         <Text>{text}</Text>
-      </Box>
+      </Bubble>
     </Container>
   );
 };

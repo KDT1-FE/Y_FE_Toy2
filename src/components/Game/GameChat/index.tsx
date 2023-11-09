@@ -1,49 +1,33 @@
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Text,
-  InputGroup,
-  Input,
-  InputRightElement,
   Button,
+  Card,
+  CardBody,
+  Input,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
-import ChatBubble from "../../common/ChatBubble";
-import useFetch from "../../../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import useInput from "../../../hooks/useInput";
+import ChatBubble from "../../common/ChatBubble";
 
 interface Message {
   id: string;
   text: string;
 }
-
-const GameChat = (gameId) => {
+const GameChat = ({ gameId }) => {
+  console.log(gameId);
   const token = JSON.parse(localStorage.getItem("token") as string);
 
-  useFetch({
-    url: "https://fastcampus-chat.net/chat/participate",
-    method: "PATCH",
-    data: {
-      chatId: "0cac625d-d479-4da3-8f4e-78b3a3ca9635",
+  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${token.accessToken}`,
+      serverId: import.meta.env.VITE_APP_SERVER_ID,
     },
-    start: true,
   });
 
-  const socket = io(
-    `https://fastcampus-chat.net/chat?chatId=0cac625d-d479-4da3-8f4e-78b3a3ca9635`,
-    {
-      extraHeaders: {
-        Authorization: `Bearer ${token.accessToken}`,
-        serverId: import.meta.env.VITE_APP_SERVER_ID,
-      },
-    },
-  );
-
   // 메세지 데이터
-  const [message, setMessage] = useState({
+  const [message, setMessage] = useState<Message>({
     id: "",
     text: "",
   });
@@ -76,6 +60,12 @@ const GameChat = (gameId) => {
     messageValue.clear();
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      submitMessage();
+    }
+  };
+
   return (
     <Card>
       <CardBody>
@@ -90,6 +80,7 @@ const GameChat = (gameId) => {
           placeholder="채팅내용"
           value={messageValue.value}
           onChange={messageValue.onChange}
+          onKeyPress={handleKeyPress}
         />
         <InputRightElement width="4.5rem">
           <Button h="1.75rem" size="sm" onClick={submitMessage}>
