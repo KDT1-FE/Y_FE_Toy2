@@ -2,21 +2,52 @@
 
 import MyChatItem from '@/components/chats/MyChatItem';
 import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import SearchMyChat from '@/components/chats/SearchMyChat';
 // svg 가져오기
 import AddChat from '../../../public/assets/addChat.svg';
 import Search from '../../../public/assets/search.svg';
-import { Chat } from './interfaces';
+import { Chat, allChatsState } from '../../store/chatsStore';
 import { instance } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 const MyChats = ({ userType }: any) => {
     const [searchOpen, setSearchOpen] = useState(false);
-    const [allChats, setAllChats] = useState<Chat[]>([]);
+    const [allChats, setAllChats] = useRecoilState(allChatsState);
+    const [myChats, setMyChats] = useState<Chat[]>([]);
+    const router = useRouter();
+    // const enterChatRoom = (chatId: string | undefined) => {
+    //     if (chatId) {
+    //         router.push(`/chating/${chatId}`);
+    //         console.log(chatId);
+    //     } else {
+    //         console.log('error');
+    //     }
+    // };
+    const enterChatRoom = (chat: Chat) => {
+        if (chat.id) {
+            router.push(
+                `/chating/${chat.id}?name=${chat.name}&isPrivate=${chat.isPrivate}&users=${chat.users}&latesetMessage=${chat.latestMessage}&updatedAt=${chat.updatedAt}`,
+            );
+        }
+    };
 
+    const getMyChats = async () => {
+        try {
+            const res = await instance.get<Chat[], any>(`chat`);
+            if (res) {
+                setMyChats(res.chats);
+            } else {
+                console.log('내 채팅 데이터 조회 실패');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
     const getAllChats = async () => {
         try {
-            const res = await instance.get<Chat[], any>('chat/all');
+            const res = await instance.get<Chat[], any>(`chat/all`);
             setAllChats(res.chats);
         } catch (error) {
             console.error(error);
@@ -24,12 +55,12 @@ const MyChats = ({ userType }: any) => {
     };
 
     useEffect(() => {
-        getAllChats();
+        if (userType === 'my') {
+            getMyChats();
+        } else {
+            getAllChats();
+        }
     }, []);
-    // 확인용
-    // useEffect(() => {
-    //     console.log(allChats);
-    // }, [allChats]);
 
     const onSearchHandler = () => {
         setSearchOpen(!searchOpen);
@@ -46,8 +77,14 @@ const MyChats = ({ userType }: any) => {
             </Header>
             <ChatContainer>
                 {searchOpen ? <SearchMyChat /> : null}
-                {allChats.map((chat) => (
-                    <MyChatItem key={chat.id} name={chat.name} latestMessage={chat.latestMessage} users={chat.users} />
+                {(userType === 'my' ? myChats : allChats).map((chat) => (
+                    <MyChatItem
+                        key={chat.id}
+                        name={chat.name}
+                        latestMessage={chat.latestMessage}
+                        users={chat.users}
+                        onClick={() => enterChatRoom(chat)}
+                    />
                 ))}
             </ChatContainer>
         </Wrapper>
