@@ -1,4 +1,4 @@
 export const apiHeader = {
   "content-type": "application/json",
-  serverId: "1601075b"
+  serverId: import.meta.env.VITE_APP_SERVER_ID
 };

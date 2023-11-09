@@ -15,7 +15,6 @@ function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(loginData);
     const LOGIN_API_URL = "https://fastcampus-chat.net/login";
 
     postApi(LOGIN_API_URL, loginData)
