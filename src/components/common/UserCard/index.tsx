@@ -1,6 +1,6 @@
-import styled from "styled-components";
 import { Button } from "@chakra-ui/react";
 import { useState } from "react";
+import styled from "styled-components";
 
 const Profile = styled.div`
   border: 1px solid #c6c6c6;
@@ -74,6 +74,7 @@ const UserCard = ({ id, name, picture, roomData, setRoomData }: Props) => {
           height="1.3rem"
           fontSize=".8rem"
           onClick={handleInvite}
+          colorScheme="red"
         >
           취소
         </Button>
