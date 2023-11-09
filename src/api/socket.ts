@@ -1,4 +1,3 @@
-// loginSocket.ts
 import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../constant';
 

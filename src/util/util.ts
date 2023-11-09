@@ -1,5 +1,5 @@
+import { NavigateFunction, useNavigate } from 'react-router';
 import { getAllUsers, postRefresh } from '../api';
-
 export const handleGetAllUsers =
   (accessToken: string) => async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,3 +34,14 @@ export const handlePostRefresh =
       alert('토큰 재발급에 실패했습니다.');
     }
   };
+
+export const titleAction = (navigate: NavigateFunction) => {
+  const url = window.location.pathname;
+  if (url === '/' || url === '/account' || url === '/join') {
+    navigate('/');
+  } else if (url === '/lobby') {
+    navigate('/lobby');
+  } else {
+    alert('게임 리브 로직 구현 예정');
+  }
+};
