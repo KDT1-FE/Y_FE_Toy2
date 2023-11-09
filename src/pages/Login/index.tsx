@@ -17,7 +17,7 @@ const Login = () => {
     password: "",
   });
 
-  const [result, loading, statusCode, refresh] = useFetch({
+  const login = useFetch({
     url: "https://fastcampus-chat.net/login",
     method: "POST",
     data: data,
@@ -34,17 +34,17 @@ const Login = () => {
   }, [idInput.value, pwInput.value]);
 
   const handleLogin = () => {
-    refresh();
+    login.refresh();
   };
 
   useEffect(() => {
-    if (result) {
-      const text = JSON.stringify(result);
+    if (login.result) {
+      const text = JSON.stringify(login.result);
       localStorage.setItem("token", text);
     }
-    console.log(result, loading, statusCode);
+    console.log(login.result, login.loading, login.statusCode);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result]);
+  }, [login.result]);
 
   return (
     <>
