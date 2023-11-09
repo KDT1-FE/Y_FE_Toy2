@@ -11,6 +11,11 @@ const config: Config = withMT({
 		'path-to-your-node_modules/@material-tailwind/react/theme/components/**/*.{js,ts,jsx,tsx}',
 	],
 	theme: {
+		screens: {
+			sm: '425px',
+			md: '768px',
+			lg: '1024px',
+		},
 		extend: {
 			colors: {
 				primary: '#FF6363',
