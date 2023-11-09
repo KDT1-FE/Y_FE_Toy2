@@ -5,9 +5,10 @@ import React, { useEffect, useState } from 'react';
 import MessageContainer from './MessageContainer';
 import io from 'socket.io-client';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { formatCreatedAt } from '@/hooks/chatsList/useFormatCreatedAt';
+
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
+import { formatCreatedAt } from '../chats/useFormatCreatedAt';
 
 interface Message {
     id: string;
