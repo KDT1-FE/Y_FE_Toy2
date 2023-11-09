@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Outlet } from "react-router-dom";
+import ProfilePage from "./pages/Profile/ProfilePage";
+import ProfileEdit from "./pages/Profile/ProfileEditPage";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 
@@ -24,6 +26,12 @@ function App() {
           </Wrapper>
         }
       />
+      <Route path="/profiles/:userid" element={<ProfilePage></ProfilePage>} />
+      <Route
+        path="/profiles/:userid/edit"
+        element={<ProfileEdit></ProfileEdit>}
+      />
+      <Route path="/profiles/:userid/:feedId" element={<div>feedId</div>} />
       <Route path="*" element={<PageNotFound></PageNotFound>} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
