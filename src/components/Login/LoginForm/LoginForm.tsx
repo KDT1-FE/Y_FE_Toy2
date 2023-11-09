@@ -21,8 +21,8 @@ function LoginForm() {
     postApi(LOGIN_API_URL, loginData)
       .then((data) => {
         console.log("로그인 성공");
-        const ACCESS_TOKEN = data.accessToken;
-        sessionStorage.setItem("accessToken", ACCESS_TOKEN);
+        const token = data.accessToken;
+        sessionStorage.setItem("token", token);
       })
       .catch((error) => {
         console.log("로그인 실패");
