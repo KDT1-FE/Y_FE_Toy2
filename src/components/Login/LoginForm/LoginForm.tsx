@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import LoginInput from "../LoginInput/LoginInput";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import FormInputBtn from "../../FormInputBtn/FormInputBtn";
 import { postApi } from "../../../utils/postApi";
 import Loader from "../../Loader/Loader";
 import { AuthContext } from "../../../hooks/useAuth";
-import axios from "axios";
-import { apiHeader } from "../../../utils/apiHeader";
 
 const initialLoginData = {
   id: "",
@@ -17,12 +15,7 @@ function LoginForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loginData, setLoginData] = useState(initialLoginData);
   const [loading, setLoading] = useState(false);
-  const { accessToken, setAccessToken, refreshToken, setRefreshToken } =
-    useContext(AuthContext);
-
-  useEffect(() => {
-    console.log("accessToken : ", accessToken);
-  }, [accessToken]);
+  const { accessToken, setAccessToken } = useContext(AuthContext);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +67,7 @@ function LoginForm() {
       />
       <ErrorMessage>{errorMessage}</ErrorMessage>
       <FormInputBtn value={"로그인"} />
+      <p>{accessToken ? "로그인상태" : "로그아웃 상태"}</p>
     </LoginContainer>
   );
 }

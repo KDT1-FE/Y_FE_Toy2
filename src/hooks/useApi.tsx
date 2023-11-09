@@ -29,7 +29,16 @@ function useApi() {
     }
   };
 
-  return { getData, postData };
+  const patchData = async (url: string) => {
+    try {
+      const response = await axios.patch(url, {}, { headers });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return { getData, postData, patchData };
 }
 
 export default useApi;
