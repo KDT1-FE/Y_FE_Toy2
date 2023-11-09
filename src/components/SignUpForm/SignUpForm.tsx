@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import SignUpInput from "../SignUpInput/SignUpInput";
+import SignUpInput, { ErrorData } from "../SignUpInput/SignUpInput";
 import { useEffect, useState } from "react";
 import FormInputBtn from "../FormInputBtn/FormInputBtn";
 import Loader from "../Loader/Loader";
@@ -31,9 +31,23 @@ function SignUpForm() {
     );
   }, [errorData]);
 
+  const updateErrorDataKey = (errorData: ErrorData) => {
+    const updateErrorData = { ...errorData };
+
+    for (const key in updateErrorData) {
+      if (updateErrorData[key] === "") {
+        updateErrorData[key] = "required";
+      }
+    }
+
+    setErrorData(updateErrorData);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    updateErrorDataKey(errorData);
 
     if (!passedValidation) {
       alert("모든 문항을 정확히 입력해주세요.");
