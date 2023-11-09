@@ -1,11 +1,13 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import type { SignUpFormProps } from '../../pages/auth/SignUp';
 import SignUpSelectTag from './SignUpSelectTag';
-import { signUpFormState } from '../../atoms';
+import { defaultSignUpValue, signUpFormState } from '../../atoms';
 import { FbUser } from '../../types/User';
+import useMutationSignUp from '../../hooks/useMutationSignUp';
 
 const tags = {
   hobby: [
@@ -33,15 +35,25 @@ const tags = {
 };
 
 function SignUpForm4({ setStep }: SignUpFormProps) {
-  const signUpForm = useRecoilValue(signUpFormState);
+  const navigate = useNavigate();
+  const [signUpForm, setSignUpForm] = useRecoilState(signUpFormState);
+  const type = signUpForm.picture.split(';')[0].slice(5);
+  const { isLoaded, signUp } = useMutationSignUp(type);
+
   const [clickedItem, setClickedItem] = useState(new Set<string>());
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newForm: FbUser = {
       ...signUpForm,
       hashtag: Array.from(clickedItem),
     };
-    console.log(newForm);
+    // 회원가입 로직
+    await signUp(newForm);
+    // recoil 저장되어있는 정보 지우기
+    setSignUpForm(defaultSignUpValue);
+    // 메시지를 보여주고 이동시켜야 할것같은데 일단 이동하기
+    navigate('/');
+    // console.log(newForm);
   };
   const handleClick = (name: string) => {
     setClickedItem((prev) => {
@@ -105,8 +117,8 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
             />
           ))}
         </Grid>
-        <Button color="primary" size="large" variant="contained" fullWidth type="submit" sx={{ mt: 3 }}>
-          LANGCHAT 시작하기
+        <Button color="primary" size="large" variant="contained" fullWidth type="submit" sx={{ my: 3 }}>
+          {isLoaded ? 'LANGCHAT 시작하기' : '회원가입 진행중...'}
         </Button>
       </form>
     </div>

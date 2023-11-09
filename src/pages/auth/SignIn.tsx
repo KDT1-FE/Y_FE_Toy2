@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, Button, Container, TextField, Typography, Link as MuiLink } from '@mui/material';
 import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import { publicApi } from '../../libs/axios';
-import { accessTokenState } from '../../atoms';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { privateApi, publicApi } from '../../libs/axios';
+import { accessTokenState, userState } from '../../atoms';
 
 interface ResponseValue {
   accessToken: string; // 사용자 접근 토큰
@@ -13,6 +13,8 @@ interface ResponseValue {
 }
 
 function SignIn() {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useRecoilState(userState);
   const setAccessTokenState = useSetRecoilState(accessTokenState);
   const formik = useFormik({
     initialValues: {
@@ -27,8 +29,15 @@ function SignIn() {
           password,
         });
 
+        // eslint-disable-next-line @typescript-eslint/dot-notation
+        privateApi.defaults.headers.common['Authorization'] = res.data.accessToken;
+        const res2 = await privateApi.get('auth/me');
+        const { user } = res2.data;
+
         localStorage.setItem('accessToken', res.data.accessToken);
         localStorage.setItem('refreshToken', res.data.refreshToken);
+        localStorage.setItem('user', JSON.stringify(user));
+        setUserData(user);
         setAccessTokenState(res.data.accessToken);
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -40,6 +49,13 @@ function SignIn() {
       }
     },
   });
+
+  useEffect(() => {
+    if (userData !== '' && localStorage.getItem('user') !== '') {
+      // 유저 정보와 액세스 토큰이 있을때
+      navigate('/home');
+    }
+  }, [userData, navigate]);
 
   return (
     <Container sx={{ height: '100%' }}>

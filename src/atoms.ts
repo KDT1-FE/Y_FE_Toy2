@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { atom } from 'recoil';
 import { FbUser } from './types/User';
 
@@ -7,7 +6,7 @@ export const accessTokenState = atom({
   default: localStorage.getItem('accessToken'), // default value (aka initial value)
 });
 
-const defaultSignUpValue: FbUser = {
+export const defaultSignUpValue: FbUser = {
   id: '',
   password: '',
   name: '',
@@ -21,4 +20,15 @@ const defaultSignUpValue: FbUser = {
 export const signUpFormState = atom({
   key: 'signUpFormState',
   default: defaultSignUpValue,
+});
+
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+
+export const userState = atom<User | string>({
+  key: 'userState',
+  default: localStorage.getItem('user') ?? '',
 });
