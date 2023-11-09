@@ -1,8 +1,7 @@
 import { styled } from '@mui/material';
 
 export const Wrapper = styled('div')({
-  height: '100%',
-
+  height: '100vh',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
@@ -11,6 +10,15 @@ export const Wrapper = styled('div')({
 
 export const StyledMessages = styled('ul')({
   width: '100%',
+  overflowY: 'scroll',
+
+  '&::-webkit-scrollbar': {
+    width: '10px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#1D3557',
+    borderRadius: '25px',
+  },
 });
 
 export const InputWrapper = styled('div')({

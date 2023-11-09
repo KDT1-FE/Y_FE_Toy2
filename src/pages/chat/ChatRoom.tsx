@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState, useCallback } from 'react';
+import React, { ChangeEvent, useEffect, useState, useCallback, useRef, LegacyRef } from 'react';
 import { Button, Input } from '@mui/material';
 import { Send } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
@@ -16,6 +16,7 @@ function ChatRoom() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<MessageType[]>([]);
   const accessToken = useRecoilValue(accessTokenState);
+  const scrollRef = useRef<HTMLUListElement | null>(null);
 
   const socketConnect = useCallback(async () => {
     const socket = io(`https://fastcampus-chat.net/chat?chatId=${chatId}`, {
@@ -26,8 +27,7 @@ function ChatRoom() {
     });
 
     setSocketState(socket);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatId]);
+  }, [chatId, accessToken]);
 
   const userFetch = useCallback(async () => {
     const response = await fetch('https://fastcampus-chat.net/auth/me', {
@@ -43,6 +43,7 @@ function ChatRoom() {
 
     setName(data.user.name);
   }, [accessToken]);
+
   // 메시지 작성
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -51,9 +52,26 @@ function ChatRoom() {
   // 메시지 보내기
   const submitMessage = () => {
     socketState?.emit('message-to-server', message);
-
     setMessage('');
   };
+
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    socketState?.emit('fetch-messages');
+
+    socketState?.on('messages-to-client', (data) => {
+      setMessages([...data.messages].reverse());
+    });
+  }, [socketState]);
 
   useEffect(() => {
     userFetch();
@@ -72,9 +90,10 @@ function ChatRoom() {
       socketState?.off('message-to-client');
     };
   }, [socketState]);
+
   return (
     <S.Wrapper>
-      <S.StyledMessages>
+      <S.StyledMessages ref={scrollRef}>
         {messages.length !== 0
           ? messages.map((message, index) => <Message name={name} message={message} key={index} />)
           : ''}
