@@ -5,6 +5,8 @@ import Layout from './components/common/Layout';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import AuthLayout from './components/common/AuthLayout';
+import ChatList from './pages/chat/ChatList';
+import ChatRoom from './pages/chat/ChatRoom';
 
 function App() {
   return (
@@ -15,7 +17,8 @@ function App() {
         {/* 은지님 부분 */}
         <Route path="/mypage" />
         {/* 홍규님 부분 */}
-        <Route path="chat" />
+        <Route path="/chat" element={<ChatList />} />
+        <Route path="/chat/:chatId" element={<ChatRoom />} />
       </Route>
       <Route element={<AuthLayout />}>
         {/* 성겸 부분 */}
