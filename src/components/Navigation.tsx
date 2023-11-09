@@ -3,13 +3,14 @@
 import styled from 'styled-components';
 
 export default function Navigation() {
+    const userId = sessionStorage.getItem('userId');
     return (
         <NavigationContainer>
             <NavigationBox>
                 <NavigationAnchor href="users">유저</NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">2</NavigationAnchor>
+                <NavigationAnchor href={`${userId}`}>내</NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
                 <NavigationAnchor href="allchats">모든</NavigationAnchor>
