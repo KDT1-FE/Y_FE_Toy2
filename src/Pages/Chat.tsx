@@ -37,9 +37,7 @@ function Chat() {
             </div>
           </CateLink>
           <CatePlus>
-            <button>
               <ModalPlus />
-            </button>
           </CatePlus>
         </ChatCategory>
         <ChatRoom>
@@ -58,9 +56,7 @@ function Chat() {
               <p className="util-input">
                 <input type="text" />
               </p>
-              <button>
                 <ModalHamburger />
-              </button>
             </div>
           </div>
           <div className="chatroom__body">
@@ -326,17 +322,6 @@ const ChatRoom = styled.div`
             padding-right: 50px;
             color: #999696;
           }
-        }
-        button {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #f5f5f5;
-          border: none;
-          outline: none;
-        }
-        button:hover {
-          cursor: pointer;
         }
       }
     }

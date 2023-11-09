@@ -1,6 +1,4 @@
-import { useState } from "react";
-import Modal from "react-modal";
-import { Styles } from "react-modal";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import "../style/Modal.css";
 
@@ -8,76 +6,77 @@ const ModalExample = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
-    setModalIsOpen(true);
+    setModalIsOpen(prev => !prev);
   };
 
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const ModalWrap = styled.div`
-    position: relative;
-  `;
+  // 메뉴 밖 클릭 시 메뉴 숨기기
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setModalIsOpen(false);
+      }
+    };
 
-  const HamButton = styled.button`
-    img:hover {
-      border-radius: 8px;
-      background-color: lightgray;
-    }
-  `;
+    document.addEventListener('click', handleClickOutside);
 
-  const AddButton = styled.button`
-    &:hover {
-      background-color: whitesmoke;
-      cursor: pointer;
-    }
-    width: 120px;
-    border: none;
-    margin-bottom: 1px;
-    background-color: #fff;
-  `;
-
-  const OutButton = styled.button`
-    &:hover {
-      background-color: whitesmoke;
-      cursor: pointer;
-    }
-    width: 120px;
-    border: none;
-    background-color: #fff;
-  `;
-
-  const customStyles: Styles = {
-    content: {
-      width: "120px",
-      height: "40px",
-      zIndex: "150",
-      position: "absolute",
-      top: "20%",
-      left: "0",
-      justifyContent: "center",
-      overflow: "auto",
-      border: "1px solid lightgray",
-      borderRadius: "8px"
-    }
-  };
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [menuRef]);
 
   return (
-    <ModalWrap>
-      <HamButton onClick={openModal}>
+    <ModalWrap ref={menuRef}>
+      <HamButton onClick={() => openModal()}>
         <img src="/src/assets/images/menu-ico.png" alt="메뉴" width="30" />
       </HamButton>
-      <Modal
-        style={customStyles}
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        overlayClassName="modal-overlay"
-      >
-        <AddButton>대화상대 초대하기</AddButton>
-        <OutButton>채팅방 나가기</OutButton>
-      </Modal>
+      {
+        modalIsOpen && (
+          <ButtonWrap>
+            <button>대화상대 초대하기</button>
+            <button>채팅방 나가기</button>
+          </ButtonWrap>
+        )
+      }
+
     </ModalWrap>
   );
 };
 
 export default ModalExample;
+
+const ModalWrap = styled.div`
+  position: relative;
+`;
+
+const HamButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border: none;
+  outline: none;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ButtonWrap = styled.div`
+  position: absolute;
+  background-color: red;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #E4E4E4;
+  border-left: 1px solid #E4E4E4;
+  border-right: 1px solid #E4E4E4;
+  button{
+    cursor: pointer;
+    width: 190px;
+    padding: 15px 10px;
+    border: none;
+    background-color: #fff;
+    border-bottom: 1px solid #E4E4E4;
+    color: #999696;
+  }
+`

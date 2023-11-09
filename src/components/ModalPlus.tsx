@@ -25,9 +25,9 @@ const ModalExample = () => {
   };
 
   const PlusButton = styled.button`
-    img:hover {
-      border-radius: 20px;
-      background-color: gray;
+    transition: all 0.3s;
+    &:hover {
+      transform: rotate(180deg);
     }
   `;
 
