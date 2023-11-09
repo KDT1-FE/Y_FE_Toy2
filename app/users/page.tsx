@@ -1,22 +1,21 @@
 import React from 'react';
 import { fetchAllUsers, fetchMyUser } from './users.utils';
 import { User } from './users.type';
-import FriendProfile from '@/Components/FriendProfiles';
-import MyProfile from '@/Components/MyProfile';
-import Header from '@/Components/Header';
+import FriendProfile from '@/Components/Users/FriendProfiles';
+import MyProfile from '@/Components/Users/MyProfile';
+import Header from '@/Components/Common/Header';
 
 const Users = async () => {
-	const accessToken = process.env.ACCESS_TOKEN as string;
+	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;
 	const allUsers: User[] = await fetchAllUsers(accessToken);
 	const myUser: User = await fetchMyUser(accessToken);
-	console.log(allUsers);
-	console.log(myUser);
+	const allUsersExceptMe = allUsers.filter((user) => user.id !== myUser.id);
 
 	return (
-		<section>
+		<section className="w-full h-full bg-white px-3">
 			<Header />
 			<MyProfile user={myUser} />
-			<FriendProfile allUsers={allUsers} />
+			<FriendProfile allUsers={allUsersExceptMe} />
 		</section>
 	);
 };

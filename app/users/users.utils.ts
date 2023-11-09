@@ -4,7 +4,7 @@ export const fetchAllUsers = async (token: string) => {
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
-			serverId: process.env.SERVER_KEY as string,
+			serverId: process.env.NEXT_PUBLIC_SERVER_ID as string,
 		},
 	});
 	const data = await res.json();
@@ -17,7 +17,7 @@ export const fetchMyUser = async (token: string) => {
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
-			serverId: process.env.SERVER_KEY as string,
+			serverId: process.env.NEXT_PUBLIC_SERVER_ID as string,
 		},
 	});
 	const data = await res.json();

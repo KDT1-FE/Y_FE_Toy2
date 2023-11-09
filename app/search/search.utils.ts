@@ -6,7 +6,7 @@ export const fetchAllOpenChat = async (accessToken: string) => {
 		method: GET,
 		headers: {
 			'content-type': CONTENT_TYPE,
-			serverId: process.env.SERVER_ID as string, // 서버 아이디 임시 사용
+			serverId: process.env.NEXT_PUBLIC_SERVER_ID as string, // 서버 아이디 임시 사용
 			Authorization: `Bearer ${accessToken}`,
 		},
 	};
