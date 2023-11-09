@@ -1,0 +1,9 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.ghosts {
+  margin: 0;
+  padding-top: 4rem;
+  text-align: center;
+  max-height: 90%;
+}

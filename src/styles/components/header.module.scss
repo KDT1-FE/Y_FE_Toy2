@@ -1,0 +1,41 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.header {
+  @include flex-center-row();
+  padding: 1rem;
+  justify-content: space-between;
+  background-color: $bg-purple-80;
+  color: $white;
+  font-size: $font-base;
+  font-family: $font-main;
+
+  p {
+    min-width: 6em;
+  }
+
+  span {
+    padding: 1rem;
+  }
+
+  &__title {
+    font-weight: $font-bold700;
+    font-family: $font-logo;
+    font-size: $font-lg;
+  }
+
+  &__button {
+    padding: 1rem;
+    background-color: transparent;
+    border: none;
+    border-radius: 0.3rem;
+    color: $white;
+    font-size: $font-base;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(0.95);
+      background-color: rgba($white, 0.1);
+    }
+  }
+}
