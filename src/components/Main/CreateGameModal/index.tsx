@@ -144,9 +144,11 @@ interface Props {
 
 const CreateGameModal = ({ setModal }: Props) => {
   const navigate = useNavigate();
+  const fireFetch = useFireFetch();
 
   const token = JSON.parse(localStorage.getItem("token") as string);
 
+  // 소켓 연결
   const socket = io(
     `https://fastcampus-chat.net/chat?chatId=9fe8a1af-9c60-4937-82dd-21d6da5b9cd9`,
     {
@@ -157,7 +159,7 @@ const CreateGameModal = ({ setModal }: Props) => {
     },
   );
 
-  const fireFetch = useFireFetch();
+  // 게임 데이터
   const [roomData, setRoomData] = useState<ChatRoom>({
     name: "",
     users: [],
@@ -165,12 +167,20 @@ const CreateGameModal = ({ setModal }: Props) => {
     num: 1,
   });
 
+  // 방제목 빈값이면 true
+  const [inputAction, setInpuAction] = useState(false);
+
+  // 방제목 input 초기화
+  const titleInput = useInput("");
+
+  // 유저정보 요청
   const users = useFetch({
     url: "https://fastcampus-chat.net/users",
     method: "GET",
     start: true,
   });
 
+  // 게임 만들기 post요청 선언 (호출 X)
   const createGame = useFetch({
     url: "https://fastcampus-chat.net/chat",
     method: "POST",
@@ -181,8 +191,7 @@ const CreateGameModal = ({ setModal }: Props) => {
     start: false,
   });
 
-  const titleInput = useInput("");
-
+  // 방제목 input 저장
   useEffect(() => {
     const copy = { ...roomData };
     copy.name = titleInput.value;
@@ -190,12 +199,17 @@ const CreateGameModal = ({ setModal }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [titleInput.value, titleInput.value]);
 
+  // 게임 생성 함수
   const handleMakeRoom = () => {
-    createGame.refresh();
-
-    console.log(roomData);
+    if (roomData.name === "") {
+      setInpuAction(true);
+    } else {
+      // 게임 생성 POST 호출
+      createGame.refresh();
+    }
   };
 
+  // 게임 인원 선택 함수
   const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
     const copy = { ...roomData };
     copy.num = ~~e.target.value;
@@ -203,8 +217,10 @@ const CreateGameModal = ({ setModal }: Props) => {
     setRoomData(copy);
   };
 
+  // 게임 생성 후 파이어베이스 저장 밑 유저 초대 푸쉬알림
   useEffect(() => {
     if (createGame.result) {
+      // 파이어베이스 게임 데이터 생성
       const newData = {
         ...roomData,
         id: createGame.result.id,
@@ -214,20 +230,21 @@ const CreateGameModal = ({ setModal }: Props) => {
         status: "대기중",
       };
 
+      // 파이어베이스 POST요청
       fireFetch.usePostData("game", createGame.result.id, newData);
 
-      // const roomText = [...JSON.stringify(newData)];
-
+      // 초대된 유저 목록 생성
       const inviteUser: (string | ChatRoom | string[])[] = [...roomData.users];
 
       inviteUser.push(newData);
       inviteUser.push("*&^");
 
-      // const text = inviteUser.toString();
       const text = JSON.stringify(inviteUser);
 
+      // 초대 메시지 전달
       socket.emit("message-to-server", text);
 
+      // 해당 게임방으로 이동
       navigate(`/game?gameId=${createGame.result.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -241,7 +258,7 @@ const CreateGameModal = ({ setModal }: Props) => {
             <ImgBox>⭐</ImgBox>
             <Input
               marginBottom="1rem"
-              border="1px solid #c6c6c6"
+              border={!inputAction ? "1px solid #c6c6c6" : "1px solid red"}
               placeholder="방제목"
               textAlign="center"
               value={titleInput.value}
