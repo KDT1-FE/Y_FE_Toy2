@@ -1,12 +1,27 @@
-import React from 'react';
-import { AllOpenChat } from '@/app/search/search.type';
+'use client';
 
-const SearchOpenChat = ({ initialData }: { initialData: AllOpenChat }) => {
-	console.log(initialData);
+import React, { useState } from 'react';
+import { AllOpenChat } from '@/app/search/search.type';
+import ShowAllOpenChat from './ShowAllOpenChat';
+
+const SearchOpenChat = ({ allOpenChat }: { allOpenChat: AllOpenChat }) => {
+	const [userInput, setUserInput] = useState('');
+	const [openChats] = useState<AllOpenChat>(allOpenChat);
+
+	const getUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setUserInput(e.target.value.toLowerCase().replace(/(\s*)/g, ''));
+	};
+
+	const searched = openChats.filter((item) =>
+		item.name.toLowerCase().replace(/(\s*)/g, '').includes(userInput),
+	);
+
 	return (
 		<>
-			<hr />
-			<h2>SearchOpenChat</h2>
+			<input onChange={getUserInput} />
+			{searched.map((item) => (
+				<ShowAllOpenChat key={item.id} openChat={item} />
+			))}
 		</>
 	);
 };
