@@ -1,10 +1,12 @@
+import { atom } from 'recoil';
+
 export interface Chat {
     id?: string;
     name?: string;
     isPrivate?: boolean;
     users?: User[];
     latestMessage?: Message | null;
-
+    onClick?: () => void;
     updatedAt?: Date;
 }
 
@@ -24,3 +26,8 @@ export interface User {
     chats: string[]; // chat id만 속합니다.
     username: string;
 }
+// 서버에 있는 모든 채팅 정보 조회
+export const allChatsState = atom<Chat[]>({
+    key: 'allChatsState',
+    default: [],
+});
