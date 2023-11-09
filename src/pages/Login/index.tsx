@@ -39,7 +39,7 @@ const Login = () => {
 
   useEffect(() => {
     if (login.result) {
-      const text = JSON.stringify(login.result);
+      const text = JSON.stringify({ ...login.result, id: idInput.value });
       localStorage.setItem("token", text);
     }
     console.log(login.result, login.loading, login.statusCode);

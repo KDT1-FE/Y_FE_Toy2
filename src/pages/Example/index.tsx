@@ -2,9 +2,24 @@ import { Button, Input } from "@chakra-ui/react";
 import { serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import styled from "styled-components";
+import CreateGameModal from "../../components/Main/CreateGameModal";
 import useFetch from "../../hooks/useFetch";
 import useFireFetch from "../../hooks/useFireFetch";
 import useInput from "../../hooks/useInput";
+
+const Toast = styled.div`
+  border-radius: 16px;
+
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+
+  background: #cdcdcd;
+
+  width: 400px;
+  height: 150px;
+`;
 
 const Example = () => {
   const token = JSON.parse(localStorage.getItem("token") as string);
@@ -35,6 +50,20 @@ const Example = () => {
     id: "",
     text: "",
   });
+  // 초대방 정보 데이터
+  const [roomData, setRoomData] = useState({
+    id: "",
+    name: "",
+    host: "",
+    users: [""],
+  });
+
+  // 팝업 데이터
+  const [toastUser, setToastUser] = useState([""]);
+
+  // 토스트 모달
+  const [toast, setToast] = useState(false);
+  const [modal, setModal] = useState(false);
 
   // 파이어베이스 커스텀훅 선언
   const fireFetch = useFireFetch();
@@ -49,18 +78,42 @@ const Example = () => {
     start: true,
   });
 
+  const live = useFetch({
+    url: "https://fastcampus-chat.net/chat/leave",
+    method: "PATCH",
+    data: {
+      chatId: "1598e7f6-ab51-43f8-b70a-67f7c57dce00",
+    },
+    start: false,
+  });
+
   // 메시지 input value 저장
   const messageValue = useInput("");
 
   // 소켓 통신 시 메시지 데이터 저장
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
+      // 일반 채팅인지 초대 메시지인지 구별
+
+      if (messageObject.text.slice(-5, -2) === "*&^") {
+        // 초대 상태 저장
+        const usersArr = JSON.parse(messageObject.text);
+        const users = [...usersArr];
+        users.pop();
+        users.pop();
+        const room = usersArr[usersArr.length - 2];
+
+        setToastUser(users);
+        setRoomData(room);
+      } else {
+        // 메시지 데이터, 작성 유저 상태 저장
+        const copy = { ...message };
+        copy.id = messageObject.userId;
+        copy.text = messageObject.text;
+        setMessage(copy);
+      }
+
       // console.log(messageObject);
-      // 메시지 데이터, 작성 유저 상태 저장
-      const copy = { ...message };
-      copy.id = messageObject.userId;
-      copy.text = messageObject.text;
-      setMessage(copy);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,6 +124,17 @@ const Example = () => {
     if (message.id !== "") console.log(message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message.text]);
+
+  //팝업 변화 감지
+  useEffect(() => {
+    if (toastUser[0] !== "") {
+      if (toastUser.includes(token.id)) {
+        console.log(roomData);
+        setToast(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toastUser]);
 
   // 파이어 베이스에 저장할 데이터
   const noticeData = {
@@ -124,7 +188,7 @@ const Example = () => {
   };
 
   const deleteData_A = () => {
-    console.log(2);
+    live.refresh();
   };
 
   // api get 요청으로 가져온 데이터 출력
@@ -152,13 +216,36 @@ const Example = () => {
       {/* 벡엔드 rest api 통신 */}
       <div style={{ marginBottom: "2rem" }}>
         <Button onClick={postData_A}>Post</Button>
-        <Button onClick={deleteData_A}>Delete</Button>
+        <Button onClick={deleteData_A}>나가기</Button>
         <Button onClick={getData_A}>Get</Button>
       </div>
 
       {/* 메시지 소켓 통신 */}
-      <Input value={messageValue.value} onChange={messageValue.onChange} />
-      <Button onClick={submitMessage}>전송</Button>
+      <div style={{ marginBottom: "2rem" }}>
+        <Input value={messageValue.value} onChange={messageValue.onChange} />
+        <Button onClick={submitMessage}>전송</Button>
+      </div>
+
+      <Button
+        onClick={() => {
+          setModal(true);
+        }}
+      >
+        모달
+      </Button>
+      {modal ? <CreateGameModal setModal={setModal} /> : null}
+      {toast && roomData ? (
+        <Toast>
+          <div>
+            <div>{roomData.host}님이 초대하였습니다.</div>
+            <div>{roomData.name}</div>
+          </div>
+          <div>
+            <Button>거절</Button>
+            <Button>수락</Button>
+          </div>
+        </Toast>
+      ) : null}
     </>
   );
 };
