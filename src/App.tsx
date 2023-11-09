@@ -4,6 +4,9 @@ import styled from "styled-components";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Outlet } from "react-router-dom";
+
+import Chat from "./pages/chat";
+
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEdit from "./pages/Profile/ProfileEditPage";
 import Login from "./pages/Login/Login";
@@ -26,6 +29,17 @@ function App() {
           </Wrapper>
         }
       />
+      <Route
+        path="/chat"
+        element={
+          <div>
+            <Header />
+            <MainContent>
+              <Chat />
+            </MainContent>
+          </div>
+        }
+      />
       <Route path="/profiles/:userid" element={<ProfilePage></ProfilePage>} />
       <Route
         path="/profiles/:userid/edit"
@@ -44,15 +58,20 @@ export default App;
 const Wrapper = styled.div`
   display: grid;
   grid-template-rows: auto 1fr auto 2fr;
-`;
+`
+
 const MainContent = styled.div`
   width: 100%;
-  height: calc(100vh - 20rem);
-`;
+  /* height: calc(100vh - 20rem); */
+  height: 100%;
+  max-width:1200px;
+  margin: 0 auto;
+`
+
 const MainBanner = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #d9d9d9;
-`;
+`
