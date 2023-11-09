@@ -7,8 +7,18 @@ import useFireFetch from "../../hooks/useFireFetch";
 import useInput from "../../hooks/useInput";
 
 const Example = () => {
-  // 토근 저장, 채팅 서버 연결
   const token = JSON.parse(localStorage.getItem("token") as string);
+
+  useFetch({
+    url: "https://fastcampus-chat.net/chat/participate",
+    method: "PATCH",
+    data: {
+      chatId: "9fe8a1af-9c60-4937-82dd-21d6da5b9cd9",
+    },
+    start: true,
+  });
+
+  // 채팅 서버 연결
   const socket = io(
     `https://fastcampus-chat.net/chat?chatId=9fe8a1af-9c60-4937-82dd-21d6da5b9cd9`,
     {

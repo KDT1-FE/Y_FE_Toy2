@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface BaseProps {
   url: string;
@@ -22,12 +22,14 @@ interface Return {
   loading: boolean;
   statusCode: number;
   refresh: () => void;
+  error: any;
 }
 
 const useFetch = ({ url, method, data, start }: Props): Return => {
   const [result, setResult] = useState<object>();
   const [loading, setLoading] = useState(false);
   const [statusCode, setCode] = useState(-1);
+  const [error, setError] = useState<any>({});
 
   const fetchData = async () => {
     if (loading) return;
@@ -54,40 +56,43 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
     }
 
     if (method === "GET") {
-      const response = await axios.get(url, {
-        headers: headers,
-      });
-
-      setCode(response.status);
-
       try {
+        const response = await axios.get(url, {
+          headers: headers,
+        });
+
+        setCode(response.status);
+
         setResult(response.data);
-      } catch (err) {
+      } catch (error) {
+        setError(error);
         setResult({});
       }
 
       setLoading(false);
     } else if (method === "POST") {
-      const response = await axios.post(url, data, {
-        headers: headers,
-      });
-      setCode(response.status);
       try {
+        const response = await axios.post(url, data, {
+          headers: headers,
+        });
+        setCode(response.status);
         setResult(response.data);
-      } catch (err) {
+      } catch (error) {
+        setError(error);
         setResult({});
       }
 
       setLoading(false);
     } else if (method === "PATCH") {
-      const response = await axios.patch(url, data, {
-        headers: headers,
-      });
-      setCode(response.status);
-
       try {
+        const response = await axios.patch(url, data, {
+          headers: headers,
+        });
+        setCode(response.status);
+
         setResult(response.data);
-      } catch (err) {
+      } catch (error) {
+        setError(error);
         setResult({});
       }
 
@@ -106,7 +111,7 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
     fetchData();
   };
 
-  return { result, loading, statusCode, refresh };
+  return { result, loading, statusCode, refresh, error };
 };
 
 export default useFetch;
