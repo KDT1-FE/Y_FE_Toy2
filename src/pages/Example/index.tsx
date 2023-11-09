@@ -2,24 +2,11 @@ import { Button, Input } from "@chakra-ui/react";
 import { serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import styled from "styled-components";
 import CreateGameModal from "../../components/Main/CreateGameModal";
+import ToastNotice from "../../components/common/ToastNotice";
 import useFetch from "../../hooks/useFetch";
 import useFireFetch from "../../hooks/useFireFetch";
 import useInput from "../../hooks/useInput";
-
-const Toast = styled.div`
-  border-radius: 16px;
-
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-
-  background: #cdcdcd;
-
-  width: 400px;
-  height: 150px;
-`;
 
 const Example = () => {
   const token = JSON.parse(localStorage.getItem("token") as string);
@@ -55,6 +42,7 @@ const Example = () => {
     id: "",
     name: "",
     host: "",
+    bg: "",
     users: [""],
   });
 
@@ -82,7 +70,7 @@ const Example = () => {
     url: "https://fastcampus-chat.net/chat/leave",
     method: "PATCH",
     data: {
-      chatId: "e3e9184e-ea74-41e1-b398-3be8d8d84d17",
+      chatId: "e6d8fd5b-00e3-4598-b826-11366c8c4676",
     },
     start: false,
   });
@@ -235,16 +223,7 @@ const Example = () => {
       </Button>
       {modal ? <CreateGameModal setModal={setModal} /> : null}
       {toast && roomData ? (
-        <Toast>
-          <div>
-            <div>{roomData.host}님이 초대하였습니다.</div>
-            <div>{roomData.name}</div>
-          </div>
-          <div>
-            <Button>거절</Button>
-            <Button>수락</Button>
-          </div>
-        </Toast>
+        <ToastNotice roomData={roomData} setToast={setToast} />
       ) : null}
     </>
   );

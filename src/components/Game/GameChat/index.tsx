@@ -22,8 +22,18 @@ interface Message {
 
 const GameChat = (gameId) => {
   const token = JSON.parse(localStorage.getItem("token") as string);
+
+  useFetch({
+    url: "https://fastcampus-chat.net/chat/participate",
+    method: "PATCH",
+    data: {
+      chatId: "0cac625d-d479-4da3-8f4e-78b3a3ca9635",
+    },
+    start: true,
+  });
+
   const socket = io(
-    `https://fastcampus-chat.net/chat?chatId=e3e9184e-ea74-41e1-b398-3be8d8d84d17`,
+    `https://fastcampus-chat.net/chat?chatId=0cac625d-d479-4da3-8f4e-78b3a3ca9635`,
     {
       extraHeaders: {
         Authorization: `Bearer ${token.accessToken}`,

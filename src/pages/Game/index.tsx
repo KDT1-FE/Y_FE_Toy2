@@ -14,7 +14,7 @@ const Game = () => {
   console.log(gameData.data);
   return (
     <Container maxW="1200px">
-      <GameChat />
+      <GameChat gameId={gameId} />
     </Container>
   );
 };
