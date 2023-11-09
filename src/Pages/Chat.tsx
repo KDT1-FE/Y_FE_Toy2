@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import NoneChat from "../components/Chat/NoneChat"
 
 function Chat() {
   return (
@@ -135,6 +136,7 @@ function Chat() {
           </div>
         </ChatRoom>
       </ChatWrapper>
+      <NoneChat />
     </>
   )
 }
