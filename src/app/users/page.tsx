@@ -15,11 +15,13 @@ interface User {
 
 export default function Users() {
     const [users, setUsers] = useState<User[] | []>([]);
+    const [loading, setLoading] = useState(true);
     const getUsers = async () => {
         try {
             let res = await instance.get<any, User[]>('/users');
             res = res.filter((user) => user.id !== sessionStorage.getItem('userId'));
             setUsers(res);
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -58,15 +60,16 @@ export default function Users() {
                 </ClearButton>
             </SearchUserBox>
             <UserList>
-                {searched.length !== 0 ? (
-                    searched.map((user: User) => {
-                        return <UserItem key={user.id} user={user} />;
-                    })
-                ) : (
-                    <NoUserWrap>
-                        <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
-                    </NoUserWrap>
-                )}
+                {loading && <Loading />}
+                {searched.length !== 0
+                    ? searched.map((user: User) => {
+                          return <UserItem key={user.id} user={user} />;
+                      })
+                    : !loading && (
+                          <NoUserWrap>
+                              <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
+                          </NoUserWrap>
+                      )}
             </UserList>
         </UsersWrap>
     );
@@ -90,7 +93,12 @@ const UserList = styled.div`
 
 const NoUserWrap = styled.div`
     text-align: center;
+
     margin-top: 8rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
 `;
 
 const NoUserText = styled.h2`
@@ -146,6 +154,28 @@ const ClearButton = styled.div`
         &:hover {
             color: #05664c;
             transition: 0.4s;
+        }
+    }
+`;
+
+const Loading = styled.div`
+    width: 50px;
+    height: 50px;
+
+    border: 5.5px solid rgba(255, 255, 255, 0.3);
+    border-top: 5.5px solid #00956e;
+    border-radius: 50%;
+
+    animation: spin 1s linear infinite;
+
+    margin: 8rem auto 0;
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
         }
     }
 `;
