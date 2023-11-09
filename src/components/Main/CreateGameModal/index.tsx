@@ -1,12 +1,14 @@
 import { Button, Input } from "@chakra-ui/react";
+import { serverTimestamp } from "firebase/firestore";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
+import useFireFetch from "../../../hooks/useFireFetch";
 import useInput from "../../../hooks/useInput";
 import UserCard from "../../common/UserCard";
-import useFireFetch from "../../../hooks/useFireFetch";
-import { useNavigate } from "react-router-dom";
+
 const Container = styled.div`
   position: absolute;
   top: 0;
@@ -201,6 +203,7 @@ const CreateGameModal = ({ setModal }: Props) => {
         ...roomData,
         id: createGame.result.id,
         host: token.id,
+        createdAt: serverTimestamp(),
       };
 
       fireFetch.usePostData("game", createGame.result.id, {
@@ -328,7 +331,7 @@ const CreateGameModal = ({ setModal }: Props) => {
           </div>
         </Section>
         <Section>
-          <div>
+          <div style={{ overflow: "auto" }}>
             <Input
               border="1px solid #c6c6c6"
               placeholder="검색"
