@@ -1,12 +1,15 @@
 import CreateGameRoom from '../../components/layout/createGameRoom';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
-// import OnlineUserList from '../../components/layout/onineUserList';
-// import UserList from '../../components/layout/userList';
+import OnlineUserList from '../../components/layout/onlineUserList';
+import UserList from '../../components/layout/userList';
+import OfflineUserList from '../../components/layout/offlineUserList';
+import { getAllUsers } from '../../api';
+
 const GameLobby = () => {
   const handleGetAllUsers = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('accessToken');
     if (!token) {
       alert('인증 토큰이 없습니다. 로그인이 필요합니다.');
       return;
@@ -39,15 +42,16 @@ const GameLobby = () => {
   //     }
   //   }
 
-
   //   fetchData();
   // }, []);
   return (
     <>
-      {/* <UserList></UserList> */}
+      <UserList></UserList>
       <br></br>
-      {/* <OnlineUserList /> */}
+      <OnlineUserList />
       <br></br>
+      <OfflineUserList />
+      <br />
       <CreateGameRoom></CreateGameRoom>
       <br></br>
       <CheckGameRoom></CheckGameRoom>

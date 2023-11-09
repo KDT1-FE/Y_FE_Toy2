@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   Center,
@@ -14,13 +13,17 @@ import {
 } from '@chakra-ui/react';
 
 import { postLogin } from '../../api/index';
+import { io } from 'socket.io-client';
+import { SERVER_ID, SERVER_URL } from '../../constant';
+import { useRecoilState } from 'recoil';
+import { onlineUserState } from '../../states/atom';
 
-const UserLogin = () => {
+function UserLogin() {
   const navigate = useNavigate();
 
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const token: any = localStorage.getItem('jwt');
+  const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,10 +31,26 @@ const UserLogin = () => {
       const res = await postLogin(id, password);
       const { accessToken, refreshToken } = res.data;
       localStorage.setItem('accessToken', accessToken);
-      alert('로그인에 성공했습니다.');
+      const token: any = localStorage.getItem('accessToken');
+      const socket = io(`${SERVER_URL}/server`, {
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+          serverId: SERVER_ID,
+        },
+      });
+      socket.on('connect', () => {
+        socket.emit('users-server');
+      });
+      socket.on('users-server-to-client', (data) => {
+        setOnlineUsers(data);
+      });
+
+      socket.on('message-to-client', (messageObject) => {
+        console.log(messageObject);
+      });
       navigate('/lobby');
-    } catch {
-      console.log('에러');
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -45,12 +64,7 @@ const UserLogin = () => {
       }}>
       <Center flexDirection={'column'}>
         <Box>
-          <Img
-            height={'250px'}
-            marginBottom={'10px'}
-            src="/main.webp"
-            alt="mainImg"
-          />
+          <Img height={'250px'} marginBottom={'10px'} alt="mainImg" />
         </Box>
         <Box flexDirection={'column'} textAlign={'center'} margin={'auto'}>
           <form onSubmit={handleLoginSubmit}>
@@ -105,6 +119,6 @@ const UserLogin = () => {
       </Center>
     </div>
   );
-};
+}
 
 export default UserLogin;

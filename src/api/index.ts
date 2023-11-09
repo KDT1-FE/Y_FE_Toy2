@@ -24,7 +24,7 @@ export const postJoin = async (joinData: JoinData) => {
 };
 
 export const getAllUsers = async (accessToken: string) => {
-  const res = await client.get('/users', {
+  const res = await client.get('users', {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -38,54 +38,39 @@ export const createGameRooms = async (
   users: string[],
   isPrivate: boolean,
 ) => {
-  const authData = {
-    name,
-    users,
-    isPrivate,
-  };
-  try {
-    const response = await axios.post(`${SERVER_URL}/chat`, authData, {
+  const res = await client.post(
+    `chat`,
+    { name: name, users: users, isPrivate: isPrivate },
+    {
       headers: {
-        'content-type': CONTENT_TYPE,
-        serverId: SERVER_ID,
         Authorization: `Bearer ${accessToken}`,
       },
-    });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+    },
+  );
+  return res.data;
 };
 
 export const getAllGameRooms = async (accessToken: string) => {
-  const response = await axios.get(`${SERVER_URL}/chat/all`, {
+  const res = await client.get(`chat/all`, {
     headers: {
-      'content-type': CONTENT_TYPE,
-      serverId: SERVER_ID,
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  return response.data;
+  return res.data;
 };
 
 export const participateGameRoom = async (
   chatId: string,
   accessToken: string,
 ) => {
-  const authData = {
-    chatId,
-  };
-  const response = await axios.patch(
-    `${SERVER_URL}/chat/participate`,
-    authData,
+  const res = await client.patch(
+    `chat/participate`,
+    { chatId: chatId },
     {
       headers: {
-        'content-type': CONTENT_TYPE,
-        serverId: SERVER_ID,
         Authorization: `Bearer ${accessToken}`,
       },
     },
   );
-  console.log(response.data);
-  return response.data;
+  return res.data;
 };

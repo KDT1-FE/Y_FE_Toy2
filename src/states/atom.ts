@@ -10,7 +10,7 @@ export const allRoomState = atom<any[]>({
   default: [],
 });
 
-export const onlineUserState = atom<any[]>({
+export const onlineUserState = atom<any>({
   key: 'onlineUserState',
   default: [],
 });
