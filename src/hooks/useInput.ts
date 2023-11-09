@@ -6,8 +6,11 @@ const useInput = (initValue: string) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
+  const clear = () => {
+    setInputValue("");
+  };
 
-  return { value: inputValue, onChange: handleChange };
+  return { value: inputValue, onChange: handleChange, clear };
 };
 
 export default useInput;
