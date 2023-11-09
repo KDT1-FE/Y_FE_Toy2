@@ -2,6 +2,7 @@
 
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import SendArrow from '../../../public/assets/sendArrow.svg';
 
 export default function MessageContainer(props: any) {
     const [message, setMessage] = useState<string>('');
@@ -23,7 +24,7 @@ export default function MessageContainer(props: any) {
                     setMessage(e.target.value);
                 }}
             />
-            <MessageBtn />
+            <SendArrow />
         </MessageWrapper>
     );
 }
@@ -35,6 +36,8 @@ const MessageWrapper = styled.form`
 
     position: absolute;
     bottom: 0;
+
+    z-index: 1;
 
     display: flex;
     justify-content: space-around;
@@ -53,7 +56,7 @@ const MessageInput = styled.input`
     border-radius: 15px;
 `;
 
-const MessageBtn = styled.button`
+const SendaArrow = styled(SendArrow)`
     width: 50px;
     height: 50px;
 
