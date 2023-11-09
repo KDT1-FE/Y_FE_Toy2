@@ -9,6 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Chat } from './card.types';
+import { formatTimeToKST } from '../../utils/formatTimeToKST';
 
 interface Props {
   chat: Chat;
@@ -21,7 +22,7 @@ const UserCard = ({ chat }: Props) => {
         <Heading as='h2' size='sm'>
           {chat.name}
         </Heading>
-        <Text fontSize='xs'>2023-11-08</Text>
+        <Text fontSize='xs'>{formatTimeToKST(chat.updatedAt)}</Text>
         <Badge colorScheme='yellow' px='2' mt='2'></Badge>
       </CardHeader>
       <CardBody>
