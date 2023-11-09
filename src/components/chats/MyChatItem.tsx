@@ -9,7 +9,7 @@ const MyChatItem = ({ name, latestMessage, users }: Chat) => {
     const usersNumber = users && users.length > 0 ? users.length : '';
     const chatsName = users && users.length === 1 ? users[0].username : name;
     return (
-        <Wrapper>
+        <Wrapper onClick={() => console.log(1)}>
             <ChatBox>
                 <ChatDescContainer>
                     <ChatInfo>

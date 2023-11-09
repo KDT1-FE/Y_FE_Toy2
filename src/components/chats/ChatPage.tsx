@@ -34,6 +34,7 @@ const MyChats = ({ userType }: any) => {
     const onSearchHandler = () => {
         setSearchOpen(!searchOpen);
     };
+
     return (
         <Wrapper>
             <Header>

@@ -1,4 +1,4 @@
-import ChatingPage from '@/components/chating/chatingPage';
+import ChatingPage from '@/components/chating/ChatingPage';
 
 export default function Chating() {
     return (
