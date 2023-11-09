@@ -265,7 +265,6 @@ interface User {
 ```curl
 curl https://fastcampus-chat.net/refresh
   \ -X 'POST'
-  \ -H 'Authorization: Bearer <accessToken>'
 ```
 
 요청 데이터 타입 및 예시:
