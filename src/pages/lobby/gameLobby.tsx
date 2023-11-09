@@ -2,52 +2,30 @@ import CreateGameRoom from '../../components/layout/createGameRoom';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
 // import OnlineUserList from '../../components/layout/onineUserList';
 // import UserList from '../../components/layout/userList';
+import { Button } from '@chakra-ui/react';
+import { handleGetAllUsers } from '../../util/util';
+import { handlePostRefresh } from '../../util/util';
+import { accessTokenState } from '../../states/atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 const GameLobby = () => {
-  const handleGetAllUsers = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
 
-    const token = localStorage.getItem('jwt');
-    if (!token) {
-      alert('인증 토큰이 없습니다. 로그인이 필요합니다.');
-      return;
-    }
-
-    try {
-      // 닉네임 중복 핸들링 로직 필요
-      const res = await getAllUsers(token);
-      console.log(res.data);
-      alert('성공');
-    } catch (e: any) {
-      console.error('에러:', e.response || e);
-      alert('에러 발생');
-    }
-  };
-
-  // const [allUsers, setAllUsers] = useRecoilState(allUserState);
-  // const [allRooms, setAllRooms] = useRecoilState(allRoomState);
-  // const token: any = localStorage.getItem('jwt');
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const allUsersData = await getAllUsers(token);
-  //       setAllUsers(allUsersData);
-  //       const allRoomsData = await getAllGameRooms(token);
-  //       setAllRooms(allRoomsData.chats);
-  //     } catch (error) {
-  //       console.error('데이터 가져오기 오류:', error);
-  //     }
-  //   }
-
-
-  //   fetchData();
-  // }, []);
+  const accessToken = useRecoilValue(accessTokenState);
   return (
     <>
+      <Button onClick={handlePostRefresh(setAccessToken)}>토큰재발급</Button>
+      <Button onClick={handleGetAllUsers(accessToken)}>모든유저보기</Button>
       {/* <UserList></UserList> */}
+  return (
+    <>
+      <UserList></UserList>
+
       <br></br>
-      {/* <OnlineUserList /> */}
+      <OnlineUserList />
       <br></br>
+      <OfflineUserList />
+      <br />
       <CreateGameRoom></CreateGameRoom>
       <br></br>
       <CheckGameRoom></CheckGameRoom>
