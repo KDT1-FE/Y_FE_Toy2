@@ -1,5 +1,9 @@
 export type AllOpenChat = Chat[];
 
+export type AllOpenChatJSON = {
+	chats: AllOpenChat;
+};
+
 type Chat = {
 	id: string;
 	name: string;
