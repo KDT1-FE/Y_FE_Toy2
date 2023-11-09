@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
 import { getAllUsers } from '../../api';
-import { useRecoilState } from 'recoil';
-import { allUserState } from '../../states/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { accessTokenState, allUserState } from '../../states/atom';
 
 const POLLING_INTERVAL = 30000;
 
 const UserList = () => {
   const [allUsers, setAllUsers] = useRecoilState(allUserState);
-
+  const accessToken: any = useRecoilValue(accessTokenState);
   const fetchData = async () => {
     try {
-      const token: any = localStorage.getItem('accessToken');
-      const allUsersData = await getAllUsers(token);
+      const allUsersData = await getAllUsers(accessToken);
       if (JSON.stringify(allUsersData.data) !== JSON.stringify(allUsers)) {
         setAllUsers(allUsersData.data);
       }
