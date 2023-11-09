@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createGameRooms } from '../../api';
-import { io } from 'socket.io-client';
-import { SERVER_URL, CONTENT_TYPE, SERVER_ID } from '../../constant';
-import { useRecoilState } from 'recoil';
-import { allRoomState } from '../../states/atom';
+// import { io } from 'socket.io-client';
+// import { SERVER_URL, CONTENT_TYPE, SERVER_ID } from '../../constant';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { accessTokenState, allRoomState } from '../../states/atom';
 
 const CreateGameRoom = () => {
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
@@ -12,8 +12,7 @@ const CreateGameRoom = () => {
   const [name, setName] = useState('');
   const [users, setUsers] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
-  const token: any = localStorage.getItem('jwt');
-
+  const accessToken: any = useRecoilValue(accessTokenState);
   const onChange = (e: React.ChangeEvent<any>) => {
     const { value, name } = e.target;
     console.log(value, name);
@@ -30,22 +29,22 @@ const CreateGameRoom = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const check = await createGameRooms(token, name, users, isPrivate);
+    const check = await createGameRooms(accessToken, name, users, isPrivate);
     if (check === undefined) {
       alert('중복된 방이 있습니다.');
     } else {
       alert('방 생성 성공.');
-      const socket = io(`${SERVER_URL}/chat?chatId=${check.id}`, {
-        extraHeaders: {
-          Authorization: `Bearer ${token}`,
-          'content-type': CONTENT_TYPE,
-          serverId: SERVER_ID,
-        },
-      });
-      console.log(socket.connected);
-      socket.on('message-to-client', (messageObject: any) => {
-        console.log(messageObject);
-      });
+      // const socket = io(`${SERVER_URL}/chat?chatId=${check.id}`, {
+      //   extraHeaders: {
+      //     Authorization: `Bearer ${token}`,
+      //     'content-type': CONTENT_TYPE,
+      //     serverId: SERVER_ID,
+      //   },
+      // });
+      // console.log(socket.connected);
+      // socket.on('message-to-client', (messageObject: any) => {
+      //   console.log(messageObject);
+      // });
 
       setAllRooms([...allRooms, check]);
 
