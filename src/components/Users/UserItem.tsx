@@ -12,6 +12,8 @@ interface User {
 }
 
 export const UserItem = ({ user }: { user: User }) => {
+    // 사용할 때 eslint 주석 삭제
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { name, picture, id } = user;
     const [showModal, setShowModal] = useState(false);
 
