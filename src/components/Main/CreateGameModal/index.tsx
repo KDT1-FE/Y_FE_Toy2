@@ -6,7 +6,7 @@ import useFetch from "../../../hooks/useFetch";
 import useInput from "../../../hooks/useInput";
 import UserCard from "../../common/UserCard";
 import useFireFetch from "../../../hooks/useFireFetch";
-
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   position: absolute;
   top: 0;
@@ -127,6 +127,7 @@ interface ChatRoom {
   isPrivate?: boolean;
   num?: number;
   bg?: string;
+  status?: string;
 }
 
 interface Props {
@@ -134,6 +135,8 @@ interface Props {
 }
 
 const CreateGameModal = ({ setModal }: Props) => {
+  const navigate = useNavigate();
+
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   const socket = io(
@@ -203,6 +206,7 @@ const CreateGameModal = ({ setModal }: Props) => {
       fireFetch.usePostData("game", createGame.result.id, {
         ...newData,
         bg: "⭐",
+        status: "대기중",
       });
 
       // const roomText = [...JSON.stringify(newData)];
@@ -216,7 +220,8 @@ const CreateGameModal = ({ setModal }: Props) => {
       const text = JSON.stringify(inviteUser);
 
       socket.emit("message-to-server", text);
-      console.log("완료");
+
+      navigate(`/game?gameId=${createGame.result.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createGame.result]);
