@@ -1,8 +1,11 @@
 import { atom } from 'recoil';
 
-const chatModalAtom = atom({
+export const chatModalAtom = atom({
 	key: 'chatModalAtom',
 	default: false,
 });
 
-export default chatModalAtom;
+export const chatModalUserSearchAtom = atom({
+	key: 'chatModalUserSearchAtom',
+	default: false,
+});

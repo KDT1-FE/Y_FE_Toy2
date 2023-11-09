@@ -7,7 +7,7 @@ import {
 	SpeedDialAction,
 	Typography,
 } from '@material-tailwind/react';
-import chatModalAtom from '@/atoms/chatModalAtom';
+import { chatModalAtom } from '@/atoms/chatModalAtom';
 import { useSetRecoilState } from 'recoil';
 
 const SpeedDialWithTextInside = () => {
