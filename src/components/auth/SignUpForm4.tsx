@@ -17,6 +17,9 @@ const tags = {
     { name: 'Cooking', tag: '요리' },
     { name: 'Movie', tag: '영화감상' },
     { name: 'Gaming', tag: '게임' },
+    { name: 'Drawing', tag: '그림' },
+    { name: 'Book', tag: '독서' },
+    { name: 'Painting', tag: '그림' },
   ],
   sports: [
     { name: 'Exercise', tag: '운동' },
@@ -24,13 +27,12 @@ const tags = {
     { name: 'Football', tag: '축구' },
     { name: 'Basketball', tag: '농구' },
     { name: 'Baseball', tag: '야구' },
+    { name: 'Swimming', tag: '수영' },
   ],
   animal: [
     { name: 'Dog', tag: '강아지' },
     { name: 'Cat', tag: '고양이' },
-    { name: 'Flower', tag: '화분키우기' },
-    { name: 'Tree', tag: '나무키우기' },
-    { name: 'Farming', tag: '밭가꾸기' },
+    { name: 'Plant', tag: '식물' },
   ],
 };
 
@@ -43,6 +45,10 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
   const [clickedItem, setClickedItem] = useState(new Set<string>());
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (clickedItem.size > 0 && clickedItem.size <= 5) {
+      console.log('1~5개 까지 선택 가능합니다.');
+      return;
+    }
     const newForm: FbUser = {
       ...signUpForm,
       hashtag: Array.from(clickedItem),
@@ -66,8 +72,11 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
   return (
     <div>
       <form onSubmit={handleSubmit} autoComplete="off">
-        <Typography variant="h4" mt={5} mb={5}>
+        <Typography variant="h4" mt={5} mb={2}>
           관심사 선택
+        </Typography>
+        <Typography variant="body1" mb={5}>
+          💡 1~5개 까지 선택 가능합니다.
         </Typography>
         <Typography variant="h5" mb={3}>
           취미/문화

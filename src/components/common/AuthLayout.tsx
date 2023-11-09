@@ -78,16 +78,6 @@ function AuthLayout() {
                 Langchat
               </Box>
             </Typography>
-            {/* <span>
-              사진:{' '}
-              <a href="https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%ED%9D%B0%EC%83%89%EA%B3%BC-%EB%85%B9%EC%83%89-%EC%9B%90%EA%B2%A9-%EC%A0%9C%EC%96%B4-zs-41Br0WhQ?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
-                Unsplash
-              </a>
-              의
-              <a href="https://unsplash.com/ko/@ademay?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
-                Adem AY
-              </a>
-            </span> */}
           </Box>
         </Grid>
       </Grid>

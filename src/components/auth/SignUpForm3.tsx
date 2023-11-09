@@ -6,14 +6,14 @@ import SignUpSelectItem from './SignUpSelectItem';
 import { signUpFormState } from '../../atoms';
 
 const languages = [
-  { name: 'English', flag: '🇬🇧' },
-  { name: '日本語', flag: '🇯🇵' },
-  { name: '中文', flag: '🇨🇳' },
-  { name: 'español', flag: '🇪🇸' },
-  { name: 'français', flag: '🇫🇷' },
-  { name: 'das Deutsche', flag: '🇩🇪' },
-  { name: 'Tiếng Việt', flag: '🇻🇳' },
-  { name: 'ภาษาไทย', flag: '🇹🇭' },
+  { name: 'English', flag: '/flag/eng.png' },
+  { name: '日本語', flag: '/flag/jpn.png' },
+  { name: '中文', flag: '/flag/cn.png' },
+  { name: 'español', flag: '/flag/es.png' },
+  { name: 'français', flag: '/flag/fr.png' },
+  { name: 'das Deutsche', flag: '/flag/de.png' },
+  { name: 'Tiếng Việt', flag: '/flag/vn.png' },
+  { name: 'ภาษาไทย', flag: '/flag/tp.png' },
 ];
 
 function SignUpForm3({ setStep }: SignUpFormProps) {

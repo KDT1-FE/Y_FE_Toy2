@@ -46,8 +46,14 @@ function SignUpSelectItem({ name, flag, setLangLv, isClicked = false }: SignUpSe
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClickBtn}
+          sx={{
+            img: {
+              width: '30px',
+              marginRight: '10px',
+            },
+          }}
         >
-          {flag}
+          <img src={flag} alt={name} />
           {name}
         </Button>
         <Menu
