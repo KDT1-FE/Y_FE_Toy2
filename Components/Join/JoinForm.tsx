@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '@material-tailwind/react';
+import { fetchJoin } from '@/app/join/join.utils';
 
 type RequestBody = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -20,8 +21,9 @@ const JoinForm = () => {
 		formState: { errors },
 	} = useForm<RequestBody>();
 	// 로그인 시 api 요청
-	const onSubmit: SubmitHandler<RequestBody> = (data) => console.log(data);
-
+	const onSubmit: SubmitHandler<RequestBody> = ({ id, password, name }) => {
+		fetchJoin(id, password, name);
+	};
 	const [imagePreview, setImagePreview] = useState('');
 
 	const image = watch('picture');
