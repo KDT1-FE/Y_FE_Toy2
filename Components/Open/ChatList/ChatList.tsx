@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { ChatListProps } from './ChatList.type';
 import { Chat } from '@/app/open/open.type';
