@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { Chat, allChatsState } from '../../store/chatsStore';
+import { Chat, allChatsState } from './chatsStore';
 
 const SearchMyChat = () => {
     const [input, setInput] = useState<string>('');

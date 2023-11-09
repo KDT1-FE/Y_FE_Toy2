@@ -1,14 +1,16 @@
 'use client';
-
-import MyChatItem from '@/components/chats/MyChatItem';
+// react 관련 import
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+// styled import
 import styled from 'styled-components';
+// chats 컴포넌트 import
+import MyChatItem from '@/components/chats/MyChatItem';
 import SearchMyChat from '@/components/chats/SearchMyChat';
-// svg 가져오기
+// svgr import
 import AddChat from '../../../public/assets/addChat.svg';
 import Search from '../../../public/assets/search.svg';
-import { Chat, allChatsState } from '../../store/chatsStore';
+import { Chat, allChatsState } from './chatsStore';
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
@@ -17,14 +19,7 @@ const MyChats = ({ userType }: any) => {
     const [allChats, setAllChats] = useRecoilState(allChatsState);
     const [myChats, setMyChats] = useState<Chat[]>([]);
     const router = useRouter();
-    // const enterChatRoom = (chatId: string | undefined) => {
-    //     if (chatId) {
-    //         router.push(`/chating/${chatId}`);
-    //         console.log(chatId);
-    //     } else {
-    //         console.log('error');
-    //     }
-    // };
+
     const enterChatRoom = (chat: Chat) => {
         if (chat.id && chat.users) {
             const users = chat.users.map((user) => `[name:${user.username}, id:${user.id}]`).join(',');
