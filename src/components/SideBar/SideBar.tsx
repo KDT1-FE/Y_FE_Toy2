@@ -4,16 +4,7 @@ import { AddIcon, EditIcon, ArrowRightIcon, ChatIcon } from '@chakra-ui/icons';
 
 const SideBar = () => {
   return (
-    <Box
-      w="250px"
-      h="100vh"
-      bg="gray.50"
-      color="black"
-      p={10}
-      position="fixed"
-      left={0}
-      boxShadow="xl"
-    >
+    <Box w="250px" h="100vh" bg="gray.50" color="black" p={10} boxShadow="xl">
       <Text fontSize="4xl" fontWeight="extrabold" mb={6}>
         로고자리
       </Text>
