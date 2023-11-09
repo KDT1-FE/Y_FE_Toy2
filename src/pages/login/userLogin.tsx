@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   Center,
@@ -14,13 +13,19 @@ import {
 import { useSetRecoilState } from 'recoil';
 import { accessTokenState } from '../../states/atom';
 import { postLogin } from '../../api/index';
+import { io } from 'socket.io-client';
+import { SERVER_ID, SERVER_URL } from '../../constant';
+import { useRecoilState } from 'recoil';
+import { onlineUserState } from '../../states/atom';
 
-const UserLogin = () => {
+function UserLogin() {
   const navigate = useNavigate();
 
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+
   const setAccessToken = useSetRecoilState(accessTokenState);
+
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +33,7 @@ const UserLogin = () => {
     try {
       const res = await postLogin(id, password);
       const { accessToken, refreshToken } = res.data;
+
       setAccessToken(accessToken);
       localStorage.setItem('refreshToken', refreshToken);
       alert('로그인에 성공했습니다.');
@@ -41,6 +47,27 @@ const UserLogin = () => {
       } else {
         alert(`로그인에 실패했습니다. 오류코드: ${e.message}`);
       }
+
+      const token: any = localStorage.getItem('accessToken');
+      const socket = io(`${SERVER_URL}/server`, {
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+          serverId: SERVER_ID,
+        },
+      });
+      socket.on('connect', () => {
+        socket.emit('users-server');
+      });
+      socket.on('users-server-to-client', (data) => {
+        setOnlineUsers(data);
+      });
+
+      socket.on('message-to-client', (messageObject) => {
+        console.log(messageObject);
+      });
+      navigate('/lobby');
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -53,7 +80,6 @@ const UserLogin = () => {
         alignItems: 'center',
       }}>
       <Center flexDirection={'column'}>
-        <Box></Box>
         <Box flexDirection={'column'} textAlign={'center'} margin={'auto'}>
           <form onSubmit={handleLoginSubmit}>
             <FormControl
@@ -107,6 +133,6 @@ const UserLogin = () => {
       </Center>
     </div>
   );
-};
+}
 
 export default UserLogin;

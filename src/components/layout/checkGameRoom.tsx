@@ -4,8 +4,10 @@ import { allRoomState } from '../../states/atom';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
 
+const POLLING_INTERVAL = 30000;
+
 const CheckGameRoom = () => {
-  const token: any = localStorage.getItem('jwt');
+  const token: any = localStorage.getItem('accessToken');
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const fetchData = async () => {
@@ -19,7 +21,13 @@ const CheckGameRoom = () => {
 
   useEffect(() => {
     fetchData();
-  }, [allRooms.length]);
+    const pollingId = setInterval(() => {
+      fetchData();
+    }, POLLING_INTERVAL);
+    return () => {
+      clearInterval(pollingId);
+    };
+  }, [fetchData, setAllRooms]);
 
   if (allRooms.length === 0) {
     return <div>No rooms available or an error occurred.</div>;
