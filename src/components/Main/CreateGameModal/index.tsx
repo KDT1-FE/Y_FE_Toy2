@@ -132,6 +132,12 @@ interface ChatRoom {
   status?: string;
 }
 
+interface UserType {
+  id: string;
+  name: string;
+  picture: string;
+}
+
 interface Props {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -337,16 +343,18 @@ const CreateGameModal = ({ setModal }: Props) => {
               marginBottom="1rem"
             />
             {users.result &&
-              users.result.map((value: any) => {
-                return (
-                  <UserCard
-                    key={value.id}
-                    {...value}
-                    setRoomData={setRoomData}
-                    roomData={roomData}
-                  />
-                );
-              })}
+              users.result
+                .filter((value: UserType) => value.id !== token.id)
+                .map((value: UserType) => {
+                  return (
+                    <UserCard
+                      key={value.id}
+                      {...value}
+                      setRoomData={setRoomData}
+                      roomData={roomData}
+                    />
+                  );
+                })}
           </div>
         </Section>
       </Wrap>
