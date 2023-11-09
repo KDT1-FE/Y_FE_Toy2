@@ -4,6 +4,7 @@ import { instance } from '@/lib/api';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdClose, MdSearch } from 'react-icons/md';
+import Navigation from '@/components/Navigation';
 
 interface User {
     id: string;
@@ -43,35 +44,38 @@ export default function Users() {
     };
 
     return (
-        <UsersWrap>
-            <HeaderText>사용자 목록</HeaderText>
-            <SearchUserBox>
-                <SearchButton>
-                    <MdSearch className="searchIcon" size="35" color="white" />
-                </SearchButton>
-                <SearchUserInput
-                    value={userInput}
-                    onChange={getInputValue}
-                    type="text"
-                    placeholder="사용자를 검색해보세요"
-                />
-                <ClearButton>
-                    {userInput && <MdClose className="clearIcon" size="25" onClick={clearSearchInput} />}
-                </ClearButton>
-            </SearchUserBox>
-            <UserList>
-                {loading && <Loading />}
-                {searched.length !== 0
-                    ? searched.map((user: User) => {
-                          return <UserItem key={user.id} user={user} />;
-                      })
-                    : !loading && (
-                          <NoUserWrap>
-                              <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
-                          </NoUserWrap>
-                      )}
-            </UserList>
-        </UsersWrap>
+        <>
+            <UsersWrap>
+                <HeaderText>사용자 목록</HeaderText>
+                <SearchUserBox>
+                    <SearchButton>
+                        <MdSearch className="searchIcon" size="35" color="white" />
+                    </SearchButton>
+                    <SearchUserInput
+                        value={userInput}
+                        onChange={getInputValue}
+                        type="text"
+                        placeholder="사용자를 검색해보세요"
+                    />
+                    <ClearButton>
+                        {userInput && <MdClose className="clearIcon" size="25" onClick={clearSearchInput} />}
+                    </ClearButton>
+                </SearchUserBox>
+                <UserList>
+                    {loading && <Loading />}
+                    {searched.length !== 0
+                        ? searched.map((user: User) => {
+                              return <UserItem key={user.id} user={user} />;
+                          })
+                        : !loading && (
+                              <NoUserWrap>
+                                  <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
+                              </NoUserWrap>
+                          )}
+                </UserList>
+            </UsersWrap>
+            <Navigation />
+        </>
     );
 }
 
@@ -80,15 +84,26 @@ const UsersWrap = styled.div`
 
     display: flex;
     flex-direction: column;
-    gap: 10;
+
+    height: 100vh;
 `;
 
 const HeaderText = styled.h1`
     color: #00956e;
+
+    margin-top: 0;
+
+    padding: 1rem;
 `;
 
 const UserList = styled.div`
     margin-top: 2rem;
+
+    padding: 1rem;
+
+    height: 80%;
+
+    overflow-y: auto;
 `;
 
 const NoUserWrap = styled.div`
