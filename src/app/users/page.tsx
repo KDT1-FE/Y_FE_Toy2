@@ -19,7 +19,7 @@ export default function Users() {
     const [loading, setLoading] = useState(true);
     const getUsers = async () => {
         try {
-            let res = await instance.get<any, User[]>('/users');
+            let res = await instance.get<unknown, User[]>('/users');
             res = res.filter((user) => user.id !== sessionStorage.getItem('userId'));
             setUsers(res);
             setLoading(false);

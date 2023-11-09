@@ -14,6 +14,8 @@ interface User {
 }
 
 const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: User }) => {
+    //사용할 때 eslint 주석 삭제
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, name, picture } = user;
     return (
         <UserModalBox onClick={clickModal}>
