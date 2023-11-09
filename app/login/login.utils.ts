@@ -8,12 +8,12 @@ export const fetchLogin = async (id: string, password: string) => {
 		id,
 		password,
 	};
-	console.log(process.env.SERVER_KEY);
+	console.log(process.env.NEXT_PUBLIC_SERVER_KEY);
 	const res = await fetch('https://fastcampus-chat.net/login', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			serverId: '6ae1894a',
+			serverId: process.env.NEXT_PUBLIC_SERVER_KEY as string,
 		},
 		// Content-Type이 JSON이니까 JSON.stringify
 		body: JSON.stringify(requestData),

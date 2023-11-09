@@ -19,6 +19,7 @@ const config: Config = withMT({
 		extend: {
 			colors: {
 				primary: '#FF6363',
+				main: '#FEE500',
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
