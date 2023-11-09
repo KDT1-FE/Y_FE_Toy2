@@ -1,7 +1,11 @@
+// loginSocket.ts
 import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../constant';
 
-export const loginSocket = (accessToken: any, data: []) => {
+export const loginSocket = (
+  accessToken: any,
+  onDataReceived: (data: any[]) => void,
+) => {
   const socket = io(`${SERVER_URL}/server`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
@@ -14,7 +18,6 @@ export const loginSocket = (accessToken: any, data: []) => {
   });
 
   socket.on('users-server-to-client', (data) => {
-    console.log(data);
-    return data;
+    onDataReceived(data);
   });
 };
