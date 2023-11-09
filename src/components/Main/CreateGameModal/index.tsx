@@ -212,7 +212,7 @@ const CreateGameModal = ({ setModal }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [titleInput.value]);
 
-  // 유조 검색 기능
+  // 유저 검색 기능
   useEffect(() => {
     if (users.result) {
       const filter = users.result.filter((value: UserType) =>
@@ -220,7 +220,6 @@ const CreateGameModal = ({ setModal }: Props) => {
       );
       setUserList(filter);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput.value, users.result]);
 
   // 게임 생성 함수
