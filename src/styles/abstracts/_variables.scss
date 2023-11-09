@@ -1,3 +1,9 @@
+//font family
+@import url(//fonts.googleapis.com/earlyaccess/jejuhallasan.css);
+@import url('https://rsms.me/inter/inter.css');
+$font-logo: 'Jeju Hallasan', cursive;
+$font-main: 'Inter', sans-serif;
+
 // Font Size
 $font-sm: 1rem;
 $font-base: 1.6rem;
@@ -16,7 +22,7 @@ $white: #fff;
 
 $bg-black: $black;
 $bg-purple: #360e4f;
-$bg-purple-20: rgba(#452b66, 0.83);
+$bg-purple-80: rgba(#452b66, 0.8);
 
 $placeholder: rgba($black, 0.2);
 
