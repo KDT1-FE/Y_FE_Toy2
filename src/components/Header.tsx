@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from '@styles/components/header.module.scss';
 
 const Header = ({ started, title, timer }: HeaderProps) => {
-  const [isStart, setIsStart] = useState(!started);
+  const [isStart, setIsStart] = useState(started);
 
   if (!isStart) {
     return (
