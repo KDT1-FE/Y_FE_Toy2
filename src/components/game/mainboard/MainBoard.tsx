@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import InputWord from './InputWord';
+import React from 'react';
+import { Visibility } from '@mui/icons-material';
+import { WordsType } from './InputWord';
+import { Answers, Board, BoardFrame, MainWrapper, NoticeBox } from './boardStyle';
+import Notice from './Notice';
 
-const MainWrapper = styled.div`
-  flex: 2;
-`;
-
-export default function MainBoard() {
-  const [words, setWords] = useState<string[] | []>([]);
+export default function MainBoard({ words, setWords }: WordsType) {
   return (
     <MainWrapper>
-      {words.length !== 0 ? words.map((e) => <h2>{e}</h2>) : <h2>없음</h2>}
-      <InputWord setWords={setWords} words={words} />
+      <NoticeBox>
+        <Notice />
+        <Visibility sx={{ fontSize: '50px', cursor: 'pointer' }} />
+      </NoticeBox>
+      <BoardFrame>
+        <Board>
+          {words.length !== 0 ? (
+            <Answers>{words[words.length - 1]}</Answers>
+          ) : (
+            <Answers>첫 단어를 입력해주세요!</Answers>
+          )}
+        </Board>
+      </BoardFrame>
     </MainWrapper>
   );
 }

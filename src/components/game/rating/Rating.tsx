@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Typography } from '@mui/material';
 import styled from 'styled-components';
 import sorting from './sorting';
 
 const RatingWrapper = styled.div`
   flex: 1;
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
+  padding: 1.6rem 0;
 `;
 
 export default function Rating() {
@@ -24,12 +27,14 @@ export default function Rating() {
 
   return (
     <RatingWrapper>
-      <h1>Rating</h1>
+      <Typography variant="h1" sx={{ fontSize: '2rem', color: '#457b9d', mt: 2, mb: 4, fontFamily: 'Bungee' }}>
+        Rating!
+      </Typography>
       {{ finish } ? (
         peoples.map((el, i) => (
-          <h2>
-            {i + 1}. {el.id} X {el.correct}
-          </h2>
+          <Typography variant="h1" sx={{ fontSize: '2rem', color: '#1d3557', mt: 2, mb: 4, fontFamily: 'Bungee' }}>
+            {i + 1}. {el.id}
+          </Typography>
         ))
       ) : (
         <div>X</div>
