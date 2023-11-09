@@ -23,6 +23,13 @@ export const postJoin = async (joinData: JoinData) => {
   return res;
 };
 
+export const postRefresh = async (refreshToken: string) => {
+  const res = await client.post('/refresh', {
+    refreshToken: refreshToken,
+  });
+  return res;
+};
+
 export const getAllUsers = async (accessToken: string) => {
   const res = await client.get('users', {
     headers: {

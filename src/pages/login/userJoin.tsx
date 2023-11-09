@@ -100,7 +100,6 @@ const UserJoin = () => {
 
   const handleJoinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       // 닉네임중복 핸들링 로직 필요
       const res = await postJoin(formData);
