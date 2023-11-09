@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Chat } from './chatsStore';
-import { formatCreatedAt } from '@/hooks/chatsList/useFormatCreatedAt';
+import { formatCreatedAt } from '@/components/chats/useFormatCreatedAt';
 
 const MyChatItem = ({ name, latestMessage, users, onClick }: Chat) => {
     const chatsPicture = users && users.length > 0 ? users[0].picture : '';

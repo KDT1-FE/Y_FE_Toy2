@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import MessageContainer from '../../../components/chating/MessageContainer';
 import io from 'socket.io-client';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 interface Message {
     id: string;
@@ -15,15 +15,15 @@ interface Message {
 
 export default function Chating() {
     const [messages, setMessages] = useState<Message[]>([]);
-    const searchParams = useSearchParams();
-    const getName = searchParams.get('name');
-    const getUsers = searchParams.get('users');
-    const getLatestMessage = searchParams.get('latestMessage');
-    const getUpdatedAt = searchParams.get('updatedAt');
-    console.log(getName);
-    console.log(getUsers);
-    console.log(getLatestMessage);
-    console.log(getUpdatedAt);
+    // const searchParams = useSearchParams();
+    // const getName = searchParams.get('name');
+    // const getUsers = searchParams.get('users');
+    // const getLatestMessage = searchParams.get('latestMessage');
+    // const getUpdatedAt = searchParams.get('updatedAt');
+    // console.log(getName);
+    // console.log(getUsers);
+    // console.log(getLatestMessage);
+    // console.log(getUpdatedAt);
 
     useEffect(() => {
         socketInitilizer();
