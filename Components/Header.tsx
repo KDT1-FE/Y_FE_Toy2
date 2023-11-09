@@ -13,28 +13,24 @@ const Header = () => {
 	return (
 		<header className="flex w-full justify-between align-center py-3 ">
 			<strong className="text-3xl">{headerInfo.Heading}</strong>
-			<headerInfo.UserUl />
+			<headerInfo.HeaderUl />
 		</header>
 	);
 };
 
 const UsersUl = () => {
+	const searchHandler = () => {
+		console.log('click the search');
+	};
+
 	return (
 		<ul className="flex align-center gap-3">
-			<li className="flex align-center cursor-pointer">
+			<li className="flex align-center cursor-pointer" onClick={searchHandler}>
 				<Image
 					width={25}
 					height={25}
 					src="/icon_search.svg"
 					alt="채팅방 검색하기"
-				/>
-			</li>
-			<li className="flex align-center cursor-pointer">
-				<Image
-					width={25}
-					height={25}
-					src="/icon_add_chat.svg"
-					alt="채팅방 만들기"
 				/>
 			</li>
 		</ul>
@@ -88,17 +84,17 @@ const OpenUl = () => {
 };
 
 const friends = {
-	UserUl: UsersUl,
+	HeaderUl: UsersUl,
 	Heading: '친구들',
 };
 
 const privates = {
-	UserUl: PrivateUl,
+	HeaderUl: PrivateUl,
 	Heading: '개인캣톡',
 };
 
 const open = {
-	UserUl: OpenUl,
+	HeaderUl: OpenUl,
 	Heading: '오픈캣톡',
 };
 
