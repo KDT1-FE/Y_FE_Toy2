@@ -82,7 +82,7 @@ const Example = () => {
     url: "https://fastcampus-chat.net/chat/leave",
     method: "PATCH",
     data: {
-      chatId: "1598e7f6-ab51-43f8-b70a-67f7c57dce00",
+      chatId: "e3e9184e-ea74-41e1-b398-3be8d8d84d17",
     },
     start: false,
   });

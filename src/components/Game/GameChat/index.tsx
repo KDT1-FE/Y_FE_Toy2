@@ -20,7 +20,7 @@ interface Message {
   text: string;
 }
 
-const GameChat = () => {
+const GameChat = (gameId) => {
   const token = JSON.parse(localStorage.getItem("token") as string);
   const socket = io(
     `https://fastcampus-chat.net/chat?chatId=e3e9184e-ea74-41e1-b398-3be8d8d84d17`,
@@ -70,7 +70,7 @@ const GameChat = () => {
     <Card>
       <CardBody>
         {messages.map((message, index) => (
-          <ChatBubble key={index} text={message.text} />
+          <ChatBubble key={index} userId={message.id} text={message.text} />
         ))}
       </CardBody>
       <InputGroup size="md">
