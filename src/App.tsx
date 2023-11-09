@@ -5,6 +5,7 @@ import Layout from './components/common/Layout';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import AuthLayout from './components/common/AuthLayout';
+import Home from './pages/home';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         {/* 상원님 부분 */}
         <Route path="/game" />
         {/* 은지님 부분 */}
-        <Route path="/mypage" />
+        <Route path="/home" element={<Home />} />
         {/* 홍규님 부분 */}
         <Route path="chat" />
       </Route>
