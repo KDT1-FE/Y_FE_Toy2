@@ -88,11 +88,11 @@ function SignUpInput({
     }
   };
 
-  useEffect(() => {
-    if (id === "id" && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (id === "id" && inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // }, []);
 
   return (
     <SignUpInputContainer>

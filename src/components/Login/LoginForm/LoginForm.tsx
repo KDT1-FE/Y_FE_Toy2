@@ -1,8 +1,12 @@
 import styled from "styled-components";
 import LoginInput from "../LoginInput/LoginInput";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import FormInputBtn from "../../FormInputBtn/FormInputBtn";
 import { postApi } from "../../../utils/postApi";
+import Loader from "../../Loader/Loader";
+import { AuthContext } from "../../../hooks/useAuth";
+import axios from "axios";
+import { apiHeader } from "../../../utils/apiHeader";
 
 const initialLoginData = {
   id: "",
@@ -12,26 +16,42 @@ const initialLoginData = {
 function LoginForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loginData, setLoginData] = useState(initialLoginData);
+  const [loading, setLoading] = useState(false);
+  const { accessToken, setAccessToken, refreshToken, setRefreshToken } =
+    useContext(AuthContext);
+
+  useEffect(() => {
+    console.log("accessToken : ", accessToken);
+  }, [accessToken]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const LOGIN_API_URL = "https://fastcampus-chat.net/login";
 
-    postApi(LOGIN_API_URL, loginData)
-      .then((data) => {
-        console.log("로그인 성공");
-        const token = data.accessToken;
-        sessionStorage.setItem("token", token);
-      })
-      .catch((error) => {
-        console.log("로그인 실패");
-        console.error(error);
-        setErrorMessage("아이디와 비밀번호를 확인해주세요.");
-      });
+    setLoading(true);
+
+    setTimeout(() => {
+      postApi(LOGIN_API_URL, loginData)
+        .then((data) => {
+          console.log("로그인 성공");
+          const token = data.accessToken;
+          const refreshToken = data.refreshToken;
+          setAccessToken(token);
+          localStorage.setItem("refreshToken", refreshToken);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("로그인 실패");
+          console.error(error);
+          setErrorMessage("아이디와 비밀번호를 확인해주세요.");
+          setLoading(false);
+        });
+    }, 1000);
   };
 
   return (
     <LoginContainer onSubmit={handleSubmit}>
+      <Loader loading={loading}></Loader>
       <LoginInput
         id={"id"}
         label={"아이디"}
