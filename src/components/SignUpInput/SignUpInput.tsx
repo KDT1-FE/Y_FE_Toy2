@@ -8,9 +8,9 @@ const NAME_REGEX = new RegExp("^[A-Za-z가-힣]{2,20}$"); // 2글자 이상 영�
 
 const ERROR_MSG: { [key: string]: string } = {
   required: "필수 정보입니다.",
-  invalidId: "5~20자의 영문자, 숫자만 입력 하세요.",
+  invalidId: "5~20자의 영문, 숫자만 5글자 이상 입력 하세요.",
   duplicated: "중복된 아이디가 존재합니다.",
-  invalidName: "2자 이상 영문 대 소문자, 한글를 입력 하세요.",
+  invalidName: "2자 이상 영문 대 소문자, 한글을 입력 하세요.",
   invalidPw: "8~16자 이상의 영문 대 소문자, 숫자를 입력하세요.",
   invalidPwCheck: "비밀번호가 일치하지 않습니다."
 };
@@ -65,7 +65,9 @@ function SignUpInput({
     if (inputId === "id" && errorData.id !== "required") {
       const { id } = formData;
       const requestBody = { id };
-      postApi("https://fastcampus-chat.net/check/id", requestBody)
+      const CHECK_DUPLICATE_API_URL = "https://fastcampus-chat.net/check/id";
+
+      postApi(CHECK_DUPLICATE_API_URL, requestBody)
         .then((data) => {
           if (data.isDuplicated) {
             setErrorData((prev) => ({

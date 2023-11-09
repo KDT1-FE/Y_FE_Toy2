@@ -3,7 +3,9 @@ import SignUpInput, { ErrorData } from "../SignUpInput/SignUpInput";
 import { useEffect, useState } from "react";
 import FormInputBtn from "../FormInputBtn/FormInputBtn";
 import Loader from "../Loader/Loader";
-import { postSignUp } from "../../utils/SignUp/postSignUp";
+import { postApi } from "../../utils/postApi";
+import axios from "axios";
+import { apiHeader } from "../../utils/apiHeader";
 
 const initialErrorData = {
   id: "",
@@ -43,7 +45,7 @@ function SignUpForm() {
     setErrorData(updateErrorData);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
@@ -54,9 +56,25 @@ function SignUpForm() {
       setLoading(false);
       return;
     } else {
-      const { confirmPw, ...RequestBody } = formData;
+      const { confirmPw, ...requestBody } = formData;
+      const SIGN_UP_API_URL = "https://fastcampus-chat.net/signup";
       setTimeout(() => {
-        postSignUp(RequestBody, setLoading(false));
+        try {
+          axios
+            .post(SIGN_UP_API_URL, requestBody, { headers: apiHeader })
+            .then((response) => {
+              if (response.data.message === "User created") {
+                alert("회원가입 성공");
+              } else {
+                alert("회원가입 실패");
+                console.error(response.data.message);
+              }
+            });
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
+        }
       }, 1000);
     }
   };
@@ -72,7 +90,7 @@ function SignUpForm() {
         setErrorData={setErrorData}
         inputProps={{
           type: "text",
-          placeholder: "영어 또는 숫자로 입력해주세요."
+          placeholder: "영문 또는 숫자로 5글자 이상 입력해주세요."
         }}
         className={`${
           errorData["id"] === "passed"
@@ -93,7 +111,7 @@ function SignUpForm() {
         setErrorData={setErrorData}
         inputProps={{
           type: "text",
-          placeholder: "2글자 이상 입력해주세요."
+          placeholder: "영문 또는 한글로 2글자 이상 입력해주세요."
         }}
         className={`${
           errorData["name"] === "passed"
