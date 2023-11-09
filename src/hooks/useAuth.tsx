@@ -21,7 +21,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem("refreshToken", refreshToken || "");
-    console.log("실행됨");
     refreshAccessToken();
   }, [refreshToken]);
 

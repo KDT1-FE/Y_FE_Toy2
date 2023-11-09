@@ -20,18 +20,18 @@ function useApi() {
     }
   };
 
-  const postData = async (url: string) => {
+  const postData = async (url: string, requestBody: {}) => {
     try {
-      const response = await axios.post(url, {}, { headers });
+      const response = await axios.post(url, requestBody, { headers });
       return response.data;
     } catch (error) {
       throw error;
     }
   };
 
-  const patchData = async (url: string) => {
+  const patchData = async (url: string, requestBody: {}) => {
     try {
-      const response = await axios.patch(url, {}, { headers });
+      const response = await axios.patch(url, { requestBody }, { headers });
       return response.data;
     } catch (error) {
       throw error;

@@ -5,6 +5,7 @@ import FormInputBtn from "../../FormInputBtn/FormInputBtn";
 import Loader from "../../Loader/Loader";
 import axios from "axios";
 import { apiHeader } from "../../../utils/apiHeader";
+import { AuthContext } from "../../../hooks/useAuth";
 
 const initialErrorData = {
   id: "",

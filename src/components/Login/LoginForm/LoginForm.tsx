@@ -67,7 +67,7 @@ function LoginForm() {
       />
       <ErrorMessage>{errorMessage}</ErrorMessage>
       <FormInputBtn value={"로그인"} />
-      <p>{accessToken ? "로그인상태" : "로그아웃 상태"}</p>
+      <p>{accessToken ? "로그인 상태" : "로그아웃"}</p>
     </LoginContainer>
   );
 }
