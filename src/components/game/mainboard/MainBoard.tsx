@@ -1,50 +1,24 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import InputWord from './InputWord';
+import React from 'react';
+import { Visibility } from '@mui/icons-material';
+import { WordsType } from './InputWord';
+import { Answers, Board, BoardFrame, MainWrapper, NoticeBox } from './boardStyle';
+import Notice from './Notice';
 
-const MainWrapper = styled.div`
-  flex: 2;
-  display: flex;
-  border-left: 1px solid #dadada;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const BoardFrame = styled.div`
-  width: 600px;
-  height: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #a8dadc;
-  border-radius: 20px;
-  padding: 100px;
-  box-sizing: border-box;
-`;
-
-const Board = styled.div`
-  width: 100%;
-  height: 500px;
-  background-color: #fff;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-export default function MainBoard() {
-  const [words, setWords] = useState<string[] | []>([]);
+export default function MainBoard({ words, setWords }: WordsType) {
   return (
     <MainWrapper>
+      <NoticeBox>
+        <Notice />
+        <Visibility sx={{ fontSize: '50px', cursor: 'pointer' }} />
+      </NoticeBox>
       <BoardFrame>
-        <Board>{words.length !== 0 ? words.map((e) => <h2>{e}</h2>) : <h2>없음</h2>}</Board>
-        <InputWord setWords={setWords} words={words} />
+        <Board>
+          {words.length !== 0 ? (
+            <Answers>{words[words.length - 1]}</Answers>
+          ) : (
+            <Answers>첫 단어를 입력해주세요!</Answers>
+          )}
+        </Board>
       </BoardFrame>
     </MainWrapper>
   );
