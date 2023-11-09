@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Visibility } from '@mui/icons-material';
 import { WordsType } from './InputWord';
 import { Answers, Board, BoardFrame, MainWrapper, NoticeBox } from './boardStyle';
 import Notice from './Notice';
+import SearchBar from './SearchBar';
 
 export default function MainBoard({ words, setWords }: WordsType) {
+  const [onAnswers, setOnAnswers] = useState(false);
   return (
     <MainWrapper>
       <NoticeBox>
         <Notice />
-        <Visibility sx={{ fontSize: '50px', cursor: 'pointer' }} />
+        {onAnswers ? (
+          <SearchBar setOnAnswers={setOnAnswers} words={words} />
+        ) : (
+          <Visibility
+            sx={{ fontSize: '50px', cursor: 'pointer' }}
+            onClick={() => {
+              setOnAnswers(!onAnswers);
+            }}
+          />
+        )}
       </NoticeBox>
       <BoardFrame>
         <Board>

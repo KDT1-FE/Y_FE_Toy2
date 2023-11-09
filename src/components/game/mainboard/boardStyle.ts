@@ -1,6 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 
 export const MainWrapper = styled.div`
+  position: relative;
   flex: 2;
   height: calc(100vh - 80px);
   display: flex;
@@ -9,6 +10,21 @@ export const MainWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+`;
+
+export const SearchModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 400px;
+  background-color: #e5e5e5;
+  z-index: 10;
+  padding: 30px 50px;
   box-sizing: border-box;
 `;
 
