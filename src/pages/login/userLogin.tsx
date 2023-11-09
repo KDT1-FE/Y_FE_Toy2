@@ -6,7 +6,6 @@ import {
   FormControl,
   FormLabel,
   Link,
-  Box,
   Input,
   Button,
 } from '@chakra-ui/react';
@@ -15,17 +14,18 @@ import { accessTokenState } from '../../states/atom';
 import { postLogin } from '../../api/index';
 import { io } from 'socket.io-client';
 import { SERVER_ID, SERVER_URL } from '../../constant';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { onlineUserState } from '../../states/atom';
 
 function UserLogin() {
   const navigate = useNavigate();
+  const accessToken = useRecoilValue(accessTokenState);
 
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
   const setAccessToken = useSetRecoilState(accessTokenState);
-
+  const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +36,23 @@ function UserLogin() {
 
       setAccessToken(accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+
+      const socket = io(`${SERVER_URL}/server`, {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+          serverId: SERVER_ID,
+        },
+      });
+      socket.on('connect', () => {
+        socket.emit('users-server');
+      });
+      socket.on('users-server-to-client', (data) => {
+        setOnlineUsers(data);
+      });
+
+      socket.on('message-to-client', (messageObject) => {
+        console.log(messageObject);
+      });
       alert('로그인에 성공했습니다.');
       navigate('/lobby');
     } catch (e: any) {
@@ -47,7 +64,8 @@ function UserLogin() {
       } else {
         alert(`로그인에 실패했습니다. 오류코드: ${e.message}`);
       }
-
+    }
+    try {
       const token: any = localStorage.getItem('accessToken');
       const socket = io(`${SERVER_URL}/server`, {
         extraHeaders: {
