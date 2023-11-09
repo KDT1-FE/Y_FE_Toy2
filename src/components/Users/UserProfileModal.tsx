@@ -92,7 +92,7 @@ const ModalMain = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
 
     .link {
         text-decoration: none;
