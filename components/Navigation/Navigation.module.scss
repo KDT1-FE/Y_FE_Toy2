@@ -1,0 +1,32 @@
+@import '@/styles/index.scss';
+.nav {
+  width: 100%;
+  background: #fff;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%);
+  bottom: 0;
+  @include shadow-top;
+  background: #fff;
+  .inner {
+    max-width: 76.8rem;
+    width: 100%;
+    margin: 0 auto;
+    @include flex-center-row;
+    justify-content: space-between;
+    .menu {
+      display: block;
+      width: 25%;
+      text-align: center;
+      @include flex-center-col;
+      .icon {
+        font-size: 1.6rem;
+        padding-top: 1rem;
+        color: $black;
+      }
+      :hover {
+        color: $brand-pink;
+      }
+    }
+  }
+}
