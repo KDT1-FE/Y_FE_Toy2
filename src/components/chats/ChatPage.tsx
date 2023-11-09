@@ -26,9 +26,14 @@ const MyChats = ({ userType }: any) => {
     //     }
     // };
     const enterChatRoom = (chat: Chat) => {
-        if (chat.id) {
+        if (chat.id && chat.users) {
+            const users = chat.users.map((user) => `[name:${user.username}, id:${user.id}]`).join(',');
+            const latestMessageQuery = JSON.stringify(chat.latestMessage);
+
             router.push(
-                `/chating/${chat.id}?name=${chat.name}&isPrivate=${chat.isPrivate}&users=${chat.users}&latesetMessage=${chat.latestMessage}&updatedAt=${chat.updatedAt}`,
+                `/chating/${chat.id}?name=${chat.name}&isPrivate=${
+                    chat.isPrivate
+                }&users=${users}&latestMessage=${encodeURIComponent(latestMessageQuery)}&updatedAt=${chat.updatedAt}`,
             );
         }
     };
@@ -60,6 +65,9 @@ const MyChats = ({ userType }: any) => {
         } else {
             getAllChats();
         }
+    }, []);
+    useEffect(() => {
+        console.log(allChats);
     }, []);
 
     const onSearchHandler = () => {
