@@ -9,6 +9,7 @@ import useInput from "../../hooks/useInput";
 const Example = () => {
   const token = JSON.parse(localStorage.getItem("token") as string);
 
+  // 페이지 입장시 자동으로 해당 채팅방으로 입장
   useFetch({
     url: "https://fastcampus-chat.net/chat/participate",
     method: "PATCH",
