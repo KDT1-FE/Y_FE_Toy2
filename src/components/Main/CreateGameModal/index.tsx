@@ -132,15 +132,23 @@ interface ChatRoom {
   status?: string;
 }
 
+interface UserType {
+  id: string;
+  name: string;
+  picture: string;
+}
+
 interface Props {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateGameModal = ({ setModal }: Props) => {
   const navigate = useNavigate();
+  const fireFetch = useFireFetch();
 
   const token = JSON.parse(localStorage.getItem("token") as string);
 
+  // 소켓 연결
   const socket = io(
     `https://fastcampus-chat.net/chat?chatId=9fe8a1af-9c60-4937-82dd-21d6da5b9cd9`,
     {
@@ -151,20 +159,31 @@ const CreateGameModal = ({ setModal }: Props) => {
     },
   );
 
-  const fireFetch = useFireFetch();
+  // 게임 데이터
   const [roomData, setRoomData] = useState<ChatRoom>({
     name: "",
     users: [],
     isPrivate: false,
-    num: 1,
+    num: 6,
   });
 
+  // 방제목 빈값이면 true
+  const [inputAction, setInpuAction] = useState(false);
+
+  const [userList, setUserList] = useState<UserType[]>([]);
+
+  // input 초기화
+  const titleInput = useInput("");
+  const searchInput = useInput("");
+
+  // 유저정보 요청
   const users = useFetch({
     url: "https://fastcampus-chat.net/users",
     method: "GET",
     start: true,
   });
 
+  // 게임 만들기 post요청 선언 (호출 X)
   const createGame = useFetch({
     url: "https://fastcampus-chat.net/chat",
     method: "POST",
@@ -175,21 +194,46 @@ const CreateGameModal = ({ setModal }: Props) => {
     start: false,
   });
 
-  const titleInput = useInput("");
+  useEffect(() => {
+    if (users.result) {
+      const filter = users.result.filter(
+        (value: UserType) => value.id !== token.id,
+      );
+      setUserList(filter);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [users.result]);
 
+  // 방제목 input 저장
   useEffect(() => {
     const copy = { ...roomData };
     copy.name = titleInput.value;
     setRoomData(copy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [titleInput.value, titleInput.value]);
+  }, [titleInput.value]);
 
+  // 유저 검색 기능
+  useEffect(() => {
+    if (users.result) {
+      const filter = users.result.filter((value: UserType) =>
+        value.name.includes(searchInput.value),
+      );
+      setUserList(filter);
+    }
+  }, [searchInput.value, users.result]);
+
+  // 게임 생성 함수
   const handleMakeRoom = () => {
-    createGame.refresh();
-
-    console.log(roomData);
+    if (roomData.name === "") {
+      setInpuAction(true);
+      console.log(roomData);
+    } else {
+      // 게임 생성 POST 호출
+      createGame.refresh();
+    }
   };
 
+  // 게임 인원 선택 함수
   const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
     const copy = { ...roomData };
     copy.num = ~~e.target.value;
@@ -197,8 +241,10 @@ const CreateGameModal = ({ setModal }: Props) => {
     setRoomData(copy);
   };
 
+  // 게임 생성 후 파이어베이스 저장 밑 유저 초대 푸쉬알림
   useEffect(() => {
     if (createGame.result) {
+      // 파이어베이스 게임 데이터 생성
       const newData = {
         ...roomData,
         id: createGame.result.id,
@@ -208,20 +254,21 @@ const CreateGameModal = ({ setModal }: Props) => {
         status: "대기중",
       };
 
+      // 파이어베이스 POST요청
       fireFetch.usePostData("game", createGame.result.id, newData);
 
-      // const roomText = [...JSON.stringify(newData)];
-
+      // 초대된 유저 목록 생성
       const inviteUser: (string | ChatRoom | string[])[] = [...roomData.users];
 
       inviteUser.push(newData);
       inviteUser.push("*&^");
 
-      // const text = inviteUser.toString();
       const text = JSON.stringify(inviteUser);
 
+      // 초대 메시지 전달
       socket.emit("message-to-server", text);
 
+      // 해당 게임방으로 이동
       navigate(`/game?gameId=${createGame.result.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,7 +282,7 @@ const CreateGameModal = ({ setModal }: Props) => {
             <ImgBox>⭐</ImgBox>
             <Input
               marginBottom="1rem"
-              border="1px solid #c6c6c6"
+              border={!inputAction ? "1px solid #c6c6c6" : "1px solid red"}
               placeholder="방제목"
               textAlign="center"
               value={titleInput.value}
@@ -250,7 +297,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="1"
                   name="drone"
                   value="1"
-                  defaultChecked
+                  // checked={roomData.num === 1}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="1">1</label>
@@ -261,7 +308,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="2"
                   name="drone"
                   value="2"
-                  checked={roomData.num === 2}
+                  // checked={roomData.num === 2}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="2">2</label>
@@ -272,7 +319,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="3"
                   name="drone"
                   value="3"
-                  checked={roomData.num === 3}
+                  // checked={roomData.num === 3}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="3">3</label>
@@ -283,7 +330,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="4"
                   name="drone"
                   value="4"
-                  checked={roomData.num === 4}
+                  // checked={roomData.num === 4}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="4">4</label>
@@ -294,7 +341,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="5"
                   name="drone"
                   value="5"
-                  checked={roomData.num === 5}
+                  // checked={roomData.num === 5}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="5">5</label>
@@ -305,7 +352,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="6"
                   name="drone"
                   value="6"
-                  checked={roomData.num === 6}
+                  checked
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="6">6</label>
@@ -335,9 +382,12 @@ const CreateGameModal = ({ setModal }: Props) => {
               placeholder="검색"
               textAlign="center"
               marginBottom="1rem"
+              height="2rem"
+              value={searchInput.value}
+              onChange={searchInput.onChange}
             />
             {users.result &&
-              users.result.map((value: any) => {
+              userList.map((value: UserType) => {
                 return (
                   <UserCard
                     key={value.id}
