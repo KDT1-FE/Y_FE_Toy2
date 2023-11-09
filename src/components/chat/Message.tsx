@@ -10,7 +10,7 @@ interface IMessageProps {
 function Message({ message, name }: IMessageProps) {
   let isSentByCurrentUser = false;
 
-  const trimmedName = message.userId.trim().toLowerCase();
+  const trimmedName = message.userId.replace('9b9a6496:', '');
 
   if (name === trimmedName) {
     isSentByCurrentUser = true;
@@ -18,7 +18,7 @@ function Message({ message, name }: IMessageProps) {
 
   return isSentByCurrentUser ? (
     <S.MessageContainer sx={{ justifyContent: 'flex-end' }}>
-      <S.SentUser sx={{ mr: 1 }}>{message?.userId}</S.SentUser>
+      <S.SentUser sx={{ mr: 1 }}>{trimmedName}</S.SentUser>
       <S.MessageBox sx={{ backgroundColor: 'primary.main' }}>
         <S.MessageText>{message?.text}</S.MessageText>
       </S.MessageBox>
@@ -28,7 +28,7 @@ function Message({ message, name }: IMessageProps) {
       <S.MessageBox sx={{ backgroundColor: 'secondary.main' }}>
         <S.MessageText>{message?.text}</S.MessageText>
       </S.MessageBox>
-      <S.SentUser sx={{ ml: 1 }}>{message?.userId}</S.SentUser>
+      <S.SentUser sx={{ ml: 1 }}>{trimmedName}</S.SentUser>
     </S.MessageContainer>
   );
 }
