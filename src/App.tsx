@@ -1,12 +1,11 @@
-import React from 'react';
-import { Flex } from '@chakra-ui/react';
-import SideBar from './components/sideBar';
+import Layout from './layout';
+import Chats from './pages/chats';
 
 function App() {
   return (
-    <div className="App">
-      <SideBar />
-    </div>
+    <Layout>
+      <Chats />
+    </Layout>
   );
 }
 
