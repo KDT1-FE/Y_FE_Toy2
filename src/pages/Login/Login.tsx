@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import LoginForm from "../../components/LoginForm/LoginForm";
+import LoginForm from "../../components/Login/LoginForm/LoginForm";
 
 function Login() {
   return (

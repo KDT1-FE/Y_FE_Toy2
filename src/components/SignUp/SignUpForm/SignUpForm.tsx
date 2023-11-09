@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import SignUpInput, { ErrorData } from "../SignUpInput/SignUpInput";
 import { useEffect, useState } from "react";
-import FormInputBtn from "../FormInputBtn/FormInputBtn";
-import Loader from "../Loader/Loader";
-import { postApi } from "../../utils/postApi";
+import FormInputBtn from "../../FormInputBtn/FormInputBtn";
+import Loader from "../../Loader/Loader";
 import axios from "axios";
-import { apiHeader } from "../../utils/apiHeader";
+import { apiHeader } from "../../../utils/apiHeader";
 
 const initialErrorData = {
   id: "",

@@ -1,16 +1,43 @@
 import styled from "styled-components";
-import { LoginInputProps } from "../LoginForm/LoginForm";
 
-function LoginInput({ id, label }: LoginInputProps) {
+function LoginInput({
+  id,
+  label,
+  loginData,
+  setLoginData,
+  inputProps
+}: LoginInputProps) {
   return (
     <LoginInputContainer>
       <InputLabel htmlFor={id}>{label}</InputLabel>
-      <Input id={id} />
+      <Input
+        id={id}
+        onChange={(e) =>
+          setLoginData((prev) => ({ ...prev, [id]: e.target.value }))
+        }
+        {...inputProps}
+      />
     </LoginInputContainer>
   );
 }
 
 export default LoginInput;
+
+interface LoginInputProps {
+  id: string;
+  label: string;
+  loginData: LoginData;
+  setLoginData: React.Dispatch<React.SetStateAction<LoginData>>;
+  inputProps: {
+    type: string;
+    placeholder: string;
+  };
+}
+
+export interface LoginData {
+  id: string;
+  password: string;
+}
 
 const LoginInputContainer = styled.div`
   display: flex;

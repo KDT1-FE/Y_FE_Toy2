@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { postApi } from "../../utils/postApi";
+import { postApi } from "../../../utils/postApi";
 
 const ID_REGEX = new RegExp("^[A-Za-z0-9]{5,20}$"); // 5~20글자 영문자만 입력 가능
 const PW_REGEX = new RegExp("^[A-Za-z0-9]{8,16}$"); // 8~16글자 영문자, 숫자만 입력 가능

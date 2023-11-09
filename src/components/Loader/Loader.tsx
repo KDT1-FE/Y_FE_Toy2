@@ -11,7 +11,7 @@ const override: CSSProperties = {
   borderColor: "red"
 };
 
-function Loader({ loading }) {
+function Loader({ loading }: { loading: boolean }) {
   return (
     <>
       <HashLoader
