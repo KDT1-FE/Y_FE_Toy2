@@ -4,7 +4,11 @@ import GameChat from "../../components/Game/GameChat";
 import Keyword from "../../components/Game/Keyword";
 import useFireFetch from "../../hooks/useFireFetch";
 
-const ProfileCard = ({ userId }: any) => {
+interface ProfileCardProps {
+  userId: string;
+}
+
+const ProfileCard: React.FC<ProfileCardProps> = ({ userId }) => {
   return (
     <Card w="200px" h="200px" justify="center" mb="20px">
       <Center>
@@ -61,6 +65,10 @@ const Game = () => {
 
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
+  }
+
+  if (!gameId) {
+    return null;
   }
 
   return (
