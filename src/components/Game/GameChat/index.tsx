@@ -6,17 +6,20 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import useInput from "../../../hooks/useInput";
 import ChatBubble from "../../common/ChatBubble";
 
 interface Message {
   id: string;
   text: string;
 }
-const GameChat = ({ gameId }) => {
-  console.log(gameId);
+
+interface GameChatProps {
+  gameId: string;
+}
+
+const GameChat: React.FC<GameChatProps> = ({ gameId }) => {
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
@@ -26,13 +29,12 @@ const GameChat = ({ gameId }) => {
     },
   });
 
-  // 메세지 데이터
   const [message, setMessage] = useState<Message>({
     id: "",
     text: "",
   });
   const [messages, setMessages]: any = useState([]);
-  const messageValue = useInput("");
+  const messageRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
@@ -53,11 +55,14 @@ const GameChat = ({ gameId }) => {
       setMessages([...messages, message]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message.text]);
+  }, [message.text, message.id]);
 
   const submitMessage = () => {
-    socket.emit("message-to-server", messageValue.value);
-    messageValue.clear();
+    if (messageRef.current && messageRef.current.value) {
+      const messageValue = messageRef.current.value;
+      socket.emit("message-to-server", messageValue);
+      messageRef.current.value = "";
+    }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -67,9 +72,9 @@ const GameChat = ({ gameId }) => {
   };
 
   return (
-    <Card>
+    <Card p={3} h="100%" mb="20px">
       <CardBody>
-        {messages.map((message, index) => (
+        {messages.map((message: Message, index: number) => (
           <ChatBubble key={index} userId={message.id} text={message.text} />
         ))}
       </CardBody>
@@ -78,8 +83,7 @@ const GameChat = ({ gameId }) => {
           pr="4.5rem"
           type="text"
           placeholder="채팅내용"
-          value={messageValue.value}
-          onChange={messageValue.onChange}
+          ref={messageRef}
           onKeyPress={handleKeyPress}
         />
         <InputRightElement width="4.5rem">
