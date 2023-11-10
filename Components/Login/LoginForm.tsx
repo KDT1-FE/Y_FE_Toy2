@@ -8,6 +8,8 @@ import { Button } from '@material-tailwind/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
+import { Input } from '@material-tailwind/react';
+import Image from 'next/image';
 
 type IFormInput = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -26,6 +28,8 @@ const LoginForm = () => {
 	// 로그인 버튼 클릭 시
 	const onSubmit: SubmitHandler<IFormInput> = async ({ id, password }) => {
 		console.log('id: ', id, 'password:', password);
+		const data = await fetchLogin(id, password);
+		console.log(data);
 		const { accessToken, refreshToken } = await fetchLogin(id, password);
 		console.log('accessToken:', accessToken);
 		console.log('refreshToken:', refreshToken);
@@ -49,26 +53,43 @@ const LoginForm = () => {
 	};
 
 	return (
-		<div className="flex-col">
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<label>id</label>
+		<div className="flex flex-col p-20 items-center justify-center">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="flex flex-col items-center justify-center"
+			>
+				<Image src="/logo.png" alt="Picture of me" width={250} height={250} />
 				{/* 영어와 숫자만 */}
-				<input
+				<Input
+					placeholder="id"
+					className="!border !border-gray-300 bg-white text-gray-900 shadow-lg ring-4 ring-transparent placeholder:text-gray-500"
+					labelProps={{
+						className: 'hidden',
+					}}
 					{...register('id', {
 						required: true,
 					})}
+					crossOrigin={'anonymous'}
 				/>
 				{errors?.id ? <p className="error">{errors.id?.message}</p> : null}
 
-				<label>password</label>
 				{/* 5자 이상 */}
-				<input {...register('password')} />
-				<Button type="submit" className=" bg-pink-200">
+				<Input
+					placeholder="password"
+					className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500"
+					labelProps={{
+						className: 'hidden',
+					}}
+					containerProps={{ className: 'min-w-[100px]' }}
+					{...register('password')}
+					crossOrigin={'anonymous'}
+				/>
+				<Button type="submit" className=" bg-pink-200 w-full mt-10">
 					로그인
 				</Button>
 			</form>
 			<Link href="/join">
-				<div>회원가입</div>
+				<div className="text-red-500 text-[10px] mt-2">회원가입</div>
 			</Link>
 		</div>
 	);

@@ -7,6 +7,7 @@ import { fetchJoin } from '@/app/join/join.utils';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
+// import Image from 'next/image';
 
 type RequestBody = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -55,23 +56,27 @@ const JoinForm = () => {
 		// 전체
 		<div className="w-full h-full flex flex-col items-center justify-center">
 			{/* 이미지 & 입력폼 & 회원가입 버튼 */}
-			<div className="flex flex-col items-center justify-center  bg-red-400">
+			<div className="flex flex-col w-full h-full items-center justify-center ">
 				{/* 이미지 */}
-				<div className="mb-3 h-50 bg-red-200">
+				<div className="mb-10">
 					{image ? (
-						<img src={image} className="h-20 w-20 rounded-full bg-blue-500 " />
+						<img
+							src={image}
+							className="h-[200px] w-[200px] rounded-full bg-blue-500 "
+						/>
 					) : (
-						<div className="h-20 w-20 rounded-full bg-blue-500" />
+						<div className="h-[200px] w-[200px] rounded-full bg-blue-500" />
 					)}
 				</div>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
-					className="w-full flex flex-col items-center "
+					className="flex flex-col w-3/5 items-center "
 				>
-					<div className=" flex flex-col gap-1 bg-red-100">
+					<div className=" flex flex-col gap-1 w-full ">
 						{/* 이름 */}
-						<div className="flex h-[90] flex-col  mt-5">
+						<div className="flex h-[90] w-full flex-col mt-5">
 							<Input
+								color="brown"
 								placeholder="20자 이하의 이름을 입력해주세요."
 								variant="static"
 								label="name"
@@ -82,22 +87,20 @@ const JoinForm = () => {
 								crossOrigin={'anonymous'}
 							/>
 
-							{errors?.name?.type === 'maxLength' && (
-								<p className="text-red-500 text-[10px] mt-2">
-									20자 이상은 입력할 수 없습니다.
-								</p>
-							)}
-							{errors?.name?.type === 'required' && (
-								<p className="text-red-500 text-[10px] mt-2">
-									{' '}
-									name를 입력해주세요.
-								</p>
-							)}
+							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+								{errors?.name?.type === 'required' && (
+									<div>name를 입력해주세요.</div>
+								)}
+								{errors?.name?.type === 'maxLength' && (
+									<div>20자 이상은 입력할 수 없습니다.</div>
+								)}
+							</div>
 						</div>
 
 						{/* id */}
-						<div className="flex w-72 h-[90] flex-col  mt-5">
+						<div className="flex  w-full  h-[90] flex-col  mt-5">
 							<Input
+								color="brown"
 								variant="static"
 								label="id"
 								placeholder=" "
@@ -107,21 +110,20 @@ const JoinForm = () => {
 								})}
 								crossOrigin={'anonymous'}
 							/>
-							{errors?.id?.type === 'pattern' && (
-								<p className="text-red-500 text-[10px] mt-2">
-									{' '}
-									영어와 숫자만 작성 가능합니다.
-								</p>
-							)}
-							{errors?.id?.type === 'required' && (
-								<p className="text-red-500 text-[10px] mt-2">
-									id를 입력해주세요.
-								</p>
-							)}
+
+							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+								{errors?.id?.type === 'pattern' && (
+									<div>영어와 숫자만 작성 가능합니다.</div>
+								)}
+								{errors?.id?.type === 'required' && (
+									<div>id를 입력해주세요.</div>
+								)}
+							</div>
 						</div>
 						{/* 비밀번호 */}
-						<div className="flex w-72  h-[90] flex-col  mt-5">
+						<div className="flex w-full  h-[90] flex-col  mt-5">
 							<Input
+								color="brown"
 								variant="static"
 								label="password"
 								type="password"
@@ -131,21 +133,19 @@ const JoinForm = () => {
 								})}
 								crossOrigin={'anonymous'}
 							/>
-
-							{errors?.password?.type === 'minLength' && (
-								<p className="text-red-500 text-[10px] mt-2">
-									입력은 최소 5자 이상이어야 합니다.
-								</p>
-							)}
-							{errors?.password?.type === 'required' && (
-								<p className="text-red-500 text-[10px] mt-2">
-									password를 입력해주세요.
-								</p>
-							)}
+							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+								{errors?.password?.type === 'minLength' && (
+									<div>입력은 최소 5자 이상이어야 합니다.</div>
+								)}
+								{errors?.password?.type === 'required' && (
+									<div> password를 입력해주세요.</div>
+								)}
+							</div>
 						</div>
 						{/* 이미지 url */}
-						<div className="flex w-72 h-[90] flex-col  mt-5">
+						<div className="flex h-[90] w-full  flex-col  mt-5">
 							<Input
+								color="brown"
 								variant="static"
 								label="image URL"
 								placeholder=" image URL을 입력해주세요 "
