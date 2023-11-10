@@ -1,5 +1,6 @@
 import React from 'react';
 import { User } from '@/app/search/search.type';
+import Image from 'next/image';
 
 const OpenChatPicture = ({ openChatUsers }: { openChatUsers: User[] }) => {
 	let userCount = 0;
@@ -16,7 +17,12 @@ const OpenChatPicture = ({ openChatUsers }: { openChatUsers: User[] }) => {
 
 					return (
 						<li key={user.id}>
-							<img src={user.picture} alt="user picture" />
+							<Image
+								width={100}
+								height={100}
+								src={user.picture}
+								alt="user picture"
+							/>
 						</li>
 					);
 				})}
