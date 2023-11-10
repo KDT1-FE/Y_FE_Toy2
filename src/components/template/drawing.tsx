@@ -1,9 +1,14 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import drawImg from '../../assets/icons/draw.png';
-import eraseImg from '../../assets/icons/eraser.png';
-import trashImg from '../../assets/icons/trash.png';
+
+import drawImg from '../../assets/draw.png';
+import eraseImg from '../../assets/eraser.png';
+import trashImg from '../../assets/trash.png';
+import { SERVER_ID, SERVER_URL } from '../../constant';
+import { io } from 'socket.io-client';
+import { drawSocket } from '../../api/socket';
+
 
 const Drawing = () => {
   const [isPainting, setIsPainting] = useState(false);
@@ -15,9 +20,13 @@ const Drawing = () => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null); // 캔버스 (도화지)
   const contextRef = useRef<CanvasRenderingContext2D | null>(null); // 그림 (내용)
+  const [roomId, setRoomId] = useState('');
 
   // useEffect 하나 쓰려고 if문 썼습니다
   useEffect(() => {
+    const newRoomId = window.location.pathname.split('/')[2];
+    setRoomId(newRoomId);
+
     const canvas = canvasRef.current; // 캔버스 Ref
     if (canvas && !contextRef.current) {
       // 최초 마운트 시에만 실행
@@ -59,6 +68,7 @@ const Drawing = () => {
 
     ctx!.fillStyle = 'white';
     ctx!.fillRect(0, 0, 700, 400);
+    drawSocket.emit('erase');
   };
 
   /// 굵기 변경 함수
@@ -121,11 +131,20 @@ const Drawing = () => {
     const ctx = contextRef.current;
     if (ctx) {
       ctx.beginPath();
-      ctx.moveTo(originalMousePosition.x, originalMousePosition.y); // moveTo(여기서 시작)부터 lineTo 지점까지
-      ctx.lineTo(newMousePosition.x, newMousePosition.y); // 그리기(이게 반복되면 게속 그려지게)
+      ctx.moveTo(originalMousePosition.x, originalMousePosition.y);
+      ctx.lineTo(newMousePosition.x, newMousePosition.y);
       ctx.closePath();
-      // path는 점 하나를 잇는 것이 아니라 여러 개 = 경로가 만들어짐
-      ctx.stroke(); // 선을 그어라(여기서 선이 그려짐)
+      ctx.stroke();
+
+      drawSocket.emit('drawing', {
+        originalMousePosition,
+        newMousePosition,
+        option: {
+          color,
+          lineWidth,
+          roomId,
+        },
+      });
     }
   };
 
@@ -137,6 +156,43 @@ const Drawing = () => {
       background: `linear-gradient(to right, #FFE283 0%, #FFE283 ${backgroundSize}%, rgb(236, 236, 236) ${backgroundSize}%, rgb(236, 236, 236) 100%)`,
     };
   };
+
+  useEffect(() => {
+    drawSocket.connect();
+    const onDrawingEvent = ({
+      originalMousePosition,
+      newMousePosition,
+      option,
+    }: IReciveInfo) => {
+      const ctx = contextRef.current;
+      if (!ctx) return;
+      ctx.strokeStyle = option.color;
+      ctx.lineWidth = option.lineWidth;
+      ctx.beginPath();
+      ctx.moveTo(originalMousePosition.x, originalMousePosition.y);
+      ctx.lineTo(newMousePosition.x, newMousePosition.y);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+    };
+
+    const onEraseEvent = () => {
+      const ctx = contextRef.current;
+      if (!ctx) return;
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, 700, 400);
+    };
+
+    drawSocket.on('drawing', onDrawingEvent);
+    drawSocket.on('erase', onEraseEvent);
+
+    return () => {
+      drawSocket.off('drawing', onDrawingEvent);
+      drawSocket.off('erase', onEraseEvent);
+      drawSocket.disconnect();
+    };
+  }, [drawSocket]);
 
   /// JSX
   return (
@@ -247,8 +303,22 @@ const RangeInput = styled.input`
   border-radius: 8px;
   outline: none;
   transition: background 450ms ease-in;
-  -webkit-appearance: none;
   accent-color: #ffca1d;
 `;
+
+interface IReciveInfo {
+  originalMousePosition: ICoordinate;
+  newMousePosition: ICoordinate;
+  option: {
+    color: string;
+    lineWidth: number;
+    roomId: string;
+  };
+}
+
+interface ICoordinate {
+  x: number;
+  y: number;
+}
 
 export default Drawing;
