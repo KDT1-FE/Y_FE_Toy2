@@ -16,7 +16,7 @@ interface ChatBubbleProps extends BoxProps {
   text: string;
 }
 
-const ChatBubble: React.FC<ChatBubbleProps> = ({ userId, text, ...rest }) => {
+const ChatBubble: React.FC<ChatBubbleProps> = ({ userId, text }) => {
   return (
     <Container>
       <Text fontWeight="bold" mb="0px">
