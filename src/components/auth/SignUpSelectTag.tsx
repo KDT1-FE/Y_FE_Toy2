@@ -8,7 +8,12 @@ interface SignUpSelectTagProps {
   isClicked: boolean;
 }
 
-function SignUpSelectTag({ name, tag, handleClick, isClicked = false }: SignUpSelectTagProps) {
+function SignUpSelectTag({
+  name,
+  tag,
+  handleClick,
+  isClicked = false,
+}: SignUpSelectTagProps) {
   return (
     <Grid
       item

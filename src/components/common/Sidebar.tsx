@@ -29,7 +29,16 @@ function Sidebar() {
           padding: '1.6rem',
         }}
       >
-        <Typography variant="h1" sx={{ fontSize: '2rem', color: 'white', mt: 2, mb: 4, fontFamily: 'Bungee' }}>
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: '2rem',
+            color: 'white',
+            mt: 2,
+            mb: 4,
+            fontFamily: 'Bungee',
+          }}
+        >
           <Link to="/">Langchat</Link>
         </Typography>
         <Box
@@ -43,7 +52,11 @@ function Sidebar() {
             color: '#fff',
           }}
         >
-          <StyledBadge overlap="circular" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
+          <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            variant="dot"
+          >
             <Avatar src={user.picture} />
           </StyledBadge>
           {user.name}

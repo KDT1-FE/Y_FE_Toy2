@@ -126,7 +126,14 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
             />
           ))}
         </Grid>
-        <Button color="primary" size="large" variant="contained" fullWidth type="submit" sx={{ my: 3 }}>
+        <Button
+          color="primary"
+          size="large"
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ my: 3 }}
+        >
           {isLoaded ? 'LANGCHAT 시작하기' : '회원가입 진행중...'}
         </Button>
       </form>

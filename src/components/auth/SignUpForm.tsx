@@ -64,11 +64,23 @@ function SignUpForm({ setStep }: SignUpFormProps) {
           value={formik.values.confirmPassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-          helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+          error={
+            formik.touched.confirmPassword &&
+            Boolean(formik.errors.confirmPassword)
+          }
+          helperText={
+            formik.touched.confirmPassword && formik.errors.confirmPassword
+          }
           margin="normal"
         />
-        <Button color="primary" size="large" variant="contained" fullWidth type="submit" sx={{ mt: 3 }}>
+        <Button
+          color="primary"
+          size="large"
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ mt: 3 }}
+        >
           다음 단계로 ( 1 / 4 )
         </Button>
       </form>

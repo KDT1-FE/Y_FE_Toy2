@@ -26,7 +26,14 @@ function AuthLayout() {
           }}
         >
           <Box sx={{ p: 3 }}>
-            <Typography variant="h1" sx={{ fontSize: '2rem', color: 'primary.main', fontFamily: 'Bungee' }}>
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: '2rem',
+                color: 'primary.main',
+                fontFamily: 'Bungee',
+              }}
+            >
               <Link to="/">Langchat</Link>
             </Typography>
           </Box>

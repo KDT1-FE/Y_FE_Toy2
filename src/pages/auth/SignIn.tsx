@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Button, Container, TextField, Typography, Link as MuiLink } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Link as MuiLink,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -30,7 +37,8 @@ function SignIn() {
         });
 
         // eslint-disable-next-line @typescript-eslint/dot-notation
-        privateApi.defaults.headers.common['Authorization'] = res.data.accessToken;
+        privateApi.defaults.headers.common['Authorization'] =
+          res.data.accessToken;
         const res2 = await privateApi.get('auth/me');
         const { user } = res2.data;
 
@@ -67,11 +75,21 @@ function SignIn() {
           minHeight: '80%',
         }}
       >
-        <Box component="form" noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={formik.handleSubmit}
+        >
           <Typography variant="h4">로그인</Typography>
           <Typography color="text.secondary" variant="body1" sx={{ my: 3 }}>
             계정이 없으신가요? &nbsp;
-            <MuiLink component={Link} to="/signup" underline="hover" variant="subtitle2">
+            <MuiLink
+              component={Link}
+              to="/signup"
+              underline="hover"
+              variant="subtitle2"
+            >
               회원가입
             </MuiLink>
           </Typography>
@@ -94,7 +112,13 @@ function SignIn() {
             onChange={formik.handleChange}
             margin="normal"
           />
-          <Button fullWidth type="submit" size="large" variant="contained" sx={{ mt: 3 }}>
+          <Button
+            fullWidth
+            type="submit"
+            size="large"
+            variant="contained"
+            sx={{ mt: 3 }}
+          >
             로그인
           </Button>
         </Box>

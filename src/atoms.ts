@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { FbUser } from './types/User';
+import { FbUser, UserSimple } from './types/User';
 
 export const accessTokenState = atom({
   key: 'accessTokenState', // unique ID (with respect to other atoms/selectors)
@@ -22,13 +22,12 @@ export const signUpFormState = atom({
   default: defaultSignUpValue,
 });
 
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-
-export const userState = atom<User | string>({
+export const userState = atom<UserSimple | string>({
   key: 'userState',
   default: localStorage.getItem('user') ?? '',
+});
+
+export const uploadFileState = atom<File | null>({
+  key: 'uploadFileState',
+  default: null,
 });
