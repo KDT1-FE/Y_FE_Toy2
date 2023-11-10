@@ -21,6 +21,7 @@ const CheckGameRoom = () => {
   };
 
   usePollingData(fetchData, [allRooms, setAllRooms]);
+  // 이거 소켓으로
 
   const handleParticipate = async (numberOfPeople: number, chatId: any) => {
     if (numberOfPeople === 4) {
@@ -33,7 +34,6 @@ const CheckGameRoom = () => {
 
   return (
     <>
-      <button onClick={fetchData}>Refresh Data</button>
       {allRooms.map((element, index) => (
         <div
           key={index}

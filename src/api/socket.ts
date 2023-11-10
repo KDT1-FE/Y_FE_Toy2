@@ -39,3 +39,24 @@ export const disconnectLoginSocket = () => {
   }
 };
 
+export const chatSocket = (accessToken: any, chatId: string) => {
+  socket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${accessToken}`,
+      serverId: SERVER_ID,
+    },
+  });
+  socket.emit('fetch-messages');
+
+  // 예제로 fetch-messages 이벤트를 발생시키고, 서버에서 받은 메시지를 콘솔에 출력
+  socket.on('connect', () => {
+    console.log('Connected from server');
+  });
+
+  // 소켓 연결이 끊어졌을 때 처리
+  socket.on('disconnect', () => {
+    console.log('Disconnected from server');
+  });
+
+  return socket;
+};
