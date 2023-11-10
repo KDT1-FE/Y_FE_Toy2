@@ -1,29 +1,20 @@
 import React from 'react';
 import { fetchAllChat } from './open.utils';
-
-type ChatData = {
-	id: string;
-	name: string;
-	users: string[];
-	isPrivate: boolean;
-	latestMessage: string;
-	updatedAt: string;
-};
+import ChatList from '@/Components/Open/ChatList/ChatList';
+import SpeedDialWithTextInside from '@/Components/Open/SpeedDial/SpeedDial';
+import ChatGenerator from '@/Components/Open/ChatGenerator/ChatGenerator';
+import Link from 'next/link';
 
 const Open = async () => {
-	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;
-	const result = await fetchAllChat(accessToken, 'minseob');
+	const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN as string;
+	const result = await fetchAllChat(accessToken);
 
-	console.log(result);
 	return (
-		<div className="flex flex-col bg-red-300">
-			{result.chats.map((chat: ChatData) => {
-				return (
-					<div key={chat.id}>
-						<div>{chat.name}</div>
-					</div>
-				);
-			})}
+		<div className="relative flex flex-col h-[calc(100vh-2.5rem)] bg-white">
+			<Link href="/search">검색</Link>
+			<ChatList myChatList={result} />
+			<SpeedDialWithTextInside />
+			<ChatGenerator />
 		</div>
 	);
 };
