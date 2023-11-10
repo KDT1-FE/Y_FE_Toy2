@@ -1,16 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { titleAction } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
 import { ChatIcon, HamburgerIcon } from '@chakra-ui/icons';
-import LoginModal, { LoginModalRef } from './loginModal';
-import ChattingModal, { ChattingModalRef } from './chattingModal';
-
-interface ModalRef {
-  contains(arg0: Node): unknown;
-  current: HTMLDivElement | null;
-  showModal?: () => void;
-}
+import LoginModal from './LoginModal'; // Import your modal component
 
 const StyledContainer = styled.div<{ $isClicked: boolean }>`
   width: 40px;
@@ -27,36 +20,13 @@ const StyledContainer = styled.div<{ $isClicked: boolean }>`
   &:hover {
     background-color: #e2e8f0;
   }
-};
 `;
+
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [isChatContainerClicked, setIsChatContainerClicked] = useState(false);
   const [isMenuContainerClicked, setIsMenuContainerClicked] = useState(false);
-
-  const chatContainerRef = useRef<ModalRef>(null);
-  const menuContainerRef = useRef<ModalRef>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const chatContainer = chatContainerRef.current?.current;
-      const menuContainer = menuContainerRef.current?.current;
-
-      if (chatContainer && !chatContainer.contains(event.target as Node)) {
-        setIsChatContainerClicked(false);
-      }
-
-      if (menuContainer && !menuContainer.contains(event.target as Node)) {
-        setIsMenuContainerClicked(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
 
   const checkLocation = () => {
     titleAction(navigate);
@@ -65,23 +35,19 @@ const Header: React.FC = () => {
   const handleChatContainerClick = () => {
     setIsChatContainerClicked(true);
     setIsMenuContainerClicked(false);
-
-    if (chatContainerRef.current) {
-      if ('showModal' in chatContainerRef.current) {
-        chatContainerRef.current.showModal?.();
-      }
-    }
+    setIsMenuModalOpen(false);
   };
 
   const handleMenuContainerClick = () => {
     setIsChatContainerClicked(false);
     setIsMenuContainerClicked(true);
+    setIsMenuModalOpen(true);
+  };
 
-    if (menuContainerRef.current) {
-      if ('showModal' in menuContainerRef.current) {
-        menuContainerRef.current.showModal?.();
-      }
-    }
+  const closeMenuModal = () => {
+    setIsMenuModalOpen(false);
+    setIsChatContainerClicked(false);
+    setIsMenuContainerClicked(false);
   };
 
   return (
@@ -90,32 +56,19 @@ const Header: React.FC = () => {
       <LogoContainer>
         <StyledContainer
           as="div"
-          ref={chatContainerRef as unknown as React.RefObject<HTMLDivElement>}
           $isClicked={isChatContainerClicked}
           onClick={handleChatContainerClick}>
-          <ChatIcon width="19px" height="19px" color="#2D3748"></ChatIcon>
+          <ChatIcon width="19px" height="19px" color="#2D3748" />
         </StyledContainer>
         <StyledContainer
           as="div"
-          ref={menuContainerRef as unknown as React.RefObject<HTMLDivElement>}
           $isClicked={isMenuContainerClicked}
           onClick={handleMenuContainerClick}>
-          <HamburgerIcon
-            width="24px"
-            height="24px"
-            color="#2D3748"></HamburgerIcon>
+          <HamburgerIcon width="24px" height="24px" color="#2D3748" />
         </StyledContainer>
       </LogoContainer>
-      {isChatContainerClicked && (
-        <ChattingModal
-          ref={chatContainerRef as unknown as React.RefObject<ChattingModalRef>}
-        />
-      )}
-      {isMenuContainerClicked && (
-        <LoginModal
-          ref={menuContainerRef as unknown as React.RefObject<LoginModalRef>}
-        />
-      )}
+
+      <LoginModal isOpen={isMenuModalOpen} onClose={closeMenuModal} />
     </HeaderContainer>
   );
 };
