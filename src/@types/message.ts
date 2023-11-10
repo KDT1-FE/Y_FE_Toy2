@@ -3,9 +3,8 @@ export interface MessageData {
   id: string;
   text: string;
   userId: string;
-  _id: string;
 }
-export interface Message {
+export interface ChatMessage {
   name: string;
   id: string;
   picture: string;
