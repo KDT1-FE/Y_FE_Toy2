@@ -1,4 +1,4 @@
-import { ResponseValue } from '../@types/chat';
+import { ResponseValue } from '../@types/channel';
 import instance from './axios';
 
 //내 채팅방 불러오기
