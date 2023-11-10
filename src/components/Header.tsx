@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useDarkMode } from "../hooks/useDarkMode";
-import { useEffect, useContext, useState } from "react";
-import axios from "axios";
+import { useContext } from "react";
 import { AuthContext } from "../hooks/useAuth";
 import Logout from "./Logout";
 
@@ -20,7 +19,6 @@ const Header = () => {
     window.localStorage.setItem("isDarkMode", isDarkMode.toString());
   };
   const { accessToken } = useContext(AuthContext)
-  const [logout,setLogout] = useState(false);
 
   const menuList: MenuListItem[] = [
     {
@@ -51,7 +49,7 @@ const Header = () => {
       </SubMenu>
       <UserBar>
         <UserInfo>
-          {accessToken ? <Logout logout={logout} setLogout={setLogout}></Logout> : <><StyledLink to={"login"}>로그인</StyledLink> |{" "}
+          {accessToken ? <Logout></Logout> : <><StyledLink to={"login"}>로그인</StyledLink> |{" "}
           <StyledLink to={"signup"}>회원가입</StyledLink></> }
         </UserInfo>
         <ThemeToggle isDarkMode={isDarkMode}>
