@@ -1,10 +1,10 @@
-import useInput from "../../../hooks/useInput";
-import { Input } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Input, Button, Text } from "@chakra-ui/react";
+import useFetch from "../../../hooks/useFetch";
 import axios from "axios";
 
-interface Data {
+interface FormData {
   id: string;
   password: string;
   name: string;
@@ -12,46 +12,126 @@ interface Data {
 }
 
 const SignUpModal = () => {
-  const idInput = useInput("");
-  const pwInput = useInput("");
-  const nameInput = useInput("");
-  const [data, setData] = useState<Data>({
-    id: "",
-    password: "",
-    name: "",
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+  const signUpFetch = useFetch({
+    url: "https://fastcampus-chat.net/signup",
+    method: "POST",
+    data: {},
+    start: false,
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  useEffect(() => {
-    const copy = { ...data };
-    copy.id = idInput.value;
-    copy.password = pwInput.value;
-    copy.name = nameInput.value;
+  const onSubmit = async (formData: FormData) => {
+    let pictureAsString: string | undefined;
 
-    setData(copy);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idInput.value, pwInput.value, nameInput.value]);
+    const toBase64 = (file: File) =>
+      new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+      });
 
-  const handleSignup = () => {
-    axios
-      .post("https://fastcampus-chat.net/signup", data, {
-        headers: {
-          "content-type": "application/json",
-          serverId: "6603aca7",
+    if (selectedFile) {
+      pictureAsString = await toBase64(selectedFile);
+    }
+
+    const dataToSend = {
+      ...formData,
+      picture: pictureAsString,
+    };
+    try {
+      const response = await axios.post(
+        "https://fastcampus-chat.net/signup",
+        dataToSend,
+        {
+          headers: {
+            "content-type": "application/json",
+            serverId: import.meta.env.VITE_APP_SERVER_ID,
+          },
         },
-      })
-      .then((res) => console.log(res));
+      );
+      if (response.status === 200) {
+        console.log("회원가입 성공:", response.data);
+        // 성공 처리 로직 구현 예정
+      }
+    } catch (error) {
+      console.error("회원가입 실패:", error);
+      // 실패 처리 로직 구현 예정
+    }
   };
+
   return (
     <>
       <div>회원가입</div>
-      <Input type="text" value={idInput.value} onChange={idInput.onChange} />
-      <Input type="text" value={pwInput.value} onChange={pwInput.onChange} />
-      <Input
-        type="text"
-        value={nameInput.value}
-        onChange={nameInput.onChange}
-      />
-      <Button onClick={handleSignup}>가입</Button>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          name="picture"
+          control={control}
+          render={({ field: { onChange } }) => (
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) {
+                  if (file.size > 1024 * 1024) {
+                    console.error("File size exceeds 1MB");
+                  } else {
+                    setSelectedFile(file);
+                    onChange(file);
+                  }
+                }
+              }}
+            />
+          )}
+        />
+        <Controller
+          name="id"
+          control={control}
+          rules={{ required: "ID는 필수입니다." }}
+          render={({ field }) => (
+            <Input type="text" placeholder="ID" {...field} />
+          )}
+        />
+        {errors.id && <Text color="red.500">{errors.id.message}</Text>}
+
+        <Controller
+          name="password"
+          control={control}
+          rules={{
+            required: "비밀번호는 필수입니다.",
+            minLength: {
+              value: 5,
+              message: "비밀번호는 5자리 이상이어야 합니다.",
+            },
+          }}
+          render={({ field }) => (
+            <Input type="password" placeholder="Password" {...field} />
+          )}
+        />
+        {errors.password && (
+          <Text color="red.500">{errors.password.message}</Text>
+        )}
+
+        <Controller
+          name="name"
+          control={control}
+          rules={{ required: "이름은 필수입니다." }}
+          render={({ field }) => (
+            <Input type="text" placeholder="Name" {...field} />
+          )}
+        />
+        {errors.name && <Text color="red.500">{errors.name.message}</Text>}
+
+        <Button type="submit" isLoading={signUpFetch.loading}>
+          가입
+        </Button>
+      </form>
     </>
   );
 };
