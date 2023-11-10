@@ -15,10 +15,10 @@ export default function Chat() {
 
   const socketRef = useRef<Socket | null>(null);
 
-  const chatId = '43c7d302-1005-4a55-b12c-3f6d30c4755c';
+  const chatId = 'ebffafb3-0b02-49de-bb75-04d465bad4b5';
 
   const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyNSIsImlhdCI6MTY5OTU5OTI3NywiZXhwIjoxNzAwMjA0MDc3fQ.xQ34bIb3kC-ISYgYtCQypNN6A5T7A3TJh_TX31hXVZI';
 
   useEffect(() => {
     socketRef.current = io(`${CLIENT_URL}?chatId=${chatId}`, {
@@ -55,7 +55,7 @@ export default function Chat() {
 
   return (
     <div className={styles.container}>
-      <ChatroomHeader />
+      <ChatroomHeader chatId={chatId}/>
       <div>
         {messages.map(msg => (
           <MyChat key={msg.id} msg={msg} />
