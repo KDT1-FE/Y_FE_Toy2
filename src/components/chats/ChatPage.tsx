@@ -92,12 +92,12 @@ const MyChats = ({ userType }: any) => {
 
     return (
         <Wrapper>
-            <Header>
+            <ChatHeader>
                 <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
                 <IconBar>
                     <AddChatIcon onClick={onAddHandler} />
                 </IconBar>
-            </Header>
+            </ChatHeader>
             <ChatContainer>
                 <SearchMyChat />
                 {userId
@@ -132,14 +132,13 @@ export default MyChats;
 
 export const Wrapper = styled.div`
     width: 100%;
-    margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* height: 100vh; */
 `;
 
-const Header = styled.div`
+const ChatHeader = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 4rem 2rem 1rem;
@@ -166,6 +165,5 @@ const ChatContainer = styled.div`
     justify-content: center;
     text-align: center;
     margin: 2rem;
-    height: 80%;
-    overflow-y: auto;
+    background-color: transparent;
 `;
