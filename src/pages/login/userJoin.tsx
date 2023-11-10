@@ -42,6 +42,8 @@ const UserJoin = () => {
     picture: '',
   });
 
+  const [filePreviewUrl, setFilePreviewUrl] = useState('');
+
   const validateField = ({
     fieldName,
     value,
@@ -122,6 +124,22 @@ const UserJoin = () => {
     return Object.values(errors).every((error) => error === '');
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setFilePreviewUrl(reader.result);
+        // 여기서 formData에 파일 데이터를 추가할 수도 있습니다.
+        setFormData({ ...formData, picture: reader.result });
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <Flex
       justifyContent={'center'}
@@ -129,23 +147,6 @@ const UserJoin = () => {
       flexDirection={'column'}
       backgroundColor="#f8fafc"
       height={'100vh'}>
-      <label
-        htmlFor="fileInput"
-        style={{ cursor: 'pointer', position: 'relative' }}>
-        <Img
-          src="/assets/inputImg.svg"
-          position="relative"
-          bottom={-170}
-          alt="inputImg"
-        />
-        <Input
-          id="fileInput"
-          type="file"
-          style={{ position: 'absolute', width: 0, height: 0, opacity: 0 }}
-          onChange={(e) => console.log(e.target.files)} // 바꿔줘야함
-        />
-      </label>
-
       <Center
         margin={100}
         backgroundColor={'white'}
@@ -153,9 +154,46 @@ const UserJoin = () => {
         boxShadow="lg"
         flexDirection={'column'}
         width={450}
-        minHeight={730}
+        height={730}
         justifyContent={'flex-end'}>
         <form onSubmit={handleJoinSubmit}>
+          <label
+            htmlFor="picture"
+            style={{ cursor: 'pointer', position: 'relative' }}>
+            {filePreviewUrl ? (
+              <Img
+                src={filePreviewUrl}
+                position="relative"
+                bottom={15}
+                margin={'auto'}
+                alt="File preview"
+                width={150}
+                height={150}
+                backgroundColor={'#f8fafc'}
+                borderRadius={10}
+                style={{
+                  border: '2px solid #E2E8F0', // 인라인 스타일로 테두리 적용
+                }}
+              />
+            ) : (
+              <Img
+                src="/assets/inputImg.svg"
+                position="relative"
+                bottom={15}
+                margin={'auto'}
+                alt="inputImg"
+                width={150}
+                height={150}
+              />
+            )}
+            <Input
+              id="picture"
+              accept="image/*"
+              type="file"
+              style={{ position: 'absolute', width: 0, height: 0, opacity: 0 }}
+              onChange={handleFileChange}
+            />
+          </label>
           <FormControl
             isRequired
             isInvalid={isError.id}
