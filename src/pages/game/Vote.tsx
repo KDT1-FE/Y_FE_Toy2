@@ -1,12 +1,12 @@
 import React from 'react';
-import Header from '../../components/Header';
+import GameHeader from '../../components/GameHeader';
 import styles from '@styles/pages/vote.module.scss';
 import GhostList from '../../components/GhostList';
 
 const Vote = () => {
   return (
     <div className={styles.vote}>
-      <Header timer={10} title={'누가 마피아 유령일까...'} started={true} />
+      <GameHeader timer={10} title={'누가 마피아 유령일까...'} started={true} />
       <GhostList ghosts={ghosts} />
       <div className={styles.vote__button}>
         <button>투표 완료</button>
