@@ -7,13 +7,13 @@ import { SOCKET } from '../../constants/socket';
 import { getUser } from '../../api/user';
 
 const ChatList = () => {
-  const [messages, setMessages] = useState<ChatInfo[] | undefined>(undefined);
+  const [messages, setMessages] = useState<ChatInfo[]>([]);
   useEffect(() => {
     const getMessageInfo = async (messages: MessageData[]) => {
       const messagesData = [];
       for (const message of messages) {
         const { id, createdAt, text, userId } = message;
-        const response = await getUser(userId);
+        const response = await getUser(userId.split(':')[1]);
         if (response) {
           const { name, picture } = response;
           messagesData.push({
@@ -27,6 +27,7 @@ const ChatList = () => {
       }
       setMessages(messagesData.reverse());
     };
+
     socket.emit(SOCKET.FETCH_MESSAGES);
     socket.on(
       SOCKET.MESSAGES_TO_CLIENT,
@@ -35,7 +36,6 @@ const ChatList = () => {
       },
     );
   }, []);
-
   return (
     <Box
       maxWidth={700}
