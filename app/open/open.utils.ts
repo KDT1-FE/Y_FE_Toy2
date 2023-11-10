@@ -1,10 +1,11 @@
-export const fetchAllChat = async (token: string, userId: string) => {
+export const fetchAllChat = async (token: string) => {
 	const res = await fetch('https://fastcampus-chat.net/chat', {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
-			NEXT_PUBLIC_SERVER_ID: process.env.SERVER_KEY as string,
+			serverId: process.env.SERVER_ID as string,
+
 		},
 	});
 	const data = await res.json();
