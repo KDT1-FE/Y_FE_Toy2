@@ -10,7 +10,6 @@ type RequestBody = {
 	password: string; // 사용자 비밀번호, 5자 이상 (필수!)
 	name: string; // 사용자 이름, 20자 이하 (필수!)
 	picture: string; // 사용자 이미지(url or base64, under 1MB)
-	// image: string;
 };
 
 const JoinForm = () => {
@@ -20,6 +19,7 @@ const JoinForm = () => {
 		watch,
 		formState: { errors },
 	} = useForm<RequestBody>();
+
 	// 로그인 시 api 요청
 	const onSubmit: SubmitHandler<RequestBody> = ({
 		id,
@@ -29,19 +29,9 @@ const JoinForm = () => {
 	}) => {
 		fetchJoin(id, password, name, picture);
 	};
-	// const [imagePreview, setImagePreview] = useState('');
 
 	const image = watch('picture');
 	console.log(image);
-	// useEffect(() => {
-	// 	if (image && image.length > 0) {
-	// 		const file = image[0];
-	// 		console.log(image);
-	// 		console.log(file);
-	// 		console.log(URL.createObjectURL(file));
-	// 		setImagePreview(URL.createObjectURL(file));
-	// 	}
-	// }, [image]);
 
 	return (
 		<>
@@ -56,21 +46,6 @@ const JoinForm = () => {
 					) : (
 						<div className="h-20 w-20 rounded-full bg-blue-500" />
 					)}
-					{/* <label
-						htmlFor="picture"
-						className="h-4 w-4 rounded-full bg-pink-500 text-white flex  items-center justify-center"
-					>
-						+
-					</label> */}
-					{/* <input
-						{...register('picture', {
-							// required: true,
-						})}
-						id="picture"
-						type="file"
-						accept="image/*"
-						className="hidden"
-					/> */}
 					{/* 이미지 url */}
 					<div className="relative m-3 group">
 						<input
