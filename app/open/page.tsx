@@ -13,6 +13,7 @@ type ChatData = {
 const Open = async () => {
 	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;
 	const result = await fetchAllChat(accessToken, 'minseob');
+
 	console.log(result);
 	return (
 		<div className="flex flex-col bg-red-300">
