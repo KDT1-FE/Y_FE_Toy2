@@ -7,7 +7,7 @@ import mychatSvg from '../../public/assets/mychats.svg';
 import allChatSvg from '../../public/assets/allchats.svg';
 import mypageSvg from '../../public/assets/mypage.svg';
 export default function Navigation() {
-    const userId = sessionStorage.getItem('userId');
+    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
     return (
         <NavigationContainer>
             <NavigationBox>
@@ -16,7 +16,7 @@ export default function Navigation() {
                 </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href={`${userId}`}>
+                <NavigationAnchor href="mychats">
                     <MyChatIcon />
                 </NavigationAnchor>
             </NavigationBox>

@@ -3,9 +3,21 @@ import React from 'react';
 import styled from 'styled-components';
 import { Chat } from './chatsStore';
 import { formatCreatedAt } from '@/components/chats/useFormatCreatedAt';
-
-const MyChatItem = ({ name, latestMessage, users, onClick }: Chat) => {
-    const chatsPicture = users && users.length > 0 ? users[0].picture : '';
+import AddChat from '../../../public/assets/addChat.svg';
+import Search from '../../../public/assets/search.svg';
+import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
+const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) => {
+    // const chatsPicture = users && users.length === 1 ? users[1].picture : '';
+    const chatsPicture =
+        isPrivate && users && users.length > 2 // private 한 그룹 채팅인 경우
+            ? '/assets/addChat.svg'
+            : isPrivate && users && users.length === 2 // private이면서 1대1 채팅인 경우
+            ? users[1].picture
+            : !isPrivate && users && users.length > 2 // private 아니면서 그룹채팅인 경우
+            ? '/assets/search.svg'
+            : !isPrivate && users && users.length === 2
+            ? '/assets/user.svg' // private 하지 않으면서 1대1 인 경우
+            : '';
     const usersNumber = users && users.length > 0 ? users.length : '';
     const chatsName = users && users.length === 1 ? users[0].username : name;
     return (
@@ -27,7 +39,7 @@ const MyChatItem = ({ name, latestMessage, users, onClick }: Chat) => {
                     </ChatInfo>
                     <MessageCount>
                         <ReceiveTime>{latestMessage ? formatCreatedAt(latestMessage.createdAt) : ''}</ReceiveTime>
-                        <CountBox>OPEN</CountBox>
+                        <TypeCheckBox>{isPrivate ? <PrivateIcon /> : <OpenIcon />}</TypeCheckBox>
                     </MessageCount>
                 </ChatDescContainer>
             </ChatBox>
@@ -120,14 +132,20 @@ const ReceiveTime = styled.p`
     font-size: 0.8rem;
 `;
 
-const CountBox = styled.div`
+const TypeCheckBox = styled.div`
     border-radius: 0.6rem;
     text-align: center;
     padding: 0.1rem 0.5rem;
     background-color: #00956e;
     color: #fff;
-    /* &:hover {
-        background-color: #fff;
-        color: #000;
-    } */
+`;
+
+const PrivateIcon = styled(AiFillLock)`
+    background-color: #00956e;
+    width: 1.5rem;
+`;
+
+const OpenIcon = styled(AiFillUnlock)`
+    background-color: #00956e;
+    width: 1.5rem;
 `;

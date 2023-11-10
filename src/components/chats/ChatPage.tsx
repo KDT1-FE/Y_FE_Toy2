@@ -13,7 +13,7 @@ import Search from '../../../public/assets/search.svg';
 import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import AddChatDropdown from './addChatDropdown';
+// import AddChatDropdown from './addChatDropdown';
 
 const MyChats = ({ userType }: any) => {
     const [searchOpen, setSearchOpen] = useState(false);
@@ -23,6 +23,7 @@ const MyChats = ({ userType }: any) => {
     const filterChats = useRecoilValue(searchChatsState);
     const router = useRouter();
     const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
     const headers = {
         Authorization: `Bearer ${accessToken}`,
         'Cache-Control': 'no-cache',
@@ -86,6 +87,10 @@ const MyChats = ({ userType }: any) => {
         };
     }, []);
 
+    useEffect(() => {
+        console.log(myChats);
+    }, []);
+
     const onSearchHandler = () => {
         setSearchOpen(!searchOpen);
     };
@@ -99,34 +104,36 @@ const MyChats = ({ userType }: any) => {
             <Header>
                 <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
                 <IconBar>
-                    <SearchIcon onClick={onSearchHandler} />
-                    <AddChatContainer>
-                        <AddChatIcon onClick={onAddHandler} />
-                        {addChatOpen && addChatOpen ? <AddChatDropdown /> : null}
-                    </AddChatContainer>
+                    {/* <SearchIcon onClick={onSearchHandler} /> */}
+                    <AddChatIcon onClick={onAddHandler} />
                 </IconBar>
             </Header>
             <ChatContainer>
-                {searchOpen ? <SearchMyChat /> : null}
-                {filterChats.length > 0
-                    ? filterChats.map((chat) => (
-                          <MyChatItem
-                              key={chat.id}
-                              name={chat.name}
-                              latestMessage={chat.latestMessage}
-                              users={chat.users}
-                              onClick={() => enterChatRoom(chat)}
-                          />
-                      ))
-                    : (userType === 'my' ? myChats : allChats).map((chat) => (
-                          <MyChatItem
-                              key={chat.id}
-                              name={chat.name}
-                              latestMessage={chat.latestMessage}
-                              users={chat.users}
-                              onClick={() => enterChatRoom(chat)}
-                          />
-                      ))}
+                {/* {searchOpen ? <SearchMyChat /> : null} */}
+                <SearchMyChat />
+                {userId
+                    ? filterChats.length > 0
+                        ? filterChats.map((chat) => (
+                              <MyChatItem
+                                  key={chat.id}
+                                  name={chat.name}
+                                  latestMessage={chat.latestMessage}
+                                  users={chat.users}
+                                  onClick={() => enterChatRoom(chat)}
+                                  isPrivate={chat.isPrivate}
+                              />
+                          ))
+                        : (userType === 'my' ? myChats : allChats).map((chat) => (
+                              <MyChatItem
+                                  key={chat.id}
+                                  name={chat.name}
+                                  latestMessage={chat.latestMessage}
+                                  users={chat.users}
+                                  onClick={() => enterChatRoom(chat)}
+                                  isPrivate={chat.isPrivate}
+                              />
+                          ))
+                    : null}
             </ChatContainer>
         </Wrapper>
     );
