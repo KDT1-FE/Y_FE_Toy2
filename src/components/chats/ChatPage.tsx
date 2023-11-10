@@ -9,14 +9,12 @@ import MyChatItem from '@/components/chats/MyChatItem';
 import SearchMyChat from '@/components/chats/SearchMyChat';
 // svgr import
 import AddChat from '../../../public/assets/addChat.svg';
-import Search from '../../../public/assets/search.svg';
 import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import { sortTime } from './useFormatCreatedAt';
 // import AddChatDropdown from './addChatDropdown';
-
 const MyChats = ({ userType }: any) => {
-    const [searchOpen, setSearchOpen] = useState(false);
     const [addChatOpen, setAddChatOpen] = useState(false);
     const [allChats, setAllChats] = useRecoilState(allChatsState);
     const [myChats, setMyChats] = useRecoilState(myChatsState);
@@ -87,10 +85,6 @@ const MyChats = ({ userType }: any) => {
         };
     }, []);
 
-    const onSearchHandler = () => {
-        setSearchOpen(!searchOpen);
-    };
-
     const onAddHandler = () => {
         setAddChatOpen(!addChatOpen);
     };
@@ -107,7 +101,7 @@ const MyChats = ({ userType }: any) => {
                 <SearchMyChat />
                 {userId
                     ? filterChats.length > 0
-                        ? filterChats.map((chat) => (
+                        ? sortTime(filterChats).map((chat) => (
                               <MyChatItem
                                   key={chat.id}
                                   name={chat.name}
@@ -117,7 +111,7 @@ const MyChats = ({ userType }: any) => {
                                   isPrivate={chat.isPrivate}
                               />
                           ))
-                        : (userType === 'my' ? myChats : allChats).map((chat) => (
+                        : sortTime(userType === 'my' ? myChats : allChats).map((chat) => (
                               <MyChatItem
                                   key={chat.id}
                                   name={chat.name}
@@ -159,15 +153,7 @@ const IconBar = styled.div`
     display: flex;
     gap: 1.5rem;
 `;
-const SearchIcon = styled(Search)`
-    cursor: pointer;
-`;
 
-const AddChatContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-`;
 const AddChatIcon = styled(AddChat)`
     position: relative;
     cursor: pointer;

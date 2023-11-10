@@ -3,8 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Chat } from './chatsStore';
 import { formatCreatedAt } from '@/components/chats/useFormatCreatedAt';
-import AddChat from '../../../public/assets/addChat.svg';
-import Search from '../../../public/assets/search.svg';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) => {
     // const chatsPicture = users && users.length === 1 ? users[1].picture : '';
@@ -19,7 +17,7 @@ const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) =>
             ? '/assets/user.svg' // private 하지 않으면서 1대1 인 경우
             : '';
     const usersNumber = users && users.length > 0 ? users.length : '';
-    const chatsName = users && users.length === 1 ? users[0].username : name;
+    const chatsName = users && users.length === 1 ? '상대방이 채팅방을 나간 상태입니다.' : name;
     return (
         <Wrapper>
             <ChatBox onClick={onClick}>

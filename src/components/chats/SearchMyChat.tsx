@@ -17,10 +17,11 @@ const SearchMyChat = ({ userType }: any) => {
             const filteringChats = (userType === 'my' ? myChats : allChats).filter((chat) =>
                 chat.name.toLowerCase().includes(e.target.value.toLowerCase()),
             );
+
             const filteredChats = [...filteringChats];
             setFilteredChats(filteredChats);
         },
-        [allChats, myChats],
+        [myChats, allChats],
     );
     return (
         <Wrapper>
@@ -48,16 +49,3 @@ const SearchItem = styled.input`
     outline: none;
     font-size: 1.2rem;
 `;
-// const SearchItem = styled.input`
-//     width: 80vw;
-//     height: 3rem;
-//     border: none;
-//     padding: 0.5rem 0.7rem;
-//     background: #fffefe;
-//     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.15);
-//     border-radius: 20px;
-//     outline: none;
-//     color: #00956e;
-//     font-weight: bold;
-//     font-size: 1.2rem;
-// `;
