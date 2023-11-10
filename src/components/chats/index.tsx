@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
-import { ChatMessage } from '../../@types/message';
+import { ChatInfo } from '../../@types/message';
 
-const Chat = ({ name, createdAt, text, picture }: Omit<ChatMessage, 'id'>) => {
+const Chat = ({ name, createdAt, text, picture }: Omit<ChatInfo, 'id'>) => {
   return (
     <Flex w="full" pt="2" pb="3">
       <Avatar

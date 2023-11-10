@@ -4,7 +4,7 @@ export interface MessageData {
   text: string;
   userId: string;
 }
-export interface ChatMessage {
+export interface ChatInfo {
   name: string;
   id: string;
   picture: string;
