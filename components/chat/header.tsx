@@ -1,10 +1,15 @@
 import { useState } from 'react';
+import instance from '@/apis/axios';
+import { useRouter } from 'next/router';
 import LeftArrowIcon from './LeftArrowIcon';
 import MenuIcon from './MenuIcon';
 import styles from './Chat.module.scss';
 
-export default function ChatroomHeader() {
+export default function ChatroomHeader({ chatId }: string) {
+  const router = useRouter();
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const accessToken =
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyNSIsImlhdCI6MTY5OTU5OTI3NywiZXhwIjoxNzAwMjA0MDc3fQ.xQ34bIb3kC-ISYgYtCQypNN6A5T7A3TJh_TX31hXVZI';
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -12,6 +17,25 @@ export default function ChatroomHeader() {
 
   const closeMenu = () => {
     setMenuOpen(false);
+  };
+
+  const handleOutBtnClick = async () => {
+    try {
+      const response = await instance.patch('/chat/leave', {
+        chatId, // API에 chatId 전달
+      },{
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+
+      }
+      );
+      console.log(response);
+      router.push('./');
+      // 채팅방 나가기 성공 후 추가적인 로직이 필요할 수 있습니다.
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -36,6 +60,7 @@ export default function ChatroomHeader() {
                 <li>참여자 2</li>
               </div>
             </ul>
+            <button onClick={handleOutBtnClick}>채팅방 나가기</button>
           </div>
         )}
       </div>
