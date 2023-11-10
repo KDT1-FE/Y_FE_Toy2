@@ -2,13 +2,10 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import drawImg from '../../assets/draw.png';
-import eraseImg from '../../assets/eraser.png';
-import trashImg from '../../assets/trash.png';
-import { SERVER_ID, SERVER_URL } from '../../constant';
-import { io } from 'socket.io-client';
+import drawImg from '../../assets/icons/draw.png';
+import eraseImg from '../../assets/icons/eraser.png';
+import trashImg from '../../assets/icons/trash.png';
 import { drawSocket } from '../../api/socket';
-
 
 const Drawing = () => {
   const [isPainting, setIsPainting] = useState(false);
