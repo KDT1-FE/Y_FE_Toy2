@@ -26,6 +26,11 @@ function UserLogin() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const setAccessToken = useSetRecoilState(accessTokenState);
+  const [showAlert, setShowAlert] = useState({
+    active: false,
+    message: '',
+    type: '',
+  });
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
