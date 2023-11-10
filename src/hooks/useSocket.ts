@@ -23,16 +23,14 @@ const useSocket = (
   });
 
   // 변화 감지
-  if (callback) {
-    useEffect(() => {
+  useEffect(() => {
+    if (callback) {
       socket.on("message-to-client", (messageObject) => {
         callback(messageObject);
       });
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [socket]);
-  }
-
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]);
   // 메시지 보내기
   const sendMessage = (text: string) => {
     socket.emit("message-to-server", text);
