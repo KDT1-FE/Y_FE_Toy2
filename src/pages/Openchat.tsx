@@ -1,13 +1,32 @@
-import React from 'react';
-import { Box, Chip, Container, Stack, Typography } from '@mui/material';
+/* eslint-disable no-console */
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Chip, Container, Stack, Typography } from '@mui/material';
+import { MapsUgc } from '@mui/icons-material';
 import {
   OpenchatAppbar,
   OpenchatBox,
   OpenchatContainer,
+  OpenchatCreateChatBtn,
 } from '../styles/OpenchatStyle';
+
 import OpenchatCategory from '../components/openchat/OpenchatCategory';
+import OpenchatCreate from '../components/openchat/OpenchatCreate';
+import { privateApi } from '../libs/axios';
+import { UserSimple } from '../types/User';
 
 function Openchat() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [allUsers, setAllUsers] = useState<UserSimple[]>([]);
+
+  useEffect(() => {
+    if (selectedId) {
+      (async () => {
+        const res = await privateApi.get('users');
+        setAllUsers(res.data);
+      })();
+    }
+  }, [selectedId]);
+
   return (
     <OpenchatContainer>
       <OpenchatAppbar id="openchat-appbar">
@@ -26,6 +45,16 @@ function Openchat() {
         </div>
       </OpenchatAppbar>
       <Container>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }} pt={3}>
+          <OpenchatCreateChatBtn
+            layoutId="newchat-modal"
+            onClick={() => setSelectedId('newchat-modal')}
+          >
+            <Button variant="contained" size="large" startIcon={<MapsUgc />}>
+              오픈채팅 만들기
+            </Button>
+          </OpenchatCreateChatBtn>
+        </Box>
         <OpenchatBox id="my-chat">
           <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
             <Typography variant="h5" mb={3}>
@@ -59,6 +88,11 @@ function Openchat() {
           </Box>
         </OpenchatBox>
       </Container>
+      <OpenchatCreate
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
+        allUsers={allUsers}
+      />
     </OpenchatContainer>
   );
 }
