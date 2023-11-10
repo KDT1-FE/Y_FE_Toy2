@@ -1,28 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Modal, { Styles } from "react-modal";
+import { useState } from "react";
+import Modal from "react-modal";
+import { Styles } from "react-modal";
 import styled from "styled-components";
-import "../style/Modal.css";
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-
-const ChatTestWrap = styled.div`
-  height: 60vh;
-  width: 100%;
-  background-color: #fff;
-`;
-
-const SmallImg = styled.img`
-  width: 30px;
-  height: 30px;
-`;
 
 const ModalExample = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -40,10 +22,6 @@ const ModalExample = () => {
         .getPropertyValue("display");
       memberBox.style.display = currentDisplay === "none" ? "block" : "none";
     }
-  };
-
-  const handleCheckboxChange = (userId: string) => {
-    console.log("유저 id:", userId);
   };
 
   const PlusButton = styled.button`
@@ -126,7 +104,7 @@ const ModalExample = () => {
 
   const customStyles: Styles = {
     content: {
-      width: "30%",
+      width: "24%",
       height: "500px",
       zIndex: "150",
       position: "absolute",
@@ -140,23 +118,8 @@ const ModalExample = () => {
     }
   };
 
-  useEffect(() => {
-    fetch("https://fastcampus-chat.net/users", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        serverId: "1601075b",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`
-      }
-    })
-      .then((response) => response.json() as unknown as User[])
-      .then((data) => setOnlineUsers(data))
-      .catch((error) => console.error("Error fetching online users:", error));
-  }, []);
-
   return (
-    <ChatTestWrap>
-      <h1>모든 유저 정보</h1>
+    <div>
       <PlusButton onClick={openModal}>
         <img src="./src/assets/images/plus-ico.png" alt="플러스" />
       </PlusButton>
@@ -172,24 +135,13 @@ const ModalExample = () => {
         <SubTitle>초대할 멤버</SubTitle>
         <InputBtn onClick={openBlock}>초대할 멤버를 선택해주세요 ▼</InputBtn>
         <MemberBox id="memberBox">
-          <ul>
-            {onlineUsers.map((user) => (
-              <BoxContent key={user.id}>
-                <li>
-                  <SmallImg src={user.picture} alt={user.name} />
-                  {user.name}
-                  <input
-                    type="checkbox"
-                    onChange={() => handleCheckboxChange(user.id)}
-                  />
-                </li>
-              </BoxContent>
-            ))}
-          </ul>
+          <BoxContent>가길동</BoxContent>
+          <BoxContent>나길동</BoxContent>
+          <BoxContent>다길동</BoxContent>
         </MemberBox>
         <SubmitBtn>완료</SubmitBtn>
       </Modal>
-    </ChatTestWrap>
+    </div>
   );
 };
 

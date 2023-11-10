@@ -8,12 +8,14 @@ import { darkTheme, lightTheme } from "./style/theme";
 import { useEffect, useState } from "react";
 import { DarkModeProvider } from "./hooks/useDarkMode";
 import Profile from "./components/Profile/Profile";
-import MainContents from "./pages/MainContents";
-import ProfilePage from "./pages/Profile/ProfilePage";
-import ProfileEditPage from "./pages/Profile/ProfileEditPage";
-import Chat from "./pages/Chat";
-import Login from "./pages/Login/Login";
-import SignUp from "./pages/SignUp/SignUp";
+import MainContents from "./Pages/MainContents";
+import ProfilePage from "./Pages/Profile/ProfilePage";
+import ProfileEditPage from "./Pages/Profile/ProfileEditPage";
+import Chat from "./Pages/Chat";
+import Login from "./Pages/Login/Login";
+import SignUp from "./Pages/SignUp/SignUp";
+import ChatTest from "./Pages/ChatTest";
+import ChatTestTest from "./Pages/ChatTestTest";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />
+      },
+      {
+        path: "chattest",
+        element: <ChatTest />
+      },
+      {
+        path: "chattesttest",
+        element: <ChatTestTest />
       }
     ]
   },

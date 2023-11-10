@@ -44,8 +44,8 @@ const Header = () => {
       </SubMenu>
       <UserBar>
         <UserInfo>
-          <StyledLink to={"#"}>로그인</StyledLink> |{" "}
-          <StyledLink to={"#"}>회원가입</StyledLink>
+          <StyledLink to={"login"}>로그인</StyledLink> |{" "}
+          <StyledLink to={"signup"}>회원가입</StyledLink>
         </UserInfo>
         <ThemeToggle isDarkMode={isDarkMode}>
           <input
