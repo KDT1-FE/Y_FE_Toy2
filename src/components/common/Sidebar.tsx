@@ -2,16 +2,19 @@ import React, { useMemo } from 'react';
 import { Avatar, Box, Divider, Typography } from '@mui/material';
 import { Home, Message, SportsEsports, Person } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import {
-  SidebarLogo,
   SidebarContainer,
   SidebarNavWrap,
   SidebarNavListItem,
   StyledBadge,
 } from '../../styles/SidebarStyles';
+import { userState } from '../../atoms';
 
 function Sidebar() {
   const { pathname } = useLocation();
+  const userData = useRecoilValue(userState);
+  const user = JSON.parse(userData);
 
   return (
     <SidebarContainer>
@@ -20,7 +23,16 @@ function Sidebar() {
           padding: '1.6rem',
         }}
       >
-        <Typography variant="h1" sx={{ fontSize: '2rem', color: 'white', mt: 2, mb: 4, fontFamily: 'Bungee' }}>
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: '2rem',
+            color: 'white',
+            mt: 2,
+            mb: 4,
+            fontFamily: 'Bungee',
+          }}
+        >
           <Link to="/">Langchat</Link>
         </Typography>
         <Box
@@ -34,10 +46,14 @@ function Sidebar() {
             color: '#fff',
           }}
         >
-          <StyledBadge overlap="circular" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
-            <Avatar />
+          <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            variant="dot"
+          >
+            <Avatar src={user?.picture} />
           </StyledBadge>
-          유저 이름
+          {user?.name}
         </Box>
       </Box>
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.04)' }} />
