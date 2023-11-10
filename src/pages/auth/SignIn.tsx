@@ -36,7 +36,9 @@ function SignIn() {
           password,
         });
 
-        // eslint-disable-next-line @typescript-eslint/dot-notation
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+
         privateApi.interceptors.request.use((config) => {
           const token = res.data.accessToken;
           const newConig = config;
@@ -47,8 +49,6 @@ function SignIn() {
         const res2 = await privateApi.get('auth/me');
         const { user } = res2.data;
 
-        localStorage.setItem('accessToken', res.data.accessToken);
-        localStorage.setItem('refreshToken', res.data.refreshToken);
         localStorage.setItem('user', JSON.stringify(user));
         setAccessTokenState(res.data.accessToken);
         setUserData(JSON.stringify(user));
@@ -56,7 +56,8 @@ function SignIn() {
         if (axios.isAxiosError(error)) {
           // axios에서 발생한 error
           if (error.code === 'ERR_BAD_REQUEST') {
-            // setErrorMsg('아이디 혹은 비밀번호를 잘못 입력하셨습니다.');
+            // eslint-disable-next-line no-console
+            console.log('아이디 혹은 비밀번호를 잘못 입력하셨습니다.');
           }
         }
       }
