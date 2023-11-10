@@ -19,13 +19,13 @@ function Navigation() {
           </Link>
         </li>
         <li className={styles.menu}>
-          <Link href="/all-chat-list">
+          <Link href="/chat-list/all">
             <BsChatSquareQuote className={styles.icon} />
             <p>오픈채팅</p>
           </Link>
         </li>
         <li className={styles.menu}>
-          <Link href="/my-chat-list">
+          <Link href="/chat-list/my">
             <BsChatSquareHeart className={styles.icon} />
             <p>나의 채팅목록</p>
           </Link>
