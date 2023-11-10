@@ -133,7 +133,7 @@ const UserJoin = () => {
         htmlFor="fileInput"
         style={{ cursor: 'pointer', position: 'relative' }}>
         <Img
-          src="public/assets/inputImg.svg"
+          src="/assets/inputImg.svg"
           position="relative"
           bottom={-170}
           alt="inputImg"

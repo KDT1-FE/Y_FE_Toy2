@@ -32,7 +32,11 @@ function UserLogin() {
   const [password, setPassword] = useState('');
   const setAccessToken = useSetRecoilState(accessTokenState);
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({
+    active: false,
+    message: '',
+    type: '',
+  });
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,14 +66,19 @@ function UserLogin() {
       });
       navigate('/lobby');
     } catch (e: any) {
-      setShowAlert(true);
-      // if (e.message === 'Request failed with status code 401') {
-      //   alert('비밀번호를 일치하지않습니다.');
-      // } else if (e.message === 'Request failed with status code 400') {
-      //   alert('일치하는 아이디가 없습니다.');
-      // } else {
-      //   alert(`로그인에 실패했습니다. 오류코드: ${e.message}`);
-      // }
+      let errorMessage = '';
+      let errorType = '';
+      if (e.message === 'Request failed with status code 401') {
+        errorMessage = '비밀번호가 일치하지 않습니다.';
+        errorType = 'password';
+      } else if (e.message === 'Request failed with status code 400') {
+        errorMessage = '일치하는 아이디가 없습니다.';
+        errorType = 'id';
+      } else {
+        errorMessage = `로그인에 실패했습니다. 오류코드: ${e.message}`;
+        errorType = 'general';
+      }
+      setShowAlert({ active: true, message: errorMessage, type: errorType });
     }
   };
 
@@ -81,7 +90,7 @@ function UserLogin() {
       backgroundColor="#f8fafc"
       height={'100vh'}>
       <Img
-        src="public/assets/fastMind.svg"
+        src="/assets/fastMind.svg"
         position={'relative'}
         bottom={-140}
         alt="fastMind"
@@ -101,7 +110,11 @@ function UserLogin() {
             <Input
               placeholder="아이디를 입력해주세요"
               _placeholder={{ fontSize: 'sm' }}
-              borderColor="gray.400"
+              borderColor={
+                showAlert.active && showAlert.type === 'id'
+                  ? 'red.500'
+                  : 'gray.200'
+              }
               autoComplete="on"
               type="text"
               value={id}
@@ -116,7 +129,11 @@ function UserLogin() {
             <Input
               placeholder="비밀번호를 입력해주세요"
               _placeholder={{ fontSize: 'sm' }}
-              borderColor="gray.400"
+              borderColor={
+                showAlert.active && showAlert.type === 'password'
+                  ? 'red.500'
+                  : 'gray.200'
+              }
               autoComplete="current-password"
               type="password"
               value={password}
@@ -163,7 +180,6 @@ function UserLogin() {
             로그인
           </Button>
         </form>
-
         <Flex justifyContent={'center'} gap="10px" padding="10">
           회원이 아니신가요?
           <Link
@@ -176,18 +192,18 @@ function UserLogin() {
           </Link>
         </Flex>
       </Center>
-      {showAlert && (
-        <Alert status="error" marginBottom={4}>
+      {showAlert.active && (
+        <Alert status="error" marginBottom={4} width={400} height={500}>
           <AlertIcon />
-          <AlertTitle mr={2}>로그인 실패!</AlertTitle>
-          <AlertDescription>
-            아이디 혹은 비밀번호를 확인해주세요.
-          </AlertDescription>
+          <AlertTitle mr={2}>로그인 오류</AlertTitle>
+          <AlertDescription>{showAlert.message}</AlertDescription>
           <CloseButton
             position="absolute"
             right="8px"
             top="8px"
-            onClick={() => setShowAlert(false)}
+            onClick={() =>
+              setShowAlert({ active: false, message: '', type: '' })
+            }
           />
         </Alert>
       )}
