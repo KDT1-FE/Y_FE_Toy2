@@ -20,7 +20,7 @@ const SearchInput = styled(motion.input)`
 `;
 const WordsBox = styled.div<{ props: boolean }>`
   width: 288px;
-  max-height: 366px;
+  max-height: 360px;
   display: ${(props) => (props.props ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
@@ -30,7 +30,7 @@ const WordsBox = styled.div<{ props: boolean }>`
   color: #1d3557;
   position: absolute;
   top: 40px;
-  left: 0;
+  left: 4px;
   border-radius: 0 0 10px 10px;
   &::-webkit-scrollbar {
     display: none;
@@ -38,12 +38,14 @@ const WordsBox = styled.div<{ props: boolean }>`
 `;
 const Words = styled.p`
   width: 100%;
-  font-size: 30px;
-  padding: 10px 0;
+  height: 60px;
+  font-size: 25px;
+  padding: 13px 0;
   margin: 0 auto;
   font-weight: 700;
   text-align: center;
   border-bottom: 1px solid #dadada;
+  box-sizing: border-box;
 `;
 
 export default function SearchBar({ setOnAnswers, words }: SetOnAnswers) {

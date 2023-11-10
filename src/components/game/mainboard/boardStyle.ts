@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 export const MainWrapper = styled.div`
   position: relative;
   flex: 2;
+  min-width: 1140px;
   height: calc(100vh - 80px);
   display: flex;
   padding: 50px;
@@ -34,27 +35,9 @@ export const Answers = styled.span`
 `;
 
 export const BoardFrame = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 20px;
-  padding: 100px;
-  box-sizing: border-box;
-`;
-
-export const Board = styled.div`
-  width: 100%;
-  height: 500px;
-  background-color: #fff;
-  border-radius: 20px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 50px;
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;

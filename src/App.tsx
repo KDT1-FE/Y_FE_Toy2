@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         {/* 상원님 부분 */}
-        <Route path="/game" index element={<Game />} />
+        <Route path="/game" element={<Game />} />
         {/* 은지님 부분 */}
         <Route path="/home" element={<Home />} />
         {/* 홍규님 부분 */}

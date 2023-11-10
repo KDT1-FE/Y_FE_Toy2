@@ -6,6 +6,7 @@ import sorting from './sorting';
 const RatingWrapper = styled.div`
   flex: 1;
   display: flex;
+  min-width: 300px;
   height: 100%;
   flex-direction: column;
   align-items: center;
