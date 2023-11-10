@@ -1,6 +1,6 @@
 import { Container, Center, Flex } from '@chakra-ui/react';
-import SideBar from './components/SideBar/SideBar';
 import { Outlet } from 'react-router-dom';
+import SideBar from './components/sideBar';
 
 const Layout = () => {
   return (
