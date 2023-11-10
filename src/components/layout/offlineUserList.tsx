@@ -5,17 +5,17 @@ import { useEffect, useState } from 'react';
 const OfflineUserList = () => {
   const onLine = useRecoilValue(onlineUserState);
   const all = useRecoilValue(allUserState);
-  const onlineUsers = onLine.users || [];
+  const allOnlineUsers = onLine.users || [];
   const differentNames = all.filter((element) => {
-    return !onlineUsers.includes(element.name);
+    return !allOnlineUsers.includes(element.id);
   });
 
   const [offlineUsers, setOfflineUsers] = useState<string[]>([]);
 
   useEffect(() => {
-    const offlineUserNames = differentNames.map((element) => element.name);
-    if (JSON.stringify(offlineUserNames) !== JSON.stringify(offlineUsers)) {
-      setOfflineUsers(offlineUserNames);
+    const offlineUserId = differentNames.map((element) => element.id);
+    if (JSON.stringify(offlineUserId) !== JSON.stringify(offlineUsers)) {
+      setOfflineUsers(offlineUserId);
     }
   }, [differentNames, offlineUsers]);
 

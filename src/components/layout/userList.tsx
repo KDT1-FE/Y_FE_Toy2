@@ -1,13 +1,11 @@
-import { useEffect } from 'react';
 import { getAllUsers } from '../../api';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allUserState } from '../../states/atom';
-
-const POLLING_INTERVAL = 30000;
+import usePollingData from '../template/usePollingData';
 
 const UserList = () => {
   const [allUsers, setAllUsers] = useRecoilState(allUserState);
-  const accessToken: any = useRecoilValue(accessTokenState);
+  const accessToken: any = useRecoilValue(accessTokenState); 
   const fetchData = async () => {
     try {
       const allUsersData = await getAllUsers(accessToken);
@@ -19,23 +17,13 @@ const UserList = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-
-    const pollingId = setInterval(() => {
-      fetchData();
-    }, POLLING_INTERVAL);
-
-    return () => {
-      clearInterval(pollingId);
-    };
-  }, [setAllUsers, fetchData]);
+  usePollingData(fetchData, [allUsers, setAllUsers]);
 
   return (
     <>
       <div>AllUserList</div>
       {allUsers.map((element, index) => (
-        <div key={index}>{element.name}</div>
+        <div key={index}>{element.id}</div>
       ))}
     </>
   );
