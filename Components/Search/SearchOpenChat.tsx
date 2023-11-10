@@ -4,11 +4,10 @@ import React, { useState, useCallback } from 'react';
 import { AllOpenChat } from '@/app/search/search.type';
 import ShowAllOpenChat from './ShowAllOpenChat';
 import { User } from '@/types';
-import { FriendProfile } from '../Users/FriendProfiles';
-import { Input } from '@material-tailwind/react';
 import ShowSearchedFriend from './ShowSearchedFriend';
 import FriendProfiles from '../Users/FriendProfiles';
 import ProfileModal from '../Common/ProfileModal';
+import { Input } from '@material-tailwind/react';
 
 const SearchOpenChat = ({
 	allOpenChat,
@@ -56,19 +55,38 @@ const SearchOpenChat = ({
 
 	return (
 		<>
-			<input onChange={getUserInput} onKeyPress={handleKeyPress} />
-			{searched.length || searchedUsers?.length ? (
+			<Input
+				onChange={getUserInput}
+				onKeyPress={handleKeyPress}
+				label="오픈 채팅방 검색하기"
+				crossOrigin={undefined}
+			/>
+			{isShowMore && <FriendProfiles allUsers={searchedUsers} />}
+			{!isShowMore && (
 				<>
-					{searched.map((item) => (
-						<ShowAllOpenChat key={item.id} openChat={item} />
-					))}
-					{searchedUsers?.map((user) => (
-						<FriendProfile key={user.id} user={user} />
-					))}
+					{searched.length || searchedUsers?.length ? (
+						<>
+							{allUsersExceptMe && (
+								<ShowSearchedFriend
+									openModalHandler={openModalHandler}
+									setIsShowMore={setIsShowMore}
+									searchedUsers={searchedUsers as User[]}
+								/>
+							)}
+							{searched.map((item) => (
+								<ShowAllOpenChat key={item.id} openChat={item} />
+							))}
+						</>
+					) : (
+						<h1>검색 결과가 없습니다.</h1>
+					)}
 				</>
-			) : (
-				<h1>검색 결과가 없습니다.</h1>
 			)}
+			<ProfileModal
+				user={modalUser}
+				open={isModalOpen}
+				setIsModalOpen={setIsModalOpen}
+			/>
 		</>
 	);
 };
