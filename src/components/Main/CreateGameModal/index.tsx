@@ -2,12 +2,13 @@ import { Button, Input } from "@chakra-ui/react";
 import { serverTimestamp } from "firebase/firestore";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import useInput from "../../../hooks/useInput";
 import UserCard from "../../common/UserCard";
+import useSocket from "../../../hooks/useSocket";
 
 const Container = styled.div`
   position: absolute;
@@ -31,9 +32,9 @@ const Wrap = styled.div`
   width: 45rem;
   height: 30rem;
 
-  background-color: #fff;
-
   display: flex;
+
+  background-color: #fff;
 
   & > div:first-child {
     padding: 3rem 1.5rem 3rem 5rem;
@@ -149,15 +150,7 @@ const CreateGameModal = ({ setModal }: Props) => {
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   // 소켓 연결
-  const socket = io(
-    `https://fastcampus-chat.net/chat?chatId=9fe8a1af-9c60-4937-82dd-21d6da5b9cd9`,
-    {
-      extraHeaders: {
-        Authorization: `Bearer ${token.accessToken}`,
-        serverId: import.meta.env.VITE_APP_SERVER_ID,
-      },
-    },
-  );
+  const sendMessage = useSocket("9fe8a1af-9c60-4937-82dd-21d6da5b9cd9");
 
   // 게임 데이터
   const [roomData, setRoomData] = useState<ChatRoom>({
@@ -266,7 +259,7 @@ const CreateGameModal = ({ setModal }: Props) => {
       const text = JSON.stringify(inviteUser);
 
       // 초대 메시지 전달
-      socket.emit("message-to-server", text);
+      sendMessage(text);
 
       // 해당 게임방으로 이동
       navigate(`/game?gameId=${createGame.result.id}`);
@@ -297,7 +290,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="1"
                   name="drone"
                   value="1"
-                  // checked={roomData.num === 1}
+                  checked={roomData.num === 1}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="1">1</label>
@@ -308,7 +301,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="2"
                   name="drone"
                   value="2"
-                  // checked={roomData.num === 2}
+                  checked={roomData.num === 2}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="2">2</label>
@@ -319,7 +312,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="3"
                   name="drone"
                   value="3"
-                  // checked={roomData.num === 3}
+                  checked={roomData.num === 3}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="3">3</label>
@@ -330,7 +323,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="4"
                   name="drone"
                   value="4"
-                  // checked={roomData.num === 4}
+                  checked={roomData.num === 4}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="4">4</label>
@@ -341,7 +334,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="5"
                   name="drone"
                   value="5"
-                  // checked={roomData.num === 5}
+                  checked={roomData.num === 5}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="5">5</label>
@@ -352,7 +345,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="6"
                   name="drone"
                   value="6"
-                  checked
+                  checked={roomData.num === 6}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="6">6</label>
@@ -377,15 +370,17 @@ const CreateGameModal = ({ setModal }: Props) => {
         </Section>
         <Section>
           <div style={{ overflow: "auto" }}>
-            <Input
-              border="1px solid #c6c6c6"
-              placeholder="검색"
-              textAlign="center"
-              marginBottom="1rem"
-              height="2rem"
-              value={searchInput.value}
-              onChange={searchInput.onChange}
-            />
+            <div>
+              <Input
+                border="1px solid #c6c6c6"
+                placeholder="검색"
+                textAlign="center"
+                marginBottom="1rem"
+                height="2rem"
+                value={searchInput.value}
+                onChange={searchInput.onChange}
+              />
+            </div>
             {users.result &&
               userList.map((value: UserType) => {
                 return (
