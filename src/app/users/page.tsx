@@ -121,7 +121,7 @@ const NoUserText = styled.h2`
 `;
 
 /**사용자 검색 */
-const SearchUserBox = styled.div`
+export const SearchUserBox = styled.div`
     background-color: white;
 
     border-radius: 20px;
@@ -134,7 +134,7 @@ const SearchUserBox = styled.div`
     gap: 3%;
 `;
 
-const SearchButton = styled.div`
+export const SearchButton = styled.div`
     background-color: #00956e;
     width: 5rem;
 
@@ -146,7 +146,7 @@ const SearchButton = styled.div`
     border-bottom-left-radius: 15px;
 `;
 
-const SearchUserInput = styled.input`
+export const SearchUserInput = styled.input`
     border: none;
 
     width: 32rem;
