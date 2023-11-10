@@ -1,14 +1,15 @@
 import { Button, Input } from "@chakra-ui/react";
+import { EmojiButton } from "@joeattardi/emoji-button";
 import { serverTimestamp } from "firebase/firestore";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { EmojiButton } from "@joeattardi/emoji-button";
 import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import useInput from "../../../hooks/useInput";
-import UserCard from "../../common/UserCard";
 import useSocket from "../../../hooks/useSocket";
+import Loader from "../../common/Loader";
+import UserCard from "../../common/UserCard";
 
 const Container = styled.div`
   position: absolute;
@@ -419,6 +420,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                 onChange={searchInput.onChange}
               />
             </div>
+            <Loader loading={users.loading}></Loader>
             {users.result &&
               userListSearch.map((value: UserType) => {
                 return (
