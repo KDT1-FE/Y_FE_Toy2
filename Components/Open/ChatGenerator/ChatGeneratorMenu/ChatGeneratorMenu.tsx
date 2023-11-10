@@ -7,18 +7,45 @@ import {
 	MenuList,
 	MenuItem,
 	Button,
+	Checkbox,
+	Typography,
 } from '@material-tailwind/react';
+import { useFetchAllUserHook } from '@/hooks/Open/useFetchAllUserHook';
+import { User } from '@/types';
+import { RegisterFn } from '../ChatGenerator.type';
 
-const ChatGeneratorMenu = () => {
+const ChatGeneratorMenu = ({ register }: RegisterFn) => {
+	const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+	const { data } = useFetchAllUserHook(accessToken as string);
+
 	return (
 		<Menu>
 			<MenuHandler>
 				<Button className="w-full">Menu</Button>
 			</MenuHandler>
-			<MenuList className=" max-h-64">
-				<MenuItem className=" max-w-xs overflow-x-hidden">d</MenuItem>
-				<MenuItem>Menu Item 2</MenuItem>
-				<MenuItem>Menu Item 3</MenuItem>
+			<MenuList className="absolute z-40 max-h-64">
+				<MenuItem className="text-center text-xl font-bold">유저들</MenuItem>
+				{data?.map((user: User) => {
+					return (
+						<MenuItem key={user.id} color="blue">
+							<Checkbox
+								crossOrigin={'anonymous'}
+								label={
+									<Typography
+										variant="small"
+										color="gray"
+										className="flex items-center font-normal"
+									>
+										{user.name}
+									</Typography>
+								}
+								value={user.id}
+								{...register('users', { required: true })}
+								containerProps={{ className: '-ml-2.5' }}
+							/>
+						</MenuItem>
+					);
+				})}
 			</MenuList>
 		</Menu>
 	);

@@ -7,8 +7,16 @@ import {
 	SpeedDialAction,
 	Typography,
 } from '@material-tailwind/react';
+import { chatModalAtom } from '@/atoms/chatModalAtom';
+import { useSetRecoilState } from 'recoil';
 
 const SpeedDialWithTextInside = () => {
+	const setModalOpen = useSetRecoilState(chatModalAtom);
+
+	const handleOpenModal = () => {
+		setModalOpen(true);
+	};
+
 	return (
 		<div className="absolute bottom-3 right-3">
 			<SpeedDial>
@@ -20,12 +28,12 @@ const SpeedDialWithTextInside = () => {
 					</div>
 				</SpeedDialHandler>
 				<SpeedDialContent>
-					<SpeedDialAction className="h-16 w-16">
+					<SpeedDialAction className="h-16 w-16" onClick={handleOpenModal}>
 						<Typography color="blue-gray" className="text-xs font-normal">
 							오픈채팅
 						</Typography>
 					</SpeedDialAction>
-					<SpeedDialAction className="h-16 w-16">
+					<SpeedDialAction className="h-16 w-16" onClick={handleOpenModal}>
 						<Typography color="blue-gray" className="text-xs font-normal">
 							비밀채팅
 						</Typography>
