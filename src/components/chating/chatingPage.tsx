@@ -4,11 +4,12 @@ import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import MessageContainer from './MessageContainer';
 import io from 'socket.io-client';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
 import { formatCreatedAt } from '../chats/useFormatCreatedAt';
+import Users from '@/app/users/page';
 
 interface Message {
     id: string;
@@ -17,59 +18,79 @@ interface Message {
     createdAt: Date; // Date
 }
 
+interface User {
+    username: string;
+    id: string;
+    picture: string;
+}
+
 export default function ChatingPage() {
     const [messages, setMessages] = useState<Message[]>([]);
-    const searchParams = useSearchParams();
+    const [users, setUsers] = useState<User[]>([]);
+    const [chatName, setChatName] = useState<string>('');
+
     const router = useRouter();
 
-    // type
-    const getChatName = searchParams.get('name');
-    const getChatUsers: any = searchParams.get('users');
-    const splitChatUsers: any = getChatUsers?.replace('],').split('[');
-    const correctChatUsers: any[] = [];
-    for (let i = 1; i < splitChatUsers?.length; i++) {
-        const data: any = splitChatUsers[i].split(', ');
-        correctChatUsers[i - 1] = {
-            name: data[0].split('name:')[1],
-            id: data[1].split('id:')[1],
-            picture: data[2].split('picture:')[1],
-        };
-    }
-
-    const findUserName = (userId: string): any => {
-        for (let i = 0; i < correctChatUsers.length; i++) {
-            if (userId == correctChatUsers[i].id) {
-                return correctChatUsers[i].name;
-            }
-        }
-    };
-
-    const findUserPicture = (userId: string): any => {
-        for (let i = 0; i < correctChatUsers.length; i++) {
-            if (userId == correctChatUsers[i].id) {
-                return correctChatUsers[i].picture;
-            }
-        }
-    };
-    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
-    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
     const pathname = usePathname();
     const chatId = pathname.split('/')[2];
+    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
-    useEffect(() => {
-        // 유저 블락
+    const getUsers = async () => {
+        const response = await fetch('https://fastcampus-chat.net/chat', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+                serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+            },
+        });
+        const data = await response.json();
+        console.log(data);
+
+        for (let i = 0; i < data.chats.length; i++) {
+            if (chatId == data.chats[i].id) {
+                console.log(chatId, data.chats[i].id);
+                setChatName(data.chats[i].name);
+                setUsers(data.chats[i].users);
+            }
+        }
+
         let userBlock = true;
 
-        for (let i = 0; i < correctChatUsers.length; i++) {
-            if (userId == correctChatUsers[i].id) {
+        for (let i = 0; i < users.length; i++) {
+            if (userId == users[i].id) {
                 userBlock = false;
             }
         }
 
         if (userBlock) router.back();
+    };
+
+    const findUserName = (userId: string): any => {
+        for (let i = 0; i < users.length; i++) {
+            if (userId == users[i].id) {
+                return users[i].username;
+            }
+        }
+    };
+
+    const findUserPicture = (userId: string): any => {
+        for (let i = 0; i < users.length; i++) {
+            if (userId == users[i].id) {
+                return users[i].picture;
+            }
+        }
+    };
+    useEffect(() => {
+        getUsers();
+
+        // 유저 블락
 
         socketInitilizer();
     }, []);
+
+    console.log(users, '1');
 
     const socket = io(`wss://fastcampus-chat.net/chat?chatId=${chatId}`, {
         extraHeaders: {
@@ -113,8 +134,8 @@ export default function ChatingPage() {
 
     return (
         <main>
-            <ChatingNavigation chatName={getChatName} />
-            <ChatingModal correctChatUsers={correctChatUsers} chatId={chatId} accessToken={accessToken} />
+            <ChatingNavigation chatName={chatName} />
+            <ChatingModal users={users} chatId={chatId} accessToken={accessToken} />
             <MessagesContainer>
                 {messages
                     ? messages.map((message: Message, i: number) =>

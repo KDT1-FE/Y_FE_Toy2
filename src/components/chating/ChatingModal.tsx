@@ -5,6 +5,12 @@ import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
 import { useRouter } from 'next/navigation';
 
+interface User {
+    username: string;
+    id: string;
+    picture: string;
+}
+
 //type
 export default function ChatingModal(props: any) {
     const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChatingModalToggle);
@@ -29,12 +35,12 @@ export default function ChatingModal(props: any) {
         <>
             <ModalWrapper style={{ display: `${modalToggle ? 'block' : 'none'}` }}>
                 <ModalTitle>대화상대</ModalTitle>
-                {props.correctChatUsers ? (
+                {props.users ? (
                     <UsersWrapper>
-                        {props.correctChatUsers.map((users: any) => (
+                        {props.users.map((user: User) => (
                             <UserWrapper>
-                                <UserImg src={users.picture} />
-                                <UserName>{users.name}</UserName>
+                                <UserImg src={user.picture} />
+                                <UserName>{user.username}</UserName>
                             </UserWrapper>
                         ))}
                     </UsersWrapper>
