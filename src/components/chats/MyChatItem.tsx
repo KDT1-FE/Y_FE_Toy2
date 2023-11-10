@@ -27,7 +27,7 @@ const MyChatItem = ({ name, latestMessage, users, onClick }: Chat) => {
                     </ChatInfo>
                     <MessageCount>
                         <ReceiveTime>{latestMessage ? formatCreatedAt(latestMessage.createdAt) : ''}</ReceiveTime>
-                        <CountBox>+100</CountBox>
+                        <CountBox>OPEN</CountBox>
                     </MessageCount>
                 </ChatDescContainer>
             </ChatBox>

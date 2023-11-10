@@ -13,11 +13,10 @@ const SearchMyChat = ({ userType }: any) => {
         (e: React.ChangeEvent<HTMLInputElement>) => {
             setInput(e.target.value);
             const filteringChats = (userType === 'my' ? myChats : allChats).filter((chat) =>
-                chat.name.toLowerCase().startsWith(e.target.value.toLowerCase()),
+                chat.name.toLowerCase().includes(e.target.value.toLowerCase()),
             );
             const filteredChats = [...filteringChats];
             setFilteredChats(filteredChats);
-            console.log(filteredChats);
         },
         [allChats, myChats],
     );
@@ -45,4 +44,7 @@ const SearchItem = styled.input`
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.15);
     border-radius: 20px;
     outline: none;
+    color: #00956e;
+    font-weight: bold;
+    font-size: 1.2rem;
 `;

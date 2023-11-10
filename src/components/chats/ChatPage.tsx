@@ -13,9 +13,11 @@ import Search from '../../../public/assets/search.svg';
 import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import AddChatDropdown from './addChatDropdown';
 
 const MyChats = ({ userType }: any) => {
     const [searchOpen, setSearchOpen] = useState(false);
+    const [addChatOpen, setAddChatOpen] = useState(false);
     const [allChats, setAllChats] = useRecoilState(allChatsState);
     const [myChats, setMyChats] = useRecoilState(myChatsState);
     const filterChats = useRecoilValue(searchChatsState);
@@ -36,7 +38,7 @@ const MyChats = ({ userType }: any) => {
             router.push(
                 `/chating/${chat.id}?name=${chat.name}&isPrivate=${
                     chat.isPrivate
-                }&users=${users}&latestMessage=${encodeURIComponent(latestMessageQuery)}&updatedAt=${chat.updatedAt}`,
+                }&users=${users}&latestMessage=${encodeURIComponent(latestMessageQuery)}`,
             );
         }
     };
@@ -88,13 +90,20 @@ const MyChats = ({ userType }: any) => {
         setSearchOpen(!searchOpen);
     };
 
+    const onAddHandler = () => {
+        setAddChatOpen(!addChatOpen);
+    };
+
     return (
         <Wrapper>
             <Header>
                 <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
                 <IconBar>
                     <SearchIcon onClick={onSearchHandler} />
-                    <AddChatIcon />
+                    <AddChatContainer>
+                        <AddChatIcon onClick={onAddHandler} />
+                        {addChatOpen && addChatOpen ? <AddChatDropdown /> : null}
+                    </AddChatContainer>
                 </IconBar>
             </Header>
             <ChatContainer>
@@ -125,7 +134,7 @@ const MyChats = ({ userType }: any) => {
 
 export default MyChats;
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
     width: 100%;
     margin: 0;
     padding: 0;
@@ -153,7 +162,13 @@ const SearchIcon = styled(Search)`
     cursor: pointer;
 `;
 
+const AddChatContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
 const AddChatIcon = styled(AddChat)`
+    position: relative;
     cursor: pointer;
 `;
 
