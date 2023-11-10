@@ -45,7 +45,7 @@ function SignIn() {
         localStorage.setItem('accessToken', res.data.accessToken);
         localStorage.setItem('refreshToken', res.data.refreshToken);
         localStorage.setItem('user', JSON.stringify(user));
-        setUserData(user);
+        setUserData(JSON.stringify(user));
         setAccessTokenState(res.data.accessToken);
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -59,7 +59,7 @@ function SignIn() {
   });
 
   useEffect(() => {
-    if (userData !== '' && localStorage.getItem('user') !== '') {
+    if (userData !== '{}' && localStorage.getItem('accessToken')) {
       // 유저 정보와 액세스 토큰이 있을때
       navigate('/home');
     }

@@ -4,7 +4,6 @@ import { Home, Message, SportsEsports, Person } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import {
-  SidebarLogo,
   SidebarContainer,
   SidebarNavWrap,
   SidebarNavListItem,
@@ -15,12 +14,7 @@ import { userState } from '../../atoms';
 function Sidebar() {
   const { pathname } = useLocation();
   const userData = useRecoilValue(userState);
-  let user;
-  if (typeof userData === 'string') {
-    user = JSON.parse(userData);
-  } else {
-    user = { ...userData };
-  }
+  const user = JSON.parse(userData);
 
   return (
     <SidebarContainer>
@@ -57,9 +51,9 @@ function Sidebar() {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-            <Avatar src={user.picture} />
+            <Avatar src={user?.picture} />
           </StyledBadge>
-          {user.name}
+          {user?.name}
         </Box>
       </Box>
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.04)' }} />
