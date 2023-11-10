@@ -14,6 +14,12 @@ const ProfileCard = ({ userId }: any) => {
   );
 };
 
+interface Categories {
+  category: string;
+  keyword: string[];
+}
+[];
+
 const Game = () => {
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);
@@ -23,11 +29,24 @@ const Game = () => {
   const gameData = fireFetch.useGetSome("game", "id", gameId as string);
   const [status, setStatus] = useState("");
 
+  const [category, setCategory] = useState<Categories | null>(null);
+  const [keyword, setKeyword] = useState("");
+
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
       setStatus(gameData.data[0].status);
     }
   }, [gameData.data]);
+
+  useEffect(() => {
+    if (status === "게임중") {
+      const currentCategory = window.localStorage.getItem("category") ?? "";
+      const currentKeyword = window.localStorage.getItem("keyword") ?? "";
+
+      setCategory({ category: currentCategory, keyword: [currentKeyword] });
+      setKeyword(currentKeyword);
+    }
+  }, [status]);
 
   // status 업데이트 함수
   const updateStatus = (newStatus: string) => {
@@ -38,6 +57,7 @@ const Game = () => {
   };
 
   console.log(gameData.data);
+  console.log(category, keyword);
 
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
@@ -59,12 +79,31 @@ const Game = () => {
         <GridItem>
           <Card h="100%" justifyContent="center">
             <Center fontWeight="bold">
-              주제는 “동물” 입니다. 당신이 라이어입니다.
-            </Center>{" "}
+              {status === "게임중" ? (
+                <>
+                  <p>
+                    주제는 {window.localStorage.getItem("category")} 입니다.
+                    &nbsp;
+                  </p>
+
+                  {window.localStorage.getItem("liar") === "true" ? (
+                    <p>당신은 Liar 입니다. </p>
+                  ) : (
+                    <p>
+                      키워드는 {window.localStorage.getItem("keyword")} 입니다.
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p>게임을 시작해주세요.</p>
+              )}
+            </Center>
           </Card>
         </GridItem>
         <GridItem>
-          <Keyword status={status} updateStatus={updateStatus} />
+          <Button w="200px" mr="20px">
+            <Keyword status={status} updateStatus={updateStatus} />
+          </Button>
         </GridItem>
         <GridItem>
           <ProfileCard userId={gameData.data[0].host}></ProfileCard>

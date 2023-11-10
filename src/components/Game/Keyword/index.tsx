@@ -1,6 +1,7 @@
 import {
-  Box,
   Button,
+  Center,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -49,15 +50,15 @@ const Keyword = ({ status, updateStatus }: any) => {
     await updateStatus("게임중");
 
     const selectedCategory = categories[getRandNum(categories.length)];
-    setCategory(selectedCategory);
-    window.localStorage.setItem("category", selectedCategory.category);
-
     const ranKeyword =
       selectedCategory.keyword[getRandNum(selectedCategory.keyword.length)];
-    setKeyword(ranKeyword);
-    window.localStorage.setItem("keyword", ranKeyword);
-
     const ranLiar = users.name[getRandNum(users.name.length)];
+
+    setCategory(selectedCategory);
+    setKeyword(ranKeyword);
+
+    window.localStorage.setItem("category", selectedCategory.category);
+    window.localStorage.setItem("keyword", ranKeyword);
     if (ranLiar === "연수") {
       window.localStorage.setItem("liar", "true");
     } else {
@@ -65,6 +66,17 @@ const Keyword = ({ status, updateStatus }: any) => {
     }
     onOpen();
   };
+
+  // status 변화에 따라 localStorage에 저장
+  useEffect(() => {
+    if (status === "게임중") {
+      const currentCategory = window.localStorage.getItem("category") ?? "";
+      const currentKeyword = window.localStorage.getItem("keyword") ?? "";
+
+      setCategory({ category: currentCategory, keyword: [currentKeyword] });
+      setKeyword(currentKeyword);
+    }
+  }, [status]);
 
   // 게임 종료
   const hadleEnd = async () => {
@@ -79,40 +91,42 @@ const Keyword = ({ status, updateStatus }: any) => {
 
   return (
     <>
-      {status === "대기중" && <Button onClick={handleStart}>게임시작</Button>}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      {status === "대기중" ? (
+        <Button onClick={handleStart}>게임시작</Button>
+      ) : (
+        <Button onClick={hadleEnd}>게임 종료</Button>
+      )}
+      <Modal isOpen={isOpen} onClose={onClose} closeOnEsc={true}>
         <ModalOverlay />
-        <ModalContent width={300} height={200}>
+        <ModalContent>
           <ModalCloseButton />
           <ModalBody>
-            <p>주제는 {category?.category} 입니다.</p>
-            {window.localStorage.getItem("liar") === "true" ? (
-              <>
-                <p>당신은 Liar 입니다.</p>
-                <p>키워드를 추리하세요.</p>
-              </>
-            ) : (
-              <p>키워드는 {keyword} 입니다.</p>
-            )}
+            <Center
+              fontWeight="bold"
+              h="100%"
+              fontSize="1.2rem"
+              pt="20"
+              pb="20"
+            >
+              <Flex
+                direction="column"
+                alignContent="center"
+                justifyContent="center"
+              >
+                <Center>주제는 {category?.category} 입니다.</Center>
+                {window.localStorage.getItem("liar") === "true" ? (
+                  <>
+                    <Center>당신은 Liar 입니다.</Center>
+                    <Center>키워드를 추리하세요.</Center>
+                  </>
+                ) : (
+                  <Center>키워드는 {keyword} 입니다.</Center>
+                )}
+              </Flex>
+            </Center>
           </ModalBody>
         </ModalContent>
       </Modal>
-      <Box>
-        {status === "게임중" && (
-          <>
-            <p>주제는 {window.localStorage.getItem("category")} 입니다.</p>
-            {window.localStorage.getItem("liar") === "true" ? (
-              <>
-                <p>당신은 Liar 입니다.</p>
-                <p>키워드를 추리하세요.</p>
-              </>
-            ) : (
-              <p>키워드는 {window.localStorage.getItem("keyword")} 입니다.</p>
-            )}
-            <Button onClick={hadleEnd}>게임 종료</Button>
-          </>
-        )}
-      </Box>
     </>
   );
 };
