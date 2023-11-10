@@ -32,6 +32,7 @@ export default function Chat() {
       console.log('Connected to chat server');
       setIsConnected(true);
     });
+
     socketRef.current.on('message-to-client', (messageObject: Message) => {
       console.log(messageObject);
       setMessages(prevMessages => [...prevMessages, messageObject]);
@@ -55,7 +56,7 @@ export default function Chat() {
 
   return (
     <>
-      <ChatroomHeader />
+      <ChatroomHeader chatId={chatId} />
       <div className={styles.container}>
         <div>
           {messages.map(msg => (
