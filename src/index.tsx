@@ -3,15 +3,18 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChakraProvider, theme } from '@chakra-ui/react';
-import './index.css';
+import './index.css'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
-);
+const queryClient = new QueryClient();
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </ChakraProvider>
   </React.StrictMode>,
 );
