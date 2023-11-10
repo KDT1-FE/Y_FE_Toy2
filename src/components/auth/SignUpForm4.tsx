@@ -1,11 +1,16 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import type { SignUpFormProps } from '../../pages/auth/SignUp';
 import SignUpSelectTag from './SignUpSelectTag';
-import { defaultSignUpValue, signUpFormState } from '../../atoms';
+import {
+  accessTokenState,
+  defaultSignUpValue,
+  signUpFormState,
+  userState,
+} from '../../atoms';
 import { FbUser } from '../../types/User';
 import useMutationSignUp from '../../hooks/useMutationSignUp';
 
@@ -39,13 +44,15 @@ const tags = {
 function SignUpForm4({ setStep }: SignUpFormProps) {
   const navigate = useNavigate();
   const [signUpForm, setSignUpForm] = useRecoilState(signUpFormState);
+  const setAccessToken = useSetRecoilState(accessTokenState);
+  const setUser = useSetRecoilState(userState);
   const type = signUpForm.picture.split(';')[0].slice(5);
   const { isLoaded, signUp } = useMutationSignUp(type);
 
   const [clickedItem, setClickedItem] = useState(new Set<string>());
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (clickedItem.size > 0 && clickedItem.size <= 5) {
+    if (clickedItem.size < 0 && clickedItem.size >= 5) {
       console.log('1~5개 까지 선택 가능합니다.');
       return;
     }
@@ -57,6 +64,11 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
     await signUp(newForm);
     // recoil 저장되어있는 정보 지우기
     setSignUpForm(defaultSignUpValue);
+    setAccessToken(null);
+    setUser('{}');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
     // 메시지를 보여주고 이동시켜야 할것같은데 일단 이동하기
     navigate('/');
     // console.log(newForm);
@@ -126,7 +138,14 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
             />
           ))}
         </Grid>
-        <Button color="primary" size="large" variant="contained" fullWidth type="submit" sx={{ my: 3 }}>
+        <Button
+          color="primary"
+          size="large"
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ my: 3 }}
+        >
           {isLoaded ? 'LANGCHAT 시작하기' : '회원가입 진행중...'}
         </Button>
       </form>

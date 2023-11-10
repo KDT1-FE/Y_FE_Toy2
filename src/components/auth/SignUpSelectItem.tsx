@@ -9,7 +9,12 @@ interface SignUpSelectItemProps {
   isClicked: boolean;
 }
 
-function SignUpSelectItem({ name, flag, setLangLv, isClicked = false }: SignUpSelectItemProps) {
+function SignUpSelectItem({
+  name,
+  flag,
+  setLangLv,
+  isClicked = false,
+}: SignUpSelectItemProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClickBtn = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Button, Container, TextField, Typography, Link as MuiLink } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Link as MuiLink,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { privateApi, publicApi } from '../../libs/axios';
 import { accessTokenState, userState } from '../../atoms';
 
@@ -15,7 +22,7 @@ interface ResponseValue {
 function SignIn() {
   const navigate = useNavigate();
   const [userData, setUserData] = useRecoilState(userState);
-  const setAccessTokenState = useSetRecoilState(accessTokenState);
+  const [accessToken, setAccessTokenState] = useRecoilState(accessTokenState);
   const formik = useFormik({
     initialValues: {
       id: '',
@@ -29,21 +36,28 @@ function SignIn() {
           password,
         });
 
-        // eslint-disable-next-line @typescript-eslint/dot-notation
-        privateApi.defaults.headers.common['Authorization'] = res.data.accessToken;
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+
+        privateApi.interceptors.request.use((config) => {
+          const token = res.data.accessToken;
+          const newConig = config;
+          newConig.headers.Authorization = `Bearer ${token}`;
+
+          return newConig;
+        });
         const res2 = await privateApi.get('auth/me');
         const { user } = res2.data;
 
-        localStorage.setItem('accessToken', res.data.accessToken);
-        localStorage.setItem('refreshToken', res.data.refreshToken);
         localStorage.setItem('user', JSON.stringify(user));
-        setUserData(user);
         setAccessTokenState(res.data.accessToken);
+        setUserData(JSON.stringify(user));
       } catch (error) {
         if (axios.isAxiosError(error)) {
           // axios에서 발생한 error
           if (error.code === 'ERR_BAD_REQUEST') {
-            // setErrorMsg('아이디 혹은 비밀번호를 잘못 입력하셨습니다.');
+            // eslint-disable-next-line no-console
+            console.log('아이디 혹은 비밀번호를 잘못 입력하셨습니다.');
           }
         }
       }
@@ -51,11 +65,11 @@ function SignIn() {
   });
 
   useEffect(() => {
-    if (userData !== '' && localStorage.getItem('user') !== '') {
+    if (accessToken) {
       // 유저 정보와 액세스 토큰이 있을때
       navigate('/home');
     }
-  }, [userData, navigate]);
+  }, [accessToken, navigate]);
 
   return (
     <Container sx={{ height: '100%' }}>
@@ -67,11 +81,21 @@ function SignIn() {
           minHeight: '80%',
         }}
       >
-        <Box component="form" noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={formik.handleSubmit}
+        >
           <Typography variant="h4">로그인</Typography>
           <Typography color="text.secondary" variant="body1" sx={{ my: 3 }}>
             계정이 없으신가요? &nbsp;
-            <MuiLink component={Link} to="/signup" underline="hover" variant="subtitle2">
+            <MuiLink
+              component={Link}
+              to="/signup"
+              underline="hover"
+              variant="subtitle2"
+            >
               회원가입
             </MuiLink>
           </Typography>
@@ -94,7 +118,13 @@ function SignIn() {
             onChange={formik.handleChange}
             margin="normal"
           />
-          <Button fullWidth type="submit" size="large" variant="contained" sx={{ mt: 3 }}>
+          <Button
+            fullWidth
+            type="submit"
+            size="large"
+            variant="contained"
+            sx={{ mt: 3 }}
+          >
             로그인
           </Button>
         </Box>

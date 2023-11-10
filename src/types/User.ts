@@ -12,3 +12,5 @@ export type FbUser = Omit<User, 'chats'> & {
   level: string;
   hashtag: string[];
 };
+
+export type UserSimple = Pick<User, 'id' | 'name' | 'picture'>;

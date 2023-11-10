@@ -1,4 +1,9 @@
-import { DocumentData, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
+import {
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+  SnapshotOptions,
+} from 'firebase/firestore';
 
 export class UserInfo {
   constructor(
@@ -20,8 +25,18 @@ export const userInfoConverter: FirestoreDataConverter<UserInfo> = {
     level: docData.level,
     hashtag: docData.hashtag,
   }),
-  fromFirestore: (snapshot: QueryDocumentSnapshot, options: SnapshotOptions) => {
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions,
+  ) => {
     const data = snapshot.data(options);
-    return new UserInfo(data.name, data.image, data.intro, data.language, data.level, data.hashtag);
+    return new UserInfo(
+      data.name,
+      data.image,
+      data.intro,
+      data.language,
+      data.level,
+      data.hashtag,
+    );
   },
 };

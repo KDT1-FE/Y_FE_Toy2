@@ -22,13 +22,12 @@ export const signUpFormState = atom({
   default: defaultSignUpValue,
 });
 
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-
-export const userState = atom<User | string>({
+export const userState = atom<string>({
   key: 'userState',
-  default: localStorage.getItem('user') ?? '',
+  default: localStorage.getItem('user') ?? '{}',
+});
+
+export const uploadFileState = atom<File | null>({
+  key: 'uploadFileState',
+  default: null,
 });

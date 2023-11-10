@@ -6,29 +6,13 @@ import { validationSchema2 } from '../../utils/validateSchema';
 import type { SignUpFormProps } from '../../pages/auth/SignUp';
 import { VisuallyHiddenInput } from '../../styles/AuthStyles';
 import { signUpFormState } from '../../atoms';
+import convertBase64 from '../../utils/FileToBase64';
+import Cropper from '../common/Cropper';
 
 function SignUpForm2({ setStep }: SignUpFormProps) {
-  const [base64Img, setBase64Img] = useState<string>();
-  const convertBase64 = (file: File) =>
-    new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
+  const [preview, setPreview] = useState<string>();
   const setSignUpForm = useSetRecoilState(signUpFormState);
-  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      convertBase64(file).then((base64) => {
-        setBase64Img(base64 as string);
-      });
-    }
-  };
+
   const formik = useFormik({
     initialValues: {
       file: null,
@@ -39,7 +23,12 @@ function SignUpForm2({ setStep }: SignUpFormProps) {
     onSubmit: (values) => {
       if (setStep) setStep(3);
       setSignUpForm((prev) => {
-        const newForm = { ...prev, picture: base64Img ?? '', name: values.name, intro: values.intro };
+        const newForm = {
+          ...prev,
+          picture: preview ?? '',
+          name: values.name,
+          intro: values.intro,
+        };
         return newForm;
       });
       // console.log(values);
@@ -52,24 +41,7 @@ function SignUpForm2({ setStep }: SignUpFormProps) {
         <Typography variant="h4" mb={5}>
           정보 입력
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-          <Button
-            component="label"
-            variant="contained"
-            sx={{
-              width: '300px',
-              height: '300px',
-              borderRadius: '100%',
-              p: 1,
-              backgroundColor: 'lightgray',
-              overflow: 'hidden',
-              img: { width: '100%', height: '100%', objectFit: 'cover', borderRadius: '100%' },
-            }}
-          >
-            {base64Img ? <img src={base64Img} alt="thumbnail" /> : <Typography variant="h4">+</Typography>}
-            <VisuallyHiddenInput type="file" onChange={onChangeFile} />
-          </Button>
-        </Box>
+        <Cropper preview={preview ?? ''} setPreview={setPreview} />
 
         <TextField
           fullWidth
@@ -95,7 +67,14 @@ function SignUpForm2({ setStep }: SignUpFormProps) {
           helperText={formik.touched.intro && formik.errors.intro}
           margin="normal"
         />
-        <Button color="primary" size="large" variant="contained" fullWidth type="submit" sx={{ mt: 3 }}>
+        <Button
+          color="primary"
+          size="large"
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ mt: 3 }}
+        >
           다음 단계로 ( 2 / 4 )
         </Button>
       </form>

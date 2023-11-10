@@ -49,7 +49,14 @@ function SignUpForm3({ setStep }: SignUpFormProps) {
             />
           ))}
         </Grid>
-        <Button color="primary" size="large" variant="contained" fullWidth type="submit" sx={{ mt: 3 }}>
+        <Button
+          color="primary"
+          size="large"
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ mt: 3 }}
+        >
           다음 단계로 ( 3 / 4 )
         </Button>
       </form>
