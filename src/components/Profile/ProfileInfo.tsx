@@ -76,6 +76,7 @@ const Tag = styled.span`
 `;
 interface usertData {
   id: string;
+  name: string;
   ProfileImgUrl: string;
   BackgroundImgUrl: string;
   introText: string;
@@ -97,7 +98,7 @@ function ProfileInfo(props: { userData: usertData | null }) {
       </ProfileInfoImgWrap>
       <ProfileInfoContents>
         <ProfileInfoUserNameWrap>
-          <span>{props.userData?.id}</span>
+          <span>{props.userData?.name}</span>
         </ProfileInfoUserNameWrap>
         <ProfileInfoUserIntroWrap>
           <span>{props.userData?.introText}</span>

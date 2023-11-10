@@ -5,6 +5,7 @@ import { doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { useState, useEffect } from "react";
 import { getStorage, ref, getMetadata, getDownloadURL } from "firebase/storage";
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ProfileContainer = styled.div`
   width: 100%;
@@ -35,6 +36,7 @@ const ProfileBodyContainer = styled.div`
 
 interface usertData {
   id: string;
+  name: string;
   ProfileImgUrl: string;
   BackgroundImgUrl: string;
   introText: string;
@@ -54,48 +56,60 @@ interface feedData {
 function useUserData() {
   const [userData, setUserData] = useState<usertData | null>(null);
   const [feedData, setFeedData] = useState<feedData | null>(null);
+  const { userid } = useParams<string>();
+  
 
   useEffect(() => {
     async function fetchUserData() {
-      const docRef = doc(db, "Users", "test1");
-      const docSnap = await getDoc(docRef);
+      if(userid) {
+        const docRef = doc(db, "Users", userid);
 
-      if (docSnap.exists()) {
-        const userData: usertData = {
-          id: docSnap.data().id,
-          ProfileImgUrl: docSnap.data().ProfileImg,
-          BackgroundImgUrl: docSnap.data().BackgroundImg,
-          introText: docSnap.data().introText,
-          hobby: docSnap.data().hobby
-        };
-
-        setUserData(userData);
-      } else {
-        setUserData(null);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const userData: usertData = {
+            id: docSnap.data().id,
+            name: docSnap.data().name,
+            ProfileImgUrl: docSnap.data().ProfileImg,
+            BackgroundImgUrl: docSnap.data().BackgroundImg,
+            introText: docSnap.data().introText,
+            hobby: docSnap.data().hobby
+          };
+  
+          setUserData(userData);
+        } else {
+          setUserData(null);
+        }
       }
-    }
+      }
+     
+
 
     async function fetchFeedData() {
-      const docRef = doc(db, "Feeds", "test1");
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setFeedData(docSnap.data());
-      } else {
-        setFeedData(null);
+      if(userid) {
+        const docRef = doc(db, "Feeds", userid);
+        const docSnap = await getDoc(docRef);
+  
+        if (docSnap.exists()) {
+          setFeedData(docSnap.data());
+        } else {
+          setFeedData(null);
+        }
       }
+
     }
 
     fetchUserData();
     fetchFeedData();
   }, []);
-
+  
   return { userData, feedData };
+  
 }
 
 function Profile() {
   // const user = {
   //   id: "test1",
+  //   name: "홍길동",
   //   ProfileImg:
   //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286",
   //   BackgroundImg:
@@ -137,7 +151,8 @@ function Profile() {
   const [imageURL, setImageURL] = useState("");
 
   const { userData, feedData } = useUserData();
-
+  console.log("User data:", userData)
+  console.log("Feed data:", feedData)
   // useEffect(() => {
   //   if (userData) {
   //     const storage = getStorage();
