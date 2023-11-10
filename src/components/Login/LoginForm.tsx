@@ -55,7 +55,7 @@ const LoginForm = () => {
                     <input type="password" name="password" onChange={onChange} />
                 </div>
                 <button>로그인</button>
-                <a href="/register">아이디가 없으신가요? 회원가입하기</a>
+                <a href="/createAccount">아이디가 없으신가요? 회원가입하기</a>
             </StyledForm>
         </StyledContainer>
     );

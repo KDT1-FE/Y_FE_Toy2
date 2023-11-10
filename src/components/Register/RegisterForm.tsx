@@ -4,7 +4,7 @@ import React, { ChangeEvent, FormEvent, MouseEvent, useEffect, useRef, useState 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { instance } from '@/lib/api';
-import { ValidationResult, isValidForm, isDuplicatedId } from './Validation';
+import { ValidationResult, isValidForm, isDuplicatedId } from '../../hooks/createAccount/Validation';
 import styled from 'styled-components';
 import { AiOutlineCamera } from 'react-icons/ai';
 
