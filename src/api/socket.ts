@@ -15,8 +15,19 @@ export const loginSocket = (accessToken: string) => {
     console.log('Received users from server:', data);
   });
 
-  socket.on('message-to-client', (messageObject) => {
-    const usersArr = messageObject.users;
+  return socket;
+};
+
+export const chatSocket = (accessToken: string, chatId: string) => {
+  const socket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${accessToken}`,
+      serverId: SERVER_ID,
+    },
+  });
+
+  socket.on('message-to-client', (messageObject: any) => {
+    console.log(messageObject);
   });
 
   return socket;
