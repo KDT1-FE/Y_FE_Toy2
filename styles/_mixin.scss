@@ -42,3 +42,8 @@
 @mixin shadow-bottom() {
   box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.3);
 }
+
+@mixin button() {
+  border: none;
+  background: transparent;
+}

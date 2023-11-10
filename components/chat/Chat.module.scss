@@ -126,6 +126,7 @@
 // 메세지 전송버튼
 .triangle_button {
   @include flex-center-row;
+  @include button;
   width: 5rem;
   height: 5rem;
 
