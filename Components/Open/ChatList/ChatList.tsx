@@ -6,15 +6,17 @@ import { Chat } from '@/app/open/open.type';
 import { filterChat } from '@/app/open/open.utils';
 import ChatItem from './ChatItem';
 import { useQuery } from '@tanstack/react-query';
+import { getCookie } from '@/Components/Login/Cookie';
 import { fetchAllChat } from '@/app/open/open.utils';
 
 const ChatList = ({ myChatList }: ChatListProps) => {
+	const accessToken = getCookie('accessToken');
 	const { data: chatList } = useQuery({
 		queryKey: ['myChatList'],
-		queryFn: () => fetchAllChat(process.env.NEXT_PUBLIC_ACCESS_TOKEN as string),
+		queryFn: () => fetchAllChat(accessToken),
 		initialData: myChatList,
 		staleTime: 1000 * 60,
-		refetchInterval: 1000 * 120,
+		refetchInterval: 1000 * 60,
 	});
 	const filteredChatList = filterChat(chatList.chats);
 	return (

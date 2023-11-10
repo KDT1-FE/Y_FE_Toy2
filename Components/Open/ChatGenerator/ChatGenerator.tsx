@@ -15,9 +15,10 @@ import { useRecoilState } from 'recoil';
 import { Inputs } from './ChatGenerator.type';
 import { useFetchPostNewChat } from '@/hooks/Open/useFetchPostNewChat';
 import { useCurrentSearchParams } from '@/hooks/Open/useCurrentSearchParmas';
+import { getCookie } from '@/Components/Login/Cookie';
 
 const ChatGenerator = () => {
-	const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN as string;
+	const accessToken = getCookie('accessToken');
 	const mutation = useFetchPostNewChat(accessToken);
 	const params = useCurrentSearchParams('type');
 
