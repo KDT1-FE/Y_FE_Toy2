@@ -5,6 +5,11 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { fetchLogin } from '../../app/login/login.utils';
 import { setCookie } from '@/Components/Login/Cookie';
 import { Button } from '@material-tailwind/react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
+import { Input } from '@material-tailwind/react';
+import Image from 'next/image';
 
 type IFormInput = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -12,6 +17,8 @@ type IFormInput = {
 };
 
 const LoginForm = () => {
+	const router = useRouter();
+
 	const {
 		register,
 		handleSubmit,
@@ -21,6 +28,8 @@ const LoginForm = () => {
 	// 로그인 버튼 클릭 시
 	const onSubmit: SubmitHandler<IFormInput> = async ({ id, password }) => {
 		console.log('id: ', id, 'password:', password);
+		const data = await fetchLogin(id, password);
+		console.log(data);
 		const { accessToken, refreshToken } = await fetchLogin(id, password);
 		console.log('accessToken:', accessToken);
 		console.log('refreshToken:', refreshToken);
@@ -29,28 +38,60 @@ const LoginForm = () => {
 		// 1일 뒤
 		time.setMinutes(time.getMinutes() + 60 * 24);
 
-		setCookie('accessToken', accessToken, { path: '/', expires: time });
-		setCookie('refreshToken', refreshToken, { path: '/' });
+		if (accessToken && refreshToken) {
+			setCookie('accessToken', accessToken, { path: '/', expires: time });
+			setCookie('refreshToken', refreshToken, { path: '/' });
+			router.replace('/users');
+		} else {
+			Swal.fire({
+				text: '등록된 유저가 없습니다.',
+				showCancelButton: false,
+				confirmButtonText: '확인',
+				confirmButtonColor: '#3085d6',
+			});
+		}
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<label>id</label>
-			{/* 영어와 숫자만 */}
-			<input
-				{...register('id', {
-					required: true,
-				})}
-			/>
-			{errors?.id ? <p className="error">{errors.id?.message}</p> : null}
+		<div className="flex flex-col h-full items-center justify-center">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="flex flex-col items-center justify-center w-2/3"
+			>
+				<Image src="/logo.png" alt="Picture of me" width={250} height={250} />
+				{/* 영어와 숫자만 */}
+				<Input
+					placeholder="id"
+					className="!border !border-gray-300 bg-white text-gray-900 shadow-lg ring-4 ring-transparent placeholder:text-gray-500"
+					labelProps={{
+						className: 'hidden',
+					}}
+					{...register('id', {
+						required: true,
+					})}
+					crossOrigin={'anonymous'}
+				/>
+				{errors?.id ? <p className="error">{errors.id?.message}</p> : null}
 
-			<label>password</label>
-			{/* 5자 이상 */}
-			<input {...register('password')} />
-			<Button type="submit" className=" bg-pink-200">
-				로그인
-			</Button>
-		</form>
+				{/* 5자 이상 */}
+				<Input
+					placeholder="password"
+					className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500"
+					labelProps={{
+						className: 'hidden',
+					}}
+					containerProps={{ className: 'min-w-[100px]' }}
+					{...register('password')}
+					crossOrigin={'anonymous'}
+				/>
+				<Button type="submit" className=" bg-pink-200 w-full mt-10">
+					로그인
+				</Button>
+				<Link href="/join">
+					<div className="text-gray-700  text-[10px] mt-4 mb-14">회원가입</div>
+				</Link>
+			</form>
+		</div>
 	);
 };
 

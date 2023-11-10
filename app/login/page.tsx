@@ -3,7 +3,7 @@ import LoginForm from '../../Components/Login/LoginForm';
 
 const Login = () => {
 	return (
-		<div>
+		<div className="w-full h-full bg-main ">
 			<LoginForm></LoginForm>
 		</div>
 	);
