@@ -49,6 +49,8 @@ const RegisterForm = () => {
         }
     };
 
+    // test
+
     const onChangeField = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
