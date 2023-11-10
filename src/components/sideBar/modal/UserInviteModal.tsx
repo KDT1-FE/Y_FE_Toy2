@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -15,7 +15,6 @@ import UserInviteList from './UserInviteList';
 
 const UserInviteModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [scrollBehavior, setScrollBehavior] = React.useState('inside');
 
   const btnRef = React.useRef(null);
   return (
@@ -42,7 +41,7 @@ const UserInviteModal = () => {
             <ModalFooter justifyContent="center">
               <Button
                 size="lg"
-                mr={3}
+                mr="3px"
                 colorScheme="blue"
                 variant="outline"
                 onClick={onClose}

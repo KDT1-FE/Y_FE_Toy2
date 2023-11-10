@@ -2,36 +2,11 @@ import React, { useState } from 'react';
 import { Box, Text, Divider, Heading } from '@chakra-ui/react';
 import { AddIcon, EditIcon, ChatIcon } from '@chakra-ui/icons';
 import UserInviteModal from './modal/UserInviteModal';
-import { useQuery } from '@tanstack/react-query';
 import MyChannelItem from './MyChannelItem';
-import instance from '../../api/axios';
-import { ResponseValue } from '../../@types/chat';
-
-const fetchChannels = async () => {
-  const response = await instance.get('/chat');
-  const data: { chats: ResponseValue } = await response.data;
-
-  return data.chats;
-};
+import { useMyChannels } from '../../hooks/useMyChannels';
 
 const SideBar = () => {
-  // 내 대화목록 조회
-  const {
-    data: channels,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['channels'],
-    queryFn: () => fetchChannels(),
-  });
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (isError) {
-    console.error();
-  }
+  const channels = useMyChannels();
 
   console.log('내챗/챗 데이터', channels);
 
