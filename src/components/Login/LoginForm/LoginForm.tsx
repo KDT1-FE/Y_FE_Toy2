@@ -5,8 +5,9 @@ import FormInputBtn from "../../FormInputBtn/FormInputBtn";
 import { postApi } from "../../../utils/postApi";
 import Loader from "../../Loader/Loader";
 import { AuthContext } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-const initialLoginData = {
+const initialLoginData: LoginData = {
   id: "",
   password: ""
 };
@@ -16,6 +17,7 @@ function LoginForm() {
   const [loginData, setLoginData] = useState(initialLoginData);
   const [loading, setLoading] = useState(false);
   const { accessToken, setAccessToken } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,15 +27,15 @@ function LoginForm() {
     setTimeout(() => {
       postApi(LOGIN_API_URL, loginData)
         .then((data) => {
-          console.log("로그인 성공");
           const token = data.accessToken;
           const refreshToken = data.refreshToken;
           setAccessToken(token);
-          localStorage.setItem("refreshToken", refreshToken);
+          sessionStorage.setItem("refreshToken", refreshToken);
+          sessionStorage.setItem("userId", loginData.id)
           setLoading(false);
+          navigate('/');
         })
         .catch((error) => {
-          console.log("로그인 실패");
           console.error(error);
           setErrorMessage("아이디와 비밀번호를 확인해주세요.");
           setLoading(false);
@@ -47,7 +49,6 @@ function LoginForm() {
       <LoginInput
         id={"id"}
         label={"아이디"}
-        loginData={loginData}
         setLoginData={setLoginData}
         inputProps={{
           type: "text",
@@ -57,7 +58,6 @@ function LoginForm() {
       <LoginInput
         id={"password"}
         label={"비밀번호"}
-        loginData={loginData}
         setLoginData={setLoginData}
         inputProps={{
           type: "password",
@@ -72,6 +72,11 @@ function LoginForm() {
 }
 
 export default LoginForm;
+
+interface LoginData {
+  id: string;
+  password: string;
+}
 
 const LoginContainer = styled.form`
   display: flex;
