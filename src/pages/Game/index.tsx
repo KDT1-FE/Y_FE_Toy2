@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Keyword from "../../components/Game/Keyword";
+import GameChat from "../../components/Game/GameChat";
+import { Container } from "@chakra-ui/react";
 import useFireFetch from "../../hooks/useFireFetch";
 
 const Game = () => {
@@ -28,9 +30,10 @@ const Game = () => {
   console.log(gameData.data);
 
   return (
-    <div>
+    <Container maxW="1200px">
+      <GameChat gameId={gameId} />
       <Keyword status={status} updateStatus={updateStatus} />
-    </div>
+    </Container>
   );
 };
 

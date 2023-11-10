@@ -2,12 +2,13 @@ import { Button, Input } from "@chakra-ui/react";
 import { serverTimestamp } from "firebase/firestore";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import useInput from "../../../hooks/useInput";
 import UserCard from "../../common/UserCard";
+import useSocket from "../../../hooks/useSocket";
 
 const Container = styled.div`
   position: absolute;
@@ -31,9 +32,9 @@ const Wrap = styled.div`
   width: 45rem;
   height: 30rem;
 
-  background-color: #fff;
-
   display: flex;
+
+  background-color: #fff;
 
   & > div:first-child {
     padding: 3rem 1.5rem 3rem 5rem;
@@ -132,39 +133,50 @@ interface ChatRoom {
   status?: string;
 }
 
+interface UserType {
+  id: string;
+  name: string;
+  picture: string;
+}
+
 interface Props {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateGameModal = ({ setModal }: Props) => {
   const navigate = useNavigate();
+  const fireFetch = useFireFetch();
 
   const token = JSON.parse(localStorage.getItem("token") as string);
 
-  const socket = io(
-    `https://fastcampus-chat.net/chat?chatId=9fe8a1af-9c60-4937-82dd-21d6da5b9cd9`,
-    {
-      extraHeaders: {
-        Authorization: `Bearer ${token.accessToken}`,
-        serverId: import.meta.env.VITE_APP_SERVER_ID,
-      },
-    },
-  );
+  // 소켓 연결
+  const sendMessage = useSocket("9fe8a1af-9c60-4937-82dd-21d6da5b9cd9");
 
-  const fireFetch = useFireFetch();
+  // 게임 데이터
   const [roomData, setRoomData] = useState<ChatRoom>({
     name: "",
     users: [],
     isPrivate: false,
-    num: 1,
+    num: 6,
   });
 
+  // 방제목 빈값이면 true
+  const [inputAction, setInpuAction] = useState(false);
+
+  const [userList, setUserList] = useState<UserType[]>([]);
+
+  // input 초기화
+  const titleInput = useInput("");
+  const searchInput = useInput("");
+
+  // 유저정보 요청
   const users = useFetch({
     url: "https://fastcampus-chat.net/users",
     method: "GET",
     start: true,
   });
 
+  // 게임 만들기 post요청 선언 (호출 X)
   const createGame = useFetch({
     url: "https://fastcampus-chat.net/chat",
     method: "POST",
@@ -175,21 +187,46 @@ const CreateGameModal = ({ setModal }: Props) => {
     start: false,
   });
 
-  const titleInput = useInput("");
+  useEffect(() => {
+    if (users.result) {
+      const filter = users.result.filter(
+        (value: UserType) => value.id !== token.id,
+      );
+      setUserList(filter);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [users.result]);
 
+  // 방제목 input 저장
   useEffect(() => {
     const copy = { ...roomData };
     copy.name = titleInput.value;
     setRoomData(copy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [titleInput.value, titleInput.value]);
+  }, [titleInput.value]);
 
+  // 유저 검색 기능
+  useEffect(() => {
+    if (users.result) {
+      const filter = users.result.filter((value: UserType) =>
+        value.name.includes(searchInput.value),
+      );
+      setUserList(filter);
+    }
+  }, [searchInput.value, users.result]);
+
+  // 게임 생성 함수
   const handleMakeRoom = () => {
-    createGame.refresh();
-
-    console.log(roomData);
+    if (roomData.name === "") {
+      setInpuAction(true);
+      console.log(roomData);
+    } else {
+      // 게임 생성 POST 호출
+      createGame.refresh();
+    }
   };
 
+  // 게임 인원 선택 함수
   const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
     const copy = { ...roomData };
     copy.num = ~~e.target.value;
@@ -197,8 +234,10 @@ const CreateGameModal = ({ setModal }: Props) => {
     setRoomData(copy);
   };
 
+  // 게임 생성 후 파이어베이스 저장 밑 유저 초대 푸쉬알림
   useEffect(() => {
     if (createGame.result) {
+      // 파이어베이스 게임 데이터 생성
       const newData = {
         ...roomData,
         id: createGame.result.id,
@@ -208,20 +247,21 @@ const CreateGameModal = ({ setModal }: Props) => {
         status: "대기중",
       };
 
+      // 파이어베이스 POST요청
       fireFetch.usePostData("game", createGame.result.id, newData);
 
-      // const roomText = [...JSON.stringify(newData)];
-
+      // 초대된 유저 목록 생성
       const inviteUser: (string | ChatRoom | string[])[] = [...roomData.users];
 
       inviteUser.push(newData);
       inviteUser.push("*&^");
 
-      // const text = inviteUser.toString();
       const text = JSON.stringify(inviteUser);
 
-      socket.emit("message-to-server", text);
+      // 초대 메시지 전달
+      sendMessage(text);
 
+      // 해당 게임방으로 이동
       navigate(`/game?gameId=${createGame.result.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,7 +275,7 @@ const CreateGameModal = ({ setModal }: Props) => {
             <ImgBox>⭐</ImgBox>
             <Input
               marginBottom="1rem"
-              border="1px solid #c6c6c6"
+              border={!inputAction ? "1px solid #c6c6c6" : "1px solid red"}
               placeholder="방제목"
               textAlign="center"
               value={titleInput.value}
@@ -250,7 +290,7 @@ const CreateGameModal = ({ setModal }: Props) => {
                   id="1"
                   name="drone"
                   value="1"
-                  defaultChecked
+                  checked={roomData.num === 1}
                   onChange={handleRadioChange}
                 />
                 <label htmlFor="1">1</label>
@@ -330,14 +370,19 @@ const CreateGameModal = ({ setModal }: Props) => {
         </Section>
         <Section>
           <div style={{ overflow: "auto" }}>
-            <Input
-              border="1px solid #c6c6c6"
-              placeholder="검색"
-              textAlign="center"
-              marginBottom="1rem"
-            />
+            <div>
+              <Input
+                border="1px solid #c6c6c6"
+                placeholder="검색"
+                textAlign="center"
+                marginBottom="1rem"
+                height="2rem"
+                value={searchInput.value}
+                onChange={searchInput.onChange}
+              />
+            </div>
             {users.result &&
-              users.result.map((value: any) => {
+              userList.map((value: UserType) => {
                 return (
                   <UserCard
                     key={value.id}
