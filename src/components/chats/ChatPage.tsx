@@ -1,7 +1,7 @@
 'use client';
 // react 관련 import
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 // styled import
 import styled from 'styled-components';
 // chats 컴포넌트 import
@@ -10,7 +10,7 @@ import SearchMyChat from '@/components/chats/SearchMyChat';
 // svgr import
 import AddChat from '../../../public/assets/addChat.svg';
 import Search from '../../../public/assets/search.svg';
-import { Chat, allChatsState } from './chatsStore';
+import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
@@ -18,8 +18,14 @@ import { useRouter } from 'next/navigation';
 const MyChats = ({ userType }: any) => {
     const [searchOpen, setSearchOpen] = useState(false);
     const [allChats, setAllChats] = useRecoilState(allChatsState);
-    const [myChats, setMyChats] = useState<Chat[]>([]);
+    const [myChats, setMyChats] = useRecoilState(myChatsState);
+    const filterChats = useRecoilValue(searchChatsState);
     const router = useRouter();
+    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Cache-Control': 'no-cache',
+    };
 
     const enterChatRoom = (chat: Chat) => {
         if (chat.id && chat.users) {
@@ -38,7 +44,7 @@ const MyChats = ({ userType }: any) => {
 
     const getMyChats = async () => {
         try {
-            const res = await instance.get<Chat[], any>(`chat`);
+            const res = await instance.get<Chat[], any>(`chat`, { headers });
             if (res) {
                 console.log(res.chats)
                 setMyChats(res.chats);
@@ -51,7 +57,7 @@ const MyChats = ({ userType }: any) => {
     };
     const getAllChats = async () => {
         try {
-            const res = await instance.get<Chat[], any>(`chat/all`);
+            const res = await instance.get<Chat[], any>(`chat/all`, { headers });
             setAllChats(res.chats);
         } catch (error) {
             console.error(error);
@@ -64,9 +70,20 @@ const MyChats = ({ userType }: any) => {
         } else {
             getAllChats();
         }
-    }, []);
-    useEffect(() => {
-        console.log(allChats);
+
+        const intervalId = setInterval(() => {
+            if (userType === 'my') {
+                getMyChats();
+                console.log('내 채팅 조회 성공');
+            } else {
+                getAllChats();
+                console.log('모든 채팅 조회 성공');
+            }
+        }, 5000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
     }, []);
 
     const onSearchHandler = () => {
@@ -84,16 +101,26 @@ const MyChats = ({ userType }: any) => {
             </Header>
             <ChatContainer>
                 {searchOpen ? <SearchMyChat /> : null}
-                {(userType === 'my' ? myChats : allChats).map((chat: Chat) => (
-                    <MyChatItem
-                        key={chat.id}
-                        name={chat.name}
-                        latestMessage={chat.latestMessage}
-                        users={chat.users}
-                        onClick={() => enterChatRoom(chat)}
-                    />
-                ))}
-            </ChatContainer>
+                {filterChats.length > 0
+                    ? filterChats.map((chat) => (
+                          <MyChatItem
+                              key={chat.id}
+                              name={chat.name}
+                              latestMessage={chat.latestMessage}
+                              users={chat.users}
+                              onClick={() => enterChatRoom(chat)}
+                          />
+                      ))
+                    : (userType === 'my' ? myChats : allChats).map((chat) => (
+                          <MyChatItem
+                              key={chat.id}
+                              name={chat.name}
+                              latestMessage={chat.latestMessage}
+                              users={chat.users}
+                              onClick={() => enterChatRoom(chat)}
+                          />
+                      ))}
+          </ChatContainer>
         </Wrapper>
     );
 };
