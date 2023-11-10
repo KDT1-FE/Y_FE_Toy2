@@ -5,7 +5,7 @@ import ChatPage from '@/components/chats/ChatPage';
 import Navigation from '@/components/Navigation';
 
 const MyChats = () => {
-    const userId = sessionStorage.getItem('userId');
+    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
     return (
         <>
             <ChatPage userType="my" />
