@@ -10,7 +10,6 @@ const Open = async () => {
 	const { chats } = await fetchAllChat(accessToken);
 	const filteredChatList = filterChat(chats);
 
-	console.log(accessToken);
 	return (
 		<div className="relative flex flex-col h-[calc(100vh-2.5rem)] bg-white">
 			<Link href="/search">검색</Link>

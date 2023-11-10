@@ -3,7 +3,7 @@ export const fetchAllUsers = async (tokens: string) => {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
-			serverId: process.env.NEXT_PUBLIC_SERVER_KEY as string,
+			serverId: process.env.NEXT_PUBLIC_SERVER_ID as string,
 			Authorization: `Bearer ${tokens}`,
 		},
 	});
