@@ -25,6 +25,21 @@ const SignUpModal = () => {
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  // ID 중복 체크 함수
+  const checkIdDuplication = async (id: string): Promise<boolean> => {
+    try {
+      const response = await axios.post(
+        "https://fastcampus-chat.net/check/id",
+        { id },
+      );
+      const data = response.data;
+      return !data.isDuplicated;
+    } catch (error) {
+      console.error("Error checking ID duplication", error);
+      return false;
+    }
+  };
+
   const onSubmit = async (formData: FormData) => {
     let pictureAsString: string | undefined;
 
@@ -93,7 +108,16 @@ const SignUpModal = () => {
         <Controller
           name="id"
           control={control}
-          rules={{ required: "ID는 필수입니다." }}
+          rules={{
+            required: "ID는 필수입니다.",
+            validate: async (id) => {
+              const isNotDuplicated = await checkIdDuplication(id);
+              if (!isNotDuplicated) {
+                return "이미 사용중인 ID입니다.";
+              }
+              return true;
+            },
+          }}
           render={({ field }) => (
             <Input type="text" placeholder="ID" {...field} />
           )}
