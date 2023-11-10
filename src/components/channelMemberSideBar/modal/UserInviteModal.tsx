@@ -11,6 +11,7 @@ import {
   useDisclosure,
   Center,
 } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 import UserInviteList from './UserInviteList';
 
 const UserInviteModal = () => {
@@ -19,9 +20,7 @@ const UserInviteModal = () => {
   const btnRef = React.useRef(null);
   return (
     <>
-      <Button mt={3} ref={btnRef} onClick={onOpen}>
-        Trigger modal
-      </Button>
+      <AddIcon boxSize="25px" color="#191919" ref={btnRef} onClick={onOpen} />
 
       <Modal
         size="sm"
