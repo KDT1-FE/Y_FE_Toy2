@@ -48,7 +48,7 @@ const FriendProfiles = ({ allUsers }: { allUsers: User[] }) => {
 	);
 };
 
-const FriendProfile = ({ user }: { user: User }) => {
+export const FriendProfile = ({ user }: { user: User }) => {
 	const picture = user.picture || '/icon_cat.svg';
 
 	return (
