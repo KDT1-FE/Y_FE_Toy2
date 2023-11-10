@@ -42,6 +42,7 @@ const ChatGenerator = () => {
 			users: data.users,
 			isPrivate: checkIsPrivateChat(),
 		});
+		handleModalClose();
 	};
 
 	const handleModalClose = () => {
