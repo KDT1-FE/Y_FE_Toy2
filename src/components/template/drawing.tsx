@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import drawImg from '../../assets/draw.png';
-import eraseImg from '../../assets/eraser.png';
-import trashImg from '../../assets/trash.png';
+import drawImg from '../../assets/icons/draw.png';
+import eraseImg from '../../assets/icons/eraser.png';
+import trashImg from '../../assets/icons/trash.png';
 
 const Drawing = () => {
   const [isPainting, setIsPainting] = useState(false);

@@ -9,22 +9,17 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react';
-import { useSetRecoilState } from 'recoil';
-import { accessTokenState } from '../../states/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { accessTokenState, onlineUserState } from '../../states/atom';
 import { postLogin } from '../../api/index';
-import { io } from 'socket.io-client';
-import { SERVER_ID, SERVER_URL } from '../../constant';
-import { useRecoilState } from 'recoil';
-import { onlineUserState } from '../../states/atom';
-
+import { loginSocket } from '../../api/socket';
 function UserLogin() {
   const navigate = useNavigate();
+  const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
 
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const setAccessToken = useSetRecoilState(accessTokenState);
-  const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
-
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -34,22 +29,22 @@ function UserLogin() {
       setAccessToken(accessToken);
       localStorage.setItem('refreshToken', refreshToken);
       alert('로그인에 성공했습니다.');
-      const socket = io(`${SERVER_URL}/server`, {
-        extraHeaders: {
-          Authorization: `Bearer ${accessToken}`,
-          serverId: SERVER_ID,
-        },
-      });
-      socket.on('connect', () => {
-        socket.emit('users-server');
-      });
-      socket.on('users-server-to-client', (data) => {
+      loginSocket(accessToken, (data: any) => {
         setOnlineUsers(data);
       });
 
-      socket.on('message-to-client', (messageObject) => {
-        console.log(messageObject);
-      });
+      // const socket = io(`${SERVER_URL}/server`, {
+      //   extraHeaders: {
+      //     Authorization: `Bearer ${accessToken}`,
+      //     serverId: SERVER_ID,
+      //   },
+      // });
+      // socket.on('connect', () => {
+      //   socket.emit('users-server');
+      // });
+      // socket.on('users-server-to-client', (data) => {
+      //   setOnlineUsers(data);
+      // });
       navigate('/lobby');
     } catch (error) {
       console.log(error);
