@@ -10,11 +10,14 @@ function UserLogout() {
 
   const handleLogout = () => {
     try {
+      console.log('Before disconnectLoginSocket', accessToken);
       disconnectLoginSocket();
+      console.log('After disconnectLoginSocket', accessToken);
 
       localStorage.removeItem('refreshToken');
       setAccessToken('');
 
+      console.log('After setAccessToken', accessToken);
       navigate('/');
     } catch (error) {
       console.log(error);
