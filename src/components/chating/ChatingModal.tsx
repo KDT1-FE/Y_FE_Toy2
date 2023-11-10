@@ -4,37 +4,26 @@ import styled, { keyframes } from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
 
-export default function ChatingModal() {
+//type
+export default function ChatingModal(props: any) {
     const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChatingModalToggle);
 
     return (
         <>
             <ModalWrapper style={{ display: `${modalToggle ? 'block' : 'none'}` }}>
                 <ModalTitle>대화상대</ModalTitle>
-                <UsersWrapper>
-                    <UserWrapper>
-                        <UserImg src="https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro" />
-                        <UserName>Test01</UserName>
-                    </UserWrapper>
-
-                    <UserWrapper>
-                        <UserImg src="https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro" />
-                        <UserName>Test02</UserName>
-                    </UserWrapper>
-
-                    <UserWrapper>
-                        <UserImg src="https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro" />
-                        <UserName>Test03</UserName>
-                    </UserWrapper>
-                    <UserWrapper>
-                        <UserImg src="https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro" />
-                        <UserName>Test04</UserName>
-                    </UserWrapper>
-                    <UserWrapper>
-                        <UserImg src="https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro" />
-                        <UserName>Test05</UserName>
-                    </UserWrapper>
-                </UsersWrapper>
+                {props.correctChatUsers ? (
+                    <UsersWrapper>
+                        {props.correctChatUsers.map((users: any) => (
+                            <UserWrapper>
+                                <UserImg src={users.picture} />
+                                <UserName>{users.name}</UserName>
+                            </UserWrapper>
+                        ))}
+                    </UsersWrapper>
+                ) : (
+                    ''
+                )}
                 <ChatingLeave>채팅방 나가기</ChatingLeave>
             </ModalWrapper>
 
