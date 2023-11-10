@@ -246,9 +246,13 @@ const UserJoin = () => {
           <Button
             width={300}
             type="submit"
-            colorScheme="teal"
             size="lg"
-            isDisabled={!isFormValid()}>
+            isDisabled={!isFormValid()}
+            bg="#4FD1C5"
+            color="white"
+            _disabled={{
+              bg: '#9AEBE0',
+            }}>
             가입하기
           </Button>
         </form>
@@ -258,7 +262,7 @@ const UserJoin = () => {
             as={ReactRouterLink}
             to="/"
             marginRight={2}
-            color="teal.500"
+            color="#4FD1C5"
             fontWeight={700}>
             로그인
           </Link>
