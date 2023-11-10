@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Avatar, Box, Divider, Typography } from '@mui/material';
-import { Home, Message, SportsEsports, Person } from '@mui/icons-material';
+import { Home, Message, SportsEsports, Person, Tag } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import {
@@ -67,6 +67,11 @@ function Sidebar() {
           <SidebarNavListItem isActive={pathname === '/chat'}>
             <Link to="/chat">
               <Message /> 메시지
+            </Link>
+          </SidebarNavListItem>
+          <SidebarNavListItem isActive={pathname === '/open'}>
+            <Link to="/open">
+              <Tag /> 오픈채팅
             </Link>
           </SidebarNavListItem>
           <SidebarNavListItem isActive={pathname === '/game'}>
