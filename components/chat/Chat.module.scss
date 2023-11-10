@@ -240,3 +240,60 @@
     }
   }
 }
+
+.notice {
+  @include flex-center-row;
+  padding: 1rem 0;
+  width: 100%;
+  overflow: hidden;
+  .box {
+    text-align: center;
+    max-width: 80%;
+
+    padding: 0.5rem 2.5rem;
+    // border: 0.1rem solid #ff3478;
+    background-color: #d9d9d9;
+    border-radius: 40rem;
+  }
+}
+
+.alert {
+  position: fixed;
+  bottom: 10rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 1000;
+
+  padding: 1rem;
+
+  border-radius: 0.5rem;
+  // animation: fadeInOut 0.5s ease-in-out 2.5s forwards;
+
+  &.active {
+    animation: fadeInOut 3s ease-in-out;
+  }
+
+  &.inactive {
+    display: none;
+  }
+
+  .box {
+    background-color: #d9d9d9;
+    opacity: 0.3;
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+
+  @keyframes fadeInOut {
+    0%,
+    100% {
+      opacity: 0;
+    }
+
+    10%,
+    90% {
+      opacity: 1;
+    }
+  }
+}

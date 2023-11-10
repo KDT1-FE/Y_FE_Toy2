@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
+import EntryNotice from '@/components/chat/entryNotice';
+import ExitNotice from '@/components/chat/exitNotice';
+import ChatAlert from '@/components/chat/chatAlert';
 import { Message } from '@/@types/types';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
@@ -12,6 +15,7 @@ export default function Chat() {
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
 
@@ -19,6 +23,7 @@ export default function Chat() {
 
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
+
   useEffect(() => {
     socketRef.current = io(`${CLIENT_URL}?chatId=${chatId}`, {
       extraHeaders: {
@@ -45,6 +50,16 @@ export default function Chat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // 이제 chatId와 accessToken이 변경될 때
 
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
     if (message && socketRef.current?.connected) {
@@ -58,10 +73,14 @@ export default function Chat() {
       <ChatroomHeader chatId={chatId} />
       <div className={styles.container}>
         <div>
+          <EntryNotice />
           {messages.map(msg => (
             <MyChat key={msg.id} msg={msg} />
           ))}
+          <ExitNotice />
         </div>
+        <div ref={messagesEndRef} />
+        {message.length === 0 && <ChatAlert />}
       </div>
       <form className={styles2.footer} onSubmit={handleSendMessage}>
         <input
