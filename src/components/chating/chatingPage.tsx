@@ -9,6 +9,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
 import { formatCreatedAt } from '../chats/useFormatCreatedAt';
+import { useRouter } from 'next/navigation';
 
 interface Message {
     id: string;
@@ -20,6 +21,8 @@ interface Message {
 export default function ChatingPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const searchParams = useSearchParams();
+
+    
 
     const getChatName = searchParams.get('name');
     const getChatUsers = searchParams.get('Users');

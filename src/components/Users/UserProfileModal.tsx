@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { ImBubble } from 'react-icons/im';
 import { MdClose } from 'react-icons/md';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 // types 폴더 나중에 만들어서 type 빼놓기
 interface User {
@@ -13,10 +15,59 @@ interface User {
     chats: string[];
 }
 
+interface UserProfileModalProps {
+    clickModal: () => void;
+    user: User;
+    newChatId: string | null;
+}
+
 const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: User }) => {
+    const router = useRouter();
+
+    const [newChatId, setNewChatId] = useState<string | null>(null);
+
     //사용할 때 eslint 주석 삭제
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, name, picture } = user;
+    const accessToken = sessionStorage.getItem('accessToken');
+    const userId = sessionStorage.getItem('userId');
+
+
+    const handleChatClick = async () => {
+        try {
+            // 채팅 생성 API 호출
+            const response = await fetch('https://fastcampus-chat.net/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                    'serverId': `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+                },
+                body: JSON.stringify({
+                    name: `1:1 Chat with ${user.name}`,
+                    users: [user.id],
+                    isPrivate: false,
+                }),
+            });
+
+            console.log(user.id, userId)
+
+            if (response.ok) {
+                const data = await response.json();
+                const generatedChatId = `1on1_${user.id}_${userId}`;
+                setNewChatId(generatedChatId); 
+
+                // 생성된 채팅 방으로 이동
+                router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
+            } else {
+                console.error('Failed to create chat room');
+            }
+        } catch (error) {
+            console.error('Error creating chat room:', error);
+        } 
+    };
+
+
     return (
         <UserModalBox onClick={clickModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -30,13 +81,10 @@ const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: 
                         {/* 접속 상태 추후 개발필요. 현재는 하드코딩 */}
                         <p>online</p>
                     </UserInfo>
-                    {/* 임시로 chating으로 이동하도록 해둠 */}
-                    <Link href="/chating" className="link">
-                        <ToChating>
-                            <ImBubble size="40" className="chatIcon" />
-                            <ChatText>1:1 채팅하기</ChatText>
-                        </ToChating>
-                    </Link>
+                    <ToChating onClick={handleChatClick}>
+                        <ImBubble size="40" className="chatIcon" />
+                        <ChatText>1:1 채팅하기</ChatText>
+                    </ToChating>
                 </ModalMain>
             </ModalContent>
         </UserModalBox>

@@ -14,6 +14,7 @@ import { Chat, allChatsState } from './chatsStore';
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
+
 const MyChats = ({ userType }: any) => {
     const [searchOpen, setSearchOpen] = useState(false);
     const [allChats, setAllChats] = useRecoilState(allChatsState);
@@ -39,6 +40,7 @@ const MyChats = ({ userType }: any) => {
         try {
             const res = await instance.get<Chat[], any>(`chat`);
             if (res) {
+                console.log(res.chats)
                 setMyChats(res.chats);
             } else {
                 console.log('내 채팅 데이터 조회 실패');
@@ -82,7 +84,7 @@ const MyChats = ({ userType }: any) => {
             </Header>
             <ChatContainer>
                 {searchOpen ? <SearchMyChat /> : null}
-                {(userType === 'my' ? myChats : allChats).map((chat) => (
+                {(userType === 'my' ? myChats : allChats).map((chat: Chat) => (
                     <MyChatItem
                         key={chat.id}
                         name={chat.name}
@@ -105,6 +107,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height:100vh;
 `;
 
 const Header = styled.div`
@@ -136,4 +139,6 @@ const ChatContainer = styled.div`
     justify-content: center;
     text-align: center;
     margin: 2rem;
+    height: 80%;
+    overflow-y: auto;
 `;
