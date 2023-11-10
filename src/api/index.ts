@@ -39,6 +39,15 @@ export const getAllUsers = async (accessToken: string) => {
   return res;
 };
 
+export const getUsers = async (accessToken: string, userId: string) => {
+  const res = await client.get(`users?userId=${userId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return res;
+};
+
 export const createGameRooms = async (
   accessToken: string,
   name: string,
