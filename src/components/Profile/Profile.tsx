@@ -77,7 +77,8 @@ function useUserData() {
   
           setUserData(userData);
         } else {
-          setUserData(null);
+          
+          window.location.href = '/404';
         }
       }
       }
