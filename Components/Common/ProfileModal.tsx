@@ -1,14 +1,7 @@
 'use client';
 
+import { User } from '@/types';
 import Image from 'next/image';
-
-type User = {
-	id: string;
-	password: string;
-	name: string;
-	picture: string;
-	chats: string[];
-};
 
 type ProfileDialogType = {
 	user: User | object;
@@ -24,6 +17,7 @@ const ProfileModal = ({ user, open, setIsModalOpen }: ProfileDialogType) => {
 		picture: '',
 		chats: [],
 	}) as User;
+
 	return (
 		<dialog
 			className="w-full sm:w-[425px] md:w-[645px] px-5 h-screen fixed top-0 bg-gray-400 "
