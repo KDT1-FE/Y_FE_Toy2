@@ -46,7 +46,3 @@ const SearchItem = styled.input`
     border-radius: 20px;
     outline: none;
 `;
-
-const SearchResults = styled.p`
-    font-size: 1rem;
-`;
