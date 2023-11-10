@@ -12,22 +12,22 @@ import { Chat } from './card.types';
 import { formatTimeToKST } from '../../utils/formatTimeToKST';
 
 interface Props {
-  chat: Chat;
+  channel: Chat;
 }
 
-const UserCard = ({ chat }: Props) => {
+const UserCard = ({ channel }: Props) => {
   return (
-    <Card border='2px solid #cdcdcd' boxShadow={0} w={215}>
+    <Card border="2px solid #cdcdcd" boxShadow={0} w={215}>
       <CardHeader>
-        <Heading as='h2' size='sm'>
-          {chat.name}
+        <Heading as="h2" size="sm">
+          {channel.name}
         </Heading>
-        <Text fontSize='xs'>{formatTimeToKST(chat.updatedAt)}</Text>
-        <Badge colorScheme='yellow' px='2' mt='2'></Badge>
+        <Text fontSize="xs">{formatTimeToKST(channel.updatedAt)}</Text>
+        <Badge colorScheme="yellow" px="2" mt="2"></Badge>
       </CardHeader>
       <CardBody>
-        <AvatarGroup size='sm' max={3}>
-          {chat.users.map((user) => (
+        <AvatarGroup size="sm" max={3}>
+          {channel.users.map((user) => (
             <Avatar key={user.id} name={user.name} />
           ))}
         </AvatarGroup>

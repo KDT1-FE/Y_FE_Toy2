@@ -1,15 +1,22 @@
 import { HStack } from '@chakra-ui/react';
-import useChats from '../../hooks/useChats';
+import useChannels from '../../hooks/useChannels';
 import UserCard from './Card';
 
 const CardContainer = () => {
-  const { data: chats, isLoading } = useChats();
+  const { data: channels, isLoading } = useChannels();
 
   if (isLoading) return <div>Loading...</div>;
 
-  if (chats && chats.length === 0) return <div>채팅방이 없습니다.</div>;
+  if (channels && channels.length === 0) return <div>채팅방이 없습니다.</div>;
 
-  return <HStack>{chats && chats.map((chat) => <UserCard key={chat.id} chat={chat} />)}</HStack>;
+  return (
+    <HStack>
+      {channels &&
+        channels.map((channel) => (
+          <UserCard key={channel.id} channel={channel} />
+        ))}
+    </HStack>
+  );
 };
 
 export default CardContainer;

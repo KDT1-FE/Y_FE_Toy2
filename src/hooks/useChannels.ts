@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { Chat } from '../components/cardContainer/card.types';
 
-const useChats = () => {
+const useChannels = () => {
   return useQuery<Chat[]>({
-    queryKey: ['chats'],
+    queryKey: ['channels'],
     queryFn: async () => {
       const response = await fetch('https://fastcampus-chat.net/chat/all', {
         method: 'GET',
@@ -21,4 +21,4 @@ const useChats = () => {
   });
 };
 
-export default useChats;
+export default useChannels;
