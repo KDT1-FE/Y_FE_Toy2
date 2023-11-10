@@ -67,7 +67,7 @@ const GameChat = ({ gameId }) => {
   };
 
   return (
-    <Card>
+    <Card p={3} h="100%" mb="20px">
       <CardBody>
         {messages.map((message, index) => (
           <ChatBubble key={index} userId={message.id} text={message.text} />

@@ -12,8 +12,6 @@ const App = () => {
         <Route path="/main" element={<AdminMain />} />
         <Route path="/game" element={<Game />} />
         <Route path="/example" element={<Example />} />
-        {/* Game 임시라우팅입니다 */}
-        <Route path="/game" element={<Game />} />
       </Routes>
     </>
   );
