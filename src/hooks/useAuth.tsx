@@ -3,7 +3,7 @@ import axios from "axios";
 
 const initialState: AuthContextInterface = {
   accessToken: null,
-  refreshToken: localStorage.getItem("refreshToken") || null,
+  refreshToken: sessionStorage.getItem("refreshToken") || null,
   setAccessToken: () => {},
   setRefreshToken: () => {},
   refreshAccessToken: () => {}
@@ -20,7 +20,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 
   useEffect(() => {
-    localStorage.setItem("refreshToken", refreshToken || "");
+    sessionStorage.setItem("refreshToken", refreshToken || "");
     if (refreshToken) {
       refreshAccessToken();
     }

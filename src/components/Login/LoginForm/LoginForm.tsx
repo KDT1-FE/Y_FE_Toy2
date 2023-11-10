@@ -30,7 +30,7 @@ function LoginForm() {
           const token = data.accessToken;
           const refreshToken = data.refreshToken;
           setAccessToken(token);
-          localStorage.setItem("refreshToken", refreshToken);
+          sessionStorage.setItem("refreshToken", refreshToken);
           setLoading(false);
           navigate('/');
         })
