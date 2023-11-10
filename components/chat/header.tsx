@@ -20,7 +20,6 @@ export default function ChatroomHeader({ chatId }: string) {
     
   };
   const handleBackBtnClick = () => {
-    console.log('clicked');
     router.back();
 
   }
@@ -33,7 +32,7 @@ export default function ChatroomHeader({ chatId }: string) {
       }
       );
       console.log(response);
-      router.push('./');
+      router.push('.');
       // 채팅방 나가기 성공 후 추가적인 로직이 필요할 수 있습니다.
     } catch (error) {
       console.error(error);

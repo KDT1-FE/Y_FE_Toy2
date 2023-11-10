@@ -3,15 +3,15 @@ import { io, Socket } from 'socket.io-client';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
 import { Message } from '@/@types/types';
+import { useRouter } from 'next/router';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
-import { useRouter } from 'next/router';
 
 export default function Chat() {
-    const router = useRouter();
-    const { chatId } = router.query;
+  const router = useRouter();
+  const { chatId } = router.query;
 
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
@@ -19,34 +19,42 @@ export default function Chat() {
 
   const socketRef = useRef<Socket | null>(null);
 
-  //const chatId = '43c7d302-1005-4a55-b12c-3f6d30c4755c';
-
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
   useEffect(() => {
     socketRef.current = io(`${CLIENT_URL}?chatId=${chatId}`, {
-      extraHeaders: {
-        Authorization: `Bearer ${accessToken}`,
-        serverId: process.env.NEXT_PUBLIC_API_KEY,
-      },
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+          serverId: process.env.NEXT_PUBLIC_API_KEY,
+        },
+      });
+
+      socketRef.current.on('connect', () => {
+        console.log('Connected to chat server');
+        setIsConnected(true);
+        console.log(socketRef.current);
+
+      });
+
+      socketRef.current.emit('fetch-messages');
+
+    socketRef.current.on('messages-to-client', (messageArray: Message[]) => {
+        setMessages(messageArray.messages.reverse());
     });
 
-    socketRef.current.on('connect', () => {
-      console.log('Connected to chat server');
-      setIsConnected(true);
-    });
-    socketRef.current.on('message-to-client', (messageObject: Message) => {
-      console.log(messageObject);
-      setMessages(prevMessages => [...prevMessages, messageObject]);
-    });
+      socketRef.current.on('message-to-client', (messageObject: Message) => {
+        console.log(messageObject);
+        setMessages(prevMessages => [...prevMessages, messageObject]);
+      });
 
     return () => {
       socketRef.current?.off('connect');
+      socketRef.current?.off('messages-to-client');
       socketRef.current?.off('message-to-client');
       socketRef.current?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // 이제 chatId와 accessToken이 변경될 때 
+  }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
 
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
@@ -58,7 +66,7 @@ export default function Chat() {
 
   return (
     <div className={styles.container}>
-      <ChatroomHeader chatId={chatId}/>
+      <ChatroomHeader chatId={chatId} />
       <div>
         {messages.map(msg => (
           <MyChat key={msg.id} msg={msg} />
