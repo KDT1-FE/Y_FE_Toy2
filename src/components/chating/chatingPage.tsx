@@ -15,14 +15,12 @@ interface Message {
     id: string;
     text: string;
     userId: string;
-    createdAt: Date; // Date?
+    createdAt: Date; // Date
 }
 
 export default function ChatingPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const searchParams = useSearchParams();
-
-    
 
     const getChatName = searchParams.get('name');
     const getChatUsers = searchParams.get('Users');
