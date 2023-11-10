@@ -1,18 +1,12 @@
+import { Button, Card, Center, Grid, GridItem, Text } from "@chakra-ui/react";
 import GameChat from "../../components/Game/GameChat";
-import {
-  Button,
-  Card,
-  Center,
-  Container,
-  Flex,
-  Grid,
-  GridItem,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
 import useFireFetch from "../../hooks/useFireFetch";
 
-const ProfileCard = ({ userId }) => {
+interface ProfileCardProps {
+  userId: string;
+}
+
+const ProfileCard: React.FC<ProfileCardProps> = ({ userId }) => {
   return (
     <Card w="200px" h="200px" justify="center" mb="20px">
       <Center>
@@ -34,6 +28,10 @@ const Game = () => {
   console.log(gameData.data);
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
+  }
+
+  if (!gameId) {
+    return null;
   }
 
   return (
