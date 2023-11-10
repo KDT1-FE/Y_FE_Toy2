@@ -213,6 +213,10 @@ const Example = () => {
   // 메시지 보내는 함수
   const submitMessage = () => {
     sendMessage(messageValue.value);
+    setMessage({
+      id: "",
+      text: "",
+    });
   };
 
   return (
