@@ -1,8 +1,41 @@
 import { Box } from '@chakra-ui/react';
 import Chat from '.';
+import { useEffect, useState } from 'react';
+import socket from '../../api/socket';
+import { Message, MessageData } from '../../@types/message';
+import { SOCKET } from '../../constants/socket';
+import { getUser } from '../../api/user';
 
 const ChatList = () => {
-  const testArray = new Array(20).fill('');
+  const [messages, setMessages] = useState<Message[] | undefined>(undefined);
+  useEffect(() => {
+    const getMessageInfo = async (messages: MessageData[]) => {
+      const messagesData = [];
+      for (const message of messages) {
+        const { id, createdAt, text, userId } = message;
+        const response = await getUser(userId);
+        if (response) {
+          const { name, picture } = response;
+          messagesData.push({
+            id,
+            createdAt: createdAt.split('T')[0],
+            text,
+            name,
+            picture,
+          });
+        }
+      }
+      setMessages(messagesData);
+    };
+    socket.emit(SOCKET.FETCH_MESSAGES);
+    socket.on(
+      SOCKET.MESSAGES_TO_CLIENT,
+      ({ messages }: { messages: MessageData[] }) => {
+        getMessageInfo(messages);
+      },
+    );
+  }, []);
+
   return (
     <Box
       maxWidth={700}
@@ -25,9 +58,16 @@ const ChatList = () => {
         },
       }}
     >
-      {testArray.map(() => {
-        // eslint-disable-next-line react/jsx-key
-        return <Chat />;
+      {messages?.map((message) => {
+        return (
+          <Chat
+            key={message.id}
+            text={message.text}
+            name={message.name}
+            picture={message.picture}
+            createdAt={message.createdAt}
+          />
+        );
       })}
     </Box>
   );
