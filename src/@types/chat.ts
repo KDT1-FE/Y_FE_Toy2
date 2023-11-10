@@ -1,9 +1,9 @@
 import { MessageData } from './message';
 import { User } from './user';
 
-export type ResponseValue = Chat[];
+export type ResponseValue = Channel[];
 
-export interface Chat {
+export interface Channel {
   id: string;
   name: string;
   users: User[]; // 속한 유저 정보

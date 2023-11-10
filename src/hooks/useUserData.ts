@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAllUsers } from '../api/useGetUsers';
+import { getAllUsers } from '../api/user';
 
 export const useUserData = () => {
   const [userData, setUserData] = useState<{
