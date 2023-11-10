@@ -51,8 +51,6 @@ const Keyword = ({ status, updateStatus }: any) => {
 
   // 게임 시작
   const handleStart = async () => {
-    onOpen();
-
     await updateStatus("게임중");
 
     const selectedCategory = categories[getRandNum(categories.length)];
@@ -66,24 +64,22 @@ const Keyword = ({ status, updateStatus }: any) => {
 
     const ranLiar = users.name[getRandNum(users.name.length)];
     if (ranLiar === "연수") {
-      // setIsLiar(true);
       window.localStorage.setItem("liar", "true");
     } else {
-      // setIsLiar(false);
       window.localStorage.setItem("liar", "false");
     }
+    onOpen();
   };
 
   // 게임 종료
   const hadleEnd = async () => {
     await updateStatus("대기중");
 
-    window.localStorage.removeItem("category");
-    window.localStorage.removeItem("keyword");
-    window.localStorage.removeItem("liar");
+    window.localStorage.setItem("category", "");
+    window.localStorage.setItem("keyword", "");
+    window.localStorage.setItem("liar", "false");
     setCategory(null);
     setKeyword("");
-    // setIsLiar(false);
   };
 
   return (
@@ -95,7 +91,7 @@ const Keyword = ({ status, updateStatus }: any) => {
           <ModalCloseButton />
           <ModalBody>
             <p>주제는 {category?.category} 입니다.</p>
-            {window.localStorage.getItem("liar") ? (
+            {window.localStorage.getItem("liar") === "true" ? (
               <>
                 <p>당신은 Liar 입니다.</p>
                 <p>키워드를 추리하세요.</p>
@@ -110,7 +106,7 @@ const Keyword = ({ status, updateStatus }: any) => {
         {status === "게임중" && (
           <>
             <p>주제는 {window.localStorage.getItem("category")} 입니다.</p>
-            {window.localStorage.getItem("liar") ? (
+            {window.localStorage.getItem("liar") === "true" ? (
               <>
                 <p>당신은 Liar 입니다.</p>
                 <p>키워드를 추리하세요.</p>
