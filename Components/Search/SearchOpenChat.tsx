@@ -5,6 +5,7 @@ import { AllOpenChat } from '@/app/search/search.type';
 import ShowAllOpenChat from './ShowAllOpenChat';
 import { User } from '@/types';
 import { FriendProfile } from '../Users/FriendProfiles';
+import { Input } from '@material-tailwind/react';
 
 const SearchOpenChat = ({
 	allOpenChat,
@@ -43,12 +44,19 @@ const SearchOpenChat = ({
 
 	return (
 		<>
-			<input onChange={getUserInput} onKeyPress={handleKeyPress} />
+			<Input
+				onChange={getUserInput}
+				onKeyPress={handleKeyPress}
+				label="오픈 채팅방 검색하기"
+				crossOrigin={undefined}
+			/>
 			{searched.length || searchedUsers?.length ? (
 				<>
-					{searched.map((item) => (
-						<ShowAllOpenChat key={item.id} openChat={item} />
-					))}
+					<ul className="flex flex-col mb-10 overflow-scroll scrollbar-hide">
+						{searched.map((item) => (
+							<ShowAllOpenChat key={item.id} openChat={item} />
+						))}
+					</ul>
 					{searchedUsers?.map((user) => (
 						<FriendProfile key={user.id} user={user} />
 					))}
