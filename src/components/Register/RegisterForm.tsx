@@ -49,8 +49,6 @@ const RegisterForm = () => {
         }
     };
 
-    // test
-
     const onChangeField = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
@@ -104,11 +102,16 @@ const RegisterForm = () => {
             <h1>회원가입</h1>
             <StyledDiv>
                 <span>프로필 설정</span>
-                <span>미기입시 기본 이미지로 등록됩니다.</span>
+                <span>미설정시 아래와 같은 예시 이미지로 등록됩니다.</span>
             </StyledDiv>
             <StyledForm onSubmit={onSubmit}>
                 <StyledProfile>
-                    <img src={image ? image : `/defaultProfile.jpg`} alt="profile-image" />
+                    <img
+                        src={
+                            image ? image : `https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro`
+                        }
+                        alt="profile-image"
+                    />
                     <StyledLabel htmlFor="file">
                         <StyledAiOutlineCamera />
                     </StyledLabel>
@@ -213,8 +216,8 @@ const StyledProfile = styled.div`
     flex-direction: column;
     align-items: center;
     img {
-        width: 210px;
-        height: 210px;
+        width: 190px;
+        height: 190px;
         border: 1.25px dotted #00956e;
         border-radius: 50%;
     }
@@ -247,9 +250,11 @@ const StyledDiv = styled.div`
 
     span:first-child {
         margin-bottom: 0.5rem;
+        font-size: 1.1rem;
     }
     span:last-child {
         opacity: 0.35;
+        font-size: 0.85rem;
     }
 `;
 
@@ -269,6 +274,7 @@ const StyledForm = styled.form`
         label {
             text-align: left;
             margin-bottom: 0.3rem;
+            padding-left: 0.125rem;
             font-weight: 600;
             span {
                 margin-right: 0.5rem;
