@@ -2,16 +2,19 @@
 
 import styled from 'styled-components';
 import StyledComponentsRegistry from '../lib/registry';
+import { RecoilRoot } from 'recoil';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en">
-            <StyledComponentsRegistry>
-                <Body>
-                    <Container>{children}</Container>
-                </Body>
-            </StyledComponentsRegistry>
-        </html>
+        <RecoilRoot>
+            <html lang="en">
+                <StyledComponentsRegistry>
+                    <Body>
+                        <Container>{children}</Container>
+                    </Body>
+                </StyledComponentsRegistry>
+            </html>
+        </RecoilRoot>
     );
 }
 
@@ -29,6 +32,7 @@ const Container = styled.div`
     width: 100%;
     max-width: 800px;
     height: 100%;
+    overflow: hidden;
 
     margin: 0 auto;
     position: relative;

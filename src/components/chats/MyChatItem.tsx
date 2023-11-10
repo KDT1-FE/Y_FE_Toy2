@@ -1,16 +1,16 @@
-// 'use client';
+'use client';
 import React from 'react';
 import styled from 'styled-components';
-import { Chat } from './interfaces';
-import { formatCreatedAt } from '@/hooks/chatsList/useFormatCreatedAt';
+import { Chat } from './chatsStore';
+import { formatCreatedAt } from '@/components/chats/useFormatCreatedAt';
 
-const MyChatItem = ({ name, latestMessage, users }: Chat) => {
+const MyChatItem = ({ name, latestMessage, users, onClick }: Chat) => {
     const chatsPicture = users && users.length > 0 ? users[0].picture : '';
     const usersNumber = users && users.length > 0 ? users.length : '';
     const chatsName = users && users.length === 1 ? users[0].username : name;
     return (
         <Wrapper>
-            <ChatBox>
+            <ChatBox onClick={onClick}>
                 <ChatDescContainer>
                     <ChatInfo>
                         <ChatImage>
