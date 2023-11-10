@@ -1,5 +1,6 @@
 import React, { Dispatch, useState } from 'react';
 import styled from 'styled-components';
+import { Send } from '@mui/icons-material';
 import search from './searchWord';
 
 export type WordsType = {
@@ -22,9 +23,17 @@ const SubmitBtn = styled.button`
   width: 80px;
   height: 44px;
   border-radius: 5px;
-  background-color: #457b9d;
+  background-color: #26446d;
   border: none;
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 12px;
+  &:hover {
+    background-color: #2e4c77;
+  }
 `;
 
 const GameInput = styled.input`
@@ -52,7 +61,10 @@ export default function InputWord({ words, setWords }: WordsType) {
         inputElement.value = '';
         return;
       }
-      if (words[words.length - 1].charAt(words[words.length - 1].length - 1) === inputValue.charAt(0)) {
+      if (
+        words[words.length - 1].charAt(words[words.length - 1].length - 1) ===
+        inputValue.charAt(0)
+      ) {
         if (existCheck) {
           alert('이미 사용된 단어입니다');
           return;
@@ -74,10 +86,14 @@ export default function InputWord({ words, setWords }: WordsType) {
     <InputBox
       onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const inputValue = (e.target as HTMLFormElement).querySelector('input')?.value;
+        const inputValue = (e.target as HTMLFormElement).querySelector('input')
+          ?.value;
         if (inputValue) {
           const isRealWord = await search(inputValue);
-          const isPossible = /^(?=(?:.*[a-z]){3,})(?!.*([a-z])\1{2,})[a-z]{3,10}$/.test(inputValue);
+          const isPossible =
+            /^(?=(?:.*[a-z]){3,})(?!.*([a-z])\1{2,})[a-z]{3,10}$/.test(
+              inputValue,
+            );
           console.log(isPossible);
 
           if (isPossible) {
@@ -93,7 +109,10 @@ export default function InputWord({ words, setWords }: WordsType) {
       }}
     >
       <GameInput type="text" />
-      <SubmitBtn type="submit">SEND</SubmitBtn>
+      <SubmitBtn type="submit">
+        SEND
+        <Send />
+      </SubmitBtn>
     </InputBox>
   );
 }

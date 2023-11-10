@@ -6,6 +6,7 @@ import sorting from './sorting';
 const RatingWrapper = styled.div`
   flex: 1;
   display: flex;
+  min-width: 300px;
   height: 100%;
   flex-direction: column;
   align-items: center;
@@ -27,12 +28,30 @@ export default function Rating() {
 
   return (
     <RatingWrapper>
-      <Typography variant="h1" sx={{ fontSize: '2rem', color: '#457b9d', mt: 2, mb: 4, fontFamily: 'Bungee' }}>
+      <Typography
+        variant="h1"
+        sx={{
+          fontSize: '2rem',
+          color: '#457b9d',
+          mt: 2,
+          mb: 4,
+          fontFamily: 'Bungee',
+        }}
+      >
         Rating!
       </Typography>
       {{ finish } ? (
-        peoples.map((el, i) => (
-          <Typography variant="h1" sx={{ fontSize: '2rem', color: '#1d3557', mt: 2, mb: 4, fontFamily: 'Bungee' }}>
+        peoples.slice(0, 10).map((el, i) => (
+          <Typography
+            variant="h1"
+            sx={{
+              fontSize: '2rem',
+              color: '#1d3557',
+              mt: 2,
+              mb: 4,
+              fontFamily: 'Bungee',
+            }}
+          >
             {i + 1}. {el.id}
           </Typography>
         ))
