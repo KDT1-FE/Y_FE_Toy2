@@ -1,7 +1,6 @@
 import { Button, Input } from "@chakra-ui/react";
 import { serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
-// import { io } from "socket.io-client";
 import CreateGameModal from "../../components/Main/CreateGameModal";
 import ToastNotice from "../../components/common/ToastNotice";
 import useFetch from "../../hooks/useFetch";
@@ -46,17 +45,6 @@ const Example = () => {
       }
     },
   );
-
-  // // 채팅 서버 연결
-  // const socket = io(
-  //   `https://fastcampus-chat.net/chat?chatId=9fe8a1af-9c60-4937-82dd-21d6da5b9cd9`,
-  //   {
-  //     extraHeaders: {
-  //       Authorization: `Bearer ${token.accessToken}`,
-  //       serverId: import.meta.env.VITE_APP_SERVER_ID,
-  //     },
-  //   },
-  // );
 
   // 메세지 데이터
   const [message, setMessage] = useState({
@@ -103,35 +91,6 @@ const Example = () => {
 
   // 메시지 input value 저장
   const messageValue = useInput("");
-
-  // // 소켓 통신 시 메시지 데이터 저장
-  // useEffect(() => {
-  //   socket.on("message-to-client", (messageObject) => {
-  //     // 일반 채팅인지 초대 메시지인지 구별
-
-  //     if (messageObject.text.slice(-5, -2) === "*&^") {
-  //       // 초대 상태 저장
-  //       const usersArr = JSON.parse(messageObject.text);
-  //       const users = [...usersArr];
-  //       users.pop();
-  //       users.pop();
-  //       const room = usersArr[usersArr.length - 2];
-
-  //       setToastUser(users);
-  //       setRoomData(room);
-  //     } else {
-  //       // 메시지 데이터, 작성 유저 상태 저장
-  //       const copy = { ...message };
-  //       copy.id = messageObject.userId;
-  //       copy.text = messageObject.text;
-  //       setMessage(copy);
-  //     }
-
-  //     // console.log(messageObject);
-  //   });
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [socket]);
 
   // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
   useEffect(() => {
@@ -213,10 +172,6 @@ const Example = () => {
   // 메시지 보내는 함수
   const submitMessage = () => {
     sendMessage(messageValue.value);
-    setMessage({
-      id: "",
-      text: "",
-    });
   };
 
   return (
@@ -260,3 +215,43 @@ const Example = () => {
 };
 
 export default Example;
+
+// // 채팅 서버 연결
+// const socket = io(
+//   `https://fastcampus-chat.net/chat?chatId=9fe8a1af-9c60-4937-82dd-21d6da5b9cd9`,
+//   {
+//     extraHeaders: {
+//       Authorization: `Bearer ${token.accessToken}`,
+//       serverId: import.meta.env.VITE_APP_SERVER_ID,
+//     },
+//   },
+// );
+
+// // 소켓 통신 시 메시지 데이터 저장
+// useEffect(() => {
+//   socket.on("message-to-client", (messageObject) => {
+//     // 일반 채팅인지 초대 메시지인지 구별
+
+//     if (messageObject.text.slice(-5, -2) === "*&^") {
+//       // 초대 상태 저장
+//       const usersArr = JSON.parse(messageObject.text);
+//       const users = [...usersArr];
+//       users.pop();
+//       users.pop();
+//       const room = usersArr[usersArr.length - 2];
+
+//       setToastUser(users);
+//       setRoomData(room);
+//     } else {
+//       // 메시지 데이터, 작성 유저 상태 저장
+//       const copy = { ...message };
+//       copy.id = messageObject.userId;
+//       copy.text = messageObject.text;
+//       setMessage(copy);
+//     }
+
+//     // console.log(messageObject);
+//   });
+
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+// }, [socket]);
