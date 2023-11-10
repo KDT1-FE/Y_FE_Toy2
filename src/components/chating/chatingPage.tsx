@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import MessageContainer from './MessageContainer';
 import io from 'socket.io-client';
 import { usePathname, useSearchParams } from 'next/navigation';
-
+import { useRouter } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
 import { formatCreatedAt } from '../chats/useFormatCreatedAt';
@@ -20,6 +20,7 @@ interface Message {
 export default function ChatingPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const searchParams = useSearchParams();
+    const router = useRouter();
 
     // type
     const getChatName = searchParams.get('name');
@@ -51,12 +52,23 @@ export default function ChatingPage() {
         }
     };
 
-    useEffect(() => {
-        socketInitilizer();
-    }, []);
-
     const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
     const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+
+    useEffect(() => {
+        // 유저 블락
+        let userBlock = true;
+
+        for (let i = 0; i < correctChatUsers.length; i++) {
+            if (userId == correctChatUsers[i].id) {
+                userBlock = false;
+            }
+        }
+
+        if (userBlock) router.back();
+
+        socketInitilizer();
+    }, []);
 
     const pathname = usePathname();
     const chatId = pathname.split('/')[2];
@@ -89,9 +101,9 @@ export default function ChatingPage() {
 
         socket.emit('users');
 
-        socket.on('users-to-client', (data) => {
-            console.log(data, 'users-to-client');
-        });
+        // socket.on('users-to-client', (data) => {
+        //     console.log(data, 'users-to-client');
+        // });
 
         socket.on('join', (data) => {
             console.log(data, 'join');
