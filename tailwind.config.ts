@@ -23,6 +23,7 @@ const config: Config = withMT({
 				success: '#198754',
 				info: '#0DCAF0',
 				warning: '#FFC107',
+				main: '#FEE500',
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

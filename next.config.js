@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
-		domains: ['gravatar.com'],
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'gravatar.com',
+			},
+		],
 	},
 };
 
