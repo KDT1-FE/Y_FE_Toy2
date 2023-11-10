@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Divider, Heading } from '@chakra-ui/react';
 import { AddIcon, EditIcon, ChatIcon } from '@chakra-ui/icons';
-import UserInviteModal from './modal/UserInviteModal';
+import UserInviteModal from '../channelMemberSideBar/modal/UserInviteModal';
 import MyChannelItem from './MyChannelItem';
 import { useMyChannels } from '../../hooks/useMyChannels';
 
@@ -45,7 +45,6 @@ const SideBar = () => {
             <Box>내가 속한 채팅방이 없습니다.</Box>
           )}
         </Box>
-        <UserInviteModal />
       </Box>
     </Box>
   );

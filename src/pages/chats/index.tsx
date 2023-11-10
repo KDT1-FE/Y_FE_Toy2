@@ -1,6 +1,7 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import ChatList from '../../components/chats/ChatList';
 import ChatInput from '../../components/chats/ChatInput';
+import ChannelMemberSideBar from '../../components/channelMemberSideBar';
 
 const Chats = () => {
   return (
@@ -22,8 +23,8 @@ const Chats = () => {
             <ChatInput />
           </Box>
         </Box>
-        <Box flex="1" bg="yellow" h="100vh">
-          유저 친구 목록
+        <Box flex="1" h="100vh">
+          <ChannelMemberSideBar />
         </Box>
       </Flex>
     </Box>

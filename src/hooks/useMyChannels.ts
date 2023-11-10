@@ -4,7 +4,7 @@ import { getMyChannels } from '../api/channel';
 
 export const useMyChannels = () => {
   const { data: myChannelsQuery } = useQuery({
-    queryKey: ['channels'],
+    queryKey: ['my-channels'],
     queryFn: getMyChannels,
   });
 
