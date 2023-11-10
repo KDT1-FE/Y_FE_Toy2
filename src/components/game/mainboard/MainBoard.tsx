@@ -21,7 +21,11 @@ export default function MainBoard({ words, setWords }: WordsType) {
           <SearchBar setOnAnswers={setOnAnswers} words={words} />
         ) : (
           <Visibility
-            sx={{ fontSize: '50px', cursor: 'pointer' }}
+            sx={{
+              fontSize: '50px',
+              cursor: 'pointer',
+              '&:hover': { scale: '1.03' },
+            }}
             onClick={() => {
               setOnAnswers(!onAnswers);
             }}

@@ -1,6 +1,7 @@
 import React, { Dispatch, useEffect, useState } from 'react';
 import { Clear } from '@mui/icons-material';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { SearchModal } from './boardStyle';
 
 type SetOnAnswers = {
@@ -8,22 +9,49 @@ type SetOnAnswers = {
   setOnAnswers: Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SearchInput = styled.input`
-  width: 80%;
+const SearchInput = styled(motion.input)`
+  width: 300px;
+  border-radius: 10px;
+  height: 40px;
+  font-weight: 600;
+  font-size: 30px;
+  border: 3px solid #1d3557;
+  box-sizing: border-box;
 `;
-const WordsBox = styled.div`
-  width: 80%;
+const WordsBox = styled.div<{ props: boolean }>`
+  width: 288px;
+  max-height: 366px;
+  display: ${(props) => (props.props ? 'flex' : 'none')};
+  flex-direction: column;
+  align-items: center;
+  overflow: scroll;
+  background-color: #fff;
+  border: 1px solid #dadada;
+  color: #1d3557;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  border-radius: 0 0 10px 10px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
-const Words = styled.span`
-  font-size: 25px;
+const Words = styled.p`
+  width: 100%;
+  font-size: 30px;
+  padding: 10px 0;
+  margin: 0 auto;
   font-weight: 700;
+  text-align: center;
+  border-bottom: 1px solid #dadada;
 `;
 
 export default function SearchBar({ setOnAnswers, words }: SetOnAnswers) {
   const [question, setQuestion] = useState<string | undefined>('');
-  const [answerList, setAnswerList] = useState(words);
-  function filtering(array: string[], word: string) {
-    return array.filter((e) => e.startsWith(word));
+  const [focus, setFocus] = useState(false);
+
+  function handleFocus() {
+    setFocus(!focus);
   }
   return (
     <SearchModal>
@@ -39,17 +67,24 @@ export default function SearchBar({ setOnAnswers, words }: SetOnAnswers) {
       />
       <SearchInput
         type="text"
+        onFocus={() => {
+          handleFocus();
+        }}
+        onBlur={() => {
+          handleFocus();
+        }}
         onChange={(e) => {
           setQuestion(e.target.value);
         }}
       />
-      <WordsBox>
+      <WordsBox props={focus}>
         {words.length !== 0 && question !== undefined ? (
           words
             .filter((e) => e.startsWith(question))
-            .map((e) => <Words>{e}, </Words>)
+            .reverse()
+            .map((e) => <Words>{e}</Words>)
         ) : (
-          <h2>끝말잇기를 시작해주세요</h2>
+          <Words>정답이 없습니다.</Words>
         )}
       </WordsBox>
     </SearchModal>

@@ -16,14 +16,7 @@ export const SearchModal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 400px;
-  background-color: #e5e5e5;
-  z-index: 10;
-  padding: 30px 50px;
+  position: relative;
   box-sizing: border-box;
 `;
 
