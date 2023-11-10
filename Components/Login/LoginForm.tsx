@@ -7,6 +7,7 @@ import { setCookie } from '@/Components/Login/Cookie';
 import { Button } from '@material-tailwind/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 type IFormInput = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -38,7 +39,12 @@ const LoginForm = () => {
 			setCookie('refreshToken', refreshToken, { path: '/' });
 			router.replace('/users');
 		} else {
-			console.log('유저가 없습니다');
+			Swal.fire({
+				text: '등록된 유저가 없습니다.',
+				showCancelButton: false,
+				confirmButtonText: '확인',
+				confirmButtonColor: '#3085d6',
+			});
 		}
 	};
 

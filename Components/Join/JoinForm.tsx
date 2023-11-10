@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '@material-tailwind/react';
 import { fetchJoin } from '@/app/join/join.utils';
 import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 type RequestBody = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -37,6 +38,12 @@ const JoinForm = () => {
 			router.replace('/login');
 		} else {
 			console.log('이미 존재한 회원 입니다');
+			Swal.fire({
+				text: '이미 존재한 회원입니다.',
+				showCancelButton: false,
+				confirmButtonText: '확인',
+				confirmButtonColor: '#3085d6',
+			});
 		}
 	};
 
