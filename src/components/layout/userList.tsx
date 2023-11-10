@@ -5,8 +5,7 @@ import usePollingData from '../template/usePollingData';
 
 const UserList = () => {
   const [allUsers, setAllUsers] = useRecoilState(allUserState);
-  const accessToken: any = useRecoilValue(accessTokenState);
-
+  const accessToken: any = useRecoilValue(accessTokenState); 
   const fetchData = async () => {
     try {
       const allUsersData = await getAllUsers(accessToken);
