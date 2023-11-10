@@ -156,27 +156,36 @@ function Cropper({ preview, setPreview }: CropperProps) {
         setPreview={setPreview}
         setModalOpen={setModalOpen}
       />
-      <a href="/" onClick={handleInputClick}>
-        <FileUpload className="add-icon" />
-      </a>
-      <Typography variant="body1">이미지 파일을 업로드 해주세요</Typography>
-      <input
-        type="file"
-        accept="image/*"
-        ref={inputRef}
-        onChange={handleImgChange}
-      />
-      <div className="img-container">
-        <img
-          src={
-            preview ||
-            ' https://www.signivis.com/img/custom/avatars/member-avatar-01.png'
-          }
-          alt=""
-          width="200"
-          height="200"
-        />
-      </div>
+      <Box
+        sx={{
+          width: '100%',
+          display: { xs: 'block', sm: 'flex' },
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          textAlign: 'center',
+        }}
+      >
+        <Box sx={{ flex: 1 }}>
+          <div className="img-container">
+            <img src={preview || '/avatar-placeholder.png'} alt="" />
+          </div>
+        </Box>
+        <Box sx={{ flex: 1, marginTop: { xs: '10px', sm: 0 } }}>
+          <a href="/" onClick={handleInputClick} className="fake-upload-btn">
+            <FileUpload className="add-icon" />{' '}
+            <Typography variant="body1">업로드</Typography>
+          </a>
+          <Typography variant="body2">
+            (선택) 이미지 파일을 업로드 해주세요
+          </Typography>
+          <input
+            type="file"
+            accept="image/*"
+            ref={inputRef}
+            onChange={handleImgChange}
+          />
+        </Box>
+      </Box>
     </CropperContainer>
   );
 }

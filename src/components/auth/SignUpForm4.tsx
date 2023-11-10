@@ -52,7 +52,7 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
   const [clickedItem, setClickedItem] = useState(new Set<string>());
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (clickedItem.size > 0 && clickedItem.size <= 5) {
+    if (clickedItem.size < 0 && clickedItem.size >= 5) {
       console.log('1~5개 까지 선택 가능합니다.');
       return;
     }
