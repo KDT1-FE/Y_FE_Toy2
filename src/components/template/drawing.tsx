@@ -1,6 +1,9 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import drawImg from '../../assets/icons/draw.png';
+import eraseImg from '../../assets/icons/eraser.png';
+import trashImg from '../../assets/icons/trash.png';
 
 const Drawing = () => {
   const [isPainting, setIsPainting] = useState(false);
@@ -18,10 +21,10 @@ const Drawing = () => {
     const canvas = canvasRef.current; // 캔버스 Ref
     if (canvas && !contextRef.current) {
       // 최초 마운트 시에만 실행
-      canvas.width = 500;
-      canvas.height = 500;
-      canvas.style.width = '500px';
-      canvas.style.height = '500px';
+      canvas.width = 700;
+      canvas.height = 400;
+      canvas.style.width = '700px';
+      canvas.style.height = '400px';
       canvas.style.backgroundColor = 'white';
 
       // 그리기
@@ -55,7 +58,7 @@ const Drawing = () => {
     const ctx = canvas?.getContext('2d');
 
     ctx!.fillStyle = 'white';
-    ctx!.fillRect(0, 0, 500, 500);
+    ctx!.fillRect(0, 0, 700, 400);
   };
 
   /// 굵기 변경 함수
@@ -69,10 +72,14 @@ const Drawing = () => {
     }
 
     const canvasCurrent: HTMLCanvasElement = canvasRef.current;
+    const rect = canvasCurrent.getBoundingClientRect();
+
+    const scaleX = canvasCurrent.width / rect.width;
+    const scaleY = canvasCurrent.height / rect.height;
 
     return {
-      x: event.pageX - canvasCurrent.offsetLeft,
-      y: event.pageY - canvasCurrent.offsetTop,
+      x: (event.clientX - rect.left) * scaleX,
+      y: (event.clientY - rect.top) * scaleY,
       // offsetLeft는 그리는 영역 left끝에서 그림판이 얼마나 떨어졌냐.. top은 위에서 그림판이 얼마나 떨어졋냐
       // event.pageX/Y는 마우스로 그리는 부분의 좌표.. X는 왼쪽에서 떨어진만큼 빼야하고 Y는 위에서 떨어진 만큼 빼야함.
     };
@@ -122,9 +129,18 @@ const Drawing = () => {
     }
   };
 
+  //
+  const getRangeInputStyle = () => {
+    const gradient_value = 100 / 10;
+    const backgroundSize = gradient_value * lineWidth;
+    return {
+      background: `linear-gradient(to right, #FFE283 0%, #FFE283 ${backgroundSize}%, rgb(236, 236, 236) ${backgroundSize}%, rgb(236, 236, 236) 100%)`,
+    };
+  };
+
   /// JSX
   return (
-    <>
+    <DrawingBox>
       <DrawingCanvas>
         <canvas
           ref={canvasRef}
@@ -134,37 +150,105 @@ const Drawing = () => {
           onMouseLeave={exitPaint}
           className="canvas"
         />
+        <DrawingTools>
+          <ToolImage src={drawImg} alt="Draw" />
+
+          <ColorButton
+            color="red"
+            onClick={() => changeColor('red')}></ColorButton>
+          <ColorButton
+            color="yellow"
+            onClick={() => changeColor('yellow')}></ColorButton>
+          <ColorButton
+            color="green"
+            onClick={() => changeColor('green')}></ColorButton>
+          <ColorButton
+            color="blue"
+            onClick={() => changeColor('blue')}></ColorButton>
+          <ColorButton
+            color="purple"
+            onClick={() => changeColor('purple')}></ColorButton>
+          <ColorButton
+            color="black"
+            onClick={() => changeColor('black')}></ColorButton>
+          <button onClick={() => changeColor('white')}>
+            <ToolImage src={eraseImg} alt="Erase" />
+          </button>
+
+          <button onClick={() => EraseAll()}>
+            <ToolImage src={trashImg} alt="EraseAll" />
+          </button>
+
+          <RangeInput
+            onChange={(e) => setLineWidth(Number(e.target.value))}
+            type="range"
+            min="1"
+            max="10"
+            step="0.1"
+            value={lineWidth}
+            style={getRangeInputStyle()}></RangeInput>
+        </DrawingTools>
       </DrawingCanvas>
-      <div>
-        <button onClick={() => changeColor('red')}>Red</button>
-        <button onClick={() => changeColor('yellow')}>Yellow</button>
-        <button onClick={() => changeColor('green')}>Green</button>
-        <button onClick={() => changeColor('blue')}>blue</button>
-        <button onClick={() => changeColor('purple')}>purple</button>
-        <button onClick={() => changeColor('black')}>Black</button>
-        <button onClick={() => changeColor('white')}>Erase</button>
-
-        <button onClick={() => EraseAll()}>EraseAll</button>
-
-        <input
-          onChange={(e) => setLineWidth(Number(e.target.value))}
-          type="range"
-          min="2"
-          max="6"
-          step="0.1"
-          value={lineWidth}
-        />
-      </div>
-    </>
+    </DrawingBox>
   );
   // addEventListener를 포함한 useEffect를 제거하고 이렇게 간략화했습니다
 };
 
+const DrawingBox = styled.div``;
+
 const DrawingCanvas = styled.div`
+  width: 700px;
+  height: 400px;
+  position: relative;
   .canvas {
-    border: 1px solid black;
+    border: 2px solid #4fd1c5;
     margin: 0 auto;
+    border-radius: 5px;
   }
+`;
+
+const DrawingTools = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  border-radius: 0 0 5px 5px;
+  background-color: #4fd1c5;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 25px;
+`;
+
+const ColorButton = styled.button`
+  width: 40px;
+  height: 40px;
+  background-color: ${(props) => props.color || 'transparent'};
+  border-radius: 50%;
+  border: 3px solid #fff;
+  margin-left: -10px;
+  color: #fff;
+  font-size: 12px;
+`;
+
+const ToolImage = styled.img`
+  width: 40px;
+  height: auto;
+`;
+
+const RangeInput = styled.input`
+  background: linear-gradient(
+    to right,
+    #ffe283 0%,
+    #ffe283 50%,
+    #ececec 50%,
+    #ececec 100%
+  );
+  border-radius: 8px;
+  outline: none;
+  transition: background 450ms ease-in;
+  -webkit-appearance: none;
+  accent-color: #ffca1d;
 `;
 
 export default Drawing;
