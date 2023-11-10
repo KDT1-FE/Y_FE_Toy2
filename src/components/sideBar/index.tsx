@@ -1,31 +1,28 @@
 import React, { useState } from 'react';
 import { Box, Text, Divider, Heading } from '@chakra-ui/react';
 import { AddIcon, EditIcon, ChatIcon } from '@chakra-ui/icons';
-import UserInviteModal from '../modal/UserInviteModal';
-import Chats from '../../utils/api';
+import UserInviteModal from './modal/UserInviteModal';
 import { useQuery } from '@tanstack/react-query';
-import MyChatListItem from './myChatListItem';
-import axiosInstance from '../../utils/axiosInstance';
-import { ResponseValue } from './myChats.types';
+import MyChannelItem from './MyChannelItem';
+import instance from '../../api/axios';
+import { ResponseValue } from '../../@types/chat';
 
-const fetchChats = async (): Promise<ResponseValue> => {
-  const response = await axiosInstance.get('/chat');
+const fetchChannels = async () => {
+  const response = await instance.get('/chat');
   const data: { chats: ResponseValue } = await response.data;
 
   return data.chats;
 };
 
 const SideBar = () => {
-  const [myChats, setMyChats] = useState(['코테', '면접', '운동', '공부']);
-
   // 내 대화목록 조회
   const {
-    data: chats,
+    data: channels,
     isLoading,
     isError,
-  } = useQuery<ResponseValue>({
-    queryKey: ['chats'],
-    queryFn: () => fetchChats(),
+  } = useQuery({
+    queryKey: ['channels'],
+    queryFn: () => fetchChannels(),
   });
 
   if (isLoading) {
@@ -33,14 +30,14 @@ const SideBar = () => {
   }
 
   if (isError) {
-    return <p>Error fetching chats</p>;
+    console.error();
   }
 
-  console.log('내챗/챗 데이터', chats);
+  console.log('내챗/챗 데이터', channels);
 
   return (
     <Box w="18rem" h="100vh" bg="gray.50" color="black" p="10px" boxShadow="xl">
-      <Text fontSize="4xl" fontWeight="extrabold" mb={6}>
+      <Text fontSize="4xl" fontWeight="extrabold" mb="6px">
         로고자리
       </Text>
       <Box color="#828C98">
@@ -63,12 +60,14 @@ const SideBar = () => {
       <Box>
         <Heading mb={6}>나의 채팅방</Heading>
         <Box>
-          {chats &&
-            chats.map((chat) => (
-              <MyChatListItem key={chat.id} chatName={chat.name} />
-            ))}
+          {channels ? (
+            channels.map((channel) => (
+              <MyChannelItem key={channel.id} myChannelName={channel.name} />
+            ))
+          ) : (
+            <Box>내가 속한 채팅방이 없습니다.</Box>
+          )}
         </Box>
-        <Chats />
         <UserInviteModal />
       </Box>
     </Box>

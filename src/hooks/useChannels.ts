@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Chat } from '../components/cardContainer/card.types';
+import { Chat } from '../@types/chat';
 
 const useChannels = () => {
   return useQuery<Chat[]>({
