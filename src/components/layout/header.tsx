@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { titleAction } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
