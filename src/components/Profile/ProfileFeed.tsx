@@ -35,17 +35,40 @@ const ProfileFeedEditImage = styled.div`
 
   cursor: pointer;
 `;
-function ProfileFeed() {
+interface usertData {
+  id: string;
+  ProfileImgUrl: string;
+  BackgroundImgUrl: string;
+  introText: string;
+  hobby: string[];
+}
+interface feed {
+  id: string;
+  feedId: string;
+  feedImageUrl: string;
+  contentText: string;
+  likes: number;
+  timeStamp: string;
+}
+interface feedData {
+  [key: string]: feed;
+}
+function ProfileFeed(props: { feedData: feedData | null }) {
   return (
     <ProfileFeedContainer>
       <ProfileFeedImageWrap>
-        <ProfileFeedImage></ProfileFeedImage>
-        <ProfileFeedImage></ProfileFeedImage>
-        <ProfileFeedImage></ProfileFeedImage>
-        <ProfileFeedImage></ProfileFeedImage>
-        <ProfileFeedImage></ProfileFeedImage>
-        <ProfileFeedImage></ProfileFeedImage>
-        <ProfileFeedImage></ProfileFeedImage>
+        {props.feedData
+          ? Object.values(props.feedData).map((feed, index) => (
+              <ProfileFeedImage
+                key={index}
+                style={{
+                  backgroundImage: `url(${feed.feedImageUrl})`
+                }}
+              />
+            ))
+          : null}
+
+        {/* 자기 프로필일 경우에만 보이게 해야함. */}
         <ProfileFeedEditImage>
           <BsPlusCircle color="#BEBEBE" size="50"></BsPlusCircle>
         </ProfileFeedEditImage>

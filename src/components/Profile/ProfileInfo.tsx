@@ -71,13 +71,25 @@ const Tag = styled.span`
 
   font-size: 12px;
   color: #464646;
-`;
 
-function ProfileInfo() {
+  margin-right: 10px;
+`;
+interface usertData {
+  id: string;
+  ProfileImgUrl: string;
+  BackgroundImgUrl: string;
+  introText: string;
+  hobby: string[];
+}
+
+function ProfileInfo(props: { userData: usertData | null }) {
   return (
     <ProfileInfoWrap>
       <ProfileInfoImgWrap>
-        <ProfileInfoImg>
+        <ProfileInfoImg
+          style={{ backgroundImage: `url(${props.userData?.ProfileImgUrl})` }}
+        >
+          {/* 자기 프로필 일경우에만 보여야함. */}
           <ProfileInfoEditBtn>
             <BsPencilFill color="#BEBEBE" />
           </ProfileInfoEditBtn>
@@ -85,17 +97,18 @@ function ProfileInfo() {
       </ProfileInfoImgWrap>
       <ProfileInfoContents>
         <ProfileInfoUserNameWrap>
-          <span>user.name</span>
+          <span>{props.userData?.id}</span>
         </ProfileInfoUserNameWrap>
         <ProfileInfoUserIntroWrap>
-          <span>user.introText</span>
+          <span>{props.userData?.introText}</span>
         </ProfileInfoUserIntroWrap>
         <ProfileInfoUserTagsWrap>
-          <Tag>전시</Tag>
+          {props.userData?.hobby.map((tagData, index) => (
+            <Tag key={index}>{tagData}</Tag>
+          ))}
         </ProfileInfoUserTagsWrap>
       </ProfileInfoContents>
     </ProfileInfoWrap>
   );
 }
-
 export default ProfileInfo;

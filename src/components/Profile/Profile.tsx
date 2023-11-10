@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import ProfileInfo from "./ProfileInfo";
 import ProfileFeed from "./ProfileFeed";
+import { doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import { useState, useEffect } from "react";
+import { getStorage, ref, getMetadata, getDownloadURL } from "firebase/storage";
 
 const ProfileContainer = styled.div`
   width: 100%;
@@ -18,23 +22,7 @@ const ProfileHeaderImg = styled.div`
   background-position: center;
   background-repeat: no-repeat;
 `;
-const ProfileHeaderImgEditBtn = styled.button`
-  width: 154px;
-  height: 36px;
 
-  position: absolute;
-  right: 43px;
-  bottom: 32px;
-
-  color: #c7c7c7;
-  background-color: #fff;
-
-  border: 1px solid #c7c7c7;
-  border-radius: 30px;
-
-  padding: 9px 33px;
-  cursor: pointer;
-`;
 const ProfileBodyContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,13 +33,137 @@ const ProfileBodyContainer = styled.div`
   padding-bottom: 190px;
 `;
 
+interface usertData {
+  id: string;
+  ProfileImgUrl: string;
+  BackgroundImgUrl: string;
+  introText: string;
+  hobby: string[];
+}
+interface feed {
+  id: string;
+  feedId: string;
+  feedImageUrl: string;
+  contentText: string;
+  likes: number;
+  timeStamp: string;
+}
+interface feedData {
+  [key: string]: feed;
+}
+function useUserData() {
+  const [userData, setUserData] = useState<usertData | null>(null);
+  const [feedData, setFeedData] = useState<feedData | null>(null);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      const docRef = doc(db, "Users", "test1");
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const userData: usertData = {
+          id: docSnap.data().id,
+          ProfileImgUrl: docSnap.data().ProfileImg,
+          BackgroundImgUrl: docSnap.data().BackgroundImg,
+          introText: docSnap.data().introText,
+          hobby: docSnap.data().hobby
+        };
+
+        setUserData(userData);
+      } else {
+        setUserData(null);
+      }
+    }
+
+    async function fetchFeedData() {
+      const docRef = doc(db, "Feeds", "test1");
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setFeedData(docSnap.data());
+      } else {
+        setFeedData(null);
+      }
+    }
+
+    fetchUserData();
+    fetchFeedData();
+  }, []);
+
+  return { userData, feedData };
+}
+
 function Profile() {
+  // const user = {
+  //   id: "test1",
+  //   ProfileImg:
+  //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286",
+  //   BackgroundImg:
+  //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286",
+  //   introText: "반갑습니다.",
+  //   hobby: ["취미", "축구", "밥"]
+  // };
+
+  // const cityRef = doc(db, "Users", user.id);
+
+  // setDoc(cityRef, user, { merge: true });
+
+  // const Feed = {
+  //   id: "test1",
+  //   feedId: "1",
+  //   feedImageUrl:
+  //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286",
+  //   contentText: "사진",
+  //   likes: 0,
+  //   timeStamp: "231109"
+  // };
+  // const cityRef = doc(db, "Feeds", user.id);
+
+  // updateDoc(cityRef, {
+  //   [`${Feed.feedId}`]: Feed
+  // });
+
+  // async function someFunction() {
+  //   const docRef = doc(db, "Users", "test1");
+  //   const docSnap = await getDoc(docRef);
+
+  //   if (docSnap.exists()) {
+  //     console.log("Document data:", docSnap.data());
+  //   } else {
+  //     console.log("No such document!");
+  //   }
+  // }
+  // someFunction();
+  const [imageURL, setImageURL] = useState("");
+
+  const { userData, feedData } = useUserData();
+
+  // useEffect(() => {
+  //   if (userData) {
+  //     const storage = getStorage();
+  //     const imageRef = ref(storage, "Users/default.jpg");
+
+  //     getDownloadURL(imageRef)
+  //       .then((url) => {
+  //         console.log("Image URL:", url);
+  //         setImageURL(url);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error getting download URL:", error);
+  //       });
+
+  //     setImageURL(userData.BackgroundImgUrl);
+  //   }
+  // }, [userData]);
   return (
     <ProfileContainer>
-      <ProfileHeaderImg></ProfileHeaderImg>
+      <ProfileHeaderImg
+        style={{ backgroundImage: `url(${userData?.BackgroundImgUrl})` }}
+      ></ProfileHeaderImg>
+
       <ProfileBodyContainer>
-        <ProfileInfo></ProfileInfo>
-        <ProfileFeed></ProfileFeed>
+        <ProfileInfo userData={userData}></ProfileInfo>
+        <ProfileFeed feedData={feedData}></ProfileFeed>
       </ProfileBodyContainer>
     </ProfileContainer>
   );
