@@ -8,6 +8,6 @@ export interface Chat {
   name: string;
   users: User[]; // 속한 유저 정보
   isPrivate: boolean;
-  latestMessage: Message | null;
+  latestMessage?: Message | null;
   updatedAt: Date;
 }

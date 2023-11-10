@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, Divider, Heading } from '@chakra-ui/react';
 import { AddIcon, EditIcon, ChatIcon } from '@chakra-ui/icons';
 import UserInviteModal from './modal/UserInviteModal';
@@ -8,7 +8,9 @@ import { useMyChannels } from '../../hooks/useMyChannels';
 const SideBar = () => {
   const channels = useMyChannels();
 
-  console.log('내챗/챗 데이터', channels);
+  useEffect(() => {
+    console.log('내챗/챗 데이터', channels);
+  }, []);
 
   return (
     <Box w="18rem" h="100vh" bg="gray.50" color="black" p="10px" boxShadow="xl">
