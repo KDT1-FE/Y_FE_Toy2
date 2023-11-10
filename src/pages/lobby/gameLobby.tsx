@@ -9,7 +9,8 @@ import OfflineUserList from '../../components/layout/offlineUserList';
 import OnlineUserList from '../../components/layout/onlineUserList';
 import UserList from '../../components/layout/userList';
 import UserLogout from '../login/userLogout';
-
+import { useState } from 'react';
+import { getUsers } from '../../api';
 
 const GameLobby = () => {
   const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
