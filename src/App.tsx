@@ -5,6 +5,7 @@ import Layout from './components/common/Layout';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import AuthLayout from './components/common/AuthLayout';
+import Openchat from './pages/Openchat';
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
         <Route path="/home" />
         {/* 홍규님 부분 */}
         <Route path="/chat" />
+        {/* 오픈 채팅 부분 */}
+        <Route path="/open" element={<Openchat />} />
       </Route>
       <Route element={<AuthLayout />}>
         {/* 성겸 부분 */}
