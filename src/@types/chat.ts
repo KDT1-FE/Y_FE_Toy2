@@ -1,4 +1,4 @@
-import { Message } from './message';
+import { MessageData } from './message';
 import { User } from './user';
 
 export type ResponseValue = Channel[];
@@ -8,6 +8,6 @@ export interface Channel {
   name: string;
   users: User[]; // 속한 유저 정보
   isPrivate: boolean;
-  latestMessage: Message | null;
+  latestMessageData: MessageData | null;
   updatedAt: Date;
 }
