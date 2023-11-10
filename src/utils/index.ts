@@ -1,2 +1,1 @@
-export * from './splitChatName';
-export * from './createChatNameWithCategory';
+export * from './channelName';
