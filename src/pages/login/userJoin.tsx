@@ -162,32 +162,33 @@ const UserJoin = () => {
           <label
             htmlFor="picture"
             style={{ cursor: 'pointer', position: 'relative' }}>
-            {filePreviewUrl ? (
-              <Img
-                src={filePreviewUrl}
-                position="relative"
-                bottom={15}
-                margin={'auto'}
-                alt="File preview"
-                width={150}
-                height={150}
-                backgroundColor={'#f8fafc'}
-                borderRadius={10}
-                style={{
-                  border: '2px solid #E2E8F0', // 인라인 스타일로 테두리 적용
-                }}
-              />
-            ) : (
-              <Img
-                src="/assets/inputImg.svg"
-                position="relative"
-                bottom={15}
-                margin={'auto'}
-                alt="inputImg"
-                width={150}
-                height={150}
-              />
-            )}
+            <Box
+              width={150}
+              height={150}
+              backgroundColor={'#f8fafc'}
+              borderRadius={10}
+              overflow="hidden"
+              margin={'auto'}>
+              {filePreviewUrl ? (
+                <Img
+                  src={filePreviewUrl}
+                  alt="File preview"
+                  width="100%"
+                  height="100%"
+                  objectFit="cover"
+                  style={{
+                    border: '2px solid #E2E8F0',
+                  }}
+                />
+              ) : (
+                <Img
+                  src="/assets/inputImg.svg"
+                  alt="inputImg"
+                  width="100%"
+                  height="100%"
+                />
+              )}
+            </Box>
             <Input
               id="picture"
               accept="image/*"
@@ -196,9 +197,11 @@ const UserJoin = () => {
               onChange={handleImgUploader}
             />
           </label>
+
           <FormControl
             isRequired
             isInvalid={isError.id}
+            marginTop={3}
             marginBottom={5}
             marginLeft={7}
             width={250}>
