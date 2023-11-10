@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useDarkMode } from "../hooks/useDarkMode";
+import { useContext } from "react";
+import { AuthContext } from "../hooks/useAuth";
+import Logout from "./Logout";
+
 
 interface MenuListItem {
   key: number;
@@ -14,6 +18,7 @@ const Header = () => {
     toggleMode();
     window.localStorage.setItem("isDarkMode", isDarkMode.toString());
   };
+  const { accessToken } = useContext(AuthContext)
 
   const menuList: MenuListItem[] = [
     {
@@ -44,8 +49,8 @@ const Header = () => {
       </SubMenu>
       <UserBar>
         <UserInfo>
-          <StyledLink to={"#"}>로그인</StyledLink> |{" "}
-          <StyledLink to={"#"}>회원가입</StyledLink>
+          {accessToken ? <Logout></Logout> : <><StyledLink to={"login"}>로그인</StyledLink> |{" "}
+          <StyledLink to={"signup"}>회원가입</StyledLink></> }
         </UserInfo>
         <ThemeToggle isDarkMode={isDarkMode}>
           <input

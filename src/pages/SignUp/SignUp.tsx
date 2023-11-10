@@ -22,6 +22,8 @@ const SignUpContainer = styled.div`
   border: 1px solid #ccc;
   padding: 50px 30px;
   margin-top: 20vh;
+  box-shadow: rgba(0, 0, 0, 0.15) 1px 1px 2px;
+  background-color: #fff;
 `;
 
 const Title = styled.h2`
