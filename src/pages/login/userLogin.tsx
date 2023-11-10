@@ -172,9 +172,12 @@ function UserLogin() {
             type="submit"
             size="lg"
             color="white"
-            bg="#4FD1C5"
+            bg={'#9AEBE0'}
+            _hover={{
+              bg: '#4FD1C5',
+            }}
             _disabled={{
-              bg: '#9AEBE0',
+              bg: '#CBD5E0',
             }}
             isDisabled={!id || !password}>
             로그인

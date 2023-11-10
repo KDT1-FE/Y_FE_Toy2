@@ -12,6 +12,11 @@ import {
   Img,
   Link,
   Box,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  CloseButton,
 } from '@chakra-ui/react';
 import { ValidationInput, FormData } from '../../interfaces/interface';
 
@@ -43,6 +48,14 @@ const UserJoin = () => {
   });
 
   const [filePreviewUrl, setFilePreviewUrl] = useState('');
+
+  const [showAlert, setShowAlert] = useState({
+    active: false,
+    message: '',
+    type: '',
+  });
+
+  const [isHovering, setIsHovering] = useState(false);
 
   const validateField = ({
     fieldName,
@@ -112,11 +125,16 @@ const UserJoin = () => {
       alert('회원가입에 성공했습니다.');
       navigate('/');
     } catch (e: any) {
+      let errorMessage = '';
+      let errorType = '';
       if (e.message === 'Request failed with status code 401') {
-        alert('중복된 아이디가 있습니다.');
+        errorMessage = '이미 가입된 아이디입니다.';
+        errorType = 'id';
       } else {
-        alert('회원가입에 실패했습니다');
+        errorMessage = `회원가입에 실패했습니다. 오류코드: ${e.message}`;
+        errorType = 'general';
       }
+      setShowAlert({ active: true, message: errorMessage, type: errorType });
     }
   };
 
@@ -168,25 +186,44 @@ const UserJoin = () => {
               backgroundColor={'#f8fafc'}
               borderRadius={10}
               overflow="hidden"
-              margin={'auto'}>
-              {filePreviewUrl ? (
-                <Img
-                  src={filePreviewUrl}
-                  alt="File preview"
-                  width="100%"
-                  height="100%"
-                  objectFit="cover"
-                  style={{
-                    border: '2px solid #E2E8F0',
-                  }}
-                />
-              ) : (
-                <Img
-                  src="/assets/inputImg.svg"
-                  alt="inputImg"
-                  width="100%"
-                  height="100%"
-                />
+              margin={'auto'}
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}>
+              <Img
+                src={filePreviewUrl || '/assets/inputImg.svg'}
+                alt="File preview"
+                width="100%"
+                height="100%"
+                borderRadius={10}
+                objectFit="cover"
+                style={
+                  filePreviewUrl
+                    ? {
+                        border: '2px solid #E2E8F0',
+                      }
+                    : {}
+                }
+              />
+              {isHovering && filePreviewUrl && (
+                <Box
+                  position="absolute"
+                  top="50%" // 상단에서부터 50% 위치
+                  left="50%" // 좌측에서부터 50% 위치
+                  transform="translate(-50%, -50%)" // 자신의 크기의 절반만큼 이동
+                  width={150}
+                  height={150}
+                  backgroundColor="rgba(0, 0, 0, 0.5)" // 불투명한 배경
+                  borderRadius={10}
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center">
+                  <Img
+                    src="public/assets/trashBin.svg" // 쓰레기통 이미지 경로
+                    alt="Delete"
+                    width="24px"
+                    height="24px"
+                  />
+                </Box>
               )}
             </Box>
             <Input
@@ -209,7 +246,11 @@ const UserJoin = () => {
             <Input
               placeholder="알파벳만 가능합니다"
               _placeholder={{ fontSize: 'sm' }}
-              borderColor="gray.400"
+              borderColor={
+                showAlert.active && showAlert.type === 'id'
+                  ? 'red.500'
+                  : 'gray.200'
+              }
               type="text"
               autoComplete="off"
               value={formData.id}
@@ -228,7 +269,11 @@ const UserJoin = () => {
             <Input
               placeholder="2자이상 20자 이하로 입력해주세요"
               _placeholder={{ fontSize: 'sm' }}
-              borderColor="gray.400"
+              borderColor={
+                showAlert.active && showAlert.type === 'name'
+                  ? 'red.500'
+                  : 'gray.200'
+              }
               type="text"
               autoComplete="off"
               value={formData.name}
@@ -251,7 +296,11 @@ const UserJoin = () => {
             <Input
               placeholder="5자 이상 입력해주세요"
               _placeholder={{ fontSize: 'sm' }}
-              borderColor="gray.400"
+              borderColor={
+                showAlert.active && showAlert.type === 'password'
+                  ? 'red.500'
+                  : 'gray.200'
+              }
               type="password"
               autoComplete="new-password"
               value={formData.password}
@@ -274,7 +323,11 @@ const UserJoin = () => {
             <Input
               placeholder="5자 이상 입력해주세요"
               _placeholder={{ fontSize: 'sm' }}
-              borderColor="gray.400"
+              borderColor={
+                showAlert.active && showAlert.type === 'confirmPassword'
+                  ? 'red.500'
+                  : 'gray.200'
+              }
               type="password"
               autoComplete="new-password"
               value={formData.confirmPassword}
@@ -291,10 +344,13 @@ const UserJoin = () => {
             type="submit"
             size="lg"
             isDisabled={!isFormValid()}
-            bg="#4FD1C5"
             color="white"
+            bg={'#9AEBE0'}
+            _hover={{
+              bg: '#4FD1C5',
+            }}
             _disabled={{
-              bg: '#9AEBE0',
+              bg: '#CBD5E0',
             }}>
             가입하기
           </Button>
@@ -311,6 +367,21 @@ const UserJoin = () => {
           </Link>
         </Flex>
       </Center>
+      {showAlert.active && (
+        <Alert status="error" marginBottom={4} width={400} height={500}>
+          <AlertIcon />
+          <AlertTitle mr={2}>로그인 오류</AlertTitle>
+          <AlertDescription>{showAlert.message}</AlertDescription>
+          <CloseButton
+            position="absolute"
+            right="8px"
+            top="8px"
+            onClick={() =>
+              setShowAlert({ active: false, message: '', type: '' })
+            }
+          />
+        </Alert>
+      )}
     </Flex>
   );
 };
