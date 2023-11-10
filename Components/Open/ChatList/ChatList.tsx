@@ -13,8 +13,8 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 		queryKey: ['myChatList'],
 		queryFn: () => fetchAllChat(process.env.NEXT_PUBLIC_ACCESS_TOKEN as string),
 		initialData: myChatList,
-		staleTime: 1000 * 1,
-		refetchInterval: 1000 * 5,
+		staleTime: 1000 * 60,
+		refetchInterval: 1000 * 120,
 	});
 	const filteredChatList = filterChat(chatList.chats);
 	return (
