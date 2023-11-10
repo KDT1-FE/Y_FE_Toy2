@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
 
 const Toast = styled.div`
-  border-radius: 16px;
+  border-radius: 0.5rem;
 
   display: flex;
   justify-content: center;
@@ -14,7 +14,8 @@ const Toast = styled.div`
   top: 2rem;
   left: 2rem;
 
-  background: #cdcdcd;
+  background-color: rgba(20, 20, 20, 0.8);
+  color: #fff;
 
   width: 400px;
   height: 150px;
@@ -91,6 +92,10 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast }) => {
         <Button
           marginRight="2rem"
           width="50%"
+          variant="outline"
+          borderColor="#eee"
+          color="#eee"
+          colorScheme="whiteAlpha"
           onClick={() => {
             live.refresh();
             setToast(false);
@@ -101,6 +106,10 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast }) => {
         <Button
           marginRight="2rem"
           width="50%"
+          variant="outline"
+          borderColor="#eee"
+          color="#eee"
+          colorScheme="whiteAlpha"
           onClick={() => {
             navigate(`/game?gameId=${roomData.id}`);
           }}

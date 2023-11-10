@@ -19,12 +19,18 @@ const Profile = styled.div`
   }
 `;
 
-const ImageWrap = styled.div`
+const ImageWrap = styled.div<{ $bg?: string }>`
   border-radius: 50%;
 
   width: 30px;
+  height: 30px;
 
   overflow: hidden;
+
+  background-image: url(${(props) => props.$bg});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 
   margin-right: 1rem;
 `;
@@ -63,9 +69,7 @@ const UserCard = ({ id, name, picture, roomData, setRoomData }: Props) => {
 
   return (
     <Profile>
-      <ImageWrap>
-        <img src={picture} alt="profile" />
-      </ImageWrap>
+      <ImageWrap $bg={picture}></ImageWrap>
       <span>{name}</span>
       <Empty />
       {status ? (

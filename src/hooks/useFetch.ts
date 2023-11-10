@@ -62,7 +62,6 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
         });
 
         setCode(response.status);
-
         setResult(response.data);
       } catch (error) {
         setError(error);
@@ -88,8 +87,8 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
         const response = await axios.patch(url, data, {
           headers: headers,
         });
-        setCode(response.status);
 
+        setCode(response.status);
         setResult(response.data);
       } catch (error) {
         setError(error);
