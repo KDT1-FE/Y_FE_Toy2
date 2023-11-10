@@ -9,6 +9,7 @@ const Header = () => {
   const checkLocation = () => {
     titleAction(navigate);
   };
+
   return (
     <Container>
       <Title onClick={checkLocation}>FastMind</Title>
@@ -50,7 +51,6 @@ const ChatContainer = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 6px;
-  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
