@@ -1,20 +1,18 @@
 'use client';
 
-import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { AiOutlineCamera } from 'react-icons/ai';
+import React, { ChangeEvent, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
-
-// axios
 import { instance } from '@/lib/api';
+import { ValidationResult, isValidForm, isDuplicatedId } from './Validation';
+import styled from 'styled-components';
+import { AiOutlineCamera } from 'react-icons/ai';
 
 interface RequestBody {
-    id: string; // 사용자 아이디 (필수!, 영어만)
-    password: string; // 사용자 비밀번호, 5자 이상 (필수!)
-    name: string; // 사용자 이름, 20자 이하 (필수!)
-    picture?: string; // 사용자 이미지(url)
+    id: string;
+    password: string;
+    name: string;
+    picture?: string;
 }
 
 const RegisterForm = () => {
@@ -24,9 +22,17 @@ const RegisterForm = () => {
         name: '',
         picture: '',
     });
+    const [validationResult, setValidationResult] = useState<ValidationResult>({
+        isIdValid: false,
+        isNameValid: false,
+        isPwValid: false,
+    });
+    const [duplicated, setDuplicated] = useState<boolean>(false); // 아이디 중복 여부 응답값
+    const [duplicatedState, setDuplicatedState] = useState<boolean>(false); // 버튼 클릭 여부
+    const [duplicatedId, setDuplicatedId] = useState<string>(''); // 아이디 중복 확인 후 수정시 재확인
     const [image, setImage] = useState<string>('');
-    const router = useRouter();
     const imageRef = useRef<HTMLInputElement | null>(null);
+    const router = useRouter();
 
     const onChangeProfile = () => {
         if (imageRef.current) {
@@ -43,19 +49,51 @@ const RegisterForm = () => {
         }
     };
 
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeField = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
+
+    const onClickDuplicated = async (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const isDuplicated = await isDuplicatedId(formData.id);
+
+        setDuplicated(isDuplicated);
+
+        if (isDuplicated) {
+            setDuplicatedState(false);
+            setValidationResult((prevResult) => ({
+                ...prevResult,
+                isIdValid: !isDuplicated,
+            }));
+        } else {
+            setDuplicatedState(true);
+            setDuplicatedId(formData.id);
+        }
+    };
+
+    useEffect(() => {
+        const currentResult = isValidForm(formData);
+        setValidationResult(currentResult);
+    }, [formData, duplicatedState]);
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        try {
-            await instance.post('/signup', formData);
-            console.log(formData);
-            router.push('/login');
-        } catch (e) {
-            console.error(e);
+        if (duplicatedId !== formData.id) {
+            setDuplicatedState(false);
+            alert('아이디 중복 확인을 해주세요.');
+        } else {
+            if (validationResult.isTotalValid && !duplicated) {
+                try {
+                    await instance.post('/signup', formData);
+                    router.push('/login');
+                } catch (e) {
+                    console.error(e);
+                }
+            }
         }
     };
 
@@ -69,11 +107,9 @@ const RegisterForm = () => {
             <StyledForm onSubmit={onSubmit}>
                 <StyledProfile>
                     <img src={image ? image : `/defaultProfile.jpg`} alt="profile-image" />
-
                     <StyledLabel htmlFor="file">
                         <StyledAiOutlineCamera />
                     </StyledLabel>
-
                     <input
                         type="file"
                         name="file"
@@ -84,33 +120,73 @@ const RegisterForm = () => {
                     />
                 </StyledProfile>
                 <div>
-                    <label htmlFor="name">이름</label>
-                    <input type="text" name="name" placeholder="이름은 20자 이하만 가능합니다." onChange={onChange} />
-                </div>
-                <div>
-                    <label htmlFor="id">
-                        <span>아이디</span>
-                        <button className="checkButton">중복 확인</button>
+                    <label htmlFor="name">
+                        <span>이름</span>
+                        {validationResult.isNameValid ? (
+                            <IsValidSpan style={{ color: '#00956e' }}>* 사용할 수 있는 이름입니다.</IsValidSpan>
+                        ) : (
+                            <IsValidSpan>* 사용할 수 없는 이름입니다.</IsValidSpan>
+                        )}
                     </label>
-
-                    <input type="text" name="id" placeholder="아이디는 영어만 가능합니다." onChange={onChange} />
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="이름은 20자 이하만 가능합니다."
+                        onChange={onChangeField}
+                    />
                 </div>
                 <div>
-                    <label htmlFor="password">비밀번호</label>
+                    <label htmlFor="id" className="labelId">
+                        <span>아이디</span>
+                        {!validationResult?.isIdValid ? (
+                            <IsValidSpan>* 사용할 수 없는 아이디입니다.</IsValidSpan>
+                        ) : validationResult.isIdValid && duplicatedState === false ? (
+                            <IsValidSpan style={{ color: '#00956e' }}>
+                                * 사용할 수 있는 아이디입니다. 중복을 확인해주세요.
+                            </IsValidSpan>
+                        ) : (
+                            <IsValidSpan style={{ color: '#00956e' }}>* 가입할 수 있는 아이디입니다.</IsValidSpan>
+                        )}
+                        <button className="checkButton" onClick={onClickDuplicated}>
+                            중복 확인
+                        </button>
+                    </label>
+                    <input
+                        type="text"
+                        name="id"
+                        placeholder="아이디는 영어와 숫자 조합만 가능합니다."
+                        onChange={onChangeField}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="password">
+                        <span>비밀번호</span>
+                        {validationResult?.isPwValid ? (
+                            <IsValidSpan style={{ color: '#00956e' }}>* 사용할 수 있는 비밀번호입니다.</IsValidSpan>
+                        ) : (
+                            <IsValidSpan>* 사용할 수 없는 비밀번호입니다.</IsValidSpan>
+                        )}
+                    </label>
                     <input
                         type="password"
                         name="password"
                         placeholder="비밀번호는 5자 이상만 가능합니다."
-                        onChange={onChange}
+                        onChange={onChangeField}
                     />
                 </div>
                 <div>
-                    <button type="submit" className="submitButton">
-                        회원가입
-                    </button>
+                    {validationResult.isTotalValid && duplicatedState ? (
+                        <button type="submit" className="submitFullButton">
+                            회원가입
+                        </button>
+                    ) : (
+                        <button disabled className="submitEmptyButton">
+                            회원가입
+                        </button>
+                    )}
                 </div>
                 <StyledLink href="/login" className="anchor">
-                    이미 아이디가 있으신가요? 로그인하기
+                    <span> 이미 아이디가 있으신가요? 로그인하기</span>
                 </StyledLink>
             </StyledForm>
         </StyledContainer>
@@ -137,9 +213,8 @@ const StyledProfile = styled.div`
     img {
         width: 210px;
         height: 210px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1.25px dotted #00956e;
         border-radius: 50%;
-        padding: 5px;
     }
 `;
 const StyledAiOutlineCamera = styled(AiOutlineCamera)`
@@ -199,11 +274,20 @@ const StyledForm = styled.form`
             display: flex;
             align-items: center;
         }
+        .labelId {
+            position: relative;
+            margin-bottom: 0.55rem;
+        }
 
         input {
-            border: 0.1px solid rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4.5px;
             padding: 0.9rem;
             width: 100%;
+            outline: none;
+            &:focus {
+                border: 1px solid #00956e;
+            }
         }
 
         input[type='file'] {
@@ -224,13 +308,15 @@ const StyledForm = styled.form`
         }
 
         button.checkButton {
+            position: absolute;
+            right: 0;
             border: none;
             border-radius: 4.5px;
             background-color: #00956e;
             color: #eee;
             font-weight: 600;
-            font-size: 0.65rem;
-            padding: 0.2rem 0.3rem;
+            font-size: 0.75rem;
+            padding: 0.4rem 0.5rem;
             cursor: pointer;
             &:hover {
                 transition: all 0.3s;
@@ -238,7 +324,7 @@ const StyledForm = styled.form`
             }
         }
 
-        button.submitButton {
+        button.submitFullButton {
             margin-top: 1rem;
             border: none;
             border-radius: 4.5px;
@@ -254,6 +340,17 @@ const StyledForm = styled.form`
                 background-color: #05664c;
             }
         }
+        button.submitEmptyButton {
+            margin-top: 1rem;
+            border: none;
+            border-radius: 4.5px;
+            background-color: #939393;
+            color: #eee;
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 1rem 0;
+            width: 100%;
+        }
     }
     div:nth-child(2) {
         margin-top: 1.25rem;
@@ -261,6 +358,19 @@ const StyledForm = styled.form`
 `;
 
 const StyledLink = styled(Link)`
-    color: #000;
+    all: unset;
+    cursor: pointer;
     margin-top: 0.5rem;
+    span {
+        color: #000;
+        opacity: 0.75;
+        font-size: 0.9rem;
+        border-bottom: 0.1px solid #000;
+    }
+`;
+
+const IsValidSpan = styled.span`
+    font-size: 0.65rem;
+    color: red;
+    opacity: 0.8;
 `;
