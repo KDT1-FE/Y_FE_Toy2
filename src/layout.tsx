@@ -1,5 +1,5 @@
 import { Container, Center, Flex } from '@chakra-ui/react';
-import SideBar from './components/SideBar/SideBar';
+import SideBar from './components/sideBar';
 
 const Layout = (props: { children: React.ReactNode }) => {
   return (
