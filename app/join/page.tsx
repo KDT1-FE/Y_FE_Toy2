@@ -3,7 +3,7 @@ import React from 'react';
 
 const Join = () => {
 	return (
-		<div>
+		<div className="w-full h-full bg-white ">
 			<JoinForm></JoinForm>
 		</div>
 	);
