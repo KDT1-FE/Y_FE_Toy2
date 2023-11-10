@@ -19,6 +19,10 @@ export const privateChatDetail = atom<any[]>({
   key: 'privateChatDetail',
   default: [],
 });
+export const privateChatNew = atom<any[]>({
+  key: 'privateChatNew',
+  default: [],
+});
 
 export const onlineUserState = atom<any>({
   key: 'onlineUserState',

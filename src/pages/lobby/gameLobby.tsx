@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { getUsers } from '../../api/index';
 import CreateGameRoom from '../../components/layout/createGameRoom';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
 import { Button } from '@chakra-ui/react';
@@ -8,17 +10,13 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import OfflineUserList from '../../components/layout/offlineUserList';
 import OnlineUserList from '../../components/layout/onlineUserList';
 import UserList from '../../components/layout/userList';
-import CheckPrivateChat from '../../components/layout/checkPrivateChat';
-
 import UserLogout from '../login/userLogout';
-
-import { test } from '../../components/layout/test';
+import CheckPrivateChat from '../../components/layout/checkPrivateChat';
 
 const GameLobby = () => {
   const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
 
   const accessToken = useRecoilValue(accessTokenState);
-
   const [imgsrc, setImgsrc] = useState('');
 
   async function fetchUserData() {
@@ -31,8 +29,6 @@ const GameLobby = () => {
       // 에러 처리 로직
     }
   }
-
-  test();
 
   return (
     <>

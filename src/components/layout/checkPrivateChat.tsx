@@ -42,18 +42,20 @@ const CheckPrivateChat = () => {
   return (
     <>
       {allMyChat.map((element, index) => (
-        <>
-          <div key={index} onClick={() => handleChatDetailModal(element.id)}>
+        <div key={index}>
+          <div onClick={() => handleChatDetailModal(element.id)}>
             <p>{element.name}</p>
             <p>{element.id}</p>
             <p>{element.users.length}</p>
             <p>{element.users[0].id}</p>
           </div>
-          <ChattingDetail
-            chatId={element.id}
-            isModalOpen={chatModals[element.id]}
-          />
-        </>
+          {chatModals[element.id] && (
+            <ChattingDetail
+              chatId={element.id}
+              isModalOpen={chatModals[element.id]}
+            />
+          )}
+        </div>
       ))}
     </>
   );

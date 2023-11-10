@@ -1,11 +1,13 @@
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../constant';
+
+let socket: Socket | null = null;
 
 export const loginSocket = (
   accessToken: any,
   onDataReceived: (data: any[]) => void,
 ) => {
-  const socket = io(`${SERVER_URL}/server`, {
+  socket = io(`${SERVER_URL}/server`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
       serverId: SERVER_ID,
@@ -13,27 +15,39 @@ export const loginSocket = (
   });
 
   socket.on('connect', () => {
-    socket.emit('users-server');
+    socket?.emit('users-server');
   });
 
   socket.on('users-server-to-client', (data) => {
     onDataReceived(data);
   });
-<<<<<<< HEAD
 
   return socket;
 };
 
-export const chatSocket = (accessToken: string, chatId: string) => {
-  // 클라이언트 소켓 생성
-  const socket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
+export const disconnectLoginSocket = () => {
+  if (socket) {
+    socket.disconnect();
+    socket = null;
+  }
+};
+
+export const chatSocket = (accessToken: any, chatId: string) => {
+  socket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
-      serverId: SERVER_ID, // 서버 ID
+      serverId: SERVER_ID,
     },
+  });
+  socket.emit('fetch-messages');
+
+  socket.on('connect', () => {
+    console.log('Connected from server');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Disconnected from server');
   });
 
   return socket;
-=======
->>>>>>> b1480300f678929faeac31e1dc86d3ad334d1bb6
 };

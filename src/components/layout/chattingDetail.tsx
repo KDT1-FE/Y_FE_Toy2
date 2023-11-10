@@ -1,45 +1,84 @@
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
-import { privateChatDetail } from '../../states/atom';
-import { useState } from 'react';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import {
+  accessTokenState,
+  privateChatDetail,
+  privateChatNew,
+} from '../../states/atom';
+import { useState, useEffect } from 'react';
 import { chatSocket } from '../../api/socket';
 
 interface ChattingDetailProps {
   chatId: string;
-  isModalOpen: boolean;
 }
 
-const ChattingDetail = ({ chatId, isModalOpen }: ChattingDetailProps) => {
-  console.log(chatId, isModalOpen);
-  const chatDetail = useRecoilValue(privateChatDetail);
-  console.log(chatDetail);
-
+const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
+  const accessToken: any = useRecoilValue(accessTokenState);
   const [postData, setPostData] = useState('');
-  const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPostData(e.target.value);
+  const [socket, setSocket] = useState<any>(null);
+  const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
+  const [newChat, setNewChat] = useRecoilState(privateChatNew);
 
+  useEffect(() => {
     try {
+      const newSocket = chatSocket(accessToken, chatId);
+      setSocket(newSocket);
+
+      newSocket.on('messages-to-client', (messageData) => {
+        //console.log('Fetched messages:', messageData.messages);
+        setFetchChat(messageData.messages);
+      });
+
+      newSocket.on('message-to-client', (messageObject) => {
+        //console.log('Message from server:', messageObject);
+        setNewChat((newChat: any) => [...newChat, messageObject]);
+      });
+
+      return () => {
+        newSocket.disconnect();
+      };
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
+  }, [accessToken, chatId]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPostData(e.target.value);
+  };
+
+  const messageSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    socket.emit('message-to-server', postData);
+    setPostData('');
   };
 
   return (
     <>
-      <ModalContainer className={isModalOpen ? 'open' : ''} id="commute-modal">
+      <ModalContainer>
         <h1>채팅디테일</h1>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+        {fetchChat.map((element, index) => (
+          <div key={index}>
+            <p>{element.text}</p>
+            <p>{element.userId}</p>
+            <p>{element.createdAt}</p>
+          </div>
+        ))}
+
+        {newChat.map((element, index) => (
+          <div key={index}>
+            <p>{element.text}</p>
+            <p>{element.userId}</p>
+            <p>{element.createdAt}</p>
+          </div>
+        ))}
 
         <h1>채팅입력</h1>
-        <form>
+        <form onSubmit={messageSubmit}>
           <input
             type="text"
             placeholder="Aa"
             value={postData}
-            onChange={onChangeName}
+            onChange={handleInputChange}
           />
         </form>
       </ModalContainer>
@@ -47,11 +86,6 @@ const ChattingDetail = ({ chatId, isModalOpen }: ChattingDetailProps) => {
   );
 };
 
-const ModalContainer = styled.div`
-  display: none;
-  &.open {
-    display: block;
-  }
-`;
+const ModalContainer = styled.div``;
 
 export default ChattingDetail;

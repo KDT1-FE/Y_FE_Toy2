@@ -6,6 +6,7 @@ const OfflineUserList = () => {
   const onLine = useRecoilValue(onlineUserState);
   const all = useRecoilValue(allUserState);
   const allOnlineUsers = onLine.users || [];
+  
   const differentNames = all.filter((element) => {
     return !allOnlineUsers.includes(element.id);
   });
