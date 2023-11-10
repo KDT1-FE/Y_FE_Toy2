@@ -30,30 +30,7 @@ const UsersUl = () => {
 					width={25}
 					height={25}
 					src="/icon_search.svg"
-					alt="채팅방 검색하기"
-				/>
-			</li>
-		</ul>
-	);
-};
-
-const PrivateUl = () => {
-	return (
-		<ul className="flex align-center gap-3">
-			<li className="flex align-center cursor-pointer">
-				<Image
-					width={25}
-					height={25}
-					src="/icon_search.svg"
-					alt="채팅방 검색하기"
-				/>
-			</li>
-			<li className="flex align-center cursor-pointer">
-				<Image
-					width={25}
-					height={25}
-					src="/icon_add_chat.svg"
-					alt="채팅방 만들기"
+					alt="친구,채팅방 검색하기"
 				/>
 			</li>
 		</ul>
@@ -61,22 +38,18 @@ const PrivateUl = () => {
 };
 
 const OpenUl = () => {
+	const searchHandler = () => {
+		console.log('click the search');
+	};
+
 	return (
 		<ul className="flex align-center gap-3">
-			<li className="flex align-center cursor-pointer">
+			<li className="flex align-center cursor-pointer" onClick={searchHandler}>
 				<Image
 					width={25}
 					height={25}
 					src="/icon_search.svg"
 					alt="채팅방 검색하기"
-				/>
-			</li>
-			<li className="flex align-center cursor-pointer">
-				<Image
-					width={25}
-					height={25}
-					src="/icon_add_chat.svg"
-					alt="채팅방 만들기"
 				/>
 			</li>
 		</ul>
@@ -85,11 +58,11 @@ const OpenUl = () => {
 
 const friends = {
 	HeaderUl: UsersUl,
-	Heading: '친구들',
+	Heading: '집사들',
 };
 
 const privates = {
-	HeaderUl: PrivateUl,
+	HeaderUl: UsersUl,
 	Heading: '개인캣톡',
 };
 

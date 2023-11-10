@@ -30,7 +30,7 @@ const MyProfile = ({ user }: { user: User }) => {
 				setIsModalOpen={setIsModalOpen}
 			/>
 			<div
-				className="flex w-full align-center mb-4 "
+				className="flex w-full align-center mb-4 cursor-pointer"
 				onClick={() => {
 					openModalHandler(user);
 				}}

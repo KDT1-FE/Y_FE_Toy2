@@ -35,7 +35,7 @@ const FriendProfiles = ({ allUsers }: { allUsers: User[] }) => {
 				return (
 					<li
 						key={user.id}
-						className="list-none"
+						className="list-none cursor-pointer"
 						onClick={() => {
 							openModalHandler(user);
 						}}
