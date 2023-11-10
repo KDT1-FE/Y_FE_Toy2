@@ -25,9 +25,17 @@ export const loginSocket = (
   return socket;
 };
 
+export const drawSocket = io(
+  'https://young-wave-37170-0a19781643d5.herokuapp.com/',
+  {
+    withCredentials: true,
+  },
+);
+
 export const disconnectLoginSocket = () => {
   if (socket) {
     socket.disconnect();
     socket = null;
   }
 };
+
