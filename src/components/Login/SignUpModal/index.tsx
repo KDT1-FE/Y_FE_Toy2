@@ -25,24 +25,26 @@ const SignUpModal = () => {
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  // ID 중복 체크 함수
   const checkIdDuplication = async (id: string): Promise<boolean> => {
     try {
       const response = await axios.post(
         "https://fastcampus-chat.net/check/id",
         { id },
       );
-      const data = response.data;
-      return !data.isDuplicated;
+      // 서버가 ID가 중복되었다고 응답하면 true를 반환
+      return response.data.isDuplicated;
     } catch (error) {
       console.error("Error checking ID duplication", error);
+      // 에러 발생 시 안전하게 중복으로 간주할 수 있습니다.
       return false;
     }
   };
 
+  // 회원가입 제출
   const onSubmit = async (formData: FormData) => {
     let pictureAsString: string | undefined;
 
+    // 파일을 Base64 문자열로 변환
     const toBase64 = (file: File) =>
       new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -59,6 +61,7 @@ const SignUpModal = () => {
       ...formData,
       picture: pictureAsString,
     };
+    // 회원가입 요청 및 결과 처리
     try {
       const response = await axios.post(
         "https://fastcampus-chat.net/signup",
@@ -110,9 +113,14 @@ const SignUpModal = () => {
           control={control}
           rules={{
             required: "ID는 필수입니다.",
+            pattern: {
+              value: /^[A-Za-z0-9]+$/,
+              message: "ID는 영문자와 숫자만 사용할 수 있습니다.",
+            },
             validate: async (id) => {
-              const isNotDuplicated = await checkIdDuplication(id);
-              if (!isNotDuplicated) {
+              const isDuplicated = await checkIdDuplication(id);
+              console.log("ID 중복 확인 결과:", isDuplicated);
+              if (isDuplicated) {
                 return "이미 사용중인 ID입니다.";
               }
               return true;
