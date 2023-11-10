@@ -4,6 +4,7 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '@material-tailwind/react';
 import { fetchJoin } from '@/app/join/join.utils';
+import Link from 'next/link';
 
 type RequestBody = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -108,10 +109,11 @@ const JoinForm = () => {
 						{errors?.id ? <p className="error">{errors.id?.message}</p> : null}
 					</div>
 				</div>
-
-				<Button type="submit" className="w-full bg-main">
-					회원가입
-				</Button>
+				<Link href="/login">
+					<Button type="submit" className="w-full bg-main">
+						회원가입
+					</Button>
+				</Link>
 			</form>
 		</>
 	);
