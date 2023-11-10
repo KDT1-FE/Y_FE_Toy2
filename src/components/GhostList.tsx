@@ -1,7 +1,7 @@
 import React from 'react';
 import { Ghost } from '../pages/game/Vote';
 import GhostItem from './GhostItem';
-import styles from '@styles/components/ghostlist.module.scss';
+import styles from '@styles/components/ghostList.module.scss';
 
 const GhostList = ({ ghosts }: { ghosts: Ghost[] }) => {
   return (

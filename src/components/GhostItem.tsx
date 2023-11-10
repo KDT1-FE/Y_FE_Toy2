@@ -1,6 +1,6 @@
 import React from 'react';
 import { Ghost } from '../pages/game/Vote';
-import styles from '@styles/components/ghostitem.module.scss';
+import styles from '@styles/components/ghostItem.module.scss';
 
 const GhostItem = ({ ghost }: { ghost: Ghost }) => {
   return (

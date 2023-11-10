@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styles from '@styles/components/header.module.scss';
+import styles from '@styles/components/gameHeader.module.scss';
 
-const Header = ({ started, title, timer }: HeaderProps) => {
+const GameHeader = ({ started, title, timer }: GameHeaderProps) => {
   const [isStart, setIsStart] = useState(started);
 
   if (!isStart) {
@@ -30,9 +30,9 @@ const Header = ({ started, title, timer }: HeaderProps) => {
   );
 };
 
-export default Header;
+export default GameHeader;
 
-type HeaderProps = {
+type GameHeaderProps = {
   started: boolean;
   title: string;
   timer?: number;
