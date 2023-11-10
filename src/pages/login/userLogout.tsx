@@ -2,8 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 import { useRecoilState } from 'recoil';
 import { accessTokenState } from '../../states/atom';
-import { io } from 'socket.io-client';
-import { SERVER_URL } from '../../constant';
+import { disconnectLoginSocket } from '../../api/socket';
 
 function UserLogout() {
   const navigate = useNavigate();
@@ -11,12 +10,14 @@ function UserLogout() {
 
   const handleLogout = () => {
     try {
-      const socket = io(`${SERVER_URL}/server`);
-      socket.disconnect();
+      console.log('Before disconnectLoginSocket', accessToken);
+      disconnectLoginSocket();
+      console.log('After disconnectLoginSocket', accessToken);
 
       localStorage.removeItem('refreshToken');
       setAccessToken('');
 
+      console.log('After setAccessToken', accessToken);
       navigate('/');
     } catch (error) {
       console.log(error);
