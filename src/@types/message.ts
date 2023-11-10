@@ -3,7 +3,6 @@ export interface MessageData {
   id: string;
   text: string;
   userId: string;
-  _id: string;
 }
 export interface Message {
   name: string;
