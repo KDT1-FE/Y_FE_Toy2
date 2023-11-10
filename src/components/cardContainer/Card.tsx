@@ -8,8 +8,8 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react';
-import { Chat } from './card.types';
 import { formatTimeToKST } from '../../utils/formatTimeToKST';
+import { Chat } from '../../@types/chat';
 
 interface Props {
   channel: Chat;
