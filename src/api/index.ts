@@ -99,3 +99,12 @@ export const getAllMyChat = async (accessToken: string) => {
   });
   return res.data;
 };
+
+export const privateChat = async (accessToken: string) => {
+  const res = await client.get(`chat`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return res.data;
+};

@@ -1,11 +1,15 @@
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getAllMyChat } from '../../api';
 import { accessTokenState, privateChatState } from '../../states/atom';
 import usePollingData from '../template/usePollingData';
+import ChattingDetail from './chattingDetail';
 
 const CheckPrivateChat = () => {
   const [allMyChat, setAllMyChat] = useRecoilState(privateChatState);
   const accessToken: any = useRecoilValue(accessTokenState);
+
+  const [chatModals, setChatModals] = useState<any>({});
 
   const fetchData = async () => {
     try {
@@ -28,15 +32,28 @@ const CheckPrivateChat = () => {
 
   usePollingData(fetchData, [allMyChat, setAllMyChat]);
 
+  const handleChatDetailModal = (chatId: string) => {
+    setChatModals((chatModals: any) => ({
+      ...chatModals,
+      [chatId]: !chatModals[chatId] as boolean,
+    }));
+  };
+
   return (
     <>
       {allMyChat.map((element, index) => (
-        <div key={index}>
-          <p>{element.name}</p>
-          <p>{element.id}</p>
-          <p>{element.users.length}</p>
-          <p>{element.users[0].id}</p>
-        </div>
+        <>
+          <div key={index} onClick={() => handleChatDetailModal(element.id)}>
+            <p>{element.name}</p>
+            <p>{element.id}</p>
+            <p>{element.users.length}</p>
+            <p>{element.users[0].id}</p>
+          </div>
+          <ChattingDetail
+            chatId={element.id}
+            isModalOpen={chatModals[element.id]}
+          />
+        </>
       ))}
     </>
   );

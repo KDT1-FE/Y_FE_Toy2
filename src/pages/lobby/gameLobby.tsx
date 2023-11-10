@@ -9,12 +9,17 @@ import OfflineUserList from '../../components/layout/offlineUserList';
 import OnlineUserList from '../../components/layout/onlineUserList';
 import UserList from '../../components/layout/userList';
 import CheckPrivateChat from '../../components/layout/checkPrivateChat';
+<<<<<<< Updated upstream
 import UserLogout from '../login/userLogout';
+=======
+import { test } from '../../components/layout/test';
+>>>>>>> Stashed changes
 
 const GameLobby = () => {
   const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
 
   const accessToken = useRecoilValue(accessTokenState);
+<<<<<<< Updated upstream
   const [imgsrc, setImgsrc] = useState('');
 
   async function fetchUserData() {
@@ -28,6 +33,9 @@ const GameLobby = () => {
     }
   }
 
+=======
+  test();
+>>>>>>> Stashed changes
   return (
     <>
       <Button onClick={fetchUserData}>이미지나와랏</Button>

@@ -25,15 +25,12 @@ export const loginSocket = (
 };
 
 export const chatSocket = (accessToken: string, chatId: string) => {
+  // 클라이언트 소켓 생성
   const socket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
-      serverId: SERVER_ID,
+      serverId: SERVER_ID, // 서버 ID
     },
-  });
-
-  socket.on('message-to-client', (messageObject: any) => {
-    console.log(messageObject);
   });
 
   return socket;
