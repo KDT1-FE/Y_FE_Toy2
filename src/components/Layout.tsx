@@ -6,7 +6,7 @@ import styled from "styled-components";
 function Layout() {
   return (
     <Wrapper>
-      <Header />
+      {/* <Header /> */}
       <AlignCentered>
         <Outlet />
       </AlignCentered>
