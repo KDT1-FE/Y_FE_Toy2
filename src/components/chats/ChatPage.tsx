@@ -137,7 +137,6 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100vh;
 `;
 
 const Header = styled.div`
