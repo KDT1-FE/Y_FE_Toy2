@@ -8,8 +8,6 @@ import styles from './Chat.module.scss';
 export default function ChatroomHeader({ chatId }: string) {
   const router = useRouter();
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const accessToken =
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyNSIsImlhdCI6MTY5OTU5OTI3NywiZXhwIjoxNzAwMjA0MDc3fQ.xQ34bIb3kC-ISYgYtCQypNN6A5T7A3TJh_TX31hXVZI';
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -24,10 +22,6 @@ export default function ChatroomHeader({ chatId }: string) {
       const response = await instance.patch('/chat/leave', {
         chatId, // API에 chatId 전달
       },{
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-
       }
       );
       console.log(response);
