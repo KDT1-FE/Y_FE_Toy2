@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import instance from '@/apis/axios';
 import { useRouter } from 'next/router';
-import LeftArrowIcon from './LeftArrowIcon';
+import { HiArrowLongLeft } from 'react-icons/hi2';
 import MenuIcon from './MenuIcon';
 import styles from './Chat.module.scss';
 
+
 export default function ChatroomHeader({ chatId }: string) {
   const router = useRouter();
+  
   const [isMenuOpen, setMenuOpen] = useState(false);
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyNSIsImlhdCI6MTY5OTU5OTI3NywiZXhwIjoxNzAwMjA0MDc3fQ.xQ34bIb3kC-ISYgYtCQypNN6A5T7A3TJh_TX31hXVZI';
@@ -17,7 +19,12 @@ export default function ChatroomHeader({ chatId }: string) {
 
   const closeMenu = () => {
     setMenuOpen(false);
+    
   };
+  const handleBackBtnClick = () => {
+    router.back();
+
+  }
 
   const handleOutBtnClick = async () => {
     try {
@@ -33,7 +40,7 @@ export default function ChatroomHeader({ chatId }: string) {
         },
       );
       console.log(response);
-      router.push('./');
+      router.push('.');
       // 채팅방 나가기 성공 후 추가적인 로직이 필요할 수 있습니다.
     } catch (error) {
       console.error(error);
@@ -43,8 +50,7 @@ export default function ChatroomHeader({ chatId }: string) {
   return (
     <div className={styles.header}>
       <div className={styles.left}>
-        <LeftArrowIcon />
-        {/* 채팅방 닫기 기능 */}
+        <HiArrowLongLeft onClick={handleBackBtnClick}/>
       </div>
       <h3 className={styles.chatTitle}>채팅방 이름</h3>
       <div className={styles.right} onClick={toggleMenu}>
