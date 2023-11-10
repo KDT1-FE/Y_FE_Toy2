@@ -47,7 +47,14 @@ export default function ChatingModal(props: any) {
                 ) : (
                     ''
                 )}
-                <ChatingLeave onClick={() => leaveChating()}>채팅방 나가기</ChatingLeave>
+                <ChatingLeave
+                    onClick={() => {
+                        setModalToggle(!modalToggle);
+                        leaveChating();
+                    }}
+                >
+                    채팅방 나가기
+                </ChatingLeave>
             </ModalWrapper>
 
             <ModalBackground

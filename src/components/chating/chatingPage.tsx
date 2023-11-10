@@ -28,6 +28,7 @@ export default function ChatingPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [users, setUsers] = useState<User[]>([]);
     const [chatName, setChatName] = useState<string>('');
+    const [getUserToggle, setGetUserToggle] = useState<boolean>(true);
 
     const router = useRouter();
 
@@ -46,25 +47,13 @@ export default function ChatingPage() {
             },
         });
         const data = await response.json();
-        console.log(data);
 
         for (let i = 0; i < data.chats.length; i++) {
             if (chatId == data.chats[i].id) {
-                console.log(chatId, data.chats[i].id);
                 setChatName(data.chats[i].name);
                 setUsers(data.chats[i].users);
             }
         }
-
-        let userBlock = true;
-
-        for (let i = 0; i < users.length; i++) {
-            if (userId == users[i].id) {
-                userBlock = false;
-            }
-        }
-
-        if (userBlock) router.back();
     };
 
     const findUserName = (userId: string): any => {
@@ -82,15 +71,14 @@ export default function ChatingPage() {
             }
         }
     };
+
     useEffect(() => {
         getUsers();
+    }, [getUserToggle]);
 
-        // 유저 블락
-
+    useEffect(() => {
         socketInitilizer();
     }, []);
-
-    console.log(users, '1');
 
     const socket = io(`wss://fastcampus-chat.net/chat?chatId=${chatId}`, {
         extraHeaders: {
@@ -126,11 +114,15 @@ export default function ChatingPage() {
 
         socket.on('join', (data) => {
             console.log(data, 'join');
+            setGetUserToggle(!getUserToggle);
         });
         socket.on('leave', (data) => {
             console.log(data, 'leave');
+            setGetUserToggle(!getUserToggle);
         });
     };
+
+    console.log(users);
 
     return (
         <main>
@@ -156,14 +148,24 @@ export default function ChatingPage() {
                               <YourMessageWrapper key={message.id}>
                                   <YourMessageNameWrapper>
                                       <YourMessagePicture
-                                          src={findUserPicture(
-                                              message.userId.split(':')[message.userId.split(':').length - 1],
-                                          )}
+                                          src={
+                                              findUserPicture(
+                                                  message.userId.split(':')[message.userId.split(':').length - 1],
+                                              ) == undefined
+                                                  ? 'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
+                                                  : findUserPicture(
+                                                        message.userId.split(':')[message.userId.split(':').length - 1],
+                                                    )
+                                          }
                                       />
                                       <YourMessageName>
                                           {findUserName(
                                               message.userId.split(':')[message.userId.split(':').length - 1],
-                                          )}
+                                          ) == undefined
+                                              ? '(퇴장한 사용자)'
+                                              : findUserName(
+                                                    message.userId.split(':')[message.userId.split(':').length - 1],
+                                                )}
                                       </YourMessageName>
                                   </YourMessageNameWrapper>
                                   <YourMessageTextWrapper>
