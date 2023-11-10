@@ -54,10 +54,11 @@ export default function Chat() {
   // };
 
   return (
-    <div className={styles.container}>
+    <>
       <ChatroomHeader />
-      {/* <p>State: + {isConnected}</p> */}
-      {/* <form onSubmit={handleSendMessage}>
+      <div className={styles.container}>
+        {/* <p>State: + {isConnected}</p> */}
+        {/* <form onSubmit={handleSendMessage}>
         <input
           type="text"
           placeholder="Type a message"
@@ -66,37 +67,22 @@ export default function Chat() {
         />
         <button type="submit">Send</button>
       </form> */}
-      <div>
-        <OtherChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <OtherChat />
-        <MyChat />
-        <MyChat />
-        {/* {messages.map((msg, index) => (
+        <div>
+          <OtherChat />
+          <MyChat />
+          <OtherChat />
+          <MyChat />
+          <OtherChat />
+          <MyChat />
+          {/* {messages.map((msg, index) => (
           <p key={index}>
             {msg.userId}: {msg.text} -{' '}
             {new Date(msg.createdAt).toLocaleString()}
           </p>
         ))} */}
+        </div>
       </div>
       <ChatroomFooter />
-    </div>
+    </>
   );
 }

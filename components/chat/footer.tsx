@@ -8,7 +8,7 @@ export default function chatroomHeader() {
         className={styles.chatInput}
         placeholder="대화를 시작해보세요!"
       />
-      <div className={styles.triangle_button} />
+      <button className={styles.triangle_button} />
     </div>
   );
 }
