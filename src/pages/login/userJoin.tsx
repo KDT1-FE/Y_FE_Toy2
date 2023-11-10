@@ -124,16 +124,18 @@ const UserJoin = () => {
     return Object.values(errors).every((error) => error === '');
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleImgUploader = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
 
     if (file) {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setFilePreviewUrl(reader.result);
-        // 여기서 formData에 파일 데이터를 추가할 수도 있습니다.
-        setFormData({ ...formData, picture: reader.result });
+        const result = reader.result;
+        if (typeof result === 'string') {
+          setFilePreviewUrl(result);
+          setFormData({ ...formData, picture: result });
+        }
       };
 
       reader.readAsDataURL(file);
@@ -191,7 +193,7 @@ const UserJoin = () => {
               accept="image/*"
               type="file"
               style={{ position: 'absolute', width: 0, height: 0, opacity: 0 }}
-              onChange={handleFileChange}
+              onChange={handleImgUploader}
             />
           </label>
           <FormControl
