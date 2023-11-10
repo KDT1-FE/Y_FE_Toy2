@@ -7,7 +7,7 @@ import Loader from "../../Loader/Loader";
 import { AuthContext } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-const initialLoginData = {
+const initialLoginData: LoginData = {
   id: "",
   password: ""
 };
@@ -31,6 +31,7 @@ function LoginForm() {
           const refreshToken = data.refreshToken;
           setAccessToken(token);
           sessionStorage.setItem("refreshToken", refreshToken);
+          sessionStorage.setItem("userId", loginData.id)
           setLoading(false);
           navigate('/');
         })
@@ -48,7 +49,6 @@ function LoginForm() {
       <LoginInput
         id={"id"}
         label={"아이디"}
-        loginData={loginData}
         setLoginData={setLoginData}
         inputProps={{
           type: "text",
@@ -58,7 +58,6 @@ function LoginForm() {
       <LoginInput
         id={"password"}
         label={"비밀번호"}
-        loginData={loginData}
         setLoginData={setLoginData}
         inputProps={{
           type: "password",
@@ -73,6 +72,11 @@ function LoginForm() {
 }
 
 export default LoginForm;
+
+interface LoginData {
+  id: string;
+  password: string;
+}
 
 const LoginContainer = styled.form`
   display: flex;

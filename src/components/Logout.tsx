@@ -9,6 +9,7 @@ function Logout() {
   const handleClick = () => {
     setRefreshToken('');
     setAccessToken(null);
+    sessionStorage.setItem('userId', '');
     navigate('/');  
   }
 
