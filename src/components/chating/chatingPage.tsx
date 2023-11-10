@@ -4,11 +4,12 @@ import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import MessageContainer from './MessageContainer';
 import io from 'socket.io-client';
-import { usePathname, useSearchParams } from 'next/navigation';
-
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
 import { formatCreatedAt } from '../chats/useFormatCreatedAt';
+import Users from '@/app/users/page';
 
 interface Message {
     id: string;
@@ -17,49 +18,67 @@ interface Message {
     createdAt: Date; // Date
 }
 
+interface User {
+    username: string;
+    id: string;
+    picture: string;
+}
+
 export default function ChatingPage() {
     const [messages, setMessages] = useState<Message[]>([]);
-    const searchParams = useSearchParams();
+    const [users, setUsers] = useState<User[]>([]);
+    const [chatName, setChatName] = useState<string>('');
+    const [getUserToggle, setGetUserToggle] = useState<boolean>(true);
 
-    // type
-    const getChatName = searchParams.get('name');
-    const getChatUsers: any = searchParams.get('users');
-    const splitChatUsers: any = getChatUsers?.replace('],').split('[');
-    const correctChatUsers: any[] = [];
-    for (let i = 1; i < splitChatUsers?.length; i++) {
-        const data: any = splitChatUsers[i].split(', ');
-        correctChatUsers[i - 1] = {
-            name: data[0].split('name:')[1],
-            id: data[1].split('id:')[1],
-            picture: data[2].split('picture:')[1],
-        };
-    }
+    const router = useRouter();
+
+    const pathname = usePathname();
+    const chatId = pathname.split('/')[2];
+    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+
+    const getUsers = async () => {
+        const response = await fetch('https://fastcampus-chat.net/chat', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+                serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+            },
+        });
+        const data = await response.json();
+
+        for (let i = 0; i < data.chats.length; i++) {
+            if (chatId == data.chats[i].id) {
+                setChatName(data.chats[i].name);
+                setUsers(data.chats[i].users);
+            }
+        }
+    };
 
     const findUserName = (userId: string): any => {
-        for (let i = 0; i < correctChatUsers.length; i++) {
-            if (userId == correctChatUsers[i].id) {
-                return correctChatUsers[i].name;
+        for (let i = 0; i < users.length; i++) {
+            if (userId == users[i].id) {
+                return users[i].username;
             }
         }
     };
 
     const findUserPicture = (userId: string): any => {
-        for (let i = 0; i < correctChatUsers.length; i++) {
-            if (userId == correctChatUsers[i].id) {
-                return correctChatUsers[i].picture;
+        for (let i = 0; i < users.length; i++) {
+            if (userId == users[i].id) {
+                return users[i].picture;
             }
         }
     };
 
     useEffect(() => {
+        getUsers();
+    }, [getUserToggle]);
+
+    useEffect(() => {
         socketInitilizer();
     }, []);
-
-    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
-    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
-
-    const pathname = usePathname();
-    const chatId = pathname.split('/')[2];
 
     const socket = io(`wss://fastcampus-chat.net/chat?chatId=${chatId}`, {
         extraHeaders: {
@@ -89,22 +108,26 @@ export default function ChatingPage() {
 
         socket.emit('users');
 
-        socket.on('users-to-client', (data) => {
-            console.log(data, 'users-to-client');
-        });
+        // socket.on('users-to-client', (data) => {
+        //     console.log(data, 'users-to-client');
+        // });
 
         socket.on('join', (data) => {
             console.log(data, 'join');
+            setGetUserToggle(!getUserToggle);
         });
         socket.on('leave', (data) => {
             console.log(data, 'leave');
+            setGetUserToggle(!getUserToggle);
         });
     };
 
+    console.log(users);
+
     return (
         <main>
-            <ChatingNavigation chatName={getChatName} />
-            <ChatingModal correctChatUsers={correctChatUsers} />
+            <ChatingNavigation chatName={chatName} />
+            <ChatingModal users={users} chatId={chatId} accessToken={accessToken} />
             <MessagesContainer>
                 {messages
                     ? messages.map((message: Message, i: number) =>
@@ -125,14 +148,24 @@ export default function ChatingPage() {
                               <YourMessageWrapper key={message.id}>
                                   <YourMessageNameWrapper>
                                       <YourMessagePicture
-                                          src={findUserPicture(
-                                              message.userId.split(':')[message.userId.split(':').length - 1],
-                                          )}
+                                          src={
+                                              findUserPicture(
+                                                  message.userId.split(':')[message.userId.split(':').length - 1],
+                                              ) == undefined
+                                                  ? 'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
+                                                  : findUserPicture(
+                                                        message.userId.split(':')[message.userId.split(':').length - 1],
+                                                    )
+                                          }
                                       />
                                       <YourMessageName>
                                           {findUserName(
                                               message.userId.split(':')[message.userId.split(':').length - 1],
-                                          )}
+                                          ) == undefined
+                                              ? '(퇴장한 사용자)'
+                                              : findUserName(
+                                                    message.userId.split(':')[message.userId.split(':').length - 1],
+                                                )}
                                       </YourMessageName>
                                   </YourMessageNameWrapper>
                                   <YourMessageTextWrapper>

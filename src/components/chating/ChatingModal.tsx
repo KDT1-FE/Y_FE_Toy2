@@ -3,28 +3,58 @@
 import styled, { keyframes } from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
+import { useRouter } from 'next/navigation';
+
+interface User {
+    username: string;
+    id: string;
+    picture: string;
+}
 
 //type
 export default function ChatingModal(props: any) {
     const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChatingModalToggle);
+    const router = useRouter();
+
+    const leaveChating = async () => {
+        await fetch('https://fastcampus-chat.net/chat/leave', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${props.accessToken}`,
+                serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+            },
+            body: JSON.stringify({
+                chatId: props.chatId,
+            }),
+        });
+        router.back();
+    };
 
     return (
         <>
             <ModalWrapper style={{ display: `${modalToggle ? 'block' : 'none'}` }}>
                 <ModalTitle>대화상대</ModalTitle>
-                {props.correctChatUsers ? (
+                {props.users ? (
                     <UsersWrapper>
-                        {props.correctChatUsers.map((users: any) => (
+                        {props.users.map((user: User) => (
                             <UserWrapper>
-                                <UserImg src={users.picture} />
-                                <UserName>{users.name}</UserName>
+                                <UserImg src={user.picture} />
+                                <UserName>{user.username}</UserName>
                             </UserWrapper>
                         ))}
                     </UsersWrapper>
                 ) : (
                     ''
                 )}
-                <ChatingLeave>채팅방 나가기</ChatingLeave>
+                <ChatingLeave
+                    onClick={() => {
+                        setModalToggle(!modalToggle);
+                        leaveChating();
+                    }}
+                >
+                    채팅방 나가기
+                </ChatingLeave>
             </ModalWrapper>
 
             <ModalBackground
