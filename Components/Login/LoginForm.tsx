@@ -23,6 +23,7 @@ const LoginForm = () => {
 		console.log('accessToken:', accessToken);
 		console.log('refreshToken:', refreshToken);
 		setCookie('accessToken', accessToken, { path: '/' });
+		setCookie('refreshToken', refreshToken, { path: '/' });
 	};
 
 	return (
