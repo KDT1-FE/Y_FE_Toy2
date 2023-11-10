@@ -4,6 +4,7 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { fetchLogin } from '../../app/login/login.utils';
 import { setCookie } from '@/Components/Login/Cookie';
+import { Button } from '@material-tailwind/react';
 
 type IFormInput = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -46,7 +47,9 @@ const LoginForm = () => {
 			<label>password</label>
 			{/* 5자 이상 */}
 			<input {...register('password')} />
-			<input type="submit" />
+			<Button type="submit" className=" bg-pink-200">
+				로그인
+			</Button>
 		</form>
 	);
 };
