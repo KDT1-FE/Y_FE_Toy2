@@ -14,6 +14,7 @@ import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import Chat from "./pages/Chat";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
+import { AuthProvider } from "./hooks/useAuth";
 
 const router = createBrowserRouter([
   {
@@ -64,10 +65,12 @@ function App() {
   return (
     <DarkModeProvider>
       <Wrapper>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <RouterProvider router={router} />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </AuthProvider>
       </Wrapper>
     </DarkModeProvider>
   );
