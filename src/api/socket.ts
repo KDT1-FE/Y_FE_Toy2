@@ -21,3 +21,10 @@ export const loginSocket = (accessToken: string) => {
 
   return socket;
 };
+
+export const drawSocket = io(
+  'https://young-wave-37170-0a19781643d5.herokuapp.com/',
+  {
+    withCredentials: true,
+  },
+);
