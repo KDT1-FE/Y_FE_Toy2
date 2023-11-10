@@ -8,6 +8,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import OfflineUserList from '../../components/layout/offlineUserList';
 import OnlineUserList from '../../components/layout/onlineUserList';
 import UserList from '../../components/layout/userList';
+import UserLogout from '../login/userLogout';
 
 const GameLobby = () => {
   const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
@@ -27,6 +28,8 @@ const GameLobby = () => {
       <CreateGameRoom></CreateGameRoom>
       <br></br>
       <CheckGameRoom></CheckGameRoom>
+      <br></br>
+      <UserLogout />
     </>
   );
 };
