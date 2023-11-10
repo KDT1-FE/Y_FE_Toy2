@@ -7,15 +7,19 @@ import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
+import { useRouter } from 'next/router';
 
 export default function Chat() {
+    const router = useRouter();
+    const { chatId } = router.query;
+
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
 
   const socketRef = useRef<Socket | null>(null);
 
-  const chatId = '43c7d302-1005-4a55-b12c-3f6d30c4755c';
+  //const chatId = '43c7d302-1005-4a55-b12c-3f6d30c4755c';
 
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';

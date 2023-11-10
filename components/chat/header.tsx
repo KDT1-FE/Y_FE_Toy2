@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import instance from '@/apis/axios';
 import { useRouter } from 'next/router';
-import LeftArrowIcon from './LeftArrowIcon';
+import { HiArrowLongLeft } from 'react-icons/hi2';
 import MenuIcon from './MenuIcon';
 import styles from './Chat.module.scss';
 
+
 export default function ChatroomHeader({ chatId }: string) {
   const router = useRouter();
+  
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -15,7 +17,13 @@ export default function ChatroomHeader({ chatId }: string) {
 
   const closeMenu = () => {
     setMenuOpen(false);
+    
   };
+  const handleBackBtnClick = () => {
+    console.log('clicked');
+    router.back();
+
+  }
 
   const handleOutBtnClick = async () => {
     try {
@@ -35,8 +43,7 @@ export default function ChatroomHeader({ chatId }: string) {
   return (
     <div className={styles.header}>
       <div className={styles.left}>
-        <LeftArrowIcon />
-        {/* 채팅방 닫기 기능 */}
+        <HiArrowLongLeft onClick={handleBackBtnClick}/>
       </div>
       <h3 className={styles.chatTitle}>채팅방 이름</h3>
       <div className={styles.right} onClick={toggleMenu}>
