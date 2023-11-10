@@ -262,13 +262,10 @@
   bottom: 10rem;
   left: 50%;
   transform: translateX(-50%);
-
+  width: 100%;
   z-index: 1000;
-
   padding: 1rem;
-
   border-radius: 0.5rem;
-  // animation: fadeInOut 0.5s ease-in-out 2.5s forwards;
 
   &.active {
     animation: fadeInOut 3s ease-in-out;

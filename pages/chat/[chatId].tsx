@@ -6,20 +6,22 @@ import EntryNotice from '@/components/chat/entryNotice';
 import ExitNotice from '@/components/chat/exitNotice';
 import ChatAlert from '@/components/chat/chatAlert';
 import { Message } from '@/@types/types';
+import { useRouter } from 'next/router';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
 
 export default function Chat() {
+  const router = useRouter();
+  const { chatId } = router.query;
+
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
-
-  const chatId = '43c7d302-1005-4a55-b12c-3f6d30c4755c';
 
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
@@ -35,6 +37,13 @@ export default function Chat() {
     socketRef.current.on('connect', () => {
       console.log('Connected to chat server');
       setIsConnected(true);
+      console.log(socketRef.current);
+    });
+
+    socketRef.current.emit('fetch-messages');
+
+    socketRef.current.on('messages-to-client', (messageArray: Message[]) => {
+      setMessages(messageArray.messages.reverse());
     });
 
     socketRef.current.on('message-to-client', (messageObject: Message) => {
@@ -44,11 +53,12 @@ export default function Chat() {
 
     return () => {
       socketRef.current?.off('connect');
+      socketRef.current?.off('messages-to-client');
       socketRef.current?.off('message-to-client');
       socketRef.current?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // 이제 chatId와 accessToken이 변경될 때
+  }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -69,7 +79,7 @@ export default function Chat() {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <ChatroomHeader chatId={chatId} />
       <div className={styles.container}>
         <div>
@@ -82,6 +92,7 @@ export default function Chat() {
         <div ref={messagesEndRef} />
         {message.length === 0 && <ChatAlert />}
       </div>
+
       <form className={styles2.footer} onSubmit={handleSendMessage}>
         <input
           type="text"
@@ -96,6 +107,6 @@ export default function Chat() {
           aria-label="Submit"
         />
       </form>
-    </>
+    </div>
   );
 }
