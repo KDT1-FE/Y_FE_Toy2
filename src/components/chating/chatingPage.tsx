@@ -14,16 +14,42 @@ interface Message {
     id: string;
     text: string;
     userId: string;
-    createdAt: Date; // Date?
+    createdAt: Date; // Date
 }
 
 export default function ChatingPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const searchParams = useSearchParams();
 
+    // type
     const getChatName = searchParams.get('name');
-    const getChatUsers = searchParams.get('Users');
-    console.log(getChatName, getChatUsers);
+    const getChatUsers: any = searchParams.get('users');
+    const splitChatUsers: any = getChatUsers?.replace('],').split('[');
+    const correctChatUsers: any[] = [];
+    for (let i = 1; i < splitChatUsers?.length; i++) {
+        const data: any = splitChatUsers[i].split(', ');
+        correctChatUsers[i - 1] = {
+            name: data[0].split('name:')[1],
+            id: data[1].split('id:')[1],
+            picture: data[2].split('picture:')[1],
+        };
+    }
+
+    const findUserName = (userId: string): any => {
+        for (let i = 0; i < correctChatUsers.length; i++) {
+            if (userId == correctChatUsers[i].id) {
+                return correctChatUsers[i].name;
+            }
+        }
+    };
+
+    const findUserPicture = (userId: string): any => {
+        for (let i = 0; i < correctChatUsers.length; i++) {
+            if (userId == correctChatUsers[i].id) {
+                return correctChatUsers[i].picture;
+            }
+        }
+    };
 
     useEffect(() => {
         socketInitilizer();
@@ -77,8 +103,8 @@ export default function ChatingPage() {
 
     return (
         <main>
-            <ChatingNavigation />
-            <ChatingModal />
+            <ChatingNavigation chatName={getChatName} />
+            <ChatingModal correctChatUsers={correctChatUsers} />
             <MessagesContainer>
                 {messages
                     ? messages.map((message: Message, i: number) =>
@@ -98,9 +124,15 @@ export default function ChatingPage() {
                           ) : (
                               <YourMessageWrapper key={message.id}>
                                   <YourMessageNameWrapper>
-                                      <YourMessagePicture src="https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro" />
+                                      <YourMessagePicture
+                                          src={findUserPicture(
+                                              message.userId.split(':')[message.userId.split(':').length - 1],
+                                          )}
+                                      />
                                       <YourMessageName>
-                                          {message.userId.split(':')[message.userId.split(':').length - 1]}
+                                          {findUserName(
+                                              message.userId.split(':')[message.userId.split(':').length - 1],
+                                          )}
                                       </YourMessageName>
                                   </YourMessageNameWrapper>
                                   <YourMessageTextWrapper>

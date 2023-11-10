@@ -46,6 +46,7 @@ const MyChats = ({ userType }: any) => {
         try {
             const res = await instance.get<Chat[], any>(`chat`, { headers });
             if (res) {
+                console.log(res.chats);
                 setMyChats(res.chats);
             } else {
                 console.log('내 채팅 데이터 조회 실패');
@@ -136,6 +137,7 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height: 100vh;
 `;
 
 const Header = styled.div`
@@ -165,4 +167,6 @@ const ChatContainer = styled.div`
     justify-content: center;
     text-align: center;
     margin: 2rem;
+    height: 80%;
+    overflow-y: auto;
 `;
