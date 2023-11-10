@@ -87,10 +87,6 @@ const MyChats = ({ userType }: any) => {
         };
     }, []);
 
-    useEffect(() => {
-        console.log(myChats);
-    }, []);
-
     const onSearchHandler = () => {
         setSearchOpen(!searchOpen);
     };
@@ -104,12 +100,10 @@ const MyChats = ({ userType }: any) => {
             <Header>
                 <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
                 <IconBar>
-                    {/* <SearchIcon onClick={onSearchHandler} /> */}
                     <AddChatIcon onClick={onAddHandler} />
                 </IconBar>
             </Header>
             <ChatContainer>
-                {/* {searchOpen ? <SearchMyChat /> : null} */}
                 <SearchMyChat />
                 {userId
                     ? filterChats.length > 0
