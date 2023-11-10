@@ -12,10 +12,11 @@ import {
 } from '@material-tailwind/react';
 import { useFetchAllUserHook } from '@/hooks/Open/useFetchAllUserHook';
 import { User } from '@/types';
+import { getCookie } from '@/Components/Login/Cookie';
 import { RegisterFn } from '../ChatGenerator.type';
 
 const ChatGeneratorMenu = ({ register }: RegisterFn) => {
-	const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+	const accessToken = getCookie('accessToken');
 	const { data } = useFetchAllUserHook(accessToken as string);
 
 	return (

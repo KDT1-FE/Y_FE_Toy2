@@ -4,9 +4,13 @@ import ChatList from '@/Components/Open/ChatList/ChatList';
 import SpeedDialWithTextInside from '@/Components/Open/SpeedDial/SpeedDial';
 import ChatGenerator from '@/Components/Open/ChatGenerator/ChatGenerator';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 
 const Open = async () => {
-	const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN as string;
+	const cookieStore = cookies();
+	const accessTokens = cookieStore.get('accessToken');
+	const accessToken = accessTokens?.value as string;
+
 	const result = await fetchAllChat(accessToken);
 
 	return (
