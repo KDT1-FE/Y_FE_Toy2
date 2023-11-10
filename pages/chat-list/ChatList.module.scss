@@ -1,0 +1,35 @@
+@import '@/styles/index.scss';
+
+.container {
+  @include container;
+  display: flex;
+  padding: 1rem;
+}
+
+.user_profile {
+  margin-right: 1rem;
+  border-radius: 100%;
+}
+
+.chatInfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.chatNameWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatName {
+  font-size: $font-size-lg;
+  margin-bottom: 1rem;
+}
+
+.chatLastestMesaage {
+  font-size: $font-size-base;
+}
+
+.chat_updated {
+}
