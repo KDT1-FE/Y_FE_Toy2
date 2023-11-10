@@ -9,7 +9,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import data from "../../../data/category.json";
 
 interface Categories {
@@ -17,10 +16,6 @@ interface Categories {
   keyword: string[];
 }
 [];
-
-const Div = styled.div`
-  margin: 20rem;
-`;
 
 const Keyword = ({ status, updateStatus }: any) => {
   const categories = data.CategoryList;
@@ -83,7 +78,7 @@ const Keyword = ({ status, updateStatus }: any) => {
   };
 
   return (
-    <Div>
+    <>
       {status === "대기중" && <Button onClick={handleStart}>게임시작</Button>}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -118,7 +113,7 @@ const Keyword = ({ status, updateStatus }: any) => {
           </>
         )}
       </Box>
-    </Div>
+    </>
   );
 };
 
