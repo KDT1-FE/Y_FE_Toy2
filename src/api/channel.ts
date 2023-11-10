@@ -1,8 +1,14 @@
-import { Chat, ResponseValue } from '../@types/chat';
+import { Channel } from '../@types/chat';
 import instance from './axios';
 
+export const getChannels = async () => {
+  const response = await instance.get<Channel[]>('/chat/all');
+
+  return response.data;
+};
+
 export const getMyChannels = async () => {
-  const response = await instance.get<{ chats: Chat[] }>('/chat');
+  const response = await instance.get<{ chats: Channel[] }>('/chat');
   const chatsData = await response.data.chats;
 
   return chatsData;

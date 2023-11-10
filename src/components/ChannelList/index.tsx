@@ -1,6 +1,6 @@
 import { HStack } from '@chakra-ui/react';
 import useChannels from '../../hooks/useChannels';
-import UserCard from './Card';
+import ChannelCard from './Channel';
 
 const CardContainer = () => {
   const { data: channels, isLoading } = useChannels();
@@ -13,7 +13,7 @@ const CardContainer = () => {
     <HStack>
       {channels &&
         channels.map((channel) => (
-          <UserCard key={channel.id} channel={channel} />
+          <ChannelCard key={channel.id} channel={channel} />
         ))}
     </HStack>
   );

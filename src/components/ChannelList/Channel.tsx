@@ -8,14 +8,14 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react';
-import { formatTimeToKST } from '../../utils/formatTimeToKST';
-import { Chat } from '../../@types/chat';
+import { formatTimeToKST } from '../../utils';
+import { Channel } from '../../@types/chat';
 
 interface Props {
-  channel: Chat;
+  channel: Channel;
 }
 
-const UserCard = ({ channel }: Props) => {
+const ChannelCard = ({ channel }: Props) => {
   return (
     <Card border="2px solid #cdcdcd" boxShadow={0} w={215}>
       <CardHeader>
@@ -36,4 +36,4 @@ const UserCard = ({ channel }: Props) => {
   );
 };
 
-export default UserCard;
+export default ChannelCard;
