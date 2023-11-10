@@ -131,7 +131,20 @@ function UserLogin() {
             display="flex"
             alignItems="center"
             marginBottom={7}>
-            <Switch id="email-alerts" marginRight={3} colorScheme="teal" />
+            <Switch
+              id="email-alerts"
+              marginRight={3}
+              sx={{
+                '.css-p27qcy[data-checked]': {
+                  // 활성화 상태에서의 트랙 색상
+                  backgroundColor: '#4FD1C5',
+                },
+                '.css-7roig[data-checked]': {
+                  // 활성화 상태에서의 썸 색상
+                  backgroundColor: 'white',
+                },
+              }}
+            />
             <FormLabel htmlFor="email-alerts" mb="0">
               계정 정보 기억하기
             </FormLabel>
@@ -140,8 +153,12 @@ function UserLogin() {
             width={300}
             height={50}
             type="submit"
-            colorScheme="teal"
             size="lg"
+            color="white"
+            bg="#4FD1C5"
+            _disabled={{
+              bg: '#9AEBE0',
+            }}
             isDisabled={!id || !password}>
             로그인
           </Button>
@@ -153,7 +170,7 @@ function UserLogin() {
             as={ReactRouterLink}
             to="/join"
             marginRight={2}
-            color="teal.500"
+            color="#4FD1C5"
             fontWeight={700}>
             회원가입
           </Link>
