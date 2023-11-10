@@ -53,10 +53,10 @@ const LoginForm = () => {
 	};
 
 	return (
-		<div className="flex flex-col p-20 items-center justify-center">
+		<div className="flex flex-col h-full items-center justify-center">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col items-center justify-center"
+				className="flex flex-col items-center justify-center w-2/3"
 			>
 				<Image src="/logo.png" alt="Picture of me" width={250} height={250} />
 				{/* 영어와 숫자만 */}
@@ -87,10 +87,10 @@ const LoginForm = () => {
 				<Button type="submit" className=" bg-pink-200 w-full mt-10">
 					로그인
 				</Button>
+				<Link href="/join">
+					<div className="text-gray-700  text-[10px] mt-4 mb-14">회원가입</div>
+				</Link>
 			</form>
-			<Link href="/join">
-				<div className="text-red-500 text-[10px] mt-2">회원가입</div>
-			</Link>
 		</div>
 	);
 };
