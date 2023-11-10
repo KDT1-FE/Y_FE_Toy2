@@ -2,12 +2,12 @@ import { Box } from '@chakra-ui/react';
 import Chat from '.';
 import { useEffect, useState } from 'react';
 import socket from '../../api/socket';
-import { Message, MessageData } from '../../@types/message';
+import { ChatInfo, MessageData } from '../../@types/message';
 import { SOCKET } from '../../constants/socket';
 import { getUser } from '../../api/user';
 
 const ChatList = () => {
-  const [messages, setMessages] = useState<Message[] | undefined>(undefined);
+  const [messages, setMessages] = useState<ChatInfo[] | undefined>(undefined);
   useEffect(() => {
     const getMessageInfo = async (messages: MessageData[]) => {
       const messagesData = [];
@@ -25,7 +25,7 @@ const ChatList = () => {
           });
         }
       }
-      setMessages(messagesData);
+      setMessages(messagesData.reverse());
     };
     socket.emit(SOCKET.FETCH_MESSAGES);
     socket.on(
