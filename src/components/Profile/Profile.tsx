@@ -152,8 +152,30 @@ function Profile() {
   const [imageURL, setImageURL] = useState("");
 
   const { userData, feedData } = useUserData();
-  console.log("User data:", userData)
-  console.log("Feed data:", feedData)
+
+  const [ isProfileMatchingLogin, setIsProfileMatchingLogin ] = useState(false);
+
+  // console.log("User data:", userData)
+  // console.log("Feed data:", feedData)
+  const loginId = sessionStorage.getItem('userId'); 
+  
+  useEffect(() => {
+    
+if(userData){
+  if(loginId == userData.id){
+    setIsProfileMatchingLogin(true);
+  }else {
+    setIsProfileMatchingLogin(false);
+  }
+}
+console.log(loginId)
+  },[userData])
+
+
+  // 세션 스토리지에서 값 가져오기
+
+
+
   // useEffect(() => {
   //   if (userData) {
   //     const storage = getStorage();
@@ -178,7 +200,7 @@ function Profile() {
       ></ProfileHeaderImg>
 
       <ProfileBodyContainer>
-        <ProfileInfo userData={userData}></ProfileInfo>
+        <ProfileInfo userData={userData} isProfileMatchingLogin = {isProfileMatchingLogin}></ProfileInfo>
         <ProfileFeed feedData={feedData}></ProfileFeed>
       </ProfileBodyContainer>
     </ProfileContainer>

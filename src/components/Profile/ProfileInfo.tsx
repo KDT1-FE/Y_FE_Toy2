@@ -83,17 +83,17 @@ interface usertData {
   hobby: string[];
 }
 
-function ProfileInfo(props: { userData: usertData | null }) {
+function ProfileInfo(props: { userData: usertData | null , isProfileMatchingLogin: boolean | null}) {
   return (
     <ProfileInfoWrap>
       <ProfileInfoImgWrap>
         <ProfileInfoImg
           style={{ backgroundImage: `url(${props.userData?.ProfileImgUrl})` }}
         >
-          {/* 자기 프로필 일경우에만 보여야함. */}
-          <ProfileInfoEditBtn>
+          { props.isProfileMatchingLogin ?           <ProfileInfoEditBtn>
             <BsPencilFill color="#BEBEBE" />
-          </ProfileInfoEditBtn>
+          </ProfileInfoEditBtn> : null}
+
         </ProfileInfoImg>
       </ProfileInfoImgWrap>
       <ProfileInfoContents>
