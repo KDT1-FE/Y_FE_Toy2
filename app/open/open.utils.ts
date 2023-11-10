@@ -4,7 +4,7 @@ export const fetchAllChat = async (token: string, userId: string) => {
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
-			serverId: process.env.SERVER_KEY as string,
+			NEXT_PUBLIC_SERVER_ID: process.env.SERVER_KEY as string,
 		},
 	});
 	const data = await res.json();
