@@ -20,7 +20,6 @@ function LoginForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const LOGIN_API_URL = "https://fastcampus-chat.net/login";
-
     setLoading(true);
 
     setTimeout(() => {
