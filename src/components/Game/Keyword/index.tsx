@@ -22,73 +22,80 @@ const Div = styled.div`
   margin: 20rem;
 `;
 
-const Keyword = () => {
+const Keyword = ({ status, updateStatus }: any) => {
   const categories = data.CategoryList;
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
-
   const users = data.users;
-  const [liar, setLiar] = useState("");
-  const [isLiar, setIsLiar] = useState(false);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
+  // 모달 자동 닫기
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     if (isOpen) {
       timer = setTimeout(() => {
         onClose();
-      }, 2000);
+      }, 3000);
     }
     return () => clearTimeout(timer);
   }, [isOpen, onClose]);
 
+  // 랜덤 숫자 계산
   const getRandNum = (length: number): number => {
     const randNum = Math.floor(Math.random() * length);
 
     return randNum;
   };
 
-  const handleStart = () => {
+  // 게임 시작
+  const handleStart = async () => {
     onOpen();
+
+    await updateStatus("게임중");
 
     const selectedCategory = categories[getRandNum(categories.length)];
     setCategory(selectedCategory);
-    setKeyword(
-      selectedCategory.keyword[getRandNum(selectedCategory.keyword.length)],
-    );
+    window.localStorage.setItem("category", selectedCategory.category);
 
-    setLiar(users.name[getRandNum(users.name.length)]);
-    if (liar === "연수") {
-      setIsLiar(true);
+    const ranKeyword =
+      selectedCategory.keyword[getRandNum(selectedCategory.keyword.length)];
+    setKeyword(ranKeyword);
+    window.localStorage.setItem("keyword", ranKeyword);
+
+    const ranLiar = users.name[getRandNum(users.name.length)];
+    if (ranLiar === "연수") {
+      // setIsLiar(true);
+      window.localStorage.setItem("liar", "true");
     } else {
-      setIsLiar(false);
+      // setIsLiar(false);
+      window.localStorage.setItem("liar", "false");
     }
+  };
+
+  // 게임 종료
+  const hadleEnd = async () => {
+    await updateStatus("대기중");
+
+    window.localStorage.removeItem("category");
+    window.localStorage.removeItem("keyword");
+    window.localStorage.removeItem("liar");
+    setCategory(null);
+    setKeyword("");
+    // setIsLiar(false);
   };
 
   return (
     <Div>
-      <Button onClick={handleStart}>게임시작</Button>
+      {status === "대기중" && <Button onClick={handleStart}>게임시작</Button>}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent width={420} height={375}>
+        <ModalContent width={300} height={200}>
           <ModalCloseButton />
           <ModalBody>
             <p>주제는 {category?.category} 입니다.</p>
-            {isLiar ? (
-              <p>당신은 Liar 입니다. 키워드를 추리하세요.</p>
-            ) : (
-              <p>키워드는 {keyword} 입니다.</p>
-            )}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-      <Box>
-        {category && (
-          <>
-            <p>주제는 {category?.category} 입니다.</p>
-            {isLiar ? (
+            {window.localStorage.getItem("liar") ? (
               <>
                 <p>당신은 Liar 입니다.</p>
                 <p>키워드를 추리하세요.</p>
@@ -96,6 +103,22 @@ const Keyword = () => {
             ) : (
               <p>키워드는 {keyword} 입니다.</p>
             )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <Box>
+        {status === "게임중" && (
+          <>
+            <p>주제는 {window.localStorage.getItem("category")} 입니다.</p>
+            {window.localStorage.getItem("liar") ? (
+              <>
+                <p>당신은 Liar 입니다.</p>
+                <p>키워드를 추리하세요.</p>
+              </>
+            ) : (
+              <p>키워드는 {window.localStorage.getItem("keyword")} 입니다.</p>
+            )}
+            <Button onClick={hadleEnd}>게임 종료</Button>
           </>
         )}
       </Box>
