@@ -19,7 +19,6 @@ export default function Chat() {
 
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
-
   useEffect(() => {
     socketRef.current = io(`${CLIENT_URL}?chatId=${chatId}`, {
       extraHeaders: {
