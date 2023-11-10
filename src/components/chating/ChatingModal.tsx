@@ -3,10 +3,27 @@
 import styled, { keyframes } from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
+import { useRouter } from 'next/navigation';
 
 //type
 export default function ChatingModal(props: any) {
     const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChatingModalToggle);
+    const router = useRouter();
+
+    const leaveChating = async () => {
+        await fetch('https://fastcampus-chat.net/chat/leave', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${props.accessToken}`,
+                serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+            },
+            body: JSON.stringify({
+                chatId: props.chatId,
+            }),
+        });
+        router.back();
+    };
 
     return (
         <>
@@ -24,7 +41,7 @@ export default function ChatingModal(props: any) {
                 ) : (
                     ''
                 )}
-                <ChatingLeave>채팅방 나가기</ChatingLeave>
+                <ChatingLeave onClick={() => leaveChating()}>채팅방 나가기</ChatingLeave>
             </ModalWrapper>
 
             <ModalBackground

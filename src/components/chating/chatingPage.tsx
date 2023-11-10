@@ -51,9 +51,10 @@ export default function ChatingPage() {
             }
         }
     };
-
     const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
     const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+    const pathname = usePathname();
+    const chatId = pathname.split('/')[2];
 
     useEffect(() => {
         // 유저 블락
@@ -69,9 +70,6 @@ export default function ChatingPage() {
 
         socketInitilizer();
     }, []);
-
-    const pathname = usePathname();
-    const chatId = pathname.split('/')[2];
 
     const socket = io(`wss://fastcampus-chat.net/chat?chatId=${chatId}`, {
         extraHeaders: {
@@ -116,7 +114,7 @@ export default function ChatingPage() {
     return (
         <main>
             <ChatingNavigation chatName={getChatName} />
-            <ChatingModal correctChatUsers={correctChatUsers} />
+            <ChatingModal correctChatUsers={correctChatUsers} chatId={chatId} accessToken={accessToken} />
             <MessagesContainer>
                 {messages
                     ? messages.map((message: Message, i: number) =>
