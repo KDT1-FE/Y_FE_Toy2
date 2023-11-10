@@ -6,6 +6,7 @@ import { fetchLogin } from '../../app/login/login.utils';
 import { setCookie } from '@/Components/Login/Cookie';
 import { Button } from '@material-tailwind/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type IFormInput = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -13,6 +14,8 @@ type IFormInput = {
 };
 
 const LoginForm = () => {
+	const router = useRouter();
+
 	const {
 		register,
 		handleSubmit,
@@ -30,8 +33,13 @@ const LoginForm = () => {
 		// 1일 뒤
 		time.setMinutes(time.getMinutes() + 60 * 24);
 
-		setCookie('accessToken', accessToken, { path: '/', expires: time });
-		setCookie('refreshToken', refreshToken, { path: '/' });
+		if (accessToken && refreshToken) {
+			setCookie('accessToken', accessToken, { path: '/', expires: time });
+			setCookie('refreshToken', refreshToken, { path: '/' });
+			router.replace('/users');
+		} else {
+			console.log('유저가 없습니다');
+		}
 	};
 
 	return (
