@@ -21,7 +21,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem("refreshToken", refreshToken || "");
-    refreshAccessToken();
+    if (refreshToken) {
+      refreshAccessToken();
+    }
   }, [refreshToken]);
 
   const refreshAccessToken = async () => {

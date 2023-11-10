@@ -5,6 +5,7 @@ import FormInputBtn from "../../FormInputBtn/FormInputBtn";
 import { postApi } from "../../../utils/postApi";
 import Loader from "../../Loader/Loader";
 import { AuthContext } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const initialLoginData = {
   id: "",
@@ -16,6 +17,7 @@ function LoginForm() {
   const [loginData, setLoginData] = useState(initialLoginData);
   const [loading, setLoading] = useState(false);
   const { accessToken, setAccessToken } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,15 +27,14 @@ function LoginForm() {
     setTimeout(() => {
       postApi(LOGIN_API_URL, loginData)
         .then((data) => {
-          console.log("로그인 성공");
           const token = data.accessToken;
           const refreshToken = data.refreshToken;
           setAccessToken(token);
           localStorage.setItem("refreshToken", refreshToken);
           setLoading(false);
+          navigate('/');
         })
         .catch((error) => {
-          console.log("로그인 실패");
           console.error(error);
           setErrorMessage("아이디와 비밀번호를 확인해주세요.");
           setLoading(false);
