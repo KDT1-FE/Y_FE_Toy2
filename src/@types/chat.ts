@@ -1,13 +1,13 @@
-import { Message } from './message';
+import { MessageData } from './message';
 import { User } from './user';
 
-export type ResponseValue = Chat[];
+export type ResponseValue = Channel[];
 
-export interface Chat {
+export interface Channel {
   id: string;
   name: string;
   users: User[]; // 속한 유저 정보
   isPrivate: boolean;
-  latestMessage: Message | null;
+  latestMessageData: MessageData | null;
   updatedAt: Date;
 }

@@ -5,6 +5,5 @@ import instance from './axios';
 export const getMyChannels = async () => {
   const response = await instance.get('/chat');
   const data: { chats: ResponseValue } = await response.data;
-
   return data.chats;
 };
