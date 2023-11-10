@@ -1,4 +1,4 @@
-@use './variables' as *;
+@import '@/styles/variables.scss';
 
 @mixin a11y-hidden() {
   position: absolute;
@@ -10,9 +10,22 @@
   clip-path: polygon(0 0, 0 0, 0 0);
 }
 
+@mixin container {
+  max-width: 76.8rem;
+  width: 100%;
+  margin: 0 auto;
+  font-size: $font-size-base;
+}
+
 @mixin flex-center-row() {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between-row() {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -23,8 +36,14 @@
   align-items: center;
 }
 
-@mixin shadow() {
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+@mixin shadow-top() {
+  box-shadow: 0 0 0.4rem 0 rgba(0, 0, 0, 0.16);
+}
+@mixin shadow-bottom() {
+  box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.3);
+}
+
+@mixin button() {
+  border: none;
+  background: transparent;
 }

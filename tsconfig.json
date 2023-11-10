@@ -13,9 +13,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./*"],
-      "@types/*": ["@types/*"]
+      "@types/*": ["@types/*"],
+      "@components/*": ["@components/*"]
 
     },
     "plugins": [{ "name": "typescript-plugin-css-modules" }]

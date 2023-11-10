@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { Message } from '../../@types/types';
+import MyChat from '@/components/chat/mychat';
+import OtherChat from '@/components/chat/otherchat';
+import { Message } from '@/@types/types';
 import { CLIENT_URL } from '../../apis/constant';
+import styles from './Chat.module.scss';
+import styles2 from '../../components/chat/Chat.module.scss';
+import ChatroomHeader from '../../components/chat/header';
 
 export default function Chat() {
-   // chatId랑 accessToken받아서 사용하기
-  const [isConnected, setIsConnected] = useState(false);
+  const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -38,40 +42,40 @@ export default function Chat() {
       socketRef.current?.off('message-to-client');
       socketRef.current?.disconnect();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // 이제 chatId와 accessToken이 변경될 때만 socket이 재생성됩니다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 이제 chatId와 accessToken이 변경될 때 
 
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log('message : ', message);
-    console.log(socketRef.current);
-     if (message && socketRef.current?.connected) {
+    if (message && socketRef.current?.connected) {
       socketRef.current.emit('message-to-server', message);
       setMessage('');
     }
   };
 
   return (
-    <>
-      <div>Chat</div>
-      <p>State: {isConnected ? 'Connected' : 'Disconnected'}</p>
-      <form onSubmit={handleSendMessage}>
+    <div className={styles.container}>
+      <ChatroomHeader />
+      <div>
+        {messages.map(msg => (
+          <MyChat key={msg.id} msg={msg} />
+        ))}
+      </div>
+
+      <form className={styles2.footer} onSubmit={handleSendMessage}>
         <input
           type="text"
-          placeholder="Type a message"
+          placeholder="대화를 시작해보세요!"
+          className={styles2.chatInput}
           value={message}
           onChange={e => setMessage(e.target.value)}
         />
-        <button type="submit">Send</button>
+        <button
+          className={styles2.triangle_button}
+          type="submit"
+          aria-label="Submit"
+        />
       </form>
-      <div>
-        {messages.map(msg => (
-          <p key={msg.id}>
-            {msg.userId}: {msg.text} -{' '}
-            {new Date(msg.createdAt).toLocaleString()}
-          </p>
-        ))}
-      </div>
-    </>
+    </div>
   );
 }
