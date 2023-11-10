@@ -9,6 +9,7 @@ const Open = async () => {
 	const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN as string;
 	const { chats } = await fetchAllChat(accessToken);
 	const filteredChatList = filterChat(chats);
+	console.log(chats);
 
 	return (
 		<div className="relative flex flex-col h-[calc(100vh-2.5rem)] bg-white">

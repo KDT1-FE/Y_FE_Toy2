@@ -9,11 +9,15 @@ import {
 } from '@material-tailwind/react';
 import { chatModalAtom } from '@/atoms/chatModalAtom';
 import { useSetRecoilState } from 'recoil';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const SpeedDialWithTextInside = () => {
 	const setModalOpen = useSetRecoilState(chatModalAtom);
+	const router = useRouter();
 
-	const handleOpenModal = () => {
+	const handleOpenModal = (query: string) => {
+		router.replace(`/open?${new URLSearchParams({ type: query })}`);
 		setModalOpen(true);
 	};
 
@@ -28,15 +32,25 @@ const SpeedDialWithTextInside = () => {
 					</div>
 				</SpeedDialHandler>
 				<SpeedDialContent>
-					<SpeedDialAction className="h-16 w-16" onClick={handleOpenModal}>
-						<Typography color="blue-gray" className="text-xs font-normal">
-							오픈채팅
-						</Typography>
+					<SpeedDialAction
+						className="h-16 w-16"
+						onClick={() => handleOpenModal('open')}
+					>
+						<Link href={`?${new URLSearchParams({ type: 'open' })}`}>
+							<Typography color="blue-gray" className="text-xs font-normal">
+								오픈채팅
+							</Typography>
+						</Link>
 					</SpeedDialAction>
-					<SpeedDialAction className="h-16 w-16" onClick={handleOpenModal}>
-						<Typography color="blue-gray" className="text-xs font-normal">
-							비밀채팅
-						</Typography>
+					<SpeedDialAction
+						className="h-16 w-16"
+						onClick={() => handleOpenModal('private')}
+					>
+						<Link href={`?${new URLSearchParams({ type: 'private' })}`}>
+							<Typography color="blue-gray" className="text-xs font-normal">
+								비밀채팅
+							</Typography>
+						</Link>
 					</SpeedDialAction>
 				</SpeedDialContent>
 			</SpeedDial>

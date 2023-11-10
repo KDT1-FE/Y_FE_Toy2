@@ -14,10 +14,12 @@ import { chatModalAtom } from '@/atoms/chatModalAtom';
 import { useRecoilState } from 'recoil';
 import { Inputs } from './ChatGenerator.type';
 import { useFetchPostNewChat } from '@/hooks/Open/useFetchPostNewChat';
+import { useCurrentSearchParams } from '@/hooks/Open/useCurrentSearchParmas';
 
 const ChatGenerator = () => {
 	const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN as string;
 	const mutation = useFetchPostNewChat(accessToken);
+	const params = useCurrentSearchParams('type');
 
 	const modalRef = useRef(null);
 	const [chatModal, setChatModal] = useRecoilState(chatModalAtom);
@@ -27,12 +29,18 @@ const ChatGenerator = () => {
 		formState: { errors },
 	} = useForm<Inputs>();
 
+	const checkIsPrivateChat = () => {
+		if (params === 'private') {
+			return true;
+		}
+		return false;
+	};
+
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		console.log(data.name);
-		console.log(data.users);
 		mutation.mutate({
 			name: data.name,
 			users: data.users,
+			isPrivate: checkIsPrivateChat(),
 		});
 	};
 

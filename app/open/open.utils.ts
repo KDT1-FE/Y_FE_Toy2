@@ -3,6 +3,7 @@ import { Chat, CatApiResponseType } from './open.type';
 export const fetchAllChat = async (token: string) => {
 	const res = await fetch(`https://fastcampus-chat.net/chat`, {
 		method: 'GET',
+		cache: 'no-cache',
 		headers: {
 			'Content-Type': 'application/json',
 			serverId: process.env.NEXT_PUBLIC_SERVER_ID as string,
