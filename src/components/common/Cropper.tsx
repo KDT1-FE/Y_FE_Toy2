@@ -143,7 +143,8 @@ function Cropper({ preview, setPreview }: CropperProps) {
   };
   // handle Change
   const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) setSrc(URL.createObjectURL(e.target.files[0]));
+    if (e.target.files && e.target.files[0])
+      setSrc(URL.createObjectURL(e.target.files[0]));
     setModalOpen(true);
   };
 

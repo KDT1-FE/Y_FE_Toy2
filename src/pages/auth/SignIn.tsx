@@ -11,8 +11,8 @@ import {
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { publicApi } from '../../libs/axios';
-import { accessTokenState } from '../../atoms';
+import { privateApi, publicApi } from '../../libs/axios';
+import { accessTokenState, userState } from '../../atoms';
 
 interface ResponseValue {
   accessToken: string; // 사용자 접근 토큰
@@ -21,6 +21,7 @@ interface ResponseValue {
 
 function SignIn() {
   const navigate = useNavigate();
+  const [userData, setUserData] = useRecoilState(userState);
   const [accessToken, setAccessTokenState] = useRecoilState(accessTokenState);
   const formik = useFormik({
     initialValues: {
@@ -36,16 +37,21 @@ function SignIn() {
         });
 
         // eslint-disable-next-line @typescript-eslint/dot-notation
-        // privateApi.defaults.headers.common['Authorization'] =
-        //   res.data.accessToken;
-        // const res2 = await privateApi.get('auth/me');
-        // const { user } = res2.data;
+        privateApi.interceptors.request.use((config) => {
+          const token = res.data.accessToken;
+          const newConig = config;
+          newConig.headers.Authorization = `Bearer ${token}`;
+
+          return newConig;
+        });
+        const res2 = await privateApi.get('auth/me');
+        const { user } = res2.data;
 
         localStorage.setItem('accessToken', res.data.accessToken);
         localStorage.setItem('refreshToken', res.data.refreshToken);
-        // localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
         setAccessTokenState(res.data.accessToken);
-        // setUserData(JSON.stringify(user));
+        setUserData(JSON.stringify(user));
       } catch (error) {
         if (axios.isAxiosError(error)) {
           // axios에서 발생한 error

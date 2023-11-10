@@ -23,11 +23,13 @@ privateApi.interceptors.response.use(
   (response) => response,
   // 200번대 응답이 아닐 경우 처리
   async (error) => {
-    const originalConfig = error.config;
-    // const msg = error.response.data.message;
-    const { status } = error.response;
+    const {
+      config,
+      response: { status },
+    } = error;
 
     if (status === 401) {
+      const originRequest = config;
       // if (msg === 'access token expired') {
       await axios({
         url: `https://fastcampus-chat.net/refresh`,
@@ -42,8 +44,8 @@ privateApi.interceptors.response.use(
         },
       }).then((res) => {
         localStorage.setItem('accessToken', res.data.accessToken);
-        originalConfig.headers.Authorization = `Bearer ${res.data.accessToken}`;
-        return publicApi(originalConfig);
+        originRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
+        return publicApi(originRequest);
       });
       // }
     } else if (status === 400 || status === 404 || status === 409) {
