@@ -4,6 +4,8 @@ import React, { useState, useCallback } from 'react';
 import { AllOpenChat } from '@/app/search/search.type';
 import ShowAllOpenChat from './ShowAllOpenChat';
 import { User } from '@/types';
+import { FriendProfile } from '../Users/FriendProfiles';
+import { Input } from '@material-tailwind/react';
 import ShowSearchedFriend from './ShowSearchedFriend';
 import FriendProfiles from '../Users/FriendProfiles';
 import ProfileModal from '../Common/ProfileModal';
@@ -55,32 +57,18 @@ const SearchOpenChat = ({
 	return (
 		<>
 			<input onChange={getUserInput} onKeyPress={handleKeyPress} />
-			{isShowMore && <FriendProfiles allUsers={searchedUsers} />}
-			{!isShowMore && (
+			{searched.length || searchedUsers?.length ? (
 				<>
-					{searched.length || searchedUsers?.length ? (
-						<>
-							{allUsersExceptMe && (
-								<ShowSearchedFriend
-									openModalHandler={openModalHandler}
-									setIsShowMore={setIsShowMore}
-									searchedUsers={searchedUsers as User[]}
-								/>
-							)}
-							{searched.map((item) => (
-								<ShowAllOpenChat key={item.id} openChat={item} />
-							))}
-						</>
-					) : (
-						<h1>검색 결과가 없습니다.</h1>
-					)}
+					{searched.map((item) => (
+						<ShowAllOpenChat key={item.id} openChat={item} />
+					))}
+					{searchedUsers?.map((user) => (
+						<FriendProfile key={user.id} user={user} />
+					))}
 				</>
+			) : (
+				<h1>검색 결과가 없습니다.</h1>
 			)}
-			<ProfileModal
-				user={modalUser}
-				open={isModalOpen}
-				setIsModalOpen={setIsModalOpen}
-			/>
 		</>
 	);
 };
