@@ -3,14 +3,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import ProfileModal from '../Common/ProfileModal';
-
-type User = {
-	id: string;
-	password: string;
-	name: string;
-	picture: string;
-	chats: string[]; // chat id만 속합니다.
-};
+import { User } from '@/types';
 
 const MyProfile = ({ user }: { user: User }) => {
 	const picture = user.picture || '/icon_cat.svg';

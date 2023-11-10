@@ -1,9 +1,9 @@
 import React from 'react';
 import { fetchAllUsers, fetchMyUser } from './users.utils';
-import { User } from './users.type';
 import FriendProfile from '@/Components/Users/FriendProfiles';
 import MyProfile from '@/Components/Users/MyProfile';
 import Header from '@/Components/Common/Header';
+import { User } from '@/types';
 
 const Users = async () => {
 	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;

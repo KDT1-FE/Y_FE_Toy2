@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
@@ -19,38 +20,34 @@ const Header = () => {
 };
 
 const UsersUl = () => {
-	const searchHandler = () => {
-		console.log('click the search');
-	};
-
 	return (
 		<ul className="flex align-center gap-3">
-			<li className="flex align-center cursor-pointer" onClick={searchHandler}>
-				<Image
-					width={25}
-					height={25}
-					src="/icon_search.svg"
-					alt="친구,채팅방 검색하기"
-				/>
+			<li className="flex align-center cursor-pointer">
+				<Link href={'/searchmychat'}>
+					<Image
+						width={25}
+						height={25}
+						src="/icon_search.svg"
+						alt="친구,채팅방 검색하기"
+					/>
+				</Link>
 			</li>
 		</ul>
 	);
 };
 
 const OpenUl = () => {
-	const searchHandler = () => {
-		console.log('click the search');
-	};
-
 	return (
 		<ul className="flex align-center gap-3">
-			<li className="flex align-center cursor-pointer" onClick={searchHandler}>
-				<Image
-					width={25}
-					height={25}
-					src="/icon_search.svg"
-					alt="채팅방 검색하기"
-				/>
+			<li className="flex align-center cursor-pointer">
+				<Link href={'/search'}>
+					<Image
+						width={25}
+						height={25}
+						src="/icon_search.svg"
+						alt="오픈채팅방 검색하기"
+					/>
+				</Link>
 			</li>
 		</ul>
 	);
