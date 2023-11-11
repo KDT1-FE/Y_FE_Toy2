@@ -7,14 +7,14 @@ interface Props {
 }
 
 const ChannelModalUserList = ({ setUsers }: Props) => {
-  const { data: users, isLoading, addUser, userList } = useUsers();
+  const { data: users, isLoading, addUser, userSet } = useUsers();
 
   useEffect(() => {
-    setUsers(userList);
-  }, [userList]);
+    setUsers(Array.from(userSet));
+  }, [userSet]);
 
   const isIncluded = (id: string) => {
-    return userList.includes(id);
+    return userSet.has(id);
   };
 
   return (
@@ -24,7 +24,7 @@ const ChannelModalUserList = ({ setUsers }: Props) => {
           친구 초대
         </Text>
         <Text fontSize="sm" fontWeight="semibold">
-          {userList.length}
+          {userSet.size}
         </Text>
       </Flex>
       <Flex flexDir="column" gap="2" h={300} overflow="auto">

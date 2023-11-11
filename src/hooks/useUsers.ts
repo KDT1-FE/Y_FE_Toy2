@@ -9,17 +9,19 @@ export const useUsers = () => {
     queryFn: getUsers,
   });
 
-  const [userList, setUserList] = useState<string[]>([]);
+  const [userSet, setUserSet] = useState<Set<string>>(new Set());
 
   const addUser = (userId: string) => {
-    setUserList((currentUserList) => {
-      const isExist = currentUserList.find((user) => user === userId);
-      if (isExist) {
-        return currentUserList.filter((user) => user !== userId);
+    setUserSet((currentUserSet) => {
+      const newSet = new Set(currentUserSet);
+      if (newSet.has(userId)) {
+        newSet.delete(userId);
+      } else {
+        newSet.add(userId);
       }
-      return [...currentUserList, userId];
+      return newSet;
     });
   };
 
-  return { data, isLoading, addUser, userList };
+  return { data, isLoading, addUser, userSet };
 };
