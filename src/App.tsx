@@ -14,6 +14,7 @@ import ProfileEditPage from "./Pages/Profile/ProfileEditPage";
 import ChatTest from "./Pages/ChatTest";
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
+import Chat from "./Pages/Chat";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       { path: "profiles/:userid/edit", element: <ProfileEditPage /> },
       {
         path: "chat",
-        element: <ChatTest />
+        element: <Chat />
       },
       {
         path: "login",
