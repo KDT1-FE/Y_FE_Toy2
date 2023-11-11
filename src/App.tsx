@@ -14,6 +14,7 @@ import Chat from "./Pages/Chat";
 import { AuthProvider } from "./hooks/useAuth";
 import { createContext } from "react";
 import { useDarkMode } from "./hooks/useDarkMode";
+import ChatTest from "./Pages/ChatTest";
 
 interface ContextProps {
   theme: Theme;
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />
+      },
+      {
+        path: "chattest",
+        element: <ChatTest />
       }
     ]
   },
