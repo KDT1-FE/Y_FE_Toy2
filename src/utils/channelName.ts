@@ -1,3 +1,10 @@
+export const checkChannelName = (name: string) => {
+  const [title] = name.split('#');
+
+  if (title.length === 0) return false;
+  return true;
+};
+
 export const splitChannelName = (name: string) => {
   const [title, category] = name.split('#');
 
@@ -11,5 +18,6 @@ export const createChannelNameWithCategory = (
   name: string,
   category: string,
 ) => {
-  return `${name}#${category}`;
+  const channelName = `${name}#${category}`;
+  return channelName.trim();
 };
