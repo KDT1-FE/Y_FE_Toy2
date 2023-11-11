@@ -32,11 +32,16 @@ const UserInviteModal = () => {
         <ModalOverlay />
         <Center>
           <ModalContent>
-            <ModalHeader textAlign="center">유저 목록</ModalHeader>
+            <ModalHeader textAlign="center" my="10px">
+              유저 목록
+            </ModalHeader>
             <ModalCloseButton />
+
             <ModalBody>
+              {/* map으로 뿌리는거 구현 */}
               <UserInviteList />
             </ModalBody>
+
             <ModalFooter justifyContent="center">
               <Button
                 size="lg"

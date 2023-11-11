@@ -8,10 +8,6 @@ import { useMyChannels } from '../../hooks/useMyChannels';
 const SideBar = () => {
   const channels = useMyChannels();
 
-  useEffect(() => {
-    console.log('내챗/챗 데이터', channels);
-  }, []);
-
   return (
     <Box w="18rem" h="100vh" bg="gray.50" color="black" p="10px" boxShadow="xl">
       <Text fontSize="4xl" fontWeight="extrabold" mb="6px">
