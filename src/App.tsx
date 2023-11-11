@@ -1,20 +1,29 @@
-// import { useState } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import { GlobalStyle } from "./style/GlobalStyle";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import PageNotFound from "./components/PageNotFound";
-import { darkTheme, lightTheme } from "./style/theme";
-import { useEffect, useState } from "react";
-import { DarkModeProvider } from "./hooks/useDarkMode";
+import { Theme, darkTheme, lightTheme } from "./style/theme";
 import Profile from "./components/Profile/Profile";
-import MainContents from "./pages/MainContents";
-import ProfilePage from "./pages/Profile/ProfilePage";
-import ProfileEditPage from "./pages/Profile/ProfileEditPage";
-import Chat from "./pages/Chat";
-import Login from "./pages/Login/Login";
-import SignUp from "./pages/SignUp/SignUp";
+import MainContents from "./Pages/MainContents";
+import ProfilePage from "./Pages/Profile/ProfilePage";
+import ProfileEditPage from "./Pages/Profile/ProfileEditPage";
+import Chat from "./Pages/Chat";
+import Login from "./Pages/Login/Login";
+import SignUp from "./Pages/SignUp/SignUp";
 import { AuthProvider } from "./hooks/useAuth";
+import { createContext } from "react";
+import { useDarkMode } from "./hooks/useDarkMode";
+
+interface ContextProps {
+  theme: Theme;
+  toggleTheme: () => void;
+}
+
+export const ThemeContext = createContext<ContextProps>({
+  theme: lightTheme,
+  toggleTheme: () => {}
+});
 
 const router = createBrowserRouter([
   {
@@ -51,30 +60,20 @@ const router = createBrowserRouter([
   }
 ]);
 
-function App() {
-  const [isDarkMode, setisDarkMode] = useState(false);
+const App: React.FC = () => {
+  const { theme, toggleTheme } = useDarkMode();
 
-  useEffect(() => {
-    const storedMode = window.localStorage.getItem("isDarkMode");
-    if (storedMode) {
-      setisDarkMode(storedMode === "true");
-    }
-  }, []);
-
-  const theme = isDarkMode ? darkTheme : lightTheme;
   return (
-    <DarkModeProvider>
-      <Wrapper>
-        <AuthProvider>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <RouterProvider router={router} />
-          </ThemeProvider>
-        </AuthProvider>
-      </Wrapper>
-    </DarkModeProvider>
+    <Wrapper>
+      <AuthProvider>
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+          <GlobalStyle theme={theme === lightTheme ? lightTheme : darkTheme} />
+          <RouterProvider router={router} />
+        </ThemeContext.Provider>
+      </AuthProvider>
+    </Wrapper>
   );
-}
+};
 
 export default App;
 
