@@ -1,4 +1,4 @@
-export interface MessageData {
+export interface ChatData {
   createdAt: string;
   id: string;
   text: string;
