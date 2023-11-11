@@ -2,17 +2,21 @@
 
 import { Host } from '@/pages/host-list/hostList.types';
 import styles from './hostListItem.module.scss';
+import Button from './Button';
 
-export default function HostListItem({ host }: { host: Host }) {
+interface HostListItemProps {
+  host: Host;
+  openModal: () => void;
+}
+
+export default function HostListItem({ host, openModal }: HostListItemProps) {
   return (
     <li className={styles.item} key={host.id}>
-      <img className={styles.hostImg} src={host.picture} alt={host.name} />
+      <img className={styles['host-img']} src={host.picture} alt={host.name} />
       <div>
         <p className={styles.name}>{host.name}</p>
-        <p className={styles.name}> {host.location}</p>
-        <button className={styles.btn} type="submit">
-          상세보기
-        </button>
+        {/* <p className={styles.name}> {host.location}</p> */}
+        <Button onClick={openModal} className="fill-btn" text="상세보기" />
       </div>
     </li>
   );

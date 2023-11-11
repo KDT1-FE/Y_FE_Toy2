@@ -4,13 +4,18 @@ import 'react-tabs/style/react-tabs.css';
 import { addHostsToFirestore, fetchHostsFromFirestore } from '@/utils/firebase';
 import Link from 'next/link';
 import HostListItem from '@/components/host-list/HostListItem';
+import Modal from '@/components/common/Modal/Modal';
+import HostDetailsModal from '@/components/common/Modal/HostDetailsModal';
 import styles from './hostList.module.scss';
 import { Host } from './hostList.types';
 
 export default function HostListPage() {
   const [hosts, setHosts] = useState<Host[]>([]);
   const [selectedTab, setSelectedTab] = useState<number>(0);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedHostDetails, setSelectedHostDetails] = useState<Host | null>(
+    null,
+  );
   const locations = ['부산', '제주', '경주', '전주'];
 
   const fetchHosts = async (location: string) => {
@@ -27,6 +32,15 @@ export default function HostListPage() {
     fetchHosts(locations[selectedTab]);
   }, []);
 
+  const openModal = (host: Host) => {
+    setSelectedHostDetails(host);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedHostDetails(null);
+    setIsModalOpen(false);
+  };
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>HOT PLACE ✨ 인기 여행지</h2>
@@ -50,7 +64,11 @@ export default function HostListPage() {
               {hosts
                 .filter(host => host.location === location)
                 .map(host => (
-                  <HostListItem key={host.id} host={host} />
+                  <HostListItem
+                    key={host.id}
+                    host={host}
+                    openModal={() => openModal(host)}
+                  />
                 ))}
             </ul>
           </TabPanel>
@@ -63,7 +81,12 @@ export default function HostListPage() {
       >
         데이터 업뎃
       </button>
-      {/* <Sample /> */}
+      {isModalOpen && (
+        <HostDetailsModal
+          hostDetails={selectedHostDetails!}
+          onClose={closeModal}
+        />
+      )}
     </section>
   );
 }
