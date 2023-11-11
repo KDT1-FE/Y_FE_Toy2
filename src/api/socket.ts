@@ -8,7 +8,7 @@ export const loginSocket = (
   accessToken: any,
   onDataReceived: (data: any[]) => void,
 ) => {
-  serverSocket = io(`${SERVER_URL}/server`, {
+  serverSocket = io(`${SERVER_URL}server`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
       serverId: SERVER_ID,
@@ -16,9 +16,11 @@ export const loginSocket = (
   });
 
   serverSocket.on('connect', () => {
-    console.log(serverSocket);
-
     serverSocket?.emit('users-server');
+  });
+
+  serverSocket.on('error', (error) => {
+    console.error('Socket.IO connection error:', error);
   });
 
   serverSocket.on('users-server-to-client', (data) => {
@@ -29,7 +31,7 @@ export const loginSocket = (
 };
 
 export const chatSocket = (accessToken: any, chatId: string) => {
-  chattingSocket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
+  chattingSocket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
       serverId: SERVER_ID,
@@ -43,6 +45,10 @@ export const chatSocket = (accessToken: any, chatId: string) => {
 
   chattingSocket.on('disconnect', () => {
     console.log('Disconnected from server');
+  });
+
+  chattingSocket.on('error', (error) => {
+    console.error(error);
   });
 
   return chattingSocket;

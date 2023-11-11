@@ -16,7 +16,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
 
   useEffect(() => {
     try {
-      const socket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
+      const socket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
         extraHeaders: {
           Authorization: `Bearer ${accessToken}`,
           serverId: SERVER_ID,
@@ -28,6 +28,16 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       });
 
       socket.on('users-to-client', (data) => {
+        setUsersInGameRoom(data.users);
+      });
+
+      socket.on('leave', (data) => {
+        console.log(data);
+        setUsersInGameRoom(data.users);
+      });
+
+      socket.on('join', (data) => {
+        console.log(data);
         setUsersInGameRoom(data.users);
       });
 

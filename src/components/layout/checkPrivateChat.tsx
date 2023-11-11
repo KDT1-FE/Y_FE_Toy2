@@ -69,7 +69,7 @@ const CheckPrivateChat = () => {
             <p>{element.name}</p>
             <p>{element.id}</p>
             <p>{element.users.length}</p>
-            <p>{element.latestMessage.text}</p>
+            {/* <p>{element.latestMessage.text}</p> */}
             {element.users.length > 0 && <p>{element.users[0].id}</p>}
             {element.users.length > 0 && <p>{element.users[0].name}</p>}
             {element.users.length > 0 && <p>{element.users[0].picture}</p>}
