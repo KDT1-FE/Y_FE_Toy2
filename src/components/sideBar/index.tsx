@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Divider, Heading } from '@chakra-ui/react';
 import { AddIcon, EditIcon, ChatIcon } from '@chakra-ui/icons';
-import UserInviteModal from '../channelMemberSideBar/modal/UserInviteModal';
 import MyChannelItem from './MyChannelItem';
 import { useMyChannels } from '../../hooks/useMyChannels';
 
 const SideBar = () => {
   const channels = useMyChannels();
+
+  useEffect(() => {
+    channels;
+  }, []);
 
   return (
     <Box w="18rem" h="100vh" bg="gray.50" color="black" p="10px" boxShadow="xl">

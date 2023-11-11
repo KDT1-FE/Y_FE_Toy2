@@ -1,33 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Center, Checkbox, Flex, useBoolean } from '@chakra-ui/react';
-import socket from '../../../api/socket';
+import { Box, Checkbox, Flex, useBoolean } from '@chakra-ui/react';
 import ChannelMemberItem from '../ChannelMemberItem';
-import { useUserData } from '../../../hooks/useUserData';
+import { getAllUsersWithId } from '../../../api/user';
+import { User } from '../../../@types/user';
 
 const UserInviteList = () => {
+  const [userData, setUserData] = useState<User[] | undefined>([]);
   const [isChecked, setIsChecked] = useBoolean(false);
 
-  const userData = useUserData();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const usersData = await getAllUsersWithId();
+      setUserData(usersData);
+    };
 
-  // useEffect(() => {
-
-  // }, []);
+    fetchUserData();
+  }, []);
 
   return (
     <Box fontSize="4xl" textAlign="center">
-      {userData.userNames.map((userName, i) => (
+      {userData?.map((user) => (
         <Flex
           align="center"
           px="50px"
           justify="space-between"
-          // onClick={setIsChecked.toggle} //음...
-          key={i}
+          onClick={() => {
+            console.log('음...', user.id);
+          }}
+          key={user.id}
         >
-          <ChannelMemberItem
-            userName={userName}
-            src={userData.profilePictures[i]}
-          />
-          <Checkbox key={i} size="lg" color={'blue.500'} />
+          <ChannelMemberItem userName={user.name} src={user.picture} />
+          <Checkbox key={user.id} size="lg" color={'blue.500'} />
         </Flex>
       ))}
     </Box>
