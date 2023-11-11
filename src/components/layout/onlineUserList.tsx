@@ -10,14 +10,17 @@ const OnlineUserList = () => {
     return allOnlineUsers.includes(element.id);
   });
 
-  const onlineUserId = onlineUserListData.map((element) => element.id);
-  const onlineUserName = onlineUserListData.map((element) => element.name);
-
   return (
-    <div>
-      <div>OnlineUserList</div>
-      <div>Users: {onlineUserId.join(', ')}</div>
-    </div>
+    <>
+      {onlineUserListData.map((element, key) => (
+        <div key={key}>
+          <div>OnlineUserList</div>
+          <p>{element.id}</p>
+          <p>{element.name}</p>
+          <p>{element.picture}</p>
+        </div>
+      ))}
+    </>
   );
 };
 
