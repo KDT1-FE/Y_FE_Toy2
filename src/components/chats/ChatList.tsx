@@ -1,41 +1,9 @@
 import { Box } from '@chakra-ui/react';
 import Chat from '.';
-import { useEffect, useState } from 'react';
-import socket from '../../api/socket';
-import { Message, MessageData } from '../../@types/message';
-import { SOCKET } from '../../constants/socket';
-import { getUser } from '../../api/user';
+import useChatList from '../../hooks/useChatList';
 
 const ChatList = () => {
-  const [messages, setMessages] = useState<Message[] | undefined>(undefined);
-  useEffect(() => {
-    const getMessageInfo = async (messages: MessageData[]) => {
-      const messagesData = [];
-      for (const message of messages) {
-        const { id, createdAt, text, userId } = message;
-        const response = await getUser(userId);
-        if (response) {
-          const { name, picture } = response;
-          messagesData.push({
-            id,
-            createdAt: createdAt.split('T')[0],
-            text,
-            name,
-            picture,
-          });
-        }
-      }
-      setMessages(messagesData);
-    };
-    socket.emit(SOCKET.FETCH_MESSAGES);
-    socket.on(
-      SOCKET.MESSAGES_TO_CLIENT,
-      ({ messages }: { messages: MessageData[] }) => {
-        getMessageInfo(messages);
-      },
-    );
-  }, []);
-
+  const chats = useChatList();
   return (
     <Box
       maxWidth={700}
@@ -58,14 +26,14 @@ const ChatList = () => {
         },
       }}
     >
-      {messages?.map((message) => {
+      {chats?.map((chat, index) => {
         return (
           <Chat
-            key={message.id}
-            text={message.text}
-            name={message.name}
-            picture={message.picture}
-            createdAt={message.createdAt}
+            key={index}
+            text={chat.text}
+            name={chat.name}
+            picture={chat.picture}
+            createdAt={chat.createdAt}
           />
         );
       })}

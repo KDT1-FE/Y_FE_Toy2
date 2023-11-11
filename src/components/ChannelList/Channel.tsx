@@ -9,7 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { formatTimeToKST } from '../../utils';
-import { Channel } from '../../@types/chat';
+import { Channel } from '../../@types/channel';
 
 interface Props {
   channel: Channel;

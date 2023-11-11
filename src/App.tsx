@@ -1,11 +1,17 @@
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import Layout from './layout';
+import ChannelPage from './pages/channel';
 import Chats from './pages/chats';
-
 function App() {
   return (
-    <Layout>
-      <Chats />
-    </Layout>
+    <Router>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/chats" element={<Chats />} />
+        </Route>
+      </Routes>
+    </Router>
+
   );
 }
 
