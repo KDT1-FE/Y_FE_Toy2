@@ -3,33 +3,21 @@ import styled from 'styled-components';
 import { titleAction } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
 import { ChatIcon, HamburgerIcon } from '@chakra-ui/icons';
-import LoginModal from './LoginModal'; // Import your modal component
-
-const StyledContainer = styled.div<{ $isClicked: boolean }>`
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  background-color: ${(props) =>
-    props.$isClicked ? '#e2e8f0' : 'transparent'};
-
-  &:hover {
-    background-color: #e2e8f0;
-  }
-`;
+import LoginModal from './LoginModal';
+import { useRecoilValue } from 'recoil';
+import { accessTokenState, chattingIdState } from '../../states/atom';
 
 const Header: React.FC = () => {
+  const id: string = useRecoilValue(chattingIdState);
+  const accessToken: string = useRecoilValue(accessTokenState);
+
   const navigate = useNavigate();
   const [isChatContainerClicked, setIsChatContainerClicked] = useState(false);
   const [isMenuContainerClicked, setIsMenuContainerClicked] = useState(false);
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
 
   const checkLocation = () => {
-    titleAction(navigate);
+    titleAction(navigate, accessToken, id);
   };
 
   const handleChatContainerClick = () => {
@@ -89,6 +77,23 @@ const Title = styled.div`
 
 const LogoContainer = styled.div`
   display: flex;
+`;
+
+const StyledContainer = styled.div<{ $isClicked: boolean }>`
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: ${(props) =>
+    props.$isClicked ? '#e2e8f0' : 'transparent'};
+
+  &:hover {
+    background-color: #e2e8f0;
+  }
 `;
 
 export default Header;
