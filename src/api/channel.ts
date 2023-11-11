@@ -1,5 +1,4 @@
-import { ResponseValue } from '../@types/channel';
-import { checkChannelName } from '../utils';
+import { Channel, ResponseValue } from '../@types/channel';
 import instance from './axios';
 
 export interface CreateChannelBody {
@@ -10,24 +9,19 @@ export interface CreateChannelBody {
 
 export const getChannels = async () => {
   const response = await instance.get<ResponseValue>('/chat/all');
-
   return response.data.chats;
-}
+};
 
 //내 채팅방 불러오기
 export const getMyChannels = async () => {
-  const response = await instance.get('/chat');
-  const data: { chats: ResponseValue } = await response.data;
-  return data.chats;
+  const response = await instance.get<{ chats: Channel[] }>('/chat');
+  const chatsData = await response.data.chats;
+
+  return chatsData;
 };
 
 export const createChannel = async (data: CreateChannelBody) => {
   try {
-    console.log(data.name);
-
-    const isValidChannelName = checkChannelName(data.name);
-    if (!isValidChannelName) return alert('채널 이름이 유효하지 않습니다.');
-
     const response = await instance.post('/chat', {
       name: data.name,
       users: data.users,
