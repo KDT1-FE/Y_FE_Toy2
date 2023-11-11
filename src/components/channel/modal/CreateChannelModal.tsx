@@ -19,7 +19,7 @@ import { useRecoilState } from 'recoil';
 import { channelState } from '../../../recoil/channel.atom';
 import { createChannel } from '../../../api/channel';
 import { createChannelNameWithCategory } from '../../../utils';
-import UserList from './UserList';
+import ChannelModalUserList from './ChannelModalUserList';
 
 const CreateChannelModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -72,10 +72,7 @@ const CreateChannelModal = () => {
               mb="2"
             />
             <CategoryInput />
-            <Text as="h3" fontWeight="bold" mt="4">
-              친구 초대
-            </Text>
-            <UserList setUsers={setUsers} />
+            <ChannelModalUserList setUsers={setUsers} />
           </ModalBody>
           <ModalFooter>
             <Button mr="3" onClick={onClose}>
