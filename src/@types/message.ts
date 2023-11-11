@@ -1,10 +1,10 @@
-export interface MessageData {
+export interface ChatData {
   createdAt: string;
   id: string;
   text: string;
   userId: string;
 }
-export interface Message {
+export interface ChatInfo {
   name: string;
   id: string;
   picture: string;
