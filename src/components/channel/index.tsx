@@ -13,7 +13,7 @@ const ChannelList = () => {
   return (
     <>
       <Box>
-        <HStack>
+        <HStack gap="4">
           {channels &&
             channels.map((channel) => (
               <ChannelCard key={channel.id} channel={channel} />
