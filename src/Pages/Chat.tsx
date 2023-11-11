@@ -1,8 +1,54 @@
 import styled from "styled-components";
-import ModalPlus from "../components/ModalPlus";
 import ChatRoom from "../components/Chat/ChatRoom";
+import ModalPlus from "../components/ModalPlus";
+import { useEffect, useState } from "react";
+import { ChatI, fetchMyRoom } from "../utils/chatApi";
 
 function Chat() {
+  const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
+
+  // 모든 채팅방 조회
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchMyRoom();
+        const myRoom = data.chats.map((room: ChatI) => {
+          // 시간 계산
+          const updatedAt = room.updatedAt;
+          const givenDate: Date = new Date(updatedAt);
+          const currentDate: Date = new Date();
+          const timeDifference = currentDate.getTime() - givenDate.getTime();
+          const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+
+          let updatedAtString: string;
+
+          if (minutesDifference < 1) {
+            updatedAtString = "방금 전";
+          } else if (minutesDifference < 60) {
+            updatedAtString = `${minutesDifference}분 전`;
+          } else {
+            const hoursDifference = Math.floor(minutesDifference / 60);
+            updatedAtString = `${hoursDifference}시간 전`;
+          }
+
+          const latestMessage = room.latestMessage || "메시지가 없습니다.";
+
+          return {
+            ...room,
+            updatedAt: updatedAtString,
+            latestMessage: latestMessage
+          };
+        });
+
+        setChatRoom(myRoom);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       {/* <div>
@@ -10,32 +56,17 @@ function Chat() {
       </div> */}
       <ChatWrapper>
         <ChatCategory>
-          <CateLink>
-            <div className="catelink__wrap">
-              <div className="catelink__img">
-                <img src="https://via.placeholder.com/150x150" alt="프로필" />
+          {chatRoom.map((room) => (
+            <CateLink>
+              <div className="catelink__wrap">
+                <div className="catelink__name">
+                  <p className="tit">{room.name}</p>
+                  <p className="content">{room.latestMessage}</p>
+                </div>
+                <div className="catelink__time">{room.updatedAt}</div>
               </div>
-              <div className="catelink__name">
-                <p className="tit">수다수다방</p>
-                <p className="content">
-                  비밀메시지1줄넘침처리비밀메시지1줄넘침처리
-                </p>
-              </div>
-              <div className="catelink__time">1시간 전</div>
-            </div>
-          </CateLink>
-          <CateLink>
-            <div className="catelink__wrap">
-              <div className="catelink__img">
-                <img src="https://via.placeholder.com/150x150" alt="프로필" />
-              </div>
-              <div className="catelink__name">
-                <p className="tit">수다수다방</p>
-                <p className="content">비밀메시지</p>
-              </div>
-              <div className="catelink__time">1시간 전</div>
-            </div>
-          </CateLink>
+            </CateLink>
+          ))}
           <CatePlus>
             <ModalPlus />
           </CatePlus>
