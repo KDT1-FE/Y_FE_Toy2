@@ -1,13 +1,17 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { accessTokenState, allRoomState } from '../../states/atom';
+import {
+  accessTokenState,
+  allRoomState,
+  // serverSocketState,
+} from '../../states/atom';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
-import { getServerSocket } from '../../api/socket';
 import { useEffect } from 'react';
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const accessToken: any = useRecoilValue(accessTokenState);
+  // const socket = useRecoilValue(serverSocketState);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,11 +23,6 @@ const CheckGameRoom = () => {
         console.error('Error retrieving data:', error);
       }
     };
-    const serverSocket = getServerSocket();
-    serverSocket?.on('new-chat', (messageObject) => {
-      console.log(messageObject);
-      setAllRooms(messageObject);
-    });
 
     fetchData();
 
@@ -33,7 +32,9 @@ const CheckGameRoom = () => {
     };
   }, [accessToken, setAllRooms, allRooms]); // useEffect dependencies
   // usePollingData(fetchData, [allRooms, setAllRooms]);
-
+  // socket.on('new-chat', (data: any) => {
+  //   setAllRooms(data);
+  // });
   const handleParticipate = async (numberOfPeople: number, chatId: any) => {
     if (numberOfPeople === 4) {
       alert('방이 꽉 찼어요.');

@@ -28,7 +28,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       });
 
       socket.on('users-to-client', (data) => {
-        setUsersInGameRoom(data);
+        setUsersInGameRoom(data.users);
       });
 
       return () => {
@@ -38,11 +38,15 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       console.error('Error retrieving data:', error);
     }
   }, [accessToken, chatId]);
+  console.log(UsersInGameRoom);
   return (
-    <div>
-      <div>Now Players</div>
-      {/* <div>Players: {UsersInGameRoom.join(', ')}</div> */}
-    </div>
+    <>
+      {UsersInGameRoom.map((userName, index) => (
+        <div key={index}>
+          <p>{userName}</p>
+        </div>
+      ))}
+    </>
   );
 };
 

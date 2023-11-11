@@ -38,3 +38,8 @@ export const onlineUserStateInGameRoom = atom<any>({
   key: 'onlineUsersInGameRoomState',
   default: [],
 });
+
+export const serverSocketState = atom<any | null>({
+  key: 'serverSocketState',
+  default: null,
+});

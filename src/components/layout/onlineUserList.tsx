@@ -11,12 +11,12 @@ const OnlineUserList = () => {
   });
 
   const onlineUserId = onlineUserListData.map((element) => element.id);
-  // const onlineUserName = onlineUserListData.map((element) => element.name);
+  const onlineUserName = onlineUserListData.map((element) => element.name);
 
   return (
     <div>
       <div>OnlineUserList</div>
-      <div>Users: {onlineUserId.join(', ')}</div>
+      <div>Users: {allOnlineUsers.join(', ')}</div>
     </div>
   );
 };
