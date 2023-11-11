@@ -11,7 +11,7 @@ export type Chat = {
 	name: string;
 	users: User[];
 	isPrivate: boolean;
-	latestMessage: Message | null;
+	messages: Message[]; // message 객체가 속합니다.
 	updatedAt: Date;
 };
 
@@ -26,13 +26,4 @@ type Message = {
 	text: string;
 	userId: string;
 	createAt: Date;
-};
-
-export type Request = {
-	method: string;
-	headers: {
-		'content-type': string;
-		serverId: string;
-		Authorization: string;
-	};
 };
