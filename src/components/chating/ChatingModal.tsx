@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
 import { useRouter } from 'next/navigation';
+import InviteImg from '../../../public/assets/InviteImg.svg';
 
 interface User {
     username: string;
@@ -43,6 +44,10 @@ export default function ChatingModal(props: any) {
                                 <UserName>{user.username}</UserName>
                             </UserWrapper>
                         ))}
+                        <UserInviteWrapper>
+                            <UserInviteImg />
+                            <UserInviteName>초대하기</UserInviteName>
+                        </UserInviteWrapper>
                     </UsersWrapper>
                 ) : (
                     ''
@@ -125,6 +130,9 @@ const ModalTitle = styled.div`
 
 const UsersWrapper = styled.div`
     width: 100%;
+    height: 80%;
+
+    overflow: scroll;
     padding-left: 30px;
     padding-top: 30px;
 `;
@@ -148,6 +156,31 @@ const UserImg = styled.img`
 const UserName = styled.div`
     font-size: 24px;
     margin-left: 10px;
+`;
+
+const UserInviteWrapper = styled.div`
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 20px;
+`;
+
+const UserInviteImg = styled(InviteImg)`
+    width: 50px;
+    height: 50px;
+
+    border-radius: 25px;
+    cursor: pointer;
+`;
+
+const UserInviteName = styled.div`
+    font-size: 24px;
+    margin-left: 10px;
+
+    color: #00956e;
+    cursor: pointer;
 `;
 
 const ChatingLeave = styled.div`
