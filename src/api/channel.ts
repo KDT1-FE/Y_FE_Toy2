@@ -1,4 +1,4 @@
-import { ResponseValue } from '../@types/chat';
+import { ResponseValue } from '../@types/channel';
 import instance from './axios';
 
 export const getChannels = async () => {

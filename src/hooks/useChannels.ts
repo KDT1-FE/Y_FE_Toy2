@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Channel } from '../@types/chat';
+import { Channel } from '../@types/channel';
 import { getChannels } from '../api/channel';
 import { ALL_CHANNELS } from '../constants/channel';
 
