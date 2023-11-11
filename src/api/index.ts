@@ -100,6 +100,16 @@ export const getAllMyChat = async (accessToken: string) => {
   return res.data;
 };
 
+
+export const getUserData = async (accessToken: string, userId: any) => {
+  const res = await client.get(`/user?userId=${userId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return res.data;
+};
+
 export const leaveGameRoom = async (accessToken: string, chatId: string) => {
   const res = await client.patch(
     `/chat/leave`,

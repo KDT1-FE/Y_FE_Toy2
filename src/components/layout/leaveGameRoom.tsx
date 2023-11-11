@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { accessTokenState } from '../../states/atom';
 import { leaveGameRoom } from '../../api';
-const LeaveGameRoom = (chatId: string) => {
+const LeaveGameRoom = (chatId: any) => {
+
   const navigate = useNavigate();
   const accessToken: any = useRecoilValue(accessTokenState);
   const id = chatId.chatId;

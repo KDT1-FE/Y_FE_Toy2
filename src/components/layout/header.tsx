@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { titleAction } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
 import { ChatIcon, HamburgerIcon } from '@chakra-ui/icons';
-import LoginModal from './LoginModal';
+import LoginModal from './loginModal';
 import { useRecoilValue } from 'recoil';
 import { accessTokenState, chattingIdState } from '../../states/atom';
 
@@ -15,6 +15,7 @@ const Header: React.FC = () => {
   const [isChatContainerClicked, setIsChatContainerClicked] = useState(false);
   const [isMenuContainerClicked, setIsMenuContainerClicked] = useState(false);
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const checkLocation = () => {
     titleAction(navigate, accessToken, id);
@@ -24,6 +25,7 @@ const Header: React.FC = () => {
     setIsChatContainerClicked(true);
     setIsMenuContainerClicked(false);
     setIsMenuModalOpen(false);
+    setIsChatModalOpen(true);
   };
 
   const handleMenuContainerClick = () => {

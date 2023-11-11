@@ -1,26 +1,48 @@
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getAllMyChat } from '../../api';
-import { accessTokenState, privateChatState } from '../../states/atom';
+import {
+  accessTokenState,
+  myUserDataState,
+  privateChatState,
+  onlineUserState,
+} from '../../states/atom';
 import usePollingData from '../template/usePollingData';
 import ChattingDetail from './chattingDetail';
 
 const CheckPrivateChat = () => {
   const [allMyChat, setAllMyChat] = useRecoilState(privateChatState);
   const accessToken: any = useRecoilValue(accessTokenState);
+  const myUserData: any = useRecoilValue(myUserDataState);
+  const onLine = useRecoilValue(onlineUserState);
 
   const [chatModals, setChatModals] = useState<any>({});
 
   const fetchData = async () => {
-    try {
-      let allMyChatData = await getAllMyChat(accessToken);
-      allMyChatData = allMyChatData.chats;
-      const privateChatArray = allMyChatData.filter(
-        (obj: any) => obj.isPrivate,
-      );
-      setData(privateChatArray);
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+    if (myUserData) {
+      try {
+        let allMyChatData = await getAllMyChat(accessToken);
+        allMyChatData = allMyChatData.chats;
+
+        // 비공개방만 필터
+        const privateChatArray = await allMyChatData.filter(
+          (obj: any) => obj.isPrivate,
+        );
+
+        // users 배열에서 내 id만 빼고 반환
+        const nonMyIdArray = privateChatArray.map((chatObject: any) => ({
+          ...chatObject,
+          users: chatObject.users.filter(
+            (user: any) => user.id !== myUserData.id,
+          ),
+        }));
+
+        console.log(onLine);
+
+        setData(nonMyIdArray);
+      } catch (error) {
+        console.error('Error retrieving data:', error);
+      }
     }
   };
 
@@ -47,14 +69,12 @@ const CheckPrivateChat = () => {
             <p>{element.name}</p>
             <p>{element.id}</p>
             <p>{element.users.length}</p>
-            <p>{element.users[0].id}</p>
+            <p>{element.latestMessage.text}</p>
+            {element.users.length > 0 && <p>{element.users[0].id}</p>}
+            {element.users.length > 0 && <p>{element.users[0].name}</p>}
+            {element.users.length > 0 && <p>{element.users[0].picture}</p>}
           </div>
-          {chatModals[element.id] && (
-            <ChattingDetail
-              chatId={element.id}
-              isModalOpen={chatModals[element.id]}
-            />
-          )}
+          {chatModals[element.id] && <ChattingDetail chatId={element.id} />}
         </div>
       ))}
     </>
