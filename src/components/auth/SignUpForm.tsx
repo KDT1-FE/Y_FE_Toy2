@@ -1,76 +1,90 @@
-import { Button, TextField } from '@mui/material';
-import React, { useState } from 'react';
-import { publicApi } from '../../libs/axios';
+import React from 'react';
+import { useFormik } from 'formik';
+import { Button, TextField, Typography } from '@mui/material';
+import { useSetRecoilState } from 'recoil';
+import validationSchema from '../../utils/validateSchema';
+import type { SignUpFormProps } from '../../pages/auth/SignUp';
+import { signUpFormState } from '../../atoms';
 
-interface RequestBody {
-  id: string; // 사용자 아이디 (필수!, 영어만)
-  password: string; // 사용자 비밀번호, 5자 이상 (필수!)
-  name: string; // 사용자 이름, 20자 이하 (필수!)
-  picture?: string; // 사용자 이미지(url or base64, under 1MB)
-}
-
-function SignUpForm() {
-  const [uid, setUid] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState('');
-
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    publicApi.post('signup', {
-      id: uid,
-      password,
-      name,
-    } as RequestBody);
-    // .then((response) => {
-    //   console.log(response);
-    // });
-  };
+function SignUpForm({ setStep }: SignUpFormProps) {
+  const setSignUpForm = useSetRecoilState(signUpFormState);
+  const formik = useFormik({
+    initialValues: {
+      id: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      if (setStep) setStep(2);
+      setSignUpForm((prev) => {
+        const current = { ...prev, id: values.id, password: values.password };
+        return current;
+      });
+    },
+  });
 
   return (
-    <form onSubmit={onSubmit}>
-      <div>
+    <div>
+      <form onSubmit={formik.handleSubmit}>
+        <Typography variant="h4" mb={5}>
+          회원가입
+        </Typography>
         <TextField
-          variant="outlined"
+          fullWidth
+          id="id"
+          name="id"
           label="아이디"
-          value={uid}
-          onChange={(e) => setUid(e.target.value)}
+          value={formik.values.id}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.id && Boolean(formik.errors.id)}
+          helperText={formik.touched.id && formik.errors.id}
           margin="normal"
-          autoComplete="off"
         />
-      </div>
-      <div>
         <TextField
-          variant="outlined"
-          label="닉네임"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          margin="normal"
-          autoComplete="off"
-        />
-      </div>
-      <div>
-        <TextField
-          variant="outlined"
+          fullWidth
+          id="password"
+          name="password"
           label="비밀번호"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
           margin="normal"
         />
-      </div>
-      <div>
         <TextField
-          variant="outlined"
-          label="비밀번호 확인"
+          fullWidth
+          id="confirmPassword"
+          name="confirmPassword"
+          label="비밀번호"
           type="password"
-          value={password2}
-          onChange={(e) => setPassword2(e.target.value)}
+          value={formik.values.confirmPassword}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.confirmPassword &&
+            Boolean(formik.errors.confirmPassword)
+          }
+          helperText={
+            formik.touched.confirmPassword && formik.errors.confirmPassword
+          }
           margin="normal"
         />
-      </div>
-      <Button type="submit">다음단계</Button>
-    </form>
+        <Button
+          color="primary"
+          size="large"
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ mt: 3 }}
+        >
+          다음 단계로 ( 1 / 4 )
+        </Button>
+      </form>
+    </div>
   );
 }
 

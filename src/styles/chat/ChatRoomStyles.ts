@@ -11,7 +11,7 @@ export const Wrapper = styled('div')({
 export const StyledMessages = styled('ul')({
   width: '100%',
   overflowY: 'scroll',
-
+  padding: '16px 0',
   '&::-webkit-scrollbar': {
     width: '10px',
   },
