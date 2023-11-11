@@ -18,3 +18,5 @@ export const theme = {
   grayColor: "#999696",
   blueColor: "#3B89FF"
 };
+
+export type Theme = typeof lightTheme;
