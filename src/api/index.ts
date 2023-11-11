@@ -100,6 +100,7 @@ export const getAllMyChat = async (accessToken: string) => {
   return res.data;
 };
 
+
 export const getUserData = async (accessToken: string, userId: any) => {
   const res = await client.get(`/user?userId=${userId}`, {
     headers: {
