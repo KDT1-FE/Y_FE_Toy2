@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import ModalHamburger from "../components/ModalHamburger";
 import ModalPlus from "../components/ModalPlus";
 import ChatRoom from "../components/Chat/ChatRoom";
 

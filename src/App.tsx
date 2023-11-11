@@ -15,7 +15,6 @@ import Chat from "./Pages/Chat";
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
 import ChatTest from "./Pages/ChatTest";
-import ChatTestTest from "./Pages/ChatTestTest";
 
 const router = createBrowserRouter([
   {
@@ -47,10 +46,6 @@ const router = createBrowserRouter([
       {
         path: "chattest",
         element: <ChatTest />
-      },
-      {
-        path: "chattesttest",
-        element: <ChatTestTest />
       }
     ]
   },

@@ -9,17 +9,6 @@ interface User {
   picture: string;
 }
 
-const ChatTestWrap = styled.div`
-  height: 60vh;
-  width: 100%;
-  background-color: #fff;
-`;
-
-const SmallImg = styled.img`
-  width: 30px;
-  height: 30px;
-`;
-
 const ModalExample = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
@@ -45,6 +34,16 @@ const ModalExample = () => {
   const handleCheckboxChange = (userId: string) => {
     console.log("유저 id:", userId);
   };
+
+  const ChatTestWrap = styled.div`
+    width: 100%;
+    background-color: #fff;
+  `;
+
+  const SmallImg = styled.img`
+    width: 30px;
+    height: 30px;
+  `;
 
   const PlusButton = styled.button`
     transition: all 0.3s;
