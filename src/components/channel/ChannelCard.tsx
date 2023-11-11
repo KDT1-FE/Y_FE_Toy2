@@ -1,12 +1,15 @@
 import { Avatar, AvatarGroup, Badge, Box, Flex, Text } from '@chakra-ui/react';
-import { formatTimeToKST } from '../../utils';
+import { formatTimeToKST, splitChannelName } from '../../utils';
 import { Channel } from '../../@types/channel';
+import { CATEGORY_COLOR_SCHEMES } from '../../constants/channel';
 
 interface Props {
   channel: Channel;
 }
 
 const ChannelCard = ({ channel }: Props) => {
+  const { title, category } = splitChannelName(channel.name);
+
   return (
     <Box
       display="flex"
@@ -28,9 +31,11 @@ const ChannelCard = ({ channel }: Props) => {
       <Box>
         <Flex justifyContent="flex-start" alignItems="center" gap="2">
           <Text as="h2" fontSize="lg" fontWeight="bold" isTruncated>
-            {channel.name}
+            {title}
           </Text>
-          <Badge colorScheme="yellow">프로그래밍</Badge>
+          <Badge colorScheme={CATEGORY_COLOR_SCHEMES[`${category}`]}>
+            {category}
+          </Badge>
         </Flex>
         <Box mb="4">
           <Text isTruncated opacity={0.5} fontSize="sm">

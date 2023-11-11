@@ -13,14 +13,13 @@ const ChannelList = () => {
   return (
     <>
       <Box>
-        <HStack gap="4">
+        <HStack gap="4" flexWrap="wrap">
           {channels &&
             channels.map((channel) => (
               <ChannelCard key={channel.id} channel={channel} />
             ))}
         </HStack>
       </Box>
-      <CreateChannelModal />
     </>
   );
 };
