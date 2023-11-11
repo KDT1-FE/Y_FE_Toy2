@@ -10,3 +10,14 @@ export const CATEGORIES = [
   '백엔드',
   '알고리즘',
 ];
+
+export const CATEGORY_COLOR_SCHEMES: { [key: string]: string } = {
+  기타: 'red',
+  일상: 'orange',
+  프로그래밍: 'yellow',
+  음식: 'green',
+  고민: 'blue',
+  프론트엔드: 'indigo',
+  백엔드: 'purple',
+  알고리즘: 'pink',
+};

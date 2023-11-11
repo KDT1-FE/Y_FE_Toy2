@@ -1,5 +1,6 @@
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import Layout from './layout';
+import ChannelPage from './pages/channel';
 import Chats from './pages/chats';
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         </Route>
       </Routes>
     </Router>
+
   );
 }
 
