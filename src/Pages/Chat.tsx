@@ -1,53 +1,99 @@
 import styled from "styled-components";
 import ChatRoom from "../components/Chat/ChatRoom";
 import ModalPlus from "../components/ModalPlus";
-import { useEffect, useState } from "react";
-import { ChatI, fetchMyRoom } from "../utils/chatApi";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { AuthContext } from "../hooks/useAuth";
+import useApi from "../hooks/useApi";
+
+interface User {
+  id: string;
+  username: string;
+  picture: string;
+}
+
+export interface ChatI {
+  id: string;
+  name: string;
+  users: User[];
+  isPrivate: boolean;
+  updatedAt: string;
+  latestMessage: string | null;
+}
 
 function Chat() {
   const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
+  const { getData } = useApi();
+
+  // const fetchMyRoom = async () => {
+  //   try {
+  //     const response = await axios.get('https://fastcampus-chat.net/chat', {
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`,
+  //         serverId: '1601075b',
+  //       }
+  //     });
+  
+  //     const roomData = response.data
+  //     return roomData;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   // 모든 채팅방 조회
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const data = await fetchMyRoom();
-        const myRoom = data.chats.map((room: ChatI) => {
-          // 시간 계산
-          const updatedAt = room.updatedAt;
-          const givenDate: Date = new Date(updatedAt);
-          const currentDate: Date = new Date();
-          const timeDifference = currentDate.getTime() - givenDate.getTime();
-          const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-
-          let updatedAtString: string;
-
-          if (minutesDifference < 1) {
-            updatedAtString = "방금 전";
-          } else if (minutesDifference < 60) {
-            updatedAtString = `${minutesDifference}분 전`;
-          } else {
-            const hoursDifference = Math.floor(minutesDifference / 60);
-            updatedAtString = `${hoursDifference}시간 전`;
-          }
-
-          const latestMessage = room.latestMessage || "메시지가 없습니다.";
-
-          return {
-            ...room,
-            updatedAt: updatedAtString,
-            latestMessage: latestMessage
-          };
-        });
-
-        setChatRoom(myRoom);
-      } catch (error) {
-        console.error(error);
+      try{
+        const data = await getData("https://fastcampus-chat.net/chat");
+        const chatData = data.chats;
+        // setChatRoom(chatData);
+        console.log(chatData);
+      } catch (error){
+        console.error(error)
       }
-    };
-
+    }
     fetchData();
+    // const fetchData = async () => {
+    //   try {
+    //     const data = await fetchMyRoom();
+    //     const myRoom = data.chats.map((room: ChatI) => {
+    //       // 시간 계산
+    //       const updatedAt = room.updatedAt;
+    //       const givenDate: Date = new Date(updatedAt);
+    //       const currentDate: Date = new Date();
+    //       const timeDifference = currentDate.getTime() - givenDate.getTime();
+    //       const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+
+    //       let updatedAtString: string;
+
+    //       if (minutesDifference < 1) {
+    //         updatedAtString = "방금 전";
+    //       } else if (minutesDifference < 60) {
+    //         updatedAtString = `${minutesDifference}분 전`;
+    //       } else {
+    //         const hoursDifference = Math.floor(minutesDifference / 60);
+    //         updatedAtString = `${hoursDifference}시간 전`;
+    //       }
+
+    //       const latestMessage = room.latestMessage || "메시지가 없습니다.";
+
+    //       return {
+    //         ...room,
+    //         updatedAt: updatedAtString,
+    //         latestMessage: latestMessage
+    //       };
+    //     });
+
+    //     setChatRoom(myRoom);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
+
+    // fetchData();
   }, []);
+  
 
   return (
     <>
