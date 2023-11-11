@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { titleAction } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
 import { ChatIcon, HamburgerIcon } from '@chakra-ui/icons';
-import LoginModal from './LoginModal'; // Import your modal component
+import LoginModal from './loginModal'; // Import your modal component
+import CheckPrivateChat from '../../components/layout/checkPrivateChat';
 
 const StyledContainer = styled.div<{ $isClicked: boolean }>`
   width: 40px;
@@ -27,6 +28,7 @@ const Header: React.FC = () => {
   const [isChatContainerClicked, setIsChatContainerClicked] = useState(false);
   const [isMenuContainerClicked, setIsMenuContainerClicked] = useState(false);
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const checkLocation = () => {
     titleAction(navigate);
@@ -36,6 +38,7 @@ const Header: React.FC = () => {
     setIsChatContainerClicked(true);
     setIsMenuContainerClicked(false);
     setIsMenuModalOpen(false);
+    setIsChatModalOpen(true);
   };
 
   const handleMenuContainerClick = () => {

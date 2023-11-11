@@ -49,12 +49,7 @@ const CheckPrivateChat = () => {
             <p>{element.users.length}</p>
             <p>{element.users[0].id}</p>
           </div>
-          {chatModals[element.id] && (
-            <ChattingDetail
-              chatId={element.id}
-              isModalOpen={chatModals[element.id]}
-            />
-          )}
+          {chatModals[element.id] && <ChattingDetail chatId={element.id} />}
         </div>
       ))}
     </>
