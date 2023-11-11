@@ -25,6 +25,26 @@ export const loginSocket = (
   return socket;
 };
 
+export const chatSocket = (accessToken: any, chatId: string) => {
+  socket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${accessToken}`,
+      serverId: SERVER_ID,
+    },
+  });
+  socket.emit('fetch-messages');
+
+  socket.on('connect', () => {
+    console.log('Connected from server');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Disconnected from server');
+  });
+
+  return socket;
+};
+
 export const drawSocket = io(
   'https://young-wave-37170-0a19781643d5.herokuapp.com/',
   {
@@ -38,4 +58,3 @@ export const disconnectLoginSocket = () => {
     socket = null;
   }
 };
-
