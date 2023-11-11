@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { Host } from '@/pages/hostList/hostList.types';
 import { app } from './firebaseconfig';
-import hostData from './hostData';
+import { hostData } from './hostData';
 
 export const storage = getStorage(app);
 export const db = getFirestore(app);
@@ -18,13 +18,16 @@ export const db = getFirestore(app);
 // 데이터 추가
 export const addHostsToFirestore = async () => {
   try {
-    // Promise.all을 사용하여 병렬로 데이터 추가
+    const hostCollectionRef = collection(db, 'hosts');
+
+    // forEach 메서드를 사용하여 문서를 추가합니다.
     await Promise.all(
       hostData.map(async host => {
-        const hostDocRef = doc(db, 'hosts', host.id); // 문서 위치 변경
+        const hostDocRef = doc(hostCollectionRef, host.id);
         await setDoc(hostDocRef, host);
       }),
     );
+
     console.log('데이터가 성공적으로 추가되었습니다.');
   } catch (error) {
     console.error('데이터 추가 중 오류 발생:', error);

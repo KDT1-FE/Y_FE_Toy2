@@ -136,5 +136,24 @@ const hostData = [
     address: '야놀자시 패캠구 프론트로 710-1',
     detail: '제주감귤 무제한 서비스🍊',
   },
+  {
+    id: 'daeddd',
+    name: 'sungsim',
+    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    location: '대전',
+    address: '야놀자시 패캠구 프론트로 710-1',
+    detail: '성심당 근처',
+  },
+  {
+    id: 'asdfghjkl1234',
+    name: 'nwq',
+    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    location: '양양',
+    address: '야놀자시 패캠구 프론트로 710-1',
+    detail: '서핑 무료강습권 제공',
+  },
 ];
-export default hostData;
+
+const locations = Array.from(new Set(hostData.map(host => host.location)));
+
+export { hostData, locations };
