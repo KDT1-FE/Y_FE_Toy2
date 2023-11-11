@@ -28,7 +28,7 @@ function Openchat() {
   }, [selectedId]);
 
   return (
-    <OpenchatContainer>
+    <OpenchatContainer isOpenModal={Boolean(selectedId)}>
       <OpenchatAppbar id="openchat-appbar">
         <div className="scroll-box">
           <Stack direction="row" spacing={1}>

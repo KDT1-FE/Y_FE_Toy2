@@ -1,9 +1,13 @@
 import { Box, styled } from '@mui/material';
 import { motion } from 'framer-motion';
 
-export const OpenchatContainer = styled('main')({
-  backgroundColor: '#f5f5f5',
-});
+export const OpenchatContainer = styled('main')<{ isOpenModal: boolean }>(
+  ({ isOpenModal }) => ({
+    backgroundColor: '#f5f5f5',
+    height: isOpenModal ? '100vh' : 'auto',
+    overflow: isOpenModal ? 'hidden' : 'initial',
+  }),
+);
 
 export const OpenchatAppbar = styled('div')({
   position: 'sticky',
@@ -81,16 +85,22 @@ export const OpenchatCreateChatWrap = styled('div')<ChatWrapProps>(
   }),
 );
 
-export const OpenchatCreateChatModal = styled(motion.div)({
-  backgroundColor: '#fff',
-  width: '100%',
-  maxWidth: '440px',
-  height: '100%',
-  maxHeight: '688px',
+export const OpenchatCreateChatModal = styled(motion.div)(({ theme }) => ({
   position: 'relative',
+  width: '100%',
+  maxWidth: '480px',
+  height: '100%',
+  boxSizing: 'border-box',
+  maxHeight: '660px',
   padding: '1rem',
+  backgroundColor: '#fff',
   border: `1px solid #ddd`,
   borderRadius: '10px',
+  overflow: 'scroll',
+  [theme.breakpoints.down('sm')]: {
+    maxHeight: '768px',
+    borderRadius: '0',
+  },
   '& .openchat__reset-btn': {
     position: 'absolute',
     top: '1rem',
@@ -105,4 +115,4 @@ export const OpenchatCreateChatModal = styled(motion.div)({
     verticalAlign: 'middle',
     marginRight: '6px',
   },
-});
+}));
