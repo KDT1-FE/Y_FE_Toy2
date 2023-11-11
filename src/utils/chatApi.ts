@@ -1,5 +1,7 @@
 import axios from "axios";
+import { useContext } from "react";
 import { io } from "socket.io-client";
+import { AuthContext } from "../hooks/useAuth";
 
 interface User {
   id: string;
@@ -16,14 +18,15 @@ export interface ChatI {
   latestMessage: string | null;
 }
 
-const token = sessionStorage.getItem('refreshToken');
+// const token = sessionStorage.getItem('refreshToken');
+const accessToken = useContext(AuthContext);
 
 // 모든 유저 조회
 export const fetchChatUsers = async () => {
   try {
     const response = await axios.get('https://fastcampus-chat.net/users', {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${accessToken}`,
         serverId: '1601075b',
       }
     });
@@ -42,7 +45,7 @@ export const postChat = async () => {
       users: ['leejin7900']
     }, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${accessToken}`,
         serverId: '1601075b',
       }
     });
@@ -57,7 +60,7 @@ export const fetchMyRoom = async () => {
   try {
     const response = await axios.get('https://fastcampus-chat.net/chat', {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${accessToken}`,
         serverId: '1601075b',
       }
     });

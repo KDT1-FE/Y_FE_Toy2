@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal, { Styles } from "react-modal";
 import styled from "styled-components";
 import "../style/Modal.css";
+import { AuthContext } from "../hooks/useAuth";
 
 interface User {
   id: string;
@@ -139,13 +140,15 @@ const ModalExample = () => {
     }
   };
 
+  const accessToken = useContext(AuthContext);
+
   useEffect(() => {
     fetch("https://fastcampus-chat.net/users", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         serverId: "1601075b",
-        Authorization: `Bearer ${sessionStorage.getItem("refreshToken")}`
+        Authorization: `Bearer ${accessToken}`
       }
     })
       .then((response) => response.json() as unknown as User[])
