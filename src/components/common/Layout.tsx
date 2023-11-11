@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import { AppBar, Grid } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
@@ -19,7 +19,9 @@ function Layout() {
           display: { xs: 'none', sm: 'block' },
         }}
       >
-        <Sidebar />
+        <AppBar position="sticky" sx={{ minHeight: '100vh' }}>
+          <Sidebar />
+        </AppBar>
       </Grid>
       <Grid item xs={12} sm={10}>
         <Outlet />

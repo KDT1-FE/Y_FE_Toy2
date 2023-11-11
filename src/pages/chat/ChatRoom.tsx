@@ -1,48 +1,24 @@
-import React, { ChangeEvent, useEffect, useState, useCallback, useRef, LegacyRef } from 'react';
+import React, { ChangeEvent, useEffect, useState, useRef } from 'react';
 import { Button, Input } from '@mui/material';
 import { Send } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
-import { Socket, io } from 'socket.io-client';
 import { useRecoilValue } from 'recoil';
 import Message from '../../components/chat/Message';
-import { accessTokenState } from '../../atoms';
 import * as S from '../../styles/chat/ChatRoomStyles';
 import { MessageType } from '../../types/MessageType';
+import { accessTokenState } from '../../atoms';
+import useSocketConnect from '../../hooks/useSocketConnect';
+import useGetUserInfo from '../../hooks/useGetUserInfo';
 
 function ChatRoom() {
-  const { chatId } = useParams();
-  const [socketState, setSocketState] = useState<Socket | null>(null);
-  const [name, setName] = useState('');
+  const { chatId = '' } = useParams();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<MessageType[]>([]);
   const accessToken = useRecoilValue(accessTokenState);
+
+  const name = useGetUserInfo(accessToken);
   const scrollRef = useRef<HTMLUListElement | null>(null);
-
-  const socketConnect = useCallback(async () => {
-    const socket = io(`https://fastcampus-chat.net/chat?chatId=${chatId}`, {
-      extraHeaders: {
-        serverId: '9b9a6496',
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    setSocketState(socket);
-  }, [chatId, accessToken]);
-
-  const userFetch = useCallback(async () => {
-    const response = await fetch('https://fastcampus-chat.net/auth/me', {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        serverId: '9b9a6496',
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    const data = await response.json();
-
-    setName(data.user.name);
-  }, [accessToken]);
+  const socket = useSocketConnect(chatId, accessToken);
 
   // 메시지 작성
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +27,7 @@ function ChatRoom() {
 
   // 메시지 보내기
   const submitMessage = () => {
-    socketState?.emit('message-to-server', message);
+    socket?.emit('message-to-server', message);
     setMessage('');
   };
 
@@ -66,36 +42,30 @@ function ChatRoom() {
   }, [messages]);
 
   useEffect(() => {
-    socketState?.emit('fetch-messages');
+    socket?.emit('fetch-messages');
 
-    socketState?.on('messages-to-client', (data) => {
+    socket?.on('messages-to-client', (data) => {
       setMessages([...data.messages].reverse());
     });
-  }, [socketState]);
+  }, [socket]);
 
   useEffect(() => {
-    userFetch();
-  }, [userFetch]);
-
-  useEffect(() => {
-    socketConnect();
-  }, [socketConnect]);
-
-  useEffect(() => {
-    socketState?.on('message-to-client', (message) => {
+    socket?.on('message-to-client', (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
     return () => {
-      socketState?.off('message-to-client');
+      socket?.off('message-to-client');
     };
-  }, [socketState]);
+  }, [socket]);
 
   return (
     <S.Wrapper>
       <S.StyledMessages ref={scrollRef}>
         {messages.length !== 0
-          ? messages.map((message, index) => <Message name={name} message={message} key={index} />)
+          ? messages.map((message, index) => (
+              <Message name={name} message={message} key={index} />
+            ))
           : ''}
       </S.StyledMessages>
 
