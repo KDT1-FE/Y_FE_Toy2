@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Input, Button, Text } from "@chakra-ui/react";
+import { Input, Button, Text, Alert, AlertIcon } from "@chakra-ui/react";
 import useFetch from "../../../hooks/useFetch";
 import axios from "axios";
 
@@ -15,6 +15,8 @@ const SignUpModal = () => {
   const {
     control,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<FormData>();
   const signUpFetch = useFetch({
@@ -24,6 +26,10 @@ const SignUpModal = () => {
     start: false,
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [signUpStatus, setSignUpStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   const checkIdDuplication = async (id: string): Promise<boolean> => {
     try {
@@ -31,11 +37,9 @@ const SignUpModal = () => {
         "https://fastcampus-chat.net/check/id",
         { id },
       );
-      // 서버가 ID가 중복되었다고 응답하면 true를 반환
       return response.data.isDuplicated;
     } catch (error) {
       console.error("Error checking ID duplication", error);
-      // 에러 발생 시 안전하게 중복으로 간주할 수 있습니다.
       return false;
     }
   };
@@ -75,17 +79,26 @@ const SignUpModal = () => {
       );
       if (response.status === 200) {
         console.log("회원가입 성공:", response.data);
-        // 성공 처리 로직 구현 예정
+        setSignUpStatus({
+          type: "success",
+          message: "회원가입에 성공하였습니다.",
+        });
       }
     } catch (error) {
       console.error("회원가입 실패:", error);
-      // 실패 처리 로직 구현 예정
+      setSignUpStatus({ type: "error", message: "회원가입에 실패하였습니다." });
     }
   };
 
   return (
     <>
       <div>회원가입</div>
+      {signUpStatus && (
+        <Alert status={signUpStatus.type}>
+          <AlertIcon />
+          {signUpStatus.message}
+        </Alert>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="picture"
@@ -118,12 +131,21 @@ const SignUpModal = () => {
               message: "ID는 영문자와 숫자만 사용할 수 있습니다.",
             },
             validate: async (id) => {
-              const isDuplicated = await checkIdDuplication(id);
-              console.log("ID 중복 확인 결과:", isDuplicated);
-              if (isDuplicated) {
-                return "이미 사용중인 ID입니다.";
+              try {
+                const isDuplicated = await checkIdDuplication(id);
+                if (isDuplicated) {
+                  setError("id", {
+                    type: "manual",
+                    message: "이미 사용중인 ID입니다.",
+                  });
+                  return false;
+                }
+                clearErrors("id");
+                return true;
+              } catch (error) {
+                console.error("ID 중복 확인 중 오류 발생:", error);
+                return "ID 중복 확인 중 오류가 발생했습니다.";
               }
-              return true;
             },
           }}
           render={({ field }) => (
