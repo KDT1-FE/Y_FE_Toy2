@@ -5,6 +5,7 @@ import UserInviteModal from './modal/UserInviteModal';
 import socket from '../../api/socket';
 import { getUser } from '../../api/user';
 import { User } from '../../@types/user';
+import ChannelExitDialog from './modal/ChannelExitDialog';
 
 interface UserIdDataProps {
   users: string[];
@@ -37,7 +38,14 @@ const ChannelMemberSideBar = () => {
   }, []);
 
   return (
-    <Box w="18rem" h="100vh" bg="gray.50" p="20px" borderLeftColor="gray.400">
+    <Box
+      position="relative"
+      w="18rem"
+      h="100vh"
+      bg="gray.50"
+      p="20px"
+      borderLeftColor="gray.400"
+    >
       <Flex align="center" mt="10" justifyContent="space-between">
         <Box fontSize="1g"> 전체 {userList.length}</Box>
         <UserInviteModal />
@@ -53,6 +61,7 @@ const ChannelMemberSideBar = () => {
           />
         ))}
       </VStack>
+      <ChannelExitDialog />
     </Box>
   );
 };
