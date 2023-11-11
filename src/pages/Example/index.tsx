@@ -67,7 +67,6 @@ const Example = () => {
     return () => {
       socket.off("message-to-client");
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   // 메세지 데이터
@@ -117,7 +116,6 @@ const Example = () => {
   // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
   useEffect(() => {
     console.log(messages);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
   //팝업 변화 감지
