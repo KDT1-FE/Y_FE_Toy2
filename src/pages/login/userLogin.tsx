@@ -16,7 +16,6 @@ import { loginSocket } from '../../api/socket';
 function UserLogin() {
   const navigate = useNavigate();
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
-
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const setAccessToken = useSetRecoilState(accessTokenState);
@@ -37,6 +36,7 @@ function UserLogin() {
       socket.on('users-server-to-client', (data) => {
         setOnlineUsers(data);
       });
+
       navigate('/lobby');
     } catch (error) {
       console.error('Login failed:', error);

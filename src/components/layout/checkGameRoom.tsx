@@ -2,26 +2,36 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allRoomState } from '../../states/atom';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
+import { getServerSocket } from '../../api/socket';
 import { useEffect } from 'react';
-import { io } from 'socket.io-client';
-import { SERVER_URL, SERVER_ID } from '../../constant';
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const accessToken: any = useRecoilValue(accessTokenState);
-
   useEffect(() => {
-    async () => {
+    const fetchData = async () => {
       try {
         const allRoomsData = await getAllGameRooms(accessToken);
-        setAllRooms(allRoomsData.chats);
+        if (JSON.stringify(allRoomsData.chats) !== JSON.stringify(allRooms)) {
+          setAllRooms(allRoomsData.chats);
+        }
       } catch (error) {
         console.error('Error retrieving data:', error);
       }
     };
-  }, []);
-  // loginSocket활용할것
+    const serverSocket = getServerSocket();
+    serverSocket?.on('new-chat', (messageObject) => {
+      console.log(messageObject);
+      setAllRooms(messageObject);
+    });
 
+    fetchData();
+
+    return () => {
+      // Cleanup function (e.g., disconnect socket) if needed
+      // This will be called when the component unmounts
+    };
+  }, [accessToken, setAllRooms, allRooms]); // useEffect dependencies
   // usePollingData(fetchData, [allRooms, setAllRooms]);
 
   const handleParticipate = async (numberOfPeople: number, chatId: any) => {

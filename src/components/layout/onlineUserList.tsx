@@ -4,7 +4,6 @@ import { onlineUserState } from '../../states/atom';
 const OnlineUserList = () => {
   const socket = useRecoilValue(onlineUserState);
   const users = socket.users || [];
-  console.log(users);
 
   return (
     <div>
