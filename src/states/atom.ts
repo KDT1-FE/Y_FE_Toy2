@@ -33,3 +33,8 @@ export const accessTokenState = atom<string>({
   key: 'accessTokenState',
   default: '',
 });
+
+export const onlineUserStateInGameRoom = atom<any>({
+  key: 'onlineUsersInGameRoomState',
+  default: [],
+});

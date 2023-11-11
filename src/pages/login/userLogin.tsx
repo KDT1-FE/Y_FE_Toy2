@@ -19,7 +19,7 @@ import {
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { accessTokenState, onlineUserState } from '../../states/atom';
 import { postLogin } from '../../api/index';
-import { loginSocket } from '../../api/socket';
+import { useSocketContext } from '../../provider/socketContext';
 function UserLogin() {
   const navigate = useNavigate();
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
@@ -31,6 +31,7 @@ function UserLogin() {
     message: '',
     type: '',
   });
+  const { createSocket } = useSocketContext();
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -39,24 +40,16 @@ function UserLogin() {
       const { accessToken, refreshToken } = res.data;
       setAccessToken(accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-
       alert('로그인에 성공했습니다.');
-      loginSocket(accessToken, (data: any) => {
+
+      const newSocket = createSocket(accessToken);
+      newSocket.on('connect', () => {
+        newSocket?.emit('users-server');
+      });
+      newSocket.on('users-server-to-client', (data: any) => {
         setOnlineUsers(data);
       });
 
-      // const socket = io(`${SERVER_URL}/server`, {
-      //   extraHeaders: {
-      //     Authorization: `Bearer ${accessToken}`,
-      //     serverId: SERVER_ID,
-      //   },
-      // });
-      // socket.on('connect', () => {
-      //   socket.emit('users-server');
-      // });
-      // socket.on('users-server-to-client', (data) => {
-      //   setOnlineUsers(data);
-      // });
       navigate('/lobby');
     } catch (e: any) {
       let errorMessage = '';
