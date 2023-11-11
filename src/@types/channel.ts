@@ -10,6 +10,6 @@ export interface Channel {
   name: string;
   users: User[]; // 속한 유저 정보
   isPrivate: boolean;
-  latestMessageData: ChatData | null;
+  latestMessage: ChatData | null;
   updatedAt: Date;
 }
