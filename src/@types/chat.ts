@@ -1,7 +1,9 @@
 import { MessageData } from './message';
 import { User } from './user';
 
-export type ResponseValue = Channel[];
+export interface ResponseValue {
+  chats: Channel[];
+}
 
 export interface Channel {
   id: string;
