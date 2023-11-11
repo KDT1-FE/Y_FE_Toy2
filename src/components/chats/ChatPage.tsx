@@ -13,6 +13,16 @@ import Search from '../../../public/assets/search.svg';
 import { Chat, allChatsState } from './chatsStore';
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+interface User {
+    id: string;
+    name: string;
+    picture: string;
+}
+
+interface ChatPageProps {
+    currentUser: User; // 필요한 경우 User 인터페이스를 import 해서 사용하세요.
+    chatList: Chat[]; // Chat 인터페이스를 import 해서 사용하세요.
+}
 
 
 const MyChats = ({ userType }: any) => {
@@ -20,6 +30,10 @@ const MyChats = ({ userType }: any) => {
     const [allChats, setAllChats] = useRecoilState(allChatsState);
     const [myChats, setMyChats] = useState<Chat[]>([]);
     const router = useRouter();
+
+    const navigateToUserSelection = () => {
+        router.push('userSelect'); // 적절한 경로로 수정하세요.
+    };
 
     const enterChatRoom = (chat: Chat) => {
         if (chat.id && chat.users) {
@@ -58,13 +72,18 @@ const MyChats = ({ userType }: any) => {
         }
     };
 
+
+
     useEffect(() => {
         if (userType === 'my') {
             getMyChats();
         } else {
             getAllChats();
         }
+
     }, []);
+
+
     useEffect(() => {
         console.log(allChats);
     }, []);
@@ -73,14 +92,15 @@ const MyChats = ({ userType }: any) => {
         setSearchOpen(!searchOpen);
     };
 
+
     return (
         <Wrapper>
             <Header>
                 <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
                 <IconBar>
-                    <SearchIcon onClick={onSearchHandler} />
-                    <AddChatIcon />
-                </IconBar>
+                <SearchIcon onClick={onSearchHandler} />
+                <AddChatIcon onClick={navigateToUserSelection} />
+            </IconBar>
             </Header>
             <ChatContainer>
                 {searchOpen ? <SearchMyChat /> : null}
