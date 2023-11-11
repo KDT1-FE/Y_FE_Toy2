@@ -10,7 +10,6 @@ const CreateGameRoom = () => {
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const navigate = useNavigate();
   const [name, setName] = useState('');
-  const [users, setUsers] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
   const accessToken: any = useRecoilValue(accessTokenState);
   const onChange = (e: React.ChangeEvent<any>) => {
@@ -29,7 +28,7 @@ const CreateGameRoom = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const check = await createGameRooms(accessToken, name, users, isPrivate);
+    const check = await createGameRooms(accessToken, name, [], isPrivate);
     if (check === undefined) {
       alert('중복된 방이 있습니다.');
     } else {
