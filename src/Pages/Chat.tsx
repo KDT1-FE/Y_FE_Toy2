@@ -2,9 +2,8 @@ import styled from "styled-components";
 import ChatRoom from "../components/Chat/ChatRoom";
 import ModalPlus from "../components/ModalPlus";
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { AuthContext } from "../hooks/useAuth";
 import useApi from "../hooks/useApi";
+import { AuthContext } from "../hooks/useAuth";
 
 interface User {
   id: string;
@@ -24,6 +23,7 @@ export interface ChatI {
 function Chat() {
   const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
   const { getData } = useApi();
+  const { accessToken } = useContext(AuthContext);
 
   // const fetchMyRoom = async () => {
   //   try {
@@ -47,7 +47,6 @@ function Chat() {
       try{
         const data = await getData("https://fastcampus-chat.net/chat");
         const chatData = data.chats;
-        // setChatRoom(chatData);
         console.log(chatData);
       } catch (error){
         console.error(error)
@@ -92,7 +91,7 @@ function Chat() {
     // };
 
     // fetchData();
-  }, []);
+  }, [accessToken]);
   
 
   return (

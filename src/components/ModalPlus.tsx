@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal, { Styles } from "react-modal";
 import styled from "styled-components";
 import "../style/Modal.css";
 import useApi from "../hooks/useApi";
+import { AuthContext } from "../hooks/useAuth";
 
 interface User {
   id: string;
@@ -14,6 +15,7 @@ const ModalExample = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
   const { getData } = useApi();
+  const { accessToken } = useContext(AuthContext);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -165,7 +167,7 @@ const ModalExample = () => {
       };
       fetchData();
 
-  }, []);
+  }, [accessToken]);
 
   return (
     <ChatTestWrap>
