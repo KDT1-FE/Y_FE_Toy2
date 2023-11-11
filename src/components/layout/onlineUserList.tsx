@@ -16,7 +16,7 @@ const OnlineUserList = () => {
   return (
     <div>
       <div>OnlineUserList</div>
-      <div>Users: {allOnlineUsers.join(', ')}</div>
+      <div>Users: {onlineUserId.join(', ')}</div>
     </div>
   );
 };

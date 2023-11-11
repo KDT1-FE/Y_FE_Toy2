@@ -37,8 +37,6 @@ const CheckPrivateChat = () => {
           ),
         }));
 
-        console.log(onLine);
-
         setData(nonMyIdArray);
       } catch (error) {
         console.error('Error retrieving data:', error);

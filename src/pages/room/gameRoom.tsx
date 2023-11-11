@@ -18,11 +18,11 @@ const GameRoom = () => {
 
   return (
     <>
-      <LeaveGameRoom chatId={id?.substring(1)}></LeaveGameRoom>
+      <LeaveGameRoom chatId={chat}></LeaveGameRoom>
       <div style={{ padding: 20, textAlign: 'center' }}>
         게임방{id}
         <Drawing />
-        <CheckUsersInGameRoom chatId={id?.substring(1)}></CheckUsersInGameRoom>
+        <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
       </div>
     </>
   );
