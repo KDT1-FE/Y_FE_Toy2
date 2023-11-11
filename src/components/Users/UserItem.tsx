@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import UserProfileModal from './UserProfileModal';
+import { BiSolidCircle } from 'react-icons/bi';
 
 interface User {
     id: string;
@@ -11,20 +12,28 @@ interface User {
     chats: string[];
 }
 
-export const UserItem = ({ user }: { user: User }) => {
-    // 사용할 때 eslint 주석 삭제
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface ConnectUserIdList {
+    users: string[];
+}
+
+export const UserItem = ({ user, connectUserIdList }: { user: User; connectUserIdList: ConnectUserIdList }) => {
     const { name, picture, id } = user;
     const [showModal, setShowModal] = useState(false);
-
     const clickModal = () => setShowModal(!showModal);
     return (
         <>
             <User onClick={clickModal}>
                 <UserImg src={picture} />
                 <UserInfo>
-                    <h2>{name}</h2>
-                    <p>online</p>
+                    <UserName>{name}</UserName>
+                    <UserState>
+                        <BiSolidCircle size="13" color={connectUserIdList.users.includes(id) ? '#00956e' : '#950000'} />
+                        {connectUserIdList.users.includes(id) ? (
+                            <UserStateTextBlack>online</UserStateTextBlack>
+                        ) : (
+                            <UserStateText>offline</UserStateText>
+                        )}
+                    </UserState>
                 </UserInfo>
             </User>
             {showModal && <UserProfileModal clickModal={clickModal} user={user} />}
@@ -68,4 +77,22 @@ const UserImg = styled.img`
 
 const UserInfo = styled.div`
     line-height: 10px;
+`;
+
+const UserName = styled.h2`
+    font-size: 1.5rem;
+`;
+
+const UserState = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+`;
+
+const UserStateText = styled.p`
+    color: #9a9a9a;
+`;
+
+const UserStateTextBlack = styled.p`
+    color: black;
 `;

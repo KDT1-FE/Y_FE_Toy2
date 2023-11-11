@@ -5,6 +5,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdClose, MdSearch } from 'react-icons/md';
 import Navigation from '@/components/Navigation';
+import { io } from 'socket.io-client';
 
 interface User {
     id: string;
@@ -14,9 +15,14 @@ interface User {
     chats: string[];
 }
 
+interface ConnectUserIdList {
+    users: string[];
+}
+
 export default function Users() {
     const [users, setUsers] = useState<User[] | []>([]);
     const [loading, setLoading] = useState(true);
+
     const getUsers = async () => {
         try {
             let res = await instance.get<unknown, User[]>('/users');
@@ -43,6 +49,30 @@ export default function Users() {
         setUserInput('');
     };
 
+    /** 접속 상태 */
+    const [connectUserIdList, setConnectUserIdList] = useState<ConnectUserIdList>({ users: [] });
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    const socket = io(`https://fastcampus-chat.net/server`, {
+        extraHeaders: {
+            Authorization: `Bearer ${accessToken}`,
+            serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+        },
+    });
+
+    useEffect(() => {
+        const accessSocket = (usersIdList: ConnectUserIdList) => {
+            if (JSON.stringify(connectUserIdList.users) !== JSON.stringify(usersIdList.users)) {
+                setConnectUserIdList(usersIdList);
+                console.log('Users페이지', usersIdList);
+            }
+        };
+        socket.on('users-server-to-client', accessSocket);
+
+        return () => {
+            socket.off('users-server-to-client', accessSocket);
+        };
+    }, [connectUserIdList]);
     return (
         <>
             <UsersWrap>
@@ -65,7 +95,7 @@ export default function Users() {
                     {loading && <Loading />}
                     {searched.length !== 0
                         ? searched.map((user: User) => {
-                              return <UserItem key={user.id} user={user} />;
+                              return <UserItem key={user.id} user={user} connectUserIdList={connectUserIdList} />;
                           })
                         : !loading && (
                               <NoUserWrap>
@@ -104,6 +134,12 @@ const UserList = styled.div`
     height: 80%;
 
     overflow-y: auto;
+    &::-webkit-scrollbar {
+        /*크롬, 사파리, 오페라, 엣지*/
+        display: none;
+    }
+    -ms-overflow-style: none; /* ie */
+    scrollbar-width: none; /* 파이어폭스 */
 `;
 
 const NoUserWrap = styled.div`
