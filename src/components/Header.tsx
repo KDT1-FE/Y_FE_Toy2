@@ -45,10 +45,6 @@ const Header = () => {
       </SubMenu>
       <UserBar>
         <UserInfo>
-<<<<<<< HEAD
-          <StyledLink to={"login"}>로그인</StyledLink> |{" "}
-          <StyledLink to={"signup"}>회원가입</StyledLink>
-=======
           {accessToken ? (
             <Logout></Logout>
           ) : (
@@ -57,7 +53,6 @@ const Header = () => {
               <StyledLink to={"signup"}>회원가입</StyledLink>
             </>
           )}
->>>>>>> 512c06a1e4417f9ec5e62ab37c624885341f4ebd
         </UserInfo>
         <ToggleBtn onClick={toggleTheme}>
           {theme === lightTheme ? (
