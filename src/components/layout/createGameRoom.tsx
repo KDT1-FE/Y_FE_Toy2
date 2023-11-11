@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createGameRooms } from '../../api';
-// import { io } from 'socket.io-client';
-// import { SERVER_URL, CONTENT_TYPE, SERVER_ID } from '../../constant';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allRoomState } from '../../states/atom';
+import { useSocketContext } from '../../provider/socketContext';
 
 const CreateGameRoom = () => {
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
@@ -12,14 +11,48 @@ const CreateGameRoom = () => {
   const [name, setName] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const accessToken: any = useRecoilValue(accessTokenState);
+  const { socket } = useSocketContext();
+
+  // Add event listener when the component mounts
+  useEffect(() => {
+    const handleNewChat = (data: any) => {
+      console.log('Socket Event Received:', data);
+
+      if (data && data.responseChat) {
+        console.log('All Rooms:', allRooms);
+
+        // Check if the chat already exists in the state
+        const chatExists = allRooms?.some(
+          (room) => room.id === data.responseChat.id,
+        );
+
+        if (!chatExists) {
+          setAllRooms((prevRooms) =>
+            prevRooms ? [...prevRooms, data.responseChat] : [data.responseChat],
+          );
+        } else {
+          console.warn(
+            'Chat already exists in the state:',
+            data.responseChat.id,
+          );
+        }
+      } else {
+        console.error('Invalid socket event data structure:', data);
+      }
+    };
+
+    socket?.on('new-chat', handleNewChat);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      socket?.off('new-chat', handleNewChat);
+    };
+  }, [socket, allRooms, setAllRooms]);
+
   const onChange = (e: React.ChangeEvent<any>) => {
     const { value, name } = e.target;
     console.log(value, name);
-    if (value === 'Private') {
-      setIsPrivate(true);
-    } else {
-      setIsPrivate(false);
-    }
+    setIsPrivate(value === 'Private');
   };
 
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,20 +66,7 @@ const CreateGameRoom = () => {
       alert('중복된 방이 있습니다.');
     } else {
       alert('방 생성 성공.');
-      // const socket = io(`${SERVER_URL}/chat?chatId=${check.id}`, {
-      //   extraHeaders: {
-      //     Authorization: `Bearer ${token}`,
-      //     'content-type': CONTENT_TYPE,
-      //     serverId: SERVER_ID,
-      //   },
-      // });
-      // console.log(socket.connected);
-      // socket.on('message-to-client', (messageObject: any) => {
-      //   console.log(messageObject);
-      // });
-
       setAllRooms([...allRooms, check]);
-
       navigate(`/room/:${check.id}`);
     }
   };
