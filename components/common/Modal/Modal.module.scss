@@ -3,7 +3,7 @@
 .ModalBox {
   // width: 5rem;
   // height: 10rem;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -19,4 +19,12 @@
     right: 1rem;
     font-weight: bold;
   }
+}
+.dim {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba($color: #000000, $alpha: 0.5);
 }

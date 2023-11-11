@@ -75,3 +75,12 @@
     background: $brand-pink;
   }
 }
+
+@mixin dim() {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba($color: $black, $alpha: 0.7);
+}

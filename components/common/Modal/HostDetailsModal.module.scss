@@ -1,5 +1,7 @@
 @import '@/styles/index.scss';
-
+.dim {
+  @include dim;
+}
 .host-img {
   width: 100%;
   border-radius: 1rem;

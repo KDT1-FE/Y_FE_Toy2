@@ -13,20 +13,23 @@ export default function HostDetailsModal({
   onClose,
 }: HostDetailsModalProps) {
   return (
-    <Modal onClose={onClose}>
-      <img
-        className={styles['host-img']}
-        src={hostDetails.picture}
-        alt={hostDetails.name}
-      />
-      <h4 className={styles.title}>{hostDetails.name}</h4>
-      <p className={styles.text}>
-        <b>주소 :</b> {hostDetails.location} {hostDetails.address}
-      </p>
-      <p className={styles.text}>
-        <b>숙소 소개</b> : {hostDetails.detail}
-      </p>
-      <Button className="fill-btn" text="문의하기" />
-    </Modal>
+    <>
+      <div className={styles.dim} />
+      <Modal onClose={onClose}>
+        <img
+          className={styles['host-img']}
+          src={hostDetails.picture}
+          alt={hostDetails.name}
+        />
+        <h4 className={styles.title}>{hostDetails.name}</h4>
+        <p className={styles.text}>
+          <b>주소 :</b> {hostDetails.location} {hostDetails.address}
+        </p>
+        <p className={styles.text}>
+          <b>숙소 소개</b> : {hostDetails.detail}
+        </p>
+        <Button className="fill-btn" text="문의하기" />
+      </Modal>
+    </>
   );
 }
