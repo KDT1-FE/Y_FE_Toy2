@@ -25,9 +25,11 @@
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.2",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.18.0",
     "react-spinners": "^0.13.8",
+    "recoil": "^0.7.7",
     "socket.io-client": "^4.7.2",
     "sort-by": "^1.2.0",
     "styled-components": "^6.1.0"
