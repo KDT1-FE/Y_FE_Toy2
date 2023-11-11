@@ -99,3 +99,17 @@ export const getAllMyChat = async (accessToken: string) => {
   });
   return res.data;
 };
+
+export const leaveGameRoom = async (accessToken: string, chatId: string) => {
+  const res = await client.patch(
+    `/chat/leave`,
+    { chatId: chatId },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+  console.log(res);
+  return res;
+};

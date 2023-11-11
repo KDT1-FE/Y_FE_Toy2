@@ -1,14 +1,21 @@
 import { Button } from '@chakra-ui/react';
 import { disconnectChattingSocket } from '../../api/socket';
 import { useNavigate } from 'react-router-dom';
-const LeaveGameRoom = () => {
+import { useRecoilValue } from 'recoil';
+import { accessTokenState } from '../../states/atom';
+import { leaveGameRoom } from '../../api';
+const LeaveGameRoom = (chatId: string) => {
   const navigate = useNavigate();
-  const handleLeave = () => {
+  const accessToken: any = useRecoilValue(accessTokenState);
+  const id = chatId.chatId;
+  const handleLeave = async () => {
     try {
-      disconnectChattingSocket();
-      navigate('/lobby');
+      await leaveGameRoom(accessToken, id);
     } catch (error) {
       console.log(error);
+    } finally {
+      disconnectChattingSocket();
+      navigate('/lobby');
     }
   };
   return (

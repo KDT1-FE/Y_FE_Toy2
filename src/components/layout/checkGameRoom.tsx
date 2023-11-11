@@ -32,6 +32,7 @@ const CheckGameRoom = () => {
       alert('방이 꽉 찼어요.');
     } else {
       await participateGameRoom(chatId, accessToken);
+
       navigate(`/room/:${chatId}`);
     }
   };

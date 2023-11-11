@@ -21,11 +21,11 @@ export const chatSocket = (accessToken: any, chatId: string) => {
       serverId: SERVER_ID,
     },
   });
-  chattingSocket.emit('fetch-messages');
+  // chattingSocket.emit('fetch-messages');
 
-  chattingSocket.on('connect', () => {
-    console.log('Connected from server');
-  });
+  // chattingSocket.on('connect', () => {
+  //   console.log('Connected from server');
+  // });
 
   // chattingSocket.on('disconnect', () => {
   //   console.log('Disconnected from server');
