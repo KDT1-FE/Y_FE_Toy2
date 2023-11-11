@@ -2,26 +2,27 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allRoomState } from '../../states/atom';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
-import usePollingData from '../template/usePollingData';
-
+import { useEffect } from 'react';
+import { io } from 'socket.io-client';
+import { SERVER_URL, SERVER_ID } from '../../constant';
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const accessToken: any = useRecoilValue(accessTokenState);
 
-  const fetchData = async () => {
-    try {
-      const allRoomsData = await getAllGameRooms(accessToken);
-      if (JSON.stringify(allRoomsData.chats) !== JSON.stringify(allRooms)) {
+  useEffect(() => {
+    async () => {
+      try {
+        const allRoomsData = await getAllGameRooms(accessToken);
         setAllRooms(allRoomsData.chats);
+      } catch (error) {
+        console.error('Error retrieving data:', error);
       }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
-    }
-  };
+    };
+  }, []);
+  // loginSocket활용할것
 
-  usePollingData(fetchData, [allRooms, setAllRooms]);
-  // 이거 소켓으로
+  // usePollingData(fetchData, [allRooms, setAllRooms]);
 
   const handleParticipate = async (numberOfPeople: number, chatId: any) => {
     if (numberOfPeople === 4) {

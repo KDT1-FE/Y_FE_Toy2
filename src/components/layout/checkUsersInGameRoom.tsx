@@ -38,7 +38,6 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       console.error('Error retrieving data:', error);
     }
   }, [accessToken, chatId]);
-  console.log(UsersInGameRoom);
   return (
     <>
       {UsersInGameRoom.map((userName, index) => (
