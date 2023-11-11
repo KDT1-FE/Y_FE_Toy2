@@ -1,6 +1,6 @@
 import React from 'react';
 // import { fetchAllOpenChat } from './search.utils';
-import SearchOpenChat from '../../Components/Search/SearchOpenChat';
+import SearchUsers from '../../Components/Users/SearchUsers';
 import { User } from '@/types';
 import { fetchAllUsers, fetchMyChats, fetchMyUser } from './searchmychat.utils';
 
@@ -15,10 +15,7 @@ const Search = async () => {
 
 	return (
 		<>
-			<SearchOpenChat
-				allUsersExceptMe={allUsersExceptMe}
-				allOpenChat={myChats}
-			/>
+			<SearchUsers allUsersExceptMe={allUsersExceptMe} myChats={myChats} />
 		</>
 	);
 };
