@@ -19,7 +19,7 @@ import {
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { accessTokenState, onlineUserState } from '../../states/atom';
 import { postLogin } from '../../api/index';
-import { useSocketContext } from '../../provider/socketContext';
+import { loginSocket } from '../../api/socket';
 function UserLogin() {
   const navigate = useNavigate();
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
@@ -31,7 +31,6 @@ function UserLogin() {
     message: '',
     type: '',
   });
-  const { createSocket } = useSocketContext();
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -42,15 +41,9 @@ function UserLogin() {
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('id', id);
 
-      console.log(id);
-
       alert('로그인에 성공했습니다.');
-
-      const newSocket = createSocket(accessToken);
-      newSocket.on('connect', () => {
-        newSocket?.emit('users-server');
-      });
-      newSocket.on('users-server-to-client', (data: any) => {
+      loginSocket(accessToken, (data: any) => {
+        console.log('Data received from socket:', data);
         setOnlineUsers(data);
       });
 

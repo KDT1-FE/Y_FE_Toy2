@@ -4,12 +4,10 @@ import { SERVER_URL, SERVER_ID } from '../constant';
 let serverSocket: Socket | null = null;
 let chattingSocket: Socket | null = null;
 
-
 export const loginSocket = (
   accessToken: any,
   onDataReceived: (data: any[]) => void,
 ) => {
-  
   serverSocket = io(`${SERVER_URL}/server`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
@@ -18,6 +16,8 @@ export const loginSocket = (
   });
 
   serverSocket.on('connect', () => {
+    console.log(serverSocket);
+
     serverSocket?.emit('users-server');
   });
 
@@ -35,15 +35,15 @@ export const chatSocket = (accessToken: any, chatId: string) => {
       serverId: SERVER_ID,
     },
   });
-  // chattingSocket.emit('fetch-messages');
+  chattingSocket.emit('fetch-messages');
 
-  // chattingSocket.on('connect', () => {
-  //   console.log('Connected from server');
-  // });
+  chattingSocket.on('connect', () => {
+    console.log('Connected from server');
+  });
 
-  // chattingSocket.on('disconnect', () => {
-  //   console.log('Disconnected from server');
-  // });
+  chattingSocket.on('disconnect', () => {
+    console.log('Disconnected from server');
+  });
 
   return chattingSocket;
 };
