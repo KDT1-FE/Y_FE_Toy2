@@ -7,7 +7,6 @@ interface ButtonProps {
   className: string;
 }
 export default function Button({ onClick, text, className = '' }: ButtonProps) {
-  console.log('Received className:', className);
   return (
     <button className={styles[className]} onClick={onClick} type="button">
       {text}

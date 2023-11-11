@@ -13,28 +13,33 @@
   padding-bottom: 10rem;
   .hash {
     display: flex;
+    justify-content: flex-start;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 3rem 1rem;
+    gap: 2rem 1rem;
     margin: 2rem 0 1rem;
 
     li {
       display: inline-block;
-      span {
-        padding: 0.6rem 1.4rem;
+      button {
+        cursor: pointer;
+        padding: 0.6rem 1.2rem;
         background: rgba(1, 82, 204, 0.1);
         border-radius: 18px;
         color: #0152cc;
         font-size: small;
         font-weight: 600;
+        border: none;
       }
     }
   }
+
   .title {
     color: $black;
     color: $brand-pink;
     font-size: $font-size-lg;
     border-bottom: 1px solid $light-pink;
-    padding: 2rem;
+    padding: 1rem;
     margin-bottom: 4rem;
   }
   .location {
