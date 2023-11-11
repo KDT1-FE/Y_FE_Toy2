@@ -1,40 +1,32 @@
+import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  accessTokenState,
-  allRoomState,
-  // serverSocketState,
-} from '../../states/atom';
+import { accessTokenState, allRoomState } from '../../states/atom';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const accessToken: any = useRecoilValue(accessTokenState);
-  // const socket = useRecoilValue(serverSocketState);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const allRoomsData = await getAllGameRooms(accessToken);
-        if (JSON.stringify(allRoomsData.chats) !== JSON.stringify(allRooms)) {
+
+        if (Array.isArray(allRoomsData?.chats)) {
           setAllRooms(allRoomsData.chats);
+        } else {
+          console.error('Invalid initial data structure:', allRoomsData?.chats);
         }
       } catch (error) {
-        console.error('Error retrieving data:', error);
+        console.error('Error retrieving initial data:', error);
       }
     };
 
     fetchData();
+  }, [accessToken, setAllRooms]);
 
-    return () => {
-      // Cleanup function (e.g., disconnect socket) if needed
-      // This will be called when the component unmounts
-    };
-  }, [accessToken, setAllRooms, allRooms]); // useEffect dependencies
-  // usePollingData(fetchData, [allRooms, setAllRooms]);
-  // socket.on('new-chat', (data: any) => {
-  //   setAllRooms(data);
-  // });
   const handleParticipate = async (numberOfPeople: number, chatId: any) => {
     if (numberOfPeople === 4) {
       alert('방이 꽉 찼어요.');
@@ -46,17 +38,20 @@ const CheckGameRoom = () => {
 
   return (
     <>
-      {allRooms.map((element, index) => (
-        <div
-          key={index}
-          onClick={() => handleParticipate(element.users.length, element.id)}>
-          <p>{element.name}</p>
-          <p>{element.id}</p>
-          <p>{element.users.length}</p>
-          {element.users.length === 4 && <p>Four users in this room</p>}
-          <p>{element.users[0].id}</p>
-        </div>
-      ))}
+      {Array.isArray(allRooms) &&
+        allRooms.map((element, index) => (
+          <div
+            key={index}
+            onClick={() =>
+              handleParticipate(element?.users?.length || 0, element?.id)
+            }>
+            <p>{element?.name}</p>
+            <p>{element?.id}</p>
+            <p>{element?.users?.length}</p>
+            {element?.users?.length === 4 && <p>Four users in this room</p>}
+            <p>{element?.users?.[0]?.id}</p>
+          </div>
+        ))}
     </>
   );
 };
