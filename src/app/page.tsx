@@ -22,6 +22,24 @@ export default function Home() {
     //     console.log(data);
     // };
 
+    // const accessToken = sessionStorage.getItem('accessToken');
+
+    // const LeaveChat = async () => {
+    //      const response = await fetch('https://fastcampus-chat.net/chat/leave', {
+    //          method: 'PATCH',
+    //          body: JSON.stringify({
+    //              chatId: 'be5ed6ab-7007-4c5c-b768-46f241741ef4',
+    //          }),
+    //          headers: {
+    //              'content-type': 'application/json',
+    //              Authorization: `Bearer ${accessToken}`,
+    //              serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+    //          },
+    //      });
+    //      const data = await response.json();
+    //      console.log(data);
+    //  };
+
     const router = useRouter();
 
     const onLogout = () => {
@@ -29,24 +47,6 @@ export default function Home() {
         sessionStorage.removeItem('userId');
         router.push('/login');
     };
-    
-    const accessToken = sessionStorage.getItem('accessToken');
-
-    const LeaveChat = async () => {
-         const response = await fetch('https://fastcampus-chat.net/chat/leave', {
-             method: 'PATCH',
-             body: JSON.stringify({
-                 chatId: 'be5ed6ab-7007-4c5c-b768-46f241741ef4',
-             }),
-             headers: {
-                 'content-type': 'application/json',
-                 Authorization: `Bearer ${accessToken}`,
-                 serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-             },
-         });
-         const data = await response.json();
-         console.log(data);
-     };
 
     return (
         <main
@@ -89,8 +89,8 @@ export default function Home() {
                 <li style={{ paddingBottom: '0.3rem' }}>
                     로그아웃 버튼 클릭 - 로그인 페이지 이동(세션스토리지 : userId, accessToken 삭제 처리)
                 </li>
-                <li style={{ paddingBottom: '0.3rem' }}>accessToken X - 로그인, 회원가입 페이지만 접근 가능</li>
-                <li>accessToken O - 로그인, 회원가입 페이지접근 불가</li>
+                <li style={{ paddingBottom: '0.3rem' }}>accessToken X - 로그인, 회원가입 페이지만 접근 가능합니다.</li>
+                <li>accessToken O - 로그인, 회원가입 페이지접근 불가합니다.</li>
             </ul>
         </main>
     );
