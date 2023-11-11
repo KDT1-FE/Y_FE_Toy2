@@ -1,7 +1,6 @@
 import { Box, HStack } from '@chakra-ui/react';
 import useChannels from '../../hooks/useChannels';
 import ChannelCard from './ChannelCard';
-import CreateChannelModal from './modal/CreateChannelModal';
 
 const ChannelList = () => {
   const { data: channels, isLoading } = useChannels();
