@@ -5,12 +5,15 @@ export const useAuth = () => {
   const [auth, setAuth] = useRecoilState(authState);
 
   const setToken = (accessToken: string, refreshToken: string) => {
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
-    setAuth({
-      accessToken,
-      refreshToken,
-      isAuthenticated: true,
+    return new Promise<void>((resolve) => {
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      setAuth({
+        accessToken,
+        refreshToken,
+        isAuthenticated: true,
+      });
+      resolve();
     });
   };
 

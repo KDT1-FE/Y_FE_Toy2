@@ -35,8 +35,9 @@ const Login = () => {
     if (login.result && login.statusCode === 200) {
       const { accessToken, refreshToken } = login.result;
       if (accessToken && refreshToken) {
-        setToken(accessToken, refreshToken);
-        navigate("/main");
+        setToken(accessToken, refreshToken).then(() => {
+          navigate("/main");
+        });
       }
     } else if (login.result && login.statusCode !== 200) {
       setLoginError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
