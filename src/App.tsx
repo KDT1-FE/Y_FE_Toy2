@@ -11,7 +11,6 @@ import Profile from "./components/Profile/Profile";
 import MainContents from "./Pages/MainContents";
 import ProfilePage from "./Pages/Profile/ProfilePage";
 import ProfileEditPage from "./Pages/Profile/ProfileEditPage";
-import ChatTest from "./Pages/ChatTest";
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
 import Chat from "./Pages/Chat";
