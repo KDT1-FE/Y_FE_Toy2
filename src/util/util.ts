@@ -7,6 +7,7 @@ export const handleGetAllUsers =
     try {
       const res = await getAllUsers(accessToken);
       console.log(res);
+      return res;
     } catch (e) {
       console.error(e);
       alert('사용자 정보를 가져오는데 실패했습니다.');

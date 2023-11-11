@@ -39,6 +39,7 @@ function UserLogin() {
       const { accessToken, refreshToken } = res.data;
       setAccessToken(accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('id', id);
 
       alert('로그인에 성공했습니다.');
       loginSocket(accessToken, (data: any) => {

@@ -17,11 +17,11 @@ interface ChattingDetailProps {
 }
 
 const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
-  const accessToken: any = useRecoilValue(accessTokenState);
   const [postData, setPostData] = useState('');
   const [socket, setSocket] = useState<any>(null);
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
+  const accessToken: any = useRecoilValue(accessTokenState);
 
   useEffect(() => {
     try {
