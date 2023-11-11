@@ -9,8 +9,8 @@ interface AuthState {
 export const authState = atom<AuthState>({
   key: "authState",
   default: {
-    accessToken: null,
-    refreshToken: null,
-    isAuthenticated: false,
+    accessToken: localStorage.getItem("accessToken"),
+    refreshToken: localStorage.getItem("refreshToken"),
+    isAuthenticated: !!localStorage.getItem("accessToken"),
   },
 });
