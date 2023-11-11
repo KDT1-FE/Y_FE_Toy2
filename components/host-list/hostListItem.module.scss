@@ -1,0 +1,33 @@
+@import '@/styles/index.scss';
+
+.item {
+  @include flex-center-col;
+  gap: 1rem;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 2rem;
+
+  .hostImg {
+    width: 7rem;
+    border-radius: 50px;
+  }
+  .name {
+    font-weight: bold;
+    // margin-top: 0;
+  }
+  .btn {
+    border-radius: 5px;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    // color: $brand-pink;
+    // background: transparent;
+    // border: 1px solid $brand-pink;
+    color: #fff;
+    background: $light-pink;
+    border: none;
+    transition: color 0.3s;
+    &:hover {
+      background: $brand-pink;
+    }
+  }
+}

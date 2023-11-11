@@ -1,0 +1,61 @@
+@import '@/styles/index.scss';
+
+.uploadDb {
+  position: fixed;
+  bottom: 20vh;
+  right: 0;
+  padding: 10px;
+}
+.container {
+  @include container;
+  height: 100vh;
+  padding: 2rem;
+
+  .title {
+    color: $black;
+    color: $brand-pink;
+    font-size: $font-size-lg;
+    border-bottom: 1px solid $light-pink;
+    padding: 2rem;
+    margin-bottom: 4rem;
+  }
+  .location {
+    display: inline-block;
+    color: $black;
+    margin: 3rem 0;
+    &::before {
+      content: '# ';
+    }
+  }
+
+  .itemList {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    li {
+      display: inline-block;
+      text-align: center;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: transform 0.3s;
+    }
+    :hover {
+      scale: 1.02;
+      font-size: $font-size-base;
+    }
+  }
+
+  @media screen and (min-width: 390px) and (max-width: 768px) {
+    .itemList {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .itemList {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
