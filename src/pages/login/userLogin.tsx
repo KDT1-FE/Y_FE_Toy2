@@ -42,6 +42,8 @@ function UserLogin() {
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('id', id);
 
+      console.log(id);
+
       alert('로그인에 성공했습니다.');
 
       const newSocket = createSocket(accessToken);
