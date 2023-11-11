@@ -16,7 +16,7 @@ export interface ChatI {
   latestMessage: string | null;
 }
 
-const token = sessionStorage.getItem('token');
+const token = sessionStorage.getItem('refreshToken');
 
 // 모든 유저 조회
 export const fetchChatUsers = async () => {

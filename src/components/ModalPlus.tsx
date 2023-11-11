@@ -145,7 +145,7 @@ const ModalExample = () => {
       headers: {
         "Content-Type": "application/json",
         serverId: "1601075b",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        Authorization: `Bearer ${sessionStorage.getItem("refreshToken")}`
       }
     })
       .then((response) => response.json() as unknown as User[])
