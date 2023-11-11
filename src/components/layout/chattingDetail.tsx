@@ -4,12 +4,14 @@ import {
   accessTokenState,
   privateChatDetail,
   privateChatNew,
+  myUserDataState,
 } from '../../states/atom';
 import { useState, useEffect } from 'react';
 import { chatSocket } from '../../api/socket';
 import {
   createSeparatedTime,
   sortCreatedAt,
+  modifyDate,
 } from '../template/useChattingSort';
 
 interface ChattingDetailProps {
@@ -21,7 +23,9 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
   const [socket, setSocket] = useState<any>(null);
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
+  const [lastDate, setLastDate] = useState('');
   const accessToken: any = useRecoilValue(accessTokenState);
+  const myUserData: any = useRecoilValue(myUserDataState);
 
   useEffect(() => {
     try {
@@ -39,18 +43,28 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
           ...message,
           ...createSeparatedTime(message.createdAt),
         }));
-        setFetchChat(SeparatedTime);
+
+        // 마지막 날짜 저장
+        setLastDate(SeparatedTime[SeparatedTime.length - 1].date);
+
+        // 중복 날짜, 시간 null로 반환
+        const modifyDateArray = modifyDate(SeparatedTime);
+
+        setFetchChat(modifyDateArray);
       });
 
       newSocket.on('message-to-client', (messageObject) => {
-        //console.log('Message from server:', messageObject);
-        setNewChat((newChat: any) => [
-          ...newChat,
-          {
-            ...messageObject,
-            ...createSeparatedTime(messageObject.createdAt),
-          },
-        ]);
+        setNewChat((newChat: any) => {
+          // 중복 날짜, 시간 null로 반환
+          const modifyDateArray = modifyDate([
+            ...newChat,
+            {
+              ...messageObject,
+              ...createSeparatedTime(messageObject.createdAt),
+            },
+          ]);
+          return modifyDateArray;
+        });
       });
 
       return () => {
@@ -77,21 +91,30 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
         <h1>채팅디테일</h1>
         {fetchChat.map((element, index) => (
           <div key={index}>
-            <p>{element.text}</p>
-            <p>{element.userId}</p>
-            <p>{element.createdAt}</p>
             <p>{element.date}</p>
-            <p>{element.time}</p>
+            <div id="messageWrap">
+              <div
+                id="message"
+                className={element.userId === myUserData.id ? 'mine' : ''}>
+                <p>{element.text}</p>
+              </div>
+              <p>{element.time}</p>
+            </div>
           </div>
         ))}
 
         {newChat.map((element, index) => (
           <div key={index}>
-            <p>{element.text}</p>
-            <p>{element.userId}</p>
-            <p>{element.createdAt}</p>
-            <p>{element.date}</p>
-            <p>{element.time}</p>
+            {element.date !== lastDate && <p>{element.date}</p>}
+
+            <div id="messageWrap">
+              <div
+                id="message"
+                className={element.userId === myUserData.id ? 'mine' : ''}>
+                <p>{element.text}</p>
+              </div>
+              <p>{element.time}</p>
+            </div>
           </div>
         ))}
 

@@ -37,9 +37,36 @@ const CheckPrivateChat = () => {
           ),
         }));
 
-        console.log(onLine);
+        // 온라인 / 오프라인 여부 반환
+        const updatedOnline = nonMyIdArray.map((element: any) => {
+          const array = element.users.map((userElement: any) => {
+            // onLine.users 값이 있는지 확인
+            const isOnline =
+              onLine.users &&
+              onLine.users.find(
+                (onlineUser: any) => onlineUser === userElement.id,
+              );
 
-        setData(nonMyIdArray);
+            if (isOnline) {
+              return {
+                ...userElement,
+                isOnline: true,
+              };
+            } else {
+              return {
+                ...userElement,
+                isOnline: false,
+              };
+            }
+          });
+
+          return {
+            ...element,
+            users: array,
+          };
+        });
+
+        setData(updatedOnline);
       } catch (error) {
         console.error('Error retrieving data:', error);
       }
@@ -60,18 +87,16 @@ const CheckPrivateChat = () => {
       [chatId]: !chatModals[chatId] as boolean,
     }));
   };
+  console.log(allMyChat);
 
   return (
     <>
       {allMyChat.map((element, index) => (
         <div key={index}>
           <div onClick={() => handleChatDetailModal(element.id)}>
-            <p>{element.name}</p>
-            <p>{element.id}</p>
-            <p>{element.users.length}</p>
             <p>{element.latestMessage.text}</p>
-            {element.users.length > 0 && <p>{element.users[0].id}</p>}
-            {element.users.length > 0 && <p>{element.users[0].name}</p>}
+            {element.users.some((user: any) => user.isOnline) && <p>온라인</p>}
+            {element.users.length > 0 && <p>{element.users[0].username}</p>}
             {element.users.length > 0 && <p>{element.users[0].picture}</p>}
           </div>
           {chatModals[element.id] && <ChattingDetail chatId={element.id} />}

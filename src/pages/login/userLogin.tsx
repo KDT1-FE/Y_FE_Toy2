@@ -25,7 +25,7 @@ function UserLogin() {
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const setAccessToken = useSetRecoilState(accessTokenState);
+  const [__, setAccessToken] = useRecoilState(accessTokenState);
   const [showAlert, setShowAlert] = useState({
     active: false,
     message: '',
@@ -42,16 +42,11 @@ function UserLogin() {
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('id', id);
 
-      console.log(id);
-
       alert('로그인에 성공했습니다.');
 
-      const newSocket = createSocket(accessToken);
-      newSocket.on('connect', () => {
-        newSocket?.emit('users-server');
-      });
-      newSocket.on('users-server-to-client', (data: any) => {
+      await loginSocket(accessToken, (data: any) => {
         setOnlineUsers(data);
+        console.log(onlineUsers);
       });
 
       navigate('/lobby');

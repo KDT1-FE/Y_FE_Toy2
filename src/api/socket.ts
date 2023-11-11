@@ -9,8 +9,9 @@ export const loginSocket = (
   accessToken: any,
   onDataReceived: (data: any[]) => void,
 ) => {
-  
-  serverSocket = io(`${SERVER_URL}/server`, {
+
+  serverSocket = io(`${SERVER_URL}server`, {
+
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
       serverId: SERVER_ID,
@@ -25,25 +26,35 @@ export const loginSocket = (
     onDataReceived(data);
   });
 
+  serverSocket.on('error', (error) => {
+    console.error('Socket.IO connection error:', error);
+    // 여기에 연결 오류 처리 로직을 추가하세요
+  });
+
   return serverSocket;
 };
 
 export const chatSocket = (accessToken: any, chatId: string) => {
-  chattingSocket = io(`${SERVER_URL}/chat?chatId=${chatId}`, {
+  chattingSocket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
       serverId: SERVER_ID,
     },
   });
-  // chattingSocket.emit('fetch-messages');
+  chattingSocket.emit('fetch-messages');
 
-  // chattingSocket.on('connect', () => {
-  //   console.log('Connected from server');
-  // });
+  chattingSocket.on('connect', () => {
+    console.log('Connected from server');
+  });
 
-  // chattingSocket.on('disconnect', () => {
-  //   console.log('Disconnected from server');
-  // });
+  chattingSocket.on('error', (error) => {
+    console.error('Socket.IO connection error:', error);
+    // 여기에 연결 오류 처리 로직을 추가하세요
+  });
+
+  chattingSocket.on('disconnect', () => {
+    console.log('Disconnected from server');
+  });
 
   return chattingSocket;
 };
