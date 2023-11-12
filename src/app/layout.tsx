@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     authCheck(setShouldRenderMoveComponent, router, pathname);
 
     /** 접속 유저 검색 */
-    const accessToken = sessionStorage.getItem('accessToken');
+    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
 
     const socket = io(`https://fastcampus-chat.net/server`, {
         extraHeaders: {
