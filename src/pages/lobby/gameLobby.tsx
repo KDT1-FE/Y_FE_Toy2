@@ -19,7 +19,6 @@ const GameLobby = () => {
   const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
 
   const accessToken = useRecoilValue(accessTokenState);
-  const [imgsrc, setImgsrc] = useState('');
 
   async function fetchUserData() {
     try {
