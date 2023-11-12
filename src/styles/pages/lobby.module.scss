@@ -1,0 +1,7 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.lobby {
+  background-color: $bg-black;
+  height: 100vh;
+}

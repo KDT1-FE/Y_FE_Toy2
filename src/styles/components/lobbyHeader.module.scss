@@ -1,0 +1,38 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.header {
+  @include flex-center-row();
+  padding: 1rem;
+  justify-content: space-between;
+  background-color: $header-purple;
+  color: $white;
+  font-size: $font-base;
+  font-family: $font-main;
+
+  h1 {
+    font-family: $font-logo;
+    margin-left: 1rem;
+  }
+
+  &__right {
+    @include flex-center-row;
+    margin-right: 1rem;
+    gap: 2rem;
+
+    &__btn {
+      background-color: $lobby-purple;
+      border: 0;
+      border-radius: 20px;
+      height: 5rem;
+      padding: 0 6rem;
+      color: $white;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba($white, 0.1);
+        transform: scale(0.95);
+      }
+    }
+  }
+}
