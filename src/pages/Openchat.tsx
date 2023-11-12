@@ -1,6 +1,14 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Chip, Container, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Container,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { MapsUgc } from '@mui/icons-material';
 import {
   OpenchatAppbar,
@@ -13,10 +21,12 @@ import OpenchatCategory from '../components/openchat/OpenchatCategory';
 import OpenchatCreate from '../components/openchat/OpenchatCreate';
 import { privateApi } from '../libs/axios';
 import { UserSimple } from '../types/User';
+import useQueryOpenchats from '../hooks/useQueryOpenchats';
 
 function Openchat() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [allUsers, setAllUsers] = useState<UserSimple[]>([]);
+  const { isQuering, openchats } = useQueryOpenchats();
 
   useEffect(() => {
     if (selectedId) {
@@ -26,6 +36,22 @@ function Openchat() {
       })();
     }
   }, [selectedId]);
+
+  if (isQuering) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#f5f5f5',
+          height: '100vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <OpenchatContainer isOpenModal={Boolean(selectedId)}>
