@@ -13,12 +13,15 @@ import UserList from '../../components/layout/userList';
 import UserLogout from '../login/userLogout';
 import CheckPrivateChat from '../../components/layout/checkPrivateChat';
 import MyUserData from '../../components/layout/MyUserData';
+import { useNavigate } from 'react-router-dom';
+import { controlBack, controlLobbyReload } from '../../hooks/leaveHandle';
 
 const GameLobby = () => {
   const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
-
   const accessToken = useRecoilValue(accessTokenState);
   const [imgsrc, setImgsrc] = useState('');
+  controlLobbyReload();
+  controlBack();
 
   async function fetchUserData() {
     try {
