@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import { useUsers } from '../../../hooks/useUsers';
 import { useEffect } from 'react';
 

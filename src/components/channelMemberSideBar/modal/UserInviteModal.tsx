@@ -11,6 +11,7 @@ import {
   useDisclosure,
   Center,
 } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 import UserInviteList from './UserInviteList';
 
 const UserInviteModal = () => {
@@ -19,9 +20,7 @@ const UserInviteModal = () => {
   const btnRef = React.useRef(null);
   return (
     <>
-      <Button mt={3} ref={btnRef} onClick={onOpen}>
-        Trigger modal
-      </Button>
+      <AddIcon boxSize="25px" color="#191919" ref={btnRef} onClick={onOpen} />
 
       <Modal
         size="sm"
@@ -33,11 +32,16 @@ const UserInviteModal = () => {
         <ModalOverlay />
         <Center>
           <ModalContent>
-            <ModalHeader textAlign="center">유저 목록</ModalHeader>
+            <ModalHeader textAlign="center" my="10px">
+              유저 목록
+            </ModalHeader>
             <ModalCloseButton />
+
             <ModalBody>
+              {/* map으로 뿌리는거 구현 */}
               <UserInviteList />
             </ModalBody>
+
             <ModalFooter justifyContent="center">
               <Button
                 size="lg"
