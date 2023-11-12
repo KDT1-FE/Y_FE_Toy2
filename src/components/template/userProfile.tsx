@@ -40,7 +40,7 @@ const UserProfile = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [name, setName] = useState('');
-  const [imgsrc, setImgsrc] = useState('');
+
   const [isHovering, setIsHovering] = useState(false);
   const [filePreviewUrl, setFilePreviewUrl] = useState('');
   const [formData, setFormData] = useState({
@@ -64,7 +64,7 @@ const UserProfile = () => {
         <Box
           width={100}
           height={100}
-          backgroundColor="#D9D9D9"
+          backgroundImage={'src/assets/icons/card.png'}
           borderRadius={10}
           marginRight={23}></Box>
         <Box>
