@@ -1,5 +1,6 @@
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
 import { ChatInfo } from '../../@types/message';
+import React from 'react';
 
 const Chat = ({ name, createdAt, text, picture }: Omit<ChatInfo, 'id'>) => {
   return (
@@ -36,4 +37,4 @@ const Chat = ({ name, createdAt, text, picture }: Omit<ChatInfo, 'id'>) => {
   );
 };
 
-export default Chat;
+export default React.memo(Chat);
