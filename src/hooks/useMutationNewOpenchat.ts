@@ -34,9 +34,13 @@ type ChatNewInfo = Omit<Chat, 'latestMessage'>;
 
 interface OpenchatCreateProps {
   setSelectedId: (id: string | null) => void;
+  fetchingData: () => Promise<void>;
 }
 
-function useMutationNewOpenchat({ setSelectedId }: OpenchatCreateProps) {
+function useMutationNewOpenchat({
+  setSelectedId,
+  fetchingData,
+}: OpenchatCreateProps) {
   const [isOpenchatCreating, setIsOpenchatCreating] = useState(false);
   const [preview, setPreview] = useState('');
   const [hashtags, setHashtags] = useState<string[]>([]);
@@ -99,6 +103,7 @@ function useMutationNewOpenchat({ setSelectedId }: OpenchatCreateProps) {
     } finally {
       // 오픈 채팅의 성공/실패 후 다시 false로 바꾸기
       setIsOpenchatCreating(false);
+      fetchingData();
     }
   };
 

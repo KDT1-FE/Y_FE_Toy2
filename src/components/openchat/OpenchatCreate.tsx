@@ -26,6 +26,7 @@ interface OpenchatCreateProps {
   selectedId: string | null;
   setSelectedId: (id: string | null) => void;
   allUsers: UserSimple[];
+  fetchingData: () => Promise<void>;
 }
 
 // 모든 해시태그 (중복을 제거)
@@ -38,6 +39,7 @@ function OpenchatCreate({
   selectedId,
   setSelectedId,
   allUsers,
+  fetchingData,
 }: OpenchatCreateProps) {
   // 오픈채팅 업로드 로직 Custom Hooks
   const {
@@ -49,7 +51,7 @@ function OpenchatCreate({
     hashtagError,
     invitedError,
     isOpenchatCreating,
-  } = useMutationNewOpenchat({ setSelectedId });
+  } = useMutationNewOpenchat({ setSelectedId, fetchingData });
 
   const myInfo = JSON.parse(localStorage.getItem('user') ?? '{}');
   const otherUsers = useMemo(

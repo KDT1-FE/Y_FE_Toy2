@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -22,21 +23,16 @@ import OpenchatCreate from '../components/openchat/OpenchatCreate';
 import { privateApi } from '../libs/axios';
 import { UserSimple } from '../types/User';
 import useQueryOpenchats from '../hooks/useQueryOpenchats';
-import {
-  filterCateOpenChats,
-  filterMyOpenChats,
-} from '../utils/filterOpenChats';
+import { filterCateOpenChats } from '../utils/filterOpenChats';
 import { animal, hobby, sports } from '../types/Openchat';
 
 function Openchat() {
+  const location = useLocation();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [allUsers, setAllUsers] = useState<UserSimple[]>([]);
-  const { isQuering, openchats } = useQueryOpenchats();
+  const { isQuering, openchats, myOpenChat, fetchingData } =
+    useQueryOpenchats();
 
-  const myOpenChat = useMemo(
-    () => filterMyOpenChats(openchats ?? []),
-    [openchats],
-  );
   const hobbyChats = useMemo(
     () => filterCateOpenChats(openchats ?? [], hobby),
     [openchats],
@@ -51,13 +47,14 @@ function Openchat() {
   );
 
   useEffect(() => {
+    fetchingData();
     if (selectedId) {
       (async () => {
         const res = await privateApi.get('users');
         setAllUsers(res.data);
       })();
     }
-  }, [selectedId]);
+  }, [fetchingData, location.key, selectedId]);
 
   if (isQuering) {
     return (
@@ -140,6 +137,7 @@ function Openchat() {
         selectedId={selectedId}
         setSelectedId={setSelectedId}
         allUsers={allUsers}
+        fetchingData={fetchingData}
       />
     </OpenchatContainer>
   );

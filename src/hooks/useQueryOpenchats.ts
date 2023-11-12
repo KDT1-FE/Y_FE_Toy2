@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { isAxiosError } from 'axios';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { privateApi } from '../libs/axios';
 import { db } from '../firebaseSDK';
 import { ChatInfo, ChatInfoConverter } from '../libs/firestoreChatConverter';
-import filterObjectsById from '../utils/filterOpenChats';
 import { Chat, Chats } from '../types/Openchat';
+import filterOpenChats from '../utils/filterOpenChats';
 
 export type ChatInfoWithId = ChatInfo & {
   id: string;
@@ -31,36 +31,36 @@ function useQueryOpenchats() {
     return data;
   };
 
-  const filteredOpenchats = useMemo(
-    () => filterObjectsById(openchats, chats),
-    [chats, openchats],
+  const myOpenChat = useMemo(
+    () => filterOpenChats(openchats, chats),
+    [openchats, chats],
   );
 
-  useEffect(() => {
-    (async () => {
-      setIsQuering(true);
-      try {
-        // 모든 채팅방 조회
-        const data = await Promise.all([
-          privateApi.get<Chats>('chat'),
-          getOpenchats(),
-        ]);
+  const getOpenchatsAndMychat = useCallback(async () => {
+    setIsQuering(true);
+    try {
+      // 모든 채팅방 조회
+      const data = await Promise.all([
+        privateApi.get<Chats>('chat'),
+        getOpenchats(),
+      ]);
 
-        setChats(data[0].data.chats);
-        setOpenchats(data[1]);
-      } catch (error) {
-        if (isAxiosError(error)) {
-          console.log(error.message);
-        }
-      } finally {
-        setIsQuering(false);
+      setChats(data[0].data.chats);
+      setOpenchats(data[1]);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.message);
       }
-    })();
+    } finally {
+      setIsQuering(false);
+    }
   }, []);
 
   return {
     isQuering,
     openchats,
+    myOpenChat,
+    fetchingData: getOpenchatsAndMychat,
   };
 }
 
