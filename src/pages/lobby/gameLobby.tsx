@@ -33,9 +33,9 @@ const GameLobby = () => {
 
   return (
     <>
-      <Button onClick={fetchUserData}>이미지나와랏</Button>
+      {/* <Button onClick={fetchUserData}>이미지나와랏</Button>
       <Button onClick={handlePostRefresh(setAccessToken)}>토큰재발급</Button>
-      <Button onClick={handleGetAllUsers(accessToken)}>모든유저보기</Button>
+      <Button onClick={handleGetAllUsers(accessToken)}>모든유저보기</Button> */}
       <h2 style={{ fontWeight: 'bold' }}>1:1대화</h2>
       <CheckPrivateChat></CheckPrivateChat>
       <UserList></UserList>
