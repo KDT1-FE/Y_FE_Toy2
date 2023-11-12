@@ -1,14 +1,15 @@
 import { Button, Input } from "@chakra-ui/react";
+import { EmojiButton } from "@joeattardi/emoji-button";
 import { serverTimestamp } from "firebase/firestore";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { io } from "socket.io-client";
 import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import useInput from "../../../hooks/useInput";
+import connect from "../../../socket/socket";
+import Loader from "../../common/Loader";
 import UserCard from "../../common/UserCard";
-import useSocket from "../../../hooks/useSocket";
 
 const Container = styled.div`
   position: absolute;
@@ -78,7 +79,7 @@ const ImgBox = styled.div`
 
   font-size: 3rem;
 
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 `;
 
 const Empty = styled.div`
@@ -147,10 +148,34 @@ const CreateGameModal = ({ setModal }: Props) => {
   const navigate = useNavigate();
   const fireFetch = useFireFetch();
 
+  // 이모지 인스턴스 및 데이터 생성
+  const [emoji, setEmoji] = useState("⭐");
+  const pickerRef = useRef(null);
+  const picker = new EmojiButton({
+    showSearch: false,
+    showPreview: false,
+    showRecents: false,
+    theme: "dark",
+    zIndex: 10000,
+    position: {
+      top: "45%",
+      right: "50%",
+    },
+  });
+  picker.on("emoji", (selection) => {
+    // 선택된 이모지 처리
+    setEmoji(selection.emoji);
+  });
+
+  // 버튼을 클릭할 때 picker를 토글
+  const handleButtonClick = () => {
+    picker.togglePicker(pickerRef as unknown as HTMLElement);
+  };
+
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   // 소켓 연결
-  const sendMessage = useSocket("9fe8a1af-9c60-4937-82dd-21d6da5b9cd9");
+  const socket = connect("9fe8a1af-9c60-4937-82dd-21d6da5b9cd9");
 
   // 게임 데이터
   const [roomData, setRoomData] = useState<ChatRoom>({
@@ -163,7 +188,9 @@ const CreateGameModal = ({ setModal }: Props) => {
   // 방제목 빈값이면 true
   const [inputAction, setInpuAction] = useState(false);
 
+  // 유저 데이터
   const [userList, setUserList] = useState<UserType[]>([]);
+  const [userListSearch, setUserListSearch] = useState<UserType[]>([]);
 
   // input 초기화
   const titleInput = useInput("");
@@ -192,7 +219,9 @@ const CreateGameModal = ({ setModal }: Props) => {
       const filter = users.result.filter(
         (value: UserType) => value.id !== token.id,
       );
+
       setUserList(filter);
+      setUserListSearch(filter);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users.result]);
@@ -208,12 +237,12 @@ const CreateGameModal = ({ setModal }: Props) => {
   // 유저 검색 기능
   useEffect(() => {
     if (users.result) {
-      const filter = users.result.filter((value: UserType) =>
+      const filter = userList.filter((value: UserType) =>
         value.name.includes(searchInput.value),
       );
-      setUserList(filter);
+      setUserListSearch(filter);
     }
-  }, [searchInput.value, users.result]);
+  }, [searchInput.value, users.result, userList]);
 
   // 게임 생성 함수
   const handleMakeRoom = () => {
@@ -240,10 +269,11 @@ const CreateGameModal = ({ setModal }: Props) => {
       // 파이어베이스 게임 데이터 생성
       const newData = {
         ...roomData,
+        users: [...roomData.users, token.id],
         id: createGame.result.id,
         host: token.id,
         createdAt: serverTimestamp(),
-        bg: "⭐",
+        bg: emoji,
         status: "대기중",
       };
 
@@ -259,7 +289,7 @@ const CreateGameModal = ({ setModal }: Props) => {
       const text = JSON.stringify(inviteUser);
 
       // 초대 메시지 전달
-      sendMessage(text);
+      socket.emit("message-to-server", text);
 
       // 해당 게임방으로 이동
       navigate(`/game?gameId=${createGame.result.id}`);
@@ -272,7 +302,16 @@ const CreateGameModal = ({ setModal }: Props) => {
       <Wrap>
         <Section>
           <div>
-            <ImgBox>⭐</ImgBox>
+            <ImgBox>{emoji}</ImgBox>
+            <Button
+              size="xs"
+              marginBottom="1.5rem"
+              className="trigger"
+              onClick={handleButtonClick}
+              ref={pickerRef}
+            >
+              이모티콘 선택
+            </Button>
             <Input
               marginBottom="1rem"
               border={!inputAction ? "1px solid #c6c6c6" : "1px solid red"}
@@ -381,8 +420,9 @@ const CreateGameModal = ({ setModal }: Props) => {
                 onChange={searchInput.onChange}
               />
             </div>
+            <Loader loading={users.loading}></Loader>
             {users.result &&
-              userList.map((value: UserType) => {
+              userListSearch.map((value: UserType) => {
                 return (
                   <UserCard
                     key={value.id}
