@@ -31,7 +31,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
     picture: '',
   });
   const [mydata, setMydata] = useState('');
-  
+
   const accessToken: string = useRecoilValue(accessTokenState);
   const userId = localStorage.getItem('id');
 
@@ -62,7 +62,6 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
           setFormData({ ...formData, picture: result });
         }
       };
-
       reader.readAsDataURL(file);
     }
   };

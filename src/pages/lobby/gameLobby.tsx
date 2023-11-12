@@ -3,8 +3,6 @@ import { getUserData } from '../../api/index';
 import CreateGameRoom from '../../components/layout/createGameRoom';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
 import { Button } from '@chakra-ui/react';
-import { handleGetAllUsers } from '../../util/util';
-import { handlePostRefresh } from '../../util/util';
 import { accessTokenState } from '../../states/atom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import OfflineUserList from '../../components/layout/offlineUserList';
@@ -22,7 +20,6 @@ const GameLobby = () => {
   const [imgsrc, setImgsrc] = useState('');
   controlLobbyReload();
   controlBack();
-
   useEffect(() => {
     async function fetchUserData() {
       try {

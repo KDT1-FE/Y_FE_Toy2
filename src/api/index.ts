@@ -45,6 +45,7 @@ export const getUserData = async (accessToken: string, userId: string) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+
   return res.data;
 };
 
