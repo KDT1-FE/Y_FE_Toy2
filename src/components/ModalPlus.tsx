@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal, { Styles } from "react-modal";
 import styled from "styled-components";
 import "../style/Modal.css";
+import useApi from "../hooks/useApi";
+import { AuthContext } from "../hooks/useAuth";
 
 interface User {
   id: string;
@@ -12,6 +14,8 @@ interface User {
 const ModalExample = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
+  const { getData } = useApi();
+  const { accessToken } = useContext(AuthContext);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -140,18 +144,29 @@ const ModalExample = () => {
   };
 
   useEffect(() => {
-    fetch("https://fastcampus-chat.net/users", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        serverId: "1601075b",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`
+    // fetch("https://fastcampus-chat.net/users", {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     serverId: "1601075b",
+    //     Authorization: `Bearer ${sessionStorage.getItem("token")}`
+    //   }
+    // })
+    //   .then((response) => response.json() as unknown as User[])
+    //   .then((data) => setOnlineUsers(data))
+    //   .catch((error) => console.error("Error fetching online users:", error));
+
+    const fetchData = async () => {
+      try {
+        const response = await getData("https://fastcampus-chat.net/users");
+        setOnlineUsers(response);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
       }
-    })
-      .then((response) => response.json() as unknown as User[])
-      .then((data) => setOnlineUsers(data))
-      .catch((error) => console.error("Error fetching online users:", error));
-  }, []);
+    };
+    fetchData();
+  }, [accessToken]);
 
   return (
     <ChatTestWrap>
