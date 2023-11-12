@@ -27,6 +27,9 @@ import {
   ListItem,
   UnorderedList,
   List,
+  Card,
+  background,
+  Text,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 
@@ -102,34 +105,66 @@ const CheckGameRoom = () => {
 
   return (
     <>
-      <List spacing="10px">
-        {allRooms.map((element, index) => (
-          <ListItem
-            key={index}
-            onClick={() => handleParticipate(element.users.length, element.id)}>
-            <p>{element.index}</p>
-            <p>{element.name}</p>
-            <p>{element.users.length} / 4</p>
-            {element.users.length === 4 ? (
-              <span className="false"></span>
-            ) : (
-              <span className="true"></span>
-            )}
-          </ListItem>
-        ))}
+      <Card
+        boxShadow="0 3.5px 5px 0 rgba(0, 0, 0, 0.05)"
+        padding="30px"
+        borderRadius="15px">
+        <List spacing="10px">
+          {allRooms.map((element, index) => (
+            <ListItem
+              width="100%"
+              height="50px"
+              borderRadius="10px"
+              backgroundColor={
+                element.users.length !== 4 ? 'gray.50' : 'gray.300 '
+              }
+              key={index}
+              cursor={'pointer'}
+              border="1px solid"
+              borderColor={'gray.200'}
+              padding="0 30px"
+              _hover={{
+                backgroundColor:
+                  element.users.length !== 4 ? 'gray.100' : 'gray.300',
+              }}
+              onClick={() =>
+                handleParticipate(element.users.length, element.id)
+              }>
+              <Flex
+                lineHeight="50px"
+                fontSize="14px"
+                fontWeight="600"
+                color={'gray.500'}
+                justifyContent={'space-between'}>
+                <Text>{element?.index}</Text>
+                <Text>{element?.name}</Text>
+                <Flex
+                  alignItems={'center'}
+                  width="50px"
+                  justifyContent={'space-between'}>
+                  <Text>{element?.users?.length} / 4</Text>
+                  {element.users.length === 4 ? (
+                    <RoundRight className="false"></RoundRight>
+                  ) : (
+                    <RoundRight className="true"></RoundRight>
+                  )}
+                </Flex>
+              </Flex>
+            </ListItem>
+          ))}
 
-        {/* Pagination 컴포넌트를 추가합니다. */}
-        <Pagination
-          activePage={currentPage}
-          itemsCountPerPage={itemsPerPage}
-          totalItemsCount={totalItemsCount}
-          pageRangeDisplayed={5}
-          prevPageText={'‹'}
-          nextPageText={'›'}
-          onChange={handlePageChange}
-        />
-      </List>
-
+          {/* Pagination 컴포넌트를 추가합니다. */}
+          <Pagination
+            activePage={currentPage}
+            itemsCountPerPage={itemsPerPage}
+            totalItemsCount={totalItemsCount}
+            pageRangeDisplayed={5}
+            prevPageText={'‹'}
+            nextPageText={'›'}
+            onChange={handlePageChange}
+          />
+        </List>
+      </Card>
       <Fade in={showAlert.active}>
         <Alert
           marginTop={10}
@@ -148,5 +183,18 @@ const CheckGameRoom = () => {
     </>
   );
 };
+
+const RoundRight = styled.span`
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+
+  &.true {
+    background-color: #48bb78;
+  }
+  &.false {
+    background-color: #f56565;
+  }
+`;
 
 export default CheckGameRoom;
