@@ -25,7 +25,7 @@ function UserLogin() {
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const setAccessToken = useSetRecoilState(accessTokenState);
+  const [__, setAccessToken] = useRecoilState(accessTokenState);
   const [showAlert, setShowAlert] = useState({
     active: false,
     message: '',
@@ -45,6 +45,7 @@ function UserLogin() {
       loginSocket(accessToken, (data: any) => {
         console.log('Data received from socket:', data);
         setOnlineUsers(data);
+        console.log(onlineUsers);
       });
 
       navigate('/lobby');

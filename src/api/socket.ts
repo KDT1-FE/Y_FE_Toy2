@@ -27,6 +27,11 @@ export const loginSocket = (
     onDataReceived(data);
   });
 
+  serverSocket.on('error', (error) => {
+    console.error('Socket.IO connection error:', error);
+    // 여기에 연결 오류 처리 로직을 추가하세요
+  });
+
   return serverSocket;
 };
 
@@ -43,12 +48,13 @@ export const chatSocket = (accessToken: any, chatId: string) => {
     console.log('Connected from server');
   });
 
-  chattingSocket.on('disconnect', () => {
-    console.log('Disconnected from server');
+  chattingSocket.on('error', (error) => {
+    console.error('Socket.IO connection error:', error);
+    // 여기에 연결 오류 처리 로직을 추가하세요
   });
 
-  chattingSocket.on('error', (error) => {
-    console.error(error);
+  chattingSocket.on('disconnect', () => {
+    console.log('Disconnected from server');
   });
 
   return chattingSocket;
