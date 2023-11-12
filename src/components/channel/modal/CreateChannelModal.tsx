@@ -57,7 +57,7 @@ const CreateChannelModal = () => {
 
   return (
     <>
-      <Button colorScheme="blue" onClick={onOpen}>
+      <Button colorScheme="blue" onClick={onOpen} mb="2">
         새로운 채팅
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
