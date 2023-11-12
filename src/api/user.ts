@@ -46,7 +46,6 @@ export const getAllUsersWithId = async () => {
   try {
     const response = await instance.get<User[]>('users');
     const users = response.data;
-    console.log('users', users);
     return users;
   } catch (error) {
     console.error(error);
