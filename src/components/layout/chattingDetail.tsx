@@ -54,6 +54,7 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
       });
 
       newSocket.on('message-to-client', (messageObject) => {
+        console.log(messageObject);
         setNewChat((newChat: any) => {
           // 중복 날짜, 시간 null로 반환
           const modifyDateArray = modifyDate([
@@ -68,6 +69,7 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
       });
 
       return () => {
+        setNewChat([]);
         newSocket.disconnect();
       };
     } catch (error) {

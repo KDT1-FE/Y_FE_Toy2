@@ -16,6 +16,8 @@ const CheckPrivateChat = () => {
   const myUserData: any = useRecoilValue(myUserDataState);
   const onLine = useRecoilValue(onlineUserState);
 
+  const [openChatId, setOpenChatId] = useState<string | null>(null);
+
   const [chatModals, setChatModals] = useState<any>({});
 
   const fetchData = async () => {
@@ -82,10 +84,7 @@ const CheckPrivateChat = () => {
   usePollingData(fetchData, [allMyChat, setAllMyChat]);
 
   const handleChatDetailModal = (chatId: string) => {
-    setChatModals((chatModals: any) => ({
-      ...chatModals,
-      [chatId]: !chatModals[chatId] as boolean,
-    }));
+    setOpenChatId((prevChatId) => (prevChatId === chatId ? null : chatId));
   };
   console.log(allMyChat);
 
@@ -102,7 +101,9 @@ const CheckPrivateChat = () => {
               {element.users.length > 0 && <p>{element.users[0].username}</p>}
               {element.users.length > 0 && <p>{element.users[0].picture}</p>}
             </div>
-            {chatModals[element.id] && <ChattingDetail chatId={element.id} />}
+            {openChatId === element.id && (
+              <ChattingDetail chatId={element.id} />
+            )}
           </div>
         ))}
     </>
