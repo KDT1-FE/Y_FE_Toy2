@@ -21,6 +21,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
+import LobbyListTop from './lobbyListTop';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
@@ -98,6 +99,7 @@ const CheckGameRoom = () => {
 
   return (
     <>
+      <LobbyListTop />
       <Card
         boxShadow="0 3.5px 5px 0 rgba(0, 0, 0, 0.05)"
         padding={30}
