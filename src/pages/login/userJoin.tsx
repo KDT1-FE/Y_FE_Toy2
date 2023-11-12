@@ -171,6 +171,14 @@ const UserJoin = () => {
     }
   };
 
+  const errorMessageStyle = (
+    fieldName: keyof FormData,
+  ): React.CSSProperties => ({
+    visibility: isError[fieldName] ? 'visible' : 'hidden',
+    height: isError[fieldName] ? 'auto' : '100px', // 예시 높이, 실제 필요에 따라 조절
+    overflow: 'hidden',
+  });
+
   return (
     <Flex
       justifyContent={'flex-end'}
@@ -265,7 +273,11 @@ const UserJoin = () => {
               value={formData.id}
               onChange={(e) => setFormData({ ...formData, id: e.target.value })}
             />
-            <FormErrorMessage textAlign={'left'}>{errors.id}</FormErrorMessage>
+            <FormErrorMessage
+              style={errorMessageStyle('id')}
+              textAlign={'left'}>
+              {errors.id}
+            </FormErrorMessage>
           </FormControl>
 
           <FormControl
@@ -290,7 +302,9 @@ const UserJoin = () => {
                 setFormData({ ...formData, name: e.target.value })
               }
             />
-            <FormErrorMessage textAlign={'left'}>
+            <FormErrorMessage
+              style={errorMessageStyle('name')}
+              textAlign={'left'}>
               {errors.name}
             </FormErrorMessage>
           </FormControl>
@@ -317,7 +331,9 @@ const UserJoin = () => {
                 setFormData({ ...formData, password: e.target.value })
               }
             />
-            <FormErrorMessage textAlign={'left'}>
+            <FormErrorMessage
+              style={errorMessageStyle('password')}
+              textAlign={'left'}>
               {errors.password}
             </FormErrorMessage>
           </FormControl>
@@ -344,7 +360,9 @@ const UserJoin = () => {
                 setFormData({ ...formData, confirmPassword: e.target.value })
               }
             />
-            <FormErrorMessage textAlign={'left'}>
+            <FormErrorMessage
+              style={errorMessageStyle('confirmPassword')}
+              textAlign={'left'}>
               {errors.confirmPassword}
             </FormErrorMessage>
           </FormControl>
