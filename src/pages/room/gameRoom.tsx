@@ -5,12 +5,13 @@ import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState } from 'recoil';
 import { chattingIdState } from '../../states/atom';
+
 import styled from 'styled-components';
 import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
 import CheckUser from '../../components/template/CheckUser';
-
 import { controlBack } from '../../hooks/leaveHandle';
+
 const GameRoom = () => {
   const { id } = useParams();
   const [chat, setChat] = useRecoilState(chattingIdState);
