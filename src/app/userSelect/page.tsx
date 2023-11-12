@@ -4,6 +4,7 @@ import { instance } from '@/lib/api';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdClose, MdSearch } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 
 
 interface User {
@@ -19,6 +20,51 @@ function UserSelect() {
     const [loading, setLoading] = useState(true);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+
+    const router = useRouter();
+    const [newChatId, setNewChatId] = useState<string | null>(null);
+    const accessToken = sessionStorage.getItem('accessToken');
+    const userId = sessionStorage.getItem('userId');
+
+    const handleChatClick = async () => {
+        try {
+          // 선택된 사용자가 없으면 아무 동작 안함
+          if (selectedUsers.length === 0) {
+            console.log('No user selected');
+            return;
+          }
+    
+          // 첫 번째 선택된 사용자와 채팅 생성 API 호출
+          const selectedUser = selectedUsers[0];
+    
+          const response = await fetch('https://fastcampus-chat.net/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`,
+              'serverId': `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+            },
+            body: JSON.stringify({
+              name: `1:1 Chat with ${selectedUser.name}`,
+              users: [selectedUser.id],
+              isPrivate: false,
+            }),
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            const generatedChatId = `1on1_${selectedUser.id}_${userId}`;
+            setNewChatId(generatedChatId);
+    
+            // 생성된 채팅 방으로 이동
+            router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
+          } else {
+            console.error('Failed to create chat room');
+          }
+        } catch (error) {
+          console.error('Error creating chat room:', error);
+        }
+      };
 
     const handleUserSelect = (user: User) => {
         if (selectedUsers.some(selectedUser => selectedUser.id === user.id)) {
@@ -88,7 +134,7 @@ function UserSelect() {
                 </UserList>
                 {selectedUsers.length > 0 && (
                     <ChatButtonWrapper>
-                        <ChatButton onClick={() => console.log('Chat button clicked')}>
+                        <ChatButton onClick={handleChatClick}>
                             채팅하기
                         </ChatButton>
                     </ChatButtonWrapper>
