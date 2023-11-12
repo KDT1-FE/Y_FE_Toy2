@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Input,
@@ -13,9 +13,13 @@ import {
   ModalBody,
   FormControl,
   FormErrorMessage,
+  Box,
+  Image,
 } from "@chakra-ui/react";
 import useFetch from "../../../hooks/useFetch";
 import axios from "axios";
+import styled from "styled-components";
+import { FaImage } from "react-icons/fa";
 
 interface FormData {
   id: string;
@@ -23,6 +27,18 @@ interface FormData {
   name: string;
   picture?: string;
 }
+const DragDropBox = styled(Box)`
+  border: 3px dashed #dbdbdb;
+  position: relative;
+  width: 50%;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 20px;
+`;
 
 const SignUpModal = ({ isOpen, onClose }) => {
   const {
@@ -43,7 +59,9 @@ const SignUpModal = ({ isOpen, onClose }) => {
     type: "success" | "error";
     message: string;
   } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // ID 중복 검사
   const checkIdDuplication = async (id: string): Promise<boolean> => {
     try {
       const response = await axios.post(
@@ -55,6 +73,32 @@ const SignUpModal = ({ isOpen, onClose }) => {
       console.error("Error checking ID duplication", error);
       return false;
     }
+  };
+
+  // 파일 선택 변경
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  // 드래그 앤 드롭
+  const onDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  }, []);
+
+  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  }, []);
+
+  // 파일 입력 필드 트리거
+  const triggerFileSelect = () => {
+    fileInputRef.current?.click();
   };
 
   // 회원가입 제출
@@ -78,6 +122,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
       ...formData,
       picture: pictureAsString,
     };
+
     // 회원가입 요청 및 결과 처리
     try {
       const response = await axios.post(
@@ -117,27 +162,29 @@ const SignUpModal = ({ isOpen, onClose }) => {
           )}
           {/* 회원가입 폼 */}
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-              name="picture"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    if (file) {
-                      if (file.size > 1024 * 1024) {
-                        console.error("File size exceeds 1MB");
-                      } else {
-                        setSelectedFile(file);
-                        onChange(file);
-                      }
-                    }
-                  }}
+            <DragDropBox
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              onClick={triggerFileSelect}
+            >
+              {selectedFile ? (
+                <Image
+                  src={URL.createObjectURL(selectedFile)}
+                  alt="Upload Preview"
+                  boxSize="40px"
                 />
+              ) : (
+                <FaImage size="40px" />
               )}
-            />
+              <Text>Drag files here to upload or click to select</Text>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                display="none"
+              />
+            </DragDropBox>
             {/* 아이디 입력 */}
             <FormControl isInvalid={!!errors.id}>
               <Controller

@@ -27,8 +27,14 @@ const LoginForm: React.FC<LoginFormProps> = ({
   loginError,
   handleLogin,
 }) => {
+  // form 태그로 감싸서 제출 핸들러 추가
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    handleLogin();
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       {loginError && (
         <Alert status="error">
           <AlertIcon />
@@ -41,15 +47,17 @@ const LoginForm: React.FC<LoginFormProps> = ({
         placeholder="아이디"
         value={idInput.value}
         onChange={idInput.onChange}
+        autoComplete="username"
       />
       <Input
         type="password"
         placeholder="비밀번호"
         value={pwInput.value}
         onChange={pwInput.onChange}
+        autoComplete="current-password"
       />
       <Button onClick={handleLogin}>로그인</Button>
-    </>
+    </form>
   );
 };
 
