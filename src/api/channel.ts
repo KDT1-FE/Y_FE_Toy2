@@ -38,19 +38,3 @@ export const getMyChannels = async () => {
 
   return chatsData;
 };
-
-// interface RequestBody {
-//   chatId: string;
-//   users: string[]; // 초대할 유저 id
-// }
-// const requestBody = {
-//   chatId: '8cb0702a-4bd8-42a9-968e-18df8e5f0665',
-//   users: ['user2'],
-// };
-
-// export const InviteChannels = async (requestBody:RequestBody) => {
-//   const response = await instance.patch<Chat[]>(`/chat/${requestBody.chatId}/invite`, requestBody);
-//   const data: { chats: ResponseValue } = await response.data;
-
-//   return data.chats;
-// };
