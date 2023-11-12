@@ -216,18 +216,16 @@ const UserJoin = () => {
               {isHovering && filePreviewUrl && (
                 <Box
                   position="absolute"
-                  top="50%" // 상단에서부터 50% 위치
-                  left="50%" // 좌측에서부터 50% 위치
-                  transform="translate(-50%, -50%)" // 자신의 크기의 절반만큼 이동
+                  transform="translate(0%, -100%)"
                   width={150}
                   height={150}
-                  backgroundColor="rgba(0, 0, 0, 0.5)" // 불투명한 배경
+                  backgroundColor="rgba(0, 0, 0, 0.5)"
                   borderRadius={10}
                   display="flex"
                   justifyContent="center"
                   alignItems="center">
                   <Img
-                    src="public/assets/trashBin.svg" // 쓰레기통 이미지 경로
+                    src="public/assets/trashBin.svg"
                     alt="Delete"
                     width="24px"
                     height="24px"
