@@ -133,6 +133,7 @@
   }
 
   transition: border-color 0.2s ease-in-out;
+
   &:focus {
     border-color: $brand-pink;
     transition: border-color 0.2s ease-in-out;
