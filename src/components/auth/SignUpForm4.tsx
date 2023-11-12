@@ -14,7 +14,7 @@ import {
 import { FbUser } from '../../types/User';
 import useMutationSignUp from '../../hooks/useMutationSignUp';
 
-const tags = {
+export const tags = {
   hobby: [
     { name: 'Music', tag: '음악감상' },
     { name: 'Dance', tag: '춤' },
