@@ -32,7 +32,6 @@ const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: 
     const accessToken = sessionStorage.getItem('accessToken');
     const userId = sessionStorage.getItem('userId');
 
-
     const handleChatClick = async () => {
         try {
             // 채팅 생성 API 호출
@@ -40,22 +39,22 @@ const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                    'serverId': `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+                    Authorization: `Bearer ${accessToken}`,
+                    serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
                 },
                 body: JSON.stringify({
                     name: `1:1 Chat with ${user.name}`,
                     users: [user.id],
-                    isPrivate: false,
+                    isPrivate: true,
                 }),
             });
 
-            console.log(user.id, userId)
+            console.log(user.id, userId);
 
             if (response.ok) {
                 const data = await response.json();
                 const generatedChatId = `1on1_${user.id}_${userId}`;
-                setNewChatId(generatedChatId); 
+                setNewChatId(generatedChatId);
 
                 // 생성된 채팅 방으로 이동
                 router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
@@ -64,9 +63,8 @@ const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: 
             }
         } catch (error) {
             console.error('Error creating chat room:', error);
-        } 
+        }
     };
-
 
     return (
         <UserModalBox onClick={clickModal}>

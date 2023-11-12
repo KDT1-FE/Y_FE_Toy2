@@ -36,18 +36,20 @@ function responseFulfilledInterceptor(res: AxiosResponse) {
             return res.data;
         } else {
             const { accessToken } = res.data;
-            const existingToken = sessionStorage.getItem('accessToken');
-            if (!existingToken) {
-                sessionStorage.setItem('accessToken', accessToken);
+            if (accessToken !== undefined && accessToken !== null) {
+                const existingToken = sessionStorage.getItem('accessToken');
+                if (!existingToken) {
+                    sessionStorage.setItem('accessToken', accessToken);
+                }
             }
-            return res.data;
         }
+        return res.data;
     }
     return Promise.reject(res.data);
 }
 
 function responseRejectedInterceptor(error: AxiosError) {
-    return error;
+    return error.code;
 }
 
 instance.interceptors.response.use(responseFulfilledInterceptor, responseRejectedInterceptor);
