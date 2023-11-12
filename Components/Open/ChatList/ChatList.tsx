@@ -8,11 +8,7 @@ import ChatItem from './ChatItem';
 import { useQuery } from '@tanstack/react-query';
 import { getCookie } from '@/Components/Login/Cookie';
 import { fetchAllChat } from '@/app/open/open.utils';
-import {
-	animated,
-	useSpring,
-	useSpringRef,
-} from '@react-spring/web';
+import { animated, useSpring, useSpringRef } from '@react-spring/web';
 import {
 	DragDropContext,
 	Draggable,
@@ -152,7 +148,7 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 					<Droppable droppableId="list-column">
 						{(droppableProvided) => (
 							<div
-								className="h-full text-amber-900 overflow-y-scroll gap-5"
+								className="h-full w-full text-amber-900  overflow-y-scroll gap-5"
 								ref={droppableProvided.innerRef}
 								{...droppableProvided.droppableProps}
 							>
@@ -168,7 +164,7 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 													ref={draggableProvided.innerRef}
 													{...draggableProvided.draggableProps}
 													{...draggableProvided.dragHandleProps}
-													className="w-fit"
+													className="w-full"
 												>
 													{snapshot.isDragging ? (
 														<ChatItemDrag chat={chat} key={chat.id} />

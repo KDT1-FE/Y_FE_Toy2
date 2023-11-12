@@ -11,7 +11,7 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 	return (
 		<div
 			key={chat.id}
-			className="border-4 border-primary hover:bg-gray-300 cursor-pointer rounded-xl ease-in transition-all duration-300 p-5"
+			className="w-fulls border-4 border-primary hover:bg-gray-300 cursor-pointer rounded-xl ease-in transition-all duration-300 p-5"
 		>
 			<div className="flex gap-5 h-full">
 				<Avatar
