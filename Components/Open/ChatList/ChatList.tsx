@@ -8,7 +8,6 @@ import ChatItem from './ChatItem';
 import { useQuery } from '@tanstack/react-query';
 import { getCookie } from '@/Components/Login/Cookie';
 import { fetchAllChat } from '@/app/open/open.utils';
-import { animated, useSpring, useSpringRef } from '@react-spring/web';
 import {
 	DragDropContext,
 	Draggable,
@@ -60,35 +59,18 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [openDeleteColumn, setOpenDeleteColumn] = useState(false);
-	const api = useSpringRef();
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const styles = useSpring({
-		ref: api,
-		from: { visible: '70' },
-		// to: {
-		// 	opacity: openDeleteColumn ? '1' : '0',
-		// },
-		config: { duration: 1000 },
-	});
 
 	console.log('컴포넌트 실행');
 	const onDragStart = () => {
-		api.start({
-			visible: '0',
-		});
 		setOpenDeleteColumn(true);
 	};
 
 	const dragEndDeleteColumn = () => {
-		api.start({
-			visible: '70',
-		});
 		setOpenDeleteColumn(false);
 	};
 
 	const onDragEnd = (result: DropResult) => {
 		const { destination, source } = result;
-		console.log(destination);
 		if (!destination) {
 			dragEndDeleteColumn();
 			return null;
@@ -144,7 +126,7 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 	return (
 		<>
 			{idAddedfilteredChatList && (
-				<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+				<DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={onDragStart}>
 					<Droppable droppableId="list-column">
 						{(droppableProvided) => (
 							<div
@@ -182,18 +164,19 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 					</Droppable>
 					<Droppable droppableId="delete-column">
 						{(droppableProvided, snapshot) => (
-							<animated.div
-								className={`h-48 flex flex-col ${
-									snapshot.isDraggingOver ? 'text-red-700' : ''
-								} items-center justify-center absolute inset-x-0 bottom-40 bg-brown-800 w-96 p-0 ${
-									snapshot.isUsingPlaceholder ? 'bg-pink-400' : ''
+							<div
+								className={`${
+									openDeleteColumn
+										? 'visible opacity-100'
+										: 'invisible opacity-0'
+								} transition-opacity duration-1000 ease-linear h-24 absolute bg-trash-can bg-contain bg-no-repeat bg-center inset-x-0 bottom-[10%] w-[calc(100%-0.01px)] ${
+									snapshot.isUsingPlaceholder ? 'bg-red-700 bg-opacity-75' : ''
 								}`}
 								ref={droppableProvided.innerRef}
 								{...droppableProvided.droppableProps}
 							>
-								삭제
 								{droppableProvided.placeholder}
-							</animated.div>
+							</div>
 						)}
 					</Droppable>
 				</DragDropContext>
