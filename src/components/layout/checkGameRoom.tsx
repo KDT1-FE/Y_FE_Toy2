@@ -66,11 +66,15 @@ const CheckGameRoom = () => {
           index: index + 1,
         })),
       };
+      console.log(plusIndex);
+
+      // 배열을 역순으로 만들기 (최신순)
+      const reversedRooms = plusIndex.chats.reverse();
 
       // 서버에서 받아온 전체 데이터를 현재 페이지에 맞게 자름
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      const paginatedRooms = plusIndex.chats.slice(startIndex, endIndex);
+      const paginatedRooms = reversedRooms.slice(startIndex, endIndex);
 
       setAllRooms(paginatedRooms);
       console.log(paginatedRooms);
