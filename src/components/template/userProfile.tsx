@@ -30,8 +30,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
   const [formData, setFormData] = useState({
     picture: '',
   });
-  const [mydata, setMydata] = useState('');
-  
+  const [myImg, setMyImg] = useState('');
   const accessToken: string = useRecoilValue(accessTokenState);
   const userId = localStorage.getItem('id');
 
@@ -40,7 +39,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
       if (accessToken && userId) {
         try {
           const res = await getMyUserData(accessToken, userId);
-          setMydata(res.user.picture);
+          setMyImg(res.user.picture);
         } catch (error) {
           console.error('내정보를 가져오는데 실패했습니다.:', error);
         }
@@ -84,7 +83,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
         <Box
           width={100}
           height={100}
-          backgroundImage={mydata}
+          backgroundImage={myImg}
           borderRadius={10}
           marginRight={23}></Box>
         <Box>
@@ -130,7 +129,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
                   onMouseEnter={() => setIsHovering(true)}
                   onMouseLeave={() => setIsHovering(false)}>
                   <Img
-                    src={filePreviewUrl || '/assets/inputImg.svg'}
+                    src={filePreviewUrl || myImg}
                     alt="File preview"
                     width="100%"
                     height="100%"
@@ -144,7 +143,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
                         : {}
                     }
                   />
-                  {isHovering && filePreviewUrl && (
+                  {isHovering && (
                     <Box
                       position="absolute"
                       transform="translate(0%, -100%)"
@@ -178,13 +177,13 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
                 />
               </label>
 
-              <FormControl marginTop={5}>
+              <FormControl marginTop={5} marginBottom={7}>
                 <FormLabel>닉네임</FormLabel>
                 <Input
                   placeholder="닉네임을 입력해주세요"
                   _placeholder={{ fontSize: 'sm' }}
                   // borderColor={
-                  //   showAlert.active && showAlert.type === 'id'
+                  //   showAlert.active && showAlert.type === 'name'
                   //     ? 'red.500'
                   //     : 'gray.200'
                   // }
@@ -192,26 +191,30 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  margin={0}
                   width="388px"
                   height="50px"
                   justifyContent={'center'}
                 />
               </FormControl>
+              <Button
+                width="390px"
+                height="50px"
+                type="submit"
+                size="lg"
+                color="white"
+                bg={'#9AEBE0'}
+                _hover={{
+                  bg: '#4FD1C5',
+                }}
+                _disabled={{
+                  bg: '#CBD5E0',
+                }}
+                // isDisabled={!name || !picture}
+              >
+                수정하기
+              </Button>
             </form>
           </ModalBody>
-
-          <ModalFooter>
-            <Button
-              marginBottom={4}
-              colorScheme="blue"
-              mr={3}
-              onClick={onClose}
-              width="390px"
-              height="50px">
-              수정하기
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

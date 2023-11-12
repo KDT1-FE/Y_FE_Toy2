@@ -5,7 +5,6 @@ import { disconnectChattingSocket } from '../api/socket';
 export const getAllUsersData = async (accessToken: string) => {
   try {
     const res = await getAllUsers(accessToken);
-    console.log(res);
     return res;
   } catch (e) {
     console.error(e);
@@ -16,7 +15,6 @@ export const getAllUsersData = async (accessToken: string) => {
 export const getMyUserData = async (accessToken: string, userId: string) => {
   try {
     const res = await getUserData(accessToken, userId);
-    console.log(res);
     return res;
   } catch (e) {
     console.error(e);

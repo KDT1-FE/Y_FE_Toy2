@@ -16,29 +16,14 @@ import MyUserData from '../../components/layout/MyUserData';
 import UserProfile from '../../components/template/userProfile';
 
 const GameLobby = () => {
-  const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
+  // const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
 
-  const accessToken = useRecoilValue(accessTokenState);
-  const [imgsrc, setImgsrc] = useState('');
-
-  useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const res = await getUserData(accessToken, 'hojin');
-        const user = res;
-        console.log(user);
-        setImgsrc(user.data[4].picture); // 이미지 소스 업데이트
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchUserData(); // 함수 호출
-  }, [accessToken]); // accessToken이 변경될 때마다 함수 호출
+  // const accessToken = useRecoilValue(accessTokenState);
+  // const [imgsrc, setImgsrc] = useState('');
 
   return (
     <>
-      <UserProfile userImg={imgsrc}></UserProfile>
+      <UserProfile></UserProfile>
       {/* <Button onClick={fetchUserData}>이미지나와랏</Button> */}
       {/* <Button onClick={handlePostRefresh(setAccessToken)}>토큰재발급</Button> */}
       {/* <Button onClick={handleGetAllUsers(accessToken)}>모든유저보기</Button> */}
