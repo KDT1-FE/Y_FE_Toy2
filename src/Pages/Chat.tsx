@@ -1,13 +1,13 @@
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import ChatRoom from "../components/Chat/ChatRoom";
 import ModalPlus from "../components/ModalPlus";
-import { useContext, useEffect, useState } from "react";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 
-interface User {
+export interface User {
   id: string;
-  username: string;
+  name: string;
   picture: string;
 }
 
@@ -22,19 +22,19 @@ export interface ChatI {
 
 function Chat() {
   const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
+  const [roomName, setRoomName] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const { getData } = useApi();
   const { accessToken } = useContext(AuthContext);
 
-  // 나의 채팅방 조회
   useEffect(() => {
     const fetchData = async () => {
-      try{
+      try {
         const data = await getData("https://fastcampus-chat.net/chat");
         const chatData = data.chats;
         console.log(chatData);
 
         const myRoom = chatData.map((room: ChatI) => {
-
           // 시간 계산
           const updatedAt = room.updatedAt;
           const givenDate: Date = new Date(updatedAt);
@@ -56,42 +56,41 @@ function Chat() {
           // const latestMessage = room.latestMessage || "메시지가 없습니다.";
           return {
             ...room,
-            updatedAt: updatedAtString,
+            updatedAt: updatedAtString
             // latestMessage: latestMessage
           };
         });
 
         setChatRoom(myRoom);
-      } catch (error){
-        console.error(error)
+      } catch (error) {
+        console.error(error);
       }
-    }
+    };
     fetchData();
   }, [accessToken]);
 
   return (
     <>
-      {/* <div>
-        채팅방이 없습니다
-      </div> */}
       <ChatWrapper>
         <ChatCategory>
-          { chatRoom.map((room) => (
+          {chatRoom.map((room) => (
             <CateLink key={room.id}>
-             <div className="catelink__wrap">
+              <div className="catelink__wrap">
                 <div className="catelink__name">
                   <p className="tit">{room.name}</p>
-                  {/* <p className="content">{room.latestMessage}</p> */}
                 </div>
                 <div className="catelink__time">{room.updatedAt}</div>
               </div>
             </CateLink>
           ))}
           <CatePlus>
-            <ModalPlus />
+            <ModalPlus
+              setRoomName={setRoomName}
+              setSelectedUsers={setSelectedUsers}
+            />
           </CatePlus>
         </ChatCategory>
-        <ChatRoom />
+        <ChatRoom roomName={roomName} selectedUsers={selectedUsers} />
       </ChatWrapper>
     </>
   );
@@ -140,7 +139,7 @@ const CateLink = styled.li`
       }
     }
     &__time {
-      text-align:right;
+      text-align: right;
       font-size: 14px;
       color: #999696;
       white-space: nowrap;
