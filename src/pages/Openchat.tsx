@@ -25,6 +25,7 @@ import { UserSimple } from '../types/User';
 import useQueryOpenchats from '../hooks/useQueryOpenchats';
 import { filterCateOpenChats } from '../utils/filterOpenChats';
 import { animal, hobby, sports } from '../types/Openchat';
+import OpenchatMy from '../components/openchat/OpenchatMy';
 
 function Openchat() {
   const location = useLocation();
@@ -108,7 +109,7 @@ function Openchat() {
             <Typography variant="h5" mb={3}>
               📣 내 오픈채팅방
             </Typography>
-            <OpenchatCategory isMyChat openchats={myOpenChat} />
+            <OpenchatMy openchats={myOpenChat} />
           </Box>
         </OpenchatBox>
         <OpenchatBox id="hobby">

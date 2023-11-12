@@ -33,30 +33,22 @@ export const OpenchatRoom = styled(Box)(({ theme }) => ({
   backgroundColor: [theme.palette.common.white],
   padding: '1rem',
   display: 'flex',
-  // [theme.breakpoints.down('sm')]: {
-  //   flexDirection: 'column',
-  //   justifyContent: 'flex-start',
-  //   alignItems: 'flex-start',
-  // },
+  alignItems: 'center',
   justifyContent: 'space-between',
   '& .openchat__room-avatar': {
     width: '3.75rem',
     '& img': { verticalAlign: 'top' },
   },
   '& .openchat__room-info': {
-    flex: 1,
     display: 'flex',
     justifyContent: 'space-between',
     width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      marginTop: '10px',
-    },
   },
   '& .openchat__room-desc': {
     flex: 4,
     margin: '0 0.8rem',
     [theme.breakpoints.down('sm')]: {
-      margin: '0 4px',
+      margin: '0 6px',
     },
   },
   '& .openchat__room-btn': { flex: 1 },
