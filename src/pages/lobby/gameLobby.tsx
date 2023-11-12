@@ -32,7 +32,6 @@ const GameLobby = () => {
         justifyContent={'space-between'}
         alignItems={'center'}
         flexDirection={'row'}
-        height={1000}
         width={1400}>
         <LeftComponent>
           <CheckGameRoom />

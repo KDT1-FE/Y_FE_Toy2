@@ -108,7 +108,8 @@ const CheckGameRoom = () => {
       <Card
         boxShadow="0 3.5px 5px 0 rgba(0, 0, 0, 0.05)"
         padding="30px"
-        borderRadius="15px">
+        borderRadius="15px"
+        position="relative">
         <List spacing="10px">
           {allRooms.map((element, index) => (
             <ListItem
@@ -154,15 +155,50 @@ const CheckGameRoom = () => {
           ))}
 
           {/* Pagination 컴포넌트를 추가합니다. */}
-          <Pagination
-            activePage={currentPage}
-            itemsCountPerPage={itemsPerPage}
-            totalItemsCount={totalItemsCount}
-            pageRangeDisplayed={5}
-            prevPageText={'‹'}
-            nextPageText={'›'}
-            onChange={handlePageChange}
-          />
+          <PaginationWrap>
+            <Pagination
+              activePage={currentPage}
+              itemsCountPerPage={itemsPerPage}
+              totalItemsCount={totalItemsCount}
+              pageRangeDisplayed={5}
+              firstPageText={
+                <svg viewBox="-20 -20 65 65" focusable="false">
+                  <g fill="currentColor">
+                    <path d="M10.416,12a2.643,2.643,0,0,1,.775-1.875L20.732.584a1.768,1.768,0,0,1,2.5,2.5l-8.739,8.739a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5l-9.541-9.541A2.643,2.643,0,0,1,10.416,12Z"></path>
+                    <path d="M.25,12a2.643,2.643,0,0,1,.775-1.875L10.566.584a1.768,1.768,0,0,1,2.5,2.5L4.327,11.823a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5L1.025,13.875A2.643,2.643,0,0,1,.25,12Z"></path>
+                  </g>
+                </svg>
+              }
+              prevPageText={
+                <svg viewBox="-5 -5 34 34" focusable="false">
+                  <path
+                    fill="currentColor"
+                    d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                </svg>
+              }
+              nextPageText={
+                <svg viewBox="-5 -5 34 34" focusable="false">
+                  <path
+                    fill="currentColor"
+                    d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                </svg>
+              }
+              lastPageText={
+                <svg viewBox="-20 -20 65 65" focusable="false">
+                  <g fill="currentColor">
+                    <path d="M13.584,12a2.643,2.643,0,0,1-.775,1.875L3.268,23.416a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L.768,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,13.584,12Z"></path>
+                    <path d="M23.75,12a2.643,2.643,0,0,1-.775,1.875l-9.541,9.541a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L10.934,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,23.75,12Z"></path>
+                  </g>
+                </svg>
+              }
+              activeClass={'active'}
+              itemClassFirst={'first'}
+              itemClassPrev={'prev'}
+              itemClassNext={'next'}
+              itemClassLast={'last'}
+              onChange={handlePageChange}
+            />
+          </PaginationWrap>
         </List>
       </Card>
       <Fade in={showAlert.active}>
@@ -194,6 +230,57 @@ const RoundRight = styled.span`
   }
   &.false {
     background-color: #f56565;
+  }
+`;
+
+const PaginationWrap = styled.div`
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+
+    .first,
+    .prev,
+    .next,
+    .last {
+      position: absolute;
+    }
+
+    .first {
+      left: 30px;
+    }
+
+    .prev {
+      left: 65px;
+    }
+
+    .next {
+      right: 65px;
+    }
+
+    .last {
+      right: 30px;
+    }
+
+    li {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background-color: #f7fafc;
+      border: 1px solid #e2e8f0;
+      line-height: 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #718096;
+      font-weight: 600;
+      cursor: pointer;
+
+      &.active {
+        color: #fff;
+        background-color: #4fd1c5;
+        border-color: #4fd1c5;
+      }
+    }
   }
 `;
 
