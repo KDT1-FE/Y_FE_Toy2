@@ -43,7 +43,12 @@ const DragDropBox = styled(Box)`
   margin-right: auto;
 `;
 
-const SignUpModal = ({ isOpen, onClose }) => {
+interface SignUpModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
   const {
     control,
     handleSubmit,
