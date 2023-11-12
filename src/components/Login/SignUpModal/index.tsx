@@ -30,14 +30,17 @@ interface FormData {
 const DragDropBox = styled(Box)`
   border: 3px dashed #dbdbdb;
   position: relative;
-  width: 50%;
-  height: 160px;
+  width: 40%;
+  height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const SignUpModal = ({ isOpen, onClose }) => {
@@ -153,7 +156,16 @@ const SignUpModal = ({ isOpen, onClose }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          sx={{
+            ".chakra-input::placeholder": {
+              textAlign: "center",
+            },
+          }}
+        >
           {signUpStatus && (
             <Alert status={signUpStatus.type}>
               <AlertIcon />
@@ -176,7 +188,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
               ) : (
                 <FaImage size="40px" />
               )}
-              <Text>Drag files here to upload or click to select</Text>
+              <Text>이미지 업로드</Text>
               <Input
                 type="file"
                 accept="image/*"
@@ -186,7 +198,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
               />
             </DragDropBox>
             {/* 아이디 입력 */}
-            <FormControl isInvalid={!!errors.id}>
+            <FormControl isInvalid={!!errors.id} my={4} justifyContent="center">
               <Controller
                 name="id"
                 control={control}
@@ -215,7 +227,13 @@ const SignUpModal = ({ isOpen, onClose }) => {
                   },
                 }}
                 render={({ field }) => (
-                  <Input type="text" placeholder="ID" {...field} />
+                  <Input
+                    type="text"
+                    placeholder="아이디 입력"
+                    {...field}
+                    width="300px"
+                    m="auto"
+                  />
                 )}
               />
               <FormErrorMessage>
@@ -223,7 +241,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
               </FormErrorMessage>
             </FormControl>
             {/* 비밀번호 입력 */}
-            <FormControl isInvalid={!!errors.password}>
+            <FormControl isInvalid={!!errors.password} my={4}>
               <Controller
                 name="password"
                 control={control}
@@ -235,7 +253,11 @@ const SignUpModal = ({ isOpen, onClose }) => {
                   },
                 }}
                 render={({ field }) => (
-                  <Input type="password" placeholder="Password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="비밀번호 입력"
+                    {...field}
+                  />
                 )}
               />
               <FormErrorMessage>
@@ -243,21 +265,27 @@ const SignUpModal = ({ isOpen, onClose }) => {
               </FormErrorMessage>
             </FormControl>
             {/* 닉네임 입력 */}
-            <FormControl isInvalid={!!errors.name}>
+            <FormControl isInvalid={!!errors.name} my={4}>
               <Controller
                 name="name"
                 control={control}
                 rules={{ required: "이름은 필수입니다." }}
                 render={({ field }) => (
-                  <Input type="text" placeholder="Name" {...field} />
+                  <Input type="text" placeholder="닉네임" {...field} />
                 )}
               />
               <FormErrorMessage>
                 {errors.name && errors.name.message}
               </FormErrorMessage>
             </FormControl>
-            <Button type="submit" isLoading={signUpFetch.loading}>
-              가입
+            <Button
+              type="submit"
+              isLoading={signUpFetch.loading}
+              width="300px"
+              m="auto"
+              my={14}
+            >
+              회원가입
             </Button>
           </form>
         </ModalBody>
