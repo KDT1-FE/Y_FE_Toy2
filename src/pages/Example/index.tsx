@@ -21,13 +21,13 @@ const Example = () => {
     url: "https://fastcampus-chat.net/chat/participate",
     method: "PATCH",
     data: {
-      chatId: "9fe8a1af-9c60-4937-82dd-21d6da5b9cd9",
+      chatId: "9984747e-389a-4aef-9a8f-968dc86a44e4",
     },
     start: true,
   });
 
   // 소켓 통신
-  const socket = connect("9fe8a1af-9c60-4937-82dd-21d6da5b9cd9");
+  const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
@@ -105,7 +105,7 @@ const Example = () => {
     url: "https://fastcampus-chat.net/chat/leave",
     method: "PATCH",
     data: {
-      chatId: "535add19-c98f-4a9b-bc6f-c145c496cb91",
+      chatId: "27441d74-4dd2-4f55-a49c-48c9085bbc4e",
     },
     start: false,
   });

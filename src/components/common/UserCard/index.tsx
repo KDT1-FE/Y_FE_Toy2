@@ -43,6 +43,9 @@ interface ChatRoom {
   name: string;
   users: string[];
   isPrivate?: boolean;
+  num: number;
+  bg?: string;
+  status?: string;
 }
 
 interface Props {
@@ -61,7 +64,12 @@ const UserCard = ({ id, name, picture, roomData, setRoomData }: Props) => {
     if (status) {
       copy.users = copy.users.filter((v) => v !== id);
     } else {
-      copy.users.push(id);
+      if (roomData.users.length >= roomData.num) {
+        alert("인원수 초과");
+        return;
+      } else {
+        copy.users.push(id);
+      }
     }
     setRoomData(copy);
     setStatue((prev) => !prev);

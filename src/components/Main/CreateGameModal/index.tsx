@@ -129,7 +129,7 @@ interface ChatRoom {
   name: string;
   users: string[];
   isPrivate?: boolean;
-  num?: number;
+  num: number;
   bg?: string;
   status?: string;
 }
@@ -175,7 +175,7 @@ const CreateGameModal = ({ setModal }: Props) => {
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   // 소켓 연결
-  const socket = connect("9fe8a1af-9c60-4937-82dd-21d6da5b9cd9");
+  const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   // 게임 데이터
   const [roomData, setRoomData] = useState<ChatRoom>({
