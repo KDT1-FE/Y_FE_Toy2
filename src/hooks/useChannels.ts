@@ -7,6 +7,9 @@ const useChannels = () => {
   return useQuery<Channel[]>({
     queryKey: ALL_CHANNELS,
     queryFn: getChannels,
+    staleTime: 1000 * 60,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 };
 
