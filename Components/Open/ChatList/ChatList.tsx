@@ -20,6 +20,7 @@ import {
 	Droppable,
 } from '@hello-pangea/dnd';
 import ChatItemDrag from './ChatItemDrag';
+import { useFetchPatchDeleteChat } from '@/hooks/Open/useFetchPatchDeleteChat';
 
 const setNewListData = (
 	sourceColumn: SourceColumnProps,
@@ -51,6 +52,9 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 		staleTime: 1000 * 60,
 		refetchInterval: 1000 * 60,
 	});
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const mutation = useFetchPatchDeleteChat(accessToken);
 
 	const filteredChatList = filterChat(chatList.chats);
 
@@ -125,8 +129,15 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 		if (destination.droppableId === 'delete-column') {
 			const newTaskIds = Array.from(sourceColumn.taskIds);
 			newTaskIds.splice(source.index, 1);
+			const deleteChatIndex = sourceColumn.taskIds[source.index];
 
 			setNewListData(sourceColumn, newTaskIds, listData, setListData);
+
+			const queryId = chatList.chats[deleteChatIndex].id;
+			console.log(queryId);
+			mutation.mutate({
+				chatId: queryId,
+			});
 			dragEndDeleteColumn();
 			return null;
 		}
