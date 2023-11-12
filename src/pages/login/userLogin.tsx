@@ -32,6 +32,7 @@ function UserLogin() {
     type: '',
   });
   const { createSocket } = useSocketContext();
+
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -44,7 +45,7 @@ function UserLogin() {
 
       alert('로그인에 성공했습니다.');
 
-      await loginSocket(accessToken, (data: any) => {
+      await createSocket(accessToken, (data: any) => {
         setOnlineUsers(data);
         console.log(onlineUsers);
       });

@@ -95,7 +95,6 @@ const Drawing = () => {
   /// mousedown 했을 때 좌표 저장 + 페인팅 시작 상태값 변경
   const startPaint = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const paint = getDrawing(event);
-    console.log(paint);
 
     if (paint) {
       setIsPainting(true); // 그리는 상태 true로 변경
