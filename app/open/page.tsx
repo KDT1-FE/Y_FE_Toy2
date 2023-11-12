@@ -14,7 +14,7 @@ const Open = async () => {
 	const result = await fetchAllChat(accessToken);
 
 	return (
-		<div className="relative flex flex-col h-[calc(100vh-2.5rem)] bg-white">
+		<div className="relative flex flex-col h-[calc(100vh-2.5rem)] w-full bg-white">
 			<Link href="/search">검색</Link>
 			<ChatList myChatList={result} />
 			<SpeedDialWithTextInside />

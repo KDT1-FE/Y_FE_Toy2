@@ -19,8 +19,8 @@ export type Chat = {
 	isPrivate: boolean;
 	users: User[];
 	messages: Message[]; // message 객체가 속합니다.
-
 	updatedAt: Date;
+	indexId?: number;
 };
 
 export type CatApiResponseType = {
