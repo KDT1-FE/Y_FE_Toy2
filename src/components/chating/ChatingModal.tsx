@@ -33,7 +33,12 @@ export default function ChatingModal(props: any) {
 
     return (
         <>
-            <ModalWrapper style={{ display: `${modalToggle ? 'block' : 'none'}` }}>
+            <ModalWrapper
+                style={{
+                    opacity: `${modalToggle ? '1' : '0'}`,
+                    transform: `${modalToggle ? 'translateZ(0)' : 'translate3d(100%, 0, 0)'}`,
+                }}
+            >
                 <ModalTitle>대화상대</ModalTitle>
                 {props.users ? (
                     <UsersWrapper>
@@ -58,35 +63,15 @@ export default function ChatingModal(props: any) {
             </ModalWrapper>
 
             <ModalBackground
-                style={{ display: `${modalToggle ? 'block' : 'none'}` }}
+                style={{
+                    visibility: `${modalToggle ? 'visible' : 'hidden'}`,
+                    opacity: `${modalToggle ? '1' : '0'}`,
+                }}
                 onClick={() => setModalToggle(!modalToggle)}
             ></ModalBackground>
         </>
     );
 }
-
-const ModalMove = keyframes`
-        0% {
-            opacity: 0;
-            transform: translate3d(100%, 0, 0);
-        }
-        to {
-            opacity: 1;
-            transform: translateZ(0);
-        }
-
-`;
-
-const ModalBackgroundFade = keyframes`
-    0% {
-            opacity: 0;
-
-        }
-        to {
-            opacity: 1;
-
-        }
-`;
 
 const ModalBackground = styled.div`
     width: 100%;
@@ -96,7 +81,8 @@ const ModalBackground = styled.div`
     z-index: 2;
 
     background-color: rgba(0, 0, 0, 0.2);
-    animation: ${ModalBackgroundFade} 0.5s;
+
+    transition: all 0.5s;
 `;
 
 const ModalWrapper = styled.div`
@@ -110,7 +96,7 @@ const ModalWrapper = styled.div`
 
     z-index: 3;
 
-    animation: ${ModalMove} 0.5s;
+    transition: 0.5s;
 `;
 
 const ModalTitle = styled.div`
