@@ -5,8 +5,33 @@ import useFetch from "../../hooks/useFetch";
 import useInput from "../../hooks/useInput";
 import SignUpModal from "../../components/Login/SignUpModal/index";
 import LoginForm from "../../components/Login/LoginForm";
+import styled from "styled-components";
+import backgroundImage from "../../assets/bg.png";
+
+const Background = styled.div`
+  background-image: url(${backgroundImage});
+  background-position: left top;
+  background-repeat: no-repeat;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+`;
 
 const Login = () => {
+  //로그인 페이지에서만 #root 스타일 적용 안함
+  useEffect(() => {
+    const root = document.getElementById("root");
+    if (root) {
+      root.style.margin = "0"; // 로그인 페이지에 대한 마진 설정 변경
+
+      return () => {
+        root.style.margin = "0 auto"; // 로그인 페이지가 언마운트될 때 원래 마진으로 복원
+      };
+    }
+  }, []);
   const idInput = useInput("");
   const pwInput = useInput("");
   const { setToken } = useAuth();
@@ -18,11 +43,13 @@ const Login = () => {
     start: false,
   });
   const [loginError, setLoginError] = useState("");
+
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   // 모달 토글
   const toggleSignUpModal = () => {
     setIsSignUpModalOpen(!isSignUpModalOpen);
   };
+
   const handleLogin = () => {
     login.refresh();
   };
@@ -41,7 +68,7 @@ const Login = () => {
   }, [login.result, login.statusCode, setToken, navigate]);
 
   return (
-    <>
+    <Background>
       <div>로그인</div>
       <LoginForm
         idInput={idInput}
@@ -49,12 +76,12 @@ const Login = () => {
         loginError={loginError}
         setLoginError={setLoginError}
         handleLogin={handleLogin}
+        toggleSignUpModal={toggleSignUpModal}
       />
-      <button onClick={toggleSignUpModal}>회원가입</button>
       {isSignUpModalOpen && (
         <SignUpModal isOpen={isSignUpModalOpen} onClose={toggleSignUpModal} />
       )}
-    </>
+    </Background>
   );
 };
 
