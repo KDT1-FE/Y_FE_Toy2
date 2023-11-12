@@ -1,5 +1,6 @@
 import { useEffect, Dispatch, SetStateAction } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { refreshToken } from '@/lib/token';
 
 export const authCheck = (
     setter?: Dispatch<SetStateAction<boolean>>,
@@ -8,6 +9,18 @@ export const authCheck = (
 ) => {
     useEffect(() => {
         const token = sessionStorage.getItem('accessToken');
+
+        const nowDate = new Date().getTime();
+        const expiresAt = sessionStorage.getItem('expiresAt');
+
+        if (expiresAt) {
+            const isExpires = nowDate - JSON.parse(expiresAt);
+
+            if (isExpires >= 0) {
+                console.log(expiresAt);
+                refreshToken();
+            }
+        }
 
         if (setter && router && pathname) {
             if (token) {
