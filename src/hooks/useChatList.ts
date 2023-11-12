@@ -6,6 +6,7 @@ import { getAllChats, getChat } from '../api/chat';
 
 const useChatList = () => {
   const [chats, setChats] = useState<ChatInfo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
     socket.emit(SOCKET.FETCH_MESSAGES);
     socket.on(
@@ -13,6 +14,7 @@ const useChatList = () => {
       async ({ messages }: { messages: ChatData[] }) => {
         const allChats = await getAllChats(messages);
         if (allChats) setChats(allChats);
+        setIsLoading(false);
       },
     );
     socket.on(SOCKET.MESSAGE_TO_CLIENT, async (message: ChatData) => {
@@ -24,7 +26,7 @@ const useChatList = () => {
       socket.off(SOCKET.MESSAGE_TO_CLIENT);
     };
   }, []);
-  return chats;
+  return { chats, isLoading };
 };
 
 export default useChatList;
