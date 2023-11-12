@@ -3,9 +3,10 @@ interface MyObject {
 }
 
 function filterOpenChats<T extends MyObject, U extends MyObject>(
-  arr1: T[],
-  arr2: U[],
+  arr1?: T[],
+  arr2?: U[],
 ): T[] {
+  if (!arr1 || !arr2) return [];
   // arr1과 arr2에서 공통된 id를 찾아냄
   const commonIds = arr1.filter((obj1) =>
     arr2.some((obj2) => obj1.id === obj2.id),

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { isAxiosError } from 'axios';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { privateApi } from '../libs/axios';
@@ -37,6 +37,7 @@ type ChatInfoWithId = ChatInfo & {
 };
 
 function useQueryOpenchats() {
+  const [chats, setChats] = useState<Chat[]>();
   const [openchats, setOpenchats] = useState<ChatInfoWithId[]>();
   const [isQuering, setIsQuering] = useState(false);
 
@@ -53,6 +54,11 @@ function useQueryOpenchats() {
     return data;
   };
 
+  const filteredOpenchats = useMemo(
+    () => filterObjectsById(openchats, chats),
+    [chats, openchats],
+  );
+
   useEffect(() => {
     (async () => {
       setIsQuering(true);
@@ -62,8 +68,8 @@ function useQueryOpenchats() {
           data: { chats },
         } = await privateApi.get<Chats>('chat/all');
         const openchats = await getOpenchats();
-        const filteredOpenchats = filterObjectsById(openchats, chats);
-        setOpenchats(filteredOpenchats);
+        setChats(chats);
+        setOpenchats(openchats);
       } catch (error) {
         if (isAxiosError(error)) {
           console.log(error.message);
@@ -76,7 +82,7 @@ function useQueryOpenchats() {
 
   return {
     isQuering,
-    openchats,
+    openchats: filteredOpenchats,
   };
 }
 
