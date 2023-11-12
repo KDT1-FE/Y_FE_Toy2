@@ -151,7 +151,7 @@ const ModalMain = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
 
     .link {
         text-decoration: none;
@@ -172,14 +172,13 @@ const UserImg = styled.img`
 
 const UserInfo = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 3rem;
-
-    margin-left: 6rem;
 `;
 
 const UserName = styled.h1`
-    font-size: 2.1rem;
+    font-size: 1.8rem;
+    margin: 0;
 `;
 
 const ToChating = styled.div`
