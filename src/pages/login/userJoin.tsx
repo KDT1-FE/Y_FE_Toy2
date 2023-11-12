@@ -384,7 +384,7 @@ const UserJoin = () => {
         <Alert marginTop={10} status="error" width={400} height={70}>
           <AlertIcon />
           <Box>
-            <AlertTitle mr={2}>로그인 오류</AlertTitle>
+            <AlertTitle mr={2}>회원가입 오류</AlertTitle>
             <AlertDescription>{showAlert.message}</AlertDescription>
           </Box>
           <CloseButton
