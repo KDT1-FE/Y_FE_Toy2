@@ -12,6 +12,11 @@ interface UserIdDataProps {
   users: string[];
 }
 
+interface ResponseData {
+  users: string[]; // 참여자들 id
+  joiners: string[]; // 새로운 참여자 id
+}
+
 const ChannelMemberSideBar = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const { params } = useParams();
@@ -36,6 +41,9 @@ const ChannelMemberSideBar = () => {
     socket.on('users-to-client', async (usersIdData: UserIdDataProps) => {
       const { users } = usersIdData;
       getMemberInfo(users);
+    });
+    socket.emit('join', (membersData: ResponseData) => {
+      console.log('membersData', membersData);
     });
   }, []);
 

@@ -57,3 +57,11 @@ export const exitChannel = async (chatId: string) => {
   );
   return response.data;
 };
+
+export const participateChannel = async (chatId: string) => {
+  const response = await instance.patch<InviteResponseValue>(
+    '/chat/participate',
+    chatId,
+  );
+  return response.data;
+};
