@@ -1,90 +1,92 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { AllOpenChat } from '@/app/search/search.type';
-import ShowAllOpenChat from './ShowAllOpenChat';
-import { User } from '@/types';
-import ShowSearchedFriend from './ShowSearchedFriend';
-import FriendProfiles from '../Users/FriendProfiles';
-import ProfileModal from '../Common/ProfileModal';
+import Link from 'next/link';
+import Image from 'next/image';
 import { Input } from '@material-tailwind/react';
+import { AllOpenChat, Chat } from '@/app/search/search.type';
+import { search, toLower } from '@/hooks/Common/search';
+import { initialChat } from '@/app/search/search.constant';
+import ShowAllOpenChat from './ShowAllOpenChat';
+import OpenChatModal from './OpenChatModal';
 
-const SearchOpenChat = ({
-	allOpenChat,
-	allUsersExceptMe,
-}: {
-	allOpenChat: AllOpenChat;
-	allUsersExceptMe?: User[];
-}) => {
+const SearchOpenChat = ({ allOpenChat }: { allOpenChat: AllOpenChat }) => {
 	const [userInput, setUserInput] = useState('');
-	const [searched, setSearched] = useState<AllOpenChat>(allOpenChat);
-	const [searchedUsers, setSearchedUsers] = useState<User[] | undefined>(
-		allUsersExceptMe,
-	);
-	const [isShowMore, setIsShowMore] = useState(false);
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-	const [modalUser, setModalUser] = useState<User | object>({});
+	const [searchedChats, setSearchedChats] = useState(allOpenChat);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [modalChat, setModalChat] = useState<Chat>(initialChat);
 
-	const openModalHandler = (user: User) => {
-		setIsModalOpen(true);
-		setModalUser(user);
-	};
-
-	const getUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setUserInput(e.target.value.toLowerCase().replace(/(\s*)/g, ''));
-		setIsShowMore(false);
-	};
+	const getUserInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		setUserInput(toLower(e.target.value));
+	}, []);
 
 	const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
-			search();
+			search(userInput, allOpenChat, setSearchedChats);
 		}
 	};
 
-	const search = useCallback(() => {
-		const result = allOpenChat.filter((item) =>
-			item.name.toLowerCase().replace(/(\s*)/g, '').includes(userInput),
-		);
-		const resultUser = allUsersExceptMe?.filter((item) =>
-			item.name.toLowerCase().replace(/(\s*)/g, '').includes(userInput),
-		);
-
-		setSearched(result);
-		setSearchedUsers(resultUser);
-	}, [userInput, allOpenChat, allUsersExceptMe]);
+	const openModalHandler = (chat: Chat) => {
+		setIsModalOpen(true);
+		setModalChat(chat);
+	};
 
 	return (
 		<>
-			<Input
-				onChange={getUserInput}
-				onKeyPress={handleKeyPress}
-				label="오픈 채팅방 검색하기"
-				crossOrigin={undefined}
-			/>
-			{isShowMore && <FriendProfiles allUsers={searchedUsers} />}
-			{!isShowMore && (
+			<div className="relative flex items-center pt-3">
+				<Link href={'/open'}>
+					<Image
+						width={25}
+						height={25}
+						src="/icon_back.svg"
+						alt="뒤로 가기"
+						className="mr-3"
+					/>
+				</Link>
+				<Input
+					onChange={getUserInput}
+					onKeyPress={handleKeyPress}
+					label="검색 Input"
+					crossOrigin={undefined}
+					value={userInput}
+				/>
+				<Image
+					width={20}
+					height={20}
+					src="/icon_cancel.svg"
+					alt="검색 취소하기"
+					className="absolute right-2"
+					onClick={() => {
+						setUserInput('');
+						setSearchedChats(allOpenChat);
+					}}
+				/>
+			</div>
+
+			{searchedChats.length ? (
 				<>
-					{searched.length || searchedUsers?.length ? (
-						<>
-							{allUsersExceptMe && (
-								<ShowSearchedFriend
-									openModalHandler={openModalHandler}
-									setIsShowMore={setIsShowMore}
-									searchedUsers={searchedUsers as User[]}
-								/>
-							)}
-							{searched.map((item) => (
-								<ShowAllOpenChat key={item.id} openChat={item} />
-							))}
-						</>
-					) : (
-						<h1>검색 결과가 없습니다.</h1>
-					)}
+					<strong className="mt-5">오픈 채팅방</strong>
+
+					{searchedChats.map((chat) => (
+						<li
+							key={chat.id}
+							onClick={() => {
+								openModalHandler(chat);
+								setModalChat(chat);
+							}}
+							className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer"
+						>
+							<ShowAllOpenChat key={chat.id} chat={chat} />
+						</li>
+					))}
 				</>
+			) : (
+				<h1 className="m-auto">검색 결과가 없습니다.</h1>
 			)}
-			<ProfileModal
-				user={modalUser}
-				open={isModalOpen}
+
+			<OpenChatModal
+				modalChat={modalChat}
+				isModalOpen={isModalOpen}
 				setIsModalOpen={setIsModalOpen}
 			/>
 		</>
