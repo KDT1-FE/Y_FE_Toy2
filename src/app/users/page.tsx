@@ -1,10 +1,12 @@
 'use client';
-import { UserItem } from '@/components/Users/UserItem';
+import UserItem from '@/components/Users/UserItem';
 import { instance } from '@/lib/api';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { MdClose, MdSearch } from 'react-icons/md';
 import Navigation from '@/components/Navigation';
+import { io } from 'socket.io-client';
+import React from 'react';
 
 interface User {
     id: string;
@@ -14,9 +16,14 @@ interface User {
     chats: string[];
 }
 
-export default function Users() {
+interface ConnectUserIdList {
+    users: string[];
+}
+
+const Users = () => {
     const [users, setUsers] = useState<User[] | []>([]);
     const [loading, setLoading] = useState(true);
+
     const getUsers = async () => {
         try {
             let res = await instance.get<unknown, User[]>('/users');
@@ -34,14 +41,38 @@ export default function Users() {
 
     /**사용자 검색 */
     const [userInput, setUserInput] = useState('');
-    const getInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const getInputValue = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setUserInput(e.target.value);
-    };
+    }, []);
     const searched = users.filter((user) => user.name.includes(userInput));
 
-    const clearSearchInput = () => {
+    const clearSearchInput = React.useCallback(() => {
         setUserInput('');
-    };
+    }, []);
+
+    /** 접속 상태 */
+    const connectUserIdListRef = useRef<ConnectUserIdList>({
+        users: [],
+    });
+    const [connectUserIdList, setConnectUserIdList] = useState<ConnectUserIdList>({ users: [] });
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    const socket = io(`https://fastcampus-chat.net/server`, {
+        extraHeaders: {
+            Authorization: `Bearer ${accessToken}`,
+            serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+        },
+    });
+
+    useEffect(() => {
+        socket.on('users-server-to-client', (usersIdList) => {
+            if (JSON.stringify(usersIdList.users) !== JSON.stringify(connectUserIdListRef.current.users)) {
+                connectUserIdListRef.current = usersIdList;
+                setConnectUserIdList(usersIdList);
+            }
+            console.log(usersIdList);
+        });
+    }, []);
 
     return (
         <>
@@ -65,7 +96,7 @@ export default function Users() {
                     {loading && <Loading />}
                     {searched.length !== 0
                         ? searched.map((user: User) => {
-                              return <UserItem key={user.id} user={user} />;
+                              return <UserItem key={user.id} user={user} connectUserIdList={connectUserIdList} />;
                           })
                         : !loading && (
                               <NoUserWrap>
@@ -77,7 +108,9 @@ export default function Users() {
             <Navigation />
         </>
     );
-}
+};
+
+export default React.memo(Users);
 
 const UsersWrap = styled.div`
     padding: 3rem;
@@ -104,6 +137,12 @@ const UserList = styled.div`
     height: 80%;
 
     overflow-y: auto;
+    &::-webkit-scrollbar {
+        /*크롬, 사파리, 오페라, 엣지*/
+        display: none;
+    }
+    -ms-overflow-style: none; /* ie */
+    scrollbar-width: none; /* 파이어폭스 */
 `;
 
 const NoUserWrap = styled.div`
