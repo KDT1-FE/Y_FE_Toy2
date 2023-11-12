@@ -16,24 +16,28 @@ const useMutationSignUp = (type: string) => {
     try {
       let url = '';
       // 유저 정보 Firestore에 저장
-      const docRef = doc(db, 'user', userData.id).withConverter(userInfoConverter);
+      const docRef = doc(db, 'user', userData.id).withConverter(
+        userInfoConverter,
+      );
       // 파일업로드 여부에 따라 로직을 다르게 구현
       if (userData.picture !== '') {
         // 업로드한 파일이 있을 때
         const image = await dataUrlToFile(userData.picture, userData.id, type);
-        if (!checkImageValidation(image)) throw new Error('올바르지 않은 이미지 입니다');
+        if (!checkImageValidation(image))
+          throw new Error('올바르지 않은 이미지 입니다');
+        const storageRef = ref(storage, `user/${userData.id}`);
+        const uploadRef = await uploadBytes(storageRef, image).then(
+          (snapshot) => snapshot.ref,
+        );
+        url = await getDownloadURL(uploadRef);
 
         const res = await publicApi.post('signup', {
           id: userData.id,
           password: userData.password,
           name: userData.name,
-          picture: userData.picture,
+          picture: url,
         });
         const { message } = res.data;
-
-        const storageRef = ref(storage, `user/${userData.id}`);
-        const uploadRef = await uploadBytes(storageRef, image).then((snapshot) => snapshot.ref);
-        url = await getDownloadURL(uploadRef);
       } else {
         // 업로드한 파일이 없을 때
         const res = await publicApi.post('signup', {
