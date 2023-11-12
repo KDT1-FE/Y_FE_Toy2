@@ -17,6 +17,7 @@ interface LoginFormProps {
   idInput: InputProps;
   pwInput: InputProps;
   loginError: string;
+  setLoginError: React.Dispatch<React.SetStateAction<string>>;
   handleLogin: () => void;
 }
 

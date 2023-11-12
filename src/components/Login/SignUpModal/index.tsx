@@ -1,6 +1,17 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Input, Button, Text, Alert, AlertIcon } from "@chakra-ui/react";
+import {
+  Input,
+  Button,
+  Text,
+  Alert,
+  AlertIcon,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+} from "@chakra-ui/react";
 import useFetch from "../../../hooks/useFetch";
 import axios from "axios";
 
@@ -11,7 +22,7 @@ interface FormData {
   picture?: string;
 }
 
-const SignUpModal = () => {
+const SignUpModal = ({ isOpen, onClose }) => {
   const {
     control,
     handleSubmit,
@@ -91,102 +102,108 @@ const SignUpModal = () => {
   };
 
   return (
-    <>
-      <div>회원가입</div>
-      {signUpStatus && (
-        <Alert status={signUpStatus.type}>
-          <AlertIcon />
-          {signUpStatus.message}
-        </Alert>
-      )}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name="picture"
-          control={control}
-          render={({ field: { onChange } }) => (
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={(event) => {
-                const file = event.target.files?.[0];
-                if (file) {
-                  if (file.size > 1024 * 1024) {
-                    console.error("File size exceeds 1MB");
-                  } else {
-                    setSelectedFile(file);
-                    onChange(file);
-                  }
-                }
-              }}
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalCloseButton />
+        <ModalBody>
+          {signUpStatus && (
+            <Alert status={signUpStatus.type}>
+              <AlertIcon />
+              {signUpStatus.message}
+            </Alert>
+          )}
+          {/* 회원가입 폼 */}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Controller
+              name="picture"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) {
+                      if (file.size > 1024 * 1024) {
+                        console.error("File size exceeds 1MB");
+                      } else {
+                        setSelectedFile(file);
+                        onChange(file);
+                      }
+                    }
+                  }}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          name="id"
-          control={control}
-          rules={{
-            required: "ID는 필수입니다.",
-            pattern: {
-              value: /^[A-Za-z0-9]+$/,
-              message: "ID는 영문자와 숫자만 사용할 수 있습니다.",
-            },
-            validate: async (id) => {
-              try {
-                const isDuplicated = await checkIdDuplication(id);
-                if (isDuplicated) {
-                  setError("id", {
-                    type: "manual",
-                    message: "이미 사용중인 ID입니다.",
-                  });
-                  return false;
-                }
-                clearErrors("id");
-                return true;
-              } catch (error) {
-                console.error("ID 중복 확인 중 오류 발생:", error);
-                return "ID 중복 확인 중 오류가 발생했습니다.";
-              }
-            },
-          }}
-          render={({ field }) => (
-            <Input type="text" placeholder="ID" {...field} />
-          )}
-        />
-        {errors.id && <Text color="red.500">{errors.id.message}</Text>}
-
-        <Controller
-          name="password"
-          control={control}
-          rules={{
-            required: "비밀번호는 필수입니다.",
-            minLength: {
-              value: 5,
-              message: "비밀번호는 5자리 이상이어야 합니다.",
-            },
-          }}
-          render={({ field }) => (
-            <Input type="password" placeholder="Password" {...field} />
-          )}
-        />
-        {errors.password && (
-          <Text color="red.500">{errors.password.message}</Text>
-        )}
-
-        <Controller
-          name="name"
-          control={control}
-          rules={{ required: "이름은 필수입니다." }}
-          render={({ field }) => (
-            <Input type="text" placeholder="Name" {...field} />
-          )}
-        />
-        {errors.name && <Text color="red.500">{errors.name.message}</Text>}
-
-        <Button type="submit" isLoading={signUpFetch.loading}>
-          가입
-        </Button>
-      </form>
-    </>
+            {/* 아이디 입력 */}
+            <Controller
+              name="id"
+              control={control}
+              rules={{
+                required: "ID는 필수입니다.",
+                pattern: {
+                  value: /^[A-Za-z0-9]+$/,
+                  message: "ID는 영문자와 숫자만 사용할 수 있습니다.",
+                },
+                validate: async (id) => {
+                  try {
+                    const isDuplicated = await checkIdDuplication(id);
+                    if (isDuplicated) {
+                      setError("id", {
+                        type: "manual",
+                        message: "이미 사용중인 ID입니다.",
+                      });
+                      return false;
+                    }
+                    clearErrors("id");
+                    return true;
+                  } catch (error) {
+                    console.error("ID 중복 확인 중 오류 발생:", error);
+                    return "ID 중복 확인 중 오류가 발생했습니다.";
+                  }
+                },
+              }}
+              render={({ field }) => (
+                <Input type="text" placeholder="ID" {...field} />
+              )}
+            />
+            {errors.id && <Text color="red.500">{errors.id.message}</Text>}
+            {/* 비밀번호 입력 */}
+            <Controller
+              name="password"
+              control={control}
+              rules={{
+                required: "비밀번호는 필수입니다.",
+                minLength: {
+                  value: 5,
+                  message: "비밀번호는 5자리 이상이어야 합니다.",
+                },
+              }}
+              render={({ field }) => (
+                <Input type="password" placeholder="Password" {...field} />
+              )}
+            />
+            {errors.password && (
+              <Text color="red.500">{errors.password.message}</Text>
+            )}
+            {/* 닉네임 입력 */}
+            <Controller
+              name="name"
+              control={control}
+              rules={{ required: "이름은 필수입니다." }}
+              render={({ field }) => (
+                <Input type="text" placeholder="Name" {...field} />
+              )}
+            />
+            {errors.name && <Text color="red.500">{errors.name.message}</Text>}
+            <Button type="submit" isLoading={signUpFetch.loading}>
+              가입
+            </Button>
+          </form>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 

@@ -18,7 +18,11 @@ const Login = () => {
     start: false,
   });
   const [loginError, setLoginError] = useState("");
-
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  // 모달 토글
+  const toggleSignUpModal = () => {
+    setIsSignUpModalOpen(!isSignUpModalOpen);
+  };
   const handleLogin = () => {
     login.refresh();
   };
@@ -46,7 +50,10 @@ const Login = () => {
         setLoginError={setLoginError}
         handleLogin={handleLogin}
       />
-      <SignUpModal />
+      <button onClick={toggleSignUpModal}>회원가입</button>
+      {isSignUpModalOpen && (
+        <SignUpModal isOpen={isSignUpModalOpen} onClose={toggleSignUpModal} />
+      )}
     </>
   );
 };
