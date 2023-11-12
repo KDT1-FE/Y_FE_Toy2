@@ -1,7 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChatListProps } from './ChatList.type';
+import {
+	ChatListProps,
+	SourceColumnProps,
+	TargetType,
+	ColumnNames,
+} from './ChatList.type';
 import { Chat } from '@/app/open/open.type';
 import { filterChat } from '@/app/open/open.utils';
 import ChatItem from './ChatItem';
@@ -16,7 +21,26 @@ import {
 } from '@hello-pangea/dnd';
 import ChatItemDrag from './ChatItemDrag';
 
-type Columns = 'list-column' | 'delete-column';
+const setNewListData = (
+	sourceColumn: SourceColumnProps,
+	newTaskIds: number[],
+	listData: TargetType,
+	setFn: React.Dispatch<React.SetStateAction<TargetType>>,
+) => {
+	const newSourceColumn = {
+		...sourceColumn,
+		taskIds: newTaskIds,
+	};
+
+	const newState = {
+		...listData,
+		columns: {
+			...listData.columns,
+			[newSourceColumn.id]: newSourceColumn,
+		},
+	};
+	setFn(newState);
+};
 
 const ChatList = ({ myChatList }: ChatListProps) => {
 	const accessToken = getCookie('accessToken');
@@ -40,7 +64,7 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 	);
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [listData, setListData] = useState({
+	const [listData, setListData] = useState<TargetType>({
 		tasks: idAddedfilteredChatList,
 		columns: {
 			'list-column': {
@@ -84,33 +108,25 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 			return null;
 		}
 
-		if (destination.droppableId === 'delete-column') {
-			console.log('delete');
-		}
-
-		const sourceColumn = listData.columns[source.droppableId as Columns];
+		const sourceColumn = listData.columns[source.droppableId as ColumnNames];
 		const destinationColumn =
-			listData.columns[destination.droppableId as Columns];
+			listData.columns[destination.droppableId as ColumnNames];
 
-		const isSameColumn = sourceColumn.id === destinationColumn.id;
-		if (isSameColumn) {
+		if (sourceColumn.id === destinationColumn.id) {
 			const newTaskIds = Array.from(sourceColumn.taskIds);
 			const [removed] = newTaskIds.splice(source.index, 1);
 			newTaskIds.splice(destination.index, 0, removed);
 
-			const newColumn = {
-				...sourceColumn,
-				taskIds: newTaskIds,
-			};
+			setNewListData(sourceColumn, newTaskIds, listData, setListData);
+			dragEndDeleteColumn();
+			return null;
+		}
 
-			const newState = {
-				...listData,
-				columns: {
-					...listData.columns,
-					[newColumn.id]: newColumn,
-				},
-			};
-			setListData(newState);
+		if (destination.droppableId === 'delete-column') {
+			const newTaskIds = Array.from(sourceColumn.taskIds);
+			newTaskIds.splice(source.index, 1);
+
+			setNewListData(sourceColumn, newTaskIds, listData, setListData);
 			dragEndDeleteColumn();
 			return null;
 		}
