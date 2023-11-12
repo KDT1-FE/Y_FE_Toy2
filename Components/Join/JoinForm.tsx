@@ -4,6 +4,10 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '@material-tailwind/react';
 import { fetchJoin } from '@/app/join/join.utils';
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
+import { Input } from '@material-tailwind/react';
+// import Image from 'next/image';
 
 type RequestBody = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -13,107 +17,151 @@ type RequestBody = {
 };
 
 const JoinForm = () => {
+	const router = useRouter();
+
 	const {
 		register,
 		handleSubmit,
 		watch,
 		formState: { errors },
-	} = useForm<RequestBody>();
+	} = useForm<RequestBody>({ mode: 'onChange' });
 
 	// 로그인 시 api 요청
-	const onSubmit: SubmitHandler<RequestBody> = ({
+	const onSubmit: SubmitHandler<RequestBody> = async ({
 		id,
 		password,
 		name,
 		picture,
 	}) => {
-		fetchJoin(id, password, name, picture);
+		// 모든 input 값에 에러없이 값이 있으면
+		const data = await fetchJoin(id, password, name, picture);
+		const { message } = data;
+		if (message === 'User created') {
+			router.replace('/login');
+		} else {
+			console.log('이미 존재한 회원 입니다');
+			Swal.fire({
+				text: '이미 존재한 회원입니다.',
+				showCancelButton: false,
+				confirmButtonText: '확인',
+				confirmButtonColor: '#3085d6',
+			});
+		}
 	};
 
 	const image = watch('picture');
 	console.log(image);
 
 	return (
-		<>
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				className="w-[300px] h-[500px] bg-white flex flex-col items-center "
-			>
-				<div className="flex flex-col items-center justify-center h-screen">
-					{/* 이미지 */}
+		// 전체
+		<div className="w-full h-full flex flex-col items-center justify-center">
+			{/* 이미지 & 입력폼 & 회원가입 버튼 */}
+			<div className="flex flex-col w-full h-full items-center justify-center ">
+				{/* 이미지 */}
+				<div className="mb-10">
 					{image ? (
-						<img src={image} className="h-14 w-14 rounded-full bg-blue-500" />
+						<img
+							src={image}
+							className="h-[200px] w-[200px] rounded-full bg-blue-500 "
+						/>
 					) : (
-						<div className="h-20 w-20 rounded-full bg-blue-500" />
+						<div className="h-[200px] w-[200px] rounded-full bg-blue-500" />
 					)}
-					{/* 이미지 url */}
-					<div className="relative m-3 group">
-						<input
-							placeholder=" "
-							{...register('picture', {
-								required: true,
-							})}
-							className="border-b py-1 focus:outline-none focus:border-purple-600 focus:border-b-2 transition-colors peer"
-						/>
-						<label className="absolute left-0 top-1 text-gray-600 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-purple-600 transition-all">
-							Image URL
-						</label>
-					</div>
-					{/* id */}
-					<div className="relative m-3 group">
-						<input
-							placeholder=" "
-							{...register('id', {
-								required: true,
-								pattern: /^[a-zA-Z0-9]*$/,
-							})}
-							className="border-b py-1 focus:outline-none focus:border-purple-600 focus:border-b-2 transition-colors peer"
-						/>
-						<label className="absolute left-0 top-1 text-gray-600 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-purple-600 transition-all">
-							id
-						</label>
-					</div>
-					{/* 비밀번호 */}
-					<div className="relative m-3">
-						<input
-							{...register('password', {
-								required: true,
-								minLength: 5,
-							})}
-							className="border-b py-1 focus:outline-none focus:border-purple-600 focus:border-b-2 transition-colors peer"
-						/>
-						<label className="absolute left-0 top-1 text-gray-600 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-purple-600 transition-all">
-							password
-						</label>
-						{errors?.password?.type === 'minLength' && (
-							<p>입력은 최소 5자 이상이어야 합니다.</p>
-						)}
-					</div>
-					{/* 이름 */}
-					<div className="relative m-3">
-						<input
-							{...register('name', {
-								required: true,
-								maxLength: 20,
-							})}
-							className="border-b py-1 focus:outline-none focus:border-purple-600 focus:border-b-2 transition-colors peer"
-						/>
-						<label className="absolute left-0 top-1 text-gray-600 cursor-text peer-focus:text-xs peer-focus:-top-4 peer-focus:text-purple-600 transition-all">
-							name
-						</label>
-						{errors?.name?.type === 'maxLength' && (
-							<p>입력은 최대 20자 이상이어야 합니다.</p>
-						)}
-
-						{errors?.id ? <p className="error">{errors.id?.message}</p> : null}
-					</div>
 				</div>
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="flex flex-col w-3/5 items-center "
+				>
+					<div className=" flex flex-col gap-1 w-full ">
+						{/* 이름 */}
+						<div className="flex h-[90] w-full flex-col mt-5">
+							<Input
+								color="brown"
+								placeholder="20자 이하의 이름을 입력해주세요."
+								variant="static"
+								label="name"
+								{...register('name', {
+									required: true,
+									maxLength: 20,
+								})}
+								crossOrigin={'anonymous'}
+							/>
 
-				<Button type="submit" className="w-full bg-main">
-					회원가입
-				</Button>
-			</form>
-		</>
+							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+								{errors?.name?.type === 'required' && (
+									<div>name를 입력해주세요.</div>
+								)}
+								{errors?.name?.type === 'maxLength' && (
+									<div>20자 이상은 입력할 수 없습니다.</div>
+								)}
+							</div>
+						</div>
+
+						{/* id */}
+						<div className="flex  w-full  h-[90] flex-col  mt-5">
+							<Input
+								color="brown"
+								variant="static"
+								label="id"
+								placeholder=" "
+								{...register('id', {
+									required: true,
+									pattern: /^[a-zA-Z0-9]*$/,
+								})}
+								crossOrigin={'anonymous'}
+							/>
+
+							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+								{errors?.id?.type === 'pattern' && (
+									<div>영어와 숫자만 작성 가능합니다.</div>
+								)}
+								{errors?.id?.type === 'required' && (
+									<div>id를 입력해주세요.</div>
+								)}
+							</div>
+						</div>
+						{/* 비밀번호 */}
+						<div className="flex w-full  h-[90] flex-col  mt-5">
+							<Input
+								color="brown"
+								variant="static"
+								label="password"
+								type="password"
+								{...register('password', {
+									required: true,
+									minLength: 5,
+								})}
+								crossOrigin={'anonymous'}
+							/>
+							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+								{errors?.password?.type === 'minLength' && (
+									<div>입력은 최소 5자 이상이어야 합니다.</div>
+								)}
+								{errors?.password?.type === 'required' && (
+									<div> password를 입력해주세요.</div>
+								)}
+							</div>
+						</div>
+						{/* 이미지 url */}
+						<div className="flex h-[90] w-full  flex-col  mt-5">
+							<Input
+								color="brown"
+								variant="static"
+								label="image URL"
+								placeholder=" image URL을 입력해주세요 "
+								{...register('picture', {
+									required: true,
+								})}
+								crossOrigin={'anonymous'}
+							/>
+						</div>
+					</div>
+					<Button type="submit" className="w-full bg-main mt-10">
+						회원가입
+					</Button>
+				</form>
+			</div>
+		</div>
 	);
 };
 

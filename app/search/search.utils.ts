@@ -1,17 +1,16 @@
-import { Request, AllOpenChatJSON, AllOpenChat } from './search.type';
+import { AllOpenChatJSON, AllOpenChat } from './search.type';
 import { GET, CONTENT_TYPE, BASE_URL, GET_CHAT_ALL } from './search.constant';
 
 export const fetchAllOpenChat = async (accessToken: string) => {
-	const Request: Request = {
+	const res = await fetch(`${BASE_URL}${GET_CHAT_ALL}`, {
 		method: GET,
 		headers: {
 			'content-type': CONTENT_TYPE,
 			serverId: process.env.NEXT_PUBLIC_SERVER_ID as string, // 서버 아이디 임시 사용
 			Authorization: `Bearer ${accessToken}`,
 		},
-	};
-
-	const res = await fetch(`${BASE_URL}${GET_CHAT_ALL}`, Request);
+		cache: 'no-cache',
+	});
 	const resJson: AllOpenChatJSON = await res.json();
 	const allOpenChat: AllOpenChat = resJson.chats;
 
@@ -25,8 +24,6 @@ export const timeForToday = (value: Date) => {
 	const betweenTime = Math.floor(
 		(today.getTime() - timeValue.getTime()) / 1000 / 60,
 	);
-
-	if (betweenTime < 1) return '방금전';
 
 	if (betweenTime < 60) {
 		return `${betweenTime}분전`;

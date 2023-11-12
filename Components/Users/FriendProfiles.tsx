@@ -3,22 +3,16 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import ProfileModal from '../Common/ProfileModal';
+import { User } from '@/types';
 
-type User = {
-	id: string;
-	password: string;
-	name: string;
-	picture: string;
-	chats: string[];
-};
-
-const FriendProfiles = ({ allUsers }: { allUsers: User[] }) => {
+const FriendProfiles = ({ allUsers }: { allUsers: User[] | undefined }) => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const [modalUser, setModalUser] = useState<User | object>({});
 
 	const openModalHandler = (user: User) => {
-		setIsModalOpen(true);
+		console.log(user);
 		setModalUser(user);
+		setIsModalOpen(true);
 	};
 
 	return (
@@ -29,9 +23,9 @@ const FriendProfiles = ({ allUsers }: { allUsers: User[] }) => {
 				setIsModalOpen={setIsModalOpen}
 			/>
 			<div className="w-full mt-8 mb-5 pt-2 border-t border-gray-400 ">
-				<h4 className="text-gray-400 font-bold">친구{allUsers.length}명</h4>
+				<h4 className="text-gray-400 font-bold">친구{allUsers?.length}명</h4>
 			</div>
-			{allUsers.map((user) => {
+			{allUsers?.map((user) => {
 				return (
 					<li
 						key={user.id}
@@ -49,7 +43,10 @@ const FriendProfiles = ({ allUsers }: { allUsers: User[] }) => {
 };
 
 export const FriendProfile = ({ user }: { user: User }) => {
-	const picture = user.picture || '/icon_cat.svg';
+	const picture =
+		user.picture.trim().split('.')[0] === 'https://avatars'
+			? user.picture
+			: '/icon_cat.svg';
 
 	return (
 		<div className="flex w-full align-center mb-4">

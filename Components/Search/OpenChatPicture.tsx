@@ -7,7 +7,7 @@ const OpenChatPicture = ({ openChatUsers }: { openChatUsers: User[] }) => {
 
 	return (
 		<>
-			<ol className="relative w-20 h-20 flex justify-center items-center flex-wrap overflow-hidden">
+			<ol className="relative w-20 h-20 flex justify-center items-center flex-wrap">
 				{openChatUsers.map((user) => {
 					userCount++;
 
@@ -16,13 +16,19 @@ const OpenChatPicture = ({ openChatUsers }: { openChatUsers: User[] }) => {
 					}
 
 					return (
-						<li key={user.id} className="w-15 h-15 -m-1">
+						<li key={user.id} className="relative w-10 h-10 -m-1">
 							<Image
-								width={40}
-								height={40}
+								fill={true}
 								src={user.picture}
 								alt="user picture"
-								className="rounded "
+								className="rounded"
+								style={{
+									position: 'absolute',
+									top: 0,
+									left: 0,
+									objectFit: 'cover',
+									margin: 'auto',
+								}}
 							/>
 						</li>
 					);

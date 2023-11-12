@@ -7,3 +7,12 @@ export const GET_CHAT_ALL = 'chat/all';
 
 // API Request 조건 정보
 export const CONTENT_TYPE = 'application/json';
+
+export const initialChat = {
+	id: '',
+	name: '',
+	users: [],
+	isPrivate: false,
+	messages: [],
+	updatedAt: new Date(),
+};
