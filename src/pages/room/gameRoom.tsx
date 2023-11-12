@@ -46,7 +46,9 @@ const GameRoom = () => {
         <GameChatting />
       </RoomMain>
       {/* <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom> */}
-      <CheckUser />
+      <UserList>
+        <CheckUser />
+      </UserList>
     </Game>
   );
 };
@@ -130,13 +132,8 @@ const RoomMain = styled.div`
   margin-top: 20px;
 `;
 
-const Chatting = styled.div`
-  width: 370px;
-  height: 450px;
-  background-color: teal;
-  border-radius: 15px;
-  text-align: center;
-  color: #fff;
+const UserList = styled.div`
+  margin-top: 20px;
 `;
 
 export default GameRoom;
