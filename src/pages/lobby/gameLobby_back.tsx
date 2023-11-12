@@ -9,7 +9,7 @@ import { accessTokenState } from '../../states/atom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import OfflineUserList from '../../components/layout/offlineUserList';
 import OnlineUserList from '../../components/layout/onlineUserList';
-import UserList from '../../components/layout/userList';
+import UserList from '../../components/template/userList';
 import UserLogout from '../login/userLogout';
 import CheckPrivateChat from '../../components/layout/checkPrivateChat';
 import MyUserData from '../../components/layout/MyUserData';

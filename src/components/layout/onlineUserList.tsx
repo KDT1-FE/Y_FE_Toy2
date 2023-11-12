@@ -1,9 +1,10 @@
 import { useRecoilValue } from 'recoil';
 import { allUserState, onlineUserState } from '../../states/atom';
+import userList from '../template/userList';
 
 const OnlineUserList = () => {
+  userList();
   const onLine = useRecoilValue(onlineUserState);
-  console.log(onLine);
   const all = useRecoilValue(allUserState);
   const allOnlineUsers = onLine.users || [];
   const onlineUserListData = all.filter((element) => {

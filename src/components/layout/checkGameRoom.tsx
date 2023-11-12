@@ -58,7 +58,7 @@ const CheckGameRoom = () => {
       // 방번호 넣기
       const plusIndex = {
         ...allRoomsData,
-        chats: allRoomsData.chats.map((room, index) => ({
+        chats: allRoomsData.chats.map((room: any, index: any) => ({
           ...room,
           index: index + 1,
         })),
@@ -102,7 +102,7 @@ const CheckGameRoom = () => {
 
   return (
     <>
-      <List spacing={3}>
+      <List spacing="10px">
         {allRooms.map((element, index) => (
           <ListItem
             key={index}
@@ -110,6 +110,11 @@ const CheckGameRoom = () => {
             <p>{element.index}</p>
             <p>{element.name}</p>
             <p>{element.users.length} / 4</p>
+            {element.users.length === 4 ? (
+              <span className="false"></span>
+            ) : (
+              <span className="true"></span>
+            )}
           </ListItem>
         ))}
 
