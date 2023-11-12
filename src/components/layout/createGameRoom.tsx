@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createGameRooms } from '../../api';
-// import { io } from 'socket.io-client';
-// import { SERVER_URL, CONTENT_TYPE, SERVER_ID } from '../../constant';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allRoomState } from '../../states/atom';
 
@@ -12,14 +10,11 @@ const CreateGameRoom = () => {
   const [name, setName] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const accessToken: any = useRecoilValue(accessTokenState);
+
   const onChange = (e: React.ChangeEvent<any>) => {
     const { value, name } = e.target;
     console.log(value, name);
-    if (value === 'Private') {
-      setIsPrivate(true);
-    } else {
-      setIsPrivate(false);
-    }
+    setIsPrivate(value === 'Private');
   };
 
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,20 +28,7 @@ const CreateGameRoom = () => {
       alert('중복된 방이 있습니다.');
     } else {
       alert('방 생성 성공.');
-      // const socket = io(`${SERVER_URL}/chat?chatId=${check.id}`, {
-      //   extraHeaders: {
-      //     Authorization: `Bearer ${token}`,
-      //     'content-type': CONTENT_TYPE,
-      //     serverId: SERVER_ID,
-      //   },
-      // });
-      // console.log(socket.connected);
-      // socket.on('message-to-client', (messageObject: any) => {
-      //   console.log(messageObject);
-      // });
-
       setAllRooms([...allRooms, check]);
-
       navigate(`/room/:${check.id}`);
     }
   };
