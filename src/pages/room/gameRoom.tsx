@@ -6,9 +6,11 @@ import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState } from 'recoil';
 import { chattingIdState } from '../../states/atom';
 import { controlBack } from '../../hooks/leaveHandle';
+import InviteGameRoom from '../../components/template/inviteGameRoom';
 const GameRoom = () => {
   const { id } = useParams();
   const [chat, setChat] = useRecoilState(chattingIdState);
+
   useEffect(() => {
     if (id) {
       setChat(id.substring(1));
@@ -19,6 +21,7 @@ const GameRoom = () => {
 
   return (
     <>
+      <InviteGameRoom chatId={chat}></InviteGameRoom>
       <LeaveGameRoom chatId={chat}></LeaveGameRoom>
       <div style={{ padding: 20, textAlign: 'center' }}>
         게임방{id}

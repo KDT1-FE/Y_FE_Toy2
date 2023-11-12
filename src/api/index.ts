@@ -114,3 +114,21 @@ export const leaveGameRoom = async (accessToken: string, chatId: string) => {
   console.log(res);
   return res;
 };
+
+export const inviteGameRoom = async (
+  accessToken: string,
+  chatId: string,
+  users = [],
+) => {
+  const res = await client.patch(
+    `/chat/invite`,
+    { chatId: chatId, users: users },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+  console.log(res);
+  return res;
+};

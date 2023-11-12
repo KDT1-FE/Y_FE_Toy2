@@ -50,25 +50,21 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       });
 
       socket.on('join', (data) => {
-        console.log(data);
+        console.log(data.user);
         setUsersInGameRoom(data.users);
       });
-
-      return () => {
-        socket.disconnect();
-      };
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
   }, [accessToken, chatId]);
-
   useEffect(() => {
     const fetchUserProfiles = async () => {
       const profilesArray: ResponseValue[] = [];
 
       for (const userId of UsersInGameRoom) {
+        const Id = userId.substring(9);
         try {
-          const res = await getUserData(accessToken, userId);
+          const res = await getUserData(accessToken, Id);
           profilesArray.push(res);
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -80,7 +76,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
 
     fetchUserProfiles();
   }, [accessToken, UsersInGameRoom]);
-
+  console.log(profiles);
   return (
     <>
       {profiles.map((element, index) => (

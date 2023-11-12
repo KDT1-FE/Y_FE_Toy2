@@ -48,3 +48,13 @@ export const chattingIdState = atom<any>({
   key: 'chattingIdState',
   default: '',
 });
+
+export const inviteUsersState = atom<any>({
+  key: 'inviteUsersState',
+  default: new Set(),
+});
+
+export const uniqueUserState = atom<any>({
+  key: 'uniqueUserState',
+  default: [],
+});
