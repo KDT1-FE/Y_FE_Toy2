@@ -12,10 +12,10 @@ const MyChannelItem = ({ myChannelName, isPrivate }: Props) => {
   return (
     <Flex align="center" mb="1rem">
       {isPrivate ? (
-        <ViewIcon boxSize="1.4rem" />
-      ) : (
-        <LockIcon boxSize="1.5rem" />
-      )}
+          <LockIcon boxSize="1.5rem" />
+        ) : (
+          <ViewIcon boxSize="1.4rem" />
+        )}
       <Box ml="1rem">{myChannelName} </Box>
     </Flex>
   );
