@@ -8,7 +8,7 @@ interface MemberItemProps {
 
 const ChannelMemberItem = ({ userName, src }: MemberItemProps) => {
   return (
-    <Flex mt="2" align="center" bg={'yellow'}>
+    <Flex mt="2" align="center">
       <Avatar size="md" name={userName} src={src}>
         <AvatarBadge boxSize="1.25em" bg="green.500" />
       </Avatar>

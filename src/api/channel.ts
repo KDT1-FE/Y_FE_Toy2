@@ -34,7 +34,7 @@ export const createChannel = async (data: CreateChannelBody) => {
 
 export const getMyChannels = async () => {
   const response = await instance.get<{ chats: Channel[] }>('/chat');
-  const chatsData = await response.data.chats;
+  const chatsData = response.data.chats;
 
   return chatsData;
 };
