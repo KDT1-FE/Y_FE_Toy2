@@ -100,15 +100,15 @@ const CheckGameRoom = () => {
     <>
       <Card
         boxShadow="0 3.5px 5px 0 rgba(0, 0, 0, 0.05)"
-        padding="30px"
-        borderRadius="15px"
+        padding={30}
+        borderRadius={15}
         position="relative">
         <List spacing="10px">
           {allRooms.map((element, index) => (
             <ListItem
               width="100%"
-              height="50px"
-              borderRadius="10px"
+              height={50}
+              borderRadius={10}
               backgroundColor={
                 element.users.length !== 4 ? 'gray.50' : 'gray.300 '
               }
@@ -126,15 +126,15 @@ const CheckGameRoom = () => {
               }>
               <Flex
                 lineHeight="50px"
-                fontSize="14px"
-                fontWeight="600"
+                fontSize={14}
+                fontWeight={600}
                 color={'gray.500'}
                 justifyContent={'space-between'}>
                 <Text>{element?.index}</Text>
                 <Text>{element?.name}</Text>
                 <Flex
                   alignItems={'center'}
-                  width="50px"
+                  width={50}
                   justifyContent={'space-between'}>
                   <Text>{element?.users?.length} / 4</Text>
                   {element.users.length === 4 ? (
