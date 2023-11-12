@@ -13,12 +13,12 @@ import UserList from '../../components/layout/userList';
 import UserLogout from '../login/userLogout';
 import CheckPrivateChat from '../../components/layout/checkPrivateChat';
 import MyUserData from '../../components/layout/MyUserData';
+import UserProfile from '../../components/template/userProfile';
 
 const GameLobby = () => {
   const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
 
   const accessToken = useRecoilValue(accessTokenState);
-  const [imgsrc, setImgsrc] = useState('');
 
   async function fetchUserData() {
     try {
@@ -33,6 +33,7 @@ const GameLobby = () => {
 
   return (
     <>
+      <UserProfile></UserProfile>
       {/* <Button onClick={fetchUserData}>이미지나와랏</Button>
       <Button onClick={handlePostRefresh(setAccessToken)}>토큰재발급</Button>
       <Button onClick={handleGetAllUsers(accessToken)}>모든유저보기</Button> */}
