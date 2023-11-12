@@ -122,9 +122,6 @@ export default function ChatingPage() {
         });
     };
 
-    console.log(users);
-    console.log(messages);
-
     return (
         <main>
             <ChatingNavigation chatName={chatName} />

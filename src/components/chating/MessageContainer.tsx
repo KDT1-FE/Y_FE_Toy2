@@ -24,7 +24,7 @@ export default function MessageContainer(props: any) {
                     setMessage(e.target.value);
                 }}
             />
-            <SendArrow />
+            <SendArrow onClick={MessageSend} />
         </MessageWrapper>
     );
 }
