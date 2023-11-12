@@ -17,11 +17,16 @@ const Move = () => {
 export default Move;
 
 const Container = styled.div`
-    width: 100%;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 50%;
     height: 100vh;
+    background: rgba(255, 255, 255, 1);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 
     div {
         position: relative;
