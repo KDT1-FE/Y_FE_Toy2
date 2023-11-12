@@ -11,6 +11,8 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalBody,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import useFetch from "../../../hooks/useFetch";
 import axios from "axios";
@@ -137,66 +139,76 @@ const SignUpModal = ({ isOpen, onClose }) => {
               )}
             />
             {/* 아이디 입력 */}
-            <Controller
-              name="id"
-              control={control}
-              rules={{
-                required: "ID는 필수입니다.",
-                pattern: {
-                  value: /^[A-Za-z0-9]+$/,
-                  message: "ID는 영문자와 숫자만 사용할 수 있습니다.",
-                },
-                validate: async (id) => {
-                  try {
-                    const isDuplicated = await checkIdDuplication(id);
-                    if (isDuplicated) {
-                      setError("id", {
-                        type: "manual",
-                        message: "이미 사용중인 ID입니다.",
-                      });
-                      return false;
+            <FormControl isInvalid={!!errors.id}>
+              <Controller
+                name="id"
+                control={control}
+                rules={{
+                  required: "ID is required.",
+                  pattern: {
+                    value: /^[A-Za-z0-9]+$/,
+                    message: "ID는 영문자와 숫자만 사용할 수 있습니다.",
+                  },
+                  validate: async (id) => {
+                    try {
+                      const isDuplicated = await checkIdDuplication(id);
+                      if (isDuplicated) {
+                        setError("id", {
+                          type: "manual",
+                          message: "이미 사용중인 ID입니다.",
+                        });
+                        return false;
+                      }
+                      clearErrors("id");
+                      return true;
+                    } catch (error) {
+                      console.error("ID 중복 확인 중 오류 발생:", error);
+                      return "ID 중복 확인 중 오류가 발생했습니다.";
                     }
-                    clearErrors("id");
-                    return true;
-                  } catch (error) {
-                    console.error("ID 중복 확인 중 오류 발생:", error);
-                    return "ID 중복 확인 중 오류가 발생했습니다.";
-                  }
-                },
-              }}
-              render={({ field }) => (
-                <Input type="text" placeholder="ID" {...field} />
-              )}
-            />
-            {errors.id && <Text color="red.500">{errors.id.message}</Text>}
+                  },
+                }}
+                render={({ field }) => (
+                  <Input type="text" placeholder="ID" {...field} />
+                )}
+              />
+              <FormErrorMessage>
+                {errors.id && errors.id.message}
+              </FormErrorMessage>
+            </FormControl>
             {/* 비밀번호 입력 */}
-            <Controller
-              name="password"
-              control={control}
-              rules={{
-                required: "비밀번호는 필수입니다.",
-                minLength: {
-                  value: 5,
-                  message: "비밀번호는 5자리 이상이어야 합니다.",
-                },
-              }}
-              render={({ field }) => (
-                <Input type="password" placeholder="Password" {...field} />
-              )}
-            />
-            {errors.password && (
-              <Text color="red.500">{errors.password.message}</Text>
-            )}
+            <FormControl isInvalid={!!errors.password}>
+              <Controller
+                name="password"
+                control={control}
+                rules={{
+                  required: "비밀번호는 필수입니다.",
+                  minLength: {
+                    value: 5,
+                    message: "비밀번호는 5자리 이상이어야 합니다.",
+                  },
+                }}
+                render={({ field }) => (
+                  <Input type="password" placeholder="Password" {...field} />
+                )}
+              />
+              <FormErrorMessage>
+                {errors.password && errors.password.message}
+              </FormErrorMessage>
+            </FormControl>
             {/* 닉네임 입력 */}
-            <Controller
-              name="name"
-              control={control}
-              rules={{ required: "이름은 필수입니다." }}
-              render={({ field }) => (
-                <Input type="text" placeholder="Name" {...field} />
-              )}
-            />
-            {errors.name && <Text color="red.500">{errors.name.message}</Text>}
+            <FormControl isInvalid={!!errors.name}>
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: "이름은 필수입니다." }}
+                render={({ field }) => (
+                  <Input type="text" placeholder="Name" {...field} />
+                )}
+              />
+              <FormErrorMessage>
+                {errors.name && errors.name.message}
+              </FormErrorMessage>
+            </FormControl>
             <Button type="submit" isLoading={signUpFetch.loading}>
               가입
             </Button>
