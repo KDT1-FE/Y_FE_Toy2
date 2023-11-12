@@ -8,27 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import usePollingData from '../template/usePollingData';
 import Pagination from 'react-js-pagination';
 import {
-  Center,
   Flex,
-  FormControl,
-  FormLabel,
-  Link,
-  Input,
-  Button,
-  Img,
-  Switch,
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  CloseButton,
   Box,
   Fade,
   ListItem,
-  UnorderedList,
   List,
   Card,
-  background,
   Text,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
@@ -98,11 +87,11 @@ const CheckGameRoom = () => {
   };
 
   useEffect(() => {
-    // alert 창 3초 후에 사라지게 하기
+    // alert 창 1초 후에 사라지게 하기
     if (showAlert.active) {
       const timer = setTimeout(() => {
         setShowAlert({ active: false, message: '', type: '' });
-      }, 3000);
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [showAlert.active]);
@@ -212,7 +201,11 @@ const CheckGameRoom = () => {
           width={400}
           height={70}
           variant="solid"
-          borderRadius={6}>
+          borderRadius={6}
+          position="absolute"
+          bottom={30}
+          left="50%"
+          marginLeft={-200}>
           <AlertIcon />
           <Box>
             <AlertTitle mr={2}>방 입장 오류</AlertTitle>
