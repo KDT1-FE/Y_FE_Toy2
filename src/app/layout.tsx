@@ -3,10 +3,22 @@
 import styled from 'styled-components';
 import StyledComponentsRegistry from '../lib/registry';
 import { RecoilRoot } from 'recoil';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
+import { authCheck } from '@/hooks/Auth';
+import { usePathname, useRouter } from 'next/navigation';
+
+import Move from '@/components/Move';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const [shouldRenderMoveComponent, setShouldRenderMoveComponent] = useState<boolean>(false);
+
+    authCheck(setShouldRenderMoveComponent, router, pathname);
+
+    /** 접속 유저 검색 */
     const accessToken = sessionStorage.getItem('accessToken');
 
     const socket = io(`https://fastcampus-chat.net/server`, {
@@ -19,12 +31,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         socket.emit('users-server');
     }, []);
+
     return (
         <RecoilRoot>
             <html lang="en">
                 <StyledComponentsRegistry>
                     <Body>
-                        <Container>{children}</Container>
+                        <Container>
+                            {shouldRenderMoveComponent && <Move />}
+                            {children}
+                        </Container>
                     </Body>
                 </StyledComponentsRegistry>
             </html>
