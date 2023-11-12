@@ -3,9 +3,9 @@ import { allUserState, onlineUserState } from '../../states/atom';
 
 const OnlineUserList = () => {
   const onLine = useRecoilValue(onlineUserState);
+  console.log(onLine);
   const all = useRecoilValue(allUserState);
   const allOnlineUsers = onLine.users || [];
-
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
   });
