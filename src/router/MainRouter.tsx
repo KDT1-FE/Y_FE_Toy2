@@ -5,20 +5,22 @@ import GameLobby from '../pages/lobby/gameLobby';
 import GameRoom from '../pages/room/gameRoom';
 import Header from '../components/layout/header';
 import Footer from '../components/layout/footer';
+import { Grid } from '@chakra-ui/react';
+
 function Dashboard() {
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}>
-      <Header></Header>
-      <Outlet></Outlet>
-      <Footer></Footer>
-    </div>
+    <Grid
+      templateRows="auto 1fr auto"
+      alignContent="center"
+      justifyItems="center"
+      gap={10}>
+      <Header />
+      <Outlet />
+      <Footer />
+    </Grid>
   );
 }
+
 const MainRouter = () => {
   return (
     <>
