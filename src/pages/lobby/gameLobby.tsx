@@ -54,6 +54,10 @@ const LeftComponent = styled.div`
 
 const RightComponent = styled.div`
   width: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
 `;
 
 export default GameLobby;
