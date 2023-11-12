@@ -5,7 +5,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
@@ -18,9 +17,7 @@ import {
   Text,
   Button,
 } from '@chakra-ui/react';
-import { useRecoilValue } from 'recoil';
-import { accessTokenState } from '../../states/atom';
-import { getMyUserData } from '../../util/util';
+import { getUserData, patchUserData } from '../../api';
 
 const UserProfile: React.FC<{ userImg: string }> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,17 +25,19 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [filePreviewUrl, setFilePreviewUrl] = useState('');
   const [formData, setFormData] = useState({
+    name: '',
     picture: '',
   });
   const [myImg, setMyImg] = useState('');
-  const accessToken: string = useRecoilValue(accessTokenState);
+
   const userId = localStorage.getItem('id');
 
   useEffect(() => {
     const fetchData = async () => {
-      if (accessToken && userId) {
+      if (userId) {
         try {
-          const res = await getMyUserData(accessToken, userId);
+          const res = await getUserData(userId);
+          console.log(res);
           setMyImg(res.user.picture);
         } catch (error) {
           console.error('내정보를 가져오는데 실패했습니다.:', error);
@@ -68,8 +67,24 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  };
+    try {
+      // 닉네임중복 핸들링 로직 필요
+      await patchUserData(formData);
 
+      alert('회원가입에 성공했습니다.');
+    } catch (e: any) {
+      let errorMessage = '';
+      let errorType = '';
+      if (e.message === 'Request failed with status code 401') {
+        errorMessage = '이미 가입된 아이디입니다.';
+        errorType = 'id';
+      } else {
+        errorMessage = `회원가입에 실패했습니다. 오류코드: ${e.message}`;
+        errorType = 'general';
+      }
+      // setShowAlert({ active: true, message: errorMessage, type: errorType });
+    }
+  };
   return (
     <>
       <Flex

@@ -1,20 +1,10 @@
 import { NavigateFunction } from 'react-router';
-import { getAllUsers, leaveGameRoom, postRefresh, getUserData } from '../api';
+import { getAllUsers, leaveGameRoom, postRefresh } from '../api';
 import { disconnectChattingSocket } from '../api/socket';
 
-export const getAllUsersData = async (accessToken: string) => {
+export const getAllUsersData = async () => {
   try {
-    const res = await getAllUsers(accessToken);
-    return res;
-  } catch (e) {
-    console.error(e);
-    alert('사용자 정보를 가져오는데 실패했습니다.');
-  }
-};
-
-export const getMyUserData = async (accessToken: string, userId: string) => {
-  try {
-    const res = await getUserData(accessToken, userId);
+    const res = await getAllUsers();
     return res;
   } catch (e) {
     console.error(e);

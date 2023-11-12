@@ -131,8 +131,7 @@ const UserJoin = () => {
     e.preventDefault();
     try {
       // 닉네임중복 핸들링 로직 필요
-      const res = await postJoin(formData);
-      console.log(res);
+      await postJoin(formData);
       alert('회원가입에 성공했습니다.');
       navigate('/');
     } catch (e: any) {
