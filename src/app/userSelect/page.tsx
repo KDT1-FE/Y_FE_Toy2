@@ -12,12 +12,23 @@ interface User {
     name: string;
     picture: string;
     chats: string[];
-    newChatId: string;
 }
 
 function UserSelect() {
     const [users, setUsers] = useState<User[] | []>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+
+    const handleUserSelect = (user: User) => {
+        if (selectedUsers.some(selectedUser => selectedUser.id === user.id)) {
+            setSelectedUsers(prevSelectedUsers => prevSelectedUsers.filter(selectedUser => selectedUser.id !== user.id));
+        } else {
+            setSelectedUsers(prevSelectedUsers => [...prevSelectedUsers, user]);
+        }
+    };
+
+
     const getUsers = async () => {
         try {
             let res = await instance.get<unknown, User[]>('/users');
@@ -44,11 +55,6 @@ function UserSelect() {
         setUserInput('');
     };
 
-    const handleSelectUser = (selectedUser: User) => {
-        // 여러 유저를 선택할 때 수행할 함수
-        console.log('Selected User:', selectedUser);
-        // 채팅하기 등의 로직을 수행할 수 있습니다.
-    };
 
     return (
         <>
@@ -72,7 +78,7 @@ function UserSelect() {
                     {loading && <Loading />}
                     {searched.length !== 0
                         ? searched.map((user: User) => {
-                              return <UserSelectionModal key={user.id} user={user} newChatId={user.newChatId} />;
+                              return <UserSelectionModal key={user.id} user={user}  onUserSelect={handleUserSelect}    />;
                           })
                         : !loading && (
                               <NoUserWrap>
@@ -80,7 +86,15 @@ function UserSelect() {
                               </NoUserWrap>
                           )}
                 </UserList>
+                {selectedUsers.length > 0 && (
+                    <ChatButtonWrapper>
+                        <ChatButton onClick={() => console.log('Chat button clicked')}>
+                            채팅하기
+                        </ChatButton>
+                    </ChatButtonWrapper>
+                )}
             </UsersWrap>
+
         </>
     );
 }
@@ -201,4 +215,23 @@ const Loading = styled.div`
             transform: rotate(360deg);
         }
     }
+`;
+const ChatButtonWrapper = styled.div`
+    position: absolute;
+    top: 3rem; /* 조절 필요한 만큼의 top 값을 주세요 */
+    right: 3rem; /* 조절 필요한 만큼의 right 값을 주세요 */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ChatButton = styled.button`
+    background-color: #00956e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
 `;

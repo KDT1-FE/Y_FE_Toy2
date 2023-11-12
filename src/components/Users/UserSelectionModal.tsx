@@ -1,5 +1,3 @@
-// UserSelectionModal.tsx
-
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -11,25 +9,37 @@ interface User {
     chats: string[];
 }
 
+interface UserSelectionModalProps {
+    user: User;
+    onUserSelect: (user: User) => void;
+    
+}
 
-
-export const UserSelectionModal = ({ user, newChatId }: { user: User; newChatId: string | null }) => {
+export const UserSelectionModal = ({ user, onUserSelect }: UserSelectionModalProps) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
+
     const { name, picture, id } = user;
 
+    const handleUserClick = () => {
+        onUserSelect(user);
+        setIsSelected(!isSelected); // 선택 여부 토글
+        console.log(user.id)
+    };
+
     return (
-        <User isHovered={isHovered}>
+        <User isHovered={isHovered} isSelected={isSelected} onClick={handleUserClick} >
             <UserImg src={picture} />
             <UserInfo>
                 <h2>{name}</h2>
                 <p>online</p>
-                {isHovered && <ChatButton>채팅하기</ChatButton>}
+
             </UserInfo>
         </User>
     );
 };
 
-const User = styled.div<{ isHovered: boolean }>`
+const User = styled.div<{ isHovered: boolean; isSelected: boolean }>`
     display: flex;
     flex-direction: row;
     gap: 2.5rem;
@@ -40,7 +50,7 @@ const User = styled.div<{ isHovered: boolean }>`
 
     box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.15);
 
-    background-color: ${({ isHovered }) => (isHovered ? '#f0f0f0' : 'white')};
+    background-color: ${({ isHovered, isSelected }) => (isSelected ? 'lightblue' : isHovered ? '#f0f0f0' : 'white')};
 
     padding: 1rem 2rem;
 

@@ -9,12 +9,16 @@ interface User {
 
 interface ChatUserSelectionProps {
     users: User[];
+    currentUser: User;
     onUserSelect: (selectedUser: User) => void;
-    closeChatUserSelectionModal: () => void;
+    closeChatUserSelectionModal: () => void; // 이 부분 추가
 }
+
+const userId = sessionStorage.getItem('userId');
 
 const ChatUserSelection: React.FC<ChatUserSelectionProps> = ({
     users,
+    currentUser,
     onUserSelect,
     closeChatUserSelectionModal,
 }) => {
@@ -24,9 +28,11 @@ const ChatUserSelection: React.FC<ChatUserSelectionProps> = ({
         const isUserSelected = selectedUsers.some((selectedUser) => selectedUser.id === user.id);
 
         if (isUserSelected) {
+            // 사용자 선택 해제
             const updatedSelectedUsers = selectedUsers.filter((selectedUser) => selectedUser.id !== user.id);
             setSelectedUsers(updatedSelectedUsers);
         } else {
+            // 사용자 선택
             setSelectedUsers([...selectedUsers, user]);
         }
     };
@@ -37,33 +43,37 @@ const ChatUserSelection: React.FC<ChatUserSelectionProps> = ({
 
         if (selectedUsers.length === 1) {
             const chatName = `1:1 Chat with ${selectedUsers[0].name}`;
-            // 선택한 사용자와의 채팅 시작 로직 수행
+            const usersList = [currentUser.id, selectedUsers[0].id]; // 현재 사용자와 선택한 사용자
+            const isPrivate = true; // 1:1 채팅은 비공개
+
+            // chatName, usersList 및 isPrivate을 사용하여 채팅 생성 로직 수행
+            // 이후 채팅 페이지로 이동하도록 구현해야 합니다.
+            // 채팅 생성 및 페이지 이동 로직을 추가하십시오.
             console.log('Start 1:1 chat with:', selectedUsers[0]);
         } else {
             // 여러 사용자와의 오픈 채팅 생성 논리 구현
             // 여러 사용자 선택 시 다른 로직을 구현하셔야 합니다.
         }
-
-        // 채팅 로직 실행 후 모달 닫기
-        closeChatUserSelectionModal();
     };
 
     return (
         <UserSelectionContainer>
             <h2>채팅할 사용자 선택</h2>
             <UserList>
-                {users.map((user) => (
-                    <UserItem
-                        key={user.id}
-                        onClick={() => handleUserSelect(user)}
-                        selected={selectedUsers.some((selectedUser) => selectedUser.id === user.id)}
-                    >
-                        <UserImg src={user.picture} alt={user.name} />
-                        <UserInfo>
-                            <h3>{user.name}</h3>
-                        </UserInfo>
-                    </UserItem>
-                ))}
+                {users
+                    .filter((user) => user.id !== currentUser.id) // 현재 로그인한 사용자 제외
+                    .map((user) => (
+                        <UserItem
+                            key={user.id}
+                            onClick={() => handleUserSelect(user)}
+                            selected={selectedUsers.some((selectedUser) => selectedUser.id === user.id)}
+                        >
+                            <UserImg src={user.picture} alt={user.name} />
+                            <UserInfo>
+                                <h3>{user.name}</h3>
+                            </UserInfo>
+                        </UserItem>
+                    ))}
             </UserList>
             {selectedUsers.length > 0 && (
                 <StartChatButton onClick={startChat}>채팅하기</StartChatButton>
@@ -72,11 +82,10 @@ const ChatUserSelection: React.FC<ChatUserSelectionProps> = ({
     );
 };
 
+
 const UserSelectionContainer = styled.div`
     padding: 1rem;
     background-color: #f5f5f5;
-    max-height: 70vh;  // 높이 제한을 둘 수 있습니다.
-    overflow-y: auto;  // 스크롤 활성화
 `;
 
 const UserList = styled.div`
@@ -122,3 +131,4 @@ const StartChatButton = styled.button`
 `;
 
 export default ChatUserSelection;
+
