@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import { chattingIdState } from '../../states/atom';
 import styled from 'styled-components';
 import inviteImg from '../../assets/icons/invite.png';
+import GameChatting from '../../components/template/GameChatting';
 
 const GameRoom = () => {
   const { id } = useParams();
@@ -38,9 +39,11 @@ const GameRoom = () => {
         </BtnGroup>
       </RoomHeader>
 
-      <div style={{ padding: 20, textAlign: 'center' }}>
+      <RoomMain>
         <Drawing />
-      </div>
+
+        <GameChatting />
+      </RoomMain>
       <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
     </Game>
   );
@@ -117,6 +120,21 @@ const InviteImage = styled.img`
   left: 20px;
   width: 22px;
   height: 22px;
+`;
+
+const RoomMain = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
+
+const Chatting = styled.div`
+  width: 370px;
+  height: 450px;
+  background-color: teal;
+  border-radius: 15px;
+  text-align: center;
+  color: #fff;
 `;
 
 export default GameRoom;

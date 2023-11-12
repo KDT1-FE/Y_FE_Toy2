@@ -27,10 +27,10 @@ const Drawing = () => {
     const canvas = canvasRef.current; // 캔버스 Ref
     if (canvas && !contextRef.current) {
       // 최초 마운트 시에만 실행
-      canvas.width = 700;
-      canvas.height = 400;
-      canvas.style.width = '700px';
-      canvas.style.height = '400px';
+      canvas.width = 800;
+      canvas.height = 450;
+      canvas.style.width = '800px';
+      canvas.style.height = '450px';
       canvas.style.backgroundColor = 'white';
 
       // 그리기
@@ -64,7 +64,7 @@ const Drawing = () => {
     const ctx = canvas?.getContext('2d');
 
     ctx!.fillStyle = 'white';
-    ctx!.fillRect(0, 0, 700, 400);
+    ctx!.fillRect(0, 0, 800, 450);
     drawSocket.emit('erase');
   };
 
@@ -177,7 +177,7 @@ const Drawing = () => {
       const ctx = contextRef.current;
       if (!ctx) return;
       ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, 700, 400);
+      ctx.fillRect(0, 0, 800, 450);
     };
 
     drawSocket.on('drawing', onDrawingEvent);
@@ -249,13 +249,13 @@ const Drawing = () => {
 const DrawingBox = styled.div``;
 
 const DrawingCanvas = styled.div`
-  width: 700px;
-  height: 400px;
+  width: 800px;
+  height: 450px;
   position: relative;
   .canvas {
     border: 2px solid #4fd1c5;
     margin: 0 auto;
-    border-radius: 5px;
+    border-radius: 15px;
   }
 `;
 
@@ -264,7 +264,7 @@ const DrawingTools = styled.div`
   bottom: 0;
   width: 100%;
   height: 60px;
-  border-radius: 0 0 5px 5px;
+  border-radius: 0 0 15px 15px;
   background-color: #4fd1c5;
   display: flex;
   justify-content: space-around;
