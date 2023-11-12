@@ -48,13 +48,16 @@ function Openchat() {
 
   useEffect(() => {
     fetchingData();
+  }, [fetchingData]);
+
+  useEffect(() => {
     if (selectedId) {
       (async () => {
         const res = await privateApi.get('users');
         setAllUsers(res.data);
       })();
     }
-  }, [fetchingData, location.key, selectedId]);
+  }, [selectedId]);
 
   if (isQuering) {
     return (
