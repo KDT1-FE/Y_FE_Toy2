@@ -95,7 +95,7 @@ export default function ChatingPage() {
         socket.emit('fetch-messages');
 
         socket.on('messages-to-client', (messageObject) => {
-            setMessages(messageObject.messages);
+            setMessages(messageObject.messages.reverse());
         });
 
         socket.on('message-to-client', (messageObject) => {
@@ -123,6 +123,7 @@ export default function ChatingPage() {
     };
 
     console.log(users);
+    console.log(messages);
 
     return (
         <main>

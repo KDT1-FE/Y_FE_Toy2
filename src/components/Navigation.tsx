@@ -18,8 +18,6 @@ export default function Navigation() {
     const pathname = usePathname();
     const path = pathname.split('/')[1];
 
-    console.log(path);
-
     return (
         <NavigationContainer>
             <NavigationBox>
