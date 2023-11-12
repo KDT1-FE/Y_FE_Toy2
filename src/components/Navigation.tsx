@@ -2,33 +2,41 @@
 
 import styled from 'styled-components';
 // svg 가져오기
-import userSvg from '../../public/assets/user.svg';
-import mychatSvg from '../../public/assets/mychats.svg';
-import allChatSvg from '../../public/assets/allchats.svg';
-import mypageSvg from '../../public/assets/mypage.svg';
+import usersSvg from '../../public/assets/naviUsers.svg';
+import mychatsSvg from '../../public/assets/naviMychats.svg';
+import allChatsSvg from '../../public/assets/naviAllchats.svg';
+import mypageSvg from '../../public/assets/naviMypage.svg';
+import usersActiveSvg from '../../public/assets/naviUsersActive.svg';
+import mychatsActiveSvg from '../../public/assets/naviMychatsActive.svg';
+import allChatsActiveSvg from '../../public/assets/naviAllchatsActive.svg';
+import mypageActiveSvg from '../../public/assets/naviMypageActive.svg';
+import { usePathname } from 'next/navigation';
+
 export default function Navigation() {
     const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+
+    const pathname = usePathname();
+    const path = pathname.split('/')[1];
+
     return (
         <NavigationContainer>
             <NavigationBox>
                 <NavigationAnchor href="users">
-                    <UserIcon />
+                    {path == 'users' ? <UsersActiveIcon /> : <UsersIcon />}
                 </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
                 <NavigationAnchor href="mychats">
-                    <MyChatIcon />
+                    {path == 'mychats' ? <MyChatsActiveIcon /> : <MyChatsIcon />}
                 </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
                 <NavigationAnchor href="allchats">
-                    <AllChatsIcon />
+                    {path == 'allchats' ? <AllChatsActiveIcon /> : <AllChatsIcon />}
                 </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">
-                    <MyPageIcon />
-                </NavigationAnchor>
+                <NavigationAnchor href="#">{path == 'mypage' ? <MyPageActiveIcon /> : <MyPageIcon />}</NavigationAnchor>
             </NavigationBox>
         </NavigationContainer>
     );
@@ -43,7 +51,7 @@ const NavigationContainer = styled.div`
 
     display: flex;
 
-    background-color: #00956e;
+    background-color: #fff;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
@@ -67,18 +75,34 @@ const NavigationAnchor = styled.a`
     }
 `;
 
-const UserIcon = styled(userSvg)`
+const UsersIcon = styled(usersSvg)`
     cursor: pointer;
 `;
 
-const MyChatIcon = styled(mychatSvg)`
+const UsersActiveIcon = styled(usersActiveSvg)`
     cursor: pointer;
 `;
 
-const AllChatsIcon = styled(allChatSvg)`
+const MyChatsIcon = styled(mychatsSvg)`
+    cursor: pointer;
+`;
+
+const MyChatsActiveIcon = styled(mychatsActiveSvg)`
+    cursor: pointer;
+`;
+
+const AllChatsIcon = styled(allChatsSvg)`
+    cursor: pointer;
+`;
+
+const AllChatsActiveIcon = styled(allChatsActiveSvg)`
     cursor: pointer;
 `;
 
 const MyPageIcon = styled(mypageSvg)`
+    cursor: pointer;
+`;
+
+const MyPageActiveIcon = styled(mypageActiveSvg)`
     cursor: pointer;
 `;

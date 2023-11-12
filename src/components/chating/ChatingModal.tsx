@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
 import { useRouter } from 'next/navigation';
+import InviteImg from '../../../public/assets/InviteImg.svg';
 
 interface User {
     username: string;
@@ -33,7 +34,12 @@ export default function ChatingModal(props: any) {
 
     return (
         <>
-            <ModalWrapper style={{ display: `${modalToggle ? 'block' : 'none'}` }}>
+            <ModalWrapper
+                style={{
+                    opacity: `${modalToggle ? '1' : '0'}`,
+                    transform: `${modalToggle ? 'translateZ(0)' : 'translate3d(100%, 0, 0)'}`,
+                }}
+            >
                 <ModalTitle>대화상대</ModalTitle>
                 {props.users ? (
                     <UsersWrapper>
@@ -43,6 +49,10 @@ export default function ChatingModal(props: any) {
                                 <UserName>{user.username}</UserName>
                             </UserWrapper>
                         ))}
+                        <UserInviteWrapper>
+                            <UserInviteImg />
+                            <UserInviteName>초대하기</UserInviteName>
+                        </UserInviteWrapper>
                     </UsersWrapper>
                 ) : (
                     ''
@@ -58,35 +68,15 @@ export default function ChatingModal(props: any) {
             </ModalWrapper>
 
             <ModalBackground
-                style={{ display: `${modalToggle ? 'block' : 'none'}` }}
+                style={{
+                    visibility: `${modalToggle ? 'visible' : 'hidden'}`,
+                    opacity: `${modalToggle ? '1' : '0'}`,
+                }}
                 onClick={() => setModalToggle(!modalToggle)}
             ></ModalBackground>
         </>
     );
 }
-
-const ModalMove = keyframes`
-        0% {
-            opacity: 0;
-            transform: translate3d(100%, 0, 0);
-        }
-        to {
-            opacity: 1;
-            transform: translateZ(0);
-        }
-
-`;
-
-const ModalBackgroundFade = keyframes`
-    0% {
-            opacity: 0;
-
-        }
-        to {
-            opacity: 1;
-
-        }
-`;
 
 const ModalBackground = styled.div`
     width: 100%;
@@ -96,7 +86,8 @@ const ModalBackground = styled.div`
     z-index: 2;
 
     background-color: rgba(0, 0, 0, 0.2);
-    animation: ${ModalBackgroundFade} 0.5s;
+
+    transition: all 0.5s;
 `;
 
 const ModalWrapper = styled.div`
@@ -110,7 +101,7 @@ const ModalWrapper = styled.div`
 
     z-index: 3;
 
-    animation: ${ModalMove} 0.5s;
+    transition: 0.5s;
 `;
 
 const ModalTitle = styled.div`
@@ -125,6 +116,9 @@ const ModalTitle = styled.div`
 
 const UsersWrapper = styled.div`
     width: 100%;
+    height: 80%;
+
+    overflow: scroll;
     padding-left: 30px;
     padding-top: 30px;
 `;
@@ -148,6 +142,31 @@ const UserImg = styled.img`
 const UserName = styled.div`
     font-size: 24px;
     margin-left: 10px;
+`;
+
+const UserInviteWrapper = styled.div`
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 20px;
+`;
+
+const UserInviteImg = styled(InviteImg)`
+    width: 50px;
+    height: 50px;
+
+    border-radius: 25px;
+    cursor: pointer;
+`;
+
+const UserInviteName = styled.div`
+    font-size: 24px;
+    margin-left: 10px;
+
+    color: #00956e;
+    cursor: pointer;
 `;
 
 const ChatingLeave = styled.div`
