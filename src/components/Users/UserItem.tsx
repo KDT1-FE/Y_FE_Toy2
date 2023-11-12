@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import UserProfileModal from './UserProfileModal';
 import { BiSolidCircle } from 'react-icons/bi';
+import React from 'react';
 
 interface User {
     id: string;
@@ -16,10 +17,16 @@ interface ConnectUserIdList {
     users: string[];
 }
 
-export const UserItem = ({ user, connectUserIdList }: { user: User; connectUserIdList: ConnectUserIdList }) => {
+interface UserItemProps {
+    user: User;
+    connectUserIdList: ConnectUserIdList;
+}
+
+const UserItem = ({ user, connectUserIdList }: UserItemProps) => {
     const { name, picture, id } = user;
     const [showModal, setShowModal] = useState(false);
     const clickModal = () => setShowModal(!showModal);
+
     return (
         <>
             <User onClick={clickModal}>
@@ -36,10 +43,14 @@ export const UserItem = ({ user, connectUserIdList }: { user: User; connectUserI
                     </UserState>
                 </UserInfo>
             </User>
-            {showModal && <UserProfileModal clickModal={clickModal} user={user} />}
+            {showModal && (
+                <UserProfileModal clickModal={clickModal} user={user} connectUserIdList={connectUserIdList} />
+            )}
         </>
     );
 };
+
+export default React.memo(UserItem);
 
 const User = styled.div`
     display: flex;

@@ -1,11 +1,12 @@
 'use client';
-import { UserItem } from '@/components/Users/UserItem';
+import UserItem from '@/components/Users/UserItem';
 import { instance } from '@/lib/api';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { MdClose, MdSearch } from 'react-icons/md';
 import Navigation from '@/components/Navigation';
 import { io } from 'socket.io-client';
+import React from 'react';
 
 interface User {
     id: string;
@@ -19,7 +20,7 @@ interface ConnectUserIdList {
     users: string[];
 }
 
-export default function Users() {
+const Users = () => {
     const [users, setUsers] = useState<User[] | []>([]);
     const [loading, setLoading] = useState(true);
 
@@ -40,16 +41,19 @@ export default function Users() {
 
     /**사용자 검색 */
     const [userInput, setUserInput] = useState('');
-    const getInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const getInputValue = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setUserInput(e.target.value);
-    };
+    }, []);
     const searched = users.filter((user) => user.name.includes(userInput));
 
-    const clearSearchInput = () => {
+    const clearSearchInput = React.useCallback(() => {
         setUserInput('');
-    };
+    }, []);
 
     /** 접속 상태 */
+    const connectUserIdListRef = useRef<ConnectUserIdList>({
+        users: [],
+    });
     const [connectUserIdList, setConnectUserIdList] = useState<ConnectUserIdList>({ users: [] });
     const accessToken = sessionStorage.getItem('accessToken');
 
@@ -61,18 +65,15 @@ export default function Users() {
     });
 
     useEffect(() => {
-        const accessSocket = (usersIdList: ConnectUserIdList) => {
-            if (JSON.stringify(connectUserIdList.users) !== JSON.stringify(usersIdList.users)) {
+        socket.on('users-server-to-client', (usersIdList) => {
+            if (JSON.stringify(usersIdList.users) !== JSON.stringify(connectUserIdListRef.current.users)) {
+                connectUserIdListRef.current = usersIdList;
                 setConnectUserIdList(usersIdList);
-                console.log('Users페이지', usersIdList);
             }
-        };
-        socket.on('users-server-to-client', accessSocket);
+            console.log(usersIdList);
+        });
+    }, []);
 
-        return () => {
-            socket.off('users-server-to-client', accessSocket);
-        };
-    }, [connectUserIdList]);
     return (
         <>
             <UsersWrap>
@@ -107,7 +108,9 @@ export default function Users() {
             <Navigation />
         </>
     );
-}
+};
+
+export default React.memo(Users);
 
 const UsersWrap = styled.div`
     padding: 3rem;

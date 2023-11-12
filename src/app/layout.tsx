@@ -3,8 +3,22 @@
 import styled from 'styled-components';
 import StyledComponentsRegistry from '../lib/registry';
 import { RecoilRoot } from 'recoil';
+import { useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    const socket = io(`https://fastcampus-chat.net/server`, {
+        extraHeaders: {
+            Authorization: `Bearer ${accessToken}`,
+            serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+        },
+    });
+
+    useEffect(() => {
+        socket.emit('users-server');
+    }, []);
     return (
         <RecoilRoot>
             <html lang="en">

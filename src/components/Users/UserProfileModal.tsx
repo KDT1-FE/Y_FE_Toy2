@@ -2,9 +2,9 @@
 import styled from 'styled-components';
 import { ImBubble } from 'react-icons/im';
 import { MdClose } from 'react-icons/md';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { BiSolidCircle } from 'react-icons/bi';
 
 // types 폴더 나중에 만들어서 type 빼놓기
 interface User {
@@ -15,19 +15,21 @@ interface User {
     chats: string[];
 }
 
+interface ConnectUserIdList {
+    users: string[];
+}
+
 interface UserProfileModalProps {
     clickModal: () => void;
     user: User;
-    newChatId: string | null;
+    connectUserIdList: ConnectUserIdList;
 }
 
-const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: User }) => {
+const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileModalProps) => {
     const router = useRouter();
 
     const [newChatId, setNewChatId] = useState<string | null>(null);
 
-    //사용할 때 eslint 주석 삭제
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, name, picture } = user;
     const accessToken = sessionStorage.getItem('accessToken');
     const userId = sessionStorage.getItem('userId');
@@ -76,8 +78,17 @@ const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: 
                     <UserImg src={picture} />
                     <UserInfo>
                         <UserName>{name}</UserName>
-                        {/* 접속 상태 추후 개발필요. 현재는 하드코딩 */}
-                        <p>online</p>
+                        <UserState>
+                            <BiSolidCircle
+                                size="13"
+                                color={connectUserIdList.users.includes(id) ? '#00956e' : '#950000'}
+                            />
+                            {connectUserIdList.users.includes(id) ? (
+                                <UserStateTextBlack>online</UserStateTextBlack>
+                            ) : (
+                                <UserStateText>offline</UserStateText>
+                            )}
+                        </UserState>
                     </UserInfo>
                     <ToChating onClick={handleChatClick}>
                         <ImBubble size="40" className="chatIcon" />
@@ -186,4 +197,18 @@ const ToChating = styled.div`
 
 const ChatText = styled.p`
     font-weight: 500;
+`;
+
+const UserState = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+`;
+
+const UserStateText = styled.p`
+    color: #9a9a9a;
+`;
+
+const UserStateTextBlack = styled.p`
+    color: black;
 `;
