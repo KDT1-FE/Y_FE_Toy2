@@ -14,6 +14,7 @@ import UserLogout from '../login/userLogout';
 import CheckPrivateChat from '../../components/layout/checkPrivateChat';
 import MyUserData from '../../components/layout/MyUserData';
 import UserProfile from '../../components/template/userProfile';
+import { controlLobbyReload, controlBack } from '../../hooks/leaveHandle';
 
 const GameLobby = () => {
   const setAccessToken = useSetRecoilState(accessTokenState); // hook 규칙으로 함수 외부에있어야함
