@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -22,20 +23,38 @@ import OpenchatCreate from '../components/openchat/OpenchatCreate';
 import { privateApi } from '../libs/axios';
 import { UserSimple } from '../types/User';
 import useQueryOpenchats from '../hooks/useQueryOpenchats';
+import { filterCateOpenChats } from '../utils/filterOpenChats';
+import { animal, hobby, sports } from '../types/Openchat';
 
 function Openchat() {
+  const location = useLocation();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [allUsers, setAllUsers] = useState<UserSimple[]>([]);
-  const { isQuering, openchats } = useQueryOpenchats();
+  const { isQuering, openchats, myOpenChat, fetchingData } =
+    useQueryOpenchats();
+
+  const hobbyChats = useMemo(
+    () => filterCateOpenChats(openchats ?? [], hobby),
+    [openchats],
+  );
+  const sportsChats = useMemo(
+    () => filterCateOpenChats(openchats ?? [], sports),
+    [openchats],
+  );
+  const animalChats = useMemo(
+    () => filterCateOpenChats(openchats ?? [], animal),
+    [openchats],
+  );
 
   useEffect(() => {
+    fetchingData();
     if (selectedId) {
       (async () => {
         const res = await privateApi.get('users');
         setAllUsers(res.data);
       })();
     }
-  }, [selectedId]);
+  }, [fetchingData, location.key, selectedId]);
 
   if (isQuering) {
     return (
@@ -82,35 +101,35 @@ function Openchat() {
           </OpenchatCreateChatBtn>
         </Box>
         <OpenchatBox id="my-chat">
-          <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
+          <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
             <Typography variant="h5" mb={3}>
               📣 내 오픈채팅방
             </Typography>
-            <OpenchatCategory isMyChat />
+            <OpenchatCategory isMyChat openchats={myOpenChat} />
           </Box>
         </OpenchatBox>
         <OpenchatBox id="hobby">
-          <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
+          <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
             <Typography variant="h5" mb={3}>
               🎮 취미/문화
             </Typography>
-            <OpenchatCategory />
+            <OpenchatCategory openchats={hobbyChats} />
           </Box>
         </OpenchatBox>
         <OpenchatBox id="sports">
-          <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
+          <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
             <Typography variant="h5" mb={3}>
               ⛳ 운동/스포츠
             </Typography>
-            <OpenchatCategory />
+            <OpenchatCategory openchats={sportsChats} />
           </Box>
         </OpenchatBox>
         <OpenchatBox id="animal">
-          <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
+          <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
             <Typography variant="h5" mb={3}>
               🐶 동물/식물
             </Typography>
-            <OpenchatCategory />
+            <OpenchatCategory openchats={animalChats} />
           </Box>
         </OpenchatBox>
       </Container>
@@ -118,6 +137,7 @@ function Openchat() {
         selectedId={selectedId}
         setSelectedId={setSelectedId}
         allUsers={allUsers}
+        fetchingData={fetchingData}
       />
     </OpenchatContainer>
   );

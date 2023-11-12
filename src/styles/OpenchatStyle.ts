@@ -33,14 +33,17 @@ export const OpenchatRoom = styled(Box)(({ theme }) => ({
   backgroundColor: [theme.palette.common.white],
   padding: '1rem',
   display: 'flex',
-  [theme.breakpoints.down('sm')]: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-  },
+  // [theme.breakpoints.down('sm')]: {
+  //   flexDirection: 'column',
+  //   justifyContent: 'flex-start',
+  //   alignItems: 'flex-start',
+  // },
   justifyContent: 'space-between',
-  '.openchat__room-avatar': { flex: 0 },
-  '.openchat__room-info': {
+  '& .openchat__room-avatar': {
+    width: '3.75rem',
+    '& img': { verticalAlign: 'top' },
+  },
+  '& .openchat__room-info': {
     flex: 1,
     display: 'flex',
     justifyContent: 'space-between',
@@ -49,14 +52,14 @@ export const OpenchatRoom = styled(Box)(({ theme }) => ({
       marginTop: '10px',
     },
   },
-  '.openchat__room-desc': {
+  '& .openchat__room-desc': {
     flex: 4,
     margin: '0 0.8rem',
     [theme.breakpoints.down('sm')]: {
       margin: '0 4px',
     },
   },
-  '.openchat__room-btn': { flex: 1 },
+  '& .openchat__room-btn': { flex: 1 },
 }));
 
 export const OpenchatCreateChatBtn = styled(motion.div)(({ theme }) => ({
@@ -116,3 +119,37 @@ export const OpenchatCreateChatModal = styled(motion.div)(({ theme }) => ({
     marginRight: '6px',
   },
 }));
+
+export const OpenchatAvatarWrap = styled('div')({
+  position: 'relative',
+  margin: 'auto',
+  width: '3.75rem',
+  height: '3.75rem',
+  overflow: 'hidden',
+  userSelect: 'none',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: `url("data:image/svg+xml,%3csvg width='88px' height='88px' viewBox='0 0 88 88' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cpath d='M44%2c0.5 C59.8650505%2c0.5 70.7664452%2c3.40244096 77.6820021%2c10.3179979 C84.597559%2c17.2335548 87.5%2c28.1349495 87.5%2c44 C87.5%2c59.8650505 84.597559%2c70.7664452 77.6820021%2c77.6820021 C70.7664452%2c84.597559 59.8650505%2c87.5 44%2c87.5 C28.1349495%2c87.5 17.2335548%2c84.597559 10.3179979%2c77.6820021 C3.40244096%2c70.7664452 0.5%2c59.8650505 0.5%2c44 C0.5%2c28.1349495 3.40244096%2c17.2335548 10.3179979%2c10.3179979 C17.2335548%2c3.40244096 28.1349495%2c0.5 44%2c0.5 Z' fill='none' stroke='rgba(0,0,0,0.08)'%3e%3c/path%3e%3c/svg%3e")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+  },
+  '& .svg-profile': {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+  },
+  '& .default-txt': {
+    fontSize: '2em',
+    fill: '#fff',
+  },
+
+  '& .default-bg': {
+    width: '100%',
+    height: '100%',
+  },
+});

@@ -30,6 +30,7 @@ export const ChatInfoConverter: FirestoreDataConverter<ChatInfo> = {
     isPrivate: docData.isPrivate,
     updatedAt: docData.updatedAt,
     hashtags: docData.hashtags,
+    image: docData.image,
   }),
   fromFirestore: (
     snapshot: QueryDocumentSnapshot,
