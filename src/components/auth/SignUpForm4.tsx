@@ -22,9 +22,9 @@ export const tags = {
     { name: 'Cooking', tag: '요리' },
     { name: 'Movie', tag: '영화감상' },
     { name: 'Gaming', tag: '게임' },
-    { name: 'Drawing', tag: '그림' },
+    { name: 'Study', tag: '스터디' },
     { name: 'Book', tag: '독서' },
-    { name: 'Painting', tag: '그림' },
+    { name: 'Painting', tag: '그림그리기' },
   ],
   sports: [
     { name: 'Exercise', tag: '운동' },

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Box,
   Button,
@@ -22,11 +22,33 @@ import OpenchatCreate from '../components/openchat/OpenchatCreate';
 import { privateApi } from '../libs/axios';
 import { UserSimple } from '../types/User';
 import useQueryOpenchats from '../hooks/useQueryOpenchats';
+import {
+  filterCateOpenChats,
+  filterMyOpenChats,
+} from '../utils/filterOpenChats';
+import { animal, hobby, sports } from '../types/Openchat';
 
 function Openchat() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [allUsers, setAllUsers] = useState<UserSimple[]>([]);
   const { isQuering, openchats } = useQueryOpenchats();
+
+  const myOpenChat = useMemo(
+    () => filterMyOpenChats(openchats ?? []),
+    [openchats],
+  );
+  const hobbyChats = useMemo(
+    () => filterCateOpenChats(openchats ?? [], hobby),
+    [openchats],
+  );
+  const sportsChats = useMemo(
+    () => filterCateOpenChats(openchats ?? [], sports),
+    [openchats],
+  );
+  const animalChats = useMemo(
+    () => filterCateOpenChats(openchats ?? [], animal),
+    [openchats],
+  );
 
   useEffect(() => {
     if (selectedId) {
@@ -82,35 +104,35 @@ function Openchat() {
           </OpenchatCreateChatBtn>
         </Box>
         <OpenchatBox id="my-chat">
-          <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
+          <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
             <Typography variant="h5" mb={3}>
               📣 내 오픈채팅방
             </Typography>
-            <OpenchatCategory isMyChat />
+            <OpenchatCategory isMyChat openchats={myOpenChat} />
           </Box>
         </OpenchatBox>
         <OpenchatBox id="hobby">
-          <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
+          <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
             <Typography variant="h5" mb={3}>
               🎮 취미/문화
             </Typography>
-            <OpenchatCategory />
+            <OpenchatCategory openchats={hobbyChats} />
           </Box>
         </OpenchatBox>
         <OpenchatBox id="sports">
-          <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
+          <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
             <Typography variant="h5" mb={3}>
               ⛳ 운동/스포츠
             </Typography>
-            <OpenchatCategory />
+            <OpenchatCategory openchats={sportsChats} />
           </Box>
         </OpenchatBox>
         <OpenchatBox id="animal">
-          <Box bgcolor="white" p={2} sx={{ minHeight: '400px' }}>
+          <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
             <Typography variant="h5" mb={3}>
               🐶 동물/식물
             </Typography>
-            <OpenchatCategory />
+            <OpenchatCategory openchats={animalChats} />
           </Box>
         </OpenchatBox>
       </Container>
