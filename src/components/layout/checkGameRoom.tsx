@@ -26,8 +26,14 @@ const CheckGameRoom = () => {
     if (numberOfPeople === 4) {
       alert('방이 꽉 찼어요.');
     } else {
-      await participateGameRoom(chatId, accessToken);
-      navigate(`/room/:${chatId}`);
+      try {
+        await participateGameRoom(chatId, accessToken);
+        navigate(`/room/:${chatId}`);
+      } catch (error: any) {
+        if (error.response.data.message === 'Chat not found') {
+          alert('방이 사라졌어요');
+        }
+      }
     }
   };
 
