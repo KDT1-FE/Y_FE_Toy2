@@ -5,7 +5,7 @@ import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
 import ExitNotice from '@/components/chat/exitNotice';
 import ChatAlert from '@/components/chat/chatAlert';
-import { Message } from '@/@types/types';
+import { JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
@@ -19,6 +19,7 @@ export default function Chat() {
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
@@ -51,6 +52,14 @@ export default function Chat() {
       setMessages(prevMessages => [...prevMessages, messageObject]);
     });
 
+    socketRef.current.on('join', (messageObject: JoinersData) => {
+      console.log(messageObject, '123123123');
+    });
+
+    socketRef.current.on('leave', (messageObject: LeaverData) => {
+      console.log(messageObject, '123123123');
+    });
+
     return () => {
       socketRef.current?.off('connect');
       socketRef.current?.off('messages-to-client');
@@ -72,27 +81,37 @@ export default function Chat() {
 
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
-    if (message && socketRef.current?.connected) {
+
+    if (!message.trim()) {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+      return;
+    }
+
+    if (socketRef.current?.connected) {
       socketRef.current.emit('message-to-server', message);
       setMessage('');
     }
   };
 
   return (
-    <div className={styles.container}>
+    <>
       <ChatroomHeader chatId={chatId} />
       <div className={styles.container}>
-        <div>
+        <div className={styles.container}>
           <EntryNotice />
-          {messages.map(msg => (
-            <MyChat key={msg.id} msg={msg} />
-          ))}
           <ExitNotice />
+          <div>
+            {messages.map(msg => (
+              <MyChat key={msg.id} msg={msg} />
+            ))}
+          </div>
+          <div ref={messagesEndRef} />
+          {showAlert && <ChatAlert />}
         </div>
-        <div ref={messagesEndRef} />
-        {message.length === 0 && <ChatAlert />}
       </div>
-
       <form className={styles2.footer} onSubmit={handleSendMessage}>
         <input
           type="text"
@@ -107,6 +126,6 @@ export default function Chat() {
           aria-label="Submit"
         />
       </form>
-    </div>
+    </>
   );
 }
