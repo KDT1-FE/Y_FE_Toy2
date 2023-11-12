@@ -171,14 +171,6 @@ const UserJoin = () => {
     }
   };
 
-  const errorMessageStyle = (
-    fieldName: keyof FormData,
-  ): React.CSSProperties => ({
-    visibility: isError[fieldName] ? 'visible' : 'hidden',
-    height: isError[fieldName] ? 'auto' : '100px', // 예시 높이, 실제 필요에 따라 조절
-    overflow: 'hidden',
-  });
-
   return (
     <Flex
       justifyContent={'flex-end'}
@@ -190,13 +182,13 @@ const UserJoin = () => {
         borderRadius={10}
         boxShadow="lg"
         flexDirection={'column'}
-        height={750}
+        height={700}
         width={450}
         justifyContent={'flex-end'}>
         <form onSubmit={handleJoinSubmit}>
           <label
             htmlFor="picture"
-            style={{ cursor: 'pointer', position: 'relative', bottom: 25 }}>
+            style={{ cursor: 'pointer', position: 'relative', bottom: 5 }}>
             <Box
               width={150}
               height={150}
@@ -258,7 +250,8 @@ const UserJoin = () => {
             marginTop={3}
             marginBottom={5}
             marginLeft={7}
-            width={250}>
+            width={250}
+            height={90}>
             <FormLabel>아이디</FormLabel>
             <Input
               placeholder="알파벳만 가능합니다"
@@ -273,11 +266,7 @@ const UserJoin = () => {
               value={formData.id}
               onChange={(e) => setFormData({ ...formData, id: e.target.value })}
             />
-            <FormErrorMessage
-              style={errorMessageStyle('id')}
-              textAlign={'left'}>
-              {errors.id}
-            </FormErrorMessage>
+            <FormErrorMessage textAlign={'left'}>{errors.id}</FormErrorMessage>
           </FormControl>
 
           <FormControl
@@ -285,7 +274,8 @@ const UserJoin = () => {
             isInvalid={isError.name}
             marginBottom={5}
             marginLeft={7}
-            width={250}>
+            width={250}
+            height={90}>
             <FormLabel>닉네임</FormLabel>
             <Input
               placeholder="2자이상 20자 이하로 입력해주세요"
@@ -302,9 +292,7 @@ const UserJoin = () => {
                 setFormData({ ...formData, name: e.target.value })
               }
             />
-            <FormErrorMessage
-              style={errorMessageStyle('name')}
-              textAlign={'left'}>
+            <FormErrorMessage textAlign={'left'}>
               {errors.name}
             </FormErrorMessage>
           </FormControl>
@@ -314,7 +302,8 @@ const UserJoin = () => {
             isInvalid={isError.password}
             marginBottom={5}
             marginLeft={7}
-            width={250}>
+            width={250}
+            height={90}>
             <FormLabel>비밀번호</FormLabel>
             <Input
               placeholder="5자 이상 입력해주세요"
@@ -331,9 +320,7 @@ const UserJoin = () => {
                 setFormData({ ...formData, password: e.target.value })
               }
             />
-            <FormErrorMessage
-              style={errorMessageStyle('password')}
-              textAlign={'left'}>
+            <FormErrorMessage textAlign={'left'}>
               {errors.password}
             </FormErrorMessage>
           </FormControl>
@@ -343,7 +330,8 @@ const UserJoin = () => {
             isInvalid={isError.confirmPassword}
             marginBottom={10}
             marginLeft={7}
-            width={250}>
+            width={250}
+            height={90}>
             <FormLabel>비밀번호 확인</FormLabel>
             <Input
               placeholder="5자 이상 입력해주세요"
@@ -360,9 +348,7 @@ const UserJoin = () => {
                 setFormData({ ...formData, confirmPassword: e.target.value })
               }
             />
-            <FormErrorMessage
-              style={errorMessageStyle('confirmPassword')}
-              textAlign={'left'}>
+            <FormErrorMessage textAlign={'left'}>
               {errors.confirmPassword}
             </FormErrorMessage>
           </FormControl>
