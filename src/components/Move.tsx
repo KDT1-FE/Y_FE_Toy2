@@ -20,7 +20,7 @@ const Container = styled.div`
     position: fixed;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 50%;
+    width: 800px;
     height: 100vh;
     background: rgba(255, 255, 255, 1);
     display: flex;
