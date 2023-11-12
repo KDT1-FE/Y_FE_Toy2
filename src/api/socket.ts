@@ -4,14 +4,11 @@ import { SERVER_URL, SERVER_ID } from '../constant';
 let serverSocket: Socket | null = null;
 let chattingSocket: Socket | null = null;
 
-
 export const loginSocket = (
   accessToken: any,
   onDataReceived: (data: any[]) => void,
 ) => {
-
   serverSocket = io(`${SERVER_URL}server`, {
-
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
       serverId: SERVER_ID,
@@ -20,6 +17,10 @@ export const loginSocket = (
 
   serverSocket.on('connect', () => {
     serverSocket?.emit('users-server');
+  });
+
+  serverSocket.on('error', (error) => {
+    console.error('Socket.IO connection error:', error);
   });
 
   serverSocket.on('users-server-to-client', (data) => {

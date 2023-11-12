@@ -17,6 +17,7 @@ import {
   AlertTitle,
   AlertDescription,
   CloseButton,
+  Fade,
 } from '@chakra-ui/react';
 import { ValidationInput, FormData } from '../../interfaces/interface';
 
@@ -54,6 +55,16 @@ const UserJoin = () => {
     message: '',
     type: '',
   });
+
+  useEffect(() => {
+    // alertc창 5초후에 사라지게 하기
+    if (showAlert.active) {
+      const timer = setTimeout(() => {
+        setShowAlert({ active: false, message: '', type: '' });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert.active]);
 
   const [isHovering, setIsHovering] = useState(false);
 
@@ -162,24 +173,22 @@ const UserJoin = () => {
 
   return (
     <Flex
-      justifyContent={'center'}
+      justifyContent={'flex-end'}
       alignItems={'center'}
       flexDirection={'column'}
-      backgroundColor="#f8fafc"
-      height={'100vh'}>
+      height={900}>
       <Center
-        margin={100}
         backgroundColor={'white'}
         borderRadius={10}
         boxShadow="lg"
         flexDirection={'column'}
+        height={700}
         width={450}
-        height={730}
         justifyContent={'flex-end'}>
         <form onSubmit={handleJoinSubmit}>
           <label
             htmlFor="picture"
-            style={{ cursor: 'pointer', position: 'relative' }}>
+            style={{ cursor: 'pointer', position: 'relative', bottom: 5 }}>
             <Box
               width={150}
               height={150}
@@ -207,18 +216,16 @@ const UserJoin = () => {
               {isHovering && filePreviewUrl && (
                 <Box
                   position="absolute"
-                  top="50%" // 상단에서부터 50% 위치
-                  left="50%" // 좌측에서부터 50% 위치
-                  transform="translate(-50%, -50%)" // 자신의 크기의 절반만큼 이동
+                  transform="translate(0%, -100%)"
                   width={150}
                   height={150}
-                  backgroundColor="rgba(0, 0, 0, 0.5)" // 불투명한 배경
+                  backgroundColor="rgba(0, 0, 0, 0.5)"
                   borderRadius={10}
                   display="flex"
                   justifyContent="center"
                   alignItems="center">
                   <Img
-                    src="public/assets/trashBin.svg" // 쓰레기통 이미지 경로
+                    src="public/assets/trashBin.svg"
                     alt="Delete"
                     width="24px"
                     height="24px"
@@ -241,7 +248,8 @@ const UserJoin = () => {
             marginTop={3}
             marginBottom={5}
             marginLeft={7}
-            width={250}>
+            width={250}
+            height={90}>
             <FormLabel>아이디</FormLabel>
             <Input
               placeholder="알파벳만 가능합니다"
@@ -264,7 +272,8 @@ const UserJoin = () => {
             isInvalid={isError.name}
             marginBottom={5}
             marginLeft={7}
-            width={250}>
+            width={250}
+            height={90}>
             <FormLabel>닉네임</FormLabel>
             <Input
               placeholder="2자이상 20자 이하로 입력해주세요"
@@ -291,7 +300,8 @@ const UserJoin = () => {
             isInvalid={isError.password}
             marginBottom={5}
             marginLeft={7}
-            width={250}>
+            width={250}
+            height={90}>
             <FormLabel>비밀번호</FormLabel>
             <Input
               placeholder="5자 이상 입력해주세요"
@@ -318,7 +328,8 @@ const UserJoin = () => {
             isInvalid={isError.confirmPassword}
             marginBottom={10}
             marginLeft={7}
-            width={250}>
+            width={250}
+            height={90}>
             <FormLabel>비밀번호 확인</FormLabel>
             <Input
               placeholder="5자 이상 입력해주세요"
@@ -367,21 +378,24 @@ const UserJoin = () => {
           </Link>
         </Flex>
       </Center>
-      {showAlert.active && (
-        <Alert status="error" marginBottom={4} width={400} height={500}>
+      <Fade in={showAlert.active}>
+        <Alert marginTop={10} status="error" width={400} height={70}>
           <AlertIcon />
-          <AlertTitle mr={2}>로그인 오류</AlertTitle>
-          <AlertDescription>{showAlert.message}</AlertDescription>
+          <Box>
+            <AlertTitle mr={2}>회원가입 오류</AlertTitle>
+            <AlertDescription>{showAlert.message}</AlertDescription>
+          </Box>
           <CloseButton
             position="absolute"
             right="8px"
             top="8px"
+            cursor="default"
             onClick={() =>
               setShowAlert({ active: false, message: '', type: '' })
             }
           />
         </Alert>
-      )}
+      </Fade>
     </Flex>
   );
 };

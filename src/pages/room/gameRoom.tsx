@@ -8,6 +8,7 @@ import { chattingIdState } from '../../states/atom';
 import styled from 'styled-components';
 import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
+import CheckUser from '../../components/template/CheckUser';
 
 const GameRoom = () => {
   const { id } = useParams();
@@ -44,7 +45,8 @@ const GameRoom = () => {
 
         <GameChatting />
       </RoomMain>
-      <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
+      {/* <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom> */}
+      <CheckUser />
     </Game>
   );
 };
@@ -58,7 +60,7 @@ const Game = styled.div`
 const RoomHeader = styled.div`
   display: flex;
   justify-content: end;
-  margin-top: 40px;
+  margin-top: 30px;
 `;
 
 const RoomInfo = styled.div`
