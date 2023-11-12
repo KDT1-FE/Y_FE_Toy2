@@ -91,17 +91,20 @@ const CheckPrivateChat = () => {
 
   return (
     <>
-      {allMyChat.map((element, index) => (
-        <div key={index}>
-          <div onClick={() => handleChatDetailModal(element.id)}>
-            <p>{element.latestMessage.text}</p>
-            {element.users.some((user: any) => user.isOnline) && <p>온라인</p>}
-            {element.users.length > 0 && <p>{element.users[0].username}</p>}
-            {element.users.length > 0 && <p>{element.users[0].picture}</p>}
+      {allMyChat.length > 0 &&
+        allMyChat.map((element, index) => (
+          <div key={index}>
+            <div onClick={() => handleChatDetailModal(element.id)}>
+              <p>{element.latestMessage.text}</p>
+              {element.users.some((user: any) => user.isOnline) && (
+                <p>온라인</p>
+              )}
+              {element.users.length > 0 && <p>{element.users[0].username}</p>}
+              {element.users.length > 0 && <p>{element.users[0].picture}</p>}
+            </div>
+            {chatModals[element.id] && <ChattingDetail chatId={element.id} />}
           </div>
-          {chatModals[element.id] && <ChattingDetail chatId={element.id} />}
-        </div>
-      ))}
+        ))}
     </>
   );
 };

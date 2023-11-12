@@ -12,9 +12,9 @@ const OnlineUserList = () => {
 
   return (
     <>
+      <div>OnlineUserList</div>
       {onlineUserListData.map((element, key) => (
         <div key={key}>
-          <div>OnlineUserList</div>
           <p>{element.id}</p>
           <p>{element.name}</p>
           <p>{element.picture}</p>

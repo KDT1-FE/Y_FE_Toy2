@@ -33,7 +33,7 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
-        //console.log('Fetched messages:', messageData.messages);
+        console.log('Fetched messages:', messageData.messages);
 
         // createdAt을 기준으로 시간순서 정렬
         const sortedMessages = sortCreatedAt(messageData.messages);
