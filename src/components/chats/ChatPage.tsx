@@ -1,22 +1,54 @@
 'use client';
-
-import MyChatItem from '@/components/chats/MyChatItem';
+// react 관련 import
 import React, { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+// styled import
 import styled from 'styled-components';
+// chats 컴포넌트 import
+import MyChatItem from '@/components/chats/MyChatItem';
 import SearchMyChat from '@/components/chats/SearchMyChat';
-// svg 가져오기
+// svgr import
 import AddChat from '../../../public/assets/addChat.svg';
-import Search from '../../../public/assets/search.svg';
-import { Chat } from './interfaces';
+import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
 import { instance } from '@/lib/api';
-
+import { useRouter } from 'next/navigation';
+import { sortTime } from './useFormatCreatedAt';
+// import AddChatDropdown from './addChatDropdown';
 const MyChats = ({ userType }: any) => {
-    const [searchOpen, setSearchOpen] = useState(false);
-    const [allChats, setAllChats] = useState<Chat[]>([]);
+    const [addChatOpen, setAddChatOpen] = useState(false);
+    const [allChats, setAllChats] = useRecoilState(allChatsState);
+    const [myChats, setMyChats] = useRecoilState(myChatsState);
+    const filterChats = useRecoilValue(searchChatsState);
+    const router = useRouter();
+    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Cache-Control': 'no-cache',
+    };
 
+    const enterChatRoom = (chat: Chat) => {
+        if (chat.id && chat.users) {
+            router.push(`/chating/${chat.id}`);
+        }
+    };
+
+    const getMyChats = async () => {
+        try {
+            const res = await instance.get<Chat[], any>(`chat`, { headers });
+            if (res) {
+                console.log(res.chats);
+                setMyChats(res.chats);
+            } else {
+                console.log('내 채팅 데이터 조회 실패');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
     const getAllChats = async () => {
         try {
-            const res = await instance.get<Chat[], any>('chat/all');
+            const res = await instance.get<Chat[], any>(`chat/all`, { headers });
             setAllChats(res.chats);
         } catch (error) {
             console.error(error);
@@ -24,30 +56,64 @@ const MyChats = ({ userType }: any) => {
     };
 
     useEffect(() => {
-        getAllChats();
-    }, []);
-    // 확인용
-    // useEffect(() => {
-    //     console.log(allChats);
-    // }, [allChats]);
+        if (userType === 'my') {
+            getMyChats();
+        } else {
+            getAllChats();
+        }
 
-    const onSearchHandler = () => {
-        setSearchOpen(!searchOpen);
+        const intervalId = setInterval(() => {
+            if (userType === 'my') {
+                getMyChats();
+                console.log('내 채팅 조회 성공');
+            } else {
+                getAllChats();
+                console.log('모든 채팅 조회 성공');
+            }
+        }, 5000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
+
+    const onAddHandler = () => {
+        setAddChatOpen(!addChatOpen);
     };
+
     return (
         <Wrapper>
-            <Header>
+            <ChatHeader>
                 <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
                 <IconBar>
-                    <SearchIcon onClick={onSearchHandler} />
-                    <AddChatIcon />
+                    <AddChatIcon onClick={onAddHandler} />
                 </IconBar>
-            </Header>
+            </ChatHeader>
             <ChatContainer>
-                {searchOpen ? <SearchMyChat /> : null}
-                {allChats.map((chat) => (
-                    <MyChatItem key={chat.id} name={chat.name} latestMessage={chat.latestMessage} users={chat.users} />
-                ))}
+                <SearchMyChat />
+                {userId
+                    ? filterChats.length > 0
+                        ? sortTime(filterChats).map((chat) => (
+                              <MyChatItem
+                                  key={chat.id}
+                                  name={chat.name}
+                                  latestMessage={chat.latestMessage}
+                                  users={chat.users}
+                                  onClick={() => enterChatRoom(chat)}
+                                  isPrivate={chat.isPrivate}
+                              />
+                          ))
+                        : sortTime(userType === 'my' ? myChats : allChats).map((chat) => (
+                              <MyChatItem
+                                  key={chat.id}
+                                  name={chat.name}
+                                  latestMessage={chat.latestMessage}
+                                  users={chat.users}
+                                  onClick={() => enterChatRoom(chat)}
+                                  isPrivate={chat.isPrivate}
+                              />
+                          ))
+                    : null}
             </ChatContainer>
         </Wrapper>
     );
@@ -55,16 +121,15 @@ const MyChats = ({ userType }: any) => {
 
 export default MyChats;
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
     width: 100%;
-    margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* height: 100vh; */
 `;
 
-const Header = styled.div`
+const ChatHeader = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 4rem 2rem 1rem;
@@ -79,11 +144,9 @@ const IconBar = styled.div`
     display: flex;
     gap: 1.5rem;
 `;
-const SearchIcon = styled(Search)`
-    cursor: pointer;
-`;
 
 const AddChatIcon = styled(AddChat)`
+    position: relative;
     cursor: pointer;
 `;
 
@@ -93,4 +156,5 @@ const ChatContainer = styled.div`
     justify-content: center;
     text-align: center;
     margin: 2rem;
+    background-color: transparent;
 `;

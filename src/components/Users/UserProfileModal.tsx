@@ -2,7 +2,9 @@
 import styled from 'styled-components';
 import { ImBubble } from 'react-icons/im';
 import { MdClose } from 'react-icons/md';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { BiSolidCircle } from 'react-icons/bi';
 
 // types 폴더 나중에 만들어서 type 빼놓기
 interface User {
@@ -13,10 +15,59 @@ interface User {
     chats: string[];
 }
 
-const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: User }) => {
-    //사용할 때 eslint 주석 삭제
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface ConnectUserIdList {
+    users: string[];
+}
+
+interface UserProfileModalProps {
+    clickModal: () => void;
+    user: User;
+    connectUserIdList: ConnectUserIdList;
+}
+
+const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileModalProps) => {
+    const router = useRouter();
+
+    const [newChatId, setNewChatId] = useState<string | null>(null);
+
     const { id, name, picture } = user;
+    const accessToken = sessionStorage.getItem('accessToken');
+    const userId = sessionStorage.getItem('userId');
+
+    const handleChatClick = async () => {
+        try {
+            // 채팅 생성 API 호출
+            const response = await fetch('https://fastcampus-chat.net/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+                },
+                body: JSON.stringify({
+                    name: `1:1 Chat with ${user.name}`,
+                    users: [user.id],
+                    isPrivate: true,
+                }),
+            });
+
+            console.log(user.id, userId);
+
+            if (response.ok) {
+                const data = await response.json();
+                const generatedChatId = `1on1_${user.id}_${userId}`;
+                setNewChatId(generatedChatId);
+
+                // 생성된 채팅 방으로 이동
+                router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
+            } else {
+                console.error('Failed to create chat room');
+            }
+        } catch (error) {
+            console.error('Error creating chat room:', error);
+        }
+    };
+
     return (
         <UserModalBox onClick={clickModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -27,16 +78,22 @@ const UserProfileModal = ({ clickModal, user }: { clickModal: () => void; user: 
                     <UserImg src={picture} />
                     <UserInfo>
                         <UserName>{name}</UserName>
-                        {/* 접속 상태 추후 개발필요. 현재는 하드코딩 */}
-                        <p>online</p>
+                        <UserState>
+                            <BiSolidCircle
+                                size="13"
+                                color={connectUserIdList.users.includes(id) ? '#00956e' : '#950000'}
+                            />
+                            {connectUserIdList.users.includes(id) ? (
+                                <UserStateTextBlack>online</UserStateTextBlack>
+                            ) : (
+                                <UserStateText>offline</UserStateText>
+                            )}
+                        </UserState>
                     </UserInfo>
-                    {/* 임시로 chating으로 이동하도록 해둠 */}
-                    <Link href="/chating" className="link">
-                        <ToChating>
-                            <ImBubble size="40" className="chatIcon" />
-                            <ChatText>1:1 채팅하기</ChatText>
-                        </ToChating>
-                    </Link>
+                    <ToChating onClick={handleChatClick}>
+                        <ImBubble size="40" className="chatIcon" />
+                        <ChatText>1:1 채팅하기</ChatText>
+                    </ToChating>
                 </ModalMain>
             </ModalContent>
         </UserModalBox>
@@ -94,7 +151,7 @@ const ModalMain = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
 
     .link {
         text-decoration: none;
@@ -115,14 +172,13 @@ const UserImg = styled.img`
 
 const UserInfo = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 3rem;
-
-    margin-left: 6rem;
 `;
 
 const UserName = styled.h1`
-    font-size: 2.1rem;
+    font-size: 1.8rem;
+    margin: 0;
 `;
 
 const ToChating = styled.div`
@@ -140,4 +196,18 @@ const ToChating = styled.div`
 
 const ChatText = styled.p`
     font-weight: 500;
+`;
+
+const UserState = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+`;
+
+const UserStateText = styled.p`
+    color: #9a9a9a;
+`;
+
+const UserStateTextBlack = styled.p`
+    color: black;
 `;

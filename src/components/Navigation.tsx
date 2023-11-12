@@ -1,21 +1,34 @@
 'use client';
 
 import styled from 'styled-components';
-
+// svg 가져오기
+import userSvg from '../../public/assets/user.svg';
+import mychatSvg from '../../public/assets/mychats.svg';
+import allChatSvg from '../../public/assets/allchats.svg';
+import mypageSvg from '../../public/assets/mypage.svg';
 export default function Navigation() {
+    const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
     return (
         <NavigationContainer>
             <NavigationBox>
-                <NavigationAnchor href="users">유저</NavigationAnchor>
+                <NavigationAnchor href="users">
+                    <UserIcon />
+                </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">2</NavigationAnchor>
+                <NavigationAnchor href="mychats">
+                    <MyChatIcon />
+                </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="allchats">모든</NavigationAnchor>
+                <NavigationAnchor href="allchats">
+                    <AllChatsIcon />
+                </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">4</NavigationAnchor>
+                <NavigationAnchor href="#">
+                    <MyPageIcon />
+                </NavigationAnchor>
             </NavigationBox>
         </NavigationContainer>
     );
@@ -30,7 +43,7 @@ const NavigationContainer = styled.div`
 
     display: flex;
 
-    background-color: #fff;
+    background-color: #00956e;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
@@ -52,4 +65,20 @@ const NavigationAnchor = styled.a`
     &:hover {
         color: #00956e;
     }
+`;
+
+const UserIcon = styled(userSvg)`
+    cursor: pointer;
+`;
+
+const MyChatIcon = styled(mychatSvg)`
+    cursor: pointer;
+`;
+
+const AllChatsIcon = styled(allChatSvg)`
+    cursor: pointer;
+`;
+
+const MyPageIcon = styled(mypageSvg)`
+    cursor: pointer;
 `;
