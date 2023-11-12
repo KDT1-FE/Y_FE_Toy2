@@ -64,7 +64,7 @@ const Header: React.FC = () => {
 };
 
 const HeaderContainer = styled.div`
-  width: 80vw;
+  width: 1200px;
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
