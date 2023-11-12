@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   Center,
@@ -15,6 +15,8 @@ import {
   AlertTitle,
   AlertDescription,
   CloseButton,
+  Box,
+  Fade,
 } from '@chakra-ui/react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { accessTokenState, onlineUserState } from '../../states/atom';
@@ -31,6 +33,7 @@ function UserLogin() {
     message: '',
     type: '',
   });
+
   const { createSocket } = useSocketContext();
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +47,7 @@ function UserLogin() {
 
       alert('로그인에 성공했습니다.');
 
-      await loginSocket(accessToken, (data: any) => {
+      await createSocket(accessToken, (data: any) => {
         setOnlineUsers(data);
         console.log(onlineUsers);
       });
@@ -67,28 +70,36 @@ function UserLogin() {
     }
   };
 
+  useEffect(() => {
+    // alertc창 5초후에 사라지게 하기
+    if (showAlert.active) {
+      const timer = setTimeout(() => {
+        setShowAlert({ active: false, message: '', type: '' });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert.active]);
+
   return (
     <Flex
-      justifyContent={'center'}
+      justifyContent={'flex-end'}
       alignItems={'center'}
       flexDirection={'column'}
-      backgroundColor="#f8fafc"
-      height={'100vh'}>
-      <Img
-        src="/assets/fastMind.svg"
-        position={'relative'}
-        bottom={-140}
-        alt="fastMind"
-      />
+      height={750}>
       <Center
-        marginBottom={200}
         backgroundColor={'white'}
         borderRadius={10}
         boxShadow="lg"
         flexDirection={'column'}
-        minHeight={550}
+        height={550}
         width={450}
         justifyContent={'flex-end'}>
+        <Img
+          src="/assets/fastMind.svg"
+          position={'relative'}
+          alt="fastMind"
+          bottom={4}
+        />
         <form onSubmit={handleLoginSubmit}>
           <FormControl>
             <FormLabel marginLeft={7}>아이디</FormLabel>
@@ -180,21 +191,24 @@ function UserLogin() {
           </Link>
         </Flex>
       </Center>
-      {showAlert.active && (
-        <Alert status="error" marginBottom={4} width={400} height={500}>
+      <Fade in={showAlert.active}>
+        <Alert marginTop={10} status="error" width={400} height={70}>
           <AlertIcon />
-          <AlertTitle mr={2}>로그인 오류</AlertTitle>
-          <AlertDescription>{showAlert.message}</AlertDescription>
+          <Box>
+            <AlertTitle mr={2}>로그인 오류</AlertTitle>
+            <AlertDescription>{showAlert.message}</AlertDescription>
+          </Box>
           <CloseButton
             position="absolute"
             right="8px"
             top="8px"
+            cursor="default"
             onClick={() =>
               setShowAlert({ active: false, message: '', type: '' })
             }
           />
         </Alert>
-      )}
+      </Fade>
     </Flex>
   );
 }

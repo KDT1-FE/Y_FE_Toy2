@@ -17,6 +17,7 @@ import {
   AlertTitle,
   AlertDescription,
   CloseButton,
+  Fade,
 } from '@chakra-ui/react';
 import { ValidationInput, FormData } from '../../interfaces/interface';
 
@@ -54,6 +55,16 @@ const UserJoin = () => {
     message: '',
     type: '',
   });
+
+  useEffect(() => {
+    // alertc창 5초후에 사라지게 하기
+    if (showAlert.active) {
+      const timer = setTimeout(() => {
+        setShowAlert({ active: false, message: '', type: '' });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert.active]);
 
   const [isHovering, setIsHovering] = useState(false);
 
@@ -162,24 +173,22 @@ const UserJoin = () => {
 
   return (
     <Flex
-      justifyContent={'center'}
+      justifyContent={'flex-end'}
       alignItems={'center'}
       flexDirection={'column'}
-      backgroundColor="#f8fafc"
-      height={'100vh'}>
+      height={900}>
       <Center
-        margin={100}
         backgroundColor={'white'}
         borderRadius={10}
         boxShadow="lg"
         flexDirection={'column'}
+        height={750}
         width={450}
-        height={730}
         justifyContent={'flex-end'}>
         <form onSubmit={handleJoinSubmit}>
           <label
             htmlFor="picture"
-            style={{ cursor: 'pointer', position: 'relative' }}>
+            style={{ cursor: 'pointer', position: 'relative', bottom: 25 }}>
             <Box
               width={150}
               height={150}
@@ -367,21 +376,24 @@ const UserJoin = () => {
           </Link>
         </Flex>
       </Center>
-      {showAlert.active && (
-        <Alert status="error" marginBottom={4} width={400} height={500}>
+      <Fade in={showAlert.active}>
+        <Alert marginTop={10} status="error" width={400} height={70}>
           <AlertIcon />
-          <AlertTitle mr={2}>로그인 오류</AlertTitle>
-          <AlertDescription>{showAlert.message}</AlertDescription>
+          <Box>
+            <AlertTitle mr={2}>로그인 오류</AlertTitle>
+            <AlertDescription>{showAlert.message}</AlertDescription>
+          </Box>
           <CloseButton
             position="absolute"
             right="8px"
             top="8px"
+            cursor="default"
             onClick={() =>
               setShowAlert({ active: false, message: '', type: '' })
             }
           />
         </Alert>
-      )}
+      </Fade>
     </Flex>
   );
 };
