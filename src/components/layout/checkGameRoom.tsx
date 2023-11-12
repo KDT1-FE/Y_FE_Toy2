@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allRoomState } from '../../states/atom';
-import { getAllGameRooms, participateGameRoom } from '../../api';
+import { getAllGameRooms, leaveGameRoom, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import usePollingData from '../template/usePollingData';
 import Pagination from 'react-js-pagination';
@@ -22,6 +22,10 @@ import {
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
+import {
+  disconnectChattingSocket,
+  disconnectLoginSocket,
+} from '../../api/socket';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
@@ -82,8 +86,26 @@ const CheckGameRoom = () => {
       setShowAlert({ active: true, message: errorMessage, type: errorType });
       console.log(showAlert);
     } else {
-      await participateGameRoom(chatId, accessToken);
-      navigate(`/room/:${chatId}`);
+      try {
+        await participateGameRoom(chatId, accessToken);
+        navigate(`/room/:${chatId}`);
+      } catch (error: any) {
+        console.log(error.response.data.message);
+        if (error.response.data.message === 'Chat not found') {
+          alert('방이 사라졌어요');
+        } else if (error.response.data.message === 'Already participated') {
+          alert('이미 참여한 방입니다. 로그아웃 합니다.');
+          try {
+            await leaveGameRoom(accessToken, chatId);
+          } catch (error) {
+            console.error(error);
+          } finally {
+            disconnectChattingSocket();
+            disconnectLoginSocket();
+            navigate('/');
+          }
+        }
+      }
     }
   };
 
