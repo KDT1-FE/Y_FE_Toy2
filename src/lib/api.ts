@@ -41,9 +41,9 @@ function responseFulfilledInterceptor(res: AxiosResponse) {
                 if (!existingToken) {
                     sessionStorage.setItem('accessToken', accessToken);
                 }
-                return res.data;
             }
         }
+        return res.data;
     }
     return Promise.reject(res.data);
 }
