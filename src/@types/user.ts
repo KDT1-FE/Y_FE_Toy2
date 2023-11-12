@@ -3,3 +3,5 @@ export interface User {
   name: string;
   picture: string;
 }
+
+export type UserProps = User[];

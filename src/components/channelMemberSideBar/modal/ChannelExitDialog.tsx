@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -12,10 +13,22 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { MdExitToApp } from 'react-icons/md';
+import { exitChannel } from '../../../api/channel';
 
-const ChannelExitDialog = () => {
+interface Prop {
+  chatId: string;
+}
+
+const ChannelExitDialog = ({ chatId }: Prop) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const cancelRef = useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
+
+  const handleExitChannel = async () => {
+    await exitChannel(chatId);
+    await onClose();
+    navigate('/');
+  };
 
   return (
     <>
@@ -45,7 +58,7 @@ const ChannelExitDialog = () => {
             <Button ref={cancelRef} onClick={onClose}>
               취소
             </Button>
-            <Button colorScheme="blue" ml={3}>
+            <Button colorScheme="blue" ml={3} onClick={handleExitChannel}>
               나가기
             </Button>
           </AlertDialogFooter>

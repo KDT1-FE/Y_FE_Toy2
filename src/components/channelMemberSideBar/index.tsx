@@ -1,5 +1,6 @@
 import { Box, Divider, Flex, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import ChannelMemberItem from './ChannelMemberItem';
 import UserInviteModal from './modal/UserInviteModal';
 import socket from '../../api/socket';
@@ -13,8 +14,9 @@ interface UserIdDataProps {
 
 const ChannelMemberSideBar = () => {
   const [userList, setUserList] = useState<User[]>([]);
+  const { params } = useParams();
+  const chatId: string = params!;
 
-  // 현재 참여리스트 socket
   useEffect(() => {
     const getMemberInfo = async (users: string[]) => {
       const userListData = [];
@@ -47,8 +49,8 @@ const ChannelMemberSideBar = () => {
       borderLeftColor="gray.400"
     >
       <Flex align="center" mt="10" justifyContent="space-between">
-        <Box fontSize="1g"> 전체 {userList.length}</Box>
-        <UserInviteModal />
+        <Box fontSize="1g"> 채팅 참여 목록 {userList.length}</Box>
+        <UserInviteModal setUserList={setUserList} chatId={chatId} />
       </Flex>
       <Divider mt="1rem" borderColor={'gray.500'} />
 
@@ -61,7 +63,7 @@ const ChannelMemberSideBar = () => {
           />
         ))}
       </VStack>
-      <ChannelExitDialog />
+      <ChannelExitDialog chatId={chatId} />
     </Box>
   );
 };
