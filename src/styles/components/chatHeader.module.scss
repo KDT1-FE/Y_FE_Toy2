@@ -1,0 +1,19 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.header {
+  @include flex-center-row();
+  padding: 1rem;
+  justify-content: space-between;
+  background-color: $bg-purple-80;
+  color: $white;
+  font-size: $font-base;
+  font-family: $font-main;
+}
+.p {
+  font-size: $font-lg;
+}
+
+.button {
+  font-size: $font-lg;
+}
