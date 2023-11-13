@@ -407,7 +407,6 @@ interface User {
 ]
 ```
 
-
 ### 채팅 생성하기
 
 ```curl
@@ -467,6 +466,72 @@ interface User {
   ],
   "isPrivate": false,
   "updatedAt": "2023-11-01T08:23:39.850Z"
+}
+```
+
+### 특정 채팅 조회
+- 특정 id의 채팅을 조회합니다.
+- isPrivate: true인 채팅방은 해당 채팅방 참가자만 볼 수 있습니다.
+
+```curl
+curl https://fastcampus-chat.net/chat/only?chatId=${chatId}
+  \ -X 'GET'
+  \ -H 'Authorization: Bearer <accessToken>'
+```
+
+요청 데이터 타입 및 예시:
+- 없음
+
+응답 데이터 타입 및 예시:
+```ts
+interface ResponseValue {
+  chat: Chat;
+}
+
+interface Chat {
+  id: string;
+  name: string;
+  users: User[]; // 속한 유저 정보
+  isPrivate: boolean;
+  latestMessage: Message | null;
+  updatedAt: Date;
+}
+
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createAt: Date;
+}
+```
+
+```json
+{
+  chat: {
+    "id": "f189ab25-5644-4d72-bd7c-0170ee9c8ede",
+    "name": "chat room 1",
+    "users": [
+    {
+      "id": "user1",
+      "name": "lgh",
+      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
+    },
+    {
+      "id": "user2",
+      "name": "ldj",
+      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
+    }
+    ],
+    "isPrivate": false,
+    "updatedAt": "2023-10-31T13:18:38.216Z",
+    "latestMessage": null
+  }
 }
 ```
 
