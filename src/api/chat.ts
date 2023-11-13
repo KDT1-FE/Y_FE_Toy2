@@ -6,7 +6,7 @@ export const getAllChats = async (messages: ChatData[]) => {
     const chatListData = [];
     for (const message of messages) {
       const { id, createdAt, text, userId } = message;
-      const response = await getUser(userId.split(':')[1]);
+      const response = await getUser(userId);
       if (response) {
         const { name, picture } = response;
         chatListData.push({
@@ -18,7 +18,7 @@ export const getAllChats = async (messages: ChatData[]) => {
         });
       }
     }
-    return chatListData.reverse();
+    return chatListData;
   } catch (error) {
     console.log(error);
   }
