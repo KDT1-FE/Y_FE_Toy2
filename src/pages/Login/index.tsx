@@ -7,17 +7,38 @@ import SignUpModal from "../../components/Login/SignUpModal/index";
 import LoginForm from "../../components/Login/LoginForm";
 import styled from "styled-components";
 import backgroundImage from "../../assets/bg.png";
+import { Flex } from "@chakra-ui/react";
 
 const Background = styled.div`
   background-image: url(${backgroundImage});
+  background-color: #ecedee;
   background-position: left top;
   background-repeat: no-repeat;
   height: 100vh;
   overflow: hidden;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: flex-end;
   box-sizing: border-box;
+`;
+
+const Title = styled.div`
+  color: #000;
+  font-family: "Kelly Slab", serif;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.408px;
+  display: flex;
+  width: 40vw;
+  height: 20vh;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 20px;
+  margin-top: 120px;
+  align-self: flex-start;
 `;
 
 const Login = () => {
@@ -71,17 +92,25 @@ const Login = () => {
 
   return (
     <Background>
-      <LoginForm
-        idInput={idInput}
-        pwInput={pwInput}
-        loginError={loginError}
-        setLoginError={setLoginError}
-        handleLogin={handleLogin}
-        toggleSignUpModal={toggleSignUpModal}
-      />
-      {isSignUpModalOpen && (
-        <SignUpModal isOpen={isSignUpModalOpen} onClose={toggleSignUpModal} />
-      )}
+      <Flex
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        height="100vh"
+      >
+        <Title>LIAR GAME</Title>
+        <LoginForm
+          idInput={idInput}
+          pwInput={pwInput}
+          loginError={loginError}
+          setLoginError={setLoginError}
+          handleLogin={handleLogin}
+          toggleSignUpModal={toggleSignUpModal}
+        />
+        {isSignUpModalOpen && (
+          <SignUpModal isOpen={isSignUpModalOpen} onClose={toggleSignUpModal} />
+        )}
+      </Flex>
     </Background>
   );
 };
