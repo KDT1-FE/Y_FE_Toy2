@@ -204,39 +204,51 @@ export default RegisterForm;
 
 const StyledContainer = styled.div`
     width: 100%;
+    height: auto;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     padding-top: 3rem;
-    height: auto;
 `;
 const StyledProfile = styled.div`
     width: 100%;
+
     position: relative;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+
     img {
         width: 190px;
         height: 190px;
-        border: 1.25px dotted #00956e;
+
+        border: 1.25px dotted ${({ theme }) => theme.color.mainGreen};
         border-radius: 50%;
     }
 `;
 const StyledAiOutlineCamera = styled(AiOutlineCamera)`
     font-size: 1.8rem;
     font-weight: 300;
+    color: white;
+
     width: 35px;
     height: 35px;
+
     padding: 2.5px;
+
     z-index: 999;
-    color: white;
+
     background-color: rgba(0, 0, 0, 0.3);
+
     border-radius: 50%;
 `;
 const StyledLabel = styled.label`
     text-align: center !important;
+
     position: absolute;
     bottom: 10%;
     right: 38.3%;
@@ -247,56 +259,75 @@ const StyledDiv = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     margin: 1rem 0;
+
     font-weight: 600;
 
     span:first-child {
         margin-bottom: 0.5rem;
-        font-size: 1.1rem;
+
+        font-size: ${({ theme }) => theme.fontSize.md};
     }
     span:last-child {
         opacity: 0.35;
-        font-size: 0.85rem;
+
+        font-size: ${({ theme }) => theme.fontSize.sm};
     }
 `;
 
 const StyledForm = styled.form`
     width: 100%;
+
     display: flex;
     flex-direction: column;
     align-items: center;
 
     div {
         width: 100%;
+
         display: flex;
         flex-direction: column;
+
         margin-bottom: 1rem;
+
         padding: 0 12rem;
 
         label {
             text-align: left;
+
             margin-bottom: 0.3rem;
+
             padding-left: 0.125rem;
+
             font-weight: 600;
+
             span {
                 margin-right: 0.5rem;
             }
+
             display: flex;
             align-items: center;
         }
+
         .labelId {
             position: relative;
+
             margin-bottom: 0.55rem;
         }
 
         input {
             border: 1px solid rgba(0, 0, 0, 0.2);
             border-radius: 4.5px;
+
             padding: 0.9rem;
+
             width: 100%;
+
             outline: none;
+
             &:focus {
-                border: 1px solid #00956e;
+                border: 1px solid ${({ theme }) => theme.color.mainGreen};
             }
         }
 
@@ -306,59 +337,85 @@ const StyledForm = styled.form`
 
         div {
             border: 1px solid red;
+
             display: flex;
             flex-direction: row;
             gap: 20px;
+
             label {
                 display: inline-block;
+
                 width: 100px;
+
                 border: 1px solid green;
+
                 padding: 10px;
             }
         }
 
         button.checkButton {
             position: absolute;
+
             right: 0;
+
             border: none;
             border-radius: 4.5px;
-            background-color: #00956e;
+
+            background-color: ${({ theme }) => theme.color.mainGreen};
+
             color: #eee;
             font-weight: 600;
-            font-size: 0.75rem;
+            font-size: ${({ theme }) => theme.fontSize.xs};
+
             padding: 0.4rem 0.5rem;
+
             cursor: pointer;
+
             &:hover {
                 transition: all 0.3s;
-                background-color: #05664c;
+
+                background-color: ${({ theme }) => theme.color.darkGreen};
             }
         }
 
         button.submitFullButton {
             margin-top: 1rem;
+
             border: none;
             border-radius: 4.5px;
-            background-color: #00956e;
+
+            background-color: ${({ theme }) => theme.color.mainGreen};
+
             color: #eee;
             font-weight: 600;
-            font-size: 1.05rem;
+            font-size: ${({ theme }) => theme.fontSize.md};
+
             padding: 1rem 0;
+
             width: 100%;
+
             cursor: pointer;
+
             &:hover {
                 transition: all 0.3s;
-                background-color: #05664c;
+
+                background-color: ${({ theme }) => theme.color.darkGreen};
             }
         }
         button.submitEmptyButton {
             margin-top: 1rem;
+
             border: none;
             border-radius: 4.5px;
-            background-color: #939393;
+
+            background-color: ${({ theme }) => theme.color.darkGray};
+
             color: #eee;
             font-weight: 600;
-            font-size: 1.05rem;
+            font-size: ${({ theme }) => theme.fontSize.md};
+
             padding: 1rem 0;
+
             width: 100%;
         }
     }
@@ -369,18 +426,24 @@ const StyledForm = styled.form`
 
 const StyledLink = styled(Link)`
     all: unset;
+
     cursor: pointer;
+
     margin-top: 0.5rem;
+
     span {
         color: #000;
+        font-size: ${({ theme }) => theme.fontSize.md};
+
         opacity: 0.75;
-        font-size: 0.9rem;
+
         border-bottom: 0.1px solid #000;
     }
 `;
 
 const IsValidSpan = styled.span`
-    font-size: 0.65rem;
+    font-size: ${({ theme }) => theme.fontSize.xs};
     color: red;
+
     opacity: 0.8;
 `;

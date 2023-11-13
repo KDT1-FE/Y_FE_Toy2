@@ -36,8 +36,10 @@ const UsersWrap = styled.div`
 `;
 
 const HeaderText = styled.h1`
-    color: #00956e;
+    color: ${({ theme }) => theme.color.mainGreen};
+    font-size: ${({ theme }) => theme.fontSize.title};
+
     margin-top: 0;
+
     padding: 1rem;
-    font-size: 1.5rem;
 `;
