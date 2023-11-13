@@ -45,7 +45,7 @@ function UserLogin() {
 
       alert('로그인에 성공했습니다.');
 
-      loginSocket((data: any) => {
+      loginSocket(accessToken, (data: any) => {
         console.log('Data received from socket:', data);
         setOnlineUsers(data);
         console.log(onlineUsers);

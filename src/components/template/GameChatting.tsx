@@ -15,6 +15,7 @@ import {
   privateChatNew,
   myUserDataState,
 } from '../../states/atom';
+import { getCookie } from '../../util/util';
 
 interface ChattingDetailProps {
   chatId: string;
@@ -27,11 +28,11 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
   const [lastDate, setLastDate] = useState('');
-
+  const accessToken: any = getCookie('accessToken');
   const myUserData: any = useRecoilValue(myUserDataState);
   useEffect(() => {
     try {
-      const newSocket = chatSocket(chatId);
+      const newSocket = chatSocket(accessToken, chatId);
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {

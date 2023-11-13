@@ -51,9 +51,7 @@ const GameRoom = () => {
         <GameChatting chatId={chat} />
       </RoomMain>
       <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
-      {/* <UserList>
-        <CheckUser />
-      </UserList> */}
+      <UserList>{/* <CheckUser /> */}</UserList>
     </Game>
   );
 };

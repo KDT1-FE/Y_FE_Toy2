@@ -5,6 +5,7 @@ import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../../constant';
 import { getUserData } from '../../api';
 import UserProfile from '../template/userProfile';
+import { getCookie } from '../../util/util';
 
 interface ChattingDetailProps {
   chatId: string;
@@ -25,11 +26,12 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     onlineUserStateInGameRoom,
   );
   const [profiles, setProfiles] = useState<ResponseValue[]>([]);
-
+  const accessToken: any = getCookie('accessToken');
   useEffect(() => {
     try {
       const socket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
         extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
           serverId: SERVER_ID,
         },
       });
