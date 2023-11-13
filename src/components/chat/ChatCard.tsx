@@ -15,10 +15,17 @@ function ChatCard({ chat }: IChatProps) {
   const [chatPartner, setChatPartner] = useState<User | null>(null);
   const user = JSON.parse(useRecoilValue(userState));
   const chatName = chat.name.split('!@#$$#@!')[1];
+  const limit = 5;
 
   dayjs.extend(relativeTime);
   const receivedTime = dayjs(chat.latestMessage?.createdAt);
   const formattedDistanceToNow = receivedTime.fromNow();
+
+  const latestMessage = chat.latestMessage?.text;
+  const messageEllipsis = {
+    string: latestMessage ? latestMessage.slice(0, limit) : '',
+    isShowMore: latestMessage ? latestMessage.length > limit : false,
+  };
 
   useEffect(() => {
     const userFilter = chat.users.filter((chatUser) => chatUser.id !== user.id);
@@ -35,12 +42,18 @@ function ChatCard({ chat }: IChatProps) {
 
           <S.ChatPreviewWrapper>
             <S.ChatName>{chatName}</S.ChatName>
-            <S.LatestMessageWrapper>
-              <S.LatestMessage>{chat.latestMessage?.text}</S.LatestMessage>
-              <S.LatestMessageTime>
-                · {formattedDistanceToNow}
-              </S.LatestMessageTime>
-            </S.LatestMessageWrapper>
+            {chat.latestMessage ? (
+              <S.LatestMessageWrapper>
+                <S.LatestMessage>{`${messageEllipsis.string}${
+                  messageEllipsis.isShowMore ? '...' : ''
+                }`}</S.LatestMessage>
+                <S.LatestMessageTime>
+                  · {formattedDistanceToNow}
+                </S.LatestMessageTime>
+              </S.LatestMessageWrapper>
+            ) : (
+              ''
+            )}
           </S.ChatPreviewWrapper>
         </S.ChatContainer>
       </S.Wrapper>

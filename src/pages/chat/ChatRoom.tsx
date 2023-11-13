@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState, useRef } from 'react';
 import { Button, Input } from '@mui/material';
-import { Send } from '@mui/icons-material';
-import { useParams } from 'react-router-dom';
+import { Send, ArrowBack } from '@mui/icons-material';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import Message from '../../components/chat/Message';
 import * as S from '../../styles/chat/ChatRoomStyles';
@@ -9,16 +9,26 @@ import { MessageType } from '../../types/MessageType';
 import { accessTokenState } from '../../atoms';
 import useSocketConnect from '../../hooks/useSocketConnect';
 import useGetUserInfo from '../../hooks/useGetUserInfo';
+import useChatAll from '../../hooks/useChatAll';
+import { ChatType } from '../../types/ChatType';
 
 function ChatRoom() {
-  const { chatId = '' } = useParams();
+  const { chatId } = useParams();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<MessageType[]>([]);
   const accessToken = useRecoilValue(accessTokenState);
-
+  const socket = useSocketConnect(chatId, accessToken);
   const name = useGetUserInfo(accessToken);
   const scrollRef = useRef<HTMLUListElement | null>(null);
-  const socket = useSocketConnect(chatId, accessToken);
+  const chatList = useChatAll(accessToken);
+  const chat: ChatType = chatList.find((chat: ChatType) => chat.id === chatId)!;
+  const chatName = chat?.name.split('!@#$$#@!')[1];
+
+  const navigate = useNavigate();
+
+  const moveToChat = () => {
+    navigate('/chat');
+  };
 
   // 메시지 작성
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,15 +52,7 @@ function ChatRoom() {
   }, [messages]);
 
   useEffect(() => {
-    socket?.emit('fetch-messages');
-
-    socket?.on('messages-to-client', (data) => {
-      setMessages([...data.messages].reverse());
-    });
-  }, [socket]);
-
-  useEffect(() => {
-    socket?.on('message-to-client', (message) => {
+    socket?.on('message-to-client', (message: MessageType) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
@@ -59,8 +61,29 @@ function ChatRoom() {
     };
   }, [socket]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.emit('fetch-messages');
+
+      socket.on('messages-to-client', (messagesObject) => {
+        setMessages(messagesObject.messages);
+      });
+    }
+
+    return () => {
+      socket?.off('messages-to-client');
+    };
+  }, [socket?.connected]);
+
   return (
     <S.Wrapper>
+      <S.Header>
+        <S.BackBtn onClick={moveToChat}>
+          <ArrowBack />
+        </S.BackBtn>
+        <S.ChatName>{chatName}</S.ChatName>
+        <S.EmptyBox />
+      </S.Header>
       <S.StyledMessages ref={scrollRef}>
         {messages.length !== 0
           ? messages.map((message, index) => (

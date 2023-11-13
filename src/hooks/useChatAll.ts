@@ -3,7 +3,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 const useChatAll = (accessToken: string | null) => {
   const [chatList, setChatList] = useState([]);
 
-  const chatAll = useCallback(async () => {
+  const chatAll = async () => {
     const response = await fetch('https://fastcampus-chat.net/chat', {
       method: 'GET',
       headers: {
@@ -14,11 +14,11 @@ const useChatAll = (accessToken: string | null) => {
     });
     const data = await response.json();
     setChatList(data.chats);
-  }, [accessToken]);
+  };
 
   useEffect(() => {
     chatAll();
-  }, [chatAll]);
+  }, []);
 
   return chatList;
 };
