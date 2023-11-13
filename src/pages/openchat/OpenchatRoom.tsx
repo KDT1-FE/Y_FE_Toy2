@@ -1,11 +1,10 @@
 /* eslint-disable no-console */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowBack } from '@mui/icons-material';
 import { Box, Button } from '@mui/material';
 import { AnimatePresence, useCycle } from 'framer-motion';
-import useSocketConnect from '../../hooks/useSocketConnect';
 import { accessTokenState, userState } from '../../atoms';
 import { MessageType } from '../../types/MessageType';
 import OpenchatMessage from '../../components/openchat/OpenchatMessage';
@@ -18,17 +17,18 @@ import {
 import useQueryOpenchatById from '../../hooks/useQueryOpenchatById';
 import OpenchatNav from '../../components/openchat/OpenchatNav';
 import MenuToggle from '../../components/openchat/MenuToggle';
+import useSocket from '../../hooks/useSocket';
 
 function OpenchatRoom() {
   const { chatId = '' } = useParams();
-  const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { isConnected, socket } = useSocket();
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const accessToken = useRecoilValue(accessTokenState);
   const userStr = useRecoilValue(userState);
   const user = JSON.parse(userStr) as UserSimple;
-  const socket = useSocketConnect(chatId, accessToken);
+
+  // const socket = useSocketConnect(chatId, accessToken);
   const { isQuering, data } = useQueryOpenchatById(chatId);
   const [isOpen, toggleOpen] = useCycle(false, true);
 
@@ -69,25 +69,37 @@ function OpenchatRoom() {
     return aDate.getTime() - bDate.getTime();
   };
 
+  useEffect(
+    () =>
+      // no-op if the socket is already connected
+
+      () => {
+        if (socket) {
+          socket.disconnect();
+        }
+      },
+    [],
+  );
+
   useEffect(() => {
-    if (socket) {
-      // 메시지를 가져오는 이벤트 emit
-      socket.emit('fetch-messages');
+    // 메시지를 가져오는 이벤트 emit
+    if (socket && isConnected) {
+      socket?.emit('fetch-messages');
       // 이전 메시지들 가져오기
-      socket.on('messages-to-client', (data) => {
+      socket?.on('messages-to-client', (data) => {
         setMessages([...data.messages]);
       });
       // 메시지 보냈을때 내 메시지 가져오기
-      socket.on('message-to-client', (message) => {
+      socket?.on('message-to-client', (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
       });
     }
+
     return () => {
       socket?.off('messages-to-client');
       socket?.off('message-to-client');
-      socket?.disconnect();
     };
-  }, [socket]);
+  }, [socket, isConnected]);
 
   return (
     <div>
@@ -107,7 +119,7 @@ function OpenchatRoom() {
             >
               <ArrowBack />
             </Button>
-            <p>{data?.name}</p>
+            <p>{isQuering || data?.name}</p>
           </div>
         </OpenchatRoomAppbar>
         <Box px={4} sx={{ display: 'flex', flexDirection: 'column' }}>
