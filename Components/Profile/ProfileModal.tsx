@@ -2,41 +2,30 @@
 
 import { User } from '@/types';
 import Image from 'next/image';
+import { useSearchParams, useRouter } from 'next/navigation';
+import React from 'react';
 
-type ProfileDialogType = {
-	user: User | object;
-	open: boolean;
-	setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+const ProfileModal = ({ user }: { user: User }) => {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	console.log(searchParams.get('isMyProfile'));
 
-const ProfileModal = ({ user, open, setIsModalOpen }: ProfileDialogType) => {
-	const userData = (user || {
-		id: '',
-		password: '',
-		name: 'catLover',
-		picture: '',
-		chats: [],
-	}) as User;
-
-  const chattingHandler = () => {
-    /*
+	const chattingHandler = () => {
+		/*
       1. 나의 채팅 조회
       2. user.id(클릭한 유저의 id)와 1대1 채팅방 있는지 확인
       3. 있으면 채팅방 참여
       4. 없으면 채팅방 생성 후 참여
     */
-
-    
-  }
+	};
 
 	return (
-		<dialog
-			className="w-full sm:w-[425px] md:w-[645px] px-5 h-screen fixed top-0 bg-gray-400 "
-			open={open}
-		>
+		<section className="relative w-full h-full top-0 bg-gray-400 ">
 			<button
 				className="absolute top-5 right-5 text-white text-3xl"
-				onClick={() => setIsModalOpen(false)}
+				onClick={() => {
+					router.back();
+				}}
 			>
 				X
 			</button>
@@ -46,15 +35,20 @@ const ProfileModal = ({ user, open, setIsModalOpen }: ProfileDialogType) => {
 				<div className="flex flex-col w-full items-center gap-5 pb-20">
 					<Image
 						className="rounded-full"
-						src={userData.picture}
-						alt={userData.name}
+						src={user.picture}
+						alt={user.name}
 						height={150}
 						width={150}
 					/>
-					<h3 className="text-2xl text-white">{userData.name}</h3>
+					<h3 className="text-2xl text-white">{user.name}</h3>
 					<div className="w-full border-t-2 h-1 border-white "></div>
 					<div className="flex items-center">
-						<div className="flex flex-col items-center cursor-pointer" onClick={()=>{chattingHandler()}}>
+						<div
+							className="flex flex-col items-center cursor-pointer"
+							onClick={() => {
+								chattingHandler();
+							}}
+						>
 							<Image
 								className=""
 								src="/icon_add_chat.svg"
@@ -67,7 +61,7 @@ const ProfileModal = ({ user, open, setIsModalOpen }: ProfileDialogType) => {
 					</div>
 				</div>
 			</div>
-		</dialog>
+		</section>
 	);
 };
 
