@@ -6,7 +6,7 @@ export const getAllChats = async (messages: ChatData[]) => {
     const chatListData = [];
     for (const message of messages) {
       const { id, createdAt, text, userId } = message;
-      const response = await getUser(userId.split(':')[1]);
+      const response = await getUser(userId);
       if (response) {
         const { name, picture } = response;
         chatListData.push({
@@ -18,7 +18,35 @@ export const getAllChats = async (messages: ChatData[]) => {
         });
       }
     }
-    return chatListData.reverse();
+    return chatListData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getJoinersName = async (users: string[]) => {
+  try {
+    const userList = [];
+    for (const userId of users) {
+      const response = await getUser(userId);
+      if (response) {
+        const { name } = response;
+        userList.push(name);
+      }
+    }
+    return userList;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getLeaverName = async (userId: string) => {
+  try {
+    const response = await getUser(userId);
+    if (response) {
+      const { name } = response;
+      return name;
+    }
   } catch (error) {
     console.log(error);
   }
