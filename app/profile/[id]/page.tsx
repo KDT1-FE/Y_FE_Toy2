@@ -1,6 +1,6 @@
 import { Chat } from '@/types';
 import { fetchMyChats, fetchProfileData } from './profile.utils';
-import ProfileModal from '@/Components/Profile/ProfileModal';
+import ProfileModal from '@/Components/Users/ProfileModal';
 import { cookies } from 'next/headers';
 
 const Profile = async ({ params }: { params: { id: string } }) => {
