@@ -1,6 +1,6 @@
 'use client';
 
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
 import { useRouter } from 'next/navigation';
@@ -12,17 +12,24 @@ interface User {
     picture: string;
 }
 
+interface ChatingModalProps {
+    users: User[];
+    chatId: string;
+}
+
 //type
-export default function ChatingModal(props: any) {
+export default function ChatingModal(props: ChatingModalProps) {
     const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChatingModalToggle);
     const router = useRouter();
+
+    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
 
     const leaveChating = async () => {
         await fetch('https://fastcampus-chat.net/chat/leave', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${props.accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
             },
             body: JSON.stringify({
@@ -31,6 +38,8 @@ export default function ChatingModal(props: any) {
         });
         router.back();
     };
+
+    console.log(props, 'props');
 
     return (
         <>

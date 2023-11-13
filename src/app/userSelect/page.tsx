@@ -1,12 +1,11 @@
 'use client';
-import UserItem from '@/components/Users/UserItem';
+import { UserSelectionModal } from '@/components/Users/UserSelectionModal';
 import { instance } from '@/lib/api';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdClose, MdSearch } from 'react-icons/md';
-import Navigation from '@/components/Navigation';
-import { io } from 'socket.io-client';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+
 
 interface User {
     id: string;
@@ -16,13 +15,65 @@ interface User {
     chats: string[];
 }
 
-interface ConnectUserIdList {
-    users: string[];
-}
-
-const Users = () => {
+function UserSelect() {
     const [users, setUsers] = useState<User[] | []>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+
+    const router = useRouter();
+    const [newChatId, setNewChatId] = useState<string | null>(null);
+    const accessToken = sessionStorage.getItem('accessToken');
+    const userId = sessionStorage.getItem('userId');
+
+    const handleChatClick = async () => {
+        try {
+          // 선택된 사용자가 없으면 아무 동작 안함
+          if (selectedUsers.length === 0) {
+            console.log('No user selected');
+            return;
+          }
+    
+          // 첫 번째 선택된 사용자와 채팅 생성 API 호출
+          const selectedUser = selectedUsers[0];
+    
+          const response = await fetch('https://fastcampus-chat.net/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`,
+              'serverId': `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+            },
+            body: JSON.stringify({
+              name: `1:1 Chat with ${selectedUser.name}`,
+              users: [selectedUser.id],
+              isPrivate: false,
+            }),
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            const generatedChatId = `1on1_${selectedUser.id}_${userId}`;
+            setNewChatId(generatedChatId);
+    
+            // 생성된 채팅 방으로 이동
+            router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
+          } else {
+            console.error('Failed to create chat room');
+          }
+        } catch (error) {
+          console.error('Error creating chat room:', error);
+        }
+      };
+
+    const handleUserSelect = (user: User) => {
+        if (selectedUsers.some(selectedUser => selectedUser.id === user.id)) {
+            setSelectedUsers(prevSelectedUsers => prevSelectedUsers.filter(selectedUser => selectedUser.id !== user.id));
+        } else {
+            setSelectedUsers(prevSelectedUsers => [...prevSelectedUsers, user]);
+        }
+    };
+
 
     const getUsers = async () => {
         try {
@@ -41,43 +92,20 @@ const Users = () => {
 
     /**사용자 검색 */
     const [userInput, setUserInput] = useState('');
-    const getInputValue = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const getInputValue = (e: ChangeEvent<HTMLInputElement>) => {
         setUserInput(e.target.value);
-    }, []);
+    };
     const searched = users.filter((user) => user.name.includes(userInput));
 
-    const clearSearchInput = React.useCallback(() => {
+    const clearSearchInput = () => {
         setUserInput('');
-    }, []);
+    };
 
-    /** 접속 상태 */
-    const connectUserIdListRef = useRef<ConnectUserIdList>({
-        users: [],
-    });
-    const [connectUserIdList, setConnectUserIdList] = useState<ConnectUserIdList>({ users: [] });
-    const accessToken = sessionStorage.getItem('accessToken');
-
-    const socket = io(`https://fastcampus-chat.net/server`, {
-        extraHeaders: {
-            Authorization: `Bearer ${accessToken}`,
-            serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-        },
-    });
-
-    useEffect(() => {
-        socket.on('users-server-to-client', (usersIdList) => {
-            if (JSON.stringify(usersIdList.users) !== JSON.stringify(connectUserIdListRef.current.users)) {
-                connectUserIdListRef.current = usersIdList;
-                setConnectUserIdList(usersIdList);
-            }
-            console.log(usersIdList);
-        });
-    }, []);
 
     return (
         <>
             <UsersWrap>
-                <HeaderText>사용자 목록</HeaderText>
+                <HeaderText>사용자 선택</HeaderText>
                 <SearchUserBox>
                     <SearchButton>
                         <MdSearch className="searchIcon" size="35" color="white" />
@@ -96,7 +124,7 @@ const Users = () => {
                     {loading && <Loading />}
                     {searched.length !== 0
                         ? searched.map((user: User) => {
-                              return <UserItem key={user.id} user={user} connectUserIdList={connectUserIdList} />;
+                              return <UserSelectionModal key={user.id} user={user}  onUserSelect={handleUserSelect}    />;
                           })
                         : !loading && (
                               <NoUserWrap>
@@ -104,13 +132,20 @@ const Users = () => {
                               </NoUserWrap>
                           )}
                 </UserList>
+                {selectedUsers.length > 0 && (
+                    <ChatButtonWrapper>
+                        <ChatButton onClick={handleChatClick}>
+                            채팅하기
+                        </ChatButton>
+                    </ChatButtonWrapper>
+                )}
             </UsersWrap>
-            <Navigation />
+
         </>
     );
-};
+}
 
-export default React.memo(Users);
+export default UserSelect;
 
 const UsersWrap = styled.div`
     padding: 3rem;
@@ -137,12 +172,6 @@ const UserList = styled.div`
     height: 80%;
 
     overflow-y: auto;
-    &::-webkit-scrollbar {
-        /*크롬, 사파리, 오페라, 엣지*/
-        display: none;
-    }
-    -ms-overflow-style: none; /* ie */
-    scrollbar-width: none; /* 파이어폭스 */
 `;
 
 const NoUserWrap = styled.div`
@@ -160,7 +189,7 @@ const NoUserText = styled.h2`
 `;
 
 /**사용자 검색 */
-export const SearchUserBox = styled.div`
+const SearchUserBox = styled.div`
     background-color: white;
 
     border-radius: 20px;
@@ -173,7 +202,7 @@ export const SearchUserBox = styled.div`
     gap: 3%;
 `;
 
-export const SearchButton = styled.div`
+const SearchButton = styled.div`
     background-color: #00956e;
     width: 5rem;
 
@@ -185,7 +214,7 @@ export const SearchButton = styled.div`
     border-bottom-left-radius: 15px;
 `;
 
-export const SearchUserInput = styled.input`
+const SearchUserInput = styled.input`
     border: none;
 
     width: 32rem;
@@ -232,4 +261,23 @@ const Loading = styled.div`
             transform: rotate(360deg);
         }
     }
+`;
+const ChatButtonWrapper = styled.div`
+    position: absolute;
+    top: 3rem; /* 조절 필요한 만큼의 top 값을 주세요 */
+    right: 3rem; /* 조절 필요한 만큼의 right 값을 주세요 */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ChatButton = styled.button`
+    background-color: #00956e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
 `;
