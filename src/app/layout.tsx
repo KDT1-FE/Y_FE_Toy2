@@ -9,8 +9,9 @@ import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { authCheck } from '@/hooks/Auth';
 import Move from '@/components/Move';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
@@ -34,21 +35,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-            <html lang="en">
-                <StyledComponentsRegistry>
-                    <ThemeProvider theme={theme}>
-                        <Body>
-                            <Container>
-                                {shouldRenderMoveComponent && <Move />}
-                                {children}
-                            </Container>
-                            <ReactQueryDevtools/>
-                        </Body>
-                    </ThemeProvider>
-                </StyledComponentsRegistry>
-            </html>
-        </RecoilRoot>
+            <RecoilRoot>
+                <html lang="en">
+                    <StyledComponentsRegistry>
+                        <ThemeProvider theme={theme}>
+                            <Body>
+                                <Container>
+                                    {shouldRenderMoveComponent && <Move />}
+                                    {children}
+                                </Container>
+                                <ReactQueryDevtools />
+                            </Body>
+                        </ThemeProvider>
+                    </StyledComponentsRegistry>
+                </html>
+            </RecoilRoot>
         </QueryClientProvider>
     );
 }

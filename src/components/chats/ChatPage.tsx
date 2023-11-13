@@ -13,15 +13,13 @@ import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStor
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
-import { useQuery } from 'react-query';
+
 import { getMyChats, getAllChats } from './getChats';
+import { useQuery } from '@tanstack/react-query';
 const MyChats = ({ userType }: any) => {
     const [addChatOpen, setAddChatOpen] = useState(false);
-    const [allChats, setAllChats] = useRecoilState(allChatsState);
-    const [myChats, setMyChats] = useRecoilState(myChatsState);
     const filterChats = useRecoilValue(searchChatsState);
     const router = useRouter();
-    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
     const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
     const enterChatRoom = (chat: Chat) => {

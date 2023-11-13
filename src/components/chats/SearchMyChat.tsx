@@ -6,13 +6,11 @@ import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStor
 import { SearchButton, SearchUserBox } from '@/app/users/page';
 import { MdSearch } from 'react-icons/md';
 import { getAllChats, getMyChats } from './getChats';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 const SearchMyChat = ({ userType }: any) => {
     const [input, setInput] = useState<string>('');
     const [filterChats, setFilteredChats] = useRecoilState(searchChatsState);
-    // const [allChats, setAllChats] = useRecoilState(allChatsState);
-    // const [myChats, setAllMyChats] = useRecoilState(myChatsState);
 
     const { data: chats, isLoading } = useQuery<Chat[], any>({
         queryKey: ['getChatsKey'],
@@ -32,10 +30,6 @@ const SearchMyChat = ({ userType }: any) => {
                 const filteredChats = [...filteringChats];
                 setFilteredChats(filteredChats);
             }
-
-            // const filteredChats = [...filteringChats];
-            // console.log('Filtered Chats:', filteredChats);
-            // setFilteredChats(filteredChats);
         },
         [isLoading, chats],
     );
