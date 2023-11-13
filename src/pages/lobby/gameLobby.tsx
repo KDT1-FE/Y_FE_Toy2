@@ -37,7 +37,7 @@ const GameLobby = () => {
 
   return (
     <>
-      <UserProfile userImg={imgsrc}></UserProfile>
+      <UserProfile></UserProfile>
       {/* <Button onClick={fetchUserData}>이미지나와랏</Button> */}
       {/* <Button onClick={handlePostRefresh(setAccessToken)}>토큰재발급</Button> */}
       {/* <Button onClick={handleGetAllUsers(accessToken)}>모든유저보기</Button> */}

@@ -12,8 +12,7 @@ function Dashboard() {
     <Grid
       templateRows="auto 1fr auto"
       alignContent="center"
-      justifyItems="center"
-      gap={10}>
+      justifyItems="center">
       <Header />
       <Outlet />
       <Footer />
