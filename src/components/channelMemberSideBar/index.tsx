@@ -7,71 +7,15 @@ import { getUser } from '../../api/user';
 import { User2 } from '../../@types/user';
 import ChannelExitDialog from './modal/ChannelExitDialog';
 import { participateChannel } from '../../api/channel';
-import serverSocket from '../../api/severSocket';
 import socket from '../../api/socket';
-
-interface UserIdDataProps {
-  users: string[];
-}
-
-interface ResponseData {
-  users: string[]; // 참여자들 id
-  joiners: string[]; // 새로운 참여자 id
-}
+import { SOCKET } from '../../constants/socket';
+import useJoinLeaveChannels from '../../hooks/useJoinLeaveChannel';
 
 const ChannelMemberSideBar = () => {
-  const [userList, setUserList] = useState<User2[]>([]);
   const { id } = useParams();
-  const chatId: string = id!;
+  const chatId = id!;
 
-  useEffect(() => {
-    socket.emit('users');
-    socket.on('users-to-client', (messages: { users: string[] }) => {
-      if (!messages) {
-        console.log('땡!!!');
-      }
-      console.log('users-to-client', messages);
-    });
-
-    const getMemberInfo = async (users: string[]) => {
-      const userListData = [];
-      for (const id of users) {
-        const response = await getUser(id);
-        if (response) {
-          const { name, picture } = response;
-          userListData.push({
-            id,
-            name,
-            picture,
-          });
-        }
-      }
-
-      setUserList(userListData);
-    };
-    //현재 서버 접속자
-    serverSocket.emit('users-server');
-    serverSocket.on(
-      'users-server-to-client',
-      (usersIdData: UserIdDataProps) => {
-        const { users } = usersIdData;
-        // getMemberInfo(users);
-      },
-    );
-
-    socket.on('leave', async (membersData: ResponseData) => {
-      console.log('LEAVE', membersData);
-    });
-    socket.on('join', (messages: { users: string[]; joiners: string[] }) => {
-      const members = messages.users;
-      console.log('JOIN', messages);
-    });
-
-    return () => {
-      socket.off('join');
-      socket.off('users-server-to-client');
-    };
-  }, []);
+  const { userList, setUserList } = useJoinLeaveChannels({ chatId });
 
   return (
     <Box

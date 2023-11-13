@@ -8,4 +8,6 @@ export const SOCKET = {
   MESSAGE_TO_CLIENT: 'message-to-client',
   LEAVE: 'leave',
   JOIN: 'join',
+  USERS: 'users',
+  USER_TO_CLIENT: 'users-to-client',
 } as const;
