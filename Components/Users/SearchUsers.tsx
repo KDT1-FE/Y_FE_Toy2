@@ -8,7 +8,6 @@ import { Input } from '@material-tailwind/react';
 import { search, toLower } from '@/hooks/Common/search';
 import ShowSearchedFriend from './ShowSearchedFriend';
 import FriendProfiles from '../Users/FriendProfiles';
-import ProfileModal from '../Common/ProfileModal';
 import ShowAllOpenChat from '../Search/ShowAllOpenChat';
 
 const SearchOpenChat = ({

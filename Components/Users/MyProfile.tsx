@@ -1,8 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
-import ProfileModal from '../Common/ProfileModal';
+import React from 'react';
 import { User } from '@/types';
 import Link from 'next/link';
 

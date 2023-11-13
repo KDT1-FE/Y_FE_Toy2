@@ -1,24 +1,38 @@
 'use client';
 
-import { User } from '@/types';
+import {
+	createPrivateChat,
+	participateChat,
+} from '@/app/profile/[id]/profile.utils';
+import { Chat, User } from '@/types';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import React from 'react';
 
-const ProfileModal = ({ user }: { user: User }) => {
+const ProfileModal = ({
+	user,
+	existPrivateChat,
+}: {
+	user: User;
+	existPrivateChat: Chat | undefined;
+}) => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	console.log(searchParams.get('isMyProfile'));
+	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;
 
-	const chattingHandler = () => {
-		/*
-      1. 나의 채팅 조회
-      2. user.id(클릭한 유저의 id)와 1대1 채팅방 있는지 확인
-      3. 있으면 채팅방 참여
-      4. 없으면 채팅방 생성 후 참여
-    */
+	const chattingHandler = async () => {
+		console.log(existPrivateChat);
+		if (existPrivateChat) {
+			const chatData = await participateChat(accessToken, existPrivateChat.id);
+			console.log('참여하기', chatData);
+		} else {
+			const chat = await createPrivateChat(accessToken, user);
+			const chatData = await participateChat(accessToken, chat.id);
+			console.log('새로 만든 후 참여하기', chatData);
+			/* 채팅방 이동 시키기*/
+		}
 	};
-
 	return (
 		<section className="relative w-full h-full top-0 bg-gray-400 ">
 			<button
@@ -45,9 +59,7 @@ const ProfileModal = ({ user }: { user: User }) => {
 					<div className="flex items-center">
 						<div
 							className="flex flex-col items-center cursor-pointer"
-							onClick={() => {
-								chattingHandler();
-							}}
+							onClick={chattingHandler}
 						>
 							<Image
 								className=""
