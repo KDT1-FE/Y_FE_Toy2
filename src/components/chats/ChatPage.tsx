@@ -14,7 +14,6 @@ import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
 import { useQuery } from 'react-query';
-import { useInfiniteQuery } from 'react-query/types/react';
 import { getMyChats, getAllChats } from './getChats';
 // import AddChatDropdown from './addChatDropdown';
 const MyChats = ({ userType }: any) => {
