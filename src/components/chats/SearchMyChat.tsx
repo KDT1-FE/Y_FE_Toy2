@@ -2,8 +2,7 @@
 import React, { useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
-import { SearchButton, SearchUserBox } from '@/app/users/page';
+import { Chat, searchChatsState } from './chatsStore';
 import { MdSearch } from 'react-icons/md';
 import { getAllChats, getMyChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
@@ -53,9 +52,34 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
+const SearchUserBox = styled.div`
+  background-color: white;
+
+  border-radius: 20px;
+  box-shadow: ${({ theme }) => theme.shadow.search};
+
+  width: 100%;
+  height: 3.5rem;
+
+  display: flex;
+  gap: 3%;
+`;
+
 const SearchItem = styled.input`
   border: none;
   width: 32rem;
   outline: none;
   font-size: 1.2rem;
+`;
+
+const SearchButton = styled.div`
+  background-color: ${({ theme }) => theme.color.mainGreen};
+  width: 5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
 `;

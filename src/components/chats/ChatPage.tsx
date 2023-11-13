@@ -26,7 +26,7 @@ const MyChats = ({ userType }: { userType: string }) => {
       router.push(`/chating/${chat.id}`);
     }
   };
-  const { data } = useQuery<Chat[], unknown>({
+  const { data } = useQuery<Chat[]>({
     queryKey: ['getChatsKey'],
     queryFn: userType === 'my' ? getMyChats : getAllChats,
     refetchOnWindowFocus: false,
