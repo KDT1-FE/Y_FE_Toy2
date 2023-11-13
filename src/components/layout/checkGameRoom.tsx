@@ -102,7 +102,7 @@ const CheckGameRoom = () => {
       console.log(showAlert);
     } else {
       try {
-        await participateGameRoom(chatId, accessToken);
+        await participateGameRoom(chatId);
         setRoomId(roomId);
         setUsersInRoom(numberOfPeople);
         navigate(`/room/:${chatId}`);
