@@ -1,9 +1,9 @@
 import { getAllUsers } from '../../api';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allUserState } from '../../states/atom';
-import usePollingData from '../template/usePollingData';
+import usePollingData from './usePollingData';
 
-const UserList = () => {
+const userList = () => {
   const [allUsers, setAllUsers] = useRecoilState(allUserState);
   const accessToken: any = useRecoilValue(accessTokenState);
   const fetchData = async () => {
@@ -18,15 +18,6 @@ const UserList = () => {
   };
 
   usePollingData(fetchData, [allUsers, setAllUsers]);
-
-  return (
-    <>
-      <div>AllUserList</div>
-      {allUsers.map((element, index) => (
-        <div key={index}>{element.id}</div>
-      ))}
-    </>
-  );
 };
 
-export default UserList;
+export default userList;

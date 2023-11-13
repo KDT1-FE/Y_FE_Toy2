@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
-
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
@@ -18,36 +16,43 @@ import {
   Text,
   Button,
 } from '@chakra-ui/react';
-import { useRecoilValue } from 'recoil';
+import { getUserData, patchUserData } from '../../api';
+import { useRecoilState } from 'recoil';
 import { accessTokenState } from '../../states/atom';
-import { getMyUserData } from '../../util/util';
+import { disconnectLoginSocket } from '../../api/socket';
+import { useNavigate } from 'react-router-dom';
 
-const UserProfile: React.FC<{ userImg: string }> = () => {
+const UserProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [name, setName] = useState('');
+  const [picture, setPicture] = useState('');
   const [isHovering, setIsHovering] = useState(false);
   const [filePreviewUrl, setFilePreviewUrl] = useState('');
-  const [formData, setFormData] = useState({
-    picture: '',
-  });
-  const [mydata, setMydata] = useState('');
+  const [myID, setMyID] = useState('');
+  const [myName, setMyname] = useState('');
+  const [myImg, setMyImg] = useState('');
 
-  const accessToken: string = useRecoilValue(accessTokenState);
   const userId = localStorage.getItem('id');
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (accessToken && userId) {
+      if (userId) {
         try {
-          const res = await getMyUserData(accessToken, userId);
-          setMydata(res.user.picture);
+          const res = await getUserData(accessToken, userId);
+          console.log(res);
+          setMyID(res.user.id);
+          setMyname(res.user.name);
+          setMyImg(res.user.picture);
         } catch (error) {
           console.error('내정보를 가져오는데 실패했습니다.:', error);
         }
       }
     };
     fetchData();
-  }, [accessToken, userId]);
+  }, [picture, name]);
 
   const handleImgUploader = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -59,7 +64,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
         const result = reader.result;
         if (typeof result === 'string') {
           setFilePreviewUrl(result);
-          setFormData({ ...formData, picture: result });
+          setPicture(result);
         }
       };
       reader.readAsDataURL(file);
@@ -68,8 +73,30 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      // 닉네임중복 핸들링 로직 필요
+      await patchUserData(accessToken, name, picture);
+      setMyname(name);
+      setMyImg(picture);
+      alert('수정에 성공했습니다.');
+      navigate('/lobby');
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  const handleUserLogout = () => {
+    try {
+      disconnectLoginSocket();
+      localStorage.removeItem('refreshToken');
+      setAccessToken('');
+      alert('로그아웃에 성공했습니다');
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Flex
@@ -83,19 +110,45 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
         <Box
           width={100}
           height={100}
-          backgroundImage={mydata}
+          backgroundImage={myImg}
+          backgroundSize="cover"
+          backgroundPosition="center"
+          backgroundRepeat="no-repeat"
           borderRadius={10}
           marginRight={23}></Box>
         <Box>
-          <Text fontWeight="600" marginBottom={3}>
-            아이디
+          <Text fontWeight="600" fontSize={20}>
+            {myName}
           </Text>
-          <Text marginBottom={3}>닉네임</Text>
+          <Text fontSize={16} marginBottom={2} color="#CBD5E0">
+            {myID}
+          </Text>
           <Box>
-            <Button onClick={onOpen} width={130} height="32px" marginRight={2}>
+            <Button
+              onClick={onOpen}
+              width={130}
+              height="32px"
+              marginRight={2}
+              bg="#151928"
+              border="1px solid #fff"
+              _hover={{
+                bg: '#fff',
+                color: '#1A365D',
+              }}
+              color={'white'}>
               회원 정보 수정
             </Button>
-            <Button width={130} height="32px">
+            <Button
+              width={130}
+              height="32px"
+              onClick={handleUserLogout}
+              border="1px solid #fff"
+              _hover={{
+                bg: '#fff',
+                color: '#1A365D',
+              }}
+              bg="#151928"
+              color={'white'}>
               로그아웃
             </Button>
           </Box>
@@ -129,7 +182,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
                   onMouseEnter={() => setIsHovering(true)}
                   onMouseLeave={() => setIsHovering(false)}>
                   <Img
-                    src={filePreviewUrl || '/assets/inputImg.svg'}
+                    src={filePreviewUrl || myImg}
                     alt="File preview"
                     width="100%"
                     height="100%"
@@ -143,7 +196,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
                         : {}
                     }
                   />
-                  {isHovering && filePreviewUrl && (
+                  {isHovering && (
                     <Box
                       position="absolute"
                       transform="translate(0%, -100%)"
@@ -177,13 +230,14 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
                 />
               </label>
 
-              <FormControl marginTop={5}>
+              <FormControl marginTop={5} marginBottom={7}>
                 <FormLabel>닉네임</FormLabel>
                 <Input
                   placeholder="닉네임을 입력해주세요"
                   _placeholder={{ fontSize: 'sm' }}
+                  borderColor={'gray.200'}
                   // borderColor={
-                  //   showAlert.active && showAlert.type === 'id'
+                  //   showAlert.active && showAlert.type === 'name'
                   //     ? 'red.500'
                   //     : 'gray.200'
                   // }
@@ -191,26 +245,30 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  margin={0}
                   width="388px"
                   height="50px"
                   justifyContent={'center'}
                 />
               </FormControl>
+              <Button
+                width="390px"
+                height="50px"
+                type="submit"
+                size="lg"
+                color="white"
+                bg={'#4FD1C5'}
+                _hover={{
+                  bg: '#9AEBE0',
+                }}
+                _disabled={{
+                  bg: '#CBD5E0',
+                }}
+                // isDisabled={!name || !picture}
+              >
+                수정하기
+              </Button>
             </form>
           </ModalBody>
-
-          <ModalFooter>
-            <Button
-              marginBottom={4}
-              colorScheme="blue"
-              mr={3}
-              onClick={onClose}
-              width="390px"
-              height="50px">
-              수정하기
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

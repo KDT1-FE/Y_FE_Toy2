@@ -38,10 +38,12 @@ export const chatSocket = (accessToken: any, chatId: string) => {
       serverId: SERVER_ID,
     },
   });
-  chattingSocket.emit('fetch-messages');
 
   chattingSocket.on('connect', () => {
     console.log('Connected from server');
+    setTimeout(() => {
+      chattingSocket?.emit('fetch-messages');
+    }, 500);
   });
 
   chattingSocket.on('error', (error) => {
