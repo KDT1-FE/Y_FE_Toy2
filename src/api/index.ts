@@ -53,7 +53,6 @@ export const getUserData = async (userId: string) => {
   return res.data;
 };
 
-
 export const patchUserData = async (name: string, picture: string) => {
   const res = await client.patch(`/user`, { name: name, picture: picture });
   return res;

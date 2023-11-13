@@ -21,10 +21,13 @@ export function getCookie(name: string): string | undefined {
     .find((row) => row.startsWith(`${name}=`))
     ?.split('=')[1];
 
-  console.log(cookieValue);
-
   return cookieValue || undefined;
 }
+
+export const removeCookies = () => {
+  document.cookie = 'accessToken=; Max-Age=0; path=/';
+  document.cookie = 'refreshToken=; Max-Age=0; path=/';
+};
 
 export const getAllUsersData = async () => {
   try {
