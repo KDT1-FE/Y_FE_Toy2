@@ -7,6 +7,7 @@ import SignUp from './pages/auth/SignUp';
 import AuthLayout from './components/common/AuthLayout';
 import Home from './pages/home';
 import Openchat from './pages/Openchat';
+import Profile from './pages/profile';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/game" />
         {/* 은지님 부분 */}
         <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
         {/* 홍규님 부분 */}
         <Route path="/chat" />
         {/* 오픈 채팅 부분 */}
