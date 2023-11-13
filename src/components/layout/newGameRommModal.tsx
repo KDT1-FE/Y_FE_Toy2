@@ -34,10 +34,14 @@ const NewGameRoomModal: React.FC<ModalProps> = ({
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    let check;
+
     if (!name) {
-      setName(randomName);
+      check = await createGameRooms(randomName, [], false);
+    } else {
+      check = await createGameRooms(name, [], false);
     }
-    const check = await createGameRooms(name, [], false);
+
     if (check === undefined) {
       alert('중복된 방이 있습니다.');
     } else {
@@ -50,7 +54,10 @@ const NewGameRoomModal: React.FC<ModalProps> = ({
   return (
     <Modal
       isCentered
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+        setName('');
+      }}
       isOpen={isOpen}
       motionPreset="slideInBottom">
       <ModalOverlay />
