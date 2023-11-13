@@ -160,7 +160,7 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
+        <ModalCloseButton style={{ zIndex: 2 }} />
         <ModalBody
           display="flex"
           flexDirection="column"
