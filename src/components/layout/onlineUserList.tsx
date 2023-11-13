@@ -5,14 +5,33 @@ import { Card, Flex, Heading, Image, Text, IconButton } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { createGameRooms } from '../../api';
+import { createGameRooms, getAllMyChat } from '../../api';
 import { randomNameFunc } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
+
+interface ResponseValue {
+  chat: Chat;
+}
+
+interface Chat {
+  id: string;
+  name: string;
+  users: User[]; // 속한 유저 정보
+  isPrivate: boolean;
+  latestMessage: Message | null;
+  updatedAt: Date;
+}
 
 interface User {
   id: string;
   name: string;
   picture: string;
+}
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createAt: Date;
 }
 
 const OnlineUserList = () => {
@@ -26,6 +45,33 @@ const OnlineUserList = () => {
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
   });
+  const chathandler = async (element: User) => {
+    if (userId === element.id) {
+      alert('본인입니다.');
+    } else {
+      let allMyChatData = await getAllMyChat();
+      allMyChatData = allMyChatData.chats;
+
+      // 비공개방만 필터
+      const privateChatArray = await allMyChatData.filter(
+        (obj: any) => obj.isPrivate,
+      );
+
+      // 이미 해당 id와 생성된 방이 있는지 필터
+      const matchingChat = privateChatArray.find((chat: Chat) =>
+        chat.users.some((user: User) => user.id === element.id),
+      );
+
+      const chatId = matchingChat ? matchingChat.id : null;
+      if (chatId) {
+        //navigate(`/room/:${chatId}`);
+        console.log(privateChatArray);
+      } else {
+        const chat = await createGameRooms(element.id, [element.id], true);
+        //navigate(`/room/:${chat.id}`);
+      }
+    }
+  };
 
   const gamehandler = async (element: User) => {
     const random = randomNameFunc();
@@ -91,6 +137,9 @@ const OnlineUserList = () => {
                   icon={<ChatIcon color={'white'} />}
                   bgColor={'teal.300'}
                   _hover={{ background: 'teal.200' }}
+                  onClick={() => {
+                    chathandler(element);
+                  }}
                 />
                 <IconButton
                   aria-label="게임 같이하기"
