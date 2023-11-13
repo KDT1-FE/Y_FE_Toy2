@@ -5,15 +5,37 @@ import { Card, Flex, Heading, Image, Text, IconButton } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import { createGameRooms } from '../../api';
+import { randomNameFunc } from '../../util/util';
+import { useNavigate } from 'react-router-dom';
+
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
 
 const OnlineUserList = () => {
   userList();
+  const navigate = useNavigate();
   const onLine = useRecoilValue(onlineUserState);
   const all = useRecoilValue(allUserState);
   const allOnlineUsers = onLine.users || [];
+  const userId = localStorage.getItem('id');
+
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
   });
+
+  const gamehandler = async (element: User) => {
+    const random = randomNameFunc();
+    if (userId === element.id) {
+      alert('본인입니다.');
+    } else {
+      const chat = await createGameRooms(random, [element.id], false);
+      navigate(`/room/:${chat.id}`);
+    }
+  };
 
   return (
     <>
@@ -65,13 +87,13 @@ const OnlineUserList = () => {
               </Flex>
               <Flex gap="5px" alignItems={'center'}>
                 <IconButton
-                  aria-label="Add to friends"
+                  aria-label="1:1 대화하기"
                   icon={<ChatIcon color={'white'} />}
                   bgColor={'teal.300'}
                   _hover={{ background: 'teal.200' }}
                 />
                 <IconButton
-                  aria-label="Add to friends"
+                  aria-label="게임 같이하기"
                   icon={
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -86,6 +108,9 @@ const OnlineUserList = () => {
                   }
                   bgColor={'teal.400'}
                   _hover={{ background: 'teal.500' }}
+                  onClick={() => {
+                    gamehandler(element);
+                  }}
                 />
               </Flex>
             </Flex>

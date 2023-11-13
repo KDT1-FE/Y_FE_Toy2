@@ -95,7 +95,6 @@ const CheckGameRoom = () => {
         setErrorMessage('방이 꽉 찼어요.');
         setErrorType('full');
         setShowAlert({ active: true, message: errorMessage, type: errorType });
-        console.log(showAlert);
       }
     } else {
       try {

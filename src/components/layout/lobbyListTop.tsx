@@ -1,9 +1,10 @@
 import { AddIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { Button, Flex, Select, Icon, useDisclosure } from '@chakra-ui/react';
 import { useState } from 'react';
-import NewGameRoomModal from './newGameRommModal';
+import NewGameRoomModal from './newGameRoomModal';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
+import { randomNameFunc } from '../../util/util';
 
 interface Chats {
   id: string;
@@ -34,26 +35,6 @@ const LobbyListTop = () => {
   const [randomName, setRandomName] = useState('');
   const userId = localStorage.getItem('id');
   const navigate = useNavigate();
-
-  // 랜덤 방제목 정하는 함수
-  const randomNameFunc = () => {
-    const data = [
-      '캐치마인드 신나는 한 판~!',
-      '아이브 영원하라',
-      '그림 고수분만',
-      '초보만 들어오세요',
-      '중랑 12여 남자만',
-      '15살 수다방',
-      '김가을양재혁',
-      '안유진은 양재혁 여친',
-      '살려주세요',
-      '패캠 뒷담방 ex) 돈 내놔....',
-    ];
-
-    const randomIndex = Math.floor(Math.random() * data.length);
-    const randomPick = data[randomIndex];
-    setRandomName(randomPick);
-  };
 
   const fastParticipate = async () => {
     try {
@@ -100,7 +81,8 @@ const LobbyListTop = () => {
               backgroundColor: 'teal.200',
             }}
             onClick={() => {
-              randomNameFunc();
+              const random = randomNameFunc();
+              setRandomName(random);
               onOpen();
             }}>
             방 만들기
