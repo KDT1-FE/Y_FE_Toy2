@@ -54,7 +54,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 textDecoration: 'underline',
               }}>
               로그인
-              <Img src="/assets/>.svg" width="5px" height="9px" />
+              <Img src="/assets/rightArrow.svg" width="5px" height="9px" />
             </Flex>
             <Flex
               alignItems={'center'}
@@ -64,7 +64,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 textDecoration: 'underline',
               }}>
               회원가입
-              <Img src="/assets/>.svg" width="5px" height="9px" />
+              <Img src="/assets/rightArrow.svg" width="5px" height="9px" />
             </Flex>
           </Flex>
           <Flex
