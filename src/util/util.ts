@@ -9,6 +9,7 @@ export const getAllUsersData = async (accessToken: string) => {
     return res;
   } catch (e) {
     console.error(e);
+
     alert('사용자 정보를 가져오는데 실패했습니다.');
   }
 };

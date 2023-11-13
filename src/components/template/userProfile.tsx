@@ -67,7 +67,6 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
           setPicture(result);
         }
       };
-
       reader.readAsDataURL(file);
     }
   };
