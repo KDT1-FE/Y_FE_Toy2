@@ -1,36 +1,29 @@
 {
-    // 전역변수 환경 설정
-    "env": {
-        "browser": true,
-        "es2021": true,
-        "node": true
-    },
-
-    // npm을 통해 설치한 외부 ESLint 설정 등록 (eslint-config-{name}으로 설치)
-    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
-
-    // ESLint에 지원할 JavaScript 옵션 설정
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-
-    // parser 등록
     "parser": "@typescript-eslint/parser",
-
-    // 사용자 규칙 추가할 플러그인 (eslint-plugin-{name}으로 설치)
-    "plugins": ["@typescript-eslint", "prettier"],
-
-    // 플러그인을 통해 설치한 것 외에 규칙 설정
+    "plugins": ["prettier"],
+    "extends": [
+        "airbnb",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:prettier/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
     "rules": {
-        "prettier/prettier": [
-            "error",
-            {
-                "endOfLine": "auto"
-            }
-        ]
+        "react/jsx-props-no-spreading": "off",
+        "no-unused-expressions": "off",
+        "linebreak-style": 0,
+        "import/prefer-default-export": 0,
+        "prettier/prettier": 0,
+        "import/extensions": 0,
+        "no-use-before-define": 0,
+        "import/no-unresolved": 0,
+        "import/no-extraneous-dependencies": 0,
+        "no-shadow": 0,
+        "react/prop-types": 0,
+        "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+        "jsx-a11y/no-noninteractive-element-interactions": 0,
+        "jsx-a11y/click-events-have-key-events": 0,
+        "jsx-a11y/no-static-element-interactions": 0,
+        "react/function-component-definition": "off"
     }
 }

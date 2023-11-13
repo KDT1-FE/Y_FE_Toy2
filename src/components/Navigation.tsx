@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
 import { BsFillPeopleFill, BsThreeDots } from 'react-icons/bs';
 import { PiChatCircleBold, PiChatsCircleFill } from 'react-icons/pi';
+import Link from 'next/link';
 
 export default function Navigation() {
     const pathname = usePathname();
@@ -11,18 +12,18 @@ export default function Navigation() {
 
     return (
         <NavigationContainer>
-            <NavigationAnchor href="users">
+            <Link href="users">
                 <BsFillPeopleFill size="35" color={path == 'users' ? '#00956e' : '#dbdbdb'} />
-            </NavigationAnchor>
-            <NavigationAnchor href="mychats">
+            </Link>
+            <Link href="mychats">
                 <PiChatCircleBold size="35" color={path == 'mychats' ? '#00956e' : '#dbdbdb'} />
-            </NavigationAnchor>
-            <NavigationAnchor href="allchats">
+            </Link>
+            <Link href="allchats">
                 <PiChatsCircleFill size="37" color={path == 'allchats' ? '#00956e' : '#dbdbdb'} />
-            </NavigationAnchor>
-            <NavigationAnchor href="#">
-                <BsThreeDots size="35" color={path == '#' ? '#00956e' : '#dbdbdb'} />
-            </NavigationAnchor>
+            </Link>
+            <Link href="mypage">
+                <BsThreeDots size="35" color={path == 'mypage' ? '#00956e' : '#dbdbdb'} />
+            </Link>
         </NavigationContainer>
     );
 }
@@ -34,19 +35,11 @@ const NavigationContainer = styled.div`
     position: absolute;
     bottom: 0;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    text-align: center;
+    align-items: center;
 
     background-color: #fff;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-`;
-
-const NavigationAnchor = styled.a`
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    text-decoration: none;
 `;

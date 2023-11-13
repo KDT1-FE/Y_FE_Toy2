@@ -117,6 +117,7 @@ const UsersWrap = styled.div`
 
     display: flex;
     flex-direction: column;
+    gap: 1rem;
 
     height: 100vh;
 `;
@@ -124,18 +125,14 @@ const UsersWrap = styled.div`
 const HeaderText = styled.h1`
     color: ${({ theme }) => theme.color.mainGreen};
     font-size: ${({ theme }) => theme.fontSize.title};
-
-    margin-top: 0;
-
-    padding: 1rem;
 `;
 
 const UserList = styled.div`
     margin-top: 2rem;
 
-    padding: 1rem;
-
     height: 80%;
+
+    padding: 1rem;
 
     overflow-y: auto;
     &::-webkit-scrollbar {

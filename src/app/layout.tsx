@@ -62,6 +62,13 @@ const Body = styled.body`
     * {
         box-sizing: border-box;
     }
+
+    @font-face {
+        font-family: 'NotoSans';
+        src: url('/fonts/NotoSansKR-Medium.ttf');
+    }
+
+    font-family: 'NotoSans';
 `;
 
 const Container = styled.div`
