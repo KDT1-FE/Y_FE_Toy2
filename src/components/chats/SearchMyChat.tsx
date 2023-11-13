@@ -8,11 +8,11 @@ import { MdSearch } from 'react-icons/md';
 import { getAllChats, getMyChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
 
-const SearchMyChat = ({ userType }: any) => {
+const SearchMyChat = ({ userType }: { userType: string }) => {
   const [input, setInput] = useState<string>('');
   const [filterChats, setFilteredChats] = useRecoilState(searchChatsState);
 
-  const { data: chats } = useQuery<Chat[], any>({
+  const { data: chats } = useQuery<Chat[], unknown>({
     queryKey: ['getChatsKey'],
     queryFn: userType === 'my' ? getMyChats : getAllChats,
     refetchOnWindowFocus: false,

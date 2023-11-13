@@ -1,7 +1,7 @@
 'use client';
 // react 관련 import
-import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 // styled import
 import styled from 'styled-components';
 // chats 컴포넌트 import
@@ -9,14 +9,13 @@ import MyChatItem from '@/components/chats/MyChatItem';
 import SearchMyChat from '@/components/chats/SearchMyChat';
 // svgr import
 import AddChat from '../../../public/assets/addChat.svg';
-import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
-import { instance } from '@/lib/api';
+import { Chat, searchChatsState } from './chatsStore';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
 
 import { getMyChats, getAllChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
-const MyChats = ({ userType }: any) => {
+const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
   const filterChats = useRecoilValue(searchChatsState);
   const router = useRouter();
