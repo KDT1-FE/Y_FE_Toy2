@@ -27,3 +27,13 @@ export interface IMessage {
   userId: string;
   createdAt: string;
 }
+
+export interface JoinersData {
+  users: string[]; // 참여자들 id
+  joiners: string[]; // 새로운 참여자 id
+}
+
+export interface LeaverData {
+  users: string[]; // 참여자들 id
+  leaver: string; // 나간 사용자 id
+}
