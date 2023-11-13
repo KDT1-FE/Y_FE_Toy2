@@ -15,6 +15,11 @@ const Users = async () => {
 		<section className="w-full h-full bg-white px-3">
 			<Header />
 			<MyProfile user={myUser} />
+			<div className="w-full mt-8 mb-5 pt-2 border-t border-gray-400 ">
+				<h4 className="text-gray-400 font-bold">
+					친구{allUsersExceptMe?.length}명
+				</h4>
+			</div>
 			<FriendProfile allUsers={allUsersExceptMe} />
 		</section>
 	);

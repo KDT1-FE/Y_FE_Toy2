@@ -12,12 +12,7 @@ const Profile = async ({ params }: { params: { id: string } }) => {
 			(chat.users[0].id === params.id || chat.users[1].id === params.id),
 	)[0];
 
-	return (
-		<ProfileModal
-			user={user}
-			existPrivateChat={existPrivateChat}
-		></ProfileModal>
-	);
+	return <ProfileModal user={user} existPrivateChat={existPrivateChat} />;
 };
 
 export default Profile;

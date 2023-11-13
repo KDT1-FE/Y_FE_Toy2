@@ -6,26 +6,17 @@ import { User } from '@/types';
 import Link from 'next/link';
 
 const FriendProfiles = ({ allUsers }: { allUsers: User[] | undefined }) => {
-	// const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-	// const [modalUser, setModalUser] = useState<User | object>({});
-
-	// const openModalHandler = (user: User) => {
-	// 	setModalUser(user);
-	// 	setIsModalOpen(true);
-	// };
-
 	return (
 		<div>
-			<div className="w-full mt-8 mb-5 pt-2 border-t border-gray-400 ">
-				<h4 className="text-gray-400 font-bold">친구{allUsers?.length}명</h4>
-			</div>
 			{allUsers?.map((user) => {
 				return (
 					<li key={user.id} className="list-none cursor-pointer">
-						<Link href={{
-              pathname: `/profile/${user.id}`,
-              query: { isMyProfile : false },
-            }}>
+						<Link
+							href={{
+								pathname: `/profile/${user.id}`,
+								query: { isMyProfile: false },
+							}}
+						>
 							<FriendProfile user={user} />
 						</Link>
 					</li>

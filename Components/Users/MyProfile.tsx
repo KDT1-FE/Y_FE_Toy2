@@ -10,13 +10,13 @@ const MyProfile = ({ user }: { user: User }) => {
 
 	return (
 		<div className="mt-3">
-			<div className="flex w-full align-center mb-4">
-				<Link
-					href={{
-						pathname: `/profile/${user.id}`,
-						query: { isMyProfile: true },
-					}}
-				>
+			<Link
+				href={{
+					pathname: `/profile/${user.id}`,
+					query: { isMyProfile: true },
+				}}
+			>
+				<div className="flex w-full align-center mb-4">
 					<div className="user-component__column">
 						<Image
 							width={70}
@@ -26,10 +26,10 @@ const MyProfile = ({ user }: { user: User }) => {
 							className="rounded-3xl mr-5"
 						/>
 					</div>
-				</Link>
 
-				<h4 className="w-1/2 py-5 text-xl font-bold">{user.name}</h4>
-			</div>
+					<h4 className="w-1/2 py-5 text-xl font-bold">{user.name}</h4>
+				</div>
+			</Link>
 		</div>
 	);
 };
