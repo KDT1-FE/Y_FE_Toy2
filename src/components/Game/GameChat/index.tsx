@@ -9,6 +9,8 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import ChatBubble from "../../common/ChatBubble";
+import SystemChat from "../../common/SystemChat";
+import Vote from "../Vote";
 
 interface Message {
   id: string;
@@ -17,9 +19,17 @@ interface Message {
 
 interface GameChatProps {
   gameId: string;
+  gameData: any;
 }
 
-const GameChat: React.FC<GameChatProps> = ({ gameId }) => {
+interface UserResponse {
+  users: string[];
+  joiners?: string[];
+  leaver?: string;
+}
+
+const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
+  console.log("GameChat/ gameData:", gameData);
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
@@ -35,6 +45,26 @@ const GameChat: React.FC<GameChatProps> = ({ gameId }) => {
   });
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
+  const [users, setUsers] = useState<string[]>([]);
+  console.log("users: ", users);
+  const [showVoteModal, setShowVoteModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<string | null>("");
+
+  const handleOpenVoteModal = () => {
+    setShowVoteModal(true);
+  };
+
+  const handleCloseVoteModal = (selectedUser: string) => {
+    setShowVoteModal(false);
+    setSelectedUser(selectedUser);
+  };
+
+  // const handleCalculateVoteClose = (finalLiar: string) => {
+  //   // finalLiar를 이용하여 특정 동작 수행 (SystemChat)
+
+  //   // 선택한 결과 초기화
+  //   setSelectedUser("");
+  // };
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
@@ -47,6 +77,25 @@ const GameChat: React.FC<GameChatProps> = ({ gameId }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
+
+  useEffect(() => {
+    // 유저 입장 메시지 수신
+    socket.on("join", (responseData: UserResponse) => {
+      const systemMessage = `${responseData.joiners!.join(
+        ", ",
+      )} 님이 입장했습니다.`;
+
+      setMessages([...messages, { id: "system", text: systemMessage }]);
+      setUsers(responseData.users);
+    });
+
+    // 유저 퇴장 메시지 수신
+    socket.on("leave", (responseData: UserResponse) => {
+      const systemMessage = `${responseData.leaver} 님이 퇴장했습니다.`;
+      setMessages([...messages, { id: "system", text: systemMessage }]);
+      setUsers(responseData.users);
+    });
+  }, []);
 
   // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
   useEffect(() => {
@@ -74,9 +123,23 @@ const GameChat: React.FC<GameChatProps> = ({ gameId }) => {
   return (
     <Card p={3} h="100%" mb="20px">
       <CardBody>
-        {messages.map((message: Message, index: number) => (
-          <ChatBubble key={index} userId={message.id} text={message.text} />
-        ))}
+        {messages.map((message: Message, index: number) =>
+          // 시스템 메시지인 경우 SystemMessage 컴포넌트 사용
+          message.id === "system" ? (
+            <SystemChat key={index} text={message.text} />
+          ) : (
+            <ChatBubble key={index} userId={message.id} text={message.text} />
+          ),
+        )}
+        <Button size="md" onClick={handleOpenVoteModal}>
+          투표하기
+        </Button>
+        {showVoteModal && (
+          <Vote gameData={gameData} onClose={handleCloseVoteModal} />
+        )}
+        {selectedUser && (
+          <SystemChat text={`${selectedUser}님이 라이어로 선택되었습니다.`} />
+        )}
       </CardBody>
       <InputGroup size="md">
         <Input
