@@ -34,13 +34,13 @@ const MyChats = ({ userType }: any) => {
         queryKey: ['getChatsKey'],
         queryFn: userType === 'my' ? getMyChats : getAllChats,
         refetchOnWindowFocus: false,
-        onSuccess: (data) => {
-            if (userType === 'my') {
-                setMyChats(data);
-            } else {
-                setAllChats(data);
-            }
-        },
+        // onSuccess: (data) => {
+        //     if (userType === 'my') {
+        //         setMyChats(data);
+        //     } else {
+        //         setAllChats(data);
+        //     }
+        // },
         staleTime: 10000,
     });
 
@@ -60,7 +60,7 @@ const MyChats = ({ userType }: any) => {
             <ChatContainer>
                 <SearchMyChat userType={userType} />
                 <ChatList>
-                    {userId
+                    {userId && data
                         ? filterChats.length > 0
                             ? sortTime(filterChats).map((chat) => (
                                   <MyChatItem
@@ -72,7 +72,7 @@ const MyChats = ({ userType }: any) => {
                                       isPrivate={chat.isPrivate}
                                   />
                               ))
-                            : sortTime(userType === 'my' ? myChats : allChats).map((chat) => (
+                            : sortTime(data).map((chat) => (
                                   <MyChatItem
                                       key={chat.id}
                                       name={chat.name}
