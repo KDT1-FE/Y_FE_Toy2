@@ -34,21 +34,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-            <html lang="en">
-                <StyledComponentsRegistry>
-                    <ThemeProvider theme={theme}>
-                        <Body>
-                            <Container>
-                                {shouldRenderMoveComponent && <Move />}
-                                {children}
-                            </Container>
-                            <ReactQueryDevtools/>
-                        </Body>
-                    </ThemeProvider>
-                </StyledComponentsRegistry>
-            </html>
-        </RecoilRoot>
+            <RecoilRoot>
+                <html lang="en">
+                    <StyledComponentsRegistry>
+                        <ThemeProvider theme={theme}>
+                            <Body>
+                                <Container>
+                                    {shouldRenderMoveComponent && <Move />}
+                                    {children}
+                                </Container>
+                                <ReactQueryDevtools />
+                            </Body>
+                        </ThemeProvider>
+                    </StyledComponentsRegistry>
+                </html>
+            </RecoilRoot>
         </QueryClientProvider>
     );
 }
@@ -61,6 +61,13 @@ const Body = styled.body`
     * {
         box-sizing: border-box;
     }
+
+    @font-face {
+        font-family: 'NotoSans';
+        src: url('/fonts/NotoSansKR-Medium.ttf');
+    }
+
+    font-family: 'NotoSans';
 `;
 
 const Container = styled.div`
