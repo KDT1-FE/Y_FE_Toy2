@@ -47,40 +47,51 @@ const Container = styled.div`
 
     div {
         padding-left: 0.5rem;
+
         margin-bottom: 2rem;
 
         h3 {
             padding-bottom: 20px;
+
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-            font-size: 1.4rem;
-            color: #00956e;
+
+            font-size: ${({ theme }) => theme.fontSize.title};
+            color: ${({ theme }) => theme.color.mainGreen};
         }
 
         div.profileDiv {
             padding-left: 0;
+
             display: flex;
             flex-direction: column;
 
             button {
                 all: unset;
+
                 margin-bottom: 25px;
-                font-size: 1.15rem;
+
+                font-size: ${({ theme }) => theme.fontSize.lg};
+                font-weight: 500;
+
                 cursor: pointer;
-                font-weight: 600;
             }
         }
 
         div.alertDiv {
             padding-left: 0;
+
             display: flex;
             flex-direction: column;
 
             button {
                 all: unset;
+
                 margin-bottom: 25px;
-                font-size: 1.15rem;
+
+                font-size: ${({ theme }) => theme.fontSize.lg};
+                font-weight: 500;
+
                 cursor: pointer;
-                font-weight: 600;
             }
         }
     }

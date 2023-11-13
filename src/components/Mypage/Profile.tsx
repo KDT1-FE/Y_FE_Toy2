@@ -83,26 +83,35 @@ const User = styled.div`
     flex-direction: row;
     align-items: center;
     gap: 2.5rem;
+
     margin-bottom: 2rem;
+
     border-radius: 20px;
-    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.15);
+
+    box-shadow: ${({ theme }) => theme.shadow.list};
     background-color: white;
+
     padding: 1rem 2rem;
     padding-bottom: 1.5rem;
+
     position: relative;
 
     button {
         all: unset;
+
         font-size: 0.8rem;
+
         position: absolute;
-        bottom: 15px;
-        right: 25px;
+        bottom: 20px;
+        right: 30px;
+
         font-weight: 600;
-        color: #00956e;
+        color: ${({ theme }) => theme.color.mainGreen};
+
         cursor: pointer;
-        &: hover {
+        &:hover {
             transition: 0.4s;
-            color: #05664c;
+            color: ${({ theme }) => theme.color.darkGreen};
         }
     }
 `;
@@ -110,9 +119,13 @@ const User = styled.div`
 const UserImg = styled.img`
     width: 125px;
     height: 125px;
+
     border-radius: 70%;
+
     overflow: hidden;
+
     margin-top: 5px;
+
     border: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
@@ -124,10 +137,11 @@ const UserRight = styled.div`
 `;
 
 const UserName = styled.h2`
-    font-size: 1.9rem;
+    font-size: ${({ theme }) => theme.fontSize.title};
 `;
 const UserId = styled.h2`
     margin-top: -11px;
-    color: #9a9a9a;
-    font-size: 1.1rem;
+
+    color: ${({ theme }) => theme.color.darkGray};
+    font-size: ${({ theme }) => theme.fontSize.md};
 `;
