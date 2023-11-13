@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
 import { controlLobbyReload, controlBack } from '../../hooks/leaveHandle';
 import { getUserData } from '../../api/index';
+import CreateGameRoom from '../../components/layout/createGameRoom';
 
 const GameLobby = () => {
   const accessToken = useRecoilValue(accessTokenState);
@@ -25,10 +26,8 @@ const GameLobby = () => {
         console.error(error);
       }
     }
-
     fetchUserData(); // 함수 호출
   }, [accessToken]); // accessToken이 변경될 때마다 함수 호출
-
   return (
     <>
       <Flex
@@ -43,6 +42,7 @@ const GameLobby = () => {
           <OnlineUserList />
           <UserProfile></UserProfile>
         </RightComponent>
+        <CreateGameRoom></CreateGameRoom>
       </Flex>
     </>
   );

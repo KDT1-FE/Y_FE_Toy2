@@ -26,11 +26,19 @@ import {
   disconnectChattingSocket,
   disconnectLoginSocket,
 } from '../../api/socket';
+import { useSetRecoilState } from 'recoil';
+import { roomIdState } from '../../states/atom';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const accessToken: any = useRecoilValue(accessTokenState);
+
+  const setRoomId = useSetRecoilState(roomIdState);
+
+  const handleSelectRoom = (roomId: number) => {
+    setRoomId(roomId);
+  };
 
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -79,7 +87,11 @@ const CheckGameRoom = () => {
 
   usePollingData(fetchData, [accessToken, currentPage]);
 
-  const handleParticipate = async (numberOfPeople: number, chatId: any) => {
+  const handleParticipate = async (
+    numberOfPeople: number,
+    chatId: any,
+    roomId: number,
+  ) => {
     if (numberOfPeople === 4) {
       const errorMessage = `방이 꽉 찼어요.`;
       const errorType = 'full';
@@ -88,6 +100,7 @@ const CheckGameRoom = () => {
     } else {
       try {
         await participateGameRoom(chatId, accessToken);
+        setRoomId(roomId);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
         console.log(error.response.data.message);
@@ -145,9 +158,14 @@ const CheckGameRoom = () => {
                 backgroundColor:
                   element.users.length !== 4 ? 'gray.100' : 'gray.300',
               }}
-              onClick={() =>
-                handleParticipate(element.users.length, element.id)
-              }>
+              onClick={() => {
+                // handleSelectRoom(element?.index);
+                handleParticipate(
+                  element.users.length,
+                  element.id,
+                  element?.index,
+                );
+              }}>
               <Flex
                 lineHeight="50px"
                 fontSize={14}

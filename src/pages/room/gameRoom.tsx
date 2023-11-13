@@ -12,6 +12,9 @@ import GameChatting from '../../components/template/GameChatting';
 import CheckUser from '../../components/template/CheckUser';
 import { controlBack } from '../../hooks/leaveHandle';
 
+import { useRecoilValue } from 'recoil';
+import { roomIdState } from '../../states/atom';
+
 const GameRoom = () => {
   const { id } = useParams();
   const [chat, setChat] = useRecoilState(chattingIdState);
@@ -23,12 +26,14 @@ const GameRoom = () => {
   // controlGameRoomReload(chat);
   controlBack();
 
+  const roomId = useRecoilValue(roomIdState);
+
   return (
     <Game>
       <RoomHeader>
         <RoomInfo>
           <RoomInformation>방 번호</RoomInformation>
-          <RoomInformation>{id?.slice(1, 5)}</RoomInformation>
+          <RoomInformation>{roomId}</RoomInformation>
           <RoomInformation>인원 수 </RoomInformation>
           <RoomInformation>3 / 4</RoomInformation>
           {/* 인원수 추가 */}

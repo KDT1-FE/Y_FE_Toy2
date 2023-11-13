@@ -48,3 +48,8 @@ export const chattingIdState = atom<any>({
   key: 'chattingIdState',
   default: '',
 });
+
+export const roomIdState = atom<any>({
+  key: 'roomIdState',
+  default: '',
+});
