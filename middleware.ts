@@ -12,5 +12,5 @@ export const middleware = (request: NextApiRequest) => {
 };
 
 export const config = {
-	matcher: ['/open', '/search'],
+	matcher: ['/open', '/search', '/user', '/private'],
 };
