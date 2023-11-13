@@ -3,7 +3,6 @@ import { useRecoilValue } from "recoil";
 import { authState } from "../../../recoil/atoms/authState";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../../hooks/useFetch";
 
 const AdminMain = () => {
   console.log("AdminMain 렌더링"); // 컴포넌트 렌더링 확인
