@@ -70,8 +70,8 @@ interface Props {
 const ToastNotice: React.FC<Props> = ({ roomData, setToast }) => {
   const navigate = useNavigate();
 
-  const live = useFetch({
-    url: "https://fastcampus-chat.net/chat/leave",
+  const join = useFetch({
+    url: "https://fastcampus-chat.net/chat/participate",
     method: "PATCH",
     data: {
       chatId: roomData.id,
@@ -97,7 +97,6 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast }) => {
           color="#eee"
           colorScheme="whiteAlpha"
           onClick={() => {
-            live.refresh();
             setToast(false);
           }}
         >
@@ -111,6 +110,7 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast }) => {
           color="#eee"
           colorScheme="whiteAlpha"
           onClick={() => {
+            join.refresh();
             navigate(`/game?gameId=${roomData.id}`);
           }}
         >

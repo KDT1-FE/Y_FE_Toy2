@@ -114,7 +114,7 @@ const Example = () => {
     start: true,
   });
 
-  const live = useFetch({
+  const leave = useFetch({
     url: "https://fastcampus-chat.net/chat/leave",
     method: "PATCH",
     data: {
@@ -196,7 +196,7 @@ const Example = () => {
   };
 
   const liveChat = () => {
-    live.refresh();
+    leave.refresh();
   };
 
   // api get 요청으로 가져온 데이터 출력

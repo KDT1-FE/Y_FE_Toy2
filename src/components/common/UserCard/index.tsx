@@ -64,7 +64,7 @@ const UserCard = ({ id, name, picture, roomData, setRoomData }: Props) => {
     if (status) {
       copy.users = copy.users.filter((v) => v !== id);
     } else {
-      if (roomData.users.length >= roomData.num) {
+      if (roomData.users.length + 1 >= roomData.num) {
         alert("인원수 초과");
         return;
       } else {
