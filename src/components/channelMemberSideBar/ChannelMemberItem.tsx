@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar, AvatarBadge, Flex, Text } from '@chakra-ui/react';
 
 interface MemberItemProps {
-  userName: string;
+  userName?: string;
   src?: string;
 }
 

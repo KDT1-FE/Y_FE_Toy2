@@ -50,18 +50,24 @@ export const inviteChannel = async (inviteData: InviteRequestBody) => {
   return response.data;
 };
 
-export const exitChannel = async (chatId: string) => {
+export const exitChannel = async ({ chatId }: IchatId) => {
+  const newChatId = { chatId };
   const response = await instance.patch<ExitResponseValue>(
     '/chat/leave',
-    chatId,
+    newChatId,
   );
   return response.data;
 };
 
+interface IchatId {
+  chatId: string;
+}
+
 export const participateChannel = async (chatId: string) => {
+  const newChatId = { chatId };
   const response = await instance.patch<InviteResponseValue>(
     '/chat/participate',
-    chatId,
+    newChatId,
   );
   return response.data;
 };

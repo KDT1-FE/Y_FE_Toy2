@@ -1,12 +1,29 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { getMyChannels } from '../api/channel';
+import { Channel } from '../@types/channel';
 
 export const useMyChannels = () => {
-  const { data: myChannelsQuery } = useQuery({
+  return useQuery({
     queryKey: ['my-channels'],
     queryFn: getMyChannels,
   });
-
-  return myChannelsQuery;
 };
+
+// export const useMyChannels = () => {
+//   return useMutation({
+//     mutationFn: getMyChannels,
+//     onSuccess: (data) => {
+//       return data;
+//     },
+//   });
+// };
+
+// export const useParticipateChannel = (chatId: string) => {
+//   const { data: participateChannelQuery, isLoading } = useQuery<Channel[]>({
+//     queryKey: ['participateChannel',chatId],
+//     queryFn: participateChannel(chatId),
+//   });
+
+//   return participateChannelQuery;
+// };

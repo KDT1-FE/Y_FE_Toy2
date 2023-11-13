@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ChannelMemberItem from './ChannelMemberItem';
 import UserInviteModal from './modal/UserInviteModal';
-import socket from '../../api/socket';
 import { getUser } from '../../api/user';
-import { User } from '../../@types/user';
+import { User2 } from '../../@types/user';
 import ChannelExitDialog from './modal/ChannelExitDialog';
+import { participateChannel } from '../../api/channel';
+import serverSocket from '../../api/severSocket';
+import socket from '../../api/socket';
 
 interface UserIdDataProps {
   users: string[];
@@ -18,11 +20,19 @@ interface ResponseData {
 }
 
 const ChannelMemberSideBar = () => {
-  const [userList, setUserList] = useState<User[]>([]);
-  const { params } = useParams();
-  const chatId: string = params!;
+  const [userList, setUserList] = useState<User2[]>([]);
+  const { id } = useParams();
+  const chatId: string = id!;
 
   useEffect(() => {
+    socket.emit('users');
+    socket.on('users-to-client', (messages: { users: string[] }) => {
+      if (!messages) {
+        console.log('땡!!!');
+      }
+      console.log('users-to-client', messages);
+    });
+
     const getMemberInfo = async (users: string[]) => {
       const userListData = [];
       for (const id of users) {
@@ -36,15 +46,31 @@ const ChannelMemberSideBar = () => {
           });
         }
       }
+
       setUserList(userListData);
     };
-    socket.on('users-to-client', async (usersIdData: UserIdDataProps) => {
-      const { users } = usersIdData;
-      getMemberInfo(users);
+    //현재 서버 접속자
+    serverSocket.emit('users-server');
+    serverSocket.on(
+      'users-server-to-client',
+      (usersIdData: UserIdDataProps) => {
+        const { users } = usersIdData;
+        // getMemberInfo(users);
+      },
+    );
+
+    socket.on('leave', async (membersData: ResponseData) => {
+      console.log('LEAVE', membersData);
     });
-    socket.emit('join', (membersData: ResponseData) => {
-      console.log('membersData', membersData);
+    socket.on('join', (messages: { users: string[]; joiners: string[] }) => {
+      const members = messages.users;
+      console.log('JOIN', messages);
     });
+
+    return () => {
+      socket.off('join');
+      socket.off('users-server-to-client');
+    };
   }, []);
 
   return (
@@ -66,7 +92,7 @@ const ChannelMemberSideBar = () => {
         {userList.map((user) => (
           <ChannelMemberItem
             key={user.id}
-            userName={user.name}
+            userName={user.name || user.username}
             src={user.picture}
           />
         ))}

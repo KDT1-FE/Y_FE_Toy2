@@ -14,10 +14,10 @@ import {
 import { AddIcon } from '@chakra-ui/icons';
 import { inviteChannel } from '../../../api/channel';
 import ChannelModalUserList from '../../channel/modal/ChannelModalUserList';
-import { User } from '../../../@types/user';
+import { User2 } from '../../../@types/user';
 
 interface Props {
-  setUserList: React.Dispatch<React.SetStateAction<User[]>>;
+  setUserList: React.Dispatch<React.SetStateAction<User2[]>>;
   chatId: string;
 }
 
@@ -28,12 +28,11 @@ const UserInviteModal = ({ setUserList, chatId }: Props) => {
 
   const handleInviteUsers = async () => {
     if (users) {
-      console.log('users', users);
       const inviteData = { chatId, users };
       const newChannelData = await inviteChannel(inviteData);
       const newUserList = newChannelData.users;
       setUserList(newUserList);
-      console.log('inviteData', inviteData);
+      console.log('newUserList', newUserList);
       onClose();
     }
   };

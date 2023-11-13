@@ -8,7 +8,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<ChannelPage />} />
-          <Route path="/chat" element={<Chats />} />
+          <Route path="/chats/:id" element={<Chats />} />
         </Route>
       </Routes>
     </Router>
