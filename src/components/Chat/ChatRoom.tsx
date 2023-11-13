@@ -1,51 +1,50 @@
 import styled from "styled-components";
 import ModalHamburger from "../ModalHamburger";
-import { useContext, useEffect, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} from "react";
 import io, { Socket } from "socket.io-client";
 import { AuthContext } from "../../hooks/useAuth";
 
-// interface Chat {
-//   id: string;
-//   name: string;
-//   users: User[]; // 속한 유저 id
-//   isPrivate: boolean;
-//   latestMessage: Message | null;
-//   updatedAt: Date;
-// }
+interface Chat {
+  id: string;
+  name: string;
+  users: User[]; // 속한 유저 id
+  isPrivate: boolean;
+  latestMessage: Message | null;
+  updatedAt: Date;
+}
 
-// interface User {
-//   id: string;
-//   name: string;
-//   picture: string;
-// }
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
 
-// interface Message {
-//   id: string;
-//   text: string;
-//   userId: string;
-//   createAt: Date;
-// }
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createAt: Date;
+}
 
 function ChatRoom({ roomId }: { roomId: string }) {
   const [text, setText] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const { accessToken } = useContext(AuthContext);
   const [socket, setSocket] = useState<Socket>({} as Socket);
   const [inputValue, setInputValue] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleClick = async () => {
     try {
-      if (socket) {
+      if (socket && text.trim()) {
         socket.emit("message-to-server", text);
-        socket.on("message-to-client", (responseData) => {
-          console.log(responseData);
-        });
-        socket.emit("fetch-messages");
-        socket.on("messages-to-client", (responseData) => {
-          setMessages(responseData.messages);
-        });
-
-        console.log(messages);
+        setText("");
         setInputValue("");
       }
     } catch (error) {
@@ -71,13 +70,37 @@ function ChatRoom({ roomId }: { roomId: string }) {
         }
       );
 
+      newSocket.on("message-to-client", (newMessage) => {
+        setMessages((prevMessages) => {
+          const isDuplicate = prevMessages.some(
+            (message) => message.id === newMessage.id
+          );
+          return isDuplicate ? prevMessages : [...prevMessages, newMessage];
+        });
+      });
+
+      newSocket.emit("fetch-messages");
+      newSocket.on("messages-to-client", (responseData) => {
+        setMessages(responseData.messages);
+      });
       setSocket(newSocket);
 
       return () => {
+        newSocket.off("message-to-client");
+        newSocket.off("messages-to-client");
         newSocket.disconnect();
       };
     }
-  }, [accessToken, roomId, messages]);
+  }, [accessToken, roomId]);
+
+  useLayoutEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+      });
+    }
+  }, [messages]);
 
   return (
     <ChatRoomWrap>
@@ -129,6 +152,9 @@ function ChatRoom({ roomId }: { roomId: string }) {
             </div>
           </div>
           <div className="alert">테일러스위프트 님이 퇴장했습니다</div>
+          <div>
+            <div ref={messagesEndRef} />
+          </div>
         </div>
       </div>
       <div className="chatroom__send">
