@@ -18,6 +18,10 @@ export type Chat = {
 	name: string;
 	isPrivate: boolean;
 	users: User[];
-	messages: Message[]; // message 객체가 속합니다.
+	latestMessage: Message | null;
 	updatedAt: Date;
+};
+
+export type AllOpenChatJSON = {
+	chats: Chat[];
 };
