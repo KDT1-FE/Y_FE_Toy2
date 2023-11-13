@@ -1,11 +1,9 @@
 import {
-  Channel,
   ResponseValue,
   InviteRequestBody,
   InviteResponseValue,
   ExitResponseValue,
 } from '../@types/channel';
-import { checkChannelName } from '../utils';
 import instance from './axios';
 
 export interface CreateChannelBody {
