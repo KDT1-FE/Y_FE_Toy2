@@ -2,11 +2,12 @@
 
 import styled from 'styled-components';
 import StyledComponentsRegistry from '../lib/registry';
+import { ThemeProvider } from 'styled-components';
+import theme from '@/style/theme';
 import { RecoilRoot } from 'recoil';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { authCheck } from '@/hooks/Auth';
-
 import Move from '@/components/Move';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -32,12 +33,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RecoilRoot>
             <html lang="en">
                 <StyledComponentsRegistry>
-                    <Body>
-                        <Container>
-                            {shouldRenderMoveComponent && <Move />}
-                            {children}
-                        </Container>
-                    </Body>
+                    <ThemeProvider theme={theme}>
+                        <Body>
+                            <Container>
+                                {shouldRenderMoveComponent && <Move />}
+                                {children}
+                            </Container>
+                        </Body>
+                    </ThemeProvider>
                 </StyledComponentsRegistry>
             </html>
         </RecoilRoot>
