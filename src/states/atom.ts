@@ -63,3 +63,8 @@ export const roomIdState = atom<any>({
   key: 'roomIdState',
   default: '',
 });
+
+export const usersInRoom = atom<any>({
+  key: 'usersInRoom',
+  default: '',
+});

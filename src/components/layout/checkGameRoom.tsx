@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { accessTokenState, allRoomState } from '../../states/atom';
+import { accessTokenState, allRoomState, usersInRoom } from '../../states/atom';
 import {
   getAllGameRooms,
   // getOnlyGameRoom,
@@ -40,10 +40,7 @@ const CheckGameRoom = () => {
   const accessToken: any = useRecoilValue(accessTokenState);
 
   const setRoomId = useSetRecoilState(roomIdState);
-
-  const handleSelectRoom = (roomId: number) => {
-    setRoomId(roomId);
-  };
+  const setUsersInRoom = useSetRecoilState(usersInRoom);
 
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -106,6 +103,7 @@ const CheckGameRoom = () => {
       try {
         await participateGameRoom(chatId, accessToken);
         setRoomId(roomId);
+        setUsersInRoom(numberOfPeople);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
         console.log(error.response.data.message);
