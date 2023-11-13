@@ -11,7 +11,7 @@ interface OpenchatMessageProps {
 
 function OpenchatMessage({ isMe, msg }: OpenchatMessageProps) {
   return (
-    <OpenchatMessageItemWrap isme={isMe}>
+    <OpenchatMessageItemWrap isme={`${isMe}`}>
       {!isMe && msg.userId}
       <div className="openchat__msg-wrapper">
         <Typography className="openchat__msg-box">{msg.text}</Typography>

@@ -229,29 +229,33 @@ export const OpenchatMessageWrap = React.memo(
   })),
 );
 
-export const OpenchatMessageItemWrap = styled(Box)<{ isme: boolean }>(
+export const OpenchatMessageItemWrap = styled(Box)<{ isme: string }>(
   ({ theme, isme }) => ({
     padding: '1rem 0',
-    alignSelf: isme ? 'flex-end' : 'flex-start',
+    alignSelf: isme === 'true' ? 'flex-end' : 'flex-start',
     '& .openchat__msg-wrapper': {
       display: 'flex',
       alignItems: 'flex-end',
-      flexDirection: isme ? 'row-reverse' : 'row',
+      flexDirection: isme === 'true' ? 'row-reverse' : 'row',
       gap: '8px',
     },
     '& .openchat__msg-box': {
       flex: '1 1 auto',
       maxWidth: '360px',
-      backgroundColor: isme
-        ? theme.palette.primary.main
-        : theme.palette.secondary.light,
-      color: isme ? theme.palette.background.paper : theme.palette.common.black,
+      backgroundColor:
+        isme === 'true'
+          ? theme.palette.primary.main
+          : theme.palette.secondary.light,
+      color:
+        isme === 'true'
+          ? theme.palette.background.paper
+          : theme.palette.common.black,
       padding: '1rem',
       borderRadius: '10px',
     },
     '& .openchat__time-box': {
       flex: '0 0 4rem',
-      textAlign: isme ? 'right' : 'left',
+      textAlign: isme === 'true' ? 'right' : 'left',
     },
   }),
 );

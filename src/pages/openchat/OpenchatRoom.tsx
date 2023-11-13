@@ -4,11 +4,10 @@ import { useRecoilValue } from 'recoil';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ArrowBack } from '@mui/icons-material';
 import { Box, Button } from '@mui/material';
-import { useCycle } from 'framer-motion';
+import { AnimatePresence, useCycle } from 'framer-motion';
 import useSocketConnect from '../../hooks/useSocketConnect';
 import { accessTokenState, userState } from '../../atoms';
 import { MessageType } from '../../types/MessageType';
-import { formatDate, formatDateTime, isToday } from '../../utils/formatDate';
 import OpenchatMessage from '../../components/openchat/OpenchatMessage';
 import { UserSimple } from '../../types/User';
 import OpenchatSender from '../../components/openchat/OpenchatSender';
@@ -16,7 +15,6 @@ import {
   OpenchatMessageWrap,
   OpenchatRoomAppbar,
 } from '../../styles/OpenchatStyle';
-import { privateApi } from '../../libs/axios';
 import useQueryOpenchatById from '../../hooks/useQueryOpenchatById';
 import OpenchatNav from '../../components/openchat/OpenchatNav';
 import MenuToggle from '../../components/openchat/MenuToggle';
@@ -25,44 +23,43 @@ function OpenchatRoom() {
   const { chatId = '' } = useParams();
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<MessageType[]>([]);
   const accessToken = useRecoilValue(accessTokenState);
   const userStr = useRecoilValue(userState);
   const user = JSON.parse(userStr) as UserSimple;
-  // const socket = useSocketConnect(chatId, accessToken);
+  const socket = useSocketConnect(chatId, accessToken);
   const { isQuering, data } = useQueryOpenchatById(chatId);
   const [isOpen, toggleOpen] = useCycle(false, true);
 
-  const tempMsg = useMemo(
-    () => [
-      {
-        id: 'be47c972-3b35-473c-9c71-2c667b093cf1',
-        text: '이방은 토이프로젝트 스터디 공부방입니다!',
-        userId: 'cinderella',
-        createdAt: '2023-11-13T09:02:51.974Z',
-      },
-      {
-        id: 'be47c972-3b35-473c-9c71-2c667b093cf1',
-        text: '안녕하세요!',
-        userId: 'user1',
-        createdAt: '2023-11-13T09:03:00.974Z',
-      },
-    ],
-    [],
-  );
+  // const tempMsg = useMemo(
+  //   () => [
+  //     {
+  //       id: 'be47c972-3b35-473c-9c71-2c667b093cf1',
+  //       text: '이방은 토이프로젝트 스터디 공부방입니다!',
+  //       userId: 'cinderella',
+  //       createdAt: '2023-11-13T09:02:51.974Z',
+  //     },
+  //     {
+  //       id: 'be47c972-3b35-473c-9c71-2c667b093cf1',
+  //       text: '안녕하세요!',
+  //       userId: 'user1',
+  //       createdAt: '2023-11-13T09:03:00.974Z',
+  //     },
+  //   ],
+  //   [],
+  // );
 
   const submitMessage = useCallback(() => {
-    // socket?.emit('message-to-server', message);
+    socket?.emit('message-to-server', message);
     setMessage('');
-  }, []);
+  }, [message]);
 
   const onChangeMessage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const msg = e.target.value;
-      setMessage(msg);
+      setMessage(e.target.value);
     },
-    [],
+    [message],
   );
 
   // 날짜를 기준으로 정렬하는 함수
@@ -72,32 +69,30 @@ function OpenchatRoom() {
     return aDate.getTime() - bDate.getTime();
   };
 
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.on('connect', () => {
-  //       console.log(socket.id); // "G5p5..."
-  //     });
-  //     // 메시지를 가져오는 이벤트 emit
-  //     socket.emit('fetch-messages');
-  //     // 이전 메시지들 가져오기
-  //     socket.on('messages-to-client', (data) => {
-  //       console.log(data.messages);
-  //       setMessages([...data.messages].reverse());
-  //     });
-  //     // 메시지 보냈을때 내 메시지 가져오기
-  //     socket?.on('message-to-client', (message) => {
-  //       setMessages((prevMessages) => [...prevMessages, message]);
-  //     });
-  //   }
-  //   return () => {
-  //     socket?.off('messages-to-client');
-  //     socket?.off('message-to-client');
-  //     socket?.disconnect();
-  //   };
-  // }, [socket, pathname]);
+  useEffect(() => {
+    if (socket) {
+      // 메시지를 가져오는 이벤트 emit
+      socket.emit('fetch-messages');
+      // 이전 메시지들 가져오기
+      socket.on('messages-to-client', (data) => {
+        setMessages([...data.messages]);
+      });
+      // 메시지 보냈을때 내 메시지 가져오기
+      socket.on('message-to-client', (message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      });
+    }
+    return () => {
+      socket?.off('messages-to-client');
+      socket?.off('message-to-client');
+      socket?.disconnect();
+    };
+  }, [socket]);
 
   return (
     <div>
+      <MenuToggle isOpen={isOpen} toggle={() => toggleOpen()} />
+      <AnimatePresence>{isOpen && <OpenchatNav />}</AnimatePresence>
       <OpenchatMessageWrap
         sx={{
           backgroundColor: 'grey.100',
@@ -113,11 +108,10 @@ function OpenchatRoom() {
               <ArrowBack />
             </Button>
             <p>{data?.name}</p>
-            <MenuToggle isOpen={isOpen} toggle={() => toggleOpen()} />
           </div>
         </OpenchatRoomAppbar>
         <Box px={4} sx={{ display: 'flex', flexDirection: 'column' }}>
-          {tempMsg.sort(sortByDate).map((message) => (
+          {messages.sort(sortByDate).map((message) => (
             <OpenchatMessage
               key={message.createdAt}
               isMe={message.userId === user.id}
@@ -126,12 +120,13 @@ function OpenchatRoom() {
           ))}
         </Box>
       </OpenchatMessageWrap>
-      <OpenchatSender
-        message={message}
-        onChange={onChangeMessage}
-        onClick={submitMessage}
-      />
-      {/* <OpenchatNav isOpen={isOpen} /> */}
+      {!isOpen && (
+        <OpenchatSender
+          message={message}
+          onChange={onChangeMessage}
+          onClick={submitMessage}
+        />
+      )}
     </div>
   );
 }

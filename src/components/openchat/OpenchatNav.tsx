@@ -23,21 +23,20 @@ const sidebar = {
   },
 };
 
-function OpenchatNav({ isOpen }: { isOpen: boolean }) {
-  const containerRef = useRef<HTMLElement>(null);
-  const { height } = useDimensions(containerRef);
-
+function OpenchatNav() {
   return (
     <motion.nav
-      initial={false}
-      animate={isOpen ? 'open' : 'closed'}
-      custom={height}
-      ref={containerRef}
-      variants={sidebar}
+      initial={{ x: '100%' }}
+      animate={{
+        x: 0,
+      }}
+      exit={{
+        x: '100%',
+      }}
+      transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
       className={styles.nav}
     >
-      <motion.div className={styles.background} />
-      <OpenchatNavItems />
+      네비게이션!
     </motion.nav>
   );
 }
