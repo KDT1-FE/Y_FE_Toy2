@@ -16,12 +16,12 @@ const SearchMyChat = ({ userType }: any) => {
             setInput(e.target.value);
             console.log(myChats);
             const filteringChats = (userType == 'my' ? myChats : allChats).filter((chat) => {
-                const includesValue = chat.name.toLowerCase().includes(e.target.value.toLowerCase());
+                const includesValue = chat.name.toLowerCase().startsWith(e.target.value.toLowerCase());
                 return includesValue;
             });
-            console.log('Filtering Chats:', filteringChats); // 추가
+            console.log('Filtering Chats:', filteringChats);
             const filteredChats = [...filteringChats];
-            console.log('Filtered Chats:', filteredChats); // 추가
+            console.log('Filtered Chats:', filteredChats);
             setFilteredChats(filteredChats);
         },
         [myChats, allChats],

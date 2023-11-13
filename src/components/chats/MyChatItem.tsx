@@ -15,7 +15,7 @@ const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) =>
             ? '/assets/search.svg'
             : !isPrivate && users && users.length === 2
             ? '/assets/user.svg' // private 하지 않으면서 1대1 인 경우
-            : '';
+            : '/assets/back.svg';
     const usersNumber = users && users.length > 0 ? users.length : '';
     const chatsName = users && users.length === 1 ? '상대방이 채팅방을 나간 상태입니다.' : name;
     return (

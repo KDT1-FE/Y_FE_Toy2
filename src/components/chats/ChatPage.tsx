@@ -14,6 +14,7 @@ import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
 import { useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query/types/react';
 import { getMyChats, getAllChats } from './getChats';
 // import AddChatDropdown from './addChatDropdown';
 const MyChats = ({ userType }: any) => {
@@ -24,10 +25,6 @@ const MyChats = ({ userType }: any) => {
     const router = useRouter();
     const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
     const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
-    // const headers = {
-    //     Authorization: `Bearer ${accessToken}`,
-    //     'Cache-Control': 'no-cache',
-    // };
 
     const enterChatRoom = (chat: Chat) => {
         if (chat.id && chat.users) {
@@ -38,7 +35,6 @@ const MyChats = ({ userType }: any) => {
         queryKey: ['getChatsKey'],
         queryFn: userType === 'my' ? getMyChats : getAllChats,
         refetchOnWindowFocus: false,
-        // refetchInterval: 5000,
         onSuccess: (data) => {
             if (userType === 'my') {
                 setMyChats(data);
@@ -48,54 +44,6 @@ const MyChats = ({ userType }: any) => {
         },
         staleTime: 10000,
     });
-
-    // const getMyChats = async () => {
-    //     try {
-    //         const res = await instance.get<Chat[], any>(`chat`, { headers });
-    //         console.log('getMyChats response:', res); // 추가
-    //         if (res) {
-    //             console.log(res.chats);
-    //             setMyChats(res.chats);
-    //         } else {
-    //             console.log('내 채팅 데이터 조회 실패');
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
-    // const getAllChats = async () => {
-    //     try {
-    //         const res = await instance.get<Chat[], any>(`chat/all`, { headers });
-    //         setAllChats(res.chats);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     if (data && userType === 'my') {
-    //         setMyChats(myChats);
-    //         console.log(myChats);
-    //     } else {
-    //         setAllChats(allChats);
-    //         console.log(allChats);
-    //     }
-
-    // const intervalId = setInterval(() => {
-    //     if (userType === 'my') {
-    //         getMyChats();
-    //         console.log('내 채팅 조회 성공');
-    //     } else {
-    //         getAllChats();
-    //         console.log('모든 채팅 조회 성공');
-    //     }
-    // }, 5000);
-
-    // return () => {
-    //     clearInterval(intervalId);
-    // };
-    // }, []);
 
     // 지우시고 다른 함수 넣으셔도 됩니다!
     const onAddHandler = () => {
@@ -112,29 +60,31 @@ const MyChats = ({ userType }: any) => {
             </ChatHeader>
             <ChatContainer>
                 <SearchMyChat userType={userType} />
-                {userId
-                    ? filterChats.length > 0
-                        ? sortTime(filterChats).map((chat) => (
-                              <MyChatItem
-                                  key={chat.id}
-                                  name={chat.name}
-                                  latestMessage={chat.latestMessage}
-                                  users={chat.users}
-                                  onClick={() => enterChatRoom(chat)}
-                                  isPrivate={chat.isPrivate}
-                              />
-                          ))
-                        : sortTime(userType === 'my' ? myChats : allChats).map((chat) => (
-                              <MyChatItem
-                                  key={chat.id}
-                                  name={chat.name}
-                                  latestMessage={chat.latestMessage}
-                                  users={chat.users}
-                                  onClick={() => enterChatRoom(chat)}
-                                  isPrivate={chat.isPrivate}
-                              />
-                          ))
-                    : null}
+                <ChatList>
+                    {userId
+                        ? filterChats.length > 0
+                            ? sortTime(filterChats).map((chat) => (
+                                  <MyChatItem
+                                      key={chat.id}
+                                      name={chat.name}
+                                      latestMessage={chat.latestMessage}
+                                      users={chat.users}
+                                      onClick={() => enterChatRoom(chat)}
+                                      isPrivate={chat.isPrivate}
+                                  />
+                              ))
+                            : sortTime(userType === 'my' ? myChats : allChats).map((chat) => (
+                                  <MyChatItem
+                                      key={chat.id}
+                                      name={chat.name}
+                                      latestMessage={chat.latestMessage}
+                                      users={chat.users}
+                                      onClick={() => enterChatRoom(chat)}
+                                      isPrivate={chat.isPrivate}
+                                  />
+                              ))
+                        : null}
+                </ChatList>
             </ChatContainer>
         </Wrapper>
     );
@@ -147,7 +97,6 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* height: 100vh; */
 `;
 
 const ChatHeader = styled.div`
@@ -178,4 +127,15 @@ const ChatContainer = styled.div`
     text-align: center;
     margin: 2rem;
     background-color: transparent;
+`;
+
+const ChatList = styled.div`
+    overflow-y: auto;
+    height: 50rem;
+    &::-webkit-scrollbar {
+        /*크롬, 사파리, 오페라, 엣지*/
+        display: none;
+    }
+    -ms-overflow-style: none; /* ie */
+    scrollbar-width: none; /* 파이어폭스 */
 `;
