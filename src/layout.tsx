@@ -1,4 +1,4 @@
-import { Container, Center, Flex } from '@chakra-ui/react';
+import { Container, Center, Flex, Box } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import SideBar from './components/sideBar';
 
@@ -8,7 +8,9 @@ const Layout = () => {
       <Container maxW="container.xl">
         <Flex w="container.xl">
           <SideBar />
-          <Outlet />
+          <Box flex="1">
+            <Outlet />
+          </Box>
         </Flex>
       </Container>
     </Center>
