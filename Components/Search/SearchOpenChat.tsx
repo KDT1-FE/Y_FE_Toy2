@@ -13,8 +13,6 @@ import OpenChatModal from './OpenChatModal';
 const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 	const [userInput, setUserInput] = useState('');
 	const [searchedChats, setSearchedChats] = useState(allOpenChat);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [modalChat, setModalChat] = useState<Chat>(initialChat);
 
 	const getUserInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		setUserInput(toLower(e.target.value));
@@ -24,11 +22,6 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 		if (e.key === 'Enter') {
 			search(userInput, allOpenChat, setSearchedChats);
 		}
-	};
-
-	const openModalHandler = (chat: Chat) => {
-		setIsModalOpen(true);
-		setModalChat(chat);
 	};
 
 	return (
@@ -68,27 +61,22 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 					<strong className="mt-5">오픈 채팅방</strong>
 
 					{searchedChats.map((chat) => (
-						<li
-							key={chat.id}
-							onClick={() => {
-								openModalHandler(chat);
-								setModalChat(chat);
+						<Link
+							href={{
+								pathname: `/chatProfile/${chat.id}`,
+								query: { isPrivate: false },
 							}}
-							className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer"
+							key={chat.id}
 						>
-							<ShowAllOpenChat key={chat.id} chat={chat} />
-						</li>
+							<li className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer">
+								<ShowAllOpenChat key={chat.id} chat={chat} />
+							</li>
+						</Link>
 					))}
 				</>
 			) : (
 				<h1 className="m-auto">검색 결과가 없습니다.</h1>
 			)}
-
-			<OpenChatModal
-				modalChat={modalChat}
-				isModalOpen={isModalOpen}
-				setIsModalOpen={setIsModalOpen}
-			/>
 		</>
 	);
 };

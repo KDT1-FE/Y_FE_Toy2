@@ -27,13 +27,13 @@ const ProfileModal = ({
 			const message = await participateChat(accessToken, existPrivateChat.id);
 			console.log('참여하기', message);
 			/* 채팅방으로 이동 시키기*/
-			router.push(`chat/${existPrivateChat.id}?isPrivate=true`);
+			router.push(`/chat/${existPrivateChat.id}?isPrivate=true`);
 		} else {
 			const chat = await createPrivateChat(accessToken, user);
 			const message = await participateChat(accessToken, chat.id);
 			console.log('새로 만든 후 참여하기', message);
 			/* 채팅방으로 이동 시키기*/
-			router.push(`chat/${chat.id}?isPrivate=true`);
+			router.push(`/chat/${chat.id}?isPrivate=true`);
 		}
 	};
 
