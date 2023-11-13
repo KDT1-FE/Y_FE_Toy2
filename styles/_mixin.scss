@@ -1,0 +1,50 @@
+@import '@/styles/variables.scss';
+
+@mixin a11y-hidden() {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+}
+
+@mixin container {
+  max-width: 76.8rem;
+  width: 100%;
+  margin: 0 auto;
+  font-size: $font-size-base;
+}
+
+@mixin flex-center-row() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between-row() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-center-col() {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin shadow-top() {
+  box-shadow: 0 0 0.4rem 0 rgba(0, 0, 0, 0.16);
+}
+@mixin shadow-bottom() {
+  box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.3);
+}
+
+@mixin button() {
+  border: none;
+  background: transparent;
+}
+
