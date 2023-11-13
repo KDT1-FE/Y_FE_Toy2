@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { Openchat } from '../../hooks/useQueryOpenchats';
 import OpenchatMyItem from './OpenchatMyItem';
+import { Openchat } from '../../types/Openchat';
 
 interface OpenchatMyProps {
   openchats?: Openchat[];

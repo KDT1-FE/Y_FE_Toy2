@@ -1,3 +1,4 @@
+import { ChatUser } from '../types/Openchat';
 import { UserSimple } from '../types/User';
 
 interface MyObject {
@@ -44,7 +45,7 @@ export function filterFriendsNotMe<T extends MyObject>(arr: T[]): T[] {
 }
 
 interface ChatObject {
-  users: UserSimple[];
+  users: ChatUser[];
   hashtags: string[];
 }
 

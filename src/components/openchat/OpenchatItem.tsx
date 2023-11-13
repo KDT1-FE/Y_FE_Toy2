@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Grid, Typography } from '@mui/material';
+import { Person } from '@mui/icons-material';
 import { OpenchatRoom } from '../../styles/OpenchatStyle';
 import { ChatInfoWithId } from '../../hooks/useQueryOpenchats';
 import OpenchatAvatar from './OpenchatAvatar';
@@ -18,8 +19,12 @@ function OpenchatItem({ openchat }: OpenchatCategoryProps) {
         <div className="openchat__room-info">
           <div className="openchat__room-desc">
             <Typography variant="body1">{openchat.name}</Typography>
-            <Typography variant="body2" color="GrayText" mt={1}>
+            <Typography variant="body2" color="GrayText">
               {openchat.hashtags.map((hashtag) => `#${hashtag}`).join(' ')}
+            </Typography>
+            <Typography variant="body2" color="GrayText">
+              <Person sx={{ width: '1rem', verticalAlign: '-6px' }} />{' '}
+              {openchat.users.length}명 참여중
             </Typography>
           </div>
           <Button
