@@ -1,34 +1,42 @@
 import React, { useState } from 'react';
+import { BsSearch } from 'react-icons/bs';
+import styles from './Search.module.scss'; // Import your appropriate styles file
 
 interface SearchProps {
   onSearch: (query: string) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ onSearch }) => {
+export default function Search({ onSearch }: SearchProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = () => {
+  function handleSearch() {
     onSearch(searchQuery);
-  };
+  }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') {
       onSearch(searchQuery);
     }
-  };
+  }
 
   return (
-    <div>
+    <div className={styles.search}>
       <input
         type="text"
-        placeholder="숙소 검색"
+        placeholder="검색어를 입력해주세요 :)"
         value={searchQuery}
         onChange={e => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <button onClick={handleSearch}>검색</button>
+
+      <button
+        type="button"
+        className={styles['fill-btn']}
+        aria-label="검색"
+        onClick={handleSearch}
+      >
+        🔍
+      </button>
     </div>
   );
-};
-
-export default Search;
+}
