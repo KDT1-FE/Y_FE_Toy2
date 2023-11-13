@@ -60,6 +60,7 @@ export default function ChatingPage() {
         }
     };
 
+
     const findUserPicture = (userId: string): string | void => {
         for (let i = 0; i < users.length; i++) {
             if (userId == users[i].id) {
@@ -122,6 +123,7 @@ export default function ChatingPage() {
         <main>
             <ChatingNavigation chatName={chatName} />
             <ChatingModal users={users} chatId={chatId} />
+
             <MessagesContainer>
                 {messages
                     ? messages.map((message: Message, i: number) =>
@@ -145,6 +147,7 @@ export default function ChatingPage() {
                                           src={
                                               findUserPicture(
                                                   message.userId.split(':')[message.userId.split(':').length - 1],
+
                                               )
                                                   ? 'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
                                                   : findUserPicture(
@@ -158,6 +161,7 @@ export default function ChatingPage() {
                                               : findUserName(
                                                     message.userId.split(':')[message.userId.split(':').length - 1],
                                                 ) || ''}
+
                                       </YourMessageName>
                                   </YourMessageNameWrapper>
                                   <YourMessageTextWrapper>
