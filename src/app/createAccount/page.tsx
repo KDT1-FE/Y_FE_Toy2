@@ -1,15 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 // components
 import RegisterForm from '@/components/Register/RegisterForm';
 
 const page = () => {
-    const accessToken = sessionStorage.getItem('accessToken');
+    const [isRightWay, setIsRightWay] = useState<boolean>(false);
 
-    if (accessToken) {
+    useEffect(() => {
+        const accessToken = sessionStorage.getItem('accessToken');
+
+        if (accessToken) {
+            setIsRightWay(false);
+        } else {
+            setIsRightWay(true);
+        }
+    }, []);
+
+    if (!isRightWay) {
         return null;
     } else {
         return (
