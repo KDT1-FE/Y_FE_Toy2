@@ -31,10 +31,8 @@ const GameLobby = () => {
         console.error(error);
       }
     }
-
     fetchUserData(); // 함수 호출
   }, [accessToken]); // accessToken이 변경될 때마다 함수 호출
-
   return (
     <>
       <UserProfile userImg={imgsrc}></UserProfile>

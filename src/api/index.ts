@@ -118,7 +118,7 @@ export const leaveGameRoom = async (accessToken: string, chatId: string) => {
 export const inviteGameRoom = async (
   accessToken: string,
   chatId: string,
-  users = [],
+  users: string[],
 ) => {
   const res = await client.patch(
     `/chat/invite`,

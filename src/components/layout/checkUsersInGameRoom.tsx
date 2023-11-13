@@ -44,13 +44,13 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
         setUsersInGameRoom(data.users);
       });
 
-      socket.on('leave', (data) => {
+      socket.on('join', (data) => {
         console.log(data);
         setUsersInGameRoom(data.users);
       });
 
-      socket.on('join', (data) => {
-        console.log(data.user);
+      socket.on('leave', (data) => {
+        console.log(data);
         setUsersInGameRoom(data.users);
       });
     } catch (error) {
@@ -60,14 +60,25 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
   useEffect(() => {
     const fetchUserProfiles = async () => {
       const profilesArray: ResponseValue[] = [];
-
+      console.log(UsersInGameRoom);
       for (const userId of UsersInGameRoom) {
-        const Id = userId.substring(9);
-        try {
-          const res = await getUserData(accessToken, Id);
-          profilesArray.push(res);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
+        console.log(userId);
+        if (userId.substring(0, 8) === '090b4ff4') {
+          console.log(userId.substring(0, 9));
+          const id = userId.substring(9);
+          try {
+            const res = await getUserData(accessToken, id);
+            profilesArray.push(res);
+          } catch (error) {
+            console.error('Error fetching user data:', error);
+          }
+        } else {
+          try {
+            const res = await getUserData(accessToken, userId);
+            profilesArray.push(res);
+          } catch (error) {
+            console.error('Error fetching user data:', error);
+          }
         }
       }
 
@@ -75,7 +86,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     };
 
     fetchUserProfiles();
-  }, [accessToken, UsersInGameRoom]);
+  }, [accessToken, UsersInGameRoom, setProfiles]);
   console.log(profiles);
   return (
     <>

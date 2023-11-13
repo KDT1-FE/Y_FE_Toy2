@@ -36,7 +36,7 @@ const InviteGameRoom = (chatId: any) => {
     }
   };
   usePollingData(checkUsers, [setUniqueUsers]);
-  console.log(allOnlineUsers, uniqueUsers);
+  // console.log(allOnlineUsers, uniqueUsers);
   useEffect(() => {
     const notInUniqueUsers = allOnlineUsers.filter(
       (userId: any) => !uniqueUsers.has(userId),
@@ -44,7 +44,7 @@ const InviteGameRoom = (chatId: any) => {
     setToInviteUsers(notInUniqueUsers);
   }, [uniqueUsers, setToInviteUsers]);
 
-  console.log(toInviteUsers);
+  // console.log(toInviteUsers);
 
   const handleInvite = async (user: any) => {
     try {
