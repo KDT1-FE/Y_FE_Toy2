@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import { authCheck } from '@/hooks/Auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Move from '@/components/Move';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </StyledComponentsRegistry>
                 </html>
             </RecoilRoot>
+            <ReactQueryDevtools />
         </QueryClientProvider>
     );
 }
