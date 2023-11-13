@@ -3,11 +3,12 @@ import { EmojiButton } from "@joeattardi/emoji-button";
 import { serverTimestamp } from "firebase/firestore";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import useInput from "../../../hooks/useInput";
-import connect from "../../../socket/socket";
+import { userState } from "../../../recoil/atoms/userState";
 import Loader from "../../common/Loader";
 import UserCard from "../../common/UserCard";
 
@@ -140,11 +141,19 @@ interface UserType {
   picture: string;
 }
 
-interface Props {
-  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+interface Socket {
+  on(event: string, callback: any): void;
+  emit(event: string, data: any): void;
 }
 
-const CreateGameModal = ({ setModal }: Props) => {
+interface Props {
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  socket: Socket;
+}
+
+const CreateGameModal = ({ setModal, socket }: Props) => {
+  const user = useRecoilValue(userState);
+
   const navigate = useNavigate();
   const fireFetch = useFireFetch();
 
@@ -172,10 +181,7 @@ const CreateGameModal = ({ setModal }: Props) => {
     picker.togglePicker(pickerRef as unknown as HTMLElement);
   };
 
-  const token = JSON.parse(localStorage.getItem("token") as string);
-
   // 소켓 연결
-  const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   // 게임 데이터
   const [roomData, setRoomData] = useState<ChatRoom>({
@@ -209,7 +215,7 @@ const CreateGameModal = ({ setModal }: Props) => {
     method: "POST",
     data: {
       name: roomData.name,
-      users: [token.id],
+      users: [user.id],
     },
     start: false,
   });
@@ -217,7 +223,7 @@ const CreateGameModal = ({ setModal }: Props) => {
   useEffect(() => {
     if (users.result) {
       const filter = users.result.filter(
-        (value: UserType) => value.id !== token.id,
+        (value: UserType) => value.id !== user.id,
       );
 
       setUserList(filter);
@@ -269,9 +275,9 @@ const CreateGameModal = ({ setModal }: Props) => {
       // 파이어베이스 게임 데이터 생성
       const newData = {
         ...roomData,
-        users: [...roomData.users, token.id],
+        users: [...roomData.users, user.id],
         id: createGame.result.id,
-        host: token.id,
+        host: user.id,
         createdAt: serverTimestamp(),
         bg: emoji,
         status: "대기중",

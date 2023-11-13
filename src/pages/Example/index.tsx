@@ -1,11 +1,13 @@
 import { Button, Input } from "@chakra-ui/react";
 import { serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import CreateGameModal from "../../components/Main/CreateGameModal";
 import ToastNotice from "../../components/common/ToastNotice";
 import useFetch from "../../hooks/useFetch";
 import useFireFetch from "../../hooks/useFireFetch";
 import useInput from "../../hooks/useInput";
+import { userState } from "../../recoil/atoms/userState";
 import connect from "../../socket/socket";
 
 interface MessageInfo {
@@ -14,7 +16,7 @@ interface MessageInfo {
 }
 
 const Example = () => {
-  const token = JSON.parse(localStorage.getItem("token") as string);
+  const user = useRecoilValue(userState);
 
   // 페이지 입장시 자동으로 해당 채팅방으로 입장
   useFetch({
@@ -118,7 +120,7 @@ const Example = () => {
     url: "https://fastcampus-chat.net/chat/leave",
     method: "PATCH",
     data: {
-      chatId: "4f54a7e3-f01c-4678-afaf-3650cb8da9d7",
+      chatId: "9984747e-389a-4aef-9a8f-968dc86a44e4",
     },
     start: false,
   });
@@ -134,7 +136,7 @@ const Example = () => {
   //팝업 변화 감지
   useEffect(() => {
     if (toastUser[0] !== "") {
-      if (toastUser.includes(token.id)) {
+      if (toastUser.includes(user.id)) {
         console.log(roomData);
         setToast(true);
       }
@@ -241,7 +243,7 @@ const Example = () => {
       >
         모달
       </Button>
-      {modal ? <CreateGameModal setModal={setModal} /> : null}
+      {modal ? <CreateGameModal setModal={setModal} socket={socket} /> : null}
       {toast && roomData ? (
         <ToastNotice roomData={roomData} setToast={setToast} />
       ) : null}
