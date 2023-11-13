@@ -120,9 +120,6 @@ export default ProfileModal;
 const Container = styled.div`
     width: 100%;
     height: 83vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     position: absolute;
     top: -300px;
     left: 0;
@@ -135,12 +132,12 @@ const Container = styled.div`
 
 const StyledContainer = styled.div`
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding-top: 3rem;
-    height: auto;
 `;
 
 const StyledProfile = styled.div`
