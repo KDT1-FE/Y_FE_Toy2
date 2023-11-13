@@ -25,6 +25,7 @@ const GameLobby = () => {
           <OnlineUserList />
           <UserProfile></UserProfile>
         </RightComponent>
+
         {/* <CreateGameRoom></CreateGameRoom> */}
       </Flex>
     </>

@@ -85,10 +85,12 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
       });
 
       newSocket.on('join', (data) => {
+        console.log('들어온거 작동');
         setUsersInGameRoom(data.users);
       });
 
       newSocket.on('leave', (data) => {
+        console.log('나간거 작동');
         setUsersInGameRoom(data.users);
       });
 
