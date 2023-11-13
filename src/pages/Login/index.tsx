@@ -15,7 +15,7 @@ const Background = styled.div`
   height: 100vh;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-end;
   box-sizing: border-box;
 `;
@@ -25,10 +25,12 @@ const Login = () => {
   useEffect(() => {
     const root = document.getElementById("root");
     if (root) {
-      root.style.margin = "0"; // 로그인 페이지에 대한 마진 설정 변경
+      root.style.margin = "0"; // 로그인 페이지에 대한 마진 설정 변경,
+      root.style.maxWidth = "100%"; // max-width 수정
 
       return () => {
         root.style.margin = "0 auto"; // 로그인 페이지가 언마운트될 때 원래 마진으로 복원
+        root.style.maxWidth = "1200px";
       };
     }
   }, []);
@@ -69,7 +71,6 @@ const Login = () => {
 
   return (
     <Background>
-      <div>로그인</div>
       <LoginForm
         idInput={idInput}
         pwInput={pwInput}

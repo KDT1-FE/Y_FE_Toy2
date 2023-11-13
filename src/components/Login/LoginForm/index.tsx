@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Alert,
   AlertIcon,
@@ -8,7 +8,6 @@ import {
   Button,
   Box,
   Flex,
-  VStack,
 } from "@chakra-ui/react";
 import styled from "styled-components";
 
@@ -18,6 +17,8 @@ const SignUpButton = styled.button`
   text-align: center;
   display: block;
   margin: 0 auto;
+  margin-top: 60px;
+  border-radius: 1px;
 `;
 
 interface InputProps {
@@ -52,10 +53,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
       <Box
         bg="black"
         p={8}
+        mr={16}
+        mt={40}
         shadow="md"
         borderRadius="md"
-        width="500px"
-        height="auto"
+        width="36vw"
+        height="40vh"
       >
         <form onSubmit={handleSubmit}>
           {loginError && (
@@ -65,7 +68,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
               <AlertDescription>{loginError}</AlertDescription>
             </Alert>
           )}
-          <Flex direction="row" align="stretch">
+          <Flex
+            direction="row"
+            alignItems="center"
+            justify="center"
+            align="stretch"
+            mt={10}
+          >
             <Flex direction="column" flex="1" mr={4}>
               <Input
                 type="text"
@@ -73,7 +82,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 value={idInput.value}
                 onChange={idInput.onChange}
                 autoComplete="username"
-                mb={4}
+                mb={6}
+                height="6vh"
+                sx={{ color: "white" }}
               />
               <Input
                 type="password"
@@ -81,9 +92,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 value={pwInput.value}
                 onChange={pwInput.onChange}
                 autoComplete="current-password"
+                height="6vh"
+                sx={{ color: "white" }}
               />
             </Flex>
-            <Button height="90px">로그인</Button>
+            <Button type="submit" width="8vw" height="15vh" borderRadius={2}>
+              로그인
+            </Button>
           </Flex>
           <SignUpButton onClick={toggleSignUpModal}>회원가입</SignUpButton>
         </form>
