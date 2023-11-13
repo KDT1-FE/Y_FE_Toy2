@@ -21,13 +21,13 @@ const Example = () => {
     url: "https://fastcampus-chat.net/chat/participate",
     method: "PATCH",
     data: {
-      chatId: "9fe8a1af-9c60-4937-82dd-21d6da5b9cd9",
+      chatId: "9984747e-389a-4aef-9a8f-968dc86a44e4",
     },
     start: true,
   });
 
   // 소켓 통신
-  const socket = connect("9fe8a1af-9c60-4937-82dd-21d6da5b9cd9");
+  const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
@@ -55,17 +55,30 @@ const Example = () => {
     });
 
     // 채팅 기록 확인
-    socket.on("messages-to-client", (messageObject) => {
-      console.log(messageObject);
+    socket.on("messages-to-client", (messagesObject) => {
+      console.log(messagesObject);
     });
 
     // 초대 메시지
-    socket.on("new-chat", (messageObject) => {
-      console.log(messageObject);
+    socket.on("new-chat", (newChat) => {
+      console.log(newChat);
+    });
+
+    // 유저 join확인
+    socket.on("join", (users) => {
+      console.log(users);
+    });
+
+    // 유저 leave확인
+    socket.on("leave", (users) => {
+      console.log(users);
     });
 
     return () => {
       socket.off("message-to-client");
+      socket.off("join");
+      socket.off("leave");
+      socket.off("new-chat");
     };
   }, [socket]);
 
@@ -101,11 +114,11 @@ const Example = () => {
     start: true,
   });
 
-  const live = useFetch({
+  const leave = useFetch({
     url: "https://fastcampus-chat.net/chat/leave",
     method: "PATCH",
     data: {
-      chatId: "535add19-c98f-4a9b-bc6f-c145c496cb91",
+      chatId: "4f54a7e3-f01c-4678-afaf-3650cb8da9d7",
     },
     start: false,
   });
@@ -183,7 +196,7 @@ const Example = () => {
   };
 
   const liveChat = () => {
-    live.refresh();
+    leave.refresh();
   };
 
   // api get 요청으로 가져온 데이터 출력
