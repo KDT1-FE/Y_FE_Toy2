@@ -17,8 +17,51 @@ import {
 } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiBell } from "react-icons/bi";
+import { useEffect, useState } from "react";
+import useFetch from "../../../hooks/useFetch";
+
+interface ResponseValue {
+  accessToken: string; // 사용자 접근 토큰
+  refreshToken: string; // access token 발급용 토큰
+  id: string;
+}
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+interface FetchResultUser {
+  result: {
+    user: User;
+  };
+}
+interface FetchResultUserList {
+  loading: boolean;
+  result: User[];
+}
 
 const GameLists = () => {
+  const [token, setToken] = useState<ResponseValue>();
+  // const [userInfo, serUserInfo] = useState();
+
+  const { result: userInfo }: FetchResultUser = useFetch({
+    url: `https://fastcampus-chat.net/user?userId=${token?.id}`,
+    method: "GET",
+    start: !!token,
+  });
+  const { loading, result: userList }: FetchResultUserList = useFetch({
+    url: "https://fastcampus-chat.net/users",
+    method: "GET",
+    start: !!token,
+  });
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("token") as string);
+    if (token) {
+      setToken(token);
+    }
+  }, []);
+
   return (
     <Container
       maxW="container.xl"
@@ -255,7 +298,7 @@ const GameLists = () => {
         </Box>
       </Box>
       <Box flex="2" display="flex" flexDirection="column" rowGap="5">
-        <Card height="240px" padding="5" rowGap="5">
+        <Card height="160px" padding="5" rowGap="5">
           <Box
             display="flex"
             alignItems="center"
@@ -266,17 +309,16 @@ const GameLists = () => {
                 boxSize="50px"
                 objectFit="cover"
                 borderRadius="full"
-                src="https://bit.ly/dan-abramov"
+                src={userInfo?.user.picture}
                 alt="Dan Abramov"
               />
-              <Text>닉네임</Text>
+              <Text>{userInfo?.user.name}</Text>
             </Box>
             <Box display="flex" columnGap="2">
               <IoSettingsOutline />
               <BiBell />
             </Box>
           </Box>
-          <Text fontWeight="bold">n전n승</Text>
           <Button
             width="71px"
             height="32px"
@@ -289,65 +331,42 @@ const GameLists = () => {
             로그아웃
           </Button>
         </Card>
-        <Card padding="3" height="430px">
+        <Card padding="3" height="515">
           <Text fontSize="large" fontWeight="800" textAlign="center">
             유저 목록
           </Text>
-          <Box display="flex" flexDirection="column" rowGap="5" paddingY="3">
-            <Box
-              display="flex"
-              alignItems="center"
-              columnGap="2"
-              backgroundColor="blackAlpha.100"
-              paddingX="3"
-              paddingY="1"
-              borderRadius="5"
-            >
-              <Image
-                boxSize="35px"
-                objectFit="cover"
-                borderRadius="full"
-                src="https://bit.ly/dan-abramov"
-                alt="Dan Abramov"
-              />
-              <Text>닉네임</Text>
-            </Box>
-            <Box
-              display="flex"
-              alignItems="center"
-              columnGap="2"
-              backgroundColor="blackAlpha.100"
-              paddingX="3"
-              paddingY="1"
-              borderRadius="5"
-            >
-              <Image
-                boxSize="35px"
-                objectFit="cover"
-                borderRadius="full"
-                src="https://bit.ly/dan-abramov"
-                alt="Dan Abramov"
-              />
-              <Text>닉네임</Text>
-            </Box>
-            <Box
-              display="flex"
-              alignItems="center"
-              columnGap="2"
-              backgroundColor="blackAlpha.100"
-              paddingX="3"
-              paddingY="1"
-              borderRadius="5"
-            >
-              <Image
-                boxSize="35px"
-                objectFit="cover"
-                borderRadius="full"
-                src="https://bit.ly/dan-abramov"
-                alt="Dan Abramov"
-              />
-              <Text>닉네임</Text>
-            </Box>
+          <Box
+            display="flex"
+            flexDirection="column"
+            rowGap="5"
+            paddingY="3"
+            overflowY="auto"
+            maxHeight="500px"
+          >
+            {loading ? (
+              <p>loading...</p>
+            ) : (
+              userList?.map((user) => (
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  columnGap="2"
+                  backgroundColor="blackAlpha.100"
+                  paddingX="3"
+                  paddingY="1"
+                  borderRadius="5"
+                >
+                  <Image
+                    boxSize="35px"
+                    objectFit="cover"
+                    borderRadius="full"
+                    src={user.picture}
+                    alt="Dan Abramov"
+                  />
+                  <Text>{user.name}</Text>
+                </Box>
+              ))
+            )}
           </Box>
         </Card>
       </Box>
