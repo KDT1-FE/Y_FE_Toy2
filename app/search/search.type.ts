@@ -1,17 +1,14 @@
 // search.type.ts
-
-export type AllOpenChat = Chat[];
-
 export type AllOpenChatJSON = {
-	chats: AllOpenChat;
+	chats: Chat[];
 };
 
 export type Chat = {
 	id: string;
 	name: string;
-	users: User[];
+	users: User[]; // 속한 유저 정보
 	isPrivate: boolean;
-	messages: Message[]; // message 객체가 속합니다.
+	latestMessage: Message | null;
 	updatedAt: Date;
 };
 

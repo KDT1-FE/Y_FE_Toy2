@@ -1,6 +1,6 @@
 'use client';
 
-import { Chat } from '@/app/search/search.type';
+import { Chat } from '@/types';
 import OpenChatText from './OpenChatText';
 import Image from 'next/image';
 

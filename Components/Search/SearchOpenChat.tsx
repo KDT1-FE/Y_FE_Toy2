@@ -4,13 +4,13 @@ import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Input } from '@material-tailwind/react';
-import { AllOpenChat, Chat } from '@/app/search/search.type';
+import { Chat } from '@/types';
 import { search, toLower } from '@/hooks/Common/search';
 import { initialChat } from '@/app/search/search.constant';
 import ShowAllOpenChat from './ShowAllOpenChat';
 import OpenChatModal from './OpenChatModal';
 
-const SearchOpenChat = ({ allOpenChat }: { allOpenChat: AllOpenChat }) => {
+const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 	const [userInput, setUserInput] = useState('');
 	const [searchedChats, setSearchedChats] = useState(allOpenChat);
 	const [isModalOpen, setIsModalOpen] = useState(false);

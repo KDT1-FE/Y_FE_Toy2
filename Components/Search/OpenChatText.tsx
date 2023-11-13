@@ -1,5 +1,5 @@
 import React from 'react';
-import { Chat } from '@/app/search/search.type';
+import { Chat } from '@/types';
 import { timeForToday } from '@/app/search/search.utils';
 
 const OpenChatText = ({
