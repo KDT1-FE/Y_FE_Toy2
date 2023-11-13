@@ -14,7 +14,6 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  CloseButton,
   Box,
   Fade,
 } from '@chakra-ui/react';
@@ -71,11 +70,10 @@ function UserLogin() {
   };
 
   useEffect(() => {
-    // alertc창 5초후에 사라지게 하기
     if (showAlert.active) {
       const timer = setTimeout(() => {
         setShowAlert({ active: false, message: '', type: '' });
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [showAlert.active]);
@@ -85,7 +83,7 @@ function UserLogin() {
       justifyContent={'flex-end'}
       alignItems={'center'}
       flexDirection={'column'}
-      height={750}>
+      height={850}>
       <Center
         backgroundColor={'white'}
         borderRadius={10}
@@ -186,27 +184,26 @@ function UserLogin() {
             to="/join"
             marginRight={2}
             color="#4FD1C5"
-            fontWeight={700}>
+            fontWeight={600}>
             회원가입
           </Link>
         </Flex>
       </Center>
       <Fade in={showAlert.active}>
-        <Alert marginTop={10} status="error" width={400} height={70}>
-          <AlertIcon />
+        <Alert
+          bg={'red.500'}
+          color={'white'}
+          marginTop={5}
+          marginBottom={3}
+          status="error"
+          width={400}
+          height={70}
+          borderRadius={10}>
+          <AlertIcon color={'white'} />
           <Box>
             <AlertTitle mr={2}>로그인 오류</AlertTitle>
             <AlertDescription>{showAlert.message}</AlertDescription>
           </Box>
-          <CloseButton
-            position="absolute"
-            right="8px"
-            top="8px"
-            cursor="default"
-            onClick={() =>
-              setShowAlert({ active: false, message: '', type: '' })
-            }
-          />
         </Alert>
       </Fade>
     </Flex>

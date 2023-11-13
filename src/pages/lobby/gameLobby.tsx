@@ -41,7 +41,7 @@ const GameLobby = () => {
         </LeftComponent>
         <RightComponent>
           <OnlineUserList />
-          <UserProfile userImg={imgsrc}></UserProfile>
+          <UserProfile></UserProfile>
         </RightComponent>
       </Flex>
     </>

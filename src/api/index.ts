@@ -49,6 +49,23 @@ export const getUserData = async (accessToken: string, userId: string) => {
   return res.data;
 };
 
+export const patchUserData = async (
+  accessToken: string,
+  name: string,
+  picture: string,
+) => {
+  const res = await client.patch(
+    `/user`,
+    { name: name, picture: picture },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+  return res;
+};
+
 export const createGameRooms = async (
   accessToken: string,
   name: string,

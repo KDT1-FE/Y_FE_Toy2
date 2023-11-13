@@ -16,7 +16,6 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  CloseButton,
   Fade,
 } from '@chakra-ui/react';
 import { ValidationInput, FormData } from '../../interfaces/interface';
@@ -57,11 +56,10 @@ const UserJoin = () => {
   });
 
   useEffect(() => {
-    // alertc창 5초후에 사라지게 하기
     if (showAlert.active) {
       const timer = setTimeout(() => {
         setShowAlert({ active: false, message: '', type: '' });
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [showAlert.active]);
@@ -96,7 +94,7 @@ const UserJoin = () => {
         else if (value.length < 2 || value.length > 20)
           error = '닉네임은 2자에서 20자 사이어야 합니다';
         else if (!/^[a-zA-Z가-힣]+$/.test(value))
-          error = '닉네임은 알파벳과 완성된 한글 음절로만 구성되어야 합니다';
+          error = '닉네임은 영문과 한글로만 구성되어야 합니다';
         break;
       default:
         break;
@@ -131,8 +129,7 @@ const UserJoin = () => {
     e.preventDefault();
     try {
       // 닉네임중복 핸들링 로직 필요
-      const res = await postJoin(formData);
-      console.log(res);
+      await postJoin(formData);
       alert('회원가입에 성공했습니다.');
       navigate('/');
     } catch (e: any) {
@@ -141,7 +138,14 @@ const UserJoin = () => {
       if (e.message === 'Request failed with status code 401') {
         errorMessage = '이미 가입된 아이디입니다.';
         errorType = 'id';
+      } else if (e.message === 'Network Error') {
+        errorMessage = `이미지 파일명이 너무 깁니다.`;
+        errorType = 'picture';
+      } else if (e.message === 'Request failed with status code 415') {
+        errorMessage = `이미지 용량이 너무 큽니다.`;
+        errorType = 'picture';
       } else {
+        console.log(e);
         errorMessage = `회원가입에 실패했습니다. 오류코드: ${e.message}`;
         errorType = 'general';
       }
@@ -176,13 +180,13 @@ const UserJoin = () => {
       justifyContent={'flex-end'}
       alignItems={'center'}
       flexDirection={'column'}
-      height={900}>
+      height={850}>
       <Center
         backgroundColor={'white'}
         borderRadius={10}
         boxShadow="lg"
         flexDirection={'column'}
-        height={700}
+        height={650}
         width={450}
         justifyContent={'flex-end'}>
         <form onSubmit={handleJoinSubmit}>
@@ -246,7 +250,7 @@ const UserJoin = () => {
             isRequired
             isInvalid={isError.id}
             marginTop={3}
-            marginBottom={5}
+            marginBottom={3}
             marginLeft={7}
             width={250}
             height={90}>
@@ -270,7 +274,7 @@ const UserJoin = () => {
           <FormControl
             isRequired
             isInvalid={isError.name}
-            marginBottom={5}
+            marginBottom={3}
             marginLeft={7}
             width={250}
             height={90}>
@@ -298,7 +302,7 @@ const UserJoin = () => {
           <FormControl
             isRequired
             isInvalid={isError.password}
-            marginBottom={5}
+            marginBottom={3}
             marginLeft={7}
             width={250}
             height={90}>
@@ -322,11 +326,10 @@ const UserJoin = () => {
               {errors.password}
             </FormErrorMessage>
           </FormControl>
-
           <FormControl
             isRequired
             isInvalid={isError.confirmPassword}
-            marginBottom={10}
+            marginBottom={5}
             marginLeft={7}
             width={250}
             height={90}>
@@ -356,9 +359,9 @@ const UserJoin = () => {
             size="lg"
             isDisabled={!isFormValid()}
             color="white"
-            bg={'#9AEBE0'}
+            bg={'#4FD1C5'}
             _hover={{
-              bg: '#4FD1C5',
+              bg: '#9AEBE0',
             }}
             _disabled={{
               bg: '#CBD5E0',
@@ -373,27 +376,26 @@ const UserJoin = () => {
             to="/"
             marginRight={2}
             color="#4FD1C5"
-            fontWeight={700}>
+            fontWeight={600}>
             로그인
           </Link>
         </Flex>
       </Center>
       <Fade in={showAlert.active}>
-        <Alert marginTop={10} status="error" width={400} height={70}>
-          <AlertIcon />
+        <Alert
+          marginTop={5}
+          marginBottom={3}
+          status="error"
+          width={400}
+          height={70}
+          bg={'red.500'}
+          color={'white'}
+          borderRadius={10}>
+          <AlertIcon color={'white'} />
           <Box>
             <AlertTitle mr={2}>회원가입 오류</AlertTitle>
             <AlertDescription>{showAlert.message}</AlertDescription>
           </Box>
-          <CloseButton
-            position="absolute"
-            right="8px"
-            top="8px"
-            cursor="default"
-            onClick={() =>
-              setShowAlert({ active: false, message: '', type: '' })
-            }
-          />
         </Alert>
       </Fade>
     </Flex>
