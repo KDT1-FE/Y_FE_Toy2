@@ -6,8 +6,9 @@ const CropperContainer = styled('div')(({ theme }) => ({
   flexFlow: 'column',
   alignItems: 'center',
   '.add-icon': {
-    width: '50px',
-    height: '50px',
+    width: '40px',
+    height: '40px',
+    marginRight: '4px',
   },
   input: {
     display: 'none',
