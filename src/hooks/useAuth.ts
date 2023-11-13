@@ -4,6 +4,7 @@ import { authState } from "../recoil/atoms/authState";
 export const useAuth = () => {
   const [auth, setAuth] = useRecoilState(authState);
 
+  // accessToken과 refreshToken을 받아 로컬 스토리지에 저장하고 상태 업데이트
   const setToken = (accessToken: string, refreshToken: string) => {
     return new Promise<void>((resolve) => {
       localStorage.setItem("accessToken", accessToken);
@@ -17,6 +18,7 @@ export const useAuth = () => {
     });
   };
 
+  // 로그아웃
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
@@ -27,6 +29,7 @@ export const useAuth = () => {
     });
   };
 
+  // 새로운 액세스 토큰 받아옴
   const refreshAccessToken = async () => {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
