@@ -122,7 +122,8 @@ const UsersWrap = styled.div`
 `;
 
 const HeaderText = styled.h1`
-    color: #00956e;
+    color: ${({ theme }) => theme.color.mainGreen};
+    font-size: ${({ theme }) => theme.fontSize.title};
 
     margin-top: 0;
 
@@ -156,7 +157,8 @@ const NoUserWrap = styled.div`
 `;
 
 const NoUserText = styled.h2`
-    color: #05664c;
+    color: ${({ theme }) => theme.color.darkGreen};
+    font-size: ${({ theme }) => theme.fontSize.xl};
 `;
 
 /**사용자 검색 */
@@ -164,7 +166,7 @@ export const SearchUserBox = styled.div`
     background-color: white;
 
     border-radius: 20px;
-    box-shadow: 0px 2px 30px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: ${({ theme }) => theme.shadow.search};
 
     width: 100%;
     height: 3.5rem;
@@ -174,7 +176,7 @@ export const SearchUserBox = styled.div`
 `;
 
 export const SearchButton = styled.div`
-    background-color: #00956e;
+    background-color: ${({ theme }) => theme.color.mainGreen};
     width: 5rem;
 
     display: flex;
@@ -192,7 +194,7 @@ export const SearchUserInput = styled.input`
 
     outline: none;
 
-    font-size: 1.2rem;
+    font-size: ${({ theme }) => theme.fontSize.lg};
 `;
 
 const ClearButton = styled.div`
@@ -204,9 +206,9 @@ const ClearButton = styled.div`
     cursor: pointer;
 
     .clearIcon {
-        color: #00956e;
+        color: ${({ theme }) => theme.color.mainGreen};
         &:hover {
-            color: #05664c;
+            color: ${({ theme }) => theme.color.darkGreen};
             transition: 0.4s;
         }
     }
@@ -217,7 +219,7 @@ const Loading = styled.div`
     height: 50px;
 
     border: 5.5px solid rgba(255, 255, 255, 0.3);
-    border-top: 5.5px solid #00956e;
+    border-top: 5.5px solid ${({ theme }) => theme.color.mainGreen};
     border-radius: 50%;
 
     animation: spin 1s linear infinite;

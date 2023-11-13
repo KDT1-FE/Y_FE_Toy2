@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { ImBubble } from 'react-icons/im';
 import { MdClose } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
 import { BiSolidCircle } from 'react-icons/bi';
 
 // types 폴더 나중에 만들어서 type 빼놓기
@@ -27,8 +26,6 @@ interface UserProfileModalProps {
 
 const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileModalProps) => {
     const router = useRouter();
-
-    const [newChatId, setNewChatId] = useState<string | null>(null);
 
     const { id, name, picture } = user;
     const accessToken = sessionStorage.getItem('accessToken');
@@ -56,7 +53,6 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
             if (response.ok) {
                 const data = await response.json();
                 const generatedChatId = `1on1_${user.id}_${userId}`;
-                setNewChatId(generatedChatId);
 
                 // 생성된 채팅 방으로 이동
                 router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
@@ -91,7 +87,7 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
                         </UserState>
                     </UserInfo>
                     <ToChating onClick={handleChatClick}>
-                        <ImBubble size="40" className="chatIcon" />
+                        <ImBubble size="30" className="chatIcon" />
                         <ChatText>1:1 채팅하기</ChatText>
                     </ToChating>
                 </ModalMain>
@@ -120,7 +116,7 @@ const UserModalBox = styled.div`
 const ModalContent = styled.div`
     background-color: white;
 
-    width: 700px;
+    width: 600px;
     height: 500px;
 
     border-radius: 5%;
@@ -137,11 +133,11 @@ const CloseButton = styled.div`
     cursor: pointer;
 
     .closeIcon {
-        color: #9a9a9a;
+        color: ${({ theme }) => theme.color.darkGray};
     }
 
     &:hover .closeIcon {
-        color: #00956e;
+        color: ${({ theme }) => theme.color.mainGreen};
         transition: 0.4s;
     }
 `;
@@ -152,11 +148,6 @@ const ModalMain = styled.div`
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
-
-    .link {
-        text-decoration: none;
-        color: black;
-    }
 `;
 
 const UserImg = styled.img`
@@ -177,7 +168,7 @@ const UserInfo = styled.div`
 `;
 
 const UserName = styled.h1`
-    font-size: 1.8rem;
+    font-size: ${({ theme }) => theme.fontSize.title};
     margin: 0;
 `;
 
@@ -189,13 +180,14 @@ const ToChating = styled.div`
     cursor: pointer;
 
     &:hover .chatIcon {
-        color: #00956e;
+        color: ${({ theme }) => theme.color.mainGreen};
         transition: 0.4s;
     }
 `;
 
 const ChatText = styled.p`
     font-weight: 500;
+    font-size: ${({ theme }) => theme.fontSize.md};
 `;
 
 const UserState = styled.div`
@@ -205,7 +197,8 @@ const UserState = styled.div`
 `;
 
 const UserStateText = styled.p`
-    color: #9a9a9a;
+    color: ${({ theme }) => theme.color.darkGray};
+    font-size: ${({ theme }) => theme.fontSize.sm};
 `;
 
 const UserStateTextBlack = styled.p`
