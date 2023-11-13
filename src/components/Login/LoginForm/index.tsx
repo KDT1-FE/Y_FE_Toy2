@@ -45,7 +45,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const [loginError, setLoginError] = useState("");
   const { setToken } = useAuth();
   const navigate = useNavigate();
-  const [user, setUser] = useRecoilState(userState);
 
   const { result, loading, statusCode, refresh, error } = useFetch({
     url: "https://fastcampus-chat.net/login",
@@ -60,7 +59,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
     if (statusCode === 200) {
       const { accessToken, refreshToken } = result; // 응답에서 토큰 추출
-      setToken(accessToken, refreshToken, idInput.value);
+      setToken(accessToken, refreshToken, idInput.value); // 토큰 설정
       navigate("/main");
     } else {
       setLoginError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
