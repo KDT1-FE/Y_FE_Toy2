@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
+import { allChatsState, myChatsState, searchChatsState } from './chatsStore';
 import { SearchButton, SearchUserBox } from '@/app/users/page';
 import { MdSearch } from 'react-icons/md';
 
