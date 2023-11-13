@@ -15,6 +15,8 @@ import {
 import useFireFetch from "../../../hooks/useFireFetch";
 import { arrayUnion } from "firebase/firestore";
 import calculateVote from "./CalculateVote";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../../recoil/atoms/userState";
 
 interface GameData {
   id: string;
@@ -37,8 +39,7 @@ const Vote: React.FC<VoteProps> = ({
   const fetchData = fireFetch.useGetSome("game", "id", gameData.id)
     .data[0] as GameData;
 
-  const storedToken = localStorage.getItem("token");
-  const tokenData = storedToken ? JSON.parse(storedToken) : null;
+  const user = useRecoilValue(userState);
 
   const handleUserChange = (value: string) => {
     setSelectedUser(value);
@@ -46,9 +47,8 @@ const Vote: React.FC<VoteProps> = ({
 
   const handleVoteSubmit = () => {
     if (selectedUser !== "") {
-      const myId = tokenData.id;
       fireFetch.updateData("game", gameData.id, {
-        votedFor: arrayUnion({ by: myId, liar: selectedUser }),
+        votedFor: arrayUnion({ by: user.id, liar: selectedUser }),
       });
 
       console.log("fetchData", fetchData);
