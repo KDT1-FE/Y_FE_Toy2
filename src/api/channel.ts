@@ -4,7 +4,6 @@ import {
   InviteRequestBody,
   InviteResponseValue,
   ExitResponseValue,
-  Channel,
 } from '../@types/channel';
 import { checkChannelName } from '../utils';
 import instance from './axios';
@@ -47,24 +46,16 @@ export const inviteChannel = async (inviteData: InviteRequestBody) => {
   return response.data;
 };
 
-export const exitChannel = async ({ chatId }: IchatId) => {
-  const newChatId = { chatId };
+export const exitChannel = async (chatId: { chatId: string }) => {
   const response = await instance.patch<ExitResponseValue>(
     '/chat/leave',
-    newChatId,
+    chatId,
   );
   return response.data;
 };
 
-interface IchatId {
-  chatId: string;
-}
-interface findUserValue {
-  chat: Channel;
-}
-
 export const findUserDataInChannel = async (chatId: string) => {
-  const response = await instance.get<findUserValue>(
+  const response = await instance.get<{ chat: Channel }>(
     `/chat/only?chatId=${chatId}`,
   );
   return response;
