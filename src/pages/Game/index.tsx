@@ -24,8 +24,7 @@ const Game = () => {
   const fireFetch = useFireFetch();
 
   const gameData = fireFetch.useGetSome("game", "id", gameId as string);
-
-  console.log(gameData.data);
+  console.log("Here Game / gameData.data", gameData.data);
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
   }
@@ -61,7 +60,7 @@ const Game = () => {
           <ProfileCard userId={gameData.data[0].users[1]}></ProfileCard>
         </GridItem>
         <GridItem>
-          <GameChat gameId={gameId} />
+          <GameChat gameId={gameId} gameData={gameData.data[0]} />
         </GridItem>
         <GridItem>
           <ProfileCard userId={gameData.data[0].users[2]}></ProfileCard>
