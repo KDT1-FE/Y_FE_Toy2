@@ -15,7 +15,6 @@ import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
 import { useQuery } from 'react-query';
 import { getMyChats, getAllChats } from './getChats';
-// import AddChatDropdown from './addChatDropdown';
 const MyChats = ({ userType }: any) => {
     const [addChatOpen, setAddChatOpen] = useState(false);
     const [allChats, setAllChats] = useRecoilState(allChatsState);
@@ -34,17 +33,9 @@ const MyChats = ({ userType }: any) => {
         queryKey: ['getChatsKey'],
         queryFn: userType === 'my' ? getMyChats : getAllChats,
         refetchOnWindowFocus: false,
-        // onSuccess: (data) => {
-        //     if (userType === 'my') {
-        //         setMyChats(data);
-        //     } else {
-        //         setAllChats(data);
-        //     }
-        // },
         staleTime: 10000,
     });
 
-    // 지우시고 다른 함수 넣으셔도 됩니다!
     const onAddHandler = () => {
         setAddChatOpen(!addChatOpen);
     };

@@ -2,29 +2,42 @@
 import React, { useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { allChatsState, myChatsState, searchChatsState } from './chatsStore';
+import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
 import { SearchButton, SearchUserBox } from '@/app/users/page';
 import { MdSearch } from 'react-icons/md';
+import { getAllChats, getMyChats } from './getChats';
+import { useQuery } from 'react-query';
 
 const SearchMyChat = ({ userType }: any) => {
     const [input, setInput] = useState<string>('');
     const [filterChats, setFilteredChats] = useRecoilState(searchChatsState);
-    const [allChats, setAllChats] = useRecoilState(allChatsState);
-    const [myChats, setAllMyChats] = useRecoilState(myChatsState);
+    // const [allChats, setAllChats] = useRecoilState(allChatsState);
+    // const [myChats, setAllMyChats] = useRecoilState(myChatsState);
+
+    const { data: chats, isLoading } = useQuery<Chat[], any>({
+        queryKey: ['getChatsKey'],
+        queryFn: userType === 'my' ? getMyChats : getAllChats,
+        refetchOnWindowFocus: false,
+        staleTime: 10000,
+    });
     const onInputChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             setInput(e.target.value);
-            console.log(myChats);
-            const filteringChats = (userType == 'my' ? myChats : allChats).filter((chat) => {
-                const includesValue = chat.name.toLowerCase().startsWith(e.target.value.toLowerCase());
-                return includesValue;
-            });
-            console.log('Filtering Chats:', filteringChats);
-            const filteredChats = [...filteringChats];
-            console.log('Filtered Chats:', filteredChats);
-            setFilteredChats(filteredChats);
+            if (!isLoading && chats) {
+                const filteringChats = chats.filter((chat) => {
+                    const filterValue = chat.name.toLowerCase().startsWith(e.target.value.toLowerCase());
+                    return filterValue;
+                });
+                console.log('Filtering Chats:', filteringChats);
+                const filteredChats = [...filteringChats];
+                setFilteredChats(filteredChats);
+            }
+
+            // const filteredChats = [...filteringChats];
+            // console.log('Filtered Chats:', filteredChats);
+            // setFilteredChats(filteredChats);
         },
-        [myChats, allChats],
+        [isLoading, chats],
     );
     return (
         <Wrapper>
