@@ -20,7 +20,7 @@ const ProfileModal = ({
 	const accessToken = getCookie('accessToken');
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const isMyProfile = searchParams.get('isMyProfile');
+	const isMyProfile = searchParams.get('isMyProfile') === 'true';
 
 	const chattingParticipateHandler = async () => {
 		if (existPrivateChat) {
@@ -35,7 +35,9 @@ const ProfileModal = ({
 		}
 	};
 
-	const editProfileHandler = () => {};
+	const editProfileHandler = () => {
+		console.log('click editProfileHandler');
+	};
 
 	return (
 		<section className="relative w-full h-full top-0 bg-gray-400 ">
@@ -61,34 +63,39 @@ const ProfileModal = ({
 					<h3 className="text-2xl text-white">{user.name}</h3>
 					<div className="w-full border-t-2 h-1 border-white "></div>
 					<div className="flex items-center">
-						<div className="flex flex-col items-center cursor-pointer">
-							{isMyProfile ? (
-								<div onClick={editProfileHandler}>
-									<Image
-										className=""
-										src="/icon_edit.svg"
-										alt="프로필 편집하기"
-										height={50}
-										width={50}
-									/>
-									<h3 className="text-center">
-										프로필 <br />
-										편집하기
-									</h3>
-								</div>
-							) : (
-								<div onClick={chattingParticipateHandler}>
-									<Image
-										className=""
-										src="/icon_add_chat.svg"
-										alt="1:1 채팅하기"
-										height={50}
-										width={50}
-									/>
-									<h3>1대1 채팅</h3>
-								</div>
-							)}
-						</div>
+						{isMyProfile ? (
+							<div
+								className="flex flex-col items-center cursor-pointer"
+								onClick={editProfileHandler}
+							>
+								<Image
+									className=""
+									src="/icon_edit.svg"
+									alt="프로필 편집하기"
+									height={50}
+									width={50}
+								/>
+								<h3 className="text-center">
+									프로필 <br />
+									편집하기
+									{isMyProfile}
+								</h3>
+							</div>
+						) : (
+							<div
+								className="flex flex-col items-center cursor-pointer"
+								onClick={chattingParticipateHandler}
+							>
+								<Image
+									className=""
+									src="/icon_add_chat.svg"
+									alt="1:1 채팅하기"
+									height={50}
+									width={50}
+								/>
+								<h3>1대1 채팅</h3>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
