@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosRequestConfig, AxiosError } from 'axios';
+import axios from 'axios';
 import { setToken } from './token';
 import { refreshToken } from './token';
 
@@ -6,32 +6,22 @@ export const instance = axios.create({
     baseURL: 'https://fastcampus-chat.net/',
 });
 
-function requestInterceptor(config: AxiosRequestConfig): any {
-    const accessToken = sessionStorage.getItem('accessToken');
+instance.interceptors.request.use((config) => {
+    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
 
     if (accessToken) {
-        return {
-            ...config,
-            headers: {
-                'content-type': 'application/json',
-                serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-                Authorization: `Bearer ${accessToken}`,
-            },
-        };
+        config.headers['Content-Type'] = 'application/json';
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+        config.headers['serverId'] = `${process.env.NEXT_PUBLIC_SERVER_KEY}`;
     } else {
-        return {
-            ...config,
-            headers: {
-                'content-type': 'application/json',
-                serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-            },
-        };
+        config.headers['Content-Type'] = 'application/json';
+        config.headers['serverId'] = `${process.env.NEXT_PUBLIC_SERVER_KEY}`;
     }
-}
 
-instance.interceptors.request.use(requestInterceptor);
+    return config;
+});
 
-function responseFulfilledInterceptor(res: AxiosResponse) {
+instance.interceptors.response.use((res) => {
     if (200 <= res.status && res.status < 300) {
         if (res.data.message === 'User created') {
             return res.data;
@@ -44,10 +34,4 @@ function responseFulfilledInterceptor(res: AxiosResponse) {
         refreshToken();
     }
     return Promise.reject(res.data);
-}
-
-function responseRejectedInterceptor(error: AxiosError) {
-    return error.code;
-}
-
-instance.interceptors.response.use(responseFulfilledInterceptor, responseRejectedInterceptor);
+});
