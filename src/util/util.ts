@@ -9,7 +9,6 @@ export const setCookises = async (
   try {
     document.cookie = `accessToken=${accessToken};max-age=3600;path=/;secure`;
     document.cookie = `refreshToken=${refreshToken};max-age=604800;path=/;secure`;
-    alert('쿠키설정에 성공했습니다.');
   } catch (e) {
     console.error(e);
     alert('쿠키설정에 실패했습니다.');
