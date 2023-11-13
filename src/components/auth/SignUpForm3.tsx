@@ -6,14 +6,14 @@ import SignUpSelectItem from './SignUpSelectItem';
 import { signUpFormState } from '../../atoms';
 
 const languages = [
-  { name: 'English', flag: '/flag/eng.png' },
-  { name: '日本語', flag: '/flag/jpn.png' },
-  { name: '中文', flag: '/flag/cn.png' },
-  { name: 'español', flag: '/flag/es.png' },
-  { name: 'français', flag: '/flag/fr.png' },
-  { name: 'das Deutsche', flag: '/flag/de.png' },
-  { name: 'Tiếng Việt', flag: '/flag/vn.png' },
-  { name: 'ภาษาไทย', flag: '/flag/tp.png' },
+  { name: 'English', flag: '/flag/eng.png', value: 'English' },
+  { name: '日本語', flag: '/flag/jpn.png', value: 'Japanese' },
+  { name: '中文', flag: '/flag/cn.png', value: 'Chinese' },
+  { name: 'español', flag: '/flag/es.png', value: 'Spanish' },
+  { name: 'français', flag: '/flag/fr.png', value: 'French' },
+  { name: 'das Deutsche', flag: '/flag/de.png', value: 'German' },
+  { name: 'Tiếng Việt', flag: '/flag/vn.png', value: 'Vietnamese' },
+  { name: 'ภาษาไทย', flag: '/flag/tp.png', value: 'Thai' },
 ];
 
 function SignUpForm3({ setStep }: SignUpFormProps) {
@@ -44,6 +44,7 @@ function SignUpForm3({ setStep }: SignUpFormProps) {
               key={language.name}
               name={language.name}
               flag={language.flag}
+              value={language.value}
               setLangLv={setLangLv}
               isClicked={language.name === clickedItem}
             />

@@ -1,9 +1,16 @@
+import { ChatUser } from '../types/Openchat';
 import { UserSimple } from '../types/User';
 
 interface MyObject {
   id: string;
 }
 
+/**
+ * 내가 참여한 채팅중 오픈 채팅만 찾는 함수 입니다.
+ * @param arr1 firestore에서 받아온 모든 채팅 데이터
+ * @param arr2 api로 받아온 내가 참여한 채팅 데이터
+ * @returns 내 오픈채팅 데이터를 반환
+ */
 function filterOpenChats<T extends MyObject, U extends MyObject>(
   arr1?: T[],
   arr2?: U[],
@@ -25,8 +32,20 @@ function filterOpenChats<T extends MyObject, U extends MyObject>(
   return resultArray;
 }
 
+/**
+ * 친구들 목록중 나는 제외해주는 필터 함수 입니다.
+ * @param arr 친구 목록
+ * @returns 나를 제외한 친구목록을 반환
+ */
+export function filterFriendsNotMe<T extends MyObject>(arr: T[]): T[] {
+  if (!arr) return [];
+  const { id } = JSON.parse(localStorage.getItem('user') ?? '{}');
+  const friends = arr.filter((obj) => obj.id !== id);
+  return friends;
+}
+
 interface ChatObject {
-  users: UserSimple[];
+  users: ChatUser[];
   hashtags: string[];
 }
 

@@ -1,29 +1,30 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { ChatInfoWithId } from '../../hooks/useQueryOpenchats';
-import OpenchatItem from './OpenchatItem';
+import OpenchatMyItem from './OpenchatMyItem';
+import { Openchat } from '../../types/Openchat';
 import OpenchatItemSkeleton from './OpenchatItemSkeleton';
 
-interface OpenchatCategoryProps {
+interface OpenchatMyProps {
   isQuering: boolean;
-  openchats?: ChatInfoWithId[];
+  openchats?: Openchat[];
 }
 
-function OpenchatCategory({ isQuering, openchats }: OpenchatCategoryProps) {
+function OpenchatMy({ isQuering, openchats }: OpenchatMyProps) {
   const count2 = new Array(2).fill(0);
   if (!openchats) return <div>채팅방이 없습니다.</div>;
   return (
     <Grid container spacing={2}>
       {!isQuering
         ? openchats.map((openchat) => (
-            <OpenchatItem key={openchat.id} openchat={openchat} />
+            <OpenchatMyItem key={openchat.id} openchat={openchat} />
           ))
         : count2.map(() => <OpenchatItemSkeleton />)}
     </Grid>
   );
 }
 
-OpenchatCategory.defaultProps = {
+OpenchatMy.defaultProps = {
   openchats: null,
 };
-export default React.memo(OpenchatCategory);
+
+export default React.memo(OpenchatMy);

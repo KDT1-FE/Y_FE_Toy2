@@ -31,35 +31,41 @@ export const OpenchatRoom = styled(Box)(({ theme }) => ({
   border: '1px solid rgba(0, 0, 0, 0.1)',
   borderRadius: '10px',
   backgroundColor: [theme.palette.common.white],
-  padding: '1rem',
+  padding: '0.75rem',
   display: 'flex',
-  // [theme.breakpoints.down('sm')]: {
-  //   flexDirection: 'column',
-  //   justifyContent: 'flex-start',
-  //   alignItems: 'flex-start',
-  // },
+  alignItems: 'center',
   justifyContent: 'space-between',
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px',
+    margin: '0 -6px',
+    borderRadius: 0,
+  },
   '& .openchat__room-avatar': {
-    width: '3.75rem',
+    width: '3.3rem',
     '& img': { verticalAlign: 'top' },
   },
   '& .openchat__room-info': {
-    flex: 1,
     display: 'flex',
     justifyContent: 'space-between',
     width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      marginTop: '10px',
-    },
   },
   '& .openchat__room-desc': {
-    flex: 4,
-    margin: '0 0.8rem',
+    flex: '7 1 70%',
+    margin: '0 0.5rem',
     [theme.breakpoints.down('sm')]: {
-      margin: '0 4px',
+      margin: '0 6px',
+    },
+    '& .overflow-ellipsis': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      maxWidth: '240px',
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '200px',
+      },
     },
   },
-  '& .openchat__room-btn': { flex: 1 },
+  '& .openchat__room-btn': { flex: '1 1 10%' },
 }));
 
 export const OpenchatCreateChatBtn = styled(motion.div)(({ theme }) => ({
@@ -123,8 +129,8 @@ export const OpenchatCreateChatModal = styled(motion.div)(({ theme }) => ({
 export const OpenchatAvatarWrap = styled('div')({
   position: 'relative',
   margin: 'auto',
-  width: '3.75rem',
-  height: '3.75rem',
+  width: '3.3rem',
+  height: '3.3rem',
   overflow: 'hidden',
   userSelect: 'none',
   '&::after': {
@@ -153,3 +159,47 @@ export const OpenchatAvatarWrap = styled('div')({
     height: '100%',
   },
 });
+
+export const OpenchatFriendWrap = styled('div')(({ theme }) => ({
+  display: 'flex',
+  padding: '10px 0',
+  alignItems: 'center',
+  '& .openchat__friend-img': {
+    flex: '0 1 48px',
+    width: '48px',
+    height: '48px',
+    overflow: 'hidden',
+    borderRadius: '100%',
+    boxSizing: 'border-box',
+    border: '1px solid #ddd',
+    '& img': {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      verticalAlign: 'middle',
+    },
+  },
+  '& .openchat__friend-text': {
+    flex: '1 1 50%',
+    margin: '0 10px',
+    '& .overflow-ellipsis': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      maxWidth: '150px',
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '250px',
+      },
+    },
+  },
+  '& .openchat__friend-send': {
+    flex: '0 1 20px',
+    cursor: 'pointer',
+    color: '#1D3557',
+    alignSelf: 'center',
+    transition: 'color 0.3s',
+    '&:hover': {
+      color: '#A8DADC',
+    },
+  },
+}));

@@ -14,7 +14,7 @@ export const defaultSignUpValue: FbUser = {
   intro: '',
   language: '',
   level: '',
-  hashtag: [],
+  hashtags: [],
 };
 
 export const signUpFormState = atom({

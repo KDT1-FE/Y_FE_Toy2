@@ -1,15 +1,15 @@
 import React from 'react';
-import { Button, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { Person } from '@mui/icons-material';
 import { OpenchatRoom } from '../../styles/OpenchatStyle';
-import { ChatInfoWithId } from '../../hooks/useQueryOpenchats';
 import OpenchatAvatar from './OpenchatAvatar';
+import { Openchat } from '../../types/Openchat';
 
-interface OpenchatCategoryProps {
-  openchat: ChatInfoWithId;
+interface OpenchatMyItemProps {
+  openchat: Openchat;
 }
 
-function OpenchatItem({ openchat }: OpenchatCategoryProps) {
+function OpenchatMyItem({ openchat }: OpenchatMyItemProps) {
   return (
     <Grid item xs={12} sm={6}>
       <OpenchatRoom>
@@ -26,28 +26,24 @@ function OpenchatItem({ openchat }: OpenchatCategoryProps) {
               color="GrayText"
               className="overflow-ellipsis"
             >
-              {openchat.hashtags.map((hashtag) => `#${hashtag}`).join(' ')}
+              {openchat.latestMessage?.text ?? '이전 메시지가 없습니다.'}
             </Typography>
             <Typography variant="body2" color="GrayText">
               <Person sx={{ width: '1rem', verticalAlign: '-6px' }} />{' '}
-              {openchat.users.length}명 참여중
+              {openchat.users.map((user) => user.username).join(',')}
             </Typography>
           </div>
-          <Button
-            variant="contained"
-            className="openchat__room-btn"
-            sx={{
-              bgcolor: 'secondary.main',
-              color: 'black',
-              ':hover': { bgcolor: 'secondary.light' },
-            }}
+          <Typography
+            variant="body2"
+            color="GrayText"
+            className="openchat__room-lastdate"
           >
-            참여
-          </Button>
+            {openchat.latestMessage?.createAt.toDateString() ?? '11월 11일'}
+          </Typography>
         </div>
       </OpenchatRoom>
     </Grid>
   );
 }
 
-export default React.memo(OpenchatItem);
+export default React.memo(OpenchatMyItem);

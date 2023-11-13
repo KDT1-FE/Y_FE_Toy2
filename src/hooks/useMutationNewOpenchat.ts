@@ -9,27 +9,8 @@ import { newChatValidationSchema } from '../utils/validateSchema';
 import { privateApi } from '../libs/axios';
 import dataUrlToFile from '../utils/dataUrltoFile';
 import { ChatInfoConverter } from '../libs/firestoreChatConverter';
+import { Chat } from '../types/Openchat';
 
-interface Chat {
-  id: string;
-  name: string;
-  users: User[]; // 자신을 포함한 참가자들 정보
-  isPrivate: boolean;
-  latestMessage: Message | null;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-interface Message {
-  id: string;
-  text: string;
-  userId: string;
-  createAt: Date;
-}
 type ChatNewInfo = Omit<Chat, 'latestMessage'>;
 
 interface OpenchatCreateProps {

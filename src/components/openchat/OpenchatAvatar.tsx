@@ -7,6 +7,9 @@ interface OpenchatAvatarProps {
 }
 
 function OpenchatAvatar({ src, alt }: OpenchatAvatarProps) {
+  const reg = /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/gim;
+  const text = alt.replace(reg, '').slice(0, 2);
+
   return (
     <OpenchatAvatarWrap className="user-img">
       <svg
@@ -40,7 +43,7 @@ function OpenchatAvatar({ src, alt }: OpenchatAvatarProps) {
           dy="10"
           textAnchor="middle"
         >
-          {alt}
+          {text}
         </text>
 
         <image
