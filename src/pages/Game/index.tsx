@@ -114,17 +114,17 @@ const Game = () => {
           </Button>
         </GridItem>
         <GridItem>
-          <ProfileCard userId={gameData.data[0].host}></ProfileCard>
           <ProfileCard userId={gameData.data[0].users[0]}></ProfileCard>
           <ProfileCard userId={gameData.data[0].users[1]}></ProfileCard>
+          <ProfileCard userId={gameData.data[0].users[2]}></ProfileCard>
         </GridItem>
         <GridItem>
           <GameChat gameId={gameId} gameData={gameData.data[0]} />
         </GridItem>
         <GridItem>
-          <ProfileCard userId={gameData.data[0].users[2]}></ProfileCard>
           <ProfileCard userId={gameData.data[0].users[3]}></ProfileCard>
           <ProfileCard userId={gameData.data[0].users[4]}></ProfileCard>
+          <ProfileCard userId={gameData.data[0].users[5]}></ProfileCard>
         </GridItem>
       </Grid>
     </>
