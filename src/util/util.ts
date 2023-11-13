@@ -3,8 +3,8 @@ import { getAllUsers, leaveGameRoom, postRefresh, getUserData } from '../api';
 import { disconnectChattingSocket } from '../api/socket';
 
 export const setCookises = async (
-  accessToken: string,
-  refreshToken: string,
+  accessToken?: string,
+  refreshToken?: string,
 ) => {
   try {
     document.cookie = `accessToken=${accessToken};max-age=3600;path=/;secure`;
