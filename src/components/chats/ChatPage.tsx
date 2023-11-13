@@ -13,6 +13,8 @@ import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStor
 import { instance } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
+import { useQuery } from 'react-query';
+import { getMyChats, getAllChats } from './getChats';
 // import AddChatDropdown from './addChatDropdown';
 const MyChats = ({ userType }: any) => {
     const [addChatOpen, setAddChatOpen] = useState(false);
@@ -22,61 +24,27 @@ const MyChats = ({ userType }: any) => {
     const router = useRouter();
     const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
     const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
-    const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        'Cache-Control': 'no-cache',
-    };
 
     const enterChatRoom = (chat: Chat) => {
         if (chat.id && chat.users) {
             router.push(`/chating/${chat.id}`);
         }
     };
-
-    const getMyChats = async () => {
-        try {
-            const res = await instance.get<Chat[], any>(`chat`, { headers });
-            if (res) {
-                console.log(res.chats);
-                setMyChats(res.chats);
-            } else {
-                console.log('내 채팅 데이터 조회 실패');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    const getAllChats = async () => {
-        try {
-            const res = await instance.get<Chat[], any>(`chat/all`, { headers });
-            setAllChats(res.chats);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        if (userType === 'my') {
-            getMyChats();
-        } else {
-            getAllChats();
-        }
-
-        const intervalId = setInterval(() => {
+    const { data, isLoading } = useQuery<Chat[], any>({
+        queryKey: ['getChatsKey'],
+        queryFn: userType === 'my' ? getMyChats : getAllChats,
+        refetchOnWindowFocus: false,
+        onSuccess: (data) => {
             if (userType === 'my') {
-                getMyChats();
-                console.log('내 채팅 조회 성공');
+                setMyChats(data);
             } else {
-                getAllChats();
-                console.log('모든 채팅 조회 성공');
+                setAllChats(data);
             }
-        }, 5000);
+        },
+        staleTime: 10000,
+    });
 
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
-
+    // 지우시고 다른 함수 넣으셔도 됩니다!
     const onAddHandler = () => {
         setAddChatOpen(!addChatOpen);
     };
@@ -90,30 +58,32 @@ const MyChats = ({ userType }: any) => {
                 </IconBar>
             </ChatHeader>
             <ChatContainer>
-                <SearchMyChat />
-                {userId
-                    ? filterChats.length > 0
-                        ? sortTime(filterChats).map((chat) => (
-                              <MyChatItem
-                                  key={chat.id}
-                                  name={chat.name}
-                                  latestMessage={chat.latestMessage}
-                                  users={chat.users}
-                                  onClick={() => enterChatRoom(chat)}
-                                  isPrivate={chat.isPrivate}
-                              />
-                          ))
-                        : sortTime(userType === 'my' ? myChats : allChats).map((chat) => (
-                              <MyChatItem
-                                  key={chat.id}
-                                  name={chat.name}
-                                  latestMessage={chat.latestMessage}
-                                  users={chat.users}
-                                  onClick={() => enterChatRoom(chat)}
-                                  isPrivate={chat.isPrivate}
-                              />
-                          ))
-                    : null}
+                <SearchMyChat userType={userType} />
+                <ChatList>
+                    {userId
+                        ? filterChats.length > 0
+                            ? sortTime(filterChats).map((chat) => (
+                                  <MyChatItem
+                                      key={chat.id}
+                                      name={chat.name}
+                                      latestMessage={chat.latestMessage}
+                                      users={chat.users}
+                                      onClick={() => enterChatRoom(chat)}
+                                      isPrivate={chat.isPrivate}
+                                  />
+                              ))
+                            : sortTime(userType === 'my' ? myChats : allChats).map((chat) => (
+                                  <MyChatItem
+                                      key={chat.id}
+                                      name={chat.name}
+                                      latestMessage={chat.latestMessage}
+                                      users={chat.users}
+                                      onClick={() => enterChatRoom(chat)}
+                                      isPrivate={chat.isPrivate}
+                                  />
+                              ))
+                        : null}
+                </ChatList>
             </ChatContainer>
         </Wrapper>
     );
@@ -126,7 +96,6 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* height: 100vh; */
 `;
 
 const ChatHeader = styled.div`
@@ -157,4 +126,15 @@ const ChatContainer = styled.div`
     text-align: center;
     margin: 2rem;
     background-color: transparent;
+`;
+
+const ChatList = styled.div`
+    overflow-y: auto;
+    height: 50rem;
+    &::-webkit-scrollbar {
+        /*크롬, 사파리, 오페라, 엣지*/
+        display: none;
+    }
+    -ms-overflow-style: none; /* ie */
+    scrollbar-width: none; /* 파이어폭스 */
 `;

@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { Chat, allChatsState, myChatsState, searchChatsState } from './chatsStore';
+import { allChatsState, myChatsState, searchChatsState } from './chatsStore';
 import { SearchButton, SearchUserBox } from '@/app/users/page';
 import { MdSearch } from 'react-icons/md';
 
@@ -14,11 +14,14 @@ const SearchMyChat = ({ userType }: any) => {
     const onInputChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             setInput(e.target.value);
-            const filteringChats = (userType === 'my' ? myChats : allChats).filter((chat) =>
-                chat.name.toLowerCase().includes(e.target.value.toLowerCase()),
-            );
-
+            console.log(myChats);
+            const filteringChats = (userType == 'my' ? myChats : allChats).filter((chat) => {
+                const includesValue = chat.name.toLowerCase().startsWith(e.target.value.toLowerCase());
+                return includesValue;
+            });
+            console.log('Filtering Chats:', filteringChats);
             const filteredChats = [...filteringChats];
+            console.log('Filtered Chats:', filteredChats);
             setFilteredChats(filteredChats);
         },
         [myChats, allChats],

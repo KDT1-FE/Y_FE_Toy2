@@ -11,6 +11,9 @@ export const formatCreatedAt = (createdAt: Date) => {
 };
 
 export const sortTime = (chats: Chat[]) => {
+    if (!Array.isArray(chats)) {
+        return [];
+    }
     return [...chats].sort((a, b) => {
         const aDateTime = new Date(a.latestMessage?.createdAt || 0);
         const bDateTime = new Date(b.latestMessage?.createdAt || 0);
