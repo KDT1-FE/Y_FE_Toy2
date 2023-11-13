@@ -35,6 +35,10 @@ interface FetchResultUser {
     user: User;
   };
 }
+interface FetchResultUserList {
+  loading: boolean;
+  result: User[];
+}
 
 const GameLists = () => {
   const [token, setToken] = useState<ResponseValue>();
@@ -42,6 +46,11 @@ const GameLists = () => {
 
   const { result: userInfo }: FetchResultUser = useFetch({
     url: `https://fastcampus-chat.net/user?userId=${token?.id}`,
+    method: "GET",
+    start: !!token,
+  });
+  const { loading, result: userList }: FetchResultUserList = useFetch({
+    url: "https://fastcampus-chat.net/users",
     method: "GET",
     start: !!token,
   });
@@ -322,7 +331,7 @@ const GameLists = () => {
             로그아웃
           </Button>
         </Card>
-        <Card padding="3" height="430px">
+        <Card padding="3" height="515">
           <Text fontSize="large" fontWeight="800" textAlign="center">
             유저 목록
           </Text>
@@ -331,7 +340,34 @@ const GameLists = () => {
             flexDirection="column"
             rowGap="5"
             paddingY="3"
-          ></Box>
+            overflowY="auto"
+            maxHeight="500px"
+          >
+            {loading ? (
+              <p>loading...</p>
+            ) : (
+              userList?.map((user) => (
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  columnGap="2"
+                  backgroundColor="blackAlpha.100"
+                  paddingX="3"
+                  paddingY="1"
+                  borderRadius="5"
+                >
+                  <Image
+                    boxSize="35px"
+                    objectFit="cover"
+                    borderRadius="full"
+                    src={user.picture}
+                    alt="Dan Abramov"
+                  />
+                  <Text>{user.name}</Text>
+                </Box>
+              ))
+            )}
+          </Box>
         </Card>
       </Box>
     </Container>
