@@ -39,4 +39,4 @@ function OpenchatItem({ openchat }: OpenchatCategoryProps) {
   );
 }
 
-export default OpenchatItem;
+export default React.memo(OpenchatItem);

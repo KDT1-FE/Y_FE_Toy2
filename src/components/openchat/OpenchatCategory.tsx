@@ -21,4 +21,4 @@ function OpenchatCategory({ openchats }: OpenchatCategoryProps) {
 OpenchatCategory.defaultProps = {
   openchats: null,
 };
-export default OpenchatCategory;
+export default React.memo(OpenchatCategory);

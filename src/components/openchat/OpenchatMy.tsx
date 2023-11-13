@@ -22,4 +22,4 @@ OpenchatMy.defaultProps = {
   openchats: null,
 };
 
-export default OpenchatMy;
+export default React.memo(OpenchatMy);

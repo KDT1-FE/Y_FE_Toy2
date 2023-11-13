@@ -31,4 +31,4 @@ function OpenchatMyItem({ openchat }: OpenchatMyItemProps) {
   );
 }
 
-export default OpenchatMyItem;
+export default React.memo(OpenchatMyItem);
