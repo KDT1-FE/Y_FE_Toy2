@@ -17,8 +17,6 @@ const CheckPrivateChat = () => {
 
   const [openChatId, setOpenChatId] = useState<string | null>(null);
 
-  const [chatModals, setChatModals] = useState<any>({});
-
   const fetchData = async () => {
     if (myUserData) {
       try {

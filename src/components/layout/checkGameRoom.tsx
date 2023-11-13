@@ -6,7 +6,6 @@ import { allRoomState } from '../../states/atom';
 import {
   getAllGameRooms,
   // getOnlyGameRoom,
-  leaveGameRoom,
   participateGameRoom,
 } from '../../api';
 import { useNavigate } from 'react-router-dom';
@@ -27,10 +26,6 @@ import {
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
-import {
-  disconnectChattingSocket,
-  disconnectLoginSocket,
-} from '../../api/socket';
 import { getAllMyChat } from '../../api';
 
 const CheckGameRoom = () => {
@@ -91,7 +86,6 @@ const CheckGameRoom = () => {
       let allMyChatData = await getAllMyChat();
       allMyChatData = allMyChatData.chats.filter((obj: any) => !obj.isPrivate);
 
-      console.log(allMyChatData);
       // chatId와 allMyChatData의 배열 요소의 id 값이 일치하는지 확인
       const matchingChat = allMyChatData.find(
         (chat: any) => chat.id === chatId,
