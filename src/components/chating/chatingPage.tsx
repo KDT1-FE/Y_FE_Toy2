@@ -5,11 +5,9 @@ import React, { useEffect, useState } from 'react';
 import MessageContainer from './MessageContainer';
 import io from 'socket.io-client';
 import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
 import { formatCreatedAt } from '../chats/useFormatCreatedAt';
-import Users from '@/app/users/page';
 
 interface Message {
     id: string;
@@ -29,8 +27,6 @@ export default function ChatingPage() {
     const [users, setUsers] = useState<User[]>([]);
     const [chatName, setChatName] = useState<string>('');
     const [getUserToggle, setGetUserToggle] = useState<boolean>(true);
-
-    const router = useRouter();
 
     const pathname = usePathname();
     const chatId = pathname.split('/')[2];
@@ -56,7 +52,7 @@ export default function ChatingPage() {
         }
     };
 
-    const findUserName = (userId: string): any => {
+    const findUserName = (userId: string): string | void => {
         for (let i = 0; i < users.length; i++) {
             if (userId == users[i].id) {
                 return users[i].username;
@@ -64,7 +60,7 @@ export default function ChatingPage() {
         }
     };
 
-    const findUserPicture = (userId: string): any => {
+    const findUserPicture = (userId: string): string | void => {
         for (let i = 0; i < users.length; i++) {
             if (userId == users[i].id) {
                 return users[i].picture;
@@ -125,7 +121,7 @@ export default function ChatingPage() {
     return (
         <main>
             <ChatingNavigation chatName={chatName} />
-            <ChatingModal users={users} chatId={chatId} accessToken={accessToken} />
+            <ChatingModal users={users} chatId={chatId} />
             <MessagesContainer>
                 {messages
                     ? messages.map((message: Message, i: number) =>
@@ -149,21 +145,19 @@ export default function ChatingPage() {
                                           src={
                                               findUserPicture(
                                                   message.userId.split(':')[message.userId.split(':').length - 1],
-                                              ) == undefined
+                                              )
                                                   ? 'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
                                                   : findUserPicture(
                                                         message.userId.split(':')[message.userId.split(':').length - 1],
-                                                    )
+                                                    ) || ''
                                           }
                                       />
                                       <YourMessageName>
-                                          {findUserName(
-                                              message.userId.split(':')[message.userId.split(':').length - 1],
-                                          ) == undefined
+                                          {findUserName(message.userId.split(':')[message.userId.split(':').length - 1])
                                               ? '(퇴장한 사용자)'
                                               : findUserName(
                                                     message.userId.split(':')[message.userId.split(':').length - 1],
-                                                )}
+                                                ) || ''}
                                       </YourMessageName>
                                   </YourMessageNameWrapper>
                                   <YourMessageTextWrapper>
