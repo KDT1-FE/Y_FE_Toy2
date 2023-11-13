@@ -27,7 +27,10 @@ export const loginSocket = (onDataReceived: (data: any[]) => void) => {
   return serverSocket;
 };
 
+
 export const chatSocket = (chatId: string) => {
+  console.log(SERVER_URL);
+
   chattingSocket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
     extraHeaders: {
       serverId: SERVER_ID,

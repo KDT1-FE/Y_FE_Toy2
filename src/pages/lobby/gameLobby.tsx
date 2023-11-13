@@ -5,8 +5,8 @@ import { Flex } from '@chakra-ui/react';
 import styled from 'styled-components';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
 import { controlLobbyReload, controlBack } from '../../hooks/leaveHandle';
-
-// import CreateGameRoom from '../../components/layout/createGameRoom';
+import { getUserData } from '../../api/index';
+import CreateGameRoom from '../../components/layout/createGameRoom';
 
 const GameLobby = () => {
   controlLobbyReload();
@@ -26,7 +26,7 @@ const GameLobby = () => {
           <OnlineUserList />
           <UserProfile></UserProfile>
         </RightComponent>
-        {/* <CreateGameRoom></CreateGameRoom> */}
+        <CreateGameRoom></CreateGameRoom>
       </Flex>
     </>
   );
