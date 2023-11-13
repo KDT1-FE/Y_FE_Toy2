@@ -16,21 +16,30 @@ interface User {
     picture: string;
 }
 
+interface IUser {
+    user: {
+        name: string;
+        picture: string;
+    };
+}
+
 const Profile = () => {
     const [profile, setProfile] = useRecoilState<User>(UserProfile);
     const currentModalOpen = useRecoilValue(UserProfileModal);
+
+    const uesrId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
     const router = useRouter();
 
     const getUser = async (): Promise<void> => {
         try {
             const userId = sessionStorage.getItem('userId');
-            const res = await instance.get<User[]>(`user?userId=${userId}`);
+            const res = await instance.get<unknown, IUser>(`user?userId=${userId}`);
             if (res) {
-                const { user }: any = res;
+                const { user } = res;
 
                 setProfile({
-                    id: user.id,
+                    id: uesrId as string,
                     name: user.name,
                     picture: user.picture,
                 });
