@@ -9,6 +9,7 @@ import { search, toLower } from '@/hooks/Common/search';
 import ShowSearchedFriend from './ShowSearchedFriend';
 import FriendProfiles from '../Users/FriendProfiles';
 import ShowAllOpenChat from '../Search/ShowAllOpenChat';
+import { useRouter } from 'next/navigation';
 
 const SearchOpenChat = ({
 	allUsersExceptMe,
@@ -21,6 +22,7 @@ const SearchOpenChat = ({
 	const [searchedChats, setSearchedChats] = useState(myChats);
 	const [searchedUsers, setSearchedUsers] = useState(allUsersExceptMe);
 	const [isShowMore, setIsShowMore] = useState(false);
+	const router = useRouter();
 
 	const getUserInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		setUserInput(toLower(e.target.value));
@@ -36,15 +38,20 @@ const SearchOpenChat = ({
 	return (
 		<>
 			<div className="relative flex items-center pt-3">
-				<Link href={'/users'}>
-					<Image
-						width={25}
-						height={25}
-						src="/icon_back.svg"
-						alt="뒤로 가기"
-						className="mr-3"
-					/>
-				</Link>
+				<Image
+					width={25}
+					height={25}
+					src="/icon_back.svg"
+					alt="뒤로 가기"
+					className="mr-3 cursor-pointer"
+					onClick={() => {
+						if (isShowMore) {
+							setIsShowMore(false);
+						} else {
+							router.back();
+						}
+					}}
+				/>
 				<Input
 					onChange={getUserInput}
 					onKeyPress={handleKeyPress}
@@ -66,11 +73,17 @@ const SearchOpenChat = ({
 				/>
 			</div>
 
-			{isShowMore && <FriendProfiles allUsers={searchedUsers} />}
+			{isShowMore && (
+				<>
+					<strong className="mt-5">내 친구 찾기</strong>
+					<FriendProfiles allUsers={searchedUsers} />
+				</>
+			)}
 			{!isShowMore && (
 				<>
 					{searchedChats.length || searchedUsers.length ? (
 						<>
+							<strong className="mt-5">내 친구 찾기</strong>
 							{allUsersExceptMe && (
 								<ShowSearchedFriend
 									setIsShowMore={setIsShowMore}
@@ -78,13 +91,19 @@ const SearchOpenChat = ({
 								/>
 							)}
 
+							<strong className="mt-5">내 채팅방 찾기</strong>
 							{searchedChats.map((chat) => (
-								<li
+								<Link
+									href={{
+										pathname: `/chat/${chat.id}`,
+										query: { isPrivate: true },
+									}}
 									key={chat.id}
-									className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer"
 								>
-									<ShowAllOpenChat key={chat.id} chat={chat} />
-								</li>
+									<li className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer">
+										<ShowAllOpenChat key={chat.id} chat={chat} />
+									</li>
+								</Link>
 							))}
 						</>
 					) : (

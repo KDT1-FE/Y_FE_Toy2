@@ -5,6 +5,7 @@ import MyProfile from '@/Components/Users/MyProfile';
 import Header from '@/Components/Common/Header';
 import { User } from '@/types';
 import { cookies } from 'next/headers';
+import Footer from '@/Components/Common/Footer';
 
 const Users = async () => {
 	const cookieStore = cookies();
@@ -23,6 +24,7 @@ const Users = async () => {
 				</h4>
 			</div>
 			<FriendProfile allUsers={allUsersExceptMe} />
+			<Footer />
 		</section>
 	);
 };

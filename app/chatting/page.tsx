@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Footer from '@/Components/Common/Footer';
 
 const wrapper = 'w-full flex flex-col items-center';
 
@@ -9,6 +10,7 @@ const chatting = () => {
 		<div className={wrapper}>
 			<div className="w-full flex justify-center bg-primary hover:bg-pink-300"></div>
 			<h1>채팅 페이지 입니다.</h1>
+			<Footer />
 		</div>
 	);
 };
