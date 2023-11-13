@@ -55,17 +55,30 @@ const Example = () => {
     });
 
     // 채팅 기록 확인
-    socket.on("messages-to-client", (messageObject) => {
-      console.log(messageObject);
+    socket.on("messages-to-client", (messagesObject) => {
+      console.log(messagesObject);
     });
 
     // 초대 메시지
-    socket.on("new-chat", (messageObject) => {
-      console.log(messageObject);
+    socket.on("new-chat", (newChat) => {
+      console.log(newChat);
+    });
+
+    // 유저 join확인
+    socket.on("join", (users) => {
+      console.log(users);
+    });
+
+    // 유저 leave확인
+    socket.on("leave", (users) => {
+      console.log(users);
     });
 
     return () => {
       socket.off("message-to-client");
+      socket.off("join");
+      socket.off("leave");
+      socket.off("new-chat");
     };
   }, [socket]);
 
@@ -105,7 +118,7 @@ const Example = () => {
     url: "https://fastcampus-chat.net/chat/leave",
     method: "PATCH",
     data: {
-      chatId: "27441d74-4dd2-4f55-a49c-48c9085bbc4e",
+      chatId: "4f54a7e3-f01c-4678-afaf-3650cb8da9d7",
     },
     start: false,
   });
