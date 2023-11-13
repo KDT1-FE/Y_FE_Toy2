@@ -2,12 +2,39 @@ import { AddIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { Button, Flex, Select, Icon, useDisclosure } from '@chakra-ui/react';
 import { useState } from 'react';
 import NewGameRoomModal from './newGameRommModal';
+import { getAllGameRooms, participateGameRoom } from '../../api';
+import { useNavigate } from 'react-router-dom';
+
+interface Chats {
+  id: string;
+  name: string;
+  users: User[]; // 속한 유저 정보
+  isPrivate: boolean;
+  latestMessage: Message | null;
+  updatedAt: Date;
+}
+
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createAt: Date;
+}
+
 const LobbyListTop = () => {
   const [sortOption, setSortOption] = useState('');
   const [selectOption, setSelectOption] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [randomName, setRandomName] = useState('');
+  const userId = localStorage.getItem('id');
+  const navigate = useNavigate();
+
   // 랜덤 방제목 정하는 함수
   const randomNameFunc = () => {
     const data = [
@@ -26,6 +53,29 @@ const LobbyListTop = () => {
     const randomIndex = Math.floor(Math.random() * data.length);
     const randomPick = data[randomIndex];
     setRandomName(randomPick);
+  };
+
+  const fastParticipate = async () => {
+    try {
+      const allRoomsData = await getAllGameRooms();
+      const allChat = allRoomsData.chats;
+
+      const lengthChats = allChat.filter(
+        (chat: Chats) => chat.users.length < 4,
+      );
+      const nonMyIdChats = lengthChats.filter((chat: Chats) =>
+        chat.users.every((user) => user.id !== userId),
+      );
+      console.log(nonMyIdChats);
+
+      const randomIndex = Math.floor(Math.random() * nonMyIdChats.length);
+      const randomPick = nonMyIdChats[randomIndex];
+
+      await participateGameRoom(randomPick.id);
+      navigate(`/room/:${randomPick.id}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -63,7 +113,8 @@ const LobbyListTop = () => {
             color={'white'}
             _hover={{
               backgroundColor: 'teal.500',
-            }}>
+            }}
+            onClick={fastParticipate}>
             빠른 참가
           </Button>
         </Flex>
