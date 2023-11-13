@@ -14,14 +14,17 @@ import {
 } from "@chakra-ui/react";
 import useFireFetch from "../../../hooks/useFireFetch";
 import { arrayUnion } from "firebase/firestore";
+import calculateVote from "./CalculateVote";
 
 interface GameData {
   id: string;
   users: string[];
+  votedFor: { by: string; liar: string }[];
 }
 
 interface VoteProps {
   onClose: (selectedUser: string) => void;
+  onVoteResult: (result: string | null) => void;
   gameData: GameData;
 }
 
@@ -31,6 +34,8 @@ const Vote: React.FC<VoteProps> = ({
 }): React.ReactElement => {
   const [selectedUser, setSelectedUser] = useState<string>("");
   const fireFetch = useFireFetch();
+  const fetchData = fireFetch.useGetSome("game", "id", gameData.id)
+    .data[0] as GameData;
 
   const storedToken = localStorage.getItem("token");
   const tokenData = storedToken ? JSON.parse(storedToken) : null;
@@ -40,12 +45,17 @@ const Vote: React.FC<VoteProps> = ({
   };
 
   const handleVoteSubmit = () => {
-    if (selectedUser !== null) {
+    if (selectedUser !== "") {
       const myId = tokenData.id;
       fireFetch.updateData("game", gameData.id, {
         votedFor: arrayUnion({ by: myId, liar: selectedUser }),
       });
-      console.log(selectedUser + "에 투표했습니다.");
+
+      console.log("fetchData", fetchData);
+      const voteResult = calculateVote(fetchData);
+
+      console.log("Vote result: " + voteResult);
+
       onClose(selectedUser);
     }
   };
