@@ -8,7 +8,7 @@ export interface UserState {
 export const userState = atom<UserState>({
   key: "userState",
   default: {
-    id: "",
+    id: localStorage.getItem("userId") || "",
     isLoggedIn: false,
   },
 });

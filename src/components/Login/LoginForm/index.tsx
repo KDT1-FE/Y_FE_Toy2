@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   AlertIcon,
@@ -10,6 +10,11 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import styled from "styled-components";
+import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import useFetch from "../../../hooks/useFetch";
+import { userState } from "../../../recoil/atoms/userState";
 
 const SignUpButton = styled.button`
   color: #e2e8f0;
@@ -29,21 +34,44 @@ interface InputProps {
 interface LoginFormProps {
   idInput: InputProps;
   pwInput: InputProps;
-  loginError: string;
-  setLoginError: React.Dispatch<React.SetStateAction<string>>;
-  handleLogin: () => void;
   toggleSignUpModal: () => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
   idInput,
   pwInput,
-  loginError,
-  handleLogin,
   toggleSignUpModal,
 }) => {
-  // form 태그로 감싸서 제출 핸들러 추가
-  const handleSubmit = (event: React.FormEvent) => {
+  const [loginError, setLoginError] = useState("");
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
+  const [user, setUser] = useRecoilState(userState);
+
+  const { result, loading, statusCode, refresh, error } = useFetch({
+    url: "https://fastcampus-chat.net/login",
+    method: "POST",
+    data: { id: idInput.value, password: pwInput.value },
+    start: false,
+  });
+
+  useEffect(() => {
+    //로그인 욫어 결과 처리
+    if (loading || !result) return;
+
+    if (statusCode === 200) {
+      const { accessToken, refreshToken } = result; // 응답에서 토큰 추출
+      setToken(accessToken, refreshToken, idInput.value);
+      navigate("/main");
+    } else {
+      setLoginError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+    }
+  }, [loading, statusCode, result, error, navigate, setToken, idInput.value]);
+
+  const handleLogin = () => {
+    refresh(); //로그인 요청 시작
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleLogin();
   };
