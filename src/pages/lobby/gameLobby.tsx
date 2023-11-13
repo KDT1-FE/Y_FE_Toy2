@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
 import { controlLobbyReload, controlBack } from '../../hooks/leaveHandle';
 import { getUserData } from '../../api/index';
-import CreateGameRoom from '../../components/layout/createGameRoom';
+// import CreateGameRoom from '../../components/layout/createGameRoom';
 
 const GameLobby = () => {
   const accessToken = useRecoilValue(accessTokenState);
@@ -42,7 +42,7 @@ const GameLobby = () => {
           <OnlineUserList />
           <UserProfile></UserProfile>
         </RightComponent>
-        <CreateGameRoom></CreateGameRoom>
+        {/* <CreateGameRoom></CreateGameRoom> */}
       </Flex>
     </>
   );
