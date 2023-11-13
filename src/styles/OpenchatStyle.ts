@@ -1,5 +1,6 @@
-import { Box, styled } from '@mui/material';
+import { Box, Grid, styled } from '@mui/material';
 import { motion } from 'framer-motion';
+import React from 'react';
 
 export const OpenchatContainer = styled('main')<{ isOpenModal: boolean }>(
   ({ isOpenModal }) => ({
@@ -201,5 +202,69 @@ export const OpenchatFriendWrap = styled('div')(({ theme }) => ({
     '&:hover': {
       color: '#A8DADC',
     },
+  },
+}));
+
+export const OpenchatRoomAppbar = React.memo(
+  styled(Box)(({ theme }) => ({
+    position: 'sticky',
+    top: 0,
+    backgroundColor: theme.palette.background.paper,
+    height: '62px',
+    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+    padding: '5px 10px',
+    boxSizing: 'border-box',
+    '& .openchat__room-appbar-wrap': {
+      display: 'flex',
+      alignItems: 'center',
+    },
+  })),
+);
+
+export const OpenchatMessageWrap = React.memo(
+  styled(Box)(({ theme }) => ({
+    padding: '0 0 62px',
+    minHeight: '100vh',
+    boxSizing: 'border-box',
+  })),
+);
+
+export const OpenchatMessageItemWrap = styled(Box)<{ isme: boolean }>(
+  ({ theme, isme }) => ({
+    padding: '1rem 0',
+    alignSelf: isme ? 'flex-end' : 'flex-start',
+    '& .openchat__msg-wrapper': {
+      display: 'flex',
+      alignItems: 'flex-end',
+      flexDirection: isme ? 'row-reverse' : 'row',
+      gap: '8px',
+    },
+    '& .openchat__msg-box': {
+      flex: '1 1 auto',
+      maxWidth: '360px',
+      backgroundColor: isme
+        ? theme.palette.primary.main
+        : theme.palette.secondary.light,
+      color: isme ? theme.palette.background.paper : theme.palette.common.black,
+      padding: '1rem',
+      borderRadius: '10px',
+    },
+    '& .openchat__time-box': {
+      flex: '0 0 4rem',
+      textAlign: isme ? 'right' : 'left',
+    },
+  }),
+);
+
+export const OpenchatSenderWrap = styled(Grid)(({ theme }) => ({
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  '& .openchat__sender-input': {
+    flex: '1 1 80%',
+    display: 'block',
+    padding: '10px',
+    border: 0,
   },
 }));
