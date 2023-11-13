@@ -7,7 +7,7 @@ const Move = () => {
     return (
         <Container>
             <div>
-                <img src="/Logo.png" alt="" />
+                <img src="/Logo.png" alt="logo" />
                 <div className="shadow"></div>
             </div>
         </Container>

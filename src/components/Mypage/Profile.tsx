@@ -1,11 +1,14 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { instance } from '@/lib/api';
-import styled from 'styled-components';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { UserProfile } from '@/store/atoms';
-import { useRecoilState } from 'recoil';
+
+import { instance } from '@/lib/api';
+
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { UserProfile, UserProfileModal } from '@/store/atoms';
+
+import styled from 'styled-components';
 
 interface User {
     id: string;
@@ -15,6 +18,7 @@ interface User {
 
 const Profile = () => {
     const [profile, setProfile] = useRecoilState<User>(UserProfile);
+    const currentModalOpen = useRecoilValue(UserProfileModal);
 
     const router = useRouter();
 
@@ -36,6 +40,10 @@ const Profile = () => {
         }
     };
 
+    useEffect(() => {
+        getUser();
+    }, [currentModalOpen]);
+
     const onLogout = () => {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('refreshToken');
@@ -44,10 +52,6 @@ const Profile = () => {
 
         router.push('/login');
     };
-
-    useEffect(() => {
-        getUser();
-    }, [profile]);
 
     return (
         <>

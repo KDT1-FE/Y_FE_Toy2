@@ -1,25 +1,23 @@
 'use client';
 
 import React, { ChangeEvent, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import styled from 'styled-components';
-import { UserProfile } from '@/store/atoms';
-import { useRecoilValue } from 'recoil';
-import { AiOutlineCamera } from 'react-icons/ai';
+
 import { instance } from '@/lib/api';
+
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { UserProfile, UserProfileModal } from '@/store/atoms';
+
+import styled from 'styled-components';
+import { AiOutlineCamera } from 'react-icons/ai';
 
 interface RequestBody {
     name: string;
     picture?: string;
 }
 
-interface PropsType {
-    setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const ProfileModal = ({ setOpenModal }: PropsType) => {
+const ProfileModal = () => {
     const userInfo = useRecoilValue(UserProfile);
+    const setOpenModal = useSetRecoilState(UserProfileModal);
 
     const [formData, setFormData] = useState<RequestBody>({
         name: userInfo.name,
@@ -27,7 +25,6 @@ const ProfileModal = ({ setOpenModal }: PropsType) => {
     });
     const [image, setImage] = useState<string>(userInfo.picture);
 
-    const router = useRouter();
     const imageRef = useRef<HTMLInputElement | null>(null);
 
     const onChangeProfile = () => {
@@ -56,7 +53,6 @@ const ProfileModal = ({ setOpenModal }: PropsType) => {
     const onCancel = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setOpenModal(false);
-        router.push('/mypage');
     };
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -65,8 +61,6 @@ const ProfileModal = ({ setOpenModal }: PropsType) => {
         try {
             await instance.patch('user', formData);
             setOpenModal(false);
-            // 임시
-            router.push('/mypage');
         } catch (e) {
             console.error(e);
         }
@@ -92,18 +86,17 @@ const ProfileModal = ({ setOpenModal }: PropsType) => {
                             accept="image/*"
                             onChange={onChangeProfile}
                             ref={imageRef}
+                            style={{ display: 'none' }}
                         />
                     </StyledProfile>
                     <div>
-                        <input type="text" name="name" placeholder={userInfo.name} onChange={onChangeField} />
+                        <StyledInput type="text" name="name" placeholder={userInfo.name} onChange={onChangeField} />
                     </div>
-
                     <div>
                         <button type="submit" className="submitFullButton">
                             수정하기
                         </button>
                     </div>
-
                     <div>
                         <button type="submit" onClick={onCancel} className="cancelButton">
                             취소
@@ -118,26 +111,28 @@ const ProfileModal = ({ setOpenModal }: PropsType) => {
 export default ProfileModal;
 
 const Container = styled.div`
-    width: 100%;
-    height: 83vh;
     position: absolute;
     top: -300px;
     left: 0;
+    width: 100%;
+    height: 83vh;
     background-color: #fff;
     backdrop-filter: blur(5px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    overflow-y: auto;
-    z-index: 999;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 const StyledContainer = styled.div`
-    width: 100%;
+    width: 100%
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 3rem;
+    padding-right: 3px;
 `;
 
 const StyledProfile = styled.div`
@@ -149,7 +144,7 @@ const StyledProfile = styled.div`
     img {
         width: 190px;
         height: 190px;
-        border: 1px dotted #00956e;
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 50%;
     }
 `;
@@ -167,7 +162,7 @@ const StyledAiOutlineCamera = styled(AiOutlineCamera)`
 const StyledLabel = styled.label`
     position: absolute;
     top: 130px;
-    right: 250px;
+    right: 117px;
 `;
 
 const StyledDiv = styled.div`
@@ -193,60 +188,14 @@ const StyledForm = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 0 8rem;
 
     div {
         width: 100%;
-        display: flex;
-
         margin-bottom: 1rem;
-        padding: 0 8rem;
-
-        label {
-            text-align: left;
-            margin-bottom: 0.3rem;
-            padding-left: 0.125rem;
-            font-weight: 600;
-            span {
-                margin-right: 2rem;
-            }
-            display: flex;
-            align-items: center;
-        }
-        .labelId {
-            position: relative;
-            margin-bottom: 0.55rem;
-        }
-
-        input {
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: 4.5px;
-            padding: 0.9rem;
-            width: 100%;
-            outline: none;
-            &:focus {
-                border: 1px solid #00956e;
-            }
-        }
-
-        input[type='file'] {
-            display: none;
-        }
-
-        div {
-            border: 1px solid red;
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-            label {
-                display: inline-block;
-                width: 100px;
-                border: 1px solid green;
-                padding: 10px;
-            }
-        }
 
         button.submitFullButton {
-            margin-top: 1rem;
             border: none;
             border-radius: 4.5px;
             background-color: #00956e;
@@ -279,5 +228,15 @@ const StyledForm = styled.form`
         display: flex;
         justify-content: center;
         margin-top: 10px;
+    }
+`;
+const StyledInput = styled.input`
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4.5px;
+    padding: 0.9rem;
+    width: 100%;
+    outline: none;
+    &:focus {
+        border: 1px solid #00956e;
     }
 `;
