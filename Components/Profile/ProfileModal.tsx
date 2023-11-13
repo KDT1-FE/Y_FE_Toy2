@@ -8,6 +8,7 @@ import { Chat, User } from '@/types';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import React from 'react';
+import { getCookie } from '../Login/Cookie';
 
 const ProfileModal = ({
 	user,
@@ -16,7 +17,7 @@ const ProfileModal = ({
 	user: User;
 	existPrivateChat: Chat | undefined;
 }) => {
-	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;
+	const accessToken = getCookie('accessToken');
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const isMyProfile = searchParams.get('isMyProfile');

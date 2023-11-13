@@ -1,9 +1,11 @@
 import { Chat } from '@/types';
 import { fetchMyChats, fetchProfileData } from './profile.utils';
 import ProfileModal from '@/Components/Profile/ProfileModal';
+import { cookies } from 'next/headers';
 
 const Profile = async ({ params }: { params: { id: string } }) => {
-	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;
+	const cookieStore = cookies();
+	const accessToken = cookieStore.get('accessToken')!.value;
 	const user = await fetchProfileData(accessToken, params.id);
 	const myChats: Chat[] = await fetchMyChats(accessToken);
 	const existPrivateChat: Chat | undefined = myChats.filter(
