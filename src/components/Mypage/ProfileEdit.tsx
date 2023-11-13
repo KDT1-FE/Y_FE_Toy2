@@ -1,20 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import styled from 'styled-components';
+import React from 'react';
+
 import ProfileModal from './ProfileModal';
 
+import { useRecoilState } from 'recoil';
+import { UserProfileModal } from '@/store/atoms';
+
+import styled from 'styled-components';
+
 const ProfileEdit = () => {
-    const [openModal, setOpenModal] = useState<boolean>(false);
+    const [openModal, setOpenModal] = useRecoilState(UserProfileModal);
 
     return (
         <Container>
-            {openModal && <ProfileModal setOpenModal={setOpenModal} />}
+            {openModal && <ProfileModal />}
             <div>
-                <h2>프로필</h2>
+                <h3>프로필</h3>
                 <div className="profileDiv">
-                    {/* Modal */}
                     <button
                         onClick={() => {
                             setOpenModal((prev) => !prev);
@@ -25,7 +28,7 @@ const ProfileEdit = () => {
                 </div>
             </div>
             <div>
-                <h2>공지사항</h2>
+                <h3>공지사항</h3>
                 <div className="alertDiv">
                     <button>신규 업데이트</button>
                     <button>진행중인 이벤트</button>
@@ -46,10 +49,10 @@ const Container = styled.div`
         padding-left: 0.5rem;
         margin-bottom: 2rem;
 
-        h2 {
+        h3 {
             padding-bottom: 20px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-            font-size: 1.65rem;
+            font-size: 1.4rem;
             color: #00956e;
         }
 
@@ -61,7 +64,7 @@ const Container = styled.div`
             button {
                 all: unset;
                 margin-bottom: 25px;
-                font-size: 1.2rem;
+                font-size: 1.15rem;
                 cursor: pointer;
                 font-weight: 600;
             }
@@ -75,7 +78,7 @@ const Container = styled.div`
             button {
                 all: unset;
                 margin-bottom: 25px;
-                font-size: 1.2rem;
+                font-size: 1.15rem;
                 cursor: pointer;
                 font-weight: 600;
             }
