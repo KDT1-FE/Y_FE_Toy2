@@ -88,8 +88,14 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
       setValue("id", userInfo.user.id);
       setValue("name", userInfo.user.name);
       setValue("picture", userInfo.user.picture);
+      setProfile({
+        ...profile,
+        id: userInfo.user.id,
+        name: userInfo.user.name,
+        picture: userInfo.user.picture,
+      });
     }
-  }, [userInfo, setValue, isOpen]);
+  }, [userInfo, setValue, setProfile, isOpen]);
 
   // ID 중복 검사
   const checkIdDuplication = async (id: string): Promise<boolean> => {
@@ -209,6 +215,12 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
                 <Image
                   src={URL.createObjectURL(selectedFile)}
                   alt="Upload Preview"
+                  boxSize="40px"
+                />
+              ) : profile.picture ? (
+                <Image
+                  src={profile.picture}
+                  alt="Profile Picture"
                   boxSize="40px"
                 />
               ) : (
