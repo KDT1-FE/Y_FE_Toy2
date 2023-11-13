@@ -26,6 +26,7 @@ const config: Config = withMT({
 				main: '#FEE500',
 			},
 			backgroundImage: {
+				'trash-can': "url('../public/icon_trash.svg')",
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic':
 					'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
