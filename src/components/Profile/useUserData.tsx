@@ -6,14 +6,14 @@ import { useParams } from "react-router-dom";
 interface usertData {
   id: string;
   name: string;
-  ProfileImgUrl: string;
-  BackgroundImgUrl: string;
+  profileImgUrl: string;
+  backgroundImgUrl: string;
   introText: string;
   hobby: string[];
 }
 interface feed {
   id: string;
-  feedId: string;
+  feedId: number;
   feedImageUrl: string;
   contentText: string;
   likes: number;
@@ -38,8 +38,8 @@ export default function useUserData() {
           const userData: usertData = {
             id: docSnap.data().id,
             name: docSnap.data().name,
-            ProfileImgUrl: docSnap.data().ProfileImgUrl,
-            BackgroundImgUrl: docSnap.data().BackgroundImgUrl,
+            profileImgUrl: docSnap.data().profileImgUrl,
+            backgroundImgUrl: docSnap.data().backgroundImgUrl,
             introText: docSnap.data().introText,
             hobby: docSnap.data().hobby
           };

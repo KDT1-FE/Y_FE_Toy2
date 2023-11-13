@@ -35,16 +35,10 @@ const ProfileFeedEditImage = styled.div`
 
   cursor: pointer;
 `;
-interface usertData {
-  id: string;
-  ProfileImgUrl: string;
-  BackgroundImgUrl: string;
-  introText: string;
-  hobby: string[];
-}
+
 interface feed {
   id: string;
-  feedId: string;
+  feedId: number;
   feedImageUrl: string;
   contentText: string;
   likes: number;
@@ -53,7 +47,12 @@ interface feed {
 interface feedData {
   [key: string]: feed;
 }
-function ProfileFeed(props: { feedData: feedData | null }) {
+function ProfileFeed(props: {
+  feedData: feedData | null;
+  isModalShow: boolean;
+  setIsModalShow: React.Dispatch<React.SetStateAction<boolean>>;
+  isProfileMatchingLogin: boolean | null;
+}) {
   return (
     <ProfileFeedContainer>
       <ProfileFeedImageWrap>
@@ -67,11 +66,15 @@ function ProfileFeed(props: { feedData: feedData | null }) {
               />
             ))
           : null}
-
-        {/* 자기 프로필일 경우에만 보이게 해야함. */}
-        <ProfileFeedEditImage>
-          <BsPlusCircle color="#BEBEBE" size="50"></BsPlusCircle>
-        </ProfileFeedEditImage>
+        {props.isProfileMatchingLogin ? (
+          <ProfileFeedEditImage
+            onClick={() => {
+              props.setIsModalShow(true);
+            }}
+          >
+            <BsPlusCircle color="#BEBEBE" size="50"></BsPlusCircle>
+          </ProfileFeedEditImage>
+        ) : null}
       </ProfileFeedImageWrap>
     </ProfileFeedContainer>
   );

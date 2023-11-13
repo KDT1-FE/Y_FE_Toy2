@@ -77,23 +77,31 @@ const Tag = styled.span`
 interface usertData {
   id: string;
   name: string;
-  ProfileImgUrl: string;
-  BackgroundImgUrl: string;
+  profileImgUrl: string;
+  backgroundImgUrl: string;
   introText: string;
   hobby: string[];
 }
 
-function ProfileInfo(props: { userData: usertData | null , isProfileMatchingLogin: boolean | null}) {
+function ProfileInfo(props: {
+  userData: usertData | null;
+  isProfileMatchingLogin: boolean | null;
+}) {
   return (
     <ProfileInfoWrap>
       <ProfileInfoImgWrap>
         <ProfileInfoImg
-          style={{ backgroundImage: `url(${props.userData?.ProfileImgUrl})` }}
+          style={{ backgroundImage: `url(${props.userData?.profileImgUrl})` }}
         >
-          { props.isProfileMatchingLogin ?           <ProfileInfoEditBtn>
-            <BsPencilFill color="#BEBEBE" />
-          </ProfileInfoEditBtn> : null}
-
+          {props.isProfileMatchingLogin ? (
+            <ProfileInfoEditBtn
+              onClick={() => {
+                window.location.href = `/profiles/${props.userData?.id}/edit`;
+              }}
+            >
+              <BsPencilFill color="#BEBEBE" />
+            </ProfileInfoEditBtn>
+          ) : null}
         </ProfileInfoImg>
       </ProfileInfoImgWrap>
       <ProfileInfoContents>
