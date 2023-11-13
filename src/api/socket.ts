@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const chatId = '8cb0702a-4bd8-42a9-968e-18df8e5f0665';
+const chatId = '0ad59c7d-e1b1-42ab-bb64-8bb6344dc0d6';
 
 const socket = io(`${process.env.REACT_APP_API_URL}/chat?chatId=${chatId}`, {
   extraHeaders: {

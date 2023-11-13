@@ -24,6 +24,34 @@ export const getAllChats = async (messages: ChatData[]) => {
   }
 };
 
+export const getJoinersName = async (users: string[]) => {
+  try {
+    const userList = [];
+    for (const userId of users) {
+      const response = await getUser(userId);
+      if (response) {
+        const { name } = response;
+        userList.push(name);
+      }
+    }
+    return userList;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getLeaverName = async (userId: string) => {
+  try {
+    const response = await getUser(userId);
+    if (response) {
+      const { name } = response;
+      return name;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getChat = async (message: ChatData) => {
   try {
     const { id, createdAt, text, userId } = message;
