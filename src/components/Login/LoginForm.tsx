@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { instance } from '@/lib/api';
@@ -78,7 +78,7 @@ const LoginForm = () => {
                     )}
                 </div>
                 <StyledLink href="/createAccount" className="anchor">
-                    <span> 이미 아이디가 있으신가요? 회원가입하기</span>
+                    <span> 아이디가 없으신가요? 회원가입하기</span>
                 </StyledLink>
             </StyledForm>
         </StyledContainer>

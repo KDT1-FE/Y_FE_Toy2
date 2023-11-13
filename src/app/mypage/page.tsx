@@ -13,12 +13,14 @@ const page = () => {
         return null;
     } else {
         return (
-            <UsersWrap>
-                <HeaderText>마이 페이지</HeaderText>
-                <Profile />
-                <ProfileEdit />
+            <>
+                <UsersWrap>
+                    <HeaderText>마이 페이지</HeaderText>
+                    <Profile />
+                    <ProfileEdit />
+                </UsersWrap>
                 <Navigation />
-            </UsersWrap>
+            </>
         );
     }
 };
@@ -26,18 +28,16 @@ const page = () => {
 export default page;
 
 const UsersWrap = styled.div`
-    padding: 3rem;
-
     display: flex;
     flex-direction: column;
 
     height: 100vh;
+    padding: 3rem;
 `;
 
 const HeaderText = styled.h1`
     color: #00956e;
-
     margin-top: 0;
-
     padding: 1rem;
+    font-size: 1.5rem;
 `;

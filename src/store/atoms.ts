@@ -19,3 +19,8 @@ export const UserProfile = atom<User>({
         picture: '',
     },
 });
+
+export const UserProfileModal = atom<boolean>({
+    key: 'UserProfileModal',
+    default: false,
+});
