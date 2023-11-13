@@ -1,8 +1,117 @@
-@use '../../abstracts' as *;
-@use '../../base' as *;
+.main__background {
+  background-image: url('/main-background.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+}
 
-ul {
-  li {
-    @include flex-row-center();
-  }
+.main__background h1 {
+  font-size: 8rem;
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: 2s;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-image: linear-gradient(to right, #310552 0%, #ffffff 100%);
+  background-size: 200% auto;
+}
+
+.main__background h1:hover {
+  background-position: right center;
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.signin_container {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 40%;
+  background-color: #31114c;
+  border-radius: 20px;
+  // box-shadow: 0 0 30px #eee;
+}
+
+.signin_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 5% 0;
+
+  height: 80%;
+}
+
+.form_error {
+  color: gray;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.signin_form input {
+  border: none;
+  border-radius: 20px;
+  padding: 1.3rem;
+  width: 50%;
+  margin: 0.3rem 0;
+  background-color: rgb(177, 175, 175);
+  transition: 0.3s;
+}
+
+.signin_form input:focus {
+  background-color: white;
+}
+
+.signin_btn {
+  background-color: #835da3;
+  border: none;
+  color: white;
+  margin-top: 1.5rem;
+  box-shadow: 0 0 20px #eee;
+  padding: 0.4rem;
+  width: 30%;
+  height: 15%;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  background-image: linear-gradient(
+    to right,
+    #000000 0%,
+    #53346d 51%,
+    #000000 100%
+  );
+  background-size: 200% auto;
+  transition: 0.5s;
+}
+
+.signin_btn:hover {
+  scale: 1.05;
+  background-color: #31114c;
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.signup_link a {
+  color: gray;
+  text-decoration: none;
+  position: absolute;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+}
+
+.signup_link a:hover {
+  color: white;
 }
