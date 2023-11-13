@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Chat.module.scss';
-import { Message } from '../../@types/types';
+import { IMessage } from '../../@types/types';
 
 function MyMessage({ msg }: { msg: Message }) {
   return (
