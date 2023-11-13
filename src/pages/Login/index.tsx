@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
-import useFetch from "../../hooks/useFetch";
 import useInput from "../../hooks/useInput";
 import SignUpModal from "../../components/Login/SignUpModal/index";
 import LoginForm from "../../components/Login/LoginForm";
