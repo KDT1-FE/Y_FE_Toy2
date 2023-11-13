@@ -18,26 +18,30 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { getUserData, patchUserData } from '../../api';
+import { useRecoilValue } from 'recoil';
+import { accessTokenState } from '../../states/atom';
 
 const UserProfile: React.FC<{ userImg: string }> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [name, setName] = useState('');
+  const [picture, setPicture] = useState('');
   const [isHovering, setIsHovering] = useState(false);
   const [filePreviewUrl, setFilePreviewUrl] = useState('');
-  const [formData, setFormData] = useState({
-    name: '',
-    picture: '',
-  });
+  const [myID, setMyID] = useState('');
+  const [myName, setMyname] = useState('');
   const [myImg, setMyImg] = useState('');
 
   const userId = localStorage.getItem('id');
+  const accessToken = useRecoilValue(accessTokenState);
 
   useEffect(() => {
     const fetchData = async () => {
       if (userId) {
         try {
-          const res = await getUserData(userId);
+          const res = await getUserData(accessToken, userId);
           console.log(res);
+          setMyID(res.user.id);
+          setMyname(res.user.name);
           setMyImg(res.user.picture);
         } catch (error) {
           console.error('내정보를 가져오는데 실패했습니다.:', error);
@@ -45,7 +49,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
       }
     };
     fetchData();
-  }, [accessToken, userId]);
+  }, [picture]);
 
   const handleImgUploader = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -57,7 +61,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
         const result = reader.result;
         if (typeof result === 'string') {
           setFilePreviewUrl(result);
-          setFormData({ ...formData, picture: result });
+          setPicture(result);
         }
       };
 
@@ -69,9 +73,9 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
     e.preventDefault();
     try {
       // 닉네임중복 핸들링 로직 필요
-      await patchUserData(formData);
+      await patchUserData(accessToken, name, picture);
 
-      alert('회원가입에 성공했습니다.');
+      alert('수정에 성공했습니다.');
     } catch (e: any) {
       let errorMessage = '';
       let errorType = '';
@@ -79,7 +83,7 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
         errorMessage = '이미 가입된 아이디입니다.';
         errorType = 'id';
       } else {
-        errorMessage = `회원가입에 실패했습니다. 오류코드: ${e.message}`;
+        errorMessage = `수정에 실패했습니다. 오류코드: ${e.message}`;
         errorType = 'general';
       }
       // setShowAlert({ active: true, message: errorMessage, type: errorType });
@@ -103,9 +107,9 @@ const UserProfile: React.FC<{ userImg: string }> = () => {
           marginRight={23}></Box>
         <Box>
           <Text fontWeight="600" marginBottom={3}>
-            아이디
+            {myID}
           </Text>
-          <Text marginBottom={3}>닉네임</Text>
+          <Text marginBottom={3}>{myName}</Text>
           <Box>
             <Button onClick={onOpen} width={130} height="32px" marginRight={2}>
               회원 정보 수정
