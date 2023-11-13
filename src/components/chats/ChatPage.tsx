@@ -36,6 +36,7 @@ const MyChats = ({ userType }: any) => {
     const getMyChats = async () => {
         try {
             const res = await instance.get<Chat[], any>(`chat`, { headers });
+            console.log('getMyChats response:', res); // 추가
             if (res) {
                 console.log(res.chats);
                 setMyChats(res.chats);
@@ -91,7 +92,7 @@ const MyChats = ({ userType }: any) => {
                 </IconBar>
             </ChatHeader>
             <ChatContainer>
-                <SearchMyChat />
+                <SearchMyChat userType={userType} />
                 {userId
                     ? filterChats.length > 0
                         ? sortTime(filterChats).map((chat) => (

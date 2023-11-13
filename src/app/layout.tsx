@@ -7,10 +7,11 @@ import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { authCheck } from '@/hooks/Auth';
 import { usePathname, useRouter } from 'next/navigation';
-
+import { QueryClient, QueryClientProvider } from 'react-query';
 import Move from '@/components/Move';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const queryClient = new QueryClient();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -33,18 +34,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     }, []);
 
     return (
-        <RecoilRoot>
-            <html lang="en">
-                <StyledComponentsRegistry>
-                    <Body>
-                        <Container>
-                            {shouldRenderMoveComponent && <Move />}
-                            {children}
-                        </Container>
-                    </Body>
-                </StyledComponentsRegistry>
-            </html>
-        </RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+            <RecoilRoot>
+                <html lang="en">
+                    <StyledComponentsRegistry>
+                        <Body>
+                            <Container>
+                                {shouldRenderMoveComponent && <Move />}
+                                {children}
+                            </Container>
+                        </Body>
+                    </StyledComponentsRegistry>
+                </html>
+            </RecoilRoot>
+        </QueryClientProvider>
     );
 }
 

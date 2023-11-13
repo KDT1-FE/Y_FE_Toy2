@@ -14,11 +14,14 @@ const SearchMyChat = ({ userType }: any) => {
     const onInputChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             setInput(e.target.value);
-            const filteringChats = (userType === 'my' ? myChats : allChats).filter((chat) =>
-                chat.name.toLowerCase().includes(e.target.value.toLowerCase()),
-            );
-
+            console.log(myChats);
+            const filteringChats = (userType == 'my' ? myChats : allChats).filter((chat) => {
+                const includesValue = chat.name.toLowerCase().includes(e.target.value.toLowerCase());
+                return includesValue;
+            });
+            console.log('Filtering Chats:', filteringChats); // 추가
             const filteredChats = [...filteringChats];
+            console.log('Filtered Chats:', filteredChats); // 추가
             setFilteredChats(filteredChats);
         },
         [myChats, allChats],
