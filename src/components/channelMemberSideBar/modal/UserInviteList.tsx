@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Checkbox, Flex, useBoolean } from '@chakra-ui/react';
 import ChannelMemberItem from '../ChannelMemberItem';
-import { getAllUsersWithId } from '../../../api/user';
+import { getUsers } from '../../../api/user';
 import { User } from '../../../@types/user';
+import { inviteChannel } from '../../../api/channel';
 
 const UserInviteList = () => {
   const [userData, setUserData] = useState<User[] | undefined>([]);
   const [isChecked, setIsChecked] = useBoolean(false);
 
+  inviteChannel;
+
   useEffect(() => {
     const fetchUserData = async () => {
-      const usersData = await getAllUsersWithId();
+      const usersData = await getUsers();
       setUserData(usersData);
     };
 

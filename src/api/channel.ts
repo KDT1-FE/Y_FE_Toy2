@@ -1,4 +1,9 @@
-import { ResponseValue, Channel } from '../@types/channel';
+import {
+  ResponseValue,
+  InviteRequestBody,
+  InviteResponseValue,
+  ExitResponseValue,
+} from '../@types/channel';
 import { checkChannelName } from '../utils';
 import instance from './axios';
 
@@ -33,8 +38,22 @@ export const createChannel = async (data: CreateChannelBody) => {
 };
 
 export const getMyChannels = async () => {
-  const response = await instance.get<{ chats: Channel[] }>('/chat');
-  const chatsData = await response.data.chats;
+  const response = await instance.get<ResponseValue>('/chat');
+  return response.data.chats;
+};
 
-  return chatsData;
+export const inviteChannel = async (inviteData: InviteRequestBody) => {
+  const response = await instance.patch<InviteResponseValue>(
+    '/chat/invite',
+    inviteData,
+  );
+  return response.data;
+};
+
+export const exitChannel = async (chatId: string) => {
+  const response = await instance.patch<ExitResponseValue>(
+    '/chat/leave',
+    chatId,
+  );
+  return response.data;
 };
