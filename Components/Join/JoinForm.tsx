@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
 import Image from 'next/image';
 import DropZone from './DropZone/DropZone';
-import { useFetchImageToCloudinary } from '@/hooks/Open/usefetchImageToCloudinary';
+import axios from 'axios';
 // import Image from 'next/image';
 
 type RequestBody = {
@@ -21,10 +21,14 @@ type RequestBody = {
 
 const JoinForm = () => {
 	const router = useRouter();
-	const [baseImageUrl, setBaseImageUrl] = React.useState<string | null>(null);
-	const mutation = useFetchImageToCloudinary();
+	const [baseImageUrl, setBaseImageUrl] = React.useState<string>();
 
-	console.log(mutation.data);
+	const fetchImage = async (file: string) => {
+		const data = await axios.post('api/image/post', {
+			file: file,
+		});
+		return data.data;
+	};
 
 	const {
 		register,
@@ -38,19 +42,18 @@ const JoinForm = () => {
 		id,
 		password,
 		name,
-		picture,
 	}) => {
-		// 모든 input 값에 에러없이 값이 있으면
-		if (baseImageUrl === null) {
+		if (!baseImageUrl) {
 			Swal.fire({
 				text: '이미지를 넣어주세요.',
 				showCancelButton: false,
 				confirmButtonText: '확인',
-				confirmButtonColor: 'red',
+				confirmButtonColor: '#3085d6',
 			});
 			return;
 		}
 
+		const picture = await fetchImage(baseImageUrl!);
 		const data = await fetchJoin(id, password, name, picture);
 		const { message } = data;
 		if (message === 'User created') {
@@ -172,14 +175,7 @@ const JoinForm = () => {
 					<Button type="submit" className="w-full bg-main mt-10">
 						회원가입
 					</Button>
-					<Button
-						type="button"
-						onClick={() => {
-							mutation.mutate(baseImageUrl as string);
-						}}
-					>
-						버튼
-					</Button>
+					<div>{baseImageUrl}</div>
 				</form>
 			</div>
 		</div>

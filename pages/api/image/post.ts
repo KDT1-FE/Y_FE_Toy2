@@ -9,7 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			api_secret: process.env.CLOUDINARY_SECRET,
 		});
 
-		const file = req.body;
+		const { file } = req.body;
 		if (!file) {
 			return res.status(400).json({ message: '파일이 없습니다.' });
 		}

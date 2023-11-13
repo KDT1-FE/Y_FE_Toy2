@@ -17,6 +17,23 @@ const OpenChatModal = ({
 	const TEXT_SIZE = 'text-2xl';
 	const router = useRouter();
 
+	const joinChat = async () => {
+		await fetch('https://fastcampus-chat.net/chat/participate', {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+				serverId: process.env.NEXT_PUBLIC_SERVER_ID as string,
+				Authorization:
+					`Bearer ${process.env.NEXT_PUBLIC_ACCESSTOKEN}` as string,
+			},
+			body: JSON.stringify({ chatId: process.env.NEXT_PUBLIC_CHAT_ID }),
+		});
+		// http://localhost:3000/chat/id 로 이동하기
+		/// 이동 후 id에서 채팅 데이터 다시 fetch 하기
+		// 에러 처리 필요
+		router.push(`chat/${modalChat.id}?isPrivate=false`);
+	};
+
 	return (
 		<dialog
 			className="fixed w-full sm:w-[425px] md:w-[645px] px-5 h-screen bg-black overflow-hidden"
@@ -43,16 +60,24 @@ const OpenChatModal = ({
 				/>
 			</button>
 
+			<div className="h-4/6 ml-5 text-white">
+				<OpenChatText openChat={modalChat} textSize={TEXT_SIZE} />
+			</div>
+			<button
+				className="h-1/6 bg-yellow-500 font-medium"
+				onClick={() => {
+					router.push(`chat/${modalChat.id}?isPrivate=false`);
+				}}
+			>
+				오픈 채팅방 참여하기
+			</button>
+
+			<div className="h-1/6 bg-black"></div>
 			<div className="absolute flex flex-col justify-end w-full h-2/5 bottom-0 left-0">
 				<div className="h-4/6 ml-5 text-white">
 					<OpenChatText openChat={modalChat} textSize={TEXT_SIZE} />
 				</div>
-				<button
-					className="h-1/6 bg-yellow-500 font-medium"
-					onClick={() => {
-						router.push(`chat/${modalChat.id}?isPrivate=false`);
-					}}
-				>
+				<button className="h-1/6 bg-yellow-500 font-medium" onClick={joinChat}>
 					오픈 채팅방 참여하기
 				</button>
 

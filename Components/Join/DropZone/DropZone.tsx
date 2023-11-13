@@ -11,7 +11,7 @@ type onDropProps = <T extends File>(
 ) => void;
 
 type DropZoneProps = {
-	setFn: React.Dispatch<React.SetStateAction<string | null>>;
+	setFn: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const DropZone = ({ setFn }: DropZoneProps) => {
@@ -60,7 +60,7 @@ const DropZone = ({ setFn }: DropZoneProps) => {
 			})}
 		>
 			<input {...getInputProps()} />
-			<p>Drag drop some files here, or click to select files</p>
+			<p>여기에 파일 드래그 드랍 해주세요</p>
 		</div>
 	);
 };
