@@ -12,7 +12,7 @@ import {
   sortCreatedAt,
   modifyDate,
 } from '../template/useChattingSort';
-
+import { getCookie } from '../../util/util';
 interface ChattingDetailProps {
   chatId: string;
 }
@@ -24,10 +24,10 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
   const [lastDate, setLastDate] = useState('');
   const myUserData: any = useRecoilValue(myUserDataState);
-
+  const accessToken: any = getCookie('accessToken');
   useEffect(() => {
     try {
-      const newSocket = chatSocket(chatId);
+      const newSocket = chatSocket(accessToken, chatId);
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
