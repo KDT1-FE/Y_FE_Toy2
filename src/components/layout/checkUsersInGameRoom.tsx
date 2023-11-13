@@ -46,9 +46,9 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
 
       socket.on('join', (data) => {
         console.log(data);
-        setTimeout(() => {
-          setUsersInGameRoom(data.users);
-        }, 5000);
+        // setTimeout(() => {
+        setUsersInGameRoom(data.users);
+        // }, 5000);
       });
 
       socket.on('leave', (data) => {
@@ -62,26 +62,26 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
   useEffect(() => {
     const fetchUserProfiles = async () => {
       const profilesArray: ResponseValue[] = [];
-      console.log(UsersInGameRoom);
+      // console.log(UsersInGameRoom);
       for (const userId of UsersInGameRoom) {
-        console.log(userId);
-        if (userId.substring(0, 8) === '090b4ff4') {
-          console.log(userId.substring(0, 9));
-          const id = userId.substring(9);
-          try {
-            const res = await getUserData(accessToken, id);
-            profilesArray.push(res);
-          } catch (error) {
-            console.error('Error fetching user data:', error);
-          }
-        } else {
-          try {
-            const res = await getUserData(accessToken, userId);
-            profilesArray.push(res);
-          } catch (error) {
-            console.error('Error fetching user data:', error);
-          }
+        // console.log(userId);
+        // if (userId.substring(0, 8) === '090b4ff4') {
+        //   console.log(userId.substring(0, 9));
+        //   const id = userId.substring(9);
+        //   try {
+        //     const res = await getUserData(accessToken, id);
+        //     profilesArray.push(res);
+        //   } catch (error) {
+        //     console.error('Error fetching user data:', error);
+        //   }
+        // } else {
+        try {
+          const res = await getUserData(accessToken, userId);
+          profilesArray.push(res);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
         }
+        // }
       }
 
       setProfiles(profilesArray);
@@ -94,7 +94,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     <>
       {profiles.map((element, index) => (
         <div key={index}>
-          <UserProfile userImg={element.user.picture} />
+          <UserProfile />
           <p>{element.user.id}</p>
           <p>{element.user.name}</p>
           <p>{element.user.picture}</p>
