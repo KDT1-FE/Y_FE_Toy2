@@ -184,7 +184,7 @@ function UserLogin() {
             to="/join"
             marginRight={2}
             color="#4FD1C5"
-            fontWeight={700}>
+            fontWeight={600}>
             회원가입
           </Link>
         </Flex>

@@ -376,7 +376,7 @@ const UserJoin = () => {
             to="/"
             marginRight={2}
             color="#4FD1C5"
-            fontWeight={700}>
+            fontWeight={600}>
             로그인
           </Link>
         </Flex>
