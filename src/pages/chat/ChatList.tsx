@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState, useEffect, useCallback } from 'react';
-import { Button, Modal, Typography } from '@mui/material';
-import { Clear } from '@mui/icons-material';
+import { Box, Button, Modal, Typography } from '@mui/material';
+import { Clear, MapsUgcRounded } from '@mui/icons-material';
 import { useRecoilValue } from 'recoil';
 import Hangul from 'hangul-js';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import UserCard from '../../components/chat/UserCard';
 import * as S from '../../styles/chat/ChatListStyles';
 import { ChatType, User } from '../../types/ChatType';
 import useCreateChat from '../../hooks/useCreateChat';
+import Chats from '../../components/chat/Chats';
 
 function ChatList() {
   const [open, setOpen] = useState(false);
@@ -68,13 +69,18 @@ function ChatList() {
 
   return (
     <S.Wrapper>
-      <S.ChatListWrapper>
-        {chatList.map((chat, index) => (
-          <ChatCard chat={chat} key={index} />
-        ))}
-      </S.ChatListWrapper>
+      <Chats chatList={chatList} />
 
       <S.NewMessageWrapper>
+        <Box sx={{ width: '60px', height: '60px' }}>
+          <MapsUgcRounded
+            sx={{
+              width: '100%',
+              height: '100%',
+              color: 'primary.main',
+            }}
+          />
+        </Box>
         <Typography sx={{ fontSize: '1.25rem' }}>내 메시지</Typography>
         <Typography sx={{ fontSize: '0.825rem', color: '#737373' }}>
           새로운 메시지를 보내보세요

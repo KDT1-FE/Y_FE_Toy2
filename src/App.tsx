@@ -5,6 +5,8 @@ import Layout from './components/common/Layout';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import AuthLayout from './components/common/AuthLayout';
+import Home from './pages/home';
+import Openchat from './pages/Openchat';
 import ChatList from './pages/chat/ChatList';
 import ChatRoom from './pages/chat/ChatRoom';
 
@@ -15,10 +17,12 @@ function App() {
         {/* 상원님 부분 */}
         <Route path="/game" />
         {/* 은지님 부분 */}
-        <Route path="/home" />
+        <Route path="/home" element={<Home />} />
         {/* 홍규님 부분 */}
         <Route path="/chat" element={<ChatList />} />
         <Route path="/chat/:chatId" element={<ChatRoom />} />
+        {/* 오픈 채팅 부분 */}
+        <Route path="/open" element={<Openchat />} />
       </Route>
       <Route element={<AuthLayout />}>
         {/* 성겸 부분 */}

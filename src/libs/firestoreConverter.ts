@@ -12,7 +12,8 @@ export class UserInfo {
     public intro: string,
     public language: string,
     public level: string,
-    public hashtag: string[],
+    public hashtags: string[],
+    public correct: number = 0,
   ) {}
 }
 
@@ -23,7 +24,8 @@ export const userInfoConverter: FirestoreDataConverter<UserInfo> = {
     intro: docData.intro,
     language: docData.language,
     level: docData.level,
-    hashtag: docData.hashtag,
+    hashtags: docData.hashtags,
+    correct: 0,
   }),
   fromFirestore: (
     snapshot: QueryDocumentSnapshot,
@@ -36,7 +38,8 @@ export const userInfoConverter: FirestoreDataConverter<UserInfo> = {
       data.intro,
       data.language,
       data.level,
-      data.hashtag,
+      data.hashtags,
+      data.correct,
     );
   },
 };

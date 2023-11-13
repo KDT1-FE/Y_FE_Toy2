@@ -14,7 +14,7 @@ import {
 import { FbUser } from '../../types/User';
 import useMutationSignUp from '../../hooks/useMutationSignUp';
 
-const tags = {
+export const tags = {
   hobby: [
     { name: 'Music', tag: '음악감상' },
     { name: 'Dance', tag: '춤' },
@@ -22,9 +22,9 @@ const tags = {
     { name: 'Cooking', tag: '요리' },
     { name: 'Movie', tag: '영화감상' },
     { name: 'Gaming', tag: '게임' },
-    { name: 'Drawing', tag: '그림' },
+    { name: 'Study', tag: '스터디' },
     { name: 'Book', tag: '독서' },
-    { name: 'Painting', tag: '그림' },
+    { name: 'Painting', tag: '그림그리기' },
   ],
   sports: [
     { name: 'Exercise', tag: '운동' },
@@ -58,7 +58,7 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
     }
     const newForm: FbUser = {
       ...signUpForm,
-      hashtag: Array.from(clickedItem),
+      hashtags: Array.from(clickedItem),
     };
     // 회원가입 로직
     await signUp(newForm);

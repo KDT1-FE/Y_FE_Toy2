@@ -4,9 +4,9 @@ export const Wrapper = styled('div')({
   display: 'flex',
 });
 
-export const ChatListWrapper = styled('div')({
+export const ChatsWrapper = styled('div')({
   borderRight: '1px solid #dbdbdb',
-  width: '380px',
+  width: '30%',
   height: '100vh',
 });
 
