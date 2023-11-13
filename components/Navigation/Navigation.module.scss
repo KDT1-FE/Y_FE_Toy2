@@ -15,17 +15,26 @@
     @include flex-center-row;
     justify-content: space-between;
     .menu {
-      display: block;
       width: 25%;
+      padding: 1rem 0 2rem;
       text-align: center;
       @include flex-center-col;
-      .icon {
+      p {
+        margin: 0 auto;
+        padding: 0;
+      }
+      .icon,
+      p {
         font-size: 1.6rem;
         padding-top: 1rem;
         color: $black;
+        transition: color 0.3s;
       }
       :hover {
-        color: $brand-pink;
+        .icon,
+        p {
+          color: $brand-pink;
+        }
       }
     }
   }
