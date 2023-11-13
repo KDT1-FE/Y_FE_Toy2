@@ -1,15 +1,14 @@
 import { User } from '@/types';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 const ShowSearchedFriend = ({
 	searchedUsers,
 	setIsShowMore,
-	openModalHandler,
 }: {
 	searchedUsers: User[];
 	setIsShowMore: React.Dispatch<React.SetStateAction<boolean>>;
-	openModalHandler: (user: User) => void | undefined;
 }) => {
 	const searchedUserUpToFour = searchedUsers?.slice(0, 4);
 	const isUpToFour = searchedUsers.length > 4 ? true : false;
@@ -21,19 +20,22 @@ const ShowSearchedFriend = ({
 						? user.picture
 						: '/icon_cat.svg';
 				return (
-					<div
-						key={user.id + `search`}
-						onClick={() => openModalHandler(user)}
-						className="flex flex-col items-center "
-					>
-						<Image
-							src={picture}
-							alt={user.id + `picture`}
-							width={50}
-							height={50}
-							className="rounded-full"
-						/>
-						<h4>{user.name}</h4>
+					<div key={user.id + `search`} className="flex flex-col items-center ">
+						<Link
+							href={{
+								pathname: `/profile/${user.id}`,
+								query: { isMyProfile: false },
+							}}
+						>
+							<Image
+								src={picture}
+								alt={user.id + `picture`}
+								width={50}
+								height={50}
+								className="rounded-full"
+							/>
+							<h4>{user.name}</h4>
+						</Link>
 					</div>
 				);
 			})}
