@@ -61,7 +61,7 @@ const User = styled.div`
 
     border-radius: 20px;
 
-    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: ${({ theme }) => theme.shadow.list};
 
     background-color: white;
 
@@ -91,7 +91,7 @@ const UserInfo = styled.div`
 `;
 
 const UserName = styled.h2`
-    font-size: 1.5rem;
+    font-size: ${({ theme }) => theme.fontSize.xl};
 `;
 
 const UserState = styled.div`
@@ -101,9 +101,11 @@ const UserState = styled.div`
 `;
 
 const UserStateText = styled.p`
-    color: #9a9a9a;
+    color: ${({ theme }) => theme.color.darkGray};
+    font-size: ${({ theme }) => theme.fontSize.md};
 `;
 
 const UserStateTextBlack = styled.p`
     color: black;
+    font-size: ${({ theme }) => theme.fontSize.md};
 `;

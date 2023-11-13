@@ -2,28 +2,24 @@
 
 import styled from 'styled-components';
 import StyledComponentsRegistry from '../lib/registry';
+import { ThemeProvider } from 'styled-components';
+import theme from '@/style/theme';
 import { RecoilRoot } from 'recoil';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { authCheck } from '@/hooks/Auth';
-import { usePathname, useRouter } from 'next/navigation';
+import Move from '@/components/Move';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-// import { ReactQueryDevtools } from 'react-query-devtools';
-import Move from '@/components/Move';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
-    const router = useRouter();
-    const pathname = usePathname();
-
     const [shouldRenderMoveComponent, setShouldRenderMoveComponent] = useState<boolean>(false);
 
-    authCheck(setShouldRenderMoveComponent, router, pathname);
+    authCheck(setShouldRenderMoveComponent);
 
     /** 접속 유저 검색 */
-    const accessToken = sessionStorage.getItem('accessToken');
+    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
 
     const socket = io(`https://fastcampus-chat.net/server`, {
         extraHeaders: {
@@ -38,19 +34,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <QueryClientProvider client={queryClient}>
-            <RecoilRoot>
-                <html lang="en">
-                    <StyledComponentsRegistry>
+        <RecoilRoot>
+            <html lang="en">
+                <StyledComponentsRegistry>
+                    <ThemeProvider theme={theme}>
                         <Body>
                             <Container>
                                 {shouldRenderMoveComponent && <Move />}
                                 {children}
                             </Container>
-                            <ReactQueryDevtools />
+                            <ReactQueryDevtools/>
                         </Body>
-                    </StyledComponentsRegistry>
-                </html>
-            </RecoilRoot>
+                    </ThemeProvider>
+                </StyledComponentsRegistry>
+            </html>
+        </RecoilRoot>
         </QueryClientProvider>
     );
 }
