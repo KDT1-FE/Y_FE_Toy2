@@ -1,7 +1,7 @@
 import React from 'react';
-import GameHeader from '../../components/GameHeader';
+import GameHeader from '@/components/common/GameHeader';
 import styles from '@styles/pages/vote.module.scss';
-import GhostList from '../../components/GhostList';
+import GhostList from '@/components/vote/GhostList';
 
 const Vote = () => {
   return (
