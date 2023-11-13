@@ -64,6 +64,8 @@ export default function Chat() {
       socketRef.current?.off('connect');
       socketRef.current?.off('messages-to-client');
       socketRef.current?.off('message-to-client');
+      socketRef.current?.off('join');
+      socketRef.current?.off('leave');
       socketRef.current?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
