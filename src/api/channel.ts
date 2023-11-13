@@ -1,4 +1,11 @@
-import { Channel, ResponseValue } from '../@types/channel';
+import {
+  Channel,
+  ResponseValue,
+  InviteRequestBody,
+  InviteResponseValue,
+  ExitResponseValue,
+} from '../@types/channel';
+import { checkChannelName } from '../utils';
 import instance from './axios';
 
 export interface CreateChannelBody {
@@ -12,14 +19,6 @@ export const getChannels = async () => {
   return response.data.chats;
 };
 
-//내 채팅방 불러오기
-export const getMyChannels = async () => {
-  const response = await instance.get<{ chats: Channel[] }>('/chat');
-  const chatsData = await response.data.chats;
-
-  return chatsData;
-};
-
 export const createChannel = async (data: CreateChannelBody) => {
   try {
     const response = await instance.post('/chat', {
@@ -31,4 +30,25 @@ export const createChannel = async (data: CreateChannelBody) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const getMyChannels = async () => {
+  const response = await instance.get<ResponseValue>('/chat');
+  return response.data.chats;
+};
+
+export const inviteChannel = async (inviteData: InviteRequestBody) => {
+  const response = await instance.patch<InviteResponseValue>(
+    '/chat/invite',
+    inviteData,
+  );
+  return response.data;
+};
+
+export const exitChannel = async (chatId: string) => {
+  const response = await instance.patch<ExitResponseValue>(
+    '/chat/leave',
+    chatId,
+  );
+  return response.data;
 };

@@ -6,13 +6,17 @@ import { SOCKET } from '../../constants/socket';
 
 const ChatInput = () => {
   const [value, setValue] = useState('');
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
+
   const sendChat = () => {
+    if (value === '') return;
     socket.emit(SOCKET.MESSAGE_TO_SERVER, value);
     setValue('');
   };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       sendChat();
@@ -38,7 +42,16 @@ const ChatInput = () => {
         }}
       />
       <InputRightElement width="4.5rem">
-        <Button h="1.75rem" size="sm" onClick={sendChat}>
+        <Button
+          h="1.75rem"
+          size="sm"
+          onClick={sendChat}
+          disabled={value === ''}
+          color={value === '' ? 'blackAlpha.300' : 'blackAlpha.900'}
+          _hover={{
+            bg: value === '' ? '' : 'gray.200',
+          }}
+        >
           Go
         </Button>
       </InputRightElement>
