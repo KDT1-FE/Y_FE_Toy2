@@ -14,4 +14,3 @@ function MyMessage({ msg }: { msg: Message }) {
 }
 
 export default MyMessage;
-

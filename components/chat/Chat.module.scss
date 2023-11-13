@@ -22,12 +22,12 @@
   font-size: $font-size-lg;
 
   border-bottom: 0.1rem solid #ff347893;
-  background-color: #fff;
+  background-color: white;
 
   // 뒤로가기 버튼, 메뉴(속성) 버튼
   .left,
   .right {
-    color: #ff3478;
+    color: $light-pink;
     font-size: 2.4rem;
     cursor: pointer;
     padding: 0 2rem;
@@ -47,7 +47,7 @@
   right: 0.1rem;
 
   border: 0.1rem solid #ccc;
-  background-color: #fff;
+  background-color: white;
   box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.15);
 
   padding: 1rem;
@@ -66,7 +66,7 @@
   }
   div {
     padding: 1rem;
-    border-bottom: 0.1rem solid #ff3478;
+    border-bottom: 0.1rem solid $brand-pink;
   }
   li {
     padding: 0.8rem 0;
@@ -74,8 +74,21 @@
     cursor: pointer;
 
     &:hover {
-      background-color: #f0f0f0; // 항목에 호버 시 배경색 변경
+      background-color: $light-gray; // 항목에 호버 시 배경색 변경
     }
+  }
+
+  .exitButton {
+    margin: 1rem 2.44rem 0 2.44rem;
+    padding: 0.6rem 1rem;
+    font-size: $font-size-base;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: $brand-pink;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
   }
 }
 
@@ -103,7 +116,7 @@
   height: 5rem;
 
   padding: 0 1rem;
-  margin: 0 1rem;
+  margin: 0 0.5rem;
 
   position: relative;
 
@@ -111,14 +124,18 @@
 
   @media (min-width: 800px) {
     width: 60%;
+    font-size: $font-size-lg;
   }
 
   @media (max-width: 799px) {
     width: 70%;
+    font-size: $font-size-base;
   }
+
   transition: border-color 0.2s ease-in-out;
+
   &:focus {
-    border-color: #ff3478;
+    border-color: $brand-pink;
     transition: border-color 0.2s ease-in-out;
   }
 }
@@ -129,6 +146,7 @@
   @include button;
   width: 5rem;
   height: 5rem;
+  outline: none;
 
   background-color: #ffffff;
   border-radius: 50%;
@@ -196,7 +214,7 @@
     }
 
     .content {
-      max-width: 80%; /* 채팅 메시지 최대 너비 설정 */
+      max-width: 50%; /* 채팅 메시지 최대 너비 설정 */
 
       background-color: #ff347879;
 
@@ -204,6 +222,9 @@
       border-radius: 1.8rem;
 
       font-size: $font-size-base;
+
+      word-wrap: break-word;
+      white-space: pre-wrap;
     }
   }
 }
@@ -211,15 +232,18 @@
 // 발신 메세지 스타일 (나)
 .myFlex {
   display: flex;
-  padding: 1rem 0;
-  width: 100%;
   align-items: flex-start;
   justify-content: flex-end;
+
+  width: 100%;
+
+  padding: 1rem 0;
 
   .myMessage {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
+
     padding-right: 1rem;
 
     span {
@@ -229,13 +253,69 @@
     }
 
     .content {
-      max-width: 80%; /* 채팅 메시지 최대 너비 설정 */
+      @media (min-width: 800px) {
+        max-width: 60rem;
+        font-size: $font-size-lg;
+      }
 
-      font-size: $font-size-base;
+      @media (max-width: 799px) {
+        max-width: 16rem;
+        font-size: $font-size-base;
+      }
 
       padding: 1rem;
+
       border-radius: 1.8rem;
       border: 0.1rem solid #ff34789a;
+
+      word-wrap: break-word;
+      white-space: pre-wrap;
     }
+  }
+}
+
+.notice {
+  @include flex-center-row;
+
+  padding: 1rem 0;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  .box {
+    text-align: center;
+
+    max-width: 80%;
+
+    padding: 0.5rem 2.5rem;
+
+    background-color: #d9d9d9;
+    border-radius: 40rem;
+  }
+}
+
+.alert {
+  position: fixed;
+  bottom: 10rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15rem;
+
+  text-align: center;
+
+  z-index: 1000;
+
+  padding: 1rem;
+
+  border-radius: 0.5rem;
+
+  .box {
+    background-color: #d9d9d949;
+    color: black;
+
+    padding: 1rem;
+
+    border-radius: 0.5rem;
   }
 }
