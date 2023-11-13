@@ -118,8 +118,8 @@ const ProfileModal = ({ setOpenModal }: PropsType) => {
 export default ProfileModal;
 
 const Container = styled.div`
-    min-width: 100%;
-    min-height: 83vh;
+    width: 100%;
+    height: 83vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
