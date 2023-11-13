@@ -72,10 +72,9 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
   // ID 중복 검사
   const checkIdDuplication = async (id: string): Promise<boolean> => {
     try {
-      const response = await axios.post(
-        "https://fastcampus-chat.net/check/id",
-        { id },
-      );
+      const response = await axios.post("https://fastcampus-chat.net/auth/id", {
+        id,
+      });
       return response.data.isDuplicated;
     } catch (error) {
       console.error("Error checking ID duplication", error);
