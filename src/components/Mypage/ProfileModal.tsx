@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, MouseEvent, useRef, useState } from 'react';
 
 import { instance } from '@/lib/api';
 
@@ -132,7 +132,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-right: 3px;
+    padding-right:
 `;
 
 const StyledProfile = styled.div`
