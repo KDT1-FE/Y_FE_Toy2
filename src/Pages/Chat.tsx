@@ -4,6 +4,7 @@ import ModalPlus from "../components/ModalPlus";
 import { useContext, useEffect, useState } from "react";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
+import { io } from "socket.io-client";
 
 interface User {
   id: string;
@@ -24,50 +25,54 @@ function Chat() {
   const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
   const { getData } = useApi();
   const { accessToken } = useContext(AuthContext);
+  const [roomId, setRoomId] = useState("");
 
   // 나의 채팅방 조회
   useEffect(() => {
-    const fetchData = async () => {
-      try{
-        const data = await getData("https://fastcampus-chat.net/chat");
-        const chatData = data.chats;
-        console.log(chatData);
+    if (accessToken) {
+      const fetchData = async () => {
+        try {
+          const data = await getData("https://fastcampus-chat.net/chat");
+          const chatData = data.chats;
+          const myRoom = chatData.map((room: ChatI) => {
+            // 시간 계산
+            const updatedAt = room.updatedAt;
+            const givenDate: Date = new Date(updatedAt);
+            const currentDate: Date = new Date();
+            const timeDifference = currentDate.getTime() - givenDate.getTime();
+            const minutesDifference = Math.floor(timeDifference / (1000 * 60));
 
-        const myRoom = chatData.map((room: ChatI) => {
+            let updatedAtString: string;
 
-          // 시간 계산
-          const updatedAt = room.updatedAt;
-          const givenDate: Date = new Date(updatedAt);
-          const currentDate: Date = new Date();
-          const timeDifference = currentDate.getTime() - givenDate.getTime();
-          const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+            if (minutesDifference < 1) {
+              updatedAtString = "방금 전";
+            } else if (minutesDifference < 60) {
+              updatedAtString = `${minutesDifference}분 전`;
+            } else {
+              const hoursDifference = Math.floor(minutesDifference / 60);
+              updatedAtString = `${hoursDifference}시간 전`;
+            }
 
-          let updatedAtString: string;
+            // const latestMessage = room.latestMessage || "메시지가 없습니다.";
+            return {
+              ...room,
+              updatedAt: updatedAtString
+              // latestMessage: latestMessage
+            };
+          });
 
-          if (minutesDifference < 1) {
-            updatedAtString = "방금 전";
-          } else if (minutesDifference < 60) {
-            updatedAtString = `${minutesDifference}분 전`;
-          } else {
-            const hoursDifference = Math.floor(minutesDifference / 60);
-            updatedAtString = `${hoursDifference}시간 전`;
-          }
-
-          // const latestMessage = room.latestMessage || "메시지가 없습니다.";
-          return {
-            ...room,
-            updatedAt: updatedAtString,
-            // latestMessage: latestMessage
-          };
-        });
-
-        setChatRoom(myRoom);
-      } catch (error){
-        console.error(error)
-      }
+          setChatRoom(myRoom);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchData();
     }
-    fetchData();
   }, [accessToken]);
+
+  const handleClick = (roomId: string) => {
+    setRoomId(roomId);
+  };
 
   return (
     <>
@@ -76,9 +81,12 @@ function Chat() {
       </div> */}
       <ChatWrapper>
         <ChatCategory>
-          { chatRoom.map((room) => (
+          {chatRoom.map((room) => (
             <CateLink key={room.id}>
-             <div className="catelink__wrap">
+              <div
+                className="catelink__wrap"
+                onClick={() => handleClick(room.id)}
+              >
                 <div className="catelink__name">
                   <p className="tit">{room.name}</p>
                   {/* <p className="content">{room.latestMessage}</p> */}
@@ -91,7 +99,7 @@ function Chat() {
             <ModalPlus />
           </CatePlus>
         </ChatCategory>
-        <ChatRoom />
+        <ChatRoom roomId={roomId} />
       </ChatWrapper>
     </>
   );
@@ -117,6 +125,7 @@ const ChatCategory = styled.ul`
 const CateLink = styled.li`
   padding: 10px;
   border-bottom: 1px solid #e8e8e8;
+  cursor: pointer;
   .catelink {
     &__wrap {
       gap: 16px;
@@ -140,7 +149,7 @@ const CateLink = styled.li`
       }
     }
     &__time {
-      text-align:right;
+      text-align: right;
       font-size: 14px;
       color: #999696;
       white-space: nowrap;

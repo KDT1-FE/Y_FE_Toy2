@@ -39,110 +39,6 @@ const ModalExample = () => {
     console.log("유저 id:", userId);
   };
 
-  const ChatTestWrap = styled.div`
-    width: 100%;
-    background-color: #fff;
-  `;
-
-  const SmallImg = styled.img`
-    width: 30px;
-    height: 30px;
-  `;
-
-  const PlusButton = styled.button`
-    transition: all 0.3s;
-    &:hover {
-      transform: rotate(180deg);
-    }
-  `;
-
-  const TopTitle = styled.h1`
-    font-size: 24px;
-    font-weight: bold;
-    margin: 30px 0 50px 0;
-  `;
-
-  const SubTitle = styled.h5`
-    font-size: 18px;
-    font-weight: bold;
-    margin: 10px 0 8px 0;
-  `;
-
-  const InputArea = styled.input`
-    &::placeholder {
-      font-size: 16px;
-    }
-    border: 1px solid lightgray;
-    border-radius: 6px;
-    font-size: 20px;
-    padding: 5px 20px;
-    margin-bottom: 6px;
-    width: 80%;
-  `;
-
-  const InputBtn = styled.button`
-    &:hover {
-      background-color: whitesmoke;
-      cursor: pointer;
-    }
-    font-size: 16px;
-    border: 1px solid lightgray;
-    border-radius: 6px;
-    padding: 8px 20px;
-    margin-bottom: 6px;
-    width: 90%;
-    background-color: #fff;
-  `;
-
-  const MemberBox = styled.div`
-    display: none;
-    width: 90%;
-    height: 30%;
-    border: 1px solid lightgray;
-    margin-top: 20px;
-    overflow-y: scroll;
-  `;
-
-  const BoxContent = styled.div`
-    display: flex;
-    align-items: center;
-    height: 34%;
-    margin-bottom: 1px solid lightgray;
-  `;
-
-  const SubmitBtn = styled.button`
-    &:hover {
-      background-color: #ff8a7a;
-      cursor: pointer;
-    }
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #f43630;
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    border-radius: 20px;
-    padding: 16px 60px;
-  `;
-
-  const customStyles: Styles = {
-    content: {
-      width: "30%",
-      height: "500px",
-      zIndex: "150",
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "white",
-      justifyContent: "center",
-      overflow: "auto",
-      borderRadius: "20px"
-    }
-  };
-
   useEffect(() => {
     // fetch("https://fastcampus-chat.net/users", {
     //   method: "GET",
@@ -156,17 +52,17 @@ const ModalExample = () => {
     //   .then((data) => setOnlineUsers(data))
     //   .catch((error) => console.error("Error fetching online users:", error));
 
-      const fetchData = async () => {
+    const fetchData = async () => {
+      if (accessToken) {
         try {
           const response = await getData("https://fastcampus-chat.net/users");
-          setOnlineUsers(response)
-          console.log(response);
+          setOnlineUsers(response);
         } catch (error) {
           console.log(error);
         }
-      };
-      fetchData();
-
+        fetchData();
+      }
+    };
   }, [accessToken]);
 
   return (
@@ -209,3 +105,107 @@ const ModalExample = () => {
 };
 
 export default ModalExample;
+
+const ChatTestWrap = styled.div`
+  width: 100%;
+  background-color: #fff;
+`;
+
+const SmallImg = styled.img`
+  width: 30px;
+  height: 30px;
+`;
+
+const PlusButton = styled.button`
+  transition: all 0.3s;
+  &:hover {
+    transform: rotate(180deg);
+  }
+`;
+
+const TopTitle = styled.h1`
+  font-size: 24px;
+  font-weight: bold;
+  margin: 30px 0 50px 0;
+`;
+
+const SubTitle = styled.h5`
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0 8px 0;
+`;
+
+const InputArea = styled.input`
+  &::placeholder {
+    font-size: 16px;
+  }
+  border: 1px solid lightgray;
+  border-radius: 6px;
+  font-size: 20px;
+  padding: 5px 20px;
+  margin-bottom: 6px;
+  width: 80%;
+`;
+
+const InputBtn = styled.button`
+  &:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+  }
+  font-size: 16px;
+  border: 1px solid lightgray;
+  border-radius: 6px;
+  padding: 8px 20px;
+  margin-bottom: 6px;
+  width: 90%;
+  background-color: #fff;
+`;
+
+const MemberBox = styled.div`
+  display: none;
+  width: 90%;
+  height: 30%;
+  border: 1px solid lightgray;
+  margin-top: 20px;
+  overflow-y: scroll;
+`;
+
+const BoxContent = styled.div`
+  display: flex;
+  align-items: center;
+  height: 34%;
+  margin-bottom: 1px solid lightgray;
+`;
+
+const SubmitBtn = styled.button`
+  &:hover {
+    background-color: #ff8a7a;
+    cursor: pointer;
+  }
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f43630;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  padding: 16px 60px;
+`;
+
+const customStyles: Styles = {
+  content: {
+    width: "30%",
+    height: "500px",
+    zIndex: "150",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "white",
+    justifyContent: "center",
+    overflow: "auto",
+    borderRadius: "20px"
+  }
+};

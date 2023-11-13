@@ -6,7 +6,7 @@ const ModalExample = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
-    setModalIsOpen(prev => !prev);
+    setModalIsOpen((prev) => !prev);
   };
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -19,10 +19,10 @@ const ModalExample = () => {
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, [menuRef]);
 
@@ -31,15 +31,12 @@ const ModalExample = () => {
       <HamButton onClick={() => openModal()}>
         <img src="/src/assets/images/menu-ico.png" alt="메뉴" width="30" />
       </HamButton>
-      {
-        modalIsOpen && (
-          <ButtonWrap>
-            <button>대화상대 초대하기</button>
-            <button>채팅방 나가기</button>
-          </ButtonWrap>
-        )
-      }
-
+      {modalIsOpen && (
+        <ButtonWrap>
+          <button>대화상대 초대하기</button>
+          <button>채팅방 나가기</button>
+        </ButtonWrap>
+      )}
     </ModalWrap>
   );
 };
@@ -67,16 +64,16 @@ const ButtonWrap = styled.div`
   background-color: red;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #E4E4E4;
-  border-left: 1px solid #E4E4E4;
-  border-right: 1px solid #E4E4E4;
-  button{
+  border-top: 1px solid #e4e4e4;
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
+  button {
     cursor: pointer;
     width: 190px;
     padding: 15px 10px;
     border: none;
     background-color: #fff;
-    border-bottom: 1px solid #E4E4E4;
+    border-bottom: 1px solid #e4e4e4;
     color: #999696;
   }
-`
+`;
