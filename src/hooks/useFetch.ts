@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { authState } from "../recoil/atoms/authState";
 
 interface BaseProps {
   url: string;
@@ -30,11 +32,10 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
   const [loading, setLoading] = useState(false);
   const [statusCode, setCode] = useState(-1);
   const [error, setError] = useState<any>({});
+  const auth = useRecoilValue(authState);
 
   const fetchData = async () => {
     if (loading) return;
-
-    const token = JSON.parse(localStorage.getItem("token") as string);
 
     setLoading(true);
 
@@ -52,7 +53,7 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
       headers = {
         "content-type": "application/json",
         serverId: import.meta.env.VITE_APP_SERVER_ID,
-        Authorization: `Bearer ${token.accessToken}`,
+        Authorization: `Bearer ${auth.accessToken}`,
       };
     }
 
