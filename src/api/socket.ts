@@ -1,6 +1,5 @@
 import { io, Socket } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../constant';
-
 let serverSocket: Socket | null = null;
 let chattingSocket: Socket | null = null;
 
@@ -32,6 +31,7 @@ export const loginSocket = (
 };
 
 export const chatSocket = (accessToken: any, chatId: string) => {
+  console.log(SERVER_URL);
   chattingSocket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,

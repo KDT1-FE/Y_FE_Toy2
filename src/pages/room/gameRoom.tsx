@@ -27,6 +27,7 @@ const GameRoom = () => {
   }, [id, setChat]);
   // controlGameRoomReload(chat);
   controlBack();
+  console.log(chat);
 
   const roomId = useRecoilValue(roomIdState);
   const users = useRecoilValue(usersInRoom);
@@ -58,9 +59,9 @@ const GameRoom = () => {
         <GameChatting chatId={chat} />
       </RoomMain>
 
-      <UserList>
-        <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
-      </UserList>
+      <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
+      <UserList>{/* <CheckUser /> */}</UserList>
+
     </Game>
   );
 };

@@ -1,8 +1,10 @@
 // checkGameRoom.tsx
 
 import { useState, useEffect } from 'react';
+
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allRoomState, usersInRoom } from '../../states/atom';
+
 import {
   getAllGameRooms,
   // getOnlyGameRoom,
@@ -37,7 +39,6 @@ import { roomIdState } from '../../states/atom';
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
-  const accessToken: any = useRecoilValue(accessTokenState);
 
   const setRoomId = useSetRecoilState(roomIdState);
   const setUsersInRoom = useSetRecoilState(usersInRoom);
@@ -59,7 +60,7 @@ const CheckGameRoom = () => {
 
   const fetchData = async () => {
     try {
-      const allRoomsData = await getAllGameRooms(accessToken);
+      const allRoomsData = await getAllGameRooms();
       setTotalItemsCount(allRoomsData.chats.length);
 
       // 방번호 넣기
@@ -87,7 +88,7 @@ const CheckGameRoom = () => {
     }
   };
 
-  usePollingData(fetchData, [accessToken, currentPage]);
+  usePollingData(fetchData, [currentPage]);
 
   const handleParticipate = async (
     numberOfPeople: number,
@@ -112,7 +113,7 @@ const CheckGameRoom = () => {
         } else if (error.response.data.message === 'Already participated') {
           alert('이미 참여한 방입니다. 로그아웃 합니다.');
           try {
-            await leaveGameRoom(accessToken, chatId);
+            await leaveGameRoom(chatId);
           } catch (error) {
             console.error(error);
           } finally {
@@ -122,7 +123,7 @@ const CheckGameRoom = () => {
           }
         }
       } finally {
-        // const res = await getOnlyGameRoom(chatId, accessToken);
+        // const res = await getOnlyGameRoom(chatId);
         // console.log(res);
       }
     }

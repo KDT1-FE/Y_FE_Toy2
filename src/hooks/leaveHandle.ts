@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { disconnectLoginSocket } from '../api/socket';
 import { useRecoilState } from 'recoil';
-import { accessTokenState } from '../states/atom';
 import { useEffect } from 'react';
 // export const controlGameRoomReload = (chatId: string) => {
-//   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
@@ -45,11 +44,10 @@ import { useEffect } from 'react';
 //       window.removeEventListener('beforeunload', handleBeforeUnload);
 //       window.removeEventListener('keydown', handleKeyDown);
 //     };
-//   }, [setAccessToken, accessToken, chatId, navigate]);
+//   }, [chatId, navigate]);
 // };
 
 export const controlLobbyReload = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const navigate = useNavigate();
   useEffect(() => {
     const handleBeforeUnload = async (event: any) => {
@@ -78,15 +76,15 @@ export const controlLobbyReload = () => {
     ) {
       localStorage.removeItem('beforeLobbyUnload');
       disconnectLoginSocket();
-      localStorage.removeItem('refreshToken');
-      setAccessToken('');
+      localStorage.removeItem('id');
+
       navigate('/');
     }
-  }, [navigate, setAccessToken]);
+  }, [navigate]);
 };
 
 export const controlBack = () => {
-  history.pushState(null, null, location.href);
+  history.pushState(null, '', location.href);
 
   window.onpopstate = function () {
     history.go(1);

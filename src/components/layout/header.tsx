@@ -5,11 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { ChatIcon, HamburgerIcon } from '@chakra-ui/icons';
 import LoginModal from './loginModal';
 import { useRecoilValue } from 'recoil';
-import { accessTokenState, chattingIdState } from '../../states/atom';
+import { chattingIdState } from '../../states/atom';
 
 const Header: React.FC = () => {
   const id: string = useRecoilValue(chattingIdState);
-  const accessToken: string = useRecoilValue(accessTokenState);
 
   const navigate = useNavigate();
   const [isChatContainerClicked, setIsChatContainerClicked] = useState(false);
@@ -18,7 +17,7 @@ const Header: React.FC = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const checkLocation = () => {
-    titleAction(navigate, accessToken, id);
+    titleAction(navigate, id);
   };
 
   const handleChatContainerClick = () => {
