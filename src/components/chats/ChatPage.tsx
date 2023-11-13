@@ -77,6 +77,7 @@ const MyChats = ({ userType }: any) => {
         };
     }, []);
 
+    // 지우시고 다른 함수 넣으셔도 됩니다!
     const onAddHandler = () => {
         setAddChatOpen(!addChatOpen);
     };
