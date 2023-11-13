@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { accessTokenState, onlineUserStateInGameRoom } from '../../states/atom';
+import { onlineUserStateInGameRoom } from '../../states/atom';
 import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../../constant';
 import { getUserData } from '../../api';
@@ -21,7 +21,6 @@ interface User {
 }
 
 const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
-  const accessToken: any = useRecoilValue(accessTokenState);
   const [UsersInGameRoom, setUsersInGameRoom] = useRecoilState<string[]>(
     onlineUserStateInGameRoom,
   );
@@ -31,7 +30,6 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     try {
       const socket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
         extraHeaders: {
-          Authorization: `Bearer ${accessToken}`,
           serverId: SERVER_ID,
         },
       });
@@ -58,7 +56,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
-  }, [accessToken, chatId]);
+  }, [chatId]);
   useEffect(() => {
     const fetchUserProfiles = async () => {
       const profilesArray: ResponseValue[] = [];
@@ -69,14 +67,14 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
         //   console.log(userId.substring(0, 9));
         //   const id = userId.substring(9);
         //   try {
-        //     const res = await getUserData(accessToken, id);
+        //     const res = await getUserData(id);
         //     profilesArray.push(res);
         //   } catch (error) {
         //     console.error('Error fetching user data:', error);
         //   }
         // } else {
         try {
-          const res = await getUserData(accessToken, userId);
+          const res = await getUserData(userId);
           profilesArray.push(res);
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -88,7 +86,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     };
 
     fetchUserProfiles();
-  }, [accessToken, UsersInGameRoom, setProfiles]);
+  }, [UsersInGameRoom, setProfiles]);
   console.log(profiles);
   return (
     <>

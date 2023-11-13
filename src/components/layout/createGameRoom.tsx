@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createGameRooms } from '../../api';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { accessTokenState, allRoomState } from '../../states/atom';
+import { allRoomState } from '../../states/atom';
 
 const CreateGameRoom = () => {
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
-  const accessToken: any = useRecoilValue(accessTokenState);
 
   const onChange = (e: React.ChangeEvent<any>) => {
     const { value, name } = e.target;
@@ -23,7 +22,7 @@ const CreateGameRoom = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const check = await createGameRooms(accessToken, name, [], isPrivate);
+    const check = await createGameRooms(name, [], isPrivate);
     if (check === undefined) {
       alert('중복된 방이 있습니다.');
     } else {

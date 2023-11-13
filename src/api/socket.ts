@@ -4,13 +4,9 @@ import { SERVER_URL, SERVER_ID } from '../constant';
 let serverSocket: Socket | null = null;
 let chattingSocket: Socket | null = null;
 
-export const loginSocket = (
-  accessToken: any,
-  onDataReceived: (data: any[]) => void,
-) => {
+export const loginSocket = (onDataReceived: (data: any[]) => void) => {
   serverSocket = io(`${SERVER_URL}server`, {
     extraHeaders: {
-      Authorization: `Bearer ${accessToken}`,
       serverId: SERVER_ID,
     },
   });
@@ -31,10 +27,9 @@ export const loginSocket = (
   return serverSocket;
 };
 
-export const chatSocket = (accessToken: any, chatId: string) => {
+export const chatSocket = (chatId: string) => {
   chattingSocket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
     extraHeaders: {
-      Authorization: `Bearer ${accessToken}`,
       serverId: SERVER_ID,
     },
   });

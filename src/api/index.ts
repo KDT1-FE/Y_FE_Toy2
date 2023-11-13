@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { CONTENT_TYPE, SERVER_ID, SERVER_URL } from '../constant';
 import { JoinData } from '../interfaces/interface';
+import { getCookie } from '../util/util';
 
 const client = axios.create({
   baseURL: SERVER_URL,
@@ -9,6 +10,19 @@ const client = axios.create({
     serverId: SERVER_ID,
   },
 });
+
+client.interceptors.request.use(
+  (config) => {
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 export const postLogin = async (id: string, password: string) => {
   const res = await client.post('/login', {
@@ -23,139 +37,72 @@ export const postJoin = async (joinData: JoinData) => {
   return res;
 };
 
-export const postRefresh = async (refreshToken: string) => {
-  const res = await client.post('/refresh', {
-    refreshToken: refreshToken,
-  });
+export const postRefresh = async () => {
+  const res = await client.post('/refresh');
   return res;
 };
 
-export const getAllUsers = async (accessToken: string) => {
-  const res = await client.get('users', {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const getAllUsers = async () => {
+  const res = await client.get('users');
   return res;
 };
 
-export const getUserData = async (accessToken: string, userId: string) => {
-  const res = await client.get(`/user?userId=${userId}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const getUserData = async (userId: string) => {
+  const res = await client.get(`/user?userId=${userId}`);
 
   return res.data;
 };
 
-export const patchUserData = async (
-  accessToken: string,
-  name: string,
-  picture: string,
-) => {
-  const res = await client.patch(
-    `/user`,
-    { name: name, picture: picture },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
+export const patchUserData = async (name: string, picture: string) => {
+  const res = await client.patch(`/user`, { name: name, picture: picture });
   return res;
 };
 
 export const createGameRooms = async (
-  accessToken: string,
   name: string,
   users: string[],
   isPrivate: boolean,
 ) => {
-  const res = await client.post(
-    `chat`,
-    { name: name, users: users, isPrivate: isPrivate },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
-  return res.data;
-};
-
-export const getAllGameRooms = async (accessToken: string) => {
-  const res = await client.get(`chat/all`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+  const res = await client.post(`chat`, {
+    name: name,
+    users: users,
+    isPrivate: isPrivate,
   });
   return res.data;
 };
 
-export const participateGameRoom = async (
-  chatId: string,
-  accessToken: string,
-) => {
-  const res = await client.patch(
-    `chat/participate`,
-    { chatId: chatId },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
+export const getAllGameRooms = async () => {
+  const res = await client.get(`chat/all`);
   return res.data;
 };
 
-export const getAllMyChat = async (accessToken: string) => {
-  const res = await client.get(`chat`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const participateGameRoom = async (chatId: string) => {
+  const res = await client.patch(`chat/participate`, { chatId: chatId });
   return res.data;
 };
 
-export const leaveGameRoom = async (accessToken: string, chatId: string) => {
-  const res = await client.patch(
-    `/chat/leave`,
-    { chatId: chatId },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
+export const getAllMyChat = async () => {
+  const res = await client.get(`chat`);
+  return res.data;
+};
+
+export const leaveGameRoom = async (chatId: string) => {
+  const res = await client.patch(`/chat/leave`, { chatId: chatId });
   console.log(res);
   return res;
 };
 
-export const inviteGameRoom = async (
-  accessToken: string,
-  chatId: string,
-  users: string[],
-) => {
-  const res = await client.patch(
-    `/chat/invite`,
-    { chatId: chatId, users: users },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
+export const inviteGameRoom = async (chatId: string, users: string[]) => {
+  const res = await client.patch(`/chat/invite`, {
+    chatId: chatId,
+    users: users,
+  });
   console.log(res);
   return res;
 };
 
-export const getOnlyGameRoom = async (accessToken: string, chatId: string) => {
-  const res = await client.get(`/chat/only?chatId=${chatId}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const getOnlyGameRoom = async (chatId: string) => {
+  const res = await client.get(`/chat/only?chatId=${chatId}`);
   console.log(res);
   return res;
 };

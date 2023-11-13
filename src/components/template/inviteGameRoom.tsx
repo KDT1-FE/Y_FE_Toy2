@@ -1,7 +1,7 @@
 // import { getAllGameRooms, inviteGameRoom } from '../../api';
 // import { useRecoilState, useRecoilValue } from 'recoil';
 // import {
-//   accessTokenState,
+//
 //   inviteUsersState,
 //   onlineUserState,
 //   uniqueUserState,
@@ -14,12 +14,12 @@
 //   const [toInviteUsers, setToInviteUsers] = useRecoilState(uniqueUserState);
 //   const onLine = useRecoilValue(onlineUserState);
 //   const allOnlineUsers = onLine.users || [];
-//   const accessToken: any = useRecoilValue(accessTokenState);
+
 //   const id = chatId.chatId;
 
 //   const checkUsers = async () => {
 //     try {
-//       const allRoomsData = await getAllGameRooms(accessToken);
+//       const allRoomsData = await getAllGameRooms();
 //       setUniqueUsers((prevUniqueUsers: Set<any>) => {
 //         const updatedUniqueUsers = new Set(prevUniqueUsers);
 
@@ -48,7 +48,7 @@
 
 //   const handleInvite = async (user: any) => {
 //     try {
-//       await inviteGameRoom(accessToken, id, [user]);
+//       await inviteGameRoom(id, [user]);
 //     } catch (error) {
 //       console.log(error);
 //     }

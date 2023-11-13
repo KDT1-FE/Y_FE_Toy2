@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import {
-  accessTokenState,
   privateChatDetail,
   privateChatNew,
   myUserDataState,
@@ -24,12 +23,11 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
   const [lastDate, setLastDate] = useState('');
-  const accessToken: any = useRecoilValue(accessTokenState);
   const myUserData: any = useRecoilValue(myUserDataState);
 
   useEffect(() => {
     try {
-      const newSocket = chatSocket(accessToken, chatId);
+      const newSocket = chatSocket(chatId);
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
@@ -75,7 +73,7 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
-  }, [accessToken, chatId]);
+  }, [chatId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPostData(e.target.value);
