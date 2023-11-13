@@ -2,7 +2,7 @@ import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
-type CookieOptions = {
+export type CookieOptions = {
 	expires?: Date;
 	path?: string;
 	domain?: string;
@@ -26,6 +26,6 @@ export const getCookie = (name: string) => {
 };
 
 // removeCookie: 쿠키를 삭제하는 함수
-export const removeCookie = (name: string, option: CookieOptions) => {
+export const removeCookie = (name: string, option?: CookieOptions) => {
 	return cookies.remove(name, { ...option });
 };

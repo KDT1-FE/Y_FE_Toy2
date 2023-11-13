@@ -4,6 +4,7 @@ import FriendProfile from '@/Components/Users/FriendProfiles';
 import MyProfile from '@/Components/Users/MyProfile';
 import Header from '@/Components/Common/Header';
 import { User } from '@/types';
+import Footer from '@/Components/Common/Footer';
 
 const Users = async () => {
 	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;
@@ -16,6 +17,7 @@ const Users = async () => {
 			<Header />
 			<MyProfile user={myUser} />
 			<FriendProfile allUsers={allUsersExceptMe} />
+			<Footer />
 		</section>
 	);
 };

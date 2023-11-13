@@ -1,5 +1,6 @@
 import HomeButton from '@/Components/Button';
 import React from 'react';
+import Footer from '@/Components/Common/Footer';
 
 const wrapper = 'w-full flex flex-col items-center';
 
@@ -10,6 +11,7 @@ const chatting = () => {
 				<HomeButton buttonName="안녕" />
 			</div>
 			<h1>채팅 페이지 입니다.</h1>
+			<Footer />
 		</div>
 	);
 };
