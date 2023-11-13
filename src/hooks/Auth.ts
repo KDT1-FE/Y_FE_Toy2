@@ -1,12 +1,11 @@
 import { useEffect, Dispatch, SetStateAction } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter, usePathname } from 'next/navigation';
 import { refreshToken } from '@/lib/token';
 
-export const authCheck = (
-    setter?: Dispatch<SetStateAction<boolean>>,
-    router?: AppRouterInstance,
-    pathname?: string,
-) => {
+export const authCheck = (setter?: Dispatch<SetStateAction<boolean>>) => {
+    const router = useRouter();
+    const pathname = usePathname();
+
     useEffect(() => {
         const token = sessionStorage.getItem('accessToken');
 
@@ -49,5 +48,5 @@ export const authCheck = (
                 }
             }
         }
-    }, [setter, router, pathname]);
+    }, [setter]);
 };
