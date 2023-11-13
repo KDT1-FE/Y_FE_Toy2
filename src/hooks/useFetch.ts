@@ -41,7 +41,8 @@ const useFetch = ({ url, method, data, start }: Props): Return => {
     let headers;
     if (
       url === "https://fastcampus-chat.net/signup" ||
-      url === "https://fastcampus-chat.net/login"
+      url === "https://fastcampus-chat.net/login" ||
+      url === "https://fastcampus-chat.net/check/id"
     ) {
       headers = {
         "content-type": "application/json",

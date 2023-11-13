@@ -128,7 +128,7 @@ interface ChatRoom {
   name: string;
   users: string[];
   isPrivate?: boolean;
-  num?: number;
+  num: number;
   bg?: string;
   status?: string;
 }
@@ -182,7 +182,7 @@ const CreateGameModal = ({ setModal }: Props) => {
     method: "POST",
     data: {
       name: roomData.name,
-      users: roomData.users,
+      users: [token.id],
     },
     start: false,
   });
