@@ -1,19 +1,25 @@
 import { useRecoilState } from "recoil";
 import { authState } from "../recoil/atoms/authState";
+import { userState } from "../recoil/atoms/userState";
 
 export const useAuth = () => {
-  const [auth, setAuth] = useRecoilState(authState);
-
-  // accessToken과 refreshToken을 받아 로컬 스토리지에 저장하고 상태 업데이트
-  const setToken = (accessToken: string, refreshToken: string) => {
+  const [auth, setAuth] = useRecoilState(authState); //사용자 인증 상태
+  const [user, setUser] = useRecoilState(userState); //사용자 정보
+  const setToken = (
+    accessToken: string,
+    refreshToken: string,
+    userId: string,
+  ) => {
     return new Promise<void>((resolve) => {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("userId", userId);
       setAuth({
         accessToken,
         refreshToken,
         isAuthenticated: true,
       });
+      setUser({ id: userId, isLoggedIn: true });
       resolve();
     });
   };
@@ -22,6 +28,7 @@ export const useAuth = () => {
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
     setAuth({
       accessToken: null,
       refreshToken: null,
@@ -47,7 +54,7 @@ export const useAuth = () => {
 
       const data = await response.json();
       if (response.ok && data.accessToken) {
-        setToken(data.accessToken, refreshToken);
+        setToken(data.accessToken, refreshToken, data.userId); // 새로운 토큰으로 상태 업데이트
       } else {
         throw new Error("Failed to refresh token");
       }
@@ -57,5 +64,5 @@ export const useAuth = () => {
     }
   };
 
-  return { auth, setToken, logout, refreshAccessToken };
+  return { auth, user, setToken, logout, refreshAccessToken };
 };

@@ -95,6 +95,7 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
       setMessages([...messages, { id: "system", text: systemMessage }]);
       setUsers(responseData.users);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
