@@ -32,8 +32,8 @@ const UserInviteList = () => {
           }}
           key={user.id}
         >
-          <ChannelMemberItem userName={user.name} src={user.picture} />
-          <Checkbox key={user.id} size="lg" color={'blue.500'} />
+          {/* <ChannelMemberItem userName={user.name} src={user.picture} />
+          <Checkbox key={user.id} size="lg" color={'blue.500'} /> */}
         </Flex>
       ))}
     </Box>

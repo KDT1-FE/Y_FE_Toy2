@@ -5,19 +5,13 @@ import ChannelMemberItem from './ChannelMemberItem';
 import UserInviteModal from './modal/UserInviteModal';
 import ChannelExitDialog from './modal/ChannelExitDialog';
 import useJoinLeaveChannels from '../../hooks/useJoinLeaveChannel';
-import { findUserDataInChannel } from '../../api/channel';
 
 const ChannelMemberSideBar = () => {
   const { id } = useParams();
   const chatId = id!;
 
-  const { memberList, setMemberList } = useJoinLeaveChannels(chatId);
-
-  // const getAllMemberList = () => {
-  //   const response = findUserDataInChannel(chatId);
-  //   console.log('가봅시다~~~~', response);
-  // };
-  // getAllMemberList();
+  const { memberList, onlineMemberIds, setMemberList } =
+    useJoinLeaveChannels(chatId);
 
   return (
     <Box
@@ -40,6 +34,7 @@ const ChannelMemberSideBar = () => {
             key={user.id}
             userName={user.name || user.username}
             src={user.picture}
+            isOnline={onlineMemberIds.includes(user.id)}
           />
         ))}
       </VStack>
