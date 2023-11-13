@@ -100,7 +100,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
               로그인
             </Button>
           </Flex>
-          <SignUpButton onClick={toggleSignUpModal}>회원가입</SignUpButton>
+          <SignUpButton type="button" onClick={toggleSignUpModal}>
+            회원가입
+          </SignUpButton>
         </form>
       </Box>
     </Flex>
