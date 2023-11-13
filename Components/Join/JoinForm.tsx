@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Button } from '@material-tailwind/react';
+import { Button, Typography } from '@material-tailwind/react';
 import { fetchJoin } from '@/app/join/join.utils';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
 import Image from 'next/image';
 import DropZone from './DropZone/DropZone';
-import { fetchImageToCloudinary } from './DropZone/Dropzone.utils';
+import { useFetchImageToCloudinary } from '@/hooks/Open/usefetchImageToCloudinary';
 // import Image from 'next/image';
 
 type RequestBody = {
@@ -22,6 +22,9 @@ type RequestBody = {
 const JoinForm = () => {
 	const router = useRouter();
 	const [baseImageUrl, setBaseImageUrl] = React.useState<string | null>(null);
+	const mutation = useFetchImageToCloudinary();
+
+	console.log(mutation.data);
 
 	const {
 		register,
@@ -47,9 +50,6 @@ const JoinForm = () => {
 			});
 			return;
 		}
-
-		const pictureUrl = fetchImageToCloudinary(baseImageUrl);
-		console.log(pictureUrl);
 
 		const data = await fetchJoin(id, password, name, picture);
 		const { message } = data;
@@ -163,21 +163,22 @@ const JoinForm = () => {
 						</div>
 						{/* 이미지 url */}
 						<div className="flex h-[90] w-full  flex-col  mt-5">
-							<Input
-								color="brown"
-								variant="static"
-								label="image URL"
-								placeholder=" image URL을 입력해주세요 "
-								{...register('picture', {
-									required: true,
-								})}
-								crossOrigin={'anonymous'}
-							/>
+							<Typography color="brown" className=" text-sm text-gray-700">
+								이미지를 넣어주세요.
+							</Typography>
 						</div>
 					</div>
 					<DropZone setFn={setBaseImageUrl} />
 					<Button type="submit" className="w-full bg-main mt-10">
 						회원가입
+					</Button>
+					<Button
+						type="button"
+						onClick={() => {
+							mutation.mutate(baseImageUrl as string);
+						}}
+					>
+						버튼
 					</Button>
 				</form>
 			</div>
