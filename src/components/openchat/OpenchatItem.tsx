@@ -18,8 +18,14 @@ function OpenchatItem({ openchat }: OpenchatCategoryProps) {
         </div>
         <div className="openchat__room-info">
           <div className="openchat__room-desc">
-            <Typography variant="body1">{openchat.name}</Typography>
-            <Typography variant="body2" color="GrayText">
+            <Typography variant="body1" className="overflow-ellipsis">
+              {openchat.name}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="GrayText"
+              className="overflow-ellipsis"
+            >
               {openchat.hashtags.map((hashtag) => `#${hashtag}`).join(' ')}
             </Typography>
             <Typography variant="body2" color="GrayText">

@@ -55,6 +55,15 @@ export const OpenchatRoom = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down('sm')]: {
       margin: '0 6px',
     },
+    '& .overflow-ellipsis': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      maxWidth: '240px',
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '200px',
+      },
+    },
   },
   '& .openchat__room-btn': { flex: '1 1 10%' },
 }));
@@ -151,13 +160,14 @@ export const OpenchatAvatarWrap = styled('div')({
   },
 });
 
-export const OpenchatFriendWrap = styled('div')({
+export const OpenchatFriendWrap = styled('div')(({ theme }) => ({
   display: 'flex',
   padding: '10px 0',
+  alignItems: 'center',
   '& .openchat__friend-img': {
-    flex: '0 1 54px',
-    width: '54px',
-    height: '54px',
+    flex: '0 1 48px',
+    width: '48px',
+    height: '48px',
     overflow: 'hidden',
     borderRadius: '100%',
     boxSizing: 'border-box',
@@ -172,6 +182,15 @@ export const OpenchatFriendWrap = styled('div')({
   '& .openchat__friend-text': {
     flex: '1 1 50%',
     margin: '0 10px',
+    '& .overflow-ellipsis': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      maxWidth: '150px',
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '250px',
+      },
+    },
   },
   '& .openchat__friend-send': {
     flex: '0 1 20px',
@@ -183,4 +202,4 @@ export const OpenchatFriendWrap = styled('div')({
       color: '#A8DADC',
     },
   },
-});
+}));

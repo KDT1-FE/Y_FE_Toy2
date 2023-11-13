@@ -18,9 +18,15 @@ function OpenchatMyItem({ openchat }: OpenchatMyItemProps) {
         </div>
         <div className="openchat__room-info">
           <div className="openchat__room-desc">
-            <Typography variant="body1">{openchat.name}</Typography>
-            <Typography variant="body1">
-              {openchat.latestMessage?.text ?? '이전 메시지'}
+            <Typography variant="body1" className="overflow-ellipsis">
+              {openchat.name}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="GrayText"
+              className="overflow-ellipsis"
+            >
+              {openchat.latestMessage?.text ?? '이전 메시지가 없습니다.'}
             </Typography>
             <Typography variant="body2" color="GrayText">
               <Person sx={{ width: '1rem', verticalAlign: '-6px' }} />{' '}

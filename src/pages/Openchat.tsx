@@ -37,6 +37,10 @@ function Openchat() {
   const { isQuering, openchats, myOpenChat, friends, hashtags, fetchingData } =
     useQueryOpenchats();
 
+  const myTagChats = useMemo(
+    () => filterCateOpenChats(openchats ?? [], hashtags ?? []),
+    [openchats],
+  );
   const hobbyChats = useMemo(
     () => filterCateOpenChats(openchats ?? [], hobby),
     [openchats],
@@ -69,21 +73,21 @@ function Openchat() {
     }
   }, [selectedId]);
 
-  if (isQuering) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#f5f5f5',
-          height: '100vh',
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+  // if (isQuering) {
+  //   return (
+  //     <Box
+  //       sx={{
+  //         display: 'flex',
+  //         justifyContent: 'center',
+  //         alignItems: 'center',
+  //         backgroundColor: '#f5f5f5',
+  //         height: '100vh',
+  //       }}
+  //     >
+  //       <CircularProgress />
+  //     </Box>
+  //   );
+  // }
 
   return (
     <OpenchatContainer isOpenModal={Boolean(selectedId)}>
@@ -96,9 +100,34 @@ function Openchat() {
               href="#my-chat"
               clickable
             />
-            <Chip label="#취미/문화" component="a" href="#hobby" clickable />
-            <Chip label="#운동/스포츠" component="a" href="#sports" clickable />
-            <Chip label="#동물/식물" component="a" href="#animal" clickable />
+            <Chip
+              label="추천"
+              component="a"
+              href="#my-tag"
+              clickable
+              variant="outlined"
+            />
+            <Chip
+              label="#취미/문화"
+              component="a"
+              href="#hobby"
+              clickable
+              variant="outlined"
+            />
+            <Chip
+              label="#운동/스포츠"
+              component="a"
+              href="#sports"
+              clickable
+              variant="outlined"
+            />
+            <Chip
+              label="#동물/식물"
+              component="a"
+              href="#animal"
+              clickable
+              variant="outlined"
+            />
           </Stack>
         </div>
       </OpenchatAppbar>
@@ -114,41 +143,63 @@ function Openchat() {
           </OpenchatCreateChatBtn>
         </Box>
         <Grid container spacing={2}>
-          <Grid item sm={12} md={9}>
+          <Grid item xs={12} sm={12} md={9}>
             <OpenchatBox id="my-chat">
-              <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
+              <Box bgcolor="white" p={2} sx={{ minHeight: '142px' }}>
                 <Typography variant="h5" mb={3}>
                   📣 내 오픈채팅방
                 </Typography>
-                <OpenchatMy openchats={myOpenChat} />
+                <OpenchatMy isQuering={isQuering} openchats={myOpenChat} />
+              </Box>
+            </OpenchatBox>
+            <OpenchatBox id="my-tag">
+              <Box bgcolor="white" p={2} sx={{ minHeight: '142px' }}>
+                <Typography variant="h5">🙌 추천 오픈채팅방</Typography>
+                <Typography variant="body2" color="GrayText" mt={1} mb={2}>
+                  관심사인 {hashtags?.map((tag) => `#${tag}`).join(' ')} 태그의
+                  채팅방을 추천드립니다.
+                </Typography>
+                <OpenchatCategory
+                  isQuering={isQuering}
+                  openchats={myTagChats}
+                />
               </Box>
             </OpenchatBox>
             <OpenchatBox id="hobby">
-              <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
+              <Box bgcolor="white" p={2} sx={{ minHeight: '142px' }}>
                 <Typography variant="h5" mb={3}>
                   🎮 취미/문화
                 </Typography>
-                <OpenchatCategory openchats={hobbyChats} />
+                <OpenchatCategory
+                  isQuering={isQuering}
+                  openchats={hobbyChats}
+                />
               </Box>
             </OpenchatBox>
             <OpenchatBox id="sports">
-              <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
+              <Box bgcolor="white" p={2} sx={{ minHeight: '142px' }}>
                 <Typography variant="h5" mb={3}>
                   ⛳ 운동/스포츠
                 </Typography>
-                <OpenchatCategory openchats={sportsChats} />
+                <OpenchatCategory
+                  isQuering={isQuering}
+                  openchats={sportsChats}
+                />
               </Box>
             </OpenchatBox>
             <OpenchatBox id="animal">
-              <Box bgcolor="white" p={2} sx={{ minHeight: '240px' }}>
+              <Box bgcolor="white" p={2} sx={{ minHeight: '142px' }}>
                 <Typography variant="h5" mb={3}>
                   🐶 동물/식물
                 </Typography>
-                <OpenchatCategory openchats={animalChats} />
+                <OpenchatCategory
+                  isQuering={isQuering}
+                  openchats={animalChats}
+                />
               </Box>
             </OpenchatBox>
           </Grid>
-          <Grid item sm={12} md={3}>
+          <Grid item xs={12} sm={12} md={3}>
             <OpenchatBox
               sx={{ position: 'sticky', top: 0, paddingTop: '58px' }}
             >

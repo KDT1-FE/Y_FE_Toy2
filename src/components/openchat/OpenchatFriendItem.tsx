@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Tooltip, Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import { Send } from '@mui/icons-material';
 import { UserInfoWithId } from '../../types/User';
 import { OpenchatFriendWrap } from '../../styles/OpenchatStyle';
@@ -20,7 +20,7 @@ function OpenchatFriendItem({ friend }: OpenchatFriendProps) {
         </Typography>
         <Typography
           variant="body2"
-          className="openchat__friend-tags"
+          className="openchat__friend-tags overflow-ellipsis"
           color="GrayText"
         >
           {friend.hashtags.map((hashtag) => `#${hashtag}`).join(' ')}
