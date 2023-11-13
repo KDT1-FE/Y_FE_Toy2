@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
 import Image from 'next/image';
 import DropZone from './DropZone/DropZone';
+import { fetchImageToCloudinary } from './DropZone/Dropzone.utils';
 // import Image from 'next/image';
 
 type RequestBody = {
@@ -20,11 +21,12 @@ type RequestBody = {
 
 const JoinForm = () => {
 	const router = useRouter();
+	const [baseImageUrl, setBaseImageUrl] = React.useState<string | null>(null);
 
 	const {
 		register,
 		handleSubmit,
-		watch,
+		// watch,
 		formState: { errors },
 	} = useForm<RequestBody>({ mode: 'onChange' });
 
@@ -36,6 +38,19 @@ const JoinForm = () => {
 		picture,
 	}) => {
 		// 모든 input 값에 에러없이 값이 있으면
+		if (baseImageUrl === null) {
+			Swal.fire({
+				text: '이미지를 넣어주세요.',
+				showCancelButton: false,
+				confirmButtonText: '확인',
+				confirmButtonColor: 'red',
+			});
+			return;
+		}
+
+		const pictureUrl = fetchImageToCloudinary(baseImageUrl);
+		console.log(pictureUrl);
+
 		const data = await fetchJoin(id, password, name, picture);
 		const { message } = data;
 		if (message === 'User created') {
@@ -51,7 +66,7 @@ const JoinForm = () => {
 		}
 	};
 
-	const image = watch('picture');
+	// const image = watch('picture');
 
 	return (
 		// 전체
@@ -60,9 +75,9 @@ const JoinForm = () => {
 			<div className="flex flex-col w-full h-full items-center justify-center ">
 				{/* 이미지 */}
 				<div className="mb-10">
-					{image ? (
+					{baseImageUrl ? (
 						<Image
-							src={image}
+							src={baseImageUrl}
 							alt="Picture of the author"
 							width={100}
 							height={100}
@@ -160,7 +175,7 @@ const JoinForm = () => {
 							/>
 						</div>
 					</div>
-					<DropZone />
+					<DropZone setFn={setBaseImageUrl} />
 					<Button type="submit" className="w-full bg-main mt-10">
 						회원가입
 					</Button>
