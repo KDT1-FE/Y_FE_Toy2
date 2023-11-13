@@ -20,6 +20,7 @@ export const fetchMyUser = async (token: string) => {
 			Authorization: `Bearer ${token}`,
 			serverId: process.env.NEXT_PUBLIC_SERVER_ID as string,
 		},
+		cache: 'no-cache',
 	});
 	const data = await res.json();
 	return data.user;
@@ -33,6 +34,7 @@ export const fetchMyChats = async (token: string) => {
 			Authorization: `Bearer ${token}`,
 			serverId: process.env.NEXT_PUBLIC_SERVER_ID as string,
 		},
+		cache: 'no-cache',
 	});
 	const data = await res.json();
 	return data.chats;

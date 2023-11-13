@@ -3,6 +3,7 @@
 import { Chat } from '@/types';
 import OpenChatText from './OpenChatText';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const OpenChatModal = ({
 	modalChat,
@@ -14,6 +15,7 @@ const OpenChatModal = ({
 	setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
 	const TEXT_SIZE = 'text-2xl';
+	const router = useRouter();
 
 	return (
 		<dialog
@@ -45,9 +47,15 @@ const OpenChatModal = ({
 				<div className="h-4/6 ml-5 text-white">
 					<OpenChatText openChat={modalChat} textSize={TEXT_SIZE} />
 				</div>
-				<button className="h-1/6 bg-yellow-500 font-medium">
+				<button
+					className="h-1/6 bg-yellow-500 font-medium"
+					onClick={() => {
+						router.push(`chat/${modalChat.id}?isPrivate=false`);
+					}}
+				>
 					오픈 채팅방 참여하기
 				</button>
+
 				<div className="h-1/6 bg-black"></div>
 			</div>
 		</dialog>

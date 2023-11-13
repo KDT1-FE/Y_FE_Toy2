@@ -8,7 +8,6 @@ import { Input } from '@material-tailwind/react';
 import { search, toLower } from '@/hooks/Common/search';
 import ShowSearchedFriend from './ShowSearchedFriend';
 import FriendProfiles from '../Users/FriendProfiles';
-import ProfileModal from '../Common/ProfileModal';
 import ShowAllOpenChat from '../Search/ShowAllOpenChat';
 
 const SearchOpenChat = ({
@@ -22,8 +21,6 @@ const SearchOpenChat = ({
 	const [searchedChats, setSearchedChats] = useState(myChats);
 	const [searchedUsers, setSearchedUsers] = useState(allUsersExceptMe);
 	const [isShowMore, setIsShowMore] = useState(false);
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-	const [modalUser, setModalUser] = useState<User | object>({});
 
 	const getUserInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		setUserInput(toLower(e.target.value));
@@ -34,11 +31,6 @@ const SearchOpenChat = ({
 			search(userInput, myChats, setSearchedChats);
 			search(userInput, allUsersExceptMe, setSearchedUsers);
 		}
-	};
-
-	const openModalHandler = (user: User) => {
-		setIsModalOpen(true);
-		setModalUser(user);
 	};
 
 	return (
@@ -81,14 +73,18 @@ const SearchOpenChat = ({
 						<>
 							{allUsersExceptMe && (
 								<ShowSearchedFriend
-									openModalHandler={openModalHandler}
 									setIsShowMore={setIsShowMore}
 									searchedUsers={searchedUsers as User[]}
 								/>
 							)}
 
 							{searchedChats.map((chat) => (
-								<ShowAllOpenChat key={chat.id} chat={chat} />
+								<li
+									key={chat.id}
+									className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer"
+								>
+									<ShowAllOpenChat key={chat.id} chat={chat} />
+								</li>
 							))}
 						</>
 					) : (
@@ -96,11 +92,6 @@ const SearchOpenChat = ({
 					)}
 				</>
 			)}
-			<ProfileModal
-				user={modalUser}
-				open={isModalOpen}
-				setIsModalOpen={setIsModalOpen}
-			/>
 		</>
 	);
 };

@@ -1,11 +1,12 @@
 import React from 'react';
-// import { fetchAllOpenChat } from './search.utils';
 import SearchUsers from '../../Components/Users/SearchUsers';
 import { User } from '@/types';
 import { fetchAllUsers, fetchMyChats, fetchMyUser } from './searchmychat.utils';
+import { cookies } from 'next/headers';
 
 const Search = async () => {
-	const accessToken = process.env.NEXT_PUBLIC_ACCESSTOKEN as string;
+	const cookieStore = cookies();
+	const accessToken = cookieStore.get('accessToken')!.value;
 	const allUsers: User[] = await fetchAllUsers(accessToken);
 	const myUser: User = await fetchMyUser(accessToken);
 	const allUsersExceptMe: User[] | [] = allUsers.filter(
