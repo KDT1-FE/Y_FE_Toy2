@@ -1022,3 +1022,18 @@ interface ResponseData {
   user: string[]; // 참가자들 id
 }
 ```
+
+### invite
+- 새로운 채팅방 생성시 모든 채팅방 유저에게 채팅방 정보를 전송합니다.
+- 기존 채팅방에 유저 초대시 초대된 유저에게 채팅방 정보를 전송합니다.
+
+응답 데이터
+```ts
+interface ResponseData {
+  id: string;
+  name: string;
+  users: string[]; // 참여자들 id
+  isPrivate: boolean;
+  updatedAt: Date;
+}
+```
