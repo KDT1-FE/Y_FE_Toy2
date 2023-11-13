@@ -15,6 +15,7 @@ import useFireFetch from "../../../hooks/useFireFetch";
 interface CalculateVoteProps {
   voteResults: string;
   onClose: (finalLiar: string) => void;
+  gameId: string;
 }
 
 const CalculateVote: React.FC<CalculateVoteProps> = ({
@@ -31,9 +32,8 @@ const CalculateVote: React.FC<CalculateVoteProps> = ({
       const gameData = await fireFetch.useGetSome("game", "id", gameId);
       const { users, votedFor } = gameData.data[0];
 
-      // 간단한 로직으로 가장 많이 지목된 유저를 선택
       const votesCount: Record<string, number> = {};
-      users.forEach((user) => {
+      users.forEach((user: string) => {
         if (votedFor.includes(user)) {
           votesCount[user] = (votesCount[user] || 0) + 1;
         }
@@ -68,7 +68,6 @@ const CalculateVote: React.FC<CalculateVoteProps> = ({
           <Text>투표 결과 계산 중입니다...</Text>
         </ModalBody>
         <ModalFooter>
-          {/* 계산이 완료되면 버튼 활성화 */}
           {finalLiar && (
             <Button colorScheme="blue" onClick={() => onClose(finalLiar)}>
               계산 완료

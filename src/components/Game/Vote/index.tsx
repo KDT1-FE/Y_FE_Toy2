@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -12,40 +12,47 @@ import {
   RadioGroup,
   Stack,
 } from "@chakra-ui/react";
-import CalculateVote from "./CalculateVote";
 import useFireFetch from "../../../hooks/useFireFetch";
-import { arrayUnion, serverTimestamp } from "firebase/firestore";
+import { arrayUnion } from "firebase/firestore";
+
+interface GameData {
+  id: string;
+  users: string[];
+}
 
 interface VoteProps {
   onClose: (selectedUser: string) => void;
-  gameData: [];
+  gameData: GameData;
 }
 
-const Vote: React.FC<VoteProps> = ({ onClose, gameData }) => {
+const Vote: React.FC<VoteProps> = ({
+  onClose,
+  gameData,
+}): React.ReactElement => {
   const [selectedUser, setSelectedUser] = useState<string>("");
-  const [showCalculateVote, setShowCalculateVote] = useState<boolean>(false);
   const fireFetch = useFireFetch();
 
   const storedToken = localStorage.getItem("token");
-  const tokenData = JSON.parse(storedToken);
+  const tokenData = storedToken ? JSON.parse(storedToken) : null;
 
   const handleUserChange = (value: string) => {
     setSelectedUser(value);
   };
 
   const handleVoteSubmit = () => {
-    const myId = tokenData.id;
-    fireFetch.updateData("game", gameData.id, {
-      votedFor: arrayUnion({ by: myId, liar: selectedUser }),
-    });
-    console.log("voted for " + selectedUser);
-    // setShowCalculateVote(true);
-    onClose();
+    if (selectedUser !== null) {
+      const myId = tokenData.id;
+      fireFetch.updateData("game", gameData.id, {
+        votedFor: arrayUnion({ by: myId, liar: selectedUser }),
+      });
+      console.log(selectedUser + "에 투표했습니다.");
+      onClose(selectedUser);
+    }
   };
 
   return (
     <>
-      <Modal isOpen={!showCalculateVote} onClose={onClose}>
+      <Modal isOpen={true} onClose={() => onClose(selectedUser)}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>라이어 투표하기</ModalHeader>
@@ -68,13 +75,6 @@ const Vote: React.FC<VoteProps> = ({ onClose, gameData }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {showCalculateVote && (
-        <CalculateVote
-          voteResults={selectedUser}
-          gameId={gameData.id}
-          onClose={onClose}
-        />
-      )}
     </>
   );
 };

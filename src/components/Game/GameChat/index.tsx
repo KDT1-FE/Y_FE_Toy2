@@ -59,12 +59,12 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
     setSelectedUser(selectedUser);
   };
 
-  const handleCalculateVoteClose = (finalLiar: string) => {
-    // finalLiar를 이용하여 특정 동작 수행 (SystemChat)
+  // const handleCalculateVoteClose = (finalLiar: string) => {
+  //   // finalLiar를 이용하여 특정 동작 수행 (SystemChat)
 
-    // 선택한 결과 초기화
-    setSelectedUser("");
-  };
+  //   // 선택한 결과 초기화
+  //   setSelectedUser("");
+  // };
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
@@ -78,23 +78,24 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
-  // useEffect(() => {
-  //   // 유저 입장 메시지 수신
-  //   socket.on("join", (responseData: UserResponse) => {
-  //     const systemMessage = `${responseData.joiners.join(
-  //       ", ",
-  //     )} 님이 입장했습니다.`;
-  //     setMessages([...messages, { id: "system", text: systemMessage }]);
-  //     setUsers(responseData.users);
-  //   });
+  useEffect(() => {
+    // 유저 입장 메시지 수신
+    socket.on("join", (responseData: UserResponse) => {
+      const systemMessage = `${responseData.joiners!.join(
+        ", ",
+      )} 님이 입장했습니다.`;
 
-  //   // 유저 퇴장 메시지 수신
-  //   socket.on("leave", (responseData: UserResponse) => {
-  //     const systemMessage = `${responseData.leaver} 님이 퇴장했습니다.`;
-  //     setMessages([...messages, { id: "system", text: systemMessage }]);
-  //     setUsers(responseData.users);
-  //   });
-  // }, []);
+      setMessages([...messages, { id: "system", text: systemMessage }]);
+      setUsers(responseData.users);
+    });
+
+    // 유저 퇴장 메시지 수신
+    socket.on("leave", (responseData: UserResponse) => {
+      const systemMessage = `${responseData.leaver} 님이 퇴장했습니다.`;
+      setMessages([...messages, { id: "system", text: systemMessage }]);
+      setUsers(responseData.users);
+    });
+  }, []);
 
   // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
   useEffect(() => {
