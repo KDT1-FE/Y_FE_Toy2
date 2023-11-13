@@ -132,7 +132,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-right:
+    padding-right: 3px;
 `;
 
 const StyledProfile = styled.div`
