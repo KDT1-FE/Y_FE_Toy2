@@ -66,7 +66,6 @@ const LobbyListTop = () => {
       const nonMyIdChats = lengthChats.filter((chat: Chats) =>
         chat.users.every((user) => user.id !== userId),
       );
-      console.log(nonMyIdChats);
 
       const randomIndex = Math.floor(Math.random() * nonMyIdChats.length);
       const randomPick = nonMyIdChats[randomIndex];
