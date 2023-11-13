@@ -25,7 +25,7 @@ client.interceptors.request.use(
 );
 
 export const postLogin = async (id: string, password: string) => {
-  const res = await client.post('/login', {
+  const res = await client.post('login', {
     id: id,
     password: password,
   });
@@ -33,12 +33,12 @@ export const postLogin = async (id: string, password: string) => {
 };
 
 export const postJoin = async (joinData: JoinData) => {
-  const res = await client.post('/signup', joinData);
+  const res = await client.post('signup', joinData);
   return res;
 };
 
 export const postRefresh = async () => {
-  const res = await client.post('/refresh');
+  const res = await client.post('refresh');
   return res;
 };
 
@@ -48,13 +48,13 @@ export const getAllUsers = async () => {
 };
 
 export const getUserData = async (userId: string) => {
-  const res = await client.get(`/user?userId=${userId}`);
+  const res = await client.get(`user?userId=${userId}`);
 
   return res.data;
 };
 
 export const patchUserData = async (name: string, picture: string) => {
-  const res = await client.patch(`/user`, { name: name, picture: picture });
+  const res = await client.patch(`user`, { name: name, picture: picture });
   return res;
 };
 
@@ -87,13 +87,13 @@ export const getAllMyChat = async () => {
 };
 
 export const leaveGameRoom = async (chatId: string) => {
-  const res = await client.patch(`/chat/leave`, { chatId: chatId });
+  const res = await client.patch(`chat/leave`, { chatId: chatId });
   console.log(res);
   return res;
 };
 
 export const inviteGameRoom = async (chatId: string, users: string[]) => {
-  const res = await client.patch(`/chat/invite`, {
+  const res = await client.patch(`chat/invite`, {
     chatId: chatId,
     users: users,
   });
@@ -102,7 +102,7 @@ export const inviteGameRoom = async (chatId: string, users: string[]) => {
 };
 
 export const getOnlyGameRoom = async (chatId: string) => {
-  const res = await client.get(`/chat/only?chatId=${chatId}`);
+  const res = await client.get(`chat/only?chatId=${chatId}`);
   console.log(res);
   return res;
 };
