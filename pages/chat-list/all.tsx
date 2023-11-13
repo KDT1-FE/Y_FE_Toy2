@@ -1,4 +1,4 @@
-// import Link from 'next/link';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { IChat } from '@/@types/types';
@@ -25,45 +25,64 @@ export default function AllChatList() {
       router.push(`/chat/${e.target.name}`);
     }
   };
+
+  const checkIncluded = (element: { id: string }) => {
+    //  TODO|서지수 use3 기준이 아닌 로그인 유저 기능으로 수정하기
+    if (element.id === 'user3') {
+      return true;
+    }
+    return false;
+  };
+
+  const routerChat = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+  };
   return (
-    <>
+    <ul>
       <CreateChat />
-      {allChatList.map(chat => (
-        // TODO|서지수  참여한 방이면 바로 이동하도록 수정
-        // <Link
-        //   href={`/chat/${chat.id}`}
-        //   key={chat.id}
-        //   className={styles.container}
-        // >
-        <div key={chat.id} className={styles.container}>
-          <Image
-            alt={`${chat.users[0].username}의 프로필 사진`}
-            src={chat.users[0].picture}
-            width={45}
-            height={45}
-            className={styles.user_profile}
-          />
-          <div className={styles.chatInfo}>
-            <div className={styles.chatWrap}>
-              <div className={styles.chatNameWrap}>
-                <div className={styles.chatName}>{chat.name}</div>
-                <span>{chat.users.length}</span>
+      {allChatList.map(chat => {
+        const isincluded = chat.users.some(checkIncluded);
+        return (
+          <li key={chat.id}>
+            <Link
+              href={`/chat/${chat.id}`}
+              className={styles.container}
+              onClick={isincluded ? undefined : routerChat}
+            >
+              <Image
+                alt={`${chat.users[0].username}의 프로필 사진`}
+                src={chat.users[0].picture}
+                width={45}
+                height={45}
+                className={styles.user_profile}
+              />
+              <div className={styles.chatInfo}>
+                <div className={styles.chatWrap}>
+                  <div className={styles.chatNameWrap}>
+                    <div className={styles.chatName}>{chat.name}</div>
+                    <span>{chat.users.length}</span>
+                  </div>
+                  <div className={styles.chatLastestMesaage}>
+                    {chat.latestMessage?.text}
+                  </div>
+                </div>
+                <div>
+                  <div className={styles.chat_updated}>{chat.updatedAt}</div>
+                  {!isincluded && (
+                    <button
+                      type="button"
+                      name={chat.id}
+                      onClick={participateChat}
+                    >
+                      참여
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className={styles.chatLastestMesaage}>
-                {chat.latestMessage?.text}
-              </div>
-            </div>
-            <div>
-              <div className={styles.chat_updated}>{chat.updatedAt}</div>
-              {/* TODO|서지수 내가 참여하지 않은 채팅방만 표시하도록 수정 */}
-              <button type="button" name={chat.id} onClick={participateChat}>
-                참여
-              </button>
-            </div>
-          </div>
-        </div>
-        // </Link>
-      ))}
-    </>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
