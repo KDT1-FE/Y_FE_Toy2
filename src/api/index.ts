@@ -132,3 +132,13 @@ export const inviteGameRoom = async (
   console.log(res);
   return res;
 };
+
+export const getOnlyGameRoom = async (accessToken: string, chatId: string) => {
+  const res = await client.get(`/chat/only?chatId=${chatId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  console.log(res);
+  return res;
+};

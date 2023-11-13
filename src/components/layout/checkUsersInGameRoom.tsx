@@ -46,7 +46,9 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
 
       socket.on('join', (data) => {
         console.log(data);
-        setUsersInGameRoom(data.users);
+        setTimeout(() => {
+          setUsersInGameRoom(data.users);
+        }, 5000);
       });
 
       socket.on('leave', (data) => {

@@ -4,7 +4,7 @@ import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState } from 'recoil';
 import { chattingIdState } from '../../states/atom';
-import InviteGameRoom from '../../components/template/inviteGameRoom';
+// import InviteGameRoom from '../../components/template/inviteGameRoom';
 import styled from 'styled-components';
 import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
@@ -34,7 +34,7 @@ const GameRoom = () => {
           <RoomInformation>3 / 4</RoomInformation>
           {/* 인원수 추가 */}
         </RoomInfo>
-        <InviteGameRoom chatId={chat}></InviteGameRoom>
+        {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
           <InviteBtn>
             <InviteImage src={inviteImg} alt="Invite" />
