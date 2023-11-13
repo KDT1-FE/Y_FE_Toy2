@@ -58,7 +58,7 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
     }
     const newForm: FbUser = {
       ...signUpForm,
-      hashtag: Array.from(clickedItem),
+      hashtags: Array.from(clickedItem),
     };
     // 회원가입 로직
     await signUp(newForm);

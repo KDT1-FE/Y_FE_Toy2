@@ -54,7 +54,8 @@ const useMutationSignUp = (type: string) => {
         language: userData.language,
         intro: userData.intro,
         level: userData.level,
-        hashtag: userData.hashtag,
+        hashtags: userData.hashtags,
+        correct: 0,
       };
       await setDoc(docRef, userInfo);
     } catch (error) {
