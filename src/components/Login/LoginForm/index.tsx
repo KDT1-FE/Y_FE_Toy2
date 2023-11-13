@@ -12,9 +12,7 @@ import {
 import styled from "styled-components";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import useFetch from "../../../hooks/useFetch";
-import { userState } from "../../../recoil/atoms/userState";
 
 const SignUpButton = styled.button`
   color: #e2e8f0;
