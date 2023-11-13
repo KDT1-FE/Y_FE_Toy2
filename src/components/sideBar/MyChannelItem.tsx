@@ -23,10 +23,13 @@ const MyChannelItem = ({ myChannelName, isPrivate, channelId }: Props) => {
   return (
     <ChakraLink as={ReactRouterLink} to={`/chats/${channelId}`}>
       <Flex
+        overflow="hidden"
         align="center"
         mx="1rem"
         my="0.5rem"
         p="0.5rem"
+        borderRadius="md"
+        fontWeight={isActive ? 'bold' : 'normal'}
         bg={isActive ? 'blue.500' : 'gray.50'}
         color={isActive ? 'white' : 'black'}
       >
@@ -35,7 +38,7 @@ const MyChannelItem = ({ myChannelName, isPrivate, channelId }: Props) => {
         ) : (
           <ViewIcon boxSize="1.4rem" />
         )}
-        <Box ml="1rem" mr="0.5rem">
+        <Box ml="1rem" mr="0.5rem" isTruncated>
           {title}
         </Box>
       </Flex>
