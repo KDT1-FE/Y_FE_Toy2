@@ -3,7 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, allRoomState } from '../../states/atom';
-import { getAllGameRooms, leaveGameRoom, participateGameRoom } from '../../api';
+import {
+  getAllGameRooms,
+  // getOnlyGameRoom,
+  leaveGameRoom,
+  participateGameRoom,
+} from '../../api';
 import { useNavigate } from 'react-router-dom';
 import usePollingData from '../template/usePollingData';
 import Pagination from 'react-js-pagination';
@@ -105,6 +110,9 @@ const CheckGameRoom = () => {
             navigate('/');
           }
         }
+      } finally {
+        // const res = await getOnlyGameRoom(chatId, accessToken);
+        // console.log(res);
       }
     }
   };
