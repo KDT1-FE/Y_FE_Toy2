@@ -7,7 +7,7 @@ interface SystemChatProps {
 
 const SystemChat: React.FC<SystemChatProps> = ({ text }) => {
   return (
-    <Box textAlign="center" bgColor="gray.500">
+    <Box textAlign="center" bgColor="gray.300" p={1} borderRadius={5} my={2}>
       {text}
     </Box>
   );

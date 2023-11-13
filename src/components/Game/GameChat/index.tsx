@@ -48,13 +48,22 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
   const [users, setUsers] = useState<string[]>([]);
   console.log("users: ", users);
   const [showVoteModal, setShowVoteModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<string | null>("");
 
   const handleOpenVoteModal = () => {
     setShowVoteModal(true);
   };
 
-  const handleCloseVoteModal = () => {
+  const handleCloseVoteModal = (selectedUser: string) => {
     setShowVoteModal(false);
+    setSelectedUser(selectedUser);
+  };
+
+  const handleCalculateVoteClose = (finalLiar: string) => {
+    // finalLiar를 이용하여 특정 동작 수행 (SystemChat)
+
+    // 선택한 결과 초기화
+    setSelectedUser("");
   };
 
   useEffect(() => {
@@ -125,7 +134,10 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
           투표하기
         </Button>
         {showVoteModal && (
-          <Vote gameData={gameData.users} onClose={handleCloseVoteModal} />
+          <Vote gameData={gameData} onClose={handleCloseVoteModal} />
+        )}
+        {selectedUser && (
+          <SystemChat text={`${selectedUser}님이 라이어로 선택되었습니다.`} />
         )}
       </CardBody>
       <InputGroup size="md">
