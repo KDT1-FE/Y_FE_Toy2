@@ -17,8 +17,6 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { getUserData, patchUserData } from '../../api';
-import { useRecoilState } from 'recoil';
-import { accessTokenState } from '../../states/atom';
 import { disconnectLoginSocket } from '../../api/socket';
 import { useNavigate } from 'react-router-dom';
 
@@ -33,7 +31,6 @@ const UserProfile = () => {
   const [myImg, setMyImg] = useState('');
 
   const userId = localStorage.getItem('id');
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
 
   const navigate = useNavigate();
 
@@ -41,7 +38,7 @@ const UserProfile = () => {
     const fetchData = async () => {
       if (userId) {
         try {
-          const res = await getUserData(accessToken, userId);
+          const res = await getUserData(userId);
           console.log(res);
           setMyID(res.user.id);
           setMyname(res.user.name);
@@ -75,7 +72,7 @@ const UserProfile = () => {
     e.preventDefault();
     try {
       // 닉네임중복 핸들링 로직 필요
-      await patchUserData(accessToken, name, picture);
+      await patchUserData(name, picture);
       setMyname(name);
       setMyImg(picture);
       alert('수정에 성공했습니다.');
@@ -89,8 +86,7 @@ const UserProfile = () => {
   const handleUserLogout = () => {
     try {
       disconnectLoginSocket();
-      localStorage.removeItem('refreshToken');
-      setAccessToken('');
+      localStorage.removeItem('id');
       alert('로그아웃에 성공했습니다');
       navigate('/');
     } catch (error) {

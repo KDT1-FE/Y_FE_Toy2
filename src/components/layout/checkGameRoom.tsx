@@ -1,8 +1,8 @@
 // checkGameRoom.tsx
 
 import { useState, useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { accessTokenState, allRoomState } from '../../states/atom';
+import { useRecoilState } from 'recoil';
+import { allRoomState } from '../../states/atom';
 import {
   getAllGameRooms,
   // getOnlyGameRoom,
@@ -35,7 +35,6 @@ import {
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
-  const accessToken: any = useRecoilValue(accessTokenState);
 
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -54,7 +53,7 @@ const CheckGameRoom = () => {
 
   const fetchData = async () => {
     try {
-      const allRoomsData = await getAllGameRooms(accessToken);
+      const allRoomsData = await getAllGameRooms();
       setTotalItemsCount(allRoomsData.chats.length);
 
       // 방번호 넣기
@@ -82,7 +81,7 @@ const CheckGameRoom = () => {
     }
   };
 
-  usePollingData(fetchData, [accessToken, currentPage]);
+  usePollingData(fetchData, [currentPage]);
 
   const handleParticipate = async (numberOfPeople: number, chatId: any) => {
     if (numberOfPeople === 4) {
@@ -92,7 +91,7 @@ const CheckGameRoom = () => {
       console.log(showAlert);
     } else {
       try {
-        await participateGameRoom(chatId, accessToken);
+        await participateGameRoom(chatId);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
         console.log(error.response.data.message);
@@ -101,7 +100,7 @@ const CheckGameRoom = () => {
         } else if (error.response.data.message === 'Already participated') {
           alert('이미 참여한 방입니다. 로그아웃 합니다.');
           try {
-            await leaveGameRoom(accessToken, chatId);
+            await leaveGameRoom(chatId);
           } catch (error) {
             console.error(error);
           } finally {
@@ -111,7 +110,7 @@ const CheckGameRoom = () => {
           }
         }
       } finally {
-        // const res = await getOnlyGameRoom(chatId, accessToken);
+        // const res = await getOnlyGameRoom(chatId);
         // console.log(res);
       }
     }

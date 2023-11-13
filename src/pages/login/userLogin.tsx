@@ -18,15 +18,16 @@ import {
   Fade,
 } from '@chakra-ui/react';
 import { useRecoilState } from 'recoil';
-import { accessTokenState, onlineUserState } from '../../states/atom';
+import { onlineUserState } from '../../states/atom';
 import { postLogin } from '../../api/index';
 import { loginSocket } from '../../api/socket';
+import { setCookises } from '../../util/util';
+
 function UserLogin() {
   const navigate = useNavigate();
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const [__, setAccessToken] = useRecoilState(accessTokenState);
   const [showAlert, setShowAlert] = useState({
     active: false,
     message: '',
@@ -39,13 +40,12 @@ function UserLogin() {
     try {
       const res = await postLogin(id, password);
       const { accessToken, refreshToken } = res.data;
-      setAccessToken(accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      setCookises(accessToken, refreshToken);
       localStorage.setItem('id', id);
 
       alert('로그인에 성공했습니다.');
 
-      loginSocket(accessToken, (data: any) => {
+      loginSocket((data: any) => {
         console.log('Data received from socket:', data);
         setOnlineUsers(data);
         console.log(onlineUsers);

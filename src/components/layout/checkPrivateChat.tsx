@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getAllMyChat } from '../../api';
 import {
-  accessTokenState,
   myUserDataState,
   privateChatState,
   onlineUserState,
@@ -12,7 +11,7 @@ import ChattingDetail from './chattingDetail';
 
 const CheckPrivateChat = () => {
   const [allMyChat, setAllMyChat] = useRecoilState(privateChatState);
-  const accessToken: any = useRecoilValue(accessTokenState);
+
   const myUserData: any = useRecoilValue(myUserDataState);
   const onLine = useRecoilValue(onlineUserState);
 
@@ -23,7 +22,7 @@ const CheckPrivateChat = () => {
   const fetchData = async () => {
     if (myUserData) {
       try {
-        let allMyChatData = await getAllMyChat(accessToken);
+        let allMyChatData = await getAllMyChat();
         allMyChatData = allMyChatData.chats;
 
         // 비공개방만 필터
