@@ -1,15 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ProfileEdit from '@/components/Mypage/ProfileEdit';
 import Navigation from '@/components/Navigation';
 import Profile from '@/components/Mypage/Profile';
 import styled from 'styled-components';
 
 const page = () => {
-    const accessToken = sessionStorage.getItem('accessToken');
+    const [isRightWay, setIsRightWay] = useState<boolean>(false);
 
-    if (!accessToken) {
+    useEffect(() => {
+        const accessToken = sessionStorage.getItem('accessToken');
+
+        if (accessToken) {
+            setIsRightWay(true);
+        } else {
+            setIsRightWay(false);
+        }
+    }, []);
+
+    if (!isRightWay) {
         return null;
     } else {
         return (
