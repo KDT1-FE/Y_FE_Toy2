@@ -1,13 +1,17 @@
 import instance from './axios';
 
 const chatListAPI = {
-  // 로그인
+  // 모든 채팅 조회
   getAllChatList() {
     return instance.get('/chat/all');
   },
-  // 회원가입
+  // 나의 채팅 조회
   getMyChatList() {
     return instance.get('/chat');
+  },
+  // 채팅 참여
+  participateChat(chatId: string) {
+    return instance.patch('/chat/participate', { chatId });
   },
 };
 

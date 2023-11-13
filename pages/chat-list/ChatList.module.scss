@@ -17,9 +17,13 @@
   justify-content: space-between;
 }
 
-.chatNameWrap {
+.chatWrap {
   display: flex;
   flex-direction: column;
+}
+
+.chatNameWrap {
+  display: flex;
 }
 
 .chatName {
