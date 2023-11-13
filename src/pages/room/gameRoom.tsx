@@ -39,7 +39,7 @@ const GameRoom = () => {
           <RoomInformation>방 번호</RoomInformation>
           <RoomInformation>{roomId}</RoomInformation>
           <RoomInformation>인원 수 </RoomInformation>
-          <RoomInformation>{users + 1} / 4</RoomInformation>
+          <RoomInformation>{users} / 4</RoomInformation>
           {/* 인원수 추가 */}
         </RoomInfo>
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
