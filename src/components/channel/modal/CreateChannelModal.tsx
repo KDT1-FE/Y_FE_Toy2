@@ -18,7 +18,10 @@ import { ChangeEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { channelState } from '../../../recoil/channel.atom';
 import { createChannel } from '../../../api/channel';
-import { createChannelNameWithCategory } from '../../../utils';
+import {
+  checkChannelName,
+  createChannelNameWithCategory,
+} from '../../../utils';
 import ChannelModalUserList from './ChannelModalUserList';
 
 const CreateChannelModal = () => {
@@ -26,9 +29,11 @@ const CreateChannelModal = () => {
   const [channel, setChannel] = useRecoilState(channelState);
   const [users, setUsers] = useState<string[]>([]);
   const [isPrivate, setPrivate] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChannelName = (e: ChangeEvent<HTMLInputElement>) => {
     setChannel({ ...channel, title: e.target.value });
+    setErrorMessage(checkChannelName(e.target.value).errorMessage);
   };
 
   const handleCreateChannel = () => {
@@ -37,7 +42,13 @@ const CreateChannelModal = () => {
       users,
       isPrivate,
     };
-    console.log(channelData);
+
+    const isValidTitle = checkChannelName(channel.title);
+
+    if (!isValidTitle.isValid) {
+      alert(isValidTitle.errorMessage);
+      return;
+    }
 
     createChannel(channelData);
     onClose();
@@ -71,6 +82,9 @@ const CreateChannelModal = () => {
               onChange={handleChannelName}
               mb="2"
             />
+            <Text fontSize="sm" color="red.500" mb="2">
+              {errorMessage}
+            </Text>
             <CategoryInput />
             <ChannelModalUserList setUsers={setUsers} />
           </ModalBody>
