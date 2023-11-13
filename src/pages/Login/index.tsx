@@ -7,7 +7,7 @@ import SignUpModal from "../../components/Login/SignUpModal/index";
 import LoginForm from "../../components/Login/LoginForm";
 import styled from "styled-components";
 import backgroundImage from "../../assets/bg.png";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 const Background = styled.div`
   background-image: url(${backgroundImage});
@@ -25,9 +25,9 @@ const Background = styled.div`
 const Title = styled.div`
   color: #000;
   font-family: "Kelly Slab", serif;
-  font-size: 80px;
+  font-size: 6vw;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.408px;
   display: flex;
@@ -39,6 +39,15 @@ const Title = styled.div`
   margin-right: 20px;
   margin-top: 120px;
   align-self: flex-start;
+`;
+
+const Copyright = styled.div`
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: right;
+  padding-right: 18vw;
+  color: #999;
 `;
 
 const Login = () => {
@@ -111,6 +120,9 @@ const Login = () => {
           <SignUpModal isOpen={isSignUpModalOpen} onClose={toggleSignUpModal} />
         )}
       </Flex>
+      <Copyright>
+        <Text>&copy; {new Date().getFullYear()} 빼빼로조</Text>
+      </Copyright>
     </Background>
   );
 };
