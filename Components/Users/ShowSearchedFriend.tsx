@@ -41,7 +41,7 @@ const ShowSearchedFriend = ({
 			})}
 			{isUpToFour ? (
 				<div
-					className="rounded-full text-center py-3"
+					className="rounded-full text-center py-3 cursor-pointer"
 					onClick={() => {
 						setIsShowMore(true);
 					}}
