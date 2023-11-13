@@ -7,6 +7,8 @@ import { fetchJoin } from '@/app/join/join.utils';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
+import Image from 'next/image';
+import DropZone from './DropZone/DropZone';
 // import Image from 'next/image';
 
 type RequestBody = {
@@ -50,7 +52,6 @@ const JoinForm = () => {
 	};
 
 	const image = watch('picture');
-	console.log(image);
 
 	return (
 		// 전체
@@ -60,8 +61,11 @@ const JoinForm = () => {
 				{/* 이미지 */}
 				<div className="mb-10">
 					{image ? (
-						<img
+						<Image
 							src={image}
+							alt="Picture of the author"
+							width={100}
+							height={100}
 							className="h-[200px] w-[200px] rounded-full bg-blue-500 "
 						/>
 					) : (
@@ -156,6 +160,7 @@ const JoinForm = () => {
 							/>
 						</div>
 					</div>
+					<DropZone />
 					<Button type="submit" className="w-full bg-main mt-10">
 						회원가입
 					</Button>
