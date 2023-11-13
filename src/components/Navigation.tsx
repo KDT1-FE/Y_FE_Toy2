@@ -20,8 +20,8 @@ export default function Navigation() {
             <NavigationAnchor href="allchats">
                 <PiChatsCircleFill size="37" color={path == 'allchats' ? '#00956e' : '#dbdbdb'} />
             </NavigationAnchor>
-            <NavigationAnchor href="#">
-                <BsThreeDots size="35" color={path == '#' ? '#00956e' : '#dbdbdb'} />
+            <NavigationAnchor href="mypage">
+                <BsThreeDots size="35" color={path == 'mypage' ? '#00956e' : '#dbdbdb'} />
             </NavigationAnchor>
         </NavigationContainer>
     );

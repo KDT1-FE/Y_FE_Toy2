@@ -4,3 +4,18 @@ export const ChatingModalToggle = atom({
     key: 'ChatingModalToggle',
     default: false,
 });
+
+interface User {
+    id: string;
+    name: string;
+    picture: string;
+}
+
+export const UserProfile = atom<User>({
+    key: 'UserProfile',
+    default: {
+        id: '',
+        name: '',
+        picture: '',
+    },
+});
