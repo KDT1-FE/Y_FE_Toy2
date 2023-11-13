@@ -20,14 +20,30 @@ const Container = styled.div`
 
 export default function Game() {
   const [words, setWords] = useState<string[] | []>([]);
+  const [peoples, setPeoples] = useState<{ name: string; correct: number }[]>(
+    [],
+  );
+  const [rate, setRate] = useState<number>(0);
 
   return (
     <Container>
       <ScreenWrapper>
-        <Rating />
+        <Rating
+          peoples={peoples}
+          setPeoples={setPeoples}
+          rate={rate}
+          setRate={setRate}
+        />
         <MainBoard setWords={setWords} words={words} />
       </ScreenWrapper>
-      <InputWord setWords={setWords} words={words} />
+      <InputWord
+        words={words}
+        setWords={setWords}
+        peoples={peoples}
+        setPeoples={setPeoples}
+        rate={rate}
+        setRate={setRate}
+      />
     </Container>
   );
 }

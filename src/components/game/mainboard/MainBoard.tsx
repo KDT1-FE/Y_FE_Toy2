@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, useState } from 'react';
 import { Visibility } from '@mui/icons-material';
 import { WordsType } from './InputWord';
 import { Answers, BoardFrame, MainWrapper, NoticeBox } from './boardStyle';

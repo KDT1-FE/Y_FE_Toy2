@@ -2,11 +2,14 @@ import React, { Dispatch, useState } from 'react';
 import styled from 'styled-components';
 import { Send } from '@mui/icons-material';
 import search from './searchWord';
+import { PeoplesType, RateType } from '../rating/Rating';
 
 export type WordsType = {
   words: string[];
   setWords: Dispatch<React.SetStateAction<string[]>>;
 };
+
+type Props = WordsType & PeoplesType & RateType;
 
 const InputBox = styled.form`
   width: 100%;
@@ -48,7 +51,14 @@ const GameInput = styled.input`
   }
 `;
 
-export default function InputWord({ words, setWords }: WordsType) {
+export default function InputWord({
+  words,
+  setWords,
+  peoples,
+  setPeoples,
+  rate,
+  setRate,
+}: Props) {
   const [existWord, setExistWord] = useState<string[]>();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const inputElement = (e.target as HTMLFormElement).querySelector('input');
@@ -58,8 +68,9 @@ export default function InputWord({ words, setWords }: WordsType) {
       if (words.length === 0) {
         setWords([...words, inputValue]);
         setExistWord([inputValue]);
+        setRate(rate + 1);
         inputElement.value = '';
-        return;
+        return true;
       }
       if (
         words[words.length - 1].charAt(words[words.length - 1].length - 1) ===
@@ -67,19 +78,21 @@ export default function InputWord({ words, setWords }: WordsType) {
       ) {
         if (existCheck) {
           alert('이미 사용된 단어입니다');
-          return;
         }
         setWords([...words, inputValue]);
+        setRate(rate + 1);
+        inputElement.value = '';
         if (existWord) {
           setExistWord([...existWord, inputValue]);
+          return true;
         }
-        inputElement.value = '';
       } else {
         alert('끝말이 이어지지 않습니다');
       }
     } else {
       alert('단어를 입력해주세요');
     }
+    return false;
   };
 
   return (
@@ -94,8 +107,6 @@ export default function InputWord({ words, setWords }: WordsType) {
             /^(?=(?:.*[a-z]){3,})(?!.*([a-z])\1{2,})[a-z]{3,10}$/.test(
               inputValue,
             );
-          console.log(isPossible);
-
           if (isPossible) {
             if (isRealWord) {
               handleSubmit(e);
