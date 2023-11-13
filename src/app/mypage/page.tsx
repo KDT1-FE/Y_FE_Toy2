@@ -7,14 +7,20 @@ import Profile from '@/components/Mypage/Profile';
 import styled from 'styled-components';
 
 const page = () => {
-    return (
-        <UsersWrap>
-            <HeaderText>마이 페이지</HeaderText>
-            <Profile />
-            <ProfileEdit />
-            <Navigation />
-        </UsersWrap>
-    );
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    if (!accessToken) {
+        return null;
+    } else {
+        return (
+            <UsersWrap>
+                <HeaderText>마이 페이지</HeaderText>
+                <Profile />
+                <ProfileEdit />
+                <Navigation />
+            </UsersWrap>
+        );
+    }
 };
 
 export default page;
