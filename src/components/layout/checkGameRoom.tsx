@@ -1,8 +1,10 @@
 // checkGameRoom.tsx
 
 import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { allRoomState } from '../../states/atom';
+
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { accessTokenState, allRoomState, usersInRoom } from '../../states/atom';
+
 import {
   getAllGameRooms,
   // getOnlyGameRoom,
@@ -31,10 +33,15 @@ import {
   disconnectChattingSocket,
   disconnectLoginSocket,
 } from '../../api/socket';
+import { useSetRecoilState } from 'recoil';
+import { roomIdState } from '../../states/atom';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
+
+  const setRoomId = useSetRecoilState(roomIdState);
+  const setUsersInRoom = useSetRecoilState(usersInRoom);
 
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -83,7 +90,11 @@ const CheckGameRoom = () => {
 
   usePollingData(fetchData, [currentPage]);
 
-  const handleParticipate = async (numberOfPeople: number, chatId: any) => {
+  const handleParticipate = async (
+    numberOfPeople: number,
+    chatId: any,
+    roomId: number,
+  ) => {
     if (numberOfPeople === 4) {
       const errorMessage = `방이 꽉 찼어요.`;
       const errorType = 'full';
@@ -91,7 +102,9 @@ const CheckGameRoom = () => {
       console.log(showAlert);
     } else {
       try {
-        await participateGameRoom(chatId);
+        await participateGameRoom(chatId, accessToken);
+        setRoomId(roomId);
+        setUsersInRoom(numberOfPeople);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
         console.log(error.response.data.message);
@@ -152,9 +165,14 @@ const CheckGameRoom = () => {
                 backgroundColor:
                   element.users.length !== 4 ? 'gray.100' : 'gray.300',
               }}
-              onClick={() =>
-                handleParticipate(element.users.length, element.id)
-              }>
+              onClick={() => {
+                // handleSelectRoom(element?.index);
+                handleParticipate(
+                  element.users.length,
+                  element.id,
+                  element?.index,
+                );
+              }}>
               <Flex
                 lineHeight="50px"
                 fontSize={14}

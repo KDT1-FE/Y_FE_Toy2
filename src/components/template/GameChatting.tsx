@@ -13,6 +13,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   privateChatDetail,
   privateChatNew,
+
+  accessTokenState,
   myUserDataState,
 } from '../../states/atom';
 import { getCookie } from '../../util/util';
@@ -22,13 +24,15 @@ interface ChattingDetailProps {
 }
 
 const GameChatting = ({ chatId }: ChattingDetailProps) => {
-  console.log(chatId);
+
   const [postData, setPostData] = useState('');
   const [socket, setSocket] = useState<any>(null);
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
   const [lastDate, setLastDate] = useState('');
+
   const accessToken: any = getCookie('accessToken');
+
   const myUserData: any = useRecoilValue(myUserDataState);
   useEffect(() => {
     try {
@@ -78,7 +82,8 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
-  }, [chatId]);
+
+  }, [accessToken, chatId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPostData(e.target.value);
@@ -103,7 +108,9 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
             <div
               id="message"
               className={element.userId === myUserData.id ? 'mine' : ''}>
+
               <p style={{ color: 'red' }}>{element.text}</p>
+
             </div>
             <p>{element.time}</p>
           </div>
@@ -118,7 +125,9 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
             <div
               id="message"
               className={element.userId === myUserData.id ? 'mine' : ''}>
+
               {/* {"mine이면 파란색, ''이면 빨간색"} */}
+
               <p>{element.text}</p>
             </div>
             <p>{element.time}</p>

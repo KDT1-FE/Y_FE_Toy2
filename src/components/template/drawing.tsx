@@ -65,7 +65,7 @@ const Drawing = () => {
 
     ctx!.fillStyle = 'white';
     ctx!.fillRect(0, 0, 800, 450);
-    drawSocket.emit('erase');
+    drawSocket.emit('erase', roomId);
   };
 
   /// 굵기 변경 함수
