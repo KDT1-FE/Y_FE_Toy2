@@ -36,7 +36,9 @@ export default function Navigation() {
                 </NavigationAnchor>
             </NavigationBox>
             <NavigationBox>
-                <NavigationAnchor href="#">{path == 'mypage' ? <MyPageActiveIcon /> : <MyPageIcon />}</NavigationAnchor>
+                <NavigationAnchor href="mypage">
+                    {path == 'mypage' ? <MyPageActiveIcon /> : <MyPageIcon />}
+                </NavigationAnchor>
             </NavigationBox>
         </NavigationContainer>
     );
