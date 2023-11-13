@@ -21,7 +21,7 @@ export function getCookie(name: string): string | undefined {
     .find((row) => row.startsWith(`${name}=`))
     ?.split('=')[1];
 
-  console.log(cookieValue);
+  // console.log(cookieValue);
 
   return cookieValue || undefined;
 }
@@ -41,10 +41,10 @@ export const getAllUsersData = async () => {
 export const getMyUserData = async (userId: string) => {
   try {
     const res = await getUserData(userId);
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (e) {
-    console.error(e);
+    // console.error(e);
     alert('사용자 정보를 가져오는데 실패했습니다.');
   }
 };
@@ -52,7 +52,7 @@ export const getMyUserData = async (userId: string) => {
 export const postRefreshToken = async () => {
   try {
     const res = await postRefresh();
-    console.log(res.data);
+    // console.log(res.data);
     alert('토큰 재발급에 성공했습니다.');
   } catch (e) {
     console.error(e);
@@ -70,7 +70,7 @@ export const titleAction = async (navigate: NavigateFunction, id: string) => {
     try {
       await leaveGameRoom(id);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       disconnectChattingSocket();
       navigate('/lobby');

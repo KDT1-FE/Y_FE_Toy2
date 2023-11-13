@@ -20,9 +20,8 @@ import { getCookie } from '../../util/util';
 interface ChattingDetailProps {
   chatId: string;
 }
-
 const GameChatting = ({ chatId }: ChattingDetailProps) => {
-  console.log(chatId);
+  // console.log(chatId);
   const [postData, setPostData] = useState('');
   const [socket, setSocket] = useState<any>(null);
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
@@ -30,13 +29,14 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [lastDate, setLastDate] = useState('');
   const accessToken: any = getCookie('accessToken');
   const myUserData: any = useRecoilValue(myUserDataState);
+  const [currentMessageObject, setCurrentMessageObject] = useState(null);
   useEffect(() => {
     try {
       const newSocket = chatSocket(accessToken, chatId);
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
-        console.log('Fetched messages:', messageData.messages);
+        // console.log('Fetched messages:', messageData.messages);
 
         // createdAt을 기준으로 시간순서 정렬
         const sortedMessages = sortCreatedAt(messageData.messages);
@@ -58,6 +58,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
 
       newSocket.on('message-to-client', (messageObject) => {
         console.log(messageObject);
+        setCurrentMessageObject(messageObject);
         setNewChat((newChat: any) => {
           // 중복 날짜, 시간 null로 반환
           const modifyDateArray = modifyDate([
@@ -70,7 +71,6 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
           return modifyDateArray;
         });
       });
-
       return () => {
         setNewChat([]);
         newSocket.disconnect();

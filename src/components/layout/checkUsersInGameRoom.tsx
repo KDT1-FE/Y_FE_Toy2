@@ -45,18 +45,18 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       });
 
       socket.on('join', (data) => {
-        console.log(data);
+        // console.log(data);
         // setTimeout(() => {
         setUsersInGameRoom(data.users);
         // }, 5000);
       });
 
       socket.on('leave', (data) => {
-        console.log(data);
+        // console.log(data);
         setUsersInGameRoom(data.users);
       });
     } catch (error) {
-      console.error('Error retrieving data:', error);
+      // console.error('Error retrieving data:', error);
     }
   }, [chatId]);
   useEffect(() => {
@@ -79,7 +79,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
           const res = await getUserData(userId);
           profilesArray.push(res);
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          // console.error('Error fetching user data:', error);
         }
         // }
       }
@@ -89,7 +89,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
 
     fetchUserProfiles();
   }, [UsersInGameRoom, setProfiles]);
-  console.log(profiles);
+  // console.log(profiles);
   return (
     <>
       {profiles.map((element, index) => (

@@ -64,7 +64,7 @@ const CheckGameRoom = () => {
           index: index + 1,
         })),
       };
-      console.log(plusIndex);
+      // console.log(plusIndex);
 
       // 배열을 역순으로 만들기 (최신순)
       const reversedRooms = plusIndex.chats.reverse();
@@ -88,13 +88,13 @@ const CheckGameRoom = () => {
       const errorMessage = `방이 꽉 찼어요.`;
       const errorType = 'full';
       setShowAlert({ active: true, message: errorMessage, type: errorType });
-      console.log(showAlert);
+      // console.log(showAlert);
     } else {
       try {
         await participateGameRoom(chatId);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
-        console.log(error.response.data.message);
+        // console.log(error.response.data.message);
         if (error.response.data.message === 'Chat not found') {
           alert('방이 사라졌어요');
         } else if (error.response.data.message === 'Already participated') {
@@ -102,7 +102,7 @@ const CheckGameRoom = () => {
           try {
             await leaveGameRoom(chatId);
           } catch (error) {
-            console.error(error);
+            // console.error(error);
           } finally {
             disconnectChattingSocket();
             disconnectLoginSocket();

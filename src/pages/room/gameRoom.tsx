@@ -1,58 +1,144 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
-import { useRecoilState } from 'recoil';
-import { chattingIdState } from '../../states/atom';
-// import InviteGameRoom from '../../components/template/inviteGameRoom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { chattingIdState, onlineUserStateInGameRoom } from '../../states/atom';
 import styled from 'styled-components';
 import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
-// import CheckUser from '../../components/template/CheckUser';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
+import CheckNums from '../../util/checkNums';
+import { gameSocket } from '../../api/socket';
 
-const GameRoom = () => {
-  const { id } = useParams();
+interface AnswerFormProps {
+  onSubmit: (answer: string) => void;
+}
+
+const AnswerForm: React.FC<AnswerFormProps> = ({ onSubmit }) => {
+  const [answer, setAnswer] = useState('');
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    onSubmit(answer);
+    setAnswer('');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        정답:
+        <input
+          type="text"
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+        />
+      </label>
+      <button type="submit">제출</button>
+    </form>
+  );
+};
+
+const GameRoom: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const [chat, setChat] = useRecoilState(chattingIdState);
+  const [buttonVisible, setButtonVisible] = useState(true);
+  const [winner, setWinner] = useState('');
+  const users = useRecoilValue(onlineUserStateInGameRoom);
+  const [showAnswerForm, setShowAnswerForm] = useState(false);
+  const [solution, setSolution] = useState('');
+  const [criteria, setCriteria] = useState(0);
+  let start = false;
 
   useEffect(() => {
     if (id) {
       setChat(id.substring(1));
     }
   }, [id, setChat]);
-  // controlGameRoomReload(chat);
+
   controlBack();
-  console.log(chat);
+  let shouldStartGame = CheckNums();
+  useEffect(() => {
+    if (shouldStartGame) {
+      const myId = localStorage.getItem('id');
+      start = true;
+      const socket = gameSocket.connect();
+
+      socket.emit('game', {
+        chatID: id,
+        captain: myId,
+        solution: solution,
+        winner,
+        start,
+      });
+
+      socket.on('game', (data) => {
+        console.log('Received data:', data);
+        if (data.captain === myId) {
+          setShowAnswerForm(true);
+        }
+        // 만약 data.solution과 채팅.text가 같다면 winner를 채팅.userId 변경
+        // if (data.start === true) {
+        // }
+        if (data.winner.length > 0) {
+          alert('승자가 정해졌어요');
+          socket.off('game');
+        }
+      });
+
+      setButtonVisible(false);
+    }
+
+    return () => {
+      gameSocket.off('game');
+    };
+  }, [criteria]);
+  const handleGameStart = () => {
+    setCriteria((prevCriteria) => prevCriteria + 1);
+  };
+
+  const handleAnswerSubmit = (answer: string) => {
+    setSolution(answer);
+    setShowAnswerForm(false);
+  };
 
   return (
-    <Game>
-      <RoomHeader>
-        <RoomInfo>
-          <RoomInformation>방 번호</RoomInformation>
-          <RoomInformation>{id?.slice(1, 5)}</RoomInformation>
-          <RoomInformation>인원 수 </RoomInformation>
-          <RoomInformation>3 / 4</RoomInformation>
-          {/* 인원수 추가 */}
-        </RoomInfo>
-        {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
-        <BtnGroup>
-          <InviteBtn>
-            <InviteImage src={inviteImg} alt="Invite" />
-            <div>초대하기</div>
-          </InviteBtn>
-          <LeaveGameRoom chatId={chat}></LeaveGameRoom>
-        </BtnGroup>
-      </RoomHeader>
+    <>
+      {showAnswerForm && <AnswerForm onSubmit={handleAnswerSubmit} />}
+      <Game>
+        <RoomHeader>
+          <RoomInfo>
+            <RoomInformation>방 번호</RoomInformation>
+            <RoomInformation>{id?.slice(1, 5)}</RoomInformation>
+            <RoomInformation>인원 수 </RoomInformation>
+            <RoomInformation>3 / 4</RoomInformation>
+            {/* 인원수 추가 */}
+          </RoomInfo>
+          {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
+          <BtnGroup>
+            <InviteBtn>
+              <InviteImage src={inviteImg} alt="Invite" />
+              <div>초대하기</div>
+            </InviteBtn>
+            {shouldStartGame && (
+              <button onClick={handleGameStart}>게임 시작</button>
+            )}
+            <LeaveGameRoom chatId={chat}></LeaveGameRoom>
+          </BtnGroup>
+        </RoomHeader>
 
-      <RoomMain>
-        <Drawing />
+        <RoomMain>
+          <Drawing />
 
-        <GameChatting chatId={chat} />
-      </RoomMain>
-      <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
-      <UserList>{/* <CheckUser /> */}</UserList>
-    </Game>
+          <GameChatting chatId={chat} />
+        </RoomMain>
+        <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
+        {/* <UserList>
+          <CheckUser />
+        </UserList> */}
+      </Game>
+    </>
   );
 };
 
@@ -138,5 +224,4 @@ const RoomMain = styled.div`
 const UserList = styled.div`
   margin-top: 20px;
 `;
-
 export default GameRoom;

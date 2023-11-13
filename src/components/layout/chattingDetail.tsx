@@ -31,7 +31,7 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
-        console.log('Fetched messages:', messageData.messages);
+        // console.log('Fetched messages:', messageData.messages);
 
         // createdAt을 기준으로 시간순서 정렬
         const sortedMessages = sortCreatedAt(messageData.messages);
@@ -52,7 +52,7 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
       });
 
       newSocket.on('message-to-client', (messageObject) => {
-        console.log(messageObject);
+        // console.log(messageObject);
         setNewChat((newChat: any) => {
           // 중복 날짜, 시간 null로 반환
           const modifyDateArray = modifyDate([
@@ -71,7 +71,7 @@ const ChattingDetail = ({ chatId }: ChattingDetailProps) => {
         newSocket.disconnect();
       };
     } catch (error) {
-      console.error('Error retrieving data:', error);
+      // console.error('Error retrieving data:', error);
     }
   }, [chatId]);
 
