@@ -22,7 +22,7 @@ import { accessTokenState } from '../../states/atom';
 import { disconnectLoginSocket } from '../../api/socket';
 import { useNavigate } from 'react-router-dom';
 
-const UserProfile: React.FC<{ userImg: string }> = () => {
+const UserProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [name, setName] = useState('');
   const [picture, setPicture] = useState('');
