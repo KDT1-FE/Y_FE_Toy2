@@ -1,156 +1,211 @@
 const hostData = [
   {
-    id: 'aaaaa',
-    name: 'herr22ddffgs',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '경주',
-    address: '경주 야놀자시 패캠구 프론트로 710-1',
-    detail: '짱짱 멋진 숙소',
+    id: 'host0',
+    location: '부산',
+    address: '패캠구 프론트로 710-0',
+    description: ` 
+    고품격 인테리어, 최상의 서비스를 갖춘 이 곳에서 가족, 연인, 친구들과 특별한 추억 만들어보세요.
+    풍성하고 배부른 체크인 이벤트 다수 !
+    광안리해수욕장에서 도보 1분 거리에 위치해 있습니다.
+    `,
+    service: ` ✔ 주차  ✔ 조식운영 ✔ 와이파이 ✔ 바베큐`,
   },
   {
-    id: 'bbbbb',
-    name: 'zzang',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '전주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '짱짱 예쁜 숙소',
+    id: 'host1',
+    location: '제주',
+    address: '패캠구 프론트로 710-0',
+    description: `
+    아름다운 오션뷰를 가득 품은 풀빌라 입니다.
+    휴양지의 느낌을 느낄 수 있는 전객실 오션뷰입니다.
+    프라이빗한 개별 야외 수영장이 전객실에 있으며 펜션의 뒤쪽은 솔밭이 있어 또 다른 분위기를 느낄 수 있습니다.`,
+    service: `
+    ✔ 주차 ✔ 수영장 ✔ 풀빌라 ✔ 와이파이 ✔ 루프탑 `,
+  },
+  {
+    id: 'host01',
+    location: '제주',
+    address: '패캠구 프론트로 710-1',
+    description: `
+    넓은 실내 수영장과 방, 화장실이 여러 개라 대규모 단체나 가족 여행에 적합합니다. 
+    독립적인 공간이며 주변에 다른 펜션 단지가 보이지 않아 조용하게 쉴 수 있습니다. 
+    친절함과 깨끗한 시설로 여행객들의 만족도가 높은 숙소입니다.`,
+    service: `✔ 주차 ✔ 바베큐 ✔ 와이파이 ✔ 어메니티 `,
   },
 
   {
-    id: 'ddddd222222',
-    name: 'geegee',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host02',
     location: '제주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '오션뷰 짱🌅',
+    address: '패캠구 프론트로 710-1',
+    description: `
+    안녕하세요.
+    물빛 예쁜 협재해수욕장 차량 5분 거리의 길리 리조트는 동남아 휴양지인 길리 섬에 온 듯한 감성을 느끼실 수 있습니다.    
+    히노끼탕에서 통창을 통해 귤밭과 돌담을 볼 수 있으며 특히 편백나무 향 가득한 독채 빌라동에는 전용 야외 가든이 있어 프라이빗 한 시간을 즐기실 수 있습니다.
+    `,
+    service: `✔ 주차 ✔ 히노끼탕 ✔ 와이파이 ✔ 어메니티 ✔투어`,
   },
   {
-    id: 'eeeee',
-    name: 'hehe',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host03',
     location: '제주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '짱짱 멋진 숙소',
+    address: '패캠구 프론트로 710-1',
+    description: `제주에서 가장 아름다운 에메랄드빛 바다색깔의 함덕해수욕장 해변 앞에 위치하고 있습니다.
+   호텔에서 서우봉 정상까지 1시간 코스의 산책길이 조성되어 있습니다.`,
+    service: `✔ 주차 ✔ 바베큐 ✔ 와이파이 ✔ 어메니티 `,
   },
   {
-    id: 'eeeee',
-    name: 'hehe',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host04',
     location: '부산',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '짱짱 좋은 숙소',
+    address: '패캠구 프론트로 740-4',
+    description: `오션뷰를 만끽할 수 있는 깔끔하고 깨끗한 부티끄 호텔입니다!
+    호텔 주변으로 해운대 시장 및 맛집 등 먹자골목이 잘 형성되어 있으며 해수욕장, 동백섬, 달맞이고개 등 관광명소의 접근에도 용이합니다.
+    `,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 와이파이 ✔ 짐 보관 `,
   },
   {
-    id: 'fff',
-    name: 'omg',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host05',
     location: '부산',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '짱짱 예쁜 숙소',
+    address: '패캠구 프론트로 715-5',
+    description: `2023년 신축 호텔입니다.
+    해운대 메인거리에 위치하고 있어 아름다운 해운대와 놀거리를 편하게 즐길 수 있습니다.
+    역과의 거리도 가까워 뚜벅이 여행객에게도 최고의 위치를 자랑합니다.`,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 수영장 ✔ 애견동반 ✔ 세탁기 `,
   },
   {
-    id: 'gsdhff',
-    name: 'ananti',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host06',
     location: '부산',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '짱짱 비싼 숙소',
+    address: '패캠구 프론트로 710-1',
+    description: `
+    부산 최초의 서비스드 레지던스 호텔이에요!
+    품격있고 고급스러워진 객실을 이용하실 수 있습니다!
+    호텔 바로 앞에 해운대 바닷가가 있으며 주변에 식당도 많아요!.`,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 수영장 ✔ 피트니스 ✔ 조식 `,
   },
   {
-    id: 'gggggg',
-    name: 'haohaohao',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '전주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '전주비빔밥 콩나물해장국 공짜!',
+    id: 'host07',
+    location: '강릉',
+    address: '패캠구 프론트로 717-7',
+    description: `안녕하세요. 스테이멜로우에 오신 것을 환영합니다`,
+    service: `✔ 주차 ✔ 스파/월풀/욕조 ✔ 무료영화(OTT) ✔ 바베큐`,
   },
   {
-    id: 'hhhhhh',
-    name: 'huahuahua',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '경주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '경주에서 제일 커요',
+    id: 'host08',
+    location: '강릉',
+    address: '패캠구 프론트로 710-8',
+    description: `경포대해변과 주문진수산시장 중간의 영진해변 바닷가에 위치하고 있습니다.
+야외에 오션뷰 바베큐장이 있고, 펜션 앞에서 일출 감상이 가능합니다.
+`,
+    service: `✔ 주차 ✔ 키즈 ✔ 글램핑 ✔ 기본양념`,
   },
   {
-    id: 'iiiii',
-    name: 'kekeke',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host09',
     location: '부산',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '주변에 핫플레이스가 있어요',
+    address: '패캠구 프론트로 710-1',
+    description: '주변에 핫플레이스가 많아요',
+    service: `✔ 주차 ✔ 오션뷰 ✔ 수영장 ✔ 조식 `,
   },
   {
-    id: 'jjjjj',
-    name: 'hahaha',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host10',
     location: '제주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '조식이 맛있어요',
+    address: '패캠구 프론트로 710-1',
+    description: '조식이 맛있어요',
+    service: `✔ 주차 ✔ 오션뷰 ✔ 조식 ✔ 바베큐`,
   },
   {
-    id: 'kkkkk',
-    name: 'cooold',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host11',
     location: '제주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '반려견 운동장이 있어요🦮',
+    address: '패캠구 프론트로 710-1',
+    description: '반려견 운동장이 있어요🦮',
+    service: `✔ 주차 ✔ 오션뷰 ✔ 반려견 동반 `,
   },
   {
-    id: 'lllll',
-    name: 'cooold',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '전주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '공기가 맑아요',
+    id: 'host12',
+    location: '여수',
+    address: '패캠구 프론트로 710-1',
+    description: `한국의 정서를 함께 갖추면서 모던하고 세련된 분위기 속에서도 편안함을 느낄 수 있도록 설계되었습니다.`,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 연회장 ✔ 뷔페 ✔ 비지니스  `,
   },
   {
-    id: 'm',
-    name: 'mstyle',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '전주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '공기가 맑아요',
+    id: 'host13',
+    location: '여수',
+    address: '패캠구 프론트로 710-1',
+    description: `쉬는 것도 먹는 것도 마음 편하게 즐길 수 있는 숙소입니다.`,
+    service: `✔ 주차 ✔ 조식 ✔ 다목적룸 ✔ 안마의자 ✔ 간식바  `,
   },
   {
-    id: 'nmnmnmn',
-    name: 'lodsgsa234a0',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '경주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '한옥이 멋져요',
+    id: 'host14',
+    location: '여수',
+    address: '패캠구 프론트로 710-1',
+    description: `여수 밤바다 이 조명에 담긴 아름다운 얘기가 있어,
+     네게 들려주고파 전활 걸어. 뭐하고 있냐고 나는 지금 여수 밤바다 여수 밤바다 ~ `,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 조식 ✔ 바베큐`,
   },
   {
-    id: 'ooooh',
-    name: 'g0',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '경주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '한옥이 멋져요',
+    id: 'host15',
+    location: '강릉',
+    address: '패캠구 프론트로 715-15',
+    description: '강릉 최고의 숙소입니다',
+    service: `✔ 주차 ✔ 오션뷰 ✔ 와이파이 ✔ 바베큐`,
   },
   {
-    id: 'piiiiii',
-    name: 'orange',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host16',
     location: '제주',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '제주감귤 무제한 서비스🍊',
+    address: '패캠구 프론트로 710-1',
+    description: '제주감귤 무제한 서비스🍊',
+    service: `✔ 주차 ✔ 오션뷰 ✔ 조식 ✔ 바베큐`,
   },
   {
-    id: 'daeddd',
-    name: 'sungsim',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
-    location: '대전',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '성심당 근처',
-  },
-  {
-    id: 'asdfghjkl1234',
-    name: 'nwq',
-    picture: 'https://avatars.githubusercontent.com/u/131247158?v=4',
+    id: 'host17',
     location: '양양',
-    address: '야놀자시 패캠구 프론트로 710-1',
-    detail: '서핑 무료강습권 제공',
+    address: '패캠구 프론트로 710-1',
+    description: '숙박 시 서핑 /스킴보드 무료 강습을 제공합니다.🏄‍♀️',
+    service: `✔ 주차 ✔ 오션뷰 ✔ 서핑강습 ✔ 바베큐`,
+  },
+  {
+    id: 'host18',
+    location: '양양',
+    address: '패캠구 프론트로 18-18',
+    description: ` 
+      푸른 동해 바다를 한눈에 담을 수 있는 펜션이에요.
+      탁 트인 바다 전망을 자랑하는 오션뷰와 스파 시설로
+      특별하고 낭만적인 시간을 보낼 수 있고 아름다운 일출 감상도 가능해요.
+      게다가 감각적인 인테리어가 더해져 객실 어디에서나 사진을 찍어도 잘 나온답니다.
+   `,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 조식 ✔ 바베큐`,
+  },
+  {
+    id: 'host19',
+    location: '양양',
+    address: '패캠구 프론트로 190-19',
+    description: ` 
+    안녕하세요 여행은 추억을 만드는 길이죠!   
+    영원히 간직하고 싶은 추억을 만들어 주는 곳 바로 이곳 in memory펜션입니다!
+    나중에 되돌아 보았을때 입가에 웃음을 가득 머금게 되는 추억을 만드시길 바랍니다.
+    감사합니다.`,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 조식 ✔ 바베큐`,
+  },
+  {
+    id: 'host20',
+    location: '양양',
+    address: '패캠구 프론트로 200-20',
+    description: `양양 서프쉑펜션은 전객실 모두 푸른 오션뷰가 펼쳐지는 곳으로 새로 리모델링한 펜션입니다.      
+      반려견 동반이 가능한 객실을 두어 반려견과도 소중한 추억을 남기기 좋아요.
+      `,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 반려견 동반 ✔ 스파`,
+  },
+  {
+    id: 'host21',
+    location: '여수',
+    address: '패캠구 프론트로 201-21',
+    description: `안녕하세요.여수 스톤아일랜드풀빌라 입니다.  
+    전 객실 오션 뷰에 노을 지는 환상적인 물듦을 볼 수 있으며 사계절 미온수 운영으로 따뜻한 수영을 즐길 수 있습니다.`,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 수영장 ✔ 바베큐`,
+  },
+  {
+    id: 'host22',
+    location: '강릉',
+    address: '패캠구 프론트로 202-22',
+    description: `생각이 쉬는 곳, 기억스테이
+    기억스테이에서는 따뜻한 기억이 될 수 있도록 감성을 준비합니다.`,
+    service: `✔ 주차 ✔ 오션뷰 ✔ 조식 ✔ 바베큐`,
   },
 ];
 

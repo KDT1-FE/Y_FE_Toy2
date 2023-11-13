@@ -15,7 +15,6 @@ export default function HostListItem({ host, openModal }: HostListItemProps) {
       <img className={styles['host-img']} src={host.picture} alt={host.name} />
       <div>
         <p className={styles.name}>{host.name}</p>
-        {/* <p className={styles.name}> {host.location}</p> */}
         <Button onClick={openModal} className="fill-btn" text="상세보기" />
       </div>
     </li>

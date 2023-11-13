@@ -3,11 +3,12 @@ import { BsSearch } from 'react-icons/bs';
 import styles from './Search.module.scss'; // Import your appropriate styles file
 
 interface SearchProps {
+  value: string;
   onSearch: (query: string) => void;
 }
 
-export default function Search({ onSearch }: SearchProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+export default function Search({ value, onSearch }: SearchProps) {
+  const [searchQuery, setSearchQuery] = useState(value);
 
   function handleSearch() {
     onSearch(searchQuery);

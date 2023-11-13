@@ -4,5 +4,6 @@ export interface Host {
   picture: string;
   location: string;
   address: string;
-  detail: string;
+  description?: string;
+  service?: string;
 }
