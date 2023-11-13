@@ -5,6 +5,8 @@ import FormInputBtn from "../../FormInputBtn/FormInputBtn";
 import Loader from "../../Loader/Loader";
 import axios from "axios";
 import { apiHeader } from "../../../utils/apiHeader";
+import { doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase/firebase";
 
 const initialErrorData = {
   id: "",
@@ -64,6 +66,19 @@ function SignUpForm() {
             .then((response) => {
               if (response.data.message === "User created") {
                 alert("회원가입 성공");
+
+                const user = {
+                  id: formData.id,
+                  name: formData.name,
+                  profileImgUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2FdefaultProfileImg.jpg?alt=media&token=4cd53e01-4bc1-404e-ba10-c29a4638e53d",
+                  backgroundImgUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2FdefaultBackgroundImg.png?alt=media&token=50349c73-07e3-44e2-abeb-b3be14cdcc11",
+                  introText: "",
+                  hobby: []
+                };
+                const userRef = doc(db, "Users", formData.id);
+                setDoc(userRef, user, { merge: true });
               } else {
                 alert("회원가입 실패");
                 console.error(response.data.message);
