@@ -49,23 +49,6 @@ export const getUserData = async (accessToken: string, userId: string) => {
   return res.data;
 };
 
-export const patchUserData = async (
-  accessToken: string,
-  name: string,
-  picture: string,
-) => {
-  const res = await client.patch(
-    `/user`,
-    { name: name, picture: picture },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
-  return res;
-};
-
 export const createGameRooms = async (
   accessToken: string,
   name: string,
@@ -150,12 +133,29 @@ export const inviteGameRoom = async (
   return res;
 };
 
-export const getOnlyGameRoom = async (accessToken: string, chatId: string) => {
-  const res = await client.get(`/chat/only?chatId=${chatId}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
+// export const getOnlyGameRoom = async (accessToken: string, chatId: string) => {
+//   const res = await client.get(`/chat/only?chatId=${chatId}`, {
+//     headers: {
+//       Authorization: `Bearer ${accessToken}`,
+//     },
+//   });
+//   console.log(res);
+//   return res;
+// };
+
+export const patchUserData = async (
+  accessToken: string,
+  name: string,
+  picture: string,
+) => {
+  const res = await client.patch(
+    `/user`,
+    { name: name, picture: picture },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-  });
-  console.log(res);
+  );
   return res;
 };

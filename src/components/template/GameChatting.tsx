@@ -2,8 +2,93 @@ import styled from 'styled-components';
 import InfoImg from '../../assets/icons/info.png';
 import AaImg from '../../assets/icons/Aa.png';
 import sendImg from '../../assets/icons/send.png';
+import { useEffect, useState } from 'react';
+import { chatSocket } from '../../api/socket';
+import {
+  sortCreatedAt,
+  createSeparatedTime,
+  modifyDate,
+} from './useChattingSort';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  privateChatDetail,
+  privateChatNew,
+  accessTokenState,
+  myUserDataState,
+} from '../../states/atom';
 
-const GameChatting = () => {
+interface ChattingDetailProps {
+  chatId: string;
+}
+
+const GameChatting = ({ chatId }: ChattingDetailProps) => {
+  console.log(chatId);
+  const [postData, setPostData] = useState('');
+  const [socket, setSocket] = useState<any>(null);
+  const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
+  const [newChat, setNewChat] = useRecoilState(privateChatNew);
+  const [lastDate, setLastDate] = useState('');
+  const accessToken: any = useRecoilValue(accessTokenState);
+  const myUserData: any = useRecoilValue(myUserDataState);
+  useEffect(() => {
+    try {
+      const newSocket = chatSocket(accessToken, chatId);
+      setSocket(newSocket);
+
+      newSocket.on('messages-to-client', (messageData) => {
+        console.log('Fetched messages:', messageData.messages);
+
+        // createdAt을 기준으로 시간순서 정렬
+        const sortedMessages = sortCreatedAt(messageData.messages);
+
+        // createdAt을 날짜와 시간으로 분리
+        const SeparatedTime: any = sortedMessages.map((message) => ({
+          ...message,
+          ...createSeparatedTime(message.createdAt),
+        }));
+
+        // 마지막 날짜 저장
+        setLastDate(SeparatedTime[SeparatedTime.length - 1].date);
+
+        // 중복 날짜, 시간 null로 반환
+        const modifyDateArray = modifyDate(SeparatedTime);
+
+        setFetchChat(modifyDateArray);
+      });
+
+      newSocket.on('message-to-client', (messageObject) => {
+        console.log(messageObject);
+        setNewChat((newChat: any) => {
+          // 중복 날짜, 시간 null로 반환
+          const modifyDateArray = modifyDate([
+            ...newChat,
+            {
+              ...messageObject,
+              ...createSeparatedTime(messageObject.createdAt),
+            },
+          ]);
+          return modifyDateArray;
+        });
+      });
+
+      return () => {
+        setNewChat([]);
+        newSocket.disconnect();
+      };
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+    }
+  }, [accessToken, chatId]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPostData(e.target.value);
+  };
+
+  const messageSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    socket.emit('message-to-server', postData);
+    setPostData('');
+  };
   return (
     <Chat>
       <ChatHeader>
@@ -11,8 +96,44 @@ const GameChatting = () => {
         <ChatHeaderWarn>게임이 시작되었습니다.</ChatHeaderWarn>
       </ChatHeader>
       {/* 채팅 부분 */}
+      {fetchChat.map((element, index) => (
+        <div key={index}>
+          <p>{element.date}</p>
+          <div id="messageWrap">
+            <div
+              id="message"
+              className={element.userId === myUserData.id ? 'mine' : ''}>
+              <p style={{ color: 'red' }}>{element.text}</p>
+            </div>
+            <p>{element.time}</p>
+          </div>
+        </div>
+      ))}
+
+      {newChat.map((element, index) => (
+        <div key={index}>
+          {element.date !== lastDate && <p>{element.date}</p>}
+
+          <div id="messageWrap">
+            <div
+              id="message"
+              className={element.userId === myUserData.id ? 'mine' : ''}>
+              {/* {"mine이면 파란색, ''이면 빨간색"} */}
+              <p>{element.text}</p>
+            </div>
+            <p>{element.time}</p>
+          </div>
+        </div>
+      ))}
       <SendChat>
-        <ChatInput />
+        <form onSubmit={messageSubmit}>
+          <input
+            type="text"
+            placeholder="Aa"
+            value={postData}
+            onChange={handleInputChange}
+          />
+        </form>
         <Aa src={AaImg} alt="Aa" />
         <Sending src={sendImg} alt="send" />
       </SendChat>
@@ -58,7 +179,7 @@ const SendChat = styled.div`
   position: relative;
 `;
 
-const ChatInput = styled.input`
+const ChatInput = styled.form`
   width: 100%;
   height: 50px;
   background-color: #f7fafc;

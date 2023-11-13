@@ -23,6 +23,7 @@ const GameRoom = () => {
   }, [id, setChat]);
   // controlGameRoomReload(chat);
   controlBack();
+  console.log(chat);
 
   return (
     <Game>
@@ -47,7 +48,7 @@ const GameRoom = () => {
       <RoomMain>
         <Drawing />
 
-        <GameChatting />
+        <GameChatting chatId={chat} />
       </RoomMain>
       <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
       {/* <UserList>

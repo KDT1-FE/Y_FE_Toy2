@@ -32,6 +32,7 @@ export const loginSocket = (
 };
 
 export const chatSocket = (accessToken: any, chatId: string) => {
+  console.log(SERVER_URL);
   chattingSocket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
