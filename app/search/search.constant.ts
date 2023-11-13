@@ -13,6 +13,6 @@ export const initialChat = {
 	name: '',
 	users: [],
 	isPrivate: false,
-	messages: [],
+	latestMessage: null,
 	updatedAt: new Date(),
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Chat } from '@/app/search/search.type';
+import { Chat } from '@/types';
 import OpenChatText from './OpenChatText';
 import OpenChatPicture from './OpenChatPicture';
 

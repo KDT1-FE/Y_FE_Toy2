@@ -1,4 +1,4 @@
-import { AllOpenChatJSON, AllOpenChat } from './search.type';
+import { AllOpenChatJSON, Chat } from '@/types';
 import { GET, CONTENT_TYPE, BASE_URL, GET_CHAT_ALL } from './search.constant';
 
 export const fetchAllOpenChat = async (accessToken: string) => {
@@ -12,7 +12,7 @@ export const fetchAllOpenChat = async (accessToken: string) => {
 		cache: 'no-cache',
 	});
 	const resJson: AllOpenChatJSON = await res.json();
-	const allOpenChat: AllOpenChat = resJson.chats;
+	const allOpenChat: Chat[] = resJson.chats;
 
 	return allOpenChat;
 };
