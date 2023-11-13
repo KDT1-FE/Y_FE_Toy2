@@ -7,7 +7,7 @@ import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import useInput from "../../../hooks/useInput";
-import useSocket from "../../../hooks/useSocket";
+import connect from "../../../socket/socket";
 import Loader from "../../common/Loader";
 import UserCard from "../../common/UserCard";
 
@@ -129,7 +129,7 @@ interface ChatRoom {
   name: string;
   users: string[];
   isPrivate?: boolean;
-  num?: number;
+  num: number;
   bg?: string;
   status?: string;
 }
@@ -175,7 +175,7 @@ const CreateGameModal = ({ setModal }: Props) => {
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   // 소켓 연결
-  const sendMessage = useSocket("9fe8a1af-9c60-4937-82dd-21d6da5b9cd9");
+  const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   // 게임 데이터
   const [roomData, setRoomData] = useState<ChatRoom>({
@@ -209,7 +209,7 @@ const CreateGameModal = ({ setModal }: Props) => {
     method: "POST",
     data: {
       name: roomData.name,
-      users: roomData.users,
+      users: [token.id],
     },
     start: false,
   });
@@ -289,7 +289,7 @@ const CreateGameModal = ({ setModal }: Props) => {
       const text = JSON.stringify(inviteUser);
 
       // 초대 메시지 전달
-      sendMessage(text);
+      socket.emit("message-to-server", text);
 
       // 해당 게임방으로 이동
       navigate(`/game?gameId=${createGame.result.id}`);
