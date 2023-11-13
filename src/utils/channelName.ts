@@ -1,8 +1,14 @@
 export const checkChannelName = (name: string) => {
-  const [title] = name.split('#');
+  if (name.length === 0) {
+    return { isValid: false, errorMessage: '채널명을 입력하세요.' };
+  } else if (name.includes('#')) {
+    return {
+      isValid: false,
+      errorMessage: '채널명에 #을 포함할 수 없습니다.',
+    };
+  }
 
-  if (title.length === 0) return false;
-  return true;
+  return { isValid: true, errorMessage: '' };
 };
 
 export const splitChannelName = (name: string) => {
