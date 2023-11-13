@@ -5,7 +5,11 @@ import { HiArrowLongLeft } from 'react-icons/hi2';
 import MenuIcon from './MenuIcon';
 import styles from './Chat.module.scss';
 
-export default function ChatroomHeader({ chatId }: string) {
+interface Props {
+  chatId: string;
+}
+
+export default function ChatroomHeader({ chatId }: Props) {
   const router = useRouter();
 
   const [isMenuOpen, setMenuOpen] = useState(false);
