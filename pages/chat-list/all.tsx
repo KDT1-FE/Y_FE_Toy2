@@ -51,7 +51,6 @@ export default function AllChatList() {
                 pathname: `/chat/${chat.id}`,
                 query: { name: chat.name },
               }}
-              as={`/chat/${chat.id}`}
               className={styles.container}
               onClick={isincluded ? undefined : routerChat}
             >
