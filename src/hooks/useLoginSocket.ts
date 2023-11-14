@@ -6,7 +6,7 @@ import { loginSocket } from '../api/socket';
 import { disconnectLoginSocket } from '../api/socket';
 import { getCookie } from '../util/util';
 
-export const useConnectSocket = () => {
+export const useLoginSocket = () => {
   const accessToken = getCookie('accessToken');
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
 
@@ -25,5 +25,5 @@ export const useConnectSocket = () => {
     };
   }, [accessToken, setOnlineUsers]);
 
-  return useConnectSocket;
+  return useLoginSocket;
 };

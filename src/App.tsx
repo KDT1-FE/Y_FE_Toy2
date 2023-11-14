@@ -1,10 +1,10 @@
 import { BrowserRouter } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import MainRouter from './router/MainRouter';
-import { useConnectSocket } from './hooks/useConnectSocket';
+import { useLoginSocket } from './hooks/useLoginSocket';
 
 function App() {
-  useConnectSocket();
+  useLoginSocket();
 
   return (
     <ChakraProvider>
