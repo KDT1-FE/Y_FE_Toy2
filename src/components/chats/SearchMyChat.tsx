@@ -70,6 +70,10 @@ const SearchItem = styled.input`
   width: 32rem;
   outline: none;
   font-size: 1.2rem;
+
+  @media screen and (max-width: 768px) {
+    width: 60vw;
+  }
 `;
 
 const SearchButton = styled.div`

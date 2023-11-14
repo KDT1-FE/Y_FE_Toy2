@@ -51,6 +51,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media screen and (max-width: 768px) {
+    height: 20vh;
+  }
 `;
 
 const ChatBox = styled.div`
