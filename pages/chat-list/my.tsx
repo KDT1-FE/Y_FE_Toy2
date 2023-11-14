@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-// import Link from 'next/link';
+import Link from 'next/link';
 import { Chat } from '@/@types/types';
 import Image from 'next/image';
+import CreateChat from '@/components/ChatList/CreateChat';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -15,38 +16,42 @@ export default function MyChatList() {
     getMyChat();
   }, []);
   return (
-    <>
+    <ul>
+      <CreateChat />
       {myChatList.map(chat => (
-        // <Link
-        //   href={`/chat/${chat.id}`}
-        //   key={chat.id}
-        //   className={styles.container}
-        // >
-        <div key={chat.id} className={styles.container}>
-          <Image
-            alt={`${chat.users[0].username}의 프로필 사진`}
-            src={chat.users[0].picture}
-            width={45}
-            height={45}
-            className={styles.user_profile}
-          />
-          <div className={styles.chatInfo}>
-            <div className={styles.chatWrap}>
-              <div className={styles.chatNameWrap}>
-                <div className={styles.chatName}>{chat.name}</div>
-                <span>{chat.users.length}</span>
+        <li key={chat.id}>
+          <Link
+            href={{
+              pathname: `/chat/${chat.id}`,
+              query: { name: chat.name },
+            }}
+            as={`/chat/${chat.id}`}
+            className={styles.container}
+          >
+            <Image
+              alt={`${chat.users[0].username}의 프로필 사진`}
+              src={chat.users[0].picture}
+              width={45}
+              height={45}
+              className={styles.user_profile}
+            />
+            <div className={styles.chatInfo}>
+              <div className={styles.chatWrap}>
+                <div className={styles.chatNameWrap}>
+                  <div className={styles.chatName}>{chat.name}</div>
+                  <span>{chat.users.length}</span>
+                </div>
+                <div className={styles.chatLastestMesaage}>
+                  {chat.latestMessage?.text}
+                </div>
               </div>
-              <div className={styles.chatLastestMesaage}>
-                {chat.latestMessage?.text}
+              <div>
+                <div className={styles.chat_updated}>{chat.updatedAt}</div>
               </div>
             </div>
-            <div>
-              <div className={styles.chat_updated}>{chat.updatedAt}</div>
-            </div>
-          </div>
-        </div>
-        // </Link>
+          </Link>
+        </li>
       ))}
-    </>
+    </ul>
   );
 }
