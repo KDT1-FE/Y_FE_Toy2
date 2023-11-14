@@ -2,6 +2,7 @@ import { Avatar, AvatarGroup, Badge, Box, Flex, Text } from '@chakra-ui/react';
 import { formatTimeToKST, splitChannelName } from '../../utils';
 import { Channel } from '../../@types/channel';
 import { CATEGORY_COLOR_SCHEMES } from '../../constants/channel';
+import { LockIcon } from '@chakra-ui/icons';
 
 interface Props {
   channel: Channel;
@@ -36,6 +37,7 @@ const ChannelCard = ({ channel }: Props) => {
           <Badge colorScheme={CATEGORY_COLOR_SCHEMES[`${category}`]}>
             {category}
           </Badge>
+          {channel.isPrivate && <LockIcon boxSize="3" opacity="0.5" />}
         </Flex>
         <Box mb="4">
           <Text isTruncated opacity={0.5} fontSize="sm">
