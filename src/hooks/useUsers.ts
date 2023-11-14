@@ -7,6 +7,7 @@ export const useUsers = () => {
   const { data, isLoading } = useQuery({
     queryKey: ALL_USERS,
     queryFn: getUsers,
+    staleTime: 1000 * 60,
   });
 
   const [userSet, setUserSet] = useState<Set<string>>(new Set());
