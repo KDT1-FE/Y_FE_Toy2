@@ -2,8 +2,8 @@
 @use '../base' as *;
 
 .header {
-  @include flex-center-row();
   padding: 1rem;
+  display: flex;
   justify-content: space-between;
   background-color: $bg-purple-80;
   color: $white;
