@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import HostListItem from '@/components/host-list/HostListItem';
+import classNames from 'classnames/bind';
 import {
   addHostsToFirestore,
   getHostsByLocation,
@@ -22,7 +23,23 @@ export default function HostListPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [locationsToShow, setLocationsToShow] = useState<string[]>(locations);
   const [noResultsMessage, setNoResultsMessage] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
+  useEffect(() => {
+    function handleScroll() {
+      const { scrollY } = window;
+      setIsScrolling(scrollY > 0);
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const headerClass = `${styles.header} ${
+    isScrolling ? styles.scrollHeader : ''
+  }`;
   useEffect(() => {
     const fetchHosts = async () => {
       try {
@@ -90,19 +107,23 @@ export default function HostListPage() {
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>HOT PLACE ✨ 인기 지역 숙소 모음</h2>
-      <Search value={searchQuery} onSearch={handleSearch} />
-      <ul className={styles.hash}>
-        {locationsToShow.map(location => (
-          <li key={location}>
-            <button
-              type="button"
-              onClick={() => {
-                scrollToLocation(location);
-              }}
-            >{`#${location}`}</button>
-          </li>
-        ))}
-      </ul>
+      <header className={headerClass}>
+        <dir className={styles.inner}>
+          <Search value={searchQuery} onSearch={handleSearch} />
+          <ul className={styles.hash}>
+            {locationsToShow.map(location => (
+              <li key={location}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    scrollToLocation(location);
+                  }}
+                >{`#${location}`}</button>
+              </li>
+            ))}
+          </ul>
+        </dir>
+      </header>
       <div>
         {locationsToShow.map(location => (
           <div key={location} id={location}>
