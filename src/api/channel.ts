@@ -3,6 +3,7 @@ import {
   InviteRequestBody,
   InviteResponseValue,
   ExitResponseValue,
+  Channel,
 } from '../@types/channel';
 import instance from './axios';
 import { getUser } from './user';

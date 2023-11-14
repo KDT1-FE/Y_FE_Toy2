@@ -5,28 +5,28 @@ import { SOCKET } from '../constants/socket';
 import { getMemberData, findUserDataInChannel } from '../api/channel';
 
 export const useJoinLeaveChannels = (chatId: string) => {
-  const [memberList, setMemberList] = useState<User2[]>([]);
-  const [onlineMemberIds, setOnlineMembersIds] = useState<string[]>([]);
+  const [userList, setUserList] = useState<User2[]>([]);
+  const [onlineUserIds, setOnlineUsersIds] = useState<string[]>([]);
 
   useEffect(() => {
     const getAllMemberList = async () => {
       const { data } = await findUserDataInChannel(chatId);
       const firstMemberList = data.chat.users;
-      setMemberList(firstMemberList);
+      setUserList(firstMemberList);
     };
     getAllMemberList();
 
     socket.emit(SOCKET.USERS);
     socket.on(SOCKET.USER_TO_CLIENT, (messages: { users: string[] }) => {
       if (!messages) return;
-      setOnlineMembersIds(messages.users);
+      setOnlineUsersIds(messages.users);
     });
 
     socket.on(
       SOCKET.LEAVE,
       async (messages: { users: string[]; joiners: string[] }) => {
         const newMemberList = await getMemberData(messages.users);
-        setMemberList(newMemberList);
+        setUserList(newMemberList);
       },
     );
 
@@ -36,7 +36,7 @@ export const useJoinLeaveChannels = (chatId: string) => {
     };
   }, [chatId]);
 
-  return { memberList, onlineMemberIds, setMemberList };
+  return { userList, onlineUserIds, setUserList };
 };
 
 export default useJoinLeaveChannels;

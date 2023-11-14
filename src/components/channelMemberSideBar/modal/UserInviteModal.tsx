@@ -17,11 +17,11 @@ import ChannelModalUserList from '../../channel/modal/ChannelModalUserList';
 import { User2 } from '../../../@types/user';
 
 interface Props {
-  setMemberList: React.Dispatch<React.SetStateAction<User2[]>>;
+  setUserList: React.Dispatch<React.SetStateAction<User2[]>>;
   chatId: string;
 }
 
-const UserInviteModal = ({ setMemberList, chatId }: Props) => {
+const UserInviteModal = ({ setUserList, chatId }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [users, setUsers] = useState<string[]>([]);
   const btnRef = useRef(null);
@@ -30,9 +30,9 @@ const UserInviteModal = ({ setMemberList, chatId }: Props) => {
     if (users) {
       const inviteData = { chatId, users };
       const newChannelData = await inviteChannel(inviteData);
-      const newMemberList = newChannelData.users;
-      setMemberList(newMemberList);
-      console.log('newMemberList', newMemberList);
+      const newUserList = newChannelData.users;
+      setUserList(newUserList);
+      console.log('newUserList', newUserList);
       onClose();
     }
   };

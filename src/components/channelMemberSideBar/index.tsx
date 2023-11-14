@@ -10,8 +10,7 @@ const ChannelMemberSideBar = () => {
   const { id } = useParams();
   const chatId = id!;
 
-  const { memberList, onlineMemberIds, setMemberList } =
-    useJoinLeaveChannels(chatId);
+  const { userList, onlineUserIds, setUserList } = useJoinLeaveChannels(chatId);
 
   return (
     <Box
@@ -23,18 +22,18 @@ const ChannelMemberSideBar = () => {
       borderLeftColor="gray.400"
     >
       <Flex align="center" mt="10" justifyContent="space-between">
-        <Box fontSize="1g"> 채팅 참여 목록 {memberList.length}</Box>
-        <UserInviteModal setMemberList={setMemberList} chatId={chatId} />
+        <Box fontSize="1g"> 채팅 참여 목록 {userList.length}</Box>
+        <UserInviteModal setUserList={setUserList} chatId={chatId} />
       </Flex>
       <Divider mt="1rem" borderColor={'gray.500'} />
 
       <VStack p="1rem" align="flex-start">
-        {memberList.map((user) => (
+        {userList.map((user) => (
           <ChannelMemberItem
             key={user.id}
             userName={user.name || user.username}
             src={user.picture}
-            isOnline={onlineMemberIds.includes(user.id)}
+            isOnline={onlineUserIds.includes(user.id)}
           />
         ))}
       </VStack>
