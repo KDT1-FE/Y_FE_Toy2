@@ -121,6 +121,7 @@ const Game = () => {
         </GridItem>
         <GridItem>
           <GameStart
+            gameId={gameId}
             status={status}
             updateStatus={updateStatus}
             gameData={gameData.data[0]}

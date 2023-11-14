@@ -13,8 +13,10 @@ import { useEffect, useState } from "react";
 import data from "../../../data/category.json";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/atoms/userState";
+import { io } from "socket.io-client";
 
 interface GameStartProps {
+  gameId: string;
   status: string;
   updateStatus: (newStatus: string) => void;
   gameData: any;
@@ -33,19 +35,35 @@ interface UserWithSort {
 }
 
 const GameStart: React.FC<GameStartProps> = ({
+  gameId,
   status,
   updateStatus,
   gameData,
   onGameStart,
 }) => {
   const user = useRecoilValue(userState);
-  console.log(gameData);
 
   const categories = data.CategoryList;
   const users = data.users;
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
+
+  const token = JSON.parse(localStorage.getItem("token") as string);
+
+  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${token.accessToken}`,
+      serverId: import.meta.env.VITE_APP_SERVER_ID,
+    },
+  });
+
+  // 게임 시작 이벤트 리스너 설정
+  socket.on("game-started", (users: any) => {
+    // 게임 정보를 상태에 저장하고 모달을 열기
+    onOpen();
+    onGameStart(users); // 게임 시작 콜백 호출
+  });
 
   // 모달 자동 닫기 로직
   useEffect(() => {
@@ -66,7 +84,7 @@ const GameStart: React.FC<GameStartProps> = ({
 
   // 게임 시작 함수
   const handleStart = async () => {
-    await updateStatus("게임중");
+    updateStatus("게임중");
 
     const selectedCategory = categories[getRandNum(categories.length)];
     const ranKeyword =
@@ -109,11 +127,21 @@ const GameStart: React.FC<GameStartProps> = ({
   return (
     <>
       {status === "대기중" ? (
-        <Button w="200px" mr="20px" onClick={handleStart}>
+        <Button
+          w="200px"
+          mr="20px"
+          onClick={handleStart}
+          isDisabled={gameData.host !== user.id}
+        >
           게임시작
         </Button>
       ) : (
-        <Button w="200px" mr="20px" onClick={hadleEnd}>
+        <Button
+          w="200px"
+          mr="20px"
+          onClick={hadleEnd}
+          isDisabled={gameData.host !== user.id}
+        >
           게임 종료
         </Button>
       )}
