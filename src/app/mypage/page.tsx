@@ -7,49 +7,54 @@ import Profile from '@/components/Mypage/Profile';
 import styled from 'styled-components';
 
 const page = () => {
-    const [isRightWay, setIsRightWay] = useState<boolean>(false);
+  const [isRightWay, setIsRightWay] = useState<boolean>(false);
 
-    useEffect(() => {
-        const accessToken = sessionStorage.getItem('accessToken');
+  useEffect(() => {
+    const accessToken = sessionStorage.getItem('accessToken');
 
-        if (accessToken) {
-            setIsRightWay(true);
-        } else {
-            setIsRightWay(false);
-        }
-    }, []);
-
-    if (!isRightWay) {
-        return null;
+    if (accessToken) {
+      setIsRightWay(true);
     } else {
-        return (
-            <>
-                <UsersWrap>
-                    <HeaderText>마이 페이지</HeaderText>
-                    <Profile />
-                    <ProfileEdit />
-                </UsersWrap>
-                <Navigation />
-            </>
-        );
+      setIsRightWay(false);
     }
+  }, []);
+
+  if (!isRightWay) {
+    return null;
+  } else {
+    return (
+      <>
+        <UsersWrap>
+          <HeaderText>마이 페이지</HeaderText>
+          <Profile />
+          <ProfileEdit />
+        </UsersWrap>
+        <Navigation />
+      </>
+    );
+  }
 };
 
 export default page;
 
 const UsersWrap = styled.div`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    height: 100vh;
-    padding: 3rem;
+  height: 100vh;
+  padding: 3rem;
+
+  @media screen and (max-width: 700px) {
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
 `;
 
 const HeaderText = styled.h1`
-    color: ${({ theme }) => theme.color.mainGreen};
-    font-size: ${({ theme }) => theme.fontSize.title};
+  color: ${({ theme }) => theme.color.mainGreen};
+  font-size: ${({ theme }) => theme.fontSize.title};
 
-    margin-top: 0;
+  margin-top: 0;
 
-    padding: 1rem;
+  padding: 1rem;
 `;
