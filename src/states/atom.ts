@@ -60,13 +60,3 @@ export const myMessageState = atom<
   key: 'myMessageState',
   default: [{ text: '', userId: '', chatId: '' }],
 });
-
-export const buttonState = atom<any>({
-  key: 'buttonState',
-  default: true,
-});
-
-export const AnswerFormState = atom<any>({
-  key: 'AnswerFormState',
-  default: false,
-});
