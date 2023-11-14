@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ghost } from '../pages/game/Vote';
+import { Ghost } from '../../pages/game/Vote';
 import GhostItem from './GhostItem';
 import styles from '@styles/components/ghostList.module.scss';
 

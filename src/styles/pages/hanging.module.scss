@@ -1,0 +1,45 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.hanging {
+  @include flex-center-col;
+  position: relative;
+  background-color: $bg-purple;
+  height: 100vh;
+  font-family: $font-logo;
+
+  &__result {
+    font-size: 5.5rem;
+    color: #c51f1f;
+    z-index: 1;
+  }
+
+  &__message {
+    padding: 1.2rem;
+    align-self: flex-end;
+    font-size: $font-lg;
+    color: #957b7b;
+    z-index: 1;
+  }
+
+  &__tree {
+    position: absolute;
+    top: 0;
+    right: -9%;
+    $size: 40%;
+    width: $size;
+    height: calc($size + 30%);
+    background-image: url('../../assets/images/hanging_tree.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  &__leaves {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url('../../assets/images/hanging_leaves.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
