@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import { channelState } from '../../../recoil/channel.atom';
 import { ChangeEvent } from 'react';
 
-const CategoryRadio = (props: any) => {
+const CategoryRadio = (props: ReturnType<typeof getRadioProps>) => {
   const { getInputProps, getRadioProps } = useRadio(props);
   const [channel, setChannel] = useRecoilState(channelState);
 
