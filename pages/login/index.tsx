@@ -46,7 +46,7 @@ export default function Login() {
             </button>
             <hr className={styles.horizontalLine} />
             <p className={styles.forgotPassword}>비밀번호를 잊으셨나요?</p>
-            <div className={styles.signup_link}>
+            <div className={styles.signUp_link}>
               <Link href="/signup" className={styles.link}>
                 회원가입
               </Link>
