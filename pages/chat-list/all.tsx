@@ -24,8 +24,11 @@ export default function AllChatList() {
 
   const participateChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (e.target instanceof HTMLButtonElement) {
-      await chatListAPI.participateChat(e.target.name);
-      router.push(`/chat/${e.target.name}`);
+      await chatListAPI.participateChat(e.target.id);
+      router.push({
+        pathname: `/chat/${e.target.id}`,
+        query: { name: e.target.name },
+      });
     }
   };
 
@@ -43,7 +46,6 @@ export default function AllChatList() {
 
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];
-
 
   return (
     <ul>
@@ -84,7 +86,8 @@ export default function AllChatList() {
                   {!isincluded && (
                     <button
                       type="button"
-                      name={chat.id}
+                      id={chat.id}
+                      name={chat.name}
                       onClick={participateChat}
                     >
                       참여
