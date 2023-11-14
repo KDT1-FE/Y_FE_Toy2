@@ -8,6 +8,8 @@ import AuthLayout from './components/common/AuthLayout';
 import Home from './pages/home';
 import Openchat from './pages/Openchat';
 import Profile from './pages/profile';
+import ChatList from './pages/chat/ChatList';
+import ChatRoom from './pages/chat/ChatRoom';
 
 function App() {
   return (
@@ -19,7 +21,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         {/* 홍규님 부분 */}
-        <Route path="/chat" />
+        <Route path="/chat" element={<ChatList />} />
+        <Route path="/chat/:chatId" element={<ChatRoom />} />
         {/* 오픈 채팅 부분 */}
         <Route path="/open" element={<Openchat />} />
       </Route>
