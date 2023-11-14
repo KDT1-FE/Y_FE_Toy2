@@ -7,6 +7,7 @@ import ExitNotice from '@/components/chat/exitNotice';
 import ChatAlert from '@/components/chat/chatAlert';
 import { JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
+import { userIdState } from '@/recoil/atoms/userIdState';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
@@ -24,7 +25,8 @@ export default function Chat() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const userId = 'user';
+  const userId = userIdState;
+  console.log(userIdState);
 
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
