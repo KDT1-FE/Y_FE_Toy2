@@ -14,7 +14,9 @@ import ChatroomHeader from '../../components/chat/header';
 
 export default function Chat() {
   const router = useRouter();
-  const { chatId } = router.query;
+  const { chatId, name } = router.query;
+
+  console.log(router.query);
 
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
@@ -50,7 +52,6 @@ export default function Chat() {
     });
 
     socket.on('message-to-client', (messageObject: Message) => {
-      console.log(messageObject);
       setMessages(prevMessages => [...prevMessages, messageObject]);
     });
 
@@ -102,7 +103,7 @@ export default function Chat() {
 
   return (
     <>
-      <ChatroomHeader chatId={chatId} />
+      <ChatroomHeader name={name} chatId={chatId} />
       <div className={styles.container}>
         <div className={styles.container}>
           <EntryNotice />

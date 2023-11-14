@@ -2,14 +2,15 @@ import { useState } from 'react';
 import instance from '@/apis/axios';
 import { useRouter } from 'next/router';
 import { HiArrowLongLeft } from 'react-icons/hi2';
-import MenuIcon from './MenuIcon';
+import { IoMdMenu } from 'react-icons/io';
 import styles from './Chat.module.scss';
 
 interface Props {
   chatId: string;
+  name: string;
 }
 
-export default function ChatroomHeader({ chatId }: Props) {
+export default function ChatroomHeader({ chatId, name }: Props) {
   const router = useRouter();
 
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -54,9 +55,9 @@ export default function ChatroomHeader({ chatId }: Props) {
       <div className={styles.left}>
         <HiArrowLongLeft onClick={handleBackBtnClick} />
       </div>
-      <h3 className={styles.chatTitle}>채팅방 이름</h3>
+      <h3 className={styles.chatTitle}>{name}</h3>
       <div className={styles.right} onClick={toggleMenu}>
-        <MenuIcon />
+      <IoMdMenu />
         {/* Dropdown 메뉴 */}
         {isMenuOpen && (
           <div className={styles.dropdownMenu}>

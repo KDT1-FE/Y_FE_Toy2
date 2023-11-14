@@ -45,7 +45,11 @@ export default function AllChatList() {
         return (
           <li key={chat.id}>
             <Link
-              href={`/chat/${chat.id}`}
+              href={{
+                pathname: `/chat/${chat.id}`,
+                query: { name: chat.name },
+              }}
+              as={`/chat/${chat.id}`}
               className={styles.container}
               onClick={isincluded ? undefined : routerChat}
             >
