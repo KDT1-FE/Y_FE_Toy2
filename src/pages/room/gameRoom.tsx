@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   chattingIdState,
   myMessageState,
+  onlineUserStateInGameRoom,
   roomIdState,
   usersInRoom,
 } from '../../states/atom';
@@ -23,17 +24,14 @@ const GameRoom: React.FC = () => {
   const [roomId, setRoomId] = useRecoilState(chattingIdState);
   const [buttonVisible, setButtonVisible] = useState(true);
   const [submitVisible, setSubmitVisible] = useState(false);
-  const [whoIsCaptain, SetWhoIsCaptain] = useState('');
+  const [ans, setAns] = useState('');
   const [myMessage, setMyMessage] = useRecoilState(myMessageState);
-  const [currentMessageObject, setCurrentMessageObject] =
-    useRecoilState(myMessageState);
-  const [socket, setSocket] = useState<any>(null);
+  let cntRef = useRef(0);
 
   useEffect(() => {
     // 채팅방 주소값 가져오기
     setMyMessage([]);
   }, []);
-  console.log(currentMessageObject[currentMessageObject.length - 1]);
 
   useEffect(() => {
     if (id) {
@@ -42,10 +40,12 @@ const GameRoom: React.FC = () => {
   }, [id, setRoomId]);
 
   const shouldStartGame = CheckNums(); // 시작인원 설정
+  console.log(shouldStartGame);
   const myId = localStorage.getItem('id');
+
   useEffect(() => {
-    // 소켓 연결 생성
-    if (roomId) {
+    // shouldStartGame이 true일 때만 실행
+    if (shouldStartGame && roomId) {
       gameSocket.connect();
       gameSocket.emit('joinRoom', roomId);
 
@@ -53,23 +53,66 @@ const GameRoom: React.FC = () => {
       gameSocket.on('game', (data) => {
         // 여기에서 필요한 상태 업데이트나 UI 반영
         console.log('this is', data);
-        if (data.isBtnVisible === false) {
+        if (data.isBtnVisible === false && data.isSubmitVisible === true) {
           setButtonVisible(false);
+          cntRef.current += 1;
+          alert(`출제자는 바로 ${data.captain}`);
         }
+
         if (data.isSubmitVisible === true && data.captain === myId) {
           setSubmitVisible(true);
+          cntRef.current += 1;
         }
-        if (data.isSubmitVisible === false) {
+
+        if (
+          data.isSubmitVisible === false &&
+          data.isBtnVisible === false &&
+          data.userId === ''
+        ) {
           setSubmitVisible(false);
+          cntRef.current += 1;
+          alert('이제 퀴즈 시작');
         }
-        // if (
-        //   data.captain !== myId &&
-        //   data.solution === myMessage[myMessage.length - 1].text &&
-        //   data.solution.length > 0
-        // ) {
-        //   alert(`${data.userId}님이 정답자 입니다!! 짝짝짝`);
-        //   setButtonVisible(true);
-        // }
+
+        if (
+          data.text === data.solution &&
+          data.userId !== data.captain &&
+          data.solution.length > 0
+        ) {
+          alert(`${data.userId}님이 승리했어요!`);
+          setButtonVisible(true);
+          cntRef.current = 0;
+          gameSocket.emit('game', {
+            roomId: roomId,
+            captain: '',
+            isBtnVisible: null,
+            isSubmitVisible: null,
+            solution: '',
+            text: '',
+            userId: '',
+          });
+          alert('다시 시작하려면 게임 시작 버튼을 눌러주세요');
+        }
+
+        if (
+          data.text === data.solution &&
+          data.userId === data.captain &&
+          data.solution.length > 0
+        ) {
+          alert('방장님 뭐해요?');
+          setButtonVisible(true);
+          cntRef.current = 0;
+          gameSocket.emit('game', {
+            roomId: roomId,
+            captain: '',
+            isBtnVisible: null,
+            isSubmitVisible: null,
+            solution: '',
+            text: '',
+            userId: '',
+          });
+          alert('다시 시작하려면 게임 시작 버튼을 눌러주세요');
+        }
       });
 
       return () => {
@@ -77,7 +120,37 @@ const GameRoom: React.FC = () => {
         gameSocket.disconnect();
       };
     }
-  }, [roomId, gameSocket, myMessage]);
+  }, [shouldStartGame, roomId, myId]);
+  console.log(cntRef.current);
+  useEffect(() => {
+    const lastMessage = myMessage[myMessage.length - 1];
+    if (lastMessage && lastMessage?.text !== '' && ans.length > 0) {
+      if (cntRef.current >= 0 && gameSocket?.connected) {
+        gameSocket.emit('game', {
+          roomId: roomId,
+          captain: myId,
+          isBtnVisible: false,
+          isSubmitVisible: false,
+          solution: ans,
+          text: lastMessage.text,
+          userId: lastMessage.userId,
+        });
+      } else {
+        console.warn('Socket is not connected or cntRef is less than 3.');
+      }
+    }
+  }, [cntRef.current, gameSocket, myId, roomId, ans, myMessage]);
+
+  useEffect(() => {
+    // 소켓이 존재하고 연결이 끊어진 경우
+    if (gameSocket && !gameSocket.connected) {
+      console.log('Socket disconnected. Reconnecting...');
+      gameSocket.connect();
+      if (roomId) {
+        gameSocket.emit('joinRoom', roomId);
+      }
+    }
+  }, [gameSocket, roomId]);
 
   const handleGameStart = () => {
     console.log('게임이 시작되었습니다!');
@@ -89,7 +162,8 @@ const GameRoom: React.FC = () => {
         isBtnVisible: false,
         isSubmitVisible: true,
         solution: '',
-        winner: '',
+        text: '',
+        userId: '',
       });
     } else {
       console.warn('Socket is not connected.');
@@ -98,6 +172,7 @@ const GameRoom: React.FC = () => {
 
   const handleSubmit = (answer: string) => {
     console.log('정답 입력해주세요');
+    setAns(answer);
     if (gameSocket?.connected) {
       gameSocket.emit('game', {
         roomId: roomId,
@@ -105,7 +180,8 @@ const GameRoom: React.FC = () => {
         isBtnVisible: false,
         isSubmitVisible: false,
         solution: answer,
-        winner: '',
+        text: '',
+        userId: '',
       });
     } else {
       console.warn('Socket is not connected.');
@@ -129,7 +205,7 @@ const GameRoom: React.FC = () => {
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
           <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-          {buttonVisible && (
+          {buttonVisible && shouldStartGame && (
             <button onClick={handleGameStart}>게임 시작</button>
           )}
           {submitVisible && <AnswerForm onSubmit={handleSubmit} />}
@@ -138,7 +214,6 @@ const GameRoom: React.FC = () => {
 
       <RoomMain>
         <Drawing />
-
         <GameChatting chatId={roomId} />
       </RoomMain>
       <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
