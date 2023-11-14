@@ -2,11 +2,15 @@
 
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Button } from '@material-tailwind/react';
+import { Button, Typography } from '@material-tailwind/react';
 import { fetchJoin } from '@/app/join/join.utils';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
+import Image from 'next/image';
+import DropZone from './DropZone/DropZone';
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 // import Image from 'next/image';
 
 type RequestBody = {
@@ -16,13 +20,67 @@ type RequestBody = {
 	picture: string; // 사용자 이미지(url or base64, under 1MB)
 };
 
+type FetchImageProps = {
+	file: string;
+	id: string;
+	password: string;
+	name: string;
+};
+
+const fetchImage = async (params: FetchImageProps) => {
+	const data = await axios.post('api/image/post', {
+		id: params.id,
+		name: params.name,
+		password: params.password,
+		file: params.file,
+	});
+	return data.data;
+};
+
 const JoinForm = () => {
 	const router = useRouter();
+	const [baseImageUrl, setBaseImageUrl] = React.useState<string>();
+
+	const mutation = useMutation({
+		mutationFn: (data: FetchImageProps) => fetchImage(data),
+		onSuccess: async (data) => {
+			const props = data.data;
+			const { message } = await fetchJoin(
+				props.id,
+				props.password,
+				props.name,
+				props.picture,
+			);
+			if (message === 'User created') {
+				Swal.fire({
+					text: '회원가입이 완료되었습니다.',
+					showCancelButton: false,
+					confirmButtonText: '확인',
+					confirmButtonColor: '#3085d6',
+				});
+				router.replace('/login');
+			} else {
+				console.log('이미 존재한 회원 입니다');
+				Swal.fire({
+					text: '이미 존재한 회원입니다.',
+					showCancelButton: false,
+					confirmButtonText: '확인',
+					confirmButtonColor: 'red',
+				});
+			}
+		},
+		onMutate: () => {
+			console.log('onMutate');
+		},
+		onError: (error) => {
+			console.log(error);
+		},
+	});
 
 	const {
 		register,
 		handleSubmit,
-		watch,
+		// watch,
 		formState: { errors },
 	} = useForm<RequestBody>({ mode: 'onChange' });
 
@@ -31,26 +89,24 @@ const JoinForm = () => {
 		id,
 		password,
 		name,
-		picture,
 	}) => {
-		// 모든 input 값에 에러없이 값이 있으면
-		const data = await fetchJoin(id, password, name, picture);
-		const { message } = data;
-		if (message === 'User created') {
-			router.replace('/login');
-		} else {
-			console.log('이미 존재한 회원 입니다');
+		if (!baseImageUrl) {
 			Swal.fire({
-				text: '이미 존재한 회원입니다.',
+				text: '이미지를 넣어주세요.',
 				showCancelButton: false,
 				confirmButtonText: '확인',
 				confirmButtonColor: '#3085d6',
 			});
+			return;
 		}
-	};
 
-	const image = watch('picture');
-	console.log(image);
+		mutation.mutate({
+			file: baseImageUrl!,
+			id: id,
+			password: password,
+			name: name,
+		});
+	};
 
 	return (
 		// 전체
@@ -59,9 +115,12 @@ const JoinForm = () => {
 			<div className="flex flex-col w-full h-full items-center justify-center ">
 				{/* 이미지 */}
 				<div className="mb-10">
-					{image ? (
-						<img
-							src={image}
+					{baseImageUrl ? (
+						<Image
+							src={baseImageUrl}
+							alt="Picture of the author"
+							width={100}
+							height={100}
 							className="h-[200px] w-[200px] rounded-full bg-blue-500 "
 						/>
 					) : (
@@ -144,21 +203,16 @@ const JoinForm = () => {
 						</div>
 						{/* 이미지 url */}
 						<div className="flex h-[90] w-full  flex-col  mt-5">
-							<Input
-								color="brown"
-								variant="static"
-								label="image URL"
-								placeholder=" image URL을 입력해주세요 "
-								{...register('picture', {
-									required: true,
-								})}
-								crossOrigin={'anonymous'}
-							/>
+							<Typography color="brown" className=" text-sm text-gray-700">
+								이미지를 넣어주세요.
+							</Typography>
 						</div>
 					</div>
+					<DropZone setFn={setBaseImageUrl} />
 					<Button type="submit" className="w-full bg-main mt-10">
 						회원가입
 					</Button>
+					<div>{baseImageUrl}</div>
 				</form>
 			</div>
 		</div>

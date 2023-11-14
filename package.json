@@ -10,19 +10,24 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.13.0",
     "@hello-pangea/dnd": "^16.3.0",
     "@material-tailwind/react": "^2.1.4",
     "@react-spring/web": "^9.7.3",
     "@tanstack/react-query": "^5.7.2",
     "@tanstack/react-query-devtools": "^5.7.4",
     "axios": "^1.6.0",
+    "cloudinary": "^1.41.0",
     "next": "14.0.1",
     "react": "^18",
     "react-cookie": "^6.1.1",
     "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.48.2",
     "recoil": "^0.7.7",
     "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "sweetalert2": "^11.9.0"
   },
   "devDependencies": {
