@@ -52,7 +52,7 @@ const CreateChannelModal = () => {
 
     mutation.mutate(channelData);
     onClose();
-    setChannel({ title: '', category: '' });
+    setChannel({ title: '', category: '기타' });
   };
 
   return (
