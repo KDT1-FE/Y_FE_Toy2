@@ -54,11 +54,10 @@ export default function useUserData() {
     if (userid) {
       const docRef = doc(db, "Feeds", userid);
       const docSnap = await getDoc(docRef);
-
       if (docSnap.exists()) {
         setFeedData(docSnap.data());
       } else {
-        setFeedData(null);
+        console.log("없음");
       }
     }
   }

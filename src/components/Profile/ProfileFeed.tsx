@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { BsPlusCircle } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const ProfileFeedContainer = styled.div`
   width: 1200px;
@@ -54,6 +55,11 @@ function ProfileFeed(props: {
   setIsModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   isProfileMatchingLogin: boolean | null;
 }) {
+  const navigate = useNavigate();
+  const handleClick = (feedId: number) => {
+    // 클릭한 피드의 ID를 이용하여 페이지 이동
+    navigate(`/profiles/asdqwe123/${feedId}`);
+  };
   return (
     <ProfileFeedContainer>
       <ProfileFeedImageWrap>
@@ -72,6 +78,9 @@ function ProfileFeed(props: {
                 key={index}
                 style={{
                   backgroundImage: `url(${feed.feedImageUrl})`
+                }}
+                onClick={() => {
+                  handleClick(feed.feedId);
                 }}
               />
             ))

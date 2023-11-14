@@ -16,7 +16,7 @@ import Modal from "react-modal";
 import InputStyle from "../../style/InputStyle";
 import { theme } from "../../style/theme";
 import StyledButton from "../../style/ButtonStyle";
-
+import useUserData from "./useUserData";
 const ProfileContainer = styled.div`
   width: 100%;
 
@@ -148,73 +148,6 @@ const ModalAddFeedWrap = styled.div`
     }
   }
 `;
-interface usertData {
-  id: string;
-  name: string;
-  profileImgUrl: string;
-  backgroundImgUrl: string;
-  introText: string;
-  hobby: string[];
-}
-interface feed {
-  id: string;
-  feedId: number;
-  feedImageUrl: string;
-  contentText: string;
-  likes: number;
-  timeStamp: string;
-  commentList?: object;
-}
-interface feedData {
-  [key: string]: feed;
-}
-function useUserData() {
-  const [userData, setUserData] = useState<usertData | null>(null);
-  const [feedData, setFeedData] = useState<feedData | null>(null);
-  const { userid } = useParams<string>();
-
-  useEffect(() => {
-    async function fetchUserData() {
-      if (userid) {
-        const docRef = doc(db, "Users", userid);
-
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const userData: usertData = {
-            id: docSnap.data().id,
-            name: docSnap.data().name,
-            profileImgUrl: docSnap.data().profileImgUrl,
-            backgroundImgUrl: docSnap.data().backgroundImgUrl,
-            introText: docSnap.data().introText,
-            hobby: docSnap.data().hobby
-          };
-
-          setUserData(userData);
-        } else {
-          window.location.href = "/404";
-        }
-      }
-    }
-
-    async function fetchFeedData() {
-      if (userid) {
-        const docRef = doc(db, "Feeds", userid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setFeedData(docSnap.data());
-        } else {
-          setFeedData(null);
-        }
-      }
-    }
-
-    fetchUserData();
-    fetchFeedData();
-  }, []);
-
-  return { userData, feedData };
-}
 
 function Profile() {
   // const user = {
@@ -268,8 +201,9 @@ function Profile() {
 
   const [isProfileMatchingLogin, setIsProfileMatchingLogin] = useState(false);
   const [context, setContext] = useState("");
-  // console.log("User data:", userData)
-  // console.log("Feed data:", feedData)
+
+  console.log(feedData);
+
   const loginId = sessionStorage.getItem("userId");
 
   const [feedImageFile, setFeedImageFile] = useState<File | null>(null);

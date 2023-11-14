@@ -165,6 +165,12 @@ function ProfileFeedDetail() {
 
   const loginId = sessionStorage.getItem("userId");
 
+  if (feedData && feedid) {
+    if (!feedData || feedData[feedid] === undefined) {
+      window.location.href = "/404";
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, [commentList]);
@@ -321,7 +327,7 @@ function ProfileFeedDetail() {
             i++
           ) {
             const nextIndex = i + 1;
-            console.log(updatedCommentList);
+
             if (updatedCommentList[nextIndex] !== undefined) {
               updatedCommentList[i] = updatedCommentList[nextIndex];
             } else {
@@ -392,7 +398,7 @@ function ProfileFeedDetail() {
             <button onClick={handleClickCommentButton}>등록</button>
           </CommentInputWrap>
 
-          {feedData && feedid
+          {feedData && feedid && feedData[feedid]
             ? Object.values(feedData[feedid].commentList || {}).map(
                 (comment, index) => (
                   <CommentListWrap key={index}>
