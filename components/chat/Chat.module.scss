@@ -85,10 +85,14 @@
     justify-content: center;
     align-items: center;
     color: white;
-    background-color: $brand-pink;
+    background-color: $light-pink;
     border: none;
     outline: none;
     border-radius: 0.5rem;
+    &:hover {
+      background-color: $brand-pink;
+      transition: 0.3s;
+    }
   }
 }
 
@@ -214,13 +218,21 @@
     }
 
     .content { /* 채팅 메시지 최대 너비 설정 */
-      max-width: 580px;
+
+      @media (min-width: 800px) {
+        max-width: 60rem;
+        font-size: $font-size-lg;
+      }
+
+      @media (max-width: 799px) {
+        max-width: 16rem;
+        font-size: $font-size-base;
+      }
       background-color: #ff347879;
 
       padding: 1rem;
       border-radius: 1.8rem;
 
-      font-size: $font-size-base;
 
       word-wrap: break-word;
       white-space: pre-wrap;
