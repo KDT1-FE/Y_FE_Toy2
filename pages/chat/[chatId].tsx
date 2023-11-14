@@ -22,8 +22,6 @@ export default function Chat() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  //const socketRef = useRef<Socket | null>(null);
-
   const userId = '';
 
   const accessToken =
@@ -40,14 +38,12 @@ export default function Chat() {
 
   useEffect(() => {
     
-
     socket.on('connect', () => {
       console.log('Connected to chat server');
       setIsConnected(true);
       
     });
 
-    
 
     socket.on('messages-to-client', (messageArray: Message[]) => {
       setMessages(messageArray.messages);
