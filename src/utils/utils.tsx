@@ -19,7 +19,6 @@ export interface UserData {
   hashtags?: string[];
   intro?: string;
   id?: string;
-  online?: boolean;
 }
 
 // 이미지 업로드 함수
