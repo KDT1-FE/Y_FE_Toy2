@@ -1,4 +1,4 @@
-export interface IUser {
+export interface User {
   id: string;
   password: string;
   name: string;
@@ -6,22 +6,22 @@ export interface IUser {
   chats: string[]; // chat id만 속합니다.
 }
 
-export interface IChat {
+export interface Chat {
   id: string;
   name: string;
   isPrivate: boolean;
-  users: IChatUser[];
-  latestMessage: IMessage; // message 객체가 속합니다.
+  users: ChatUser[];
+  latestMessage: Message; // message 객체가 속합니다.
   updatedAt: string;
 }
 
-export interface IChatUser {
+export interface ChatUser {
   id: string;
   username: string;
   picture: string;
 }
 
-export interface IMessage {
+export interface Message {
   id: string;
   text: string;
   userId: string;

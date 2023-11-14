@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { IChat } from '@/@types/types';
+import { Chat } from '@/@types/types';
 import Image from 'next/image';
 import CreateChat from '@/components/ChatList/CreateChat';
 import chatListAPI from '../../apis/chatListAPI';
@@ -10,7 +10,7 @@ import styles from './ChatList.module.scss';
 export default function AllChatList() {
   const router = useRouter();
 
-  const [allChatList, setAllChatList] = useState<IChat[]>([]);
+  const [allChatList, setAllChatList] = useState<Chat[]>([]);
   const getAllChat = async () => {
     const chatAllList = await chatListAPI.getAllChatList();
     setAllChatList(chatAllList.data.chats);
