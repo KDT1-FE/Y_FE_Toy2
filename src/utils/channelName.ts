@@ -35,15 +35,25 @@ export const filterChannels = (
   selectedCategory: string,
   channels: Channel[],
 ) => {
-  if (title === '' && selectedCategory === '') return channels;
+  let filteredChannels =
+    title !== ''
+      ? channels.filter((channel) => channel.name.split('#')[0].includes(title))
+      : channels;
 
-  const filteredByTitle = channels.filter((channel) => {
-    console.log(title);
-    return channel.name.split('#')[0].includes(title);
-  });
+  if (selectedCategory !== '') {
+    filteredChannels = filteredChannels.filter((channel) => {
+      const channelCategory = channel.name.split('#')[1];
+      return channelCategory === selectedCategory;
+    });
+  }
 
-  return filteredByTitle.filter((channel) => {
-    const { category } = splitChannelName(channel.name);
-    return category === selectedCategory;
-  });
+  return filteredChannels;
+  // if (selectedCategory !== '' && selectedCategory !== '전체') {
+  //   filteredChannels = filteredChannels.filter((channel) => {
+  //     const channelCategory = channel.name.split('#')[1];
+  //     return channelCategory === selectedCategory;
+  //   });
+  // }
+
+  // return filteredChannels;
 };

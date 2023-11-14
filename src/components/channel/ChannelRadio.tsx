@@ -1,32 +1,29 @@
 import { Box, useRadio } from '@chakra-ui/react';
 import React, { ChangeEvent, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { channelState } from '../../recoil/channel.atom';
+import { categoryChannelState } from '../../recoil/channel.atom';
 
 const ChannelRadio = (props: any) => {
   const { getInputProps, getRadioProps } = useRadio(props);
-  const [categoryChannel, setCategoryChannel] = useRecoilState(channelState);
+  const [categoryChannel, setCategoryChannel] =
+    useRecoilState(categoryChannelState);
 
   const input = getInputProps({
     onChange: (e: ChangeEvent<HTMLInputElement>) => {
-      setCategoryChannel({ ...categoryChannel, category: e.target.value });
+      setCategoryChannel((prev) => {
+        const newChannel = { ...prev, category: e.target.value };
+        props.onSelectCategory(newChannel.category);
+        return newChannel;
+      });
     },
   });
 
   const checkbox = getRadioProps();
 
-  useEffect(() => {
-    // categoryChannel이 변경되면 onSelectCategory 호출
-    props.onSelectCategory(categoryChannel.category);
-  }, [categoryChannel]);
-
   return (
     <>
       <Box as="label">
-        <input
-          {...input}
-          onClick={() => props.onSelectCategory(categoryChannel.category)}
-        />
+        <input {...input} />
         <Box
           {...checkbox}
           cursor="pointer"

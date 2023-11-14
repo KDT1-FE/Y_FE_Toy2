@@ -2,10 +2,10 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 import { useRecoilState } from 'recoil';
-import { channelState } from '../../recoil/channel.atom';
+import { modalChannelState } from '../../recoil/channel.atom';
 
 const ChannelSearchInput = () => {
-  const [channel, setChannel] = useRecoilState(channelState);
+  const [channel, setChannel] = useRecoilState(modalChannelState);
   const searchChannel = (e: ChangeEvent<HTMLInputElement>) => {
     setChannel({ ...channel, title: e.target.value });
   };
