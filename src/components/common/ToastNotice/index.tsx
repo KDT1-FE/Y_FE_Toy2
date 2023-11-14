@@ -2,6 +2,9 @@ import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
+import useFireFetch from "../../../hooks/useFireFetch";
+import { userState } from "../../../recoil/atoms/userState";
+import { useRecoilValue } from "recoil";
 
 const Toast = styled.div`
   border-radius: 0.5rem;
@@ -56,6 +59,11 @@ const ButtonWrap = styled.div`
   align-items: center;
 `;
 
+interface Socket {
+  on(event: string, callback: any): void;
+  emit(event: string, data: any): void;
+}
+
 interface Props {
   roomData: {
     id: string;
@@ -65,10 +73,14 @@ interface Props {
     users: string[];
   };
   setToast: React.Dispatch<React.SetStateAction<boolean>>;
+  socket: Socket;
 }
 
-const ToastNotice: React.FC<Props> = ({ roomData, setToast }) => {
+const ToastNotice: React.FC<Props> = ({ roomData, setToast, socket }) => {
   const navigate = useNavigate();
+  const fireFetch = useFireFetch();
+
+  const user = useRecoilValue(userState);
 
   const join = useFetch({
     url: "https://fastcampus-chat.net/chat/participate",
@@ -110,6 +122,9 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast }) => {
           color="#eee"
           colorScheme="whiteAlpha"
           onClick={() => {
+            socket.emit("message-to-server", `${user.id}:${roomData.id}:!#%&(`);
+            const users = [...roomData.users, user.id];
+            fireFetch.updateData("game", roomData.id, { users: users });
             join.refresh();
             navigate(`/game?gameId=${roomData.id}`);
           }}
