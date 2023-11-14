@@ -10,7 +10,6 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { Host } from '@/pages/host-list/hostList.types';
-// import { IUser } from '@/@types/types';
 import axiosInstance from '../apis/axios';
 import { hostData } from './hostData';
 import app from './firebaseConfig';
@@ -18,8 +17,10 @@ import app from './firebaseConfig';
 export const storage = getStorage(app);
 export const db = getFirestore(app);
 
+const locations = Array.from(new Set(hostData.map(host => host.location)));
+
 //  firestore에 상세 데이터 추가
-export const addHostsToFirestore = async () => {
+/* export const addHostsToFirestore = async () => {
   const hostCollectionRef = collection(db, 'hosts');
   const addHostPromises = hostData.map(host => {
     const hostDocRef = doc(hostCollectionRef, host.id);
@@ -32,7 +33,7 @@ export const addHostsToFirestore = async () => {
   } catch (error) {
     console.error('데이터 추가 중 오류 발생:', error);
   }
-};
+}; */
 
 // 지역별 데이터 필터링
 export const getHostsByLocation = async (location: string): Promise<Host[]> => {
@@ -96,3 +97,4 @@ export async function updateHostsInfo() {
     console.error('데이터 업데이트 중 오류 발생:', error);
   }
 }
+export { locations };

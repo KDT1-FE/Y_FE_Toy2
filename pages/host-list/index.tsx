@@ -4,9 +4,9 @@ import {
   addHostsToFirestore,
   getHostsByLocation,
   updateHostsInfo,
+  locations,
 } from '@/utils/hostsStorage';
 
-import { locations } from '@/utils/hostData';
 import Search from '@/components/host-list/Search';
 import HostDetailsModal from '@/components/host-list/HostDetailsModal';
 import styles from './hostList.module.scss';

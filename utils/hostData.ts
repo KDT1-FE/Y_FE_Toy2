@@ -209,6 +209,4 @@ const hostData = [
   },
 ];
 
-const locations = Array.from(new Set(hostData.map(host => host.location)));
-
-export { hostData, locations };
+export { hostData };
