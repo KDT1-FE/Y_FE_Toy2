@@ -24,8 +24,11 @@ export default function AllChatList() {
 
   const participateChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (e.target instanceof HTMLButtonElement) {
-      await chatListAPI.participateChat(e.target.name);
-      router.push(`/chat/${e.target.name}`);
+      await chatListAPI.participateChat(e.target.id);
+      router.push({
+        pathname: `/chat/${e.target.id}`,
+        query: { name: e.target.name },
+      });
     }
   };
 
@@ -49,7 +52,11 @@ export default function AllChatList() {
   };
   return (
     <ul>
-       <button className={styles.chatPlusBtn} type="button" onClick={() => setIsModal(true)}>
+      <button
+        className={styles.chatPlusBtn}
+        type="button"
+        onClick={() => setIsModal(true)}
+      >
         +
       </button>
       {isModal && <ChatListModal handleModal={handleModal} />}
@@ -64,7 +71,6 @@ export default function AllChatList() {
                 pathname: `/chat/${chat.id}`,
                 query: { name: chat.name },
               }}
-              as={`/chat/${chat.id}`}
               className={styles.container}
               onClick={isincluded ? undefined : routerChat}
             >
@@ -86,11 +92,14 @@ export default function AllChatList() {
                   </div>
                 </div>
                 <div>
-                  <div className={styles.chat_updated}>{isToday === dateString ? formattedTime : `${dateString}`}</div>
+                  <div className={styles.chat_updated}>
+                    {isToday === dateString ? formattedTime : `${dateString}`}
+                  </div>
                   {!isincluded && (
                     <button
                       type="button"
-                      name={chat.id}
+                      id={chat.id}
+                      name={chat.name}
                       onClick={participateChat}
                     >
                       참여
