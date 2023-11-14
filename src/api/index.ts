@@ -32,6 +32,7 @@ client.interceptors.response.use(
       const refreshToken = getCookie('refreshToken');
       if (refreshToken) {
         try {
+          console.log('응답 인터셉터 실행')
           const res = await postRefresh(refreshToken);
           setAccessToken(res.data.accessToken);
           return axios(error.config); // 원래 요청을 재시도

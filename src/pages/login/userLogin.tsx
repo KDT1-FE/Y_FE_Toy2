@@ -19,12 +19,13 @@ import {
 } from '@chakra-ui/react';
 import { useRecoilState } from 'recoil';
 import { onlineUserState } from '../../states/atom';
-import { postLogin } from '../../api/index';
 import { loginSocket } from '../../api/socket';
-import { setCookies, removeCookies } from '../../util/util';
+import { postLogin } from '../../api/index';
+import { setCookies, getCookie, removeCookies } from '../../util/util';
 
 function UserLogin() {
   const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -40,6 +41,7 @@ function UserLogin() {
 
     try {
       const res = await postLogin(id, password);
+      setIsLogin(true);
       const { accessToken, refreshToken } = res.data;
       setCookies(accessToken, refreshToken);
       localStorage.setItem('id', id);
@@ -49,7 +51,7 @@ function UserLogin() {
       loginSocket(accessToken, (data: any) => {
         console.log('Data received from socket:', data);
         setOnlineUsers(data);
-        console.log(onlineUsers);
+        console.log('소켓설정완료 핸들러', onlineUsers);
       });
 
       navigate('/lobby');
@@ -78,6 +80,20 @@ function UserLogin() {
       return () => clearTimeout(timer);
     }
   }, [showAlert.active]);
+
+  useEffect(() => {
+    const accessToken = getCookie('accessToken');
+    const refreshToken = getCookie('refreshToken');
+
+    if ((accessToken || refreshToken) && !isLogin) {
+      loginSocket(accessToken, (data: any) => {
+        setOnlineUsers(data);
+        console.log('소켓설정완료 유즈이팩트');
+      });
+      navigate('/lobby');
+      console.log('리디렉션됨');
+    }
+  }, []);
 
   return (
     <Flex
