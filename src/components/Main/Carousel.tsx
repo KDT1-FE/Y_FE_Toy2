@@ -1,6 +1,7 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import './carousel.css'
 import styled from 'styled-components';
 
 function Carousel() {
@@ -35,7 +36,7 @@ function Carousel() {
                 관심사 기반 커뮤니티
               </span>
             </p>
-            <img src="/src/assets/images/mainban-img1.png" alt="배너" />
+            <img src="/src/assets/images/mainban-img2.png" alt="배너" />
           </div>
         </Slides>
         <Slides>
@@ -47,7 +48,7 @@ function Carousel() {
                 관심사 기반 커뮤니티
               </span>
             </p>
-            <img src="/src/assets/images/mainban-img1.png" alt="배너" />
+            <img src="/src/assets/images/mainban-img3.png" alt="배너" />
           </div>
         </Slides>
       </Slider>
@@ -65,14 +66,14 @@ const Slides = styled.div`
     justify-content: center;
     align-items: flex-start;
     font-weight: 700;
-    font-size: 48px;
-    line-height: 61px;
+    font-size: 2.6rem;
+    line-height: 3rem;
     .slide-des{
       font-weight: 400;
-      font-size: 30px;
-      line-height: 24px;
+      font-size: 1.5rem;
+      line-height: 2rem;
       letter-spacing: -0.4px;
-      margin-top: 30px;
+      margin-top: 25px;
     }
   }
   .slide-inner{
@@ -84,3 +85,4 @@ const Slides = styled.div`
     height: 100%;
   }
 `
+
