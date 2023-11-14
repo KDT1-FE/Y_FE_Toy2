@@ -46,7 +46,7 @@ export const FriendProfilesCheckOnline = ({
 			console.log('disconnect user');
 			socket.disconnect();
 		};
-	}, []);
+	}, [accessToken]);
 
 	return (
 		<div>
