@@ -26,12 +26,16 @@ const MyChats = ({ userType }: { userType: string }) => {
       router.push(`/chating/${chat.id}`);
     }
   };
-  const { data } = useQuery<Chat[]>({
+  const { data, isLoading } = useQuery<Chat[]>({
     queryKey: ['getChatsKey'],
     queryFn: userType === 'my' ? getMyChats : getAllChats,
     refetchOnWindowFocus: false,
-    staleTime: 10000,
+    refetchInterval: 1000,
   });
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const onAddHandler = () => {
     setAddChatOpen(!addChatOpen);
@@ -125,4 +129,26 @@ const ChatList = styled.div`
   }
   -ms-overflow-style: none; /* ie */
   scrollbar-width: none; /* 파이어폭스 */
+`;
+
+const Loading = styled.div`
+  width: 50px;
+  height: 50px;
+
+  border: 5.5px solid rgba(255, 255, 255, 0.3);
+  border-top: 5.5px solid ${({ theme }) => theme.color.mainGreen};
+  border-radius: 50%;
+
+  animation: spin 1s linear infinite;
+
+  margin: 20rem auto 0;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
