@@ -37,6 +37,12 @@ export const myChatsState = atom<Chat[]>({
   default: [],
 });
 
+// 검색할 때 나오는 Input 값
+export const searchInputState = atom<string>({
+  key: 'searchInputState',
+  default: '',
+});
+
 // 검색했을 때 나오는 채팅방 조회
 export const searchChatsState = atom<Chat[]>({
   key: 'searchChatsState',

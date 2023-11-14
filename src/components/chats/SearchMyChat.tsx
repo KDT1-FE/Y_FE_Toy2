@@ -2,13 +2,14 @@
 import React, { useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { Chat, searchChatsState } from './chatsStore';
+import { Chat, searchChatsState, searchInputState } from './chatsStore';
 import { MdSearch } from 'react-icons/md';
 import { getAllChats, getMyChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
+import { debounce } from 'lodash';
 
 const SearchMyChat = ({ userType }: { userType: string }) => {
-  const [input, setInput] = useState<string>('');
+  const [input, setInput] = useRecoilState(searchInputState);
   const [filterChats, setFilteredChats] = useRecoilState(searchChatsState);
 
   const { data: chats } = useQuery<Chat[], unknown>({
@@ -17,21 +18,13 @@ const SearchMyChat = ({ userType }: { userType: string }) => {
     refetchOnWindowFocus: false,
     refetchInterval: 1000,
   });
-  const onInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setInput(e.target.value);
-      if (chats) {
-        const filteringChats = chats.filter((chat) => {
-          const filterValue = chat.name.toLowerCase().includes(e.target.value.toLowerCase());
-          return filterValue;
-        });
-        const filteredChats = [...filteringChats];
-        console.log(filteredChats);
-        setFilteredChats(filteredChats);
-      }
-    },
-    [chats],
-  );
+  const onInputChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+    if (chats) {
+      const filteringChats = chats.filter((chat) => chat.name.includes(e.target.value));
+      setFilteredChats(filteringChats);
+    }
+  }, 300);
   return (
     <Wrapper>
       <SearchUserBox>

@@ -9,7 +9,7 @@ import MyChatItem from '@/components/chats/MyChatItem';
 import SearchMyChat from '@/components/chats/SearchMyChat';
 // svgr import
 import AddChat from '../../../public/assets/addChat.svg';
-import { Chat, searchChatsState } from './chatsStore';
+import { Chat, searchChatsState, searchInputState } from './chatsStore';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
 
@@ -17,6 +17,7 @@ import { getMyChats, getAllChats, partChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
 const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
+  const filterInputValue = useRecoilValue(searchInputState);
   const filterChats = useRecoilValue(searchChatsState);
   const router = useRouter();
   const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
@@ -55,9 +56,41 @@ const MyChats = ({ userType }: { userType: string }) => {
       <ChatContainer>
         <SearchMyChat userType={userType} />
         <ChatList>
-          {userId &&
-            data &&
-            (filterChats.length > 0
+          {userId && data ? (
+            filterInputValue ? (
+              filterChats.length > 0 ? (
+                sortTime(filterChats).map((chat) => (
+                  <MyChatItem
+                    key={chat.id}
+                    name={chat.name}
+                    latestMessage={chat.latestMessage}
+                    users={chat.users}
+                    onClick={() => enterChatRoom(chat)}
+                    isPrivate={chat.isPrivate}
+                  />
+                ))
+              ) : (
+                <NoUserWrap>
+                  <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
+                </NoUserWrap>
+              )
+            ) : (
+              sortTime(data).map((chat) => (
+                <MyChatItem
+                  key={chat.id}
+                  name={chat.name}
+                  latestMessage={chat.latestMessage}
+                  users={chat.users}
+                  onClick={() => enterChatRoom(chat)}
+                  isPrivate={chat.isPrivate}
+                />
+              ))
+            )
+          ) : null}
+        </ChatList>
+        {/* <ChatList>
+          {userId && data
+            ? filterChats.length > 0
               ? sortTime(filterChats).map((chat) => (
                   <MyChatItem
                     key={chat.id}
@@ -68,42 +101,17 @@ const MyChats = ({ userType }: { userType: string }) => {
                     isPrivate={chat.isPrivate}
                   />
                 ))
-              : filterChats !== null &&
-                filterChats.length === 0 && (
-                  <NoUserWrap>
-                    <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
-                  </NoUserWrap>
-                ))}
-        </ChatList>
-        {/* <ChatList>
-          {userId && data ? (
-            filterChats.length > 0 ? (
-              sortTime(filterChats).map((chat) => (
-                <MyChatItem
-                  key={chat.id}
-                  name={chat.name}
-                  latestMessage={chat.latestMessage}
-                  users={chat.users}
-                  onClick={() => enterChatRoom(chat)}
-                  isPrivate={chat.isPrivate}
-                />
-              ))
-            ) : (
-              <NoUserWrap>
-                <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
-              </NoUserWrap>
-            )
-          ) : // : sortTime(data).map((chat) => (
-          //     <MyChatItem
-          //       key={chat.id}
-          //       name={chat.name}
-          //       latestMessage={chat.latestMessage}
-          //       users={chat.users}
-          //       onClick={() => enterChatRoom(chat)}
-          //       isPrivate={chat.isPrivate}
-          //     />
-          //   ))
-          null}
+              : sortTime(data).map((chat) => (
+                  <MyChatItem
+                    key={chat.id}
+                    name={chat.name}
+                    latestMessage={chat.latestMessage}
+                    users={chat.users}
+                    onClick={() => enterChatRoom(chat)}
+                    isPrivate={chat.isPrivate}
+                  />
+                ))
+            : null}
         </ChatList> */}
       </ChatContainer>
     </Wrapper>
