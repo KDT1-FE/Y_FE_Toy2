@@ -39,6 +39,7 @@ export const partChats = async () => {
     const res = await instance.patch<Chat[], any>(`chat/participate`, { headers });
     if (res) {
       return res.chats;
+      console.log(res.chats);
     }
   } catch (error) {
     console.error(error);

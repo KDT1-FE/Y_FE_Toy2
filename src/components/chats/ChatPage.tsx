@@ -28,9 +28,10 @@ const MyChats = ({ userType }: { userType: string }) => {
         partChats();
         router.push(`/chating/${chat.id}`);
         console.log('새로 입장 성공');
+      } else {
+        router.push(`/chating/${chat.id}`);
+        console.log('그냥 들어가기 성공');
       }
-      router.push(`/chating/${chat.id}`);
-      console.log('그냥 들어가기 성공');
     }
   };
   const { data, isLoading } = useQuery<Chat[]>({
@@ -101,7 +102,6 @@ export default MyChats;
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  height: 100vh;
   flex-direction: column;
   justify-content: center;
 `;
@@ -120,6 +120,7 @@ const MyChatBar = styled.div`
 const IconBar = styled.div`
   display: flex;
   gap: 1.5rem;
+  margin-top: 0.6rem;
 `;
 
 const AddChatIcon = styled(AddChat)`
