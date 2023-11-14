@@ -22,7 +22,7 @@ const ChatGeneratorMenu = ({ register }: RegisterFn) => {
 	return (
 		<Menu>
 			<MenuHandler>
-				<Button className="w-full">Menu</Button>
+				<Button className="w-full">유저 초대하기</Button>
 			</MenuHandler>
 			<MenuList className="absolute z-[62] max-h-64">
 				<MenuItem className="text-center text-xl font-bold">유저들</MenuItem>

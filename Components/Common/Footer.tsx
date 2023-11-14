@@ -13,16 +13,36 @@ const Footer = () => {
 		window.location.href = '/login';
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const data = [
+		{
+			label: '유저',
+			value: 'users',
+		},
+		{
+			label: '개인 채팅방',
+			value: 'private',
+		},
+		{
+			label: '오픈 채팅방',
+			value: 'open',
+		},
+		{
+			lable: '검색하기',
+			value: 'search',
+		},
+	];
+
 	return (
-		<div className="w-auto gap-20 h-20 mx-auto fixed bottom-0 flex justify-center items-center bg-white">
+		<div className="w-full sm:w-[425px] md:w-[645px] h-12 flex justify-around items-center bg-primary mx-auto fixed inset-x-0 bottom-0">
 			<Link href={'/users'}>
-				<Image width={21} height={21} src="/people.svg" alt="친구 목록 보기" />
+				<Image width={20} height={20} src="/people.svg" alt="친구 목록 보기" />
 			</Link>
 			<Link href={'/chatting'}>
-				<Image width={25} height={25} src="/more.svg" alt="더보기" />
+				<Image width={20} height={20} src="/more.svg" alt="더보기" />
 			</Link>
 			<Link href={'/search'}>
-				<Image width={21} height={21} src="/search.svg" alt="검색하기" />
+				<Image width={20} height={20} src="/search.svg" alt="검색하기" />
 			</Link>
 			<button
 				onClick={handleLogout}

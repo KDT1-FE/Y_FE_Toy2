@@ -7,7 +7,7 @@ import {
 	TargetType,
 	ColumnNames,
 } from './ChatList.type';
-import { Chat } from '@/app/chatting/chatting.type';
+import { Chat } from '@/app/private/chatting.type';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { useFetchPatchDeleteChat } from '@/hooks/Open/useFetchPatchDeleteChat';
 import ChatDroppableDelete from './ChatDroppable/ChatDroppableDelete';

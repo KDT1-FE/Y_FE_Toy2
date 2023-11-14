@@ -1,4 +1,4 @@
-import { Chat } from '@/app/chatting/chatting.type';
+import { Chat } from '@/app/private/chatting.type';
 
 export type ChatListProps = {
 	myChatList: Chat[];

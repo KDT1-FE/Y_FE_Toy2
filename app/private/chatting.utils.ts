@@ -15,11 +15,15 @@ export const fetchAllChat = async (token: string) => {
 };
 
 export const filterChat = (chatList: Chat[]) => {
-	const OpenChatList = chatList.filter((chat: Chat) => chat.isPrivate !== true);
-	const PrivateChatList = chatList.filter(
-		(chat: Chat) => chat.isPrivate === true,
+	const PersonalChat = chatList.filter(
+		(chat: Chat) => chat.isPrivate === true && chat.users.length === 2,
 	);
-	return { OpenChatList, PrivateChatList };
+	const MultiChat = chatList.filter(
+		(chat: Chat) => chat.isPrivate === true && chat.users.length > 2,
+	);
+
+	const PublicChat = chatList.filter((chat: Chat) => chat.isPrivate === false);
+	return { PersonalChat, MultiChat, PublicChat };
 };
 
 export const fetchRandomImage = async (chatNumber: number) => {
