@@ -19,6 +19,9 @@ function Carousel() {
             <p className="slide-tit">
               취향으로<br />
               만나는 우리
+              <span className='slide-des'>
+                관심사 기반 커뮤니티
+              </span>
             </p>
             <img src="/src/assets/images/mainban-img1.png" alt="배너" />
           </div>
@@ -28,6 +31,9 @@ function Carousel() {
             <p className="slide-tit">
               취향으로<br />
               만나는 우리
+              <span className='slide-des'>
+                관심사 기반 커뮤니티
+              </span>
             </p>
             <img src="/src/assets/images/mainban-img1.png" alt="배너" />
           </div>
@@ -37,6 +43,9 @@ function Carousel() {
             <p className="slide-tit">
               취향으로<br />
               만나는 우리
+              <span className='slide-des'>
+                관심사 기반 커뮤니티
+              </span>
             </p>
             <img src="/src/assets/images/mainban-img1.png" alt="배너" />
           </div>
@@ -52,7 +61,19 @@ const Slides = styled.div`
   height:400px;
   .slide-tit{
     display: inline-flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 61px;
+    .slide-des{
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 24px;
+      letter-spacing: -0.4px;
+      margin-top: 30px;
+    }
   }
   .slide-inner{
     max-width: 900px;
