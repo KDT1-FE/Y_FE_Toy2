@@ -25,6 +25,9 @@ export default function Chat() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  const [joiners, setJoiners] = useState<string[]>([]);
+  const [leavers, setLeavers] = useState<string[]>([]);
+
   const userId = useRecoilValue(userIdState);
   // console.log(userIdState);
 
@@ -56,11 +59,13 @@ export default function Chat() {
     socket.emit('fetch-messages');
 
     socket.on('join', (messageObject: JoinersData) => {
-      console.log(messageObject, '123123123');
+      console.log(messageObject, '채팅방 입장');
+      setJoiners(prevJoiners => [...prevJoiners, ...messageObject.joiners]);
     });
 
     socket.on('leave', (messageObject: LeaverData) => {
-      console.log(messageObject, '123123123');
+      console.log(messageObject, '채팅방 퇴장');
+      setLeavers(prevLeavers => [...prevLeavers, messageObject.leaver]);
     });
 
     return () => {
@@ -105,6 +110,11 @@ export default function Chat() {
       <div className={styles.container}>
         <div className={styles.container}>
           <div>
+            {leavers.length === 0
+              ? null
+              : leavers.map((leaver, index) => (
+                  <ExitNotice key={index} leaver={leaver} />
+                ))}
             {messages.map(msg =>
               msg.userId === userId ? (
                 <MyChat key={msg.id} msg={msg} />
@@ -112,8 +122,7 @@ export default function Chat() {
                 <OtherChat key={msg.id} msg={msg} />
               ),
             )}
-            <EntryNotice />
-            <ExitNotice />
+            <EntryNotice joiners={joiners} />
           </div>
           <div ref={messagesEndRef} />
           {showAlert && <ChatAlert />}
