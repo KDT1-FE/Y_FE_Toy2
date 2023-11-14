@@ -5,7 +5,7 @@ import { signup } from '@api/signup';
 import { useState } from 'react';
 import { validateUser } from '@utils/validate';
 import { idCheck } from '@api/idcheck';
-import SignupModal from '@components/signup/signupModal';
+import SignupModal from '@components/signup/SignupModal';
 import { useAppSelector } from '@/hooks/redux';
 
 const Signup = () => {
