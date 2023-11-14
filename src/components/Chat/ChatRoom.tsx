@@ -3,49 +3,43 @@ import ModalHamburger from "../ModalHamburger";
 import { useContext, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import { AuthContext } from "../../hooks/useAuth";
+import Loader from "../Loader/Loader";
 
-// interface Chat {
-//   id: string;
-//   name: string;
-//   users: User[]; // 속한 유저 id
-//   isPrivate: boolean;
-//   latestMessage: Message | null;
-//   updatedAt: Date;
-// }
+interface Chat {
+  id: string;
+  name: string;
+  users: User[]; // 속한 유저 id
+  isPrivate: boolean;
+  latestMessage: Message | null;
+  updatedAt: Date;
+}
 
-// interface User {
-//   id: string;
-//   name: string;
-//   picture: string;
-// }
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
 
-// interface Message {
-//   id: string;
-//   text: string;
-//   userId: string;
-//   createAt: Date;
-// }
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createAt: Date;
+}
 
 function ChatRoom({ roomId }: { roomId: string }) {
   const [text, setText] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const { accessToken } = useContext(AuthContext);
   const [socket, setSocket] = useState<Socket>({} as Socket);
   const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
     try {
-      if (socket) {
+      if (socket && text.trim()) {
         socket.emit("message-to-server", text);
-        socket.on("message-to-client", (responseData) => {
-          console.log(responseData);
-        });
-        socket.emit("fetch-messages");
-        socket.on("messages-to-client", (responseData) => {
-          setMessages(responseData.messages);
-        });
-
-        console.log(messages);
+        setText("");
         setInputValue("");
       }
     } catch (error) {
@@ -59,29 +53,50 @@ function ChatRoom({ roomId }: { roomId: string }) {
   };
 
   useEffect(() => {
-    if (accessToken) {
-      console.log("방이 바뀜", roomId);
-      const newSocket = io(
-        `https://fastcampus-chat.net/chat?chatId=${roomId}`,
-        {
-          extraHeaders: {
-            Authorization: `Bearer ${accessToken}`,
-            serverId: "1601075b"
-          }
+    if (accessToken && roomId) {
+      const fetchData = async () => {
+        try {
+          setLoading(!loading);
+          const newSocket = io(
+            `https://fastcampus-chat.net/chat?chatId=${roomId}`,
+            {
+              extraHeaders: {
+                Authorization: `Bearer ${accessToken}`,
+                serverId: "1601075b"
+              }
+            }
+          );
+
+          newSocket.on("message-to-client", (responseData) => {
+            setMessages((prevMessages) => [...prevMessages, responseData]);
+          });
+
+          newSocket.emit("fetch-messages");
+          newSocket.on("messages-to-client", (responseData) => {
+            setMessages(responseData.messages);
+          });
+
+          console.log("데이터 불러오기 성공 : ", messages);
+          setSocket(newSocket);
+          return () => {
+            newSocket.off("message-to-client");
+            newSocket.off("messages-to-client");
+            newSocket.disconnect();
+          };
+        } catch (error) {
+          console.error(error);
+        } finally {
+          console.log("done!");
         }
-      );
-
-      setSocket(newSocket);
-
-      return () => {
-        newSocket.disconnect();
       };
+      fetchData();
     }
-  }, [accessToken, roomId, messages]);
+  }, [accessToken, roomId]);
 
   return (
     <ChatRoomWrap>
       <div className="chatroom__tit">
+        <Loader loading={loading}></Loader>
         <div className="tit-bx">
           {/* 채팅방의 img 속성은 없음 */}
           {/* <div className="img">

@@ -4,7 +4,7 @@ import ModalPlus from "../components/ModalPlus";
 import { useContext, useEffect, useState } from "react";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
-import { io } from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 
 interface User {
   id: string;
