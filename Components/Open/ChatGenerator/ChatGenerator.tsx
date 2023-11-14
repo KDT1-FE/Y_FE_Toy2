@@ -55,7 +55,7 @@ const ChatGenerator = () => {
 			{chatModal && (
 				<div
 					ref={modalRef}
-					className={`absolute  w-full  inset-0 flex flex-col items-center justify-center bg-white border-4 box-border`}
+					className={`absolute z-[60]  w-full  inset-0 flex flex-col items-center justify-center bg-white border-4 box-border`}
 				>
 					<button
 						type="button"

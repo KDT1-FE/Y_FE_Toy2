@@ -14,11 +14,12 @@ export const fetchAllChat = async (token: string) => {
 	return data;
 };
 
-export const filterChat = (chatValue: string, chatList: Chat[]) => {
-	if (chatValue === 'open') {
-		return chatList.filter((chat: Chat) => chat.isPrivate !== true);
-	}
-	return chatList.filter((chat: Chat) => chat.isPrivate === true);
+export const filterChat = (chatList: Chat[]) => {
+	const OpenChatList = chatList.filter((chat: Chat) => chat.isPrivate !== true);
+	const PrivateChatList = chatList.filter(
+		(chat: Chat) => chat.isPrivate === true,
+	);
+	return { OpenChatList, PrivateChatList };
 };
 
 export const fetchRandomImage = async (chatNumber: number) => {

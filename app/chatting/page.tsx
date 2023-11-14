@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { cookies } from 'next/headers';
 import Header from '@/Components/Common/Header';
 import ChatDivder from '@/Components/Open/ChatDivder/ChatDivder';
+import Footer from '@/Components/Common/Footer';
 
 const Chatting = async () => {
 	const cookieStore = cookies();
@@ -21,11 +22,7 @@ const Chatting = async () => {
 			<ChatDivder myChatList={result} />
 			<ChatGenerator />
 			<SpeedDialWithTextInside />
-			<div className="flex flex-col">
-				<h1>Footer</h1>
-				<Link href="/chatting?chatValue=open">chatting?open</Link>
-				<Link href="/chatting?chatValue=private">chatting?private</Link>
-			</div>
+			<Footer />
 		</div>
 	);
 };
