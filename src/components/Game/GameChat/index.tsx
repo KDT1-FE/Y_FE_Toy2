@@ -29,7 +29,6 @@ interface UserResponse {
 }
 
 const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
-  console.log("GameChat/ gameData:", gameData);
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
