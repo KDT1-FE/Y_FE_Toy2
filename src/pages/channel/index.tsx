@@ -1,5 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
-import ChannelList from '../../components/channel';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import CreateChannelModal from '../../components/channel/modal/CreateChannelModal';
 import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import ChannelSearchInput from '../../components/channel/ChannelSearchInput';
@@ -34,7 +33,7 @@ const ChannelPage = () => {
           <CreateChannelModal />
           <ChannelSearchInput />
         </Flex>
-        <ChannelList />
+        <Outlet />
       </Box>
       <AllUserBar />
     </Flex>
