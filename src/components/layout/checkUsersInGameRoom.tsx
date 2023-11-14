@@ -46,7 +46,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
           const res = await getUserData(userId);
           profilesArray.push(res);
         } catch (error) {
-          // console.error('Error fetching user data:', error);
+          console.error('Error fetching user data:', error);
         }
         // }
       }
@@ -56,7 +56,8 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
 
     fetchUserProfiles();
   }, [UsersInGameRoom, setProfiles]);
-  // console.log(profiles);
+  console.log(profiles);
+
   return (
     <UserList>
       {profiles.map((element, index) => (

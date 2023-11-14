@@ -16,34 +16,7 @@ import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
 import CheckNums from '../../util/checkNums';
 import { gameSocket } from '../../api/socket';
-
-interface AnswerFormProps {
-  onSubmit: (answer: string) => void;
-}
-
-const AnswerForm: React.FC<AnswerFormProps> = ({ onSubmit }) => {
-  const [answer, setAnswer] = useState('');
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    onSubmit(answer);
-    setAnswer('');
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        정답:
-        <input
-          type="text"
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-        />
-      </label>
-      <button type="submit">제출</button>
-    </form>
-  );
-};
+import AnswerForm from '../../components/template/AnswerForm';
 
 const GameRoom: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,15 +24,16 @@ const GameRoom: React.FC = () => {
   const [buttonVisible, setButtonVisible] = useState(true);
   const [submitVisible, setSubmitVisible] = useState(false);
   const [whoIsCaptain, SetWhoIsCaptain] = useState('');
-  const [solution, setSolution] = useState('');
   const [myMessage, setMyMessage] = useRecoilState(myMessageState);
   const [currentMessageObject, setCurrentMessageObject] =
     useRecoilState(myMessageState);
   const [socket, setSocket] = useState<any>(null);
+
   useEffect(() => {
     // 채팅방 주소값 가져오기
     setMyMessage([]);
   }, []);
+  console.log(currentMessageObject[currentMessageObject.length - 1]);
 
   useEffect(() => {
     if (id) {
@@ -77,8 +51,25 @@ const GameRoom: React.FC = () => {
 
       // 서버로부터 'game' 이벤트 수신 리스너 설정
       gameSocket.on('game', (data) => {
-        console.log('RECEIVED', data);
         // 여기에서 필요한 상태 업데이트나 UI 반영
+        console.log('this is', data);
+        if (data.isBtnVisible === false) {
+          setButtonVisible(false);
+        }
+        if (data.isSubmitVisible === true && data.captain === myId) {
+          setSubmitVisible(true);
+        }
+        if (data.isSubmitVisible === false) {
+          setSubmitVisible(false);
+        }
+        // if (
+        //   data.captain !== myId &&
+        //   data.solution === myMessage[myMessage.length - 1].text &&
+        //   data.solution.length > 0
+        // ) {
+        //   alert(`${data.userId}님이 정답자 입니다!! 짝짝짝`);
+        //   setButtonVisible(true);
+        // }
       });
 
       return () => {
@@ -86,7 +77,7 @@ const GameRoom: React.FC = () => {
         gameSocket.disconnect();
       };
     }
-  }, [roomId, gameSocket]);
+  }, [roomId, gameSocket, myMessage]);
 
   const handleGameStart = () => {
     console.log('게임이 시작되었습니다!');
@@ -104,11 +95,26 @@ const GameRoom: React.FC = () => {
       console.warn('Socket is not connected.');
     }
   };
+
+  const handleSubmit = (answer: string) => {
+    console.log('정답 입력해주세요');
+    if (gameSocket?.connected) {
+      gameSocket.emit('game', {
+        roomId: roomId,
+        captain: myId,
+        isBtnVisible: false,
+        isSubmitVisible: false,
+        solution: answer,
+        winner: '',
+      });
+    } else {
+      console.warn('Socket is not connected.');
+    }
+  };
   controlBack();
 
   const roomNum = useRecoilValue(roomIdState);
   const users = useRecoilValue(usersInRoom);
-  console.log(users);
 
   return (
     <Game>
@@ -123,12 +129,10 @@ const GameRoom: React.FC = () => {
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
           <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-          <button
-            onClick={() => {
-              handleGameStart();
-            }}>
-            게임 시작
-          </button>
+          {buttonVisible && (
+            <button onClick={handleGameStart}>게임 시작</button>
+          )}
+          {submitVisible && <AnswerForm onSubmit={handleSubmit} />}
         </BtnGroup>
       </RoomHeader>
 
