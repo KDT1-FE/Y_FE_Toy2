@@ -17,28 +17,33 @@ interface RequestBody {
   id: string;
   password: string;
   name: string;
+}
+
+interface UserRequestBody extends RequestBody {
   picture: string;
 }
 
 interface SignUpModalProps {
   handleModal: () => void;
   formData: RequestBody;
-  fetchImageUrl: (url: string) => void;
+  defaultImgUrl: string | null;
 }
 
 export default function SignUpModal({
   handleModal,
   formData,
-  fetchImageUrl,
+  defaultImgUrl,
 }: SignUpModalProps) {
   const router = useRouter();
-  const [pictureName, setPictureName] = useState('');
-  const [selectedImg, setSelectedImg] = useState<string>(formData.picture);
+  const userFormData: RequestBody = formData;
+  const [pictureName, setPictureName] = useState('default.jpg');
+  const [selectedImg, setSelectedImg] = useState<string | null>(defaultImgUrl);
   const imageRef = useRef<HTMLInputElement>(null);
   const imageStyle = {
     borderRadius: '50%',
   };
 
+  console.log(defaultImgUrl);
   const handleInputClick = () => {
     if (imageRef.current) {
       imageRef.current.click();
@@ -46,8 +51,8 @@ export default function SignUpModal({
   };
 
   const handleImgResetClick = () => {
-    setSelectedImg(formData.picture);
-    setPictureName(formData.picture);
+    setSelectedImg(defaultImgUrl);
+    setPictureName('default.jpg');
   };
 
   const previewImg = (img: File | undefined) => {
@@ -69,28 +74,36 @@ export default function SignUpModal({
     previewImg(selectedFile);
   };
 
-  const handleImageUpload = async () => {
+  const handleImageUpload = async (): Promise<string | undefined> => {
     try {
       if (selectedImg) {
         const storage = getStorage(app);
         const imagesRef = ref(storage, `images/${pictureName}`);
-        await uploadString(imagesRef, selectedImg, 'data_url');
-        await getDownloadURL(imagesRef).then(url => {
-          return fetchImageUrl(url);
-        });
+
+        if (selectedImg !== defaultImgUrl) {
+          await uploadString(imagesRef, selectedImg, 'data_url');
+          const url = await getDownloadURL(imagesRef);
+          return url;
+        }
+        return defaultImgUrl;
       }
     } catch (error) {
       console.log(error);
     }
+    return undefined;
   };
 
   const handleSignUpClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(1);
     try {
-      const response = await instance.post('/signup', formData);
-      handleImageUpload();
-      if (response.status === 200) {
+      const selectedImgUrl: string | undefined = await handleImageUpload();
+      if (selectedImgUrl) {
+        const requestUserData: UserRequestBody = {
+          ...userFormData,
+          picture: selectedImgUrl,
+        };
+        await instance.post('/signup', requestUserData);
+        alert('회원가입이 완료되었습니다.');
         handleModal();
         router.push('/login');
       }
@@ -98,6 +111,7 @@ export default function SignUpModal({
       console.log(error);
     }
   };
+
   return (
     <Modal>
       <div className={styles.signUpModalBox}>

@@ -31,7 +31,7 @@ function Navigation() {
           </Link>
         </li>
         <li className={styles.menu}>
-          <Link href="/">
+          <Link href="/mypage">
             <BsPersonCircle className={styles.icon} />
             <p>마이페이지</p>
           </Link>
