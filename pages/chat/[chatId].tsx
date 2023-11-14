@@ -16,8 +16,6 @@ export default function Chat() {
   const router = useRouter();
   const { chatId, name } = router.query;
 
-  console.log(router.query);
-
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -29,23 +27,20 @@ export default function Chat() {
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
 
-    const socket = useMemo(() => {
-      return io(`${CLIENT_URL}?chatId=${chatId}`, {
-        extraHeaders: {
-          Authorization: `Bearer ${accessToken}`,
-          serverId: process.env.NEXT_PUBLIC_API_KEY,
-        },
-      });
-    }, [chatId, accessToken]);
+  const socket = useMemo(() => {
+    return io(`${CLIENT_URL}?chatId=${chatId}`, {
+      extraHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+        serverId: process.env.NEXT_PUBLIC_API_KEY,
+      },
+    });
+  }, [chatId, accessToken]);
 
   useEffect(() => {
-    
     socket.on('connect', () => {
       console.log('Connected to chat server');
       setIsConnected(true);
-      
     });
-
 
     socket.on('messages-to-client', (messageArray: Message[]) => {
       setMessages(messageArray.messages);

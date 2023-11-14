@@ -6,6 +6,7 @@ import Image from 'next/image';
 import CreateChat from '@/components/ChatList/CreateChat';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
+import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 
 export default function AllChatList() {
   const router = useRouter();
@@ -37,11 +38,18 @@ export default function AllChatList() {
   const routerChat = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
   };
+
+  const today = new Date();
+  const isToday = today.toISOString().split('T')[0];
+
+
   return (
     <ul>
       <CreateChat />
       {allChatList.map(chat => {
         const isincluded = chat.users.some(checkIncluded);
+        const dateString = todayDate(chat.updatedAt);
+        const formattedTime = formattingTime(chat.updatedAt);
         return (
           <li key={chat.id}>
             <Link
@@ -71,7 +79,7 @@ export default function AllChatList() {
                   </div>
                 </div>
                 <div>
-                  <div className={styles.chat_updated}>{chat.updatedAt}</div>
+                  <div className={styles.chat_updated}>{isToday === dateString ? formattedTime : `${dateString}`}</div>
                   {!isincluded && (
                     <button
                       type="button"
