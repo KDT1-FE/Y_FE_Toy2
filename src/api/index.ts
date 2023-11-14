@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CONTENT_TYPE, SERVER_ID, SERVER_URL } from '../constant';
 import { JoinData } from '../interfaces/interface';
-import { getCookie } from '../util/util';
+import { getCookie, setAccessToken } from '../util/util';
 
 const client = axios.create({
   baseURL: SERVER_URL,
@@ -24,8 +24,32 @@ client.interceptors.request.use(
   },
 );
 
+client.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    // 401 에러를 체크하여 토큰 재발급 시도
+    if (error.response && error.response.status === 401) {
+      const refreshToken = getCookie('refreshToken');
+      if (refreshToken) {
+        try {
+          const res = await postRefresh(refreshToken);
+          setAccessToken(res.data.accessToken);
+          return axios(error.config); // 원래 요청을 재시도
+        } catch (refreshError) {
+          console.error('토큰 재발급 시도 실패: ', refreshError);
+        }
+      } else {
+        alert('리프레시 토큰이 없어 토큰 재발급이 불가능합니다.');
+      }
+    } else {
+      console.error('API 요청 실패: ', error);
+    }
+    return Promise.reject(error);
+  },
+);
+
 export const postLogin = async (id: string, password: string) => {
-  const res = await client.post('/login', {
+  const res = await client.post('login', {
     id: id,
     password: password,
   });
@@ -33,12 +57,14 @@ export const postLogin = async (id: string, password: string) => {
 };
 
 export const postJoin = async (joinData: JoinData) => {
-  const res = await client.post('/signup', joinData);
+  const res = await client.post('signup', joinData);
   return res;
 };
 
-export const postRefresh = async () => {
-  const res = await client.post('/refresh');
+export const postRefresh = async (refreshToken: string) => {
+  const res = await client.post('refresh', {
+    refreshToken: refreshToken,
+  });
   return res;
 };
 
@@ -48,14 +74,13 @@ export const getAllUsers = async () => {
 };
 
 export const getUserData = async (userId: string) => {
-  const res = await client.get(`/user?userId=${userId}`);
+  const res = await client.get(`user?userId=${userId}`);
 
   return res.data;
 };
 
-
 export const patchUserData = async (name: string, picture: string) => {
-  const res = await client.patch(`/user`, { name: name, picture: picture });
+  const res = await client.patch(`user`, { name: name, picture: picture });
   return res;
 };
 
@@ -88,13 +113,13 @@ export const getAllMyChat = async () => {
 };
 
 export const leaveGameRoom = async (chatId: string) => {
-  const res = await client.patch(`/chat/leave`, { chatId: chatId });
+  const res = await client.patch(`chat/leave`, { chatId: chatId });
   console.log(res);
   return res;
 };
 
 export const inviteGameRoom = async (chatId: string, users: string[]) => {
-  const res = await client.patch(`/chat/invite`, {
+  const res = await client.patch(`chat/invite`, {
     chatId: chatId,
     users: users,
   });
@@ -103,7 +128,7 @@ export const inviteGameRoom = async (chatId: string, users: string[]) => {
 };
 
 export const getOnlyGameRoom = async (chatId: string) => {
-  const res = await client.get(`/chat/only?chatId=${chatId}`);
+  const res = await client.get(`chat/only?chatId=${chatId}`);
   console.log(res);
   return res;
 };

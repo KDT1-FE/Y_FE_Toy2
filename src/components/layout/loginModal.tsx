@@ -9,7 +9,9 @@ import {
   Flex,
   Switch,
 } from '@chakra-ui/react';
-
+import { getCookie } from '../../util/util';
+import { disconnectLoginSocket } from '../../api/socket';
+import { removeCookies } from '../../util/util';
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,9 +19,26 @@ interface LoginModalProps {
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const handleClick = (url: string) => {
-    navigate(url);
-    onClose();
+  const refreshToken = getCookie('refreshToken');
+
+  const handleClick = async () => {
+    if (refreshToken) {
+      try {
+        await disconnectLoginSocket();
+        localStorage.removeItem('id');
+        removeCookies();
+        alert('로그아웃에 성공했습니다');
+        navigate('/');
+      } catch (error) {
+        console.log(error);
+        alert('로그아웃 중 오류가 발생했습니다');
+      } finally {
+        onClose();
+      }
+    } else {
+      navigate('/');
+      onClose();
+    }
   };
 
   return (
@@ -49,17 +68,17 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               marginBottom={2}
               alignItems={'center'}
               justifyContent={'space-between'}
-              onClick={() => handleClick('/')}
+              onClick={() => handleClick()}
               _hover={{
                 textDecoration: 'underline',
               }}>
-              로그인
+              {refreshToken ? '로그아웃' : '로그인'}
               <Img src="/assets/rightArrow.svg" width="5px" height="9px" />
             </Flex>
             <Flex
               alignItems={'center'}
               justifyContent={'space-between'}
-              onClick={() => handleClick('/join')}
+              onClick={() => navigate('/join')}
               _hover={{
                 textDecoration: 'underline',
               }}>

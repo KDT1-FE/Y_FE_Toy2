@@ -19,6 +19,7 @@ import {
 import { getUserData, patchUserData } from '../../api';
 import { disconnectLoginSocket } from '../../api/socket';
 import { useNavigate } from 'react-router-dom';
+import { removeCookies } from '../../util/util';
 
 const UserProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,7 +40,6 @@ const UserProfile = () => {
       if (userId) {
         try {
           const res = await getUserData(userId);
-          console.log(res);
           setMyID(res.user.id);
           setMyname(res.user.name);
           setMyImg(res.user.picture);
@@ -83,16 +83,19 @@ const UserProfile = () => {
     }
   };
 
-  const handleUserLogout = () => {
+  const handleUserLogout = async () => {
     try {
-      disconnectLoginSocket();
+      await disconnectLoginSocket();
       localStorage.removeItem('id');
+      removeCookies();
       alert('로그아웃에 성공했습니다');
       navigate('/');
     } catch (error) {
       console.log(error);
+      alert('로그아웃 중 오류가 발생했습니다');
     }
   };
+
   return (
     <>
       <Flex
