@@ -48,12 +48,36 @@ const WriterInfoWrap = styled.div`
 
     margin-right: 16px;
   }
+
   .timeStamp {
+    display: flex;
+    flex-direction: column;
+
     font-size: 16px;
     opacity: 0.8;
 
     position: absolute;
     right: 0;
+  }
+
+  button {
+    position: absolute;
+    right: 0;
+
+    width: 80px;
+    height: 30px;
+
+    margin-top: 32px;
+
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-family: "Pretendard";
+
+    background-color: #0d6efd;
+    color: white;
   }
 `;
 const ContentsWrap = styled.div`
@@ -233,6 +257,7 @@ function ProfileFeedDetail() {
       ).length;
 
       const newComment = {
+        id: loginId,
         name: allUserData[loginId ? loginId : ""].name,
         text: commentValue,
         timeStamp: formattedDate,
@@ -277,6 +302,7 @@ function ProfileFeedDetail() {
       const feedInfo = feedData[feedid ? feedid : "1"];
 
       const editComment = {
+        id: loginId,
         name: allUserData[loginId ? loginId : ""].name,
         text: updateComment,
         timeStamp: formattedDate,
@@ -350,7 +376,68 @@ function ProfileFeedDetail() {
       }
     }
   };
+  const handleDeleteFeed = async () => {
+    if (userData && feedData) {
+      const feedRef = doc(db, "Feeds", userData.id);
+      try {
+        const feedDoc = await getDoc(feedRef);
+        const currentFeedData = feedDoc.data();
+        const deleteFeedid = feedid ? feedid : "1";
 
+        if (currentFeedData && currentFeedData[deleteFeedid]) {
+          console.log(currentFeedData[deleteFeedid]);
+
+          // 삭제할 피드의 인덱스
+          const deleteIndex = parseInt(deleteFeedid, 10);
+
+          // Feed 삭제
+          updateDoc(feedRef, {
+            [deleteFeedid]: deleteField()
+          });
+
+          // 뒤에 있는 피드들을 앞으로 당기기
+          for (
+            let i = deleteIndex + 1;
+            i <= Object.keys(currentFeedData).length;
+            i++
+          ) {
+            const nextIndex = i - 1;
+            const currentFeed = currentFeedData[i];
+
+            // 다음 인덱스의 피드가 존재하면 앞으로 당기기
+            if (currentFeed !== undefined) {
+              updateDoc(feedRef, {
+                [nextIndex]: currentFeed,
+                [i]: deleteField()
+              });
+
+              // 다음 인덱스의 피드의 feedId 수정
+              updateDoc(feedRef, {
+                [`${nextIndex}.feedId`]: nextIndex
+              });
+            } else {
+              // 다음 인덱스의 피드가 존재하지 않으면 삭제
+              updateDoc(feedRef, {
+                [nextIndex]: deleteField()
+              });
+            }
+          }
+
+          // 필요한 로직이 있다면 추가
+
+          // 예시로 fetchData 함수 호출 및 페이지 리다이렉트
+          await fetchData();
+          window.location.href = `/profiles/${userid}`;
+        } else {
+          alert("해당 피드가 존재하지 않습니다.");
+        }
+      } catch (error) {
+        alert(
+          `문서를 가져오거나 업데이트하는 도중 오류가 발생했습니다: ${error}`
+        );
+      }
+    }
+  };
   return (
     <ProfileFeedDetailContainer>
       <WriterInfoWrap>
@@ -361,6 +448,7 @@ function ProfileFeedDetail() {
         <div>{userData?.name}</div>
         <div className="timeStamp">
           {feedData && feedid ? feedData[feedid]?.timeStamp : ""}
+          <button onClick={handleDeleteFeed}>삭제</button>
         </div>
       </WriterInfoWrap>
       <ContentsWrap>
@@ -416,6 +504,7 @@ function ProfileFeedDetail() {
                       index={index}
                       handleEditComment={handleEditComment}
                       handleDeleteComment={handleDeleteComment}
+                      loginId={loginId}
                     ></ProfileFeedComment>
                   </CommentListWrap>
                 )

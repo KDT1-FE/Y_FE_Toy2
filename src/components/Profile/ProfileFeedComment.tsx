@@ -2,7 +2,9 @@ import React, { useState } from "react";
 
 import styled from "styled-components";
 const Container = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: space-between;
   gap: 128px;
   margin-bottom: 32px;
 
@@ -28,8 +30,30 @@ const Container = styled.div`
       font-size: 16px;
     }
   }
+  input {
+    width: 600px;
+    height: 50px;
+    border: none;
+    border-radius: 24px;
+
+    padding: 0px 16px;
+    margin-right: 32px;
+
+    font-family: "Pretendard";
+  }
+  input:focus {
+    outline: none;
+  }
   .buttonWrap {
     margin-top: 16px;
+
+    button {
+      margin-right: 16px;
+
+      border: none;
+
+      cursor: pointer;
+    }
   }
 `;
 
@@ -49,11 +73,13 @@ interface feedData {
 export default function ProfileFeedComment(props: {
   feedData: feedData | null;
   comment: {
+    id: string;
     name: string;
     text: string;
     timeStamp: string;
   };
   index: number | null;
+  loginId: string | null;
   handleEditComment: (commentId: string, newText: string) => void;
   handleDeleteComment: (commentId: string) => void;
 }) {
@@ -91,14 +117,16 @@ export default function ProfileFeedComment(props: {
           </div>
         )}
       </div>
-      <div className="buttonWrap">
-        {isEditing ? (
-          <button onClick={handleSaveClick}>저장</button>
-        ) : (
-          <button onClick={handleEditClick}>수정</button>
-        )}
-        <button onClick={handleDeleteClick}>삭제</button>
-      </div>
+      {props.loginId == props.comment.id ? (
+        <div className="buttonWrap">
+          {isEditing ? (
+            <button onClick={handleSaveClick}>저장</button>
+          ) : (
+            <button onClick={handleEditClick}>수정</button>
+          )}
+          <button onClick={handleDeleteClick}>삭제</button>
+        </div>
+      ) : null}
     </Container>
   );
 }
