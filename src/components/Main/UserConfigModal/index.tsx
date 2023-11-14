@@ -15,6 +15,7 @@ import {
   Box,
   Image,
   Text,
+  Spinner,
 } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../../recoil/atoms/authState";
@@ -67,6 +68,8 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
     message: string;
   } | null>(null);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -83,9 +86,12 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
 
   // 사용자 정보를 폼에 설정
   useEffect(() => {
+    if (isOpen) {
+      setIsLoading(true);
+    }
     if (userInfo && userInfo.auth) {
       console.log("UserInfo:", userInfo);
-      //  폼 값 설정 로직
+      // 폼 값 설정 로직
       setValue("id", userInfo.user.id);
       setValue("name", userInfo.user.name);
       setValue("picture", userInfo.user.picture);
@@ -94,8 +100,9 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
         name: userInfo.user.name,
         picture: userInfo.user.picture,
       });
+      setIsLoading(false);
     }
-  }, [userInfo, setValue, setProfile, isOpen]);
+  }, [isOpen, userInfo, setValue, setProfile]);
 
   // 파일 선택 변경
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -194,71 +201,80 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
               {updateStatus.message}
             </Alert>
           )}
-          {/* 프로필 폼 */}
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <DragDropBox
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              onClick={triggerFileSelect}
-            >
-              {selectedFile ? (
-                <Image
-                  src={URL.createObjectURL(selectedFile)}
-                  alt="Upload Preview"
-                  boxSize="40px"
-                />
-              ) : profile.picture ? (
-                <Image
-                  src={profile.picture}
-                  alt="Profile Picture"
-                  boxSize="40px"
-                />
-              ) : (
-                <FaImage size="40px" />
-              )}
-              <Text>이미지 업로드</Text>
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                ref={fileInputRef}
-                display="none"
-              />
-            </DragDropBox>
-            {/* 아이디 입력 */}
-            <FormControl isInvalid={!!errors.id} my={4} justifyContent="center">
-              <Input
-                type="text"
-                placeholder="아이디"
-                value={profile.id}
-                readOnly
-                sx={{
-                  cursor: "not-allowed", // 마우스 커서 변경 방지
-                  _focus: { borderColor: "initial", boxShadow: "none" },
-                  _hover: { borderColor: "initial" },
-                }}
-                width="300px"
-                m="auto"
-              />
-            </FormControl>
-            {/* 닉네임 입력 */}
-            <FormControl isInvalid={!!errors.name} my={4}>
-              <Controller
-                name="name"
-                control={control}
-                rules={{ required: "이름은 필수입니다." }}
-                render={({ field }) => (
-                  <Input type="text" placeholder="닉네임" {...field} />
+          {isLoading ? (
+            // 로딩 중 스피너 표시
+            <Spinner size="xl" />
+          ) : (
+            // 로딩이 완료되면 폼 내용 표시
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <DragDropBox
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                onClick={triggerFileSelect}
+              >
+                {selectedFile ? (
+                  <Image
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Upload Preview"
+                    boxSize="40px"
+                  />
+                ) : profile.picture ? (
+                  <Image
+                    src={profile.picture}
+                    alt="Profile Picture"
+                    boxSize="40px"
+                  />
+                ) : (
+                  <FaImage size="40px" />
                 )}
-              />
-              <FormErrorMessage>
-                {errors.name && errors.name.message}
-              </FormErrorMessage>
-            </FormControl>
-            <Button type="submit" width="300px" m="auto" my={14}>
-              설정완료
-            </Button>
-          </form>
+                <Text>이미지 업로드</Text>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  ref={fileInputRef}
+                  display="none"
+                />
+              </DragDropBox>
+              {/* 아이디 입력 */}
+              <FormControl
+                isInvalid={!!errors.id}
+                my={4}
+                justifyContent="center"
+              >
+                <Input
+                  type="text"
+                  placeholder="아이디"
+                  value={profile.id}
+                  readOnly
+                  sx={{
+                    cursor: "not-allowed", // 마우스 커서 변경 방지
+                    _focus: { borderColor: "initial", boxShadow: "none" },
+                    _hover: { borderColor: "initial" },
+                  }}
+                  width="300px"
+                  m="auto"
+                />
+              </FormControl>
+              {/* 닉네임 입력 */}
+              <FormControl isInvalid={!!errors.name} my={4}>
+                <Controller
+                  name="name"
+                  control={control}
+                  rules={{ required: "이름은 필수입니다." }}
+                  render={({ field }) => (
+                    <Input type="text" placeholder="닉네임" {...field} />
+                  )}
+                />
+                <FormErrorMessage>
+                  {errors.name && errors.name.message}
+                </FormErrorMessage>
+              </FormControl>
+              <Button type="submit" width="300px" m="auto" my={14}>
+                설정완료
+              </Button>
+            </form>
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>
