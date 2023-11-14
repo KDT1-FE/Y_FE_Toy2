@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import GameChat from "../../components/Game/GameChat";
 import useFireFetch from "../../hooks/useFireFetch";
 import GameStart from "../../components/Game/GameStart";
+import { io } from "socket.io-client";
 
 interface ProfileCardProps {
   userId: string;
@@ -36,6 +37,15 @@ const Game = () => {
 
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
+
+  const token = JSON.parse(localStorage.getItem("token") as string);
+
+  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${token.accessToken}`,
+      serverId: import.meta.env.VITE_APP_SERVER_ID,
+    },
+  });
 
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
@@ -121,11 +131,11 @@ const Game = () => {
         </GridItem>
         <GridItem>
           <GameStart
-            gameId={gameId}
+            socket={socket}
             status={status}
+            users={users}
+            host={gameData.data[0].host}
             updateStatus={updateStatus}
-            gameData={gameData.data[0]}
-            onGameStart={(shuffleUsers) => setUsers(shuffleUsers)}
           />
         </GridItem>
         <GridItem>
@@ -134,7 +144,7 @@ const Game = () => {
           })}
         </GridItem>
         <GridItem>
-          <GameChat gameId={gameId} gameData={gameData.data[0]} />
+          <GameChat socket={socket} gameData={gameData.data[0]} />
         </GridItem>
         <GridItem>
           <GridItem>

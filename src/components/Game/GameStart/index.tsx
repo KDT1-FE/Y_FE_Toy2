@@ -13,14 +13,13 @@ import { useEffect, useState } from "react";
 import data from "../../../data/category.json";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/atoms/userState";
-import { io } from "socket.io-client";
 
 interface GameStartProps {
-  gameId: string;
+  socket: any;
   status: string;
+  users: string[];
+  host: string;
   updateStatus: (newStatus: string) => void;
-  gameData: any;
-  onGameStart: (shuffledUsers: any) => void; // 게임 시작 시 호출할 콜백
 }
 
 interface Categories {
@@ -35,35 +34,19 @@ interface UserWithSort {
 }
 
 const GameStart: React.FC<GameStartProps> = ({
-  gameId,
+  socket,
   status,
+  users,
+  host,
   updateStatus,
-  gameData,
-  onGameStart,
 }) => {
   const user = useRecoilValue(userState);
+  console.log(socket);
 
   const categories = data.CategoryList;
-  const users = data.users;
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
-
-  const token = JSON.parse(localStorage.getItem("token") as string);
-
-  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
-    extraHeaders: {
-      Authorization: `Bearer ${token.accessToken}`,
-      serverId: import.meta.env.VITE_APP_SERVER_ID,
-    },
-  });
-
-  // 게임 시작 이벤트 리스너 설정
-  socket.on("game-started", (users: any) => {
-    // 게임 정보를 상태에 저장하고 모달을 열기
-    onOpen();
-    onGameStart(users); // 게임 시작 콜백 호출
-  });
 
   // 모달 자동 닫기 로직
   useEffect(() => {
@@ -89,13 +72,13 @@ const GameStart: React.FC<GameStartProps> = ({
     const selectedCategory = categories[getRandNum(categories.length)];
     const ranKeyword =
       selectedCategory.keyword[getRandNum(selectedCategory.keyword.length)];
-    const ranLiar = users.name[getRandNum(users.name.length)];
+    const ranLiar = users[getRandNum(users.length)];
 
     setCategory(selectedCategory);
     setKeyword(ranKeyword);
 
     // 유저 순서 랜덤으로 섞기
-    const shuffledUsers: string[] = gameData.users
+    const shuffledUsers: string[] = users
       .map(
         (userId: string): UserWithSort => ({
           value: userId, // 실제 유저 ID
@@ -110,7 +93,6 @@ const GameStart: React.FC<GameStartProps> = ({
     window.localStorage.setItem("keyword", ranKeyword);
     window.localStorage.setItem("liar", ranLiar === user.id ? "true" : "false");
     onOpen();
-    onGameStart(shuffledUsers);
   };
 
   // 게임 종료
@@ -131,7 +113,7 @@ const GameStart: React.FC<GameStartProps> = ({
           w="200px"
           mr="20px"
           onClick={handleStart}
-          isDisabled={gameData.host !== user.id}
+          isDisabled={host !== user.id}
         >
           게임시작
         </Button>
@@ -140,7 +122,7 @@ const GameStart: React.FC<GameStartProps> = ({
           w="200px"
           mr="20px"
           onClick={hadleEnd}
-          isDisabled={gameData.host !== user.id}
+          isDisabled={host !== user.id}
         >
           게임 종료
         </Button>
