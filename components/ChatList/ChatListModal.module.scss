@@ -1,0 +1,46 @@
+@import '../../styles/mixin';
+@import '../../styles/_variables';
+
+.dim {
+    @include dim;
+  }
+  
+
+.ChatListModalBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 30rem;
+    height: 150px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    @include flex-center-row;
+    @include shadow-bottom;
+
+    .close-icon {
+        font-size: 1.4rem;
+        position: absolute;
+        right: 1rem;
+        top : 1rem;
+        font-weight: bold;
+      }
+
+    input {
+        border : 1px solid $brand-pink;
+        outline: none;
+        padding : 2rem;
+        border-radius: 5px;
+        margin-right: 1.5rem;
+    }
+    button {
+        border : 0;
+        background-color: $light-pink;
+        padding : 1.1rem 1.3rem;
+        border-radius: 7px;
+        &:hover {
+            background-color: $brand-pink;
+            transition: 0.3s;
+          }
+    }
+}
