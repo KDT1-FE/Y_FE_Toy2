@@ -14,7 +14,7 @@ const ChatDroppableDelete = ({ openDeleteColumn }: ChatDroppableDelete) => {
 				<div
 					className={`${
 						openDeleteColumn ? 'visible opacity-100' : 'invisible opacity-0'
-					} transition-opacity absolute duration-1000 ease-linear h-24 bg-trash-can bg-contain bg-no-repeat bg-center inset-x-0 bottom-44 w-[calc(100%-0.01px)] ${
+					} transition-opacity absolute duration-1000 ease-linear h-24 bg-trash-can bg-contain bg-no-repeat bg-center inset-x-0 bottom-[10%] w-[calc(100%-0.01px)] ${
 						snapshot.isUsingPlaceholder
 							? 'bg-red-700 bg-opacity-75'
 							: 'bg-yellow-700 bg-opacity-75'
