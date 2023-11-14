@@ -49,6 +49,7 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
   console.log("users: ", users);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>("");
+  const [voteResult, setVoteResult] = useState<string | null>(null);
 
   const handleOpenVoteModal = () => {
     setShowVoteModal(true);
@@ -59,12 +60,9 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
     setSelectedUser(selectedUser);
   };
 
-  // const handleCalculateVoteClose = (finalLiar: string) => {
-  //   // finalLiar를 이용하여 특정 동작 수행 (SystemChat)
-
-  //   // 선택한 결과 초기화
-  //   setSelectedUser("");
-  // };
+  const handleVoteResult = (result: string | null) => {
+    setVoteResult(result);
+  };
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
@@ -96,7 +94,7 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
       setUsers(responseData.users);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setMessages, socket]);
 
   // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
   useEffect(() => {
@@ -136,10 +134,19 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
           투표하기
         </Button>
         {showVoteModal && (
-          <Vote gameData={gameData} onClose={handleCloseVoteModal} />
+          <Vote
+            gameData={gameData}
+            onClose={handleCloseVoteModal}
+            onVoteResult={handleVoteResult}
+          />
         )}
         {selectedUser && (
-          <SystemChat text={`${selectedUser}님이 라이어로 선택되었습니다.`} />
+          <SystemChat text={`${selectedUser}님을 라이어로 지목했습니다.`} />
+        )}
+        {voteResult !== null && (
+          <SystemChat
+            text={`${voteResult}님이 라이어로 최종 지목되었습니다.`}
+          />
         )}
       </CardBody>
       <InputGroup size="md">

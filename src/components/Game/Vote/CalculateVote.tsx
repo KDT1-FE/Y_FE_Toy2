@@ -1,82 +1,41 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Text,
-} from "@chakra-ui/react";
-import useFireFetch from "../../../hooks/useFireFetch";
-
-interface CalculateVoteProps {
-  voteResults: string;
-  onClose: (finalLiar: string) => void;
-  gameId: string;
+interface Vote {
+  by: string;
+  liar: string;
 }
 
-const CalculateVote: React.FC<CalculateVoteProps> = ({
-  voteResults,
-  onClose,
-  gameId,
-}) => {
-  const [finalLiar, setFinalLiar] = useState<string>("");
-  const fireFetch = useFireFetch();
+interface GameData {
+  id: string;
+  users: string[];
+  votedFor: Vote[];
+}
 
-  // 투표 결과 계산 로직
-  useEffect(() => {
-    const calculateFinalLiar = async () => {
-      const gameData = await fireFetch.useGetSome("game", "id", gameId);
-      const { users, votedFor } = gameData.data[0];
+const calculateVote = (gameData: GameData): string | null => {
+  if (gameData.votedFor.length !== gameData.users.length) {
+    console.log(
+      `투표가 진행중입니다: ${gameData.votedFor.length} / ${gameData.users.length}`,
+    );
+    return null;
+  }
 
-      const votesCount: Record<string, number> = {};
-      users.forEach((user: string) => {
-        if (votedFor.includes(user)) {
-          votesCount[user] = (votesCount[user] || 0) + 1;
-        }
-      });
+  const voteCount: Record<string, number> = {};
+  gameData.votedFor.forEach((vote) => {
+    const liarId = vote.liar;
+    console.log("liarId:" + liarId);
+    voteCount[liarId] = (voteCount[liarId] || 0) + 1;
+  });
 
-      let maxVotes = 0;
-      for (const user in votesCount) {
-        if (votesCount[user] > maxVotes) {
-          maxVotes = votesCount[user];
-          setFinalLiar(user);
-        }
-      }
-    };
+  let maxCount = 0;
+  let maxId: string | null = null;
 
-    calculateFinalLiar();
-  }, [voteResults, gameId, fireFetch]);
-
-  // 투표 결과 계산 후 최종 라이어를 부모 컴포넌트로 전달
-  useEffect(() => {
-    if (finalLiar) {
-      onClose(finalLiar);
+  for (const id in voteCount) {
+    if (voteCount[id] > maxCount) {
+      maxCount = voteCount[id];
+      maxId = id;
+      console.log("maxId", maxId, maxCount + "표");
     }
-  }, [finalLiar, onClose]);
+  }
 
-  return (
-    <Modal isOpen={true} onClose={() => {}}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>투표 결과 계산 중</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Text>투표 결과 계산 중입니다...</Text>
-        </ModalBody>
-        <ModalFooter>
-          {finalLiar && (
-            <Button colorScheme="blue" onClick={() => onClose(finalLiar)}>
-              계산 완료
-            </Button>
-          )}
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
+  return maxId;
 };
 
-export default CalculateVote;
+export default calculateVote;
