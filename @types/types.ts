@@ -12,7 +12,7 @@ export interface Chat {
   isPrivate: boolean;
   users: ChatUser[];
   latestMessage: Message; // message 객체가 속합니다.
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export interface ChatUser {
@@ -25,7 +25,7 @@ export interface Message {
   id: string;
   text: string;
   userId: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export interface JoinersData {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useRecoilValue } from 'recoil';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
@@ -11,22 +13,21 @@ import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
+import { userIdState } from '../../recoil/atoms/userIdState';
 
 export default function Chat() {
   const router = useRouter();
   const { chatId, name } = router.query;
+
+  const userId = useRecoilValue(userIdState);
 
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-  const userId = 'user';
-
-  const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
-
+  const accessToken : string = localStorage.getItem('accessToken');
+  
   const socket = useMemo(() => {
     return io(`${CLIENT_URL}?chatId=${chatId}`, {
       extraHeaders: {
