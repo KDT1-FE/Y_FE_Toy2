@@ -48,12 +48,6 @@ function UserLogin() {
 
       alert('로그인에 성공했습니다.');
 
-      loginSocket(accessToken, (data: any) => {
-        console.log('Data received from socket:', data);
-        setOnlineUsers(data);
-        console.log('소켓설정완료 핸들러', onlineUsers);
-      });
-
       navigate('/lobby');
     } catch (e: any) {
       let errorMessage = '';
@@ -85,11 +79,7 @@ function UserLogin() {
     const accessToken = getCookie('accessToken');
     const refreshToken = getCookie('refreshToken');
 
-    if ((accessToken || refreshToken) && !isLogin) {
-      loginSocket(accessToken, (data: any) => {
-        setOnlineUsers(data);
-        console.log('소켓설정완료 유즈이팩트');
-      });
+    if (accessToken || refreshToken) {
       navigate('/lobby');
       console.log('리디렉션됨');
     }
