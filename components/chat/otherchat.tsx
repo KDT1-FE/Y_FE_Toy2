@@ -2,9 +2,9 @@
 import React from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import styles from './Chat.module.scss';
-import { Message } from '../../@types/types';
+import { IMessage } from '../../@types/types';
 
-function OtherMessage({ msg }: { msg: Message }) {
+function OtherMessage({ msg }: { msg: IMessage }) {
 
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];

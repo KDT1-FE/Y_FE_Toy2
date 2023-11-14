@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef,useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
@@ -22,7 +22,7 @@ export default function Chat() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const userId = '';
+  const userId = 'user';
 
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
@@ -101,14 +101,16 @@ export default function Chat() {
       <ChatroomHeader name={name} chatId={chatId} />
       <div className={styles.container}>
         <div className={styles.container}>
-          <EntryNotice />
-          <ExitNotice />
           <div>
-          {messages.map(msg => (
-              msg.userId === userId ? 
-              <MyChat key={msg.id} msg={msg} />
-              : <OtherChat key={msg.id} msg={msg}/>
-            ))}
+            {messages.map(msg =>
+              msg.userId === userId ? (
+                <MyChat key={msg.id} msg={msg} />
+              ) : (
+                <OtherChat key={msg.id} msg={msg} />
+              ),
+            )}
+            <EntryNotice />
+            <ExitNotice />
           </div>
           <div ref={messagesEndRef} />
           {showAlert && <ChatAlert />}
