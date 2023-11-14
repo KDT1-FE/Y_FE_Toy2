@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 // import Link from 'next/link';
-import { IChat } from '@/@types/types';
+import { Chat } from '@/@types/types';
 import Image from 'next/image';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
 export default function MyChatList() {
-  const [myChatList, setMyChatList] = useState<IChat[]>([]);
+  const [myChatList, setMyChatList] = useState<Chat[]>([]);
   const getMyChat = async () => {
     const ChatMyList = await chatListAPI.getMyChatList();
     setMyChatList(ChatMyList.data.chats);
