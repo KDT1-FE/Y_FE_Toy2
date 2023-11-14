@@ -3,10 +3,10 @@ import styled from 'styled-components';
 export const MainWrapper = styled.div`
   position: relative;
   flex: 2;
-  min-width: 1140px;
+  min-width: 1080px;
   height: calc(100vh - 80px);
   display: flex;
-  padding: 50px;
+  padding: 40px;
   border-left: 1px solid #dadada;
   flex-direction: column;
   align-items: center;
@@ -29,7 +29,7 @@ export const NoticeBox = styled.div`
 `;
 
 export const Answers = styled.span`
-  font-size: 50px;
+  font-size: 80px;
   font-weight: 700;
   color: #1d3557;
 `;
@@ -43,18 +43,13 @@ export const BoardFrame = styled.div`
 `;
 
 export const TimerBox = styled.div`
-  width: 80px;
+  width: 100%;
   height: 80px;
   border-radius: 80px;
-  background-color: #e63946;
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-export const CountDown = styled.span`
-  font-size: 30px;
-  color: #fefefe;
+  gap: 30px;
 `;
 
 export const RateBox = styled.div`
@@ -71,6 +66,12 @@ export const MyRateBox = styled.div`
   justify-content: center;
   gap: 10px;
 `;
+
+export const ScoreName = styled.span`
+  font-size: 30px;
+  font-weight: 700;
+`;
+
 export const MyRate = styled.span`
-  font-size: 25px;
+  font-size: 30px;
 `;

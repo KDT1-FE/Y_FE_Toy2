@@ -111,7 +111,6 @@ export default function InputWord({
     const inputElement = (e.target as HTMLFormElement).querySelector('input');
     const inputValue = inputElement?.value;
     const existCheck = words?.find((e) => e === inputValue);
-
     if (inputValue) {
       if (words.length === 0) {
         setWords([...words, inputValue]);

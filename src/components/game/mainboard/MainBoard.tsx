@@ -3,32 +3,39 @@ import { Timer } from '@mui/icons-material';
 import {
   Answers,
   BoardFrame,
-  CountDown,
   MainWrapper,
   MyRate,
   MyRateBox,
   NoticeBox,
   RateBox,
+  ScoreName,
   TimerBox,
 } from './boardStyle';
 import Notice from './Notice';
-import SearchBar from './SearchBar';
 import StartBtn from './timer/StartBtn';
-import { StartType, TimeType, WordsType } from '../gameType';
+import {
+  CurrentRateType,
+  RateType,
+  StartType,
+  TimeType,
+  WordsType,
+} from '../gameType';
+import TimeGauge from './timer/TimeGauge';
 
 type Props = WordsType &
   StartType &
-  TimeType & {
-    rate: number;
-    currentRate: number;
-  };
+  TimeType &
+  CurrentRateType &
+  Pick<RateType, 'rate'>;
 
 export default function MainBoard({
   words,
+  setWords,
   start,
   setStart,
   rate,
   currentRate,
+  setCurrentRate,
   time,
   setTime,
 }: Props) {
@@ -38,11 +45,11 @@ export default function MainBoard({
         <Notice />
         <RateBox>
           <MyRateBox>
-            <MyRate>Score</MyRate>
+            <ScoreName>Score</ScoreName>
             <MyRate>{currentRate}</MyRate>
           </MyRateBox>
           <MyRateBox>
-            <MyRate>High Score</MyRate>
+            <ScoreName>High Score</ScoreName>
             <MyRate>{rate}</MyRate>
           </MyRateBox>
         </RateBox>
@@ -52,19 +59,18 @@ export default function MainBoard({
           <Answers>{words[words.length - 1]}</Answers>
         ) : (
           <StartBtn
-            time={time}
+            setWords={setWords}
             setTime={setTime}
-            start={start}
             setStart={setStart}
+            setCurrentRate={setCurrentRate}
           />
         )}
       </BoardFrame>
-      {start ? (
+      {start && (
         <TimerBox>
-          <CountDown>{time}</CountDown>
+          <Timer sx={{ fontSize: '50px' }} />
+          <TimeGauge time={time} />
         </TimerBox>
-      ) : (
-        <Timer sx={{ fontSize: '50px' }} />
       )}
     </MainWrapper>
   );
