@@ -150,8 +150,18 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
         });
       }
     } catch (error) {
-      console.error("회원가입 실패:", error);
-      setSignUpStatus({ type: "error", message: "회원가입에 실패하였습니다." });
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        setError("id", {
+          type: "manual",
+          message: "이미 사용중인 ID입니다.",
+        });
+      } else {
+        console.error("회원가입 실패:", error);
+        setSignUpStatus({
+          type: "error",
+          message: "회원가입에 실패하였습니다.",
+        });
+      }
     }
   };
 
