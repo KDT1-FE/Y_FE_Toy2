@@ -1,20 +1,50 @@
 import styled from "styled-components";
 import ModalHamburger from "../ModalHamburger";
-import { useContext, useEffect, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} from "react";
 import io, { Socket } from "socket.io-client";
 import { AuthContext } from "../../hooks/useAuth";
-import Loader from "../Loader/Loader";
 import { ChatI } from "../../pages/Chat";
+import SearchInput from "../SearchInput/SearchInput";
 
-function ChatRoom({ roomId, setChatRoom }: ChartRoomProps) {
+export interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+
+interface ChatRoomProps {
+  roomId: string;
+  roomName: string;
+  selectedUsers: User[];
+  setChatRoom: React.Dispatch<React.SetStateAction<ChatI[]>>;
+}
+
+export interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createdAt: Date;
+}
+
+function ChatRoom({
+  roomId,
+  roomName,
+  selectedUsers,
+  setChatRoom
+}: ChatRoomProps) {
   const [text, setText] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { accessToken } = useContext(AuthContext);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [inputValue, setInputValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [joinUser, setJoinUser] = useState<JoinUser | null>(null);
-  const [leaveUser, setLeaveUser] = useState<LeaveUser | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   const handleClick = async () => {
     try {
@@ -35,71 +65,48 @@ function ChatRoom({ roomId, setChatRoom }: ChartRoomProps) {
 
   useEffect(() => {
     if (accessToken) {
-      const fetchData = async () => {
-        try {
-          const newSocket = io(
-            `https://fastcampus-chat.net/chat?chatId=${roomId}`,
-            {
-              extraHeaders: {
-                Authorization: `Bearer ${accessToken}`,
-                serverId: "1601075b"
-              }
-            }
-          );
-          setSocket(newSocket);
-        } catch (error) {
-          console.log(error);
+      console.log("방이 바뀜", roomId);
+      const newSocket = io(
+        `https://fastcampus-chat.net/chat?chatId=${roomId}`,
+        {
+          extraHeaders: {
+            Authorization: `Bearer ${accessToken}`,
+            serverId: "1601075b"
+          }
         }
+      );
+
+      newSocket.on("message-to-client", (newMessage) => {
+        setMessages((prevMessages) => {
+          const isDuplicate = prevMessages.some(
+            (message) => message.id === newMessage.id
+          );
+          return isDuplicate ? prevMessages : [...prevMessages, newMessage];
+        });
+      });
+
+      newSocket.emit("fetch-messages");
+      newSocket.on("messages-to-client", (responseData) => {
+        setMessages(responseData.messages);
+      });
+      setSocket(newSocket);
+
+      return () => {
+        newSocket.off("message-to-client");
+        newSocket.off("messages-to-client");
+        newSocket.disconnect();
       };
-      fetchData();
     }
   }, [accessToken, roomId]);
 
-  useEffect(() => {
-    if (socket) {
-      const fetchData = async () => {
-        try {
-          socket.on("message-to-client", (responseData) => {
-            setMessages((prevMessages) => [...prevMessages, responseData]);
-          });
-          socket.on("messages-to-client", (responseData) => {
-            setMessages(responseData.messages);
-            console.log(roomId);
-          });
-          socket.emit("fetch-messages");
-
-          return () => {
-            socket.off("message-to-client");
-            socket.off("messages-to-client");
-            socket.disconnect();
-          };
-        } catch (error) {
-          console.error(error);
-        } finally {
-          console.log("done!");
-        }
-      };
-      fetchData();
-    }
-  }, [roomId]);
-
-  useEffect(() => {
-    if (joinUser && socket) {
-      socket.on("join", (responseData) => {
-        setJoinUser(responseData);
-        console.log("들어온 유저", responseData);
+  useLayoutEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end"
       });
     }
-  }, [joinUser]);
-
-  useEffect(() => {
-    if (leaveUser && socket) {
-      socket.on("leave", (responseData) => {
-        setLeaveUser(responseData);
-        console.log("나간 유저", responseData);
-      });
-    }
-  }, [leaveUser]);
+  }, [messages]);
 
   const convertToKoreanTime = (utcDateString: Date) => {
     const koreanDate = new Date(utcDateString);
@@ -133,22 +140,19 @@ function ChatRoom({ roomId, setChatRoom }: ChartRoomProps) {
   return (
     <ChatRoomWrap>
       <div className="chatroom__tit">
-        <Loader loading={loading}></Loader>
         <div className="tit-bx">
-          {/* 채팅방의 img 속성은 없음 */}
-          {/* <div className="img">
-            <img src="https://via.placeholder.com/150x150" alt="프로필" />
-          </div> */}
-          <p className="tit">수다수다방</p>
+          <p className="tit">{roomName}</p>
           <p className="count">
             <img src="/src/assets/images/user-ico.png" width="14"></img>
-            <span className="num">2</span>
+            <span className="num">{selectedUsers.length}</span>
           </p>
         </div>
         <div className="util-bx">
-          <p className="util-input">
-            <input type="text" />
-          </p>
+          <SearchInput
+            searchText={searchText}
+            setSearchText={setSearchText}
+            messages={messages}
+          />
           <ModalHamburger roomId={roomId} setChatRoom={setChatRoom} />
         </div>
       </div>
@@ -175,7 +179,9 @@ function ChatRoom({ roomId, setChatRoom }: ChartRoomProps) {
                           ? ""
                           : message.userId}
                       </span>
-                      <span className="bubble">{message.text}</span>
+                      <span className="bubble" id={message.id}>
+                        {message.text}
+                      </span>
                     </div>
                     <div className="date">
                       {convertToKoreanTime(message.createdAt)}
@@ -186,6 +192,9 @@ function ChatRoom({ roomId, setChatRoom }: ChartRoomProps) {
             </div>
           ))}
           <div className="alert">테일러스위프트 님이 퇴장했습니다</div>
+          <div>
+            <div ref={messagesEndRef} />
+          </div>
         </div>
       </div>
       <div className="chatroom__send">
@@ -203,43 +212,6 @@ function ChatRoom({ roomId, setChatRoom }: ChartRoomProps) {
 }
 
 export default ChatRoom;
-
-interface ChartRoomProps {
-  roomId: string;
-  setChatRoom: React.Dispatch<React.SetStateAction<ChatI[]>>;
-}
-
-interface Chat {
-  id: string;
-  name: string;
-  users: User[]; // 속한 유저 id
-  isPrivate: boolean;
-  latestMessage: Message | null;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-
-interface Message {
-  id: string;
-  text: string;
-  userId: string;
-  createdAt: Date;
-}
-
-interface JoinUser {
-  users: string[];
-  joiners: string[];
-}
-
-interface LeaveUser {
-  users: string[];
-  leaver: string;
-}
 
 const ChatRoomWrap = styled.div`
   flex: 1 0 70%;
@@ -295,21 +267,6 @@ const ChatRoomWrap = styled.div`
       .util-bx {
         display: flex;
         align-items: center;
-        .util-input {
-          margin-right: 10px;
-          input {
-            background: url("/src/assets/images/search.png") white no-repeat;
-            background-size: 20px;
-            background-position: 90% center;
-            border-radius: 20px;
-            border: none;
-            outline: none;
-            height: 30px;
-            padding: 0 20px;
-            padding-right: 50px;
-            color: #999696;
-          }
-        }
       }
     }
     &__body {
@@ -378,6 +335,25 @@ const ChatRoomWrap = styled.div`
             padding: 15px 20px;
             color: #6c6c6c;
             line-height: 1.2;
+            &.shake {
+              animation: shake 0.4s 2;
+
+              @keyframes shake {
+                0%,
+                100% {
+                  transform: translateX(0);
+                }
+                25% {
+                  transform: translateX(-4px);
+                }
+                50% {
+                  transform: translateX(4px);
+                }
+                75% {
+                  transform: translateX(-4px);
+                }
+              }
+            }
           }
         }
         .date {

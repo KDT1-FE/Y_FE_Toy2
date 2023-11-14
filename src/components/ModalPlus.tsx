@@ -5,17 +5,55 @@ import "../style/Modal.css";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 
-interface User {
+export interface User {
   id: string;
   name: string;
   picture: string;
 }
 
-const ModalExample = () => {
+interface ModalExampleProps {
+  setRoomName: (name: string) => void;
+  setSelectedUsers: (users: User[]) => void;
+}
+
+const ModalExample: React.FC<ModalExampleProps> = ({
+  setRoomName,
+  setSelectedUsers
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
   const { getData } = useApi();
   const { accessToken } = useContext(AuthContext);
+  const [roomNameInput, setRoomNameInput] = useState("");
+  const [localSelectedUsers, setLocalSelectedUsers] = useState<User[]>([]);
+
+  const areUsersDifferent = (
+    newUsers: string | any[],
+    currentUsers: string | any[]
+  ) => {
+    if (newUsers.length !== currentUsers.length) return true;
+    for (let i = 0; i < newUsers.length; i++) {
+      if (newUsers[i].id !== currentUsers[i].id) return true;
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getData("https://fastcampus-chat.net/users");
+        if (areUsersDifferent(response, onlineUsers)) {
+          setOnlineUsers(response);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (accessToken) {
+      fetchData();
+    }
+  }, [accessToken]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -36,34 +74,39 @@ const ModalExample = () => {
   };
 
   const handleCheckboxChange = (userId: string) => {
-    console.log("유저 id:", userId);
+    useEffect(() => {
+      const fetchData = async () => {
+        if (accessToken) {
+          try {
+            const response = await getData("https://fastcampus-chat.net/users");
+            setOnlineUsers(response);
+          } catch (error) {
+            console.log(error);
+          }
+          fetchData();
+        }
+      };
+    }, [accessToken]);
+    //   const selectedUser = onlineUsers.find((user) => user.id === userId);
+    //   if (selectedUser) {
+    //     setLocalSelectedUsers((prevSelected) => {
+    //       const isAlreadySelected = prevSelected.some(
+    //         (user) => user.id === userId
+    //       );
+    //       if (isAlreadySelected) {
+    //         return prevSelected.filter((user) => user.id !== userId);
+    //       } else {
+    //         return [...prevSelected, selectedUser];
+    //       }
+    //     });
+    //   }
   };
 
-  useEffect(() => {
-    // fetch("https://fastcampus-chat.net/users", {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     serverId: "1601075b",
-    //     Authorization: `Bearer ${sessionStorage.getItem("token")}`
-    //   }
-    // })
-    //   .then((response) => response.json() as unknown as User[])
-    //   .then((data) => setOnlineUsers(data))
-    //   .catch((error) => console.error("Error fetching online users:", error));
-
-    const fetchData = async () => {
-      if (accessToken) {
-        try {
-          const response = await getData("https://fastcampus-chat.net/users");
-          setOnlineUsers(response);
-        } catch (error) {
-          console.log(error);
-        }
-        fetchData();
-      }
-    };
-  }, [accessToken]);
+  const submitModal = () => {
+    setRoomName(roomNameInput);
+    setSelectedUsers(localSelectedUsers);
+    closeModal();
+  };
 
   return (
     <ChatTestWrap>
@@ -79,7 +122,11 @@ const ModalExample = () => {
       >
         <TopTitle>채팅방 새로만들기</TopTitle>
         <SubTitle>채팅방 이름</SubTitle>
-        <InputArea placeholder="방명을 입력해주세요" />
+        <InputArea
+          placeholder="방명을 입력해주세요"
+          value={roomNameInput}
+          onChange={(e) => setRoomNameInput(e.target.value)}
+        />
         <SubTitle>초대할 멤버</SubTitle>
         <InputBtn onClick={openBlock}>초대할 멤버를 선택해주세요 ▼</InputBtn>
         <MemberBox id="memberBox">
@@ -98,7 +145,7 @@ const ModalExample = () => {
             ))}
           </ul>
         </MemberBox>
-        <SubmitBtn>완료</SubmitBtn>
+        <SubmitBtn onClick={submitModal}>완료</SubmitBtn>
       </Modal>
     </ChatTestWrap>
   );

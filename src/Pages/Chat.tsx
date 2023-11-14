@@ -1,14 +1,14 @@
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import ChatRoom from "../components/Chat/ChatRoom";
 import ModalPlus from "../components/ModalPlus";
-import { useContext, useEffect, useState } from "react";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 import io, { Socket } from "socket.io-client";
 
-interface User {
+export interface User {
   id: string;
-  username: string;
+  name: string;
   picture: string;
 }
 
@@ -23,11 +23,12 @@ export interface ChatI {
 
 function Chat() {
   const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
+  const [roomName, setRoomName] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const { getData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
 
-  // 나의 채팅방 조회
   useEffect(() => {
     if (accessToken) {
       const fetchData = async () => {
@@ -77,9 +78,6 @@ function Chat() {
 
   return (
     <>
-      {/* <div>
-        채팅방이 없습니다
-      </div> */}
       <ChatWrapper>
         <ChatCategory>
           {chatRoom.map((room) => (
@@ -90,17 +88,25 @@ function Chat() {
               >
                 <div className="catelink__name">
                   <p className="tit">{room.name}</p>
-                  {/* <p className="content">{room.latestMessage}</p> */}
                 </div>
                 <div className="catelink__time">{room.updatedAt}</div>
               </div>
             </CateLink>
           ))}
           <CatePlus>
-            <ModalPlus />
+            <ModalPlus
+              setRoomName={setRoomName}
+              setSelectedUsers={setSelectedUsers}
+            />
           </CatePlus>
         </ChatCategory>
-        <ChatRoom roomId={roomId} setChatRoom={setChatRoom} />
+
+        <ChatRoom
+          roomId={roomId}
+          roomName={roomName}
+          selectedUsers={selectedUsers}
+          setChatRoom={setChatRoom}
+        />
       </ChatWrapper>
     </>
   );
