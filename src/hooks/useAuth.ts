@@ -5,6 +5,18 @@ import { userState } from "../recoil/atoms/userState";
 export const useAuth = () => {
   const [auth, setAuth] = useRecoilState(authState); //사용자 인증 상태
   const [user, setUser] = useRecoilState(userState); //사용자 정보
+
+  // 토큰 만료 여부 확인
+  const isTokenExpired = (token: string) => {
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.exp < Date.now() / 1000;
+    } catch (error) {
+      return true; // 토큰 파싱에 실패하면 만료된 것으로 간주
+    }
+  };
+
+  // 토큰 설정 및 저장
   const setToken = (
     accessToken: string,
     refreshToken: string,
@@ -61,9 +73,24 @@ export const useAuth = () => {
       }
     } catch (error) {
       console.error("Token refresh error:", error);
-      // 에러 핸들링 추가해야함.
+      logout();
     }
   };
 
-  return { auth, user, setToken, logout, refreshAccessToken };
+  // API 요청 전 토큰 갱신(만료시 새 토큰 요청)
+  const refreshTokenIfNeeded = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken && isTokenExpired(accessToken)) {
+      await refreshAccessToken();
+    }
+  };
+
+  return {
+    auth,
+    user,
+    setToken,
+    logout,
+    refreshAccessToken,
+    refreshTokenIfNeeded,
+  };
 };
