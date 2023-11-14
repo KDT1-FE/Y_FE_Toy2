@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import instance from '@/apis/axios';
 import { useRouter } from 'next/router';
 import { HiArrowLongLeft } from 'react-icons/hi2';
 import { IoMdMenu } from 'react-icons/io';
 import styles from './Chat.module.scss';
+import Jwtinterceptors from '../../apis/Jwtinterceptors';
+
 
 interface Props {
   chatId: string;
@@ -13,9 +14,11 @@ interface Props {
 export default function ChatroomHeader({ chatId, name }: Props) {
   const router = useRouter();
 
+  const { instance } = Jwtinterceptors();
+
+  const accessToken: string = localStorage.getItem('accessToken');
+
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyNSIsImlhdCI6MTY5OTU5OTI3NywiZXhwIjoxNzAwMjA0MDc3fQ.xQ34bIb3kC-ISYgYtCQypNN6A5T7A3TJh_TX31hXVZI';
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -43,7 +46,7 @@ export default function ChatroomHeader({ chatId, name }: Props) {
         },
       );
       console.log(response);
-      router.push('.');
+      router.push('/chat-list/my');
       // 채팅방 나가기 성공 후 추가적인 로직이 필요할 수 있습니다.
     } catch (error) {
       console.error(error);

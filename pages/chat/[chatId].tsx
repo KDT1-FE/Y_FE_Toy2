@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useRecoilValue } from 'recoil';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
@@ -9,7 +11,6 @@ import { JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
-import { useRecoilValue } from 'recoil';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
@@ -29,7 +30,8 @@ export default function Chat() {
   const [leavers, setLeavers] = useState<string[]>([]);
 
   const userId = useRecoilValue(userIdState);
-  // console.log(userIdState);
+
+  console.log(userId);
 
   const accessToken = getStorage('accessToken');
 
