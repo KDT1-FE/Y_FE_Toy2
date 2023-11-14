@@ -1,5 +1,4 @@
-import React, { ChangeEvent, useEffect, useState, useRef } from 'react';
-import { Button, Input } from '@mui/material';
+import React, { useEffect, useState, useRef } from 'react';
 import { Send, ArrowBack } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -10,38 +9,50 @@ import { accessTokenState } from '../../atoms';
 import useSocketConnect from '../../hooks/useSocketConnect';
 import useGetUserInfo from '../../hooks/useGetUserInfo';
 import useChatAll from '../../hooks/useChatAll';
+import useUserAll from '../../hooks/useUserAll';
 import { ChatType } from '../../types/ChatType';
 
 function ChatRoom() {
+  const navigate = useNavigate();
   const { chatId } = useParams();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<MessageType[]>([]);
   const accessToken = useRecoilValue(accessTokenState);
   const socket = useSocketConnect(chatId, accessToken);
-  const name = useGetUserInfo(accessToken);
+  const userInfo = useGetUserInfo(accessToken);
+  const users = useUserAll(accessToken);
   const scrollRef = useRef<HTMLUListElement | null>(null);
   const chatList = useChatAll(accessToken);
   const chat: ChatType = chatList.find((chat: ChatType) => chat.id === chatId)!;
-  const chatName = chat?.name.split('!@#$$#@!')[1];
+  let chatPartner;
 
-  const navigate = useNavigate();
+  if (chat) {
+    chatPartner = chat.users.find((user) => user.id !== userInfo?.id);
+  }
 
-  const moveToChat = () => {
+  const moveToChat = (): void => {
     navigate('/chat');
   };
 
   // 메시지 작성
-  const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
   // 메시지 보내기
-  const submitMessage = () => {
-    socket?.emit('message-to-server', message);
-    setMessage('');
+  const submitMessage = (): void => {
+    if (message.trim()) {
+      socket?.emit('message-to-server', message);
+      setMessage('');
+    }
   };
 
-  const scrollToBottom = () => {
+  const handleSubmit = (e: React.KeyboardEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    submitMessage();
+  };
+
+  const scrollToBottom = (): void => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
@@ -81,43 +92,38 @@ function ChatRoom() {
         <S.BackBtn onClick={moveToChat}>
           <ArrowBack />
         </S.BackBtn>
-        <S.ChatName>{chatName}</S.ChatName>
+        <S.ChatName>{chatPartner?.username}</S.ChatName>
         <S.EmptyBox />
       </S.Header>
       <S.StyledMessages ref={scrollRef}>
         {messages.length !== 0
           ? messages.map((message, index) => (
-              <Message name={name} message={message} key={index} />
+              <Message
+                userInfo={userInfo}
+                users={users}
+                messages={messages}
+                message={message}
+                key={index}
+              />
             ))
           : ''}
       </S.StyledMessages>
 
       <S.InputWrapper>
-        <S.StyledForm>
-          <Input
-            sx={{
-              width: '100%',
-              backgroundColor: 'white',
-              borderRadius: '10px',
-              outline: 'none',
-              p: 2,
-            }}
+        <S.StyledForm onSubmit={handleSubmit}>
+          <S.StyledInput
             type="text"
             autoComplete="off"
             onChange={onChangeMessage}
             value={message}
           />
-          <Button
-            sx={{
-              backgroundColor: '#26446d',
-              ml: 1,
-            }}
+          <S.SendBtn
             variant="contained"
             endIcon={<Send />}
             onClick={submitMessage}
           >
             Send
-          </Button>
+          </S.SendBtn>
         </S.StyledForm>
       </S.InputWrapper>
     </S.Wrapper>

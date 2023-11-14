@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import * as S from '../../styles/chat/ChatCardStyles';
-import { ChatType, User } from '../../types/ChatType';
+import { ChatType } from '../../types/ChatType';
 import { userState } from '../../atoms';
 
 interface IChatProps {
@@ -12,9 +12,8 @@ interface IChatProps {
 }
 
 function ChatCard({ chat }: IChatProps) {
-  const [chatPartner, setChatPartner] = useState<User | null>(null);
   const user = JSON.parse(useRecoilValue(userState));
-  const chatName = chat.name.split('!@#$$#@!')[1];
+  const chatPartner = chat.users.find((chatUser) => chatUser.id !== user.id);
   const limit = 5;
 
   dayjs.extend(relativeTime);
@@ -27,11 +26,6 @@ function ChatCard({ chat }: IChatProps) {
     isShowMore: latestMessage ? latestMessage.length > limit : false,
   };
 
-  useEffect(() => {
-    const userFilter = chat.users.filter((chatUser) => chatUser.id !== user.id);
-    setChatPartner(userFilter[0]);
-  }, [setChatPartner, chat.users, user.id]);
-
   return (
     <Link to={`/chat/${chat.id}`}>
       <S.Wrapper>
@@ -41,7 +35,7 @@ function ChatCard({ chat }: IChatProps) {
           </S.ImageWrapper>
 
           <S.ChatPreviewWrapper>
-            <S.ChatName>{chatName}</S.ChatName>
+            <S.ChatName>{chatPartner?.username}</S.ChatName>
             {chat.latestMessage ? (
               <S.LatestMessageWrapper>
                 <S.LatestMessage>{`${messageEllipsis.string}${

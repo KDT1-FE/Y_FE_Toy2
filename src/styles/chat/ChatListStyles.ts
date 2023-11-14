@@ -6,7 +6,7 @@ export const Wrapper = styled('div')({
 
 export const ChatsWrapper = styled('div')({
   borderRight: '1px solid #dbdbdb',
-  width: '30%',
+  width: '440px',
   height: '100vh',
 });
 

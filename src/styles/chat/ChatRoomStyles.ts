@@ -1,4 +1,4 @@
-import { styled, AppBar, Typography, Box } from '@mui/material';
+import { styled, AppBar, Typography, Box, Input, Button } from '@mui/material';
 
 export const Wrapper = styled('div')({
   width: '100%',
@@ -8,8 +8,6 @@ export const Wrapper = styled('div')({
   flexDirection: 'column',
   justifyContent: 'space-between',
   alignItems: 'center',
-
-  border: '1px solid black',
 });
 
 export const Header = styled(AppBar)({
@@ -52,8 +50,13 @@ export const EmptyBox = styled(Box)({ width: '5%', height: '100%' });
 export const StyledMessages = styled('ul')({
   width: '100%',
   height: '100%',
-  overflowY: 'scroll',
   padding: '16px 0',
+
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '6px',
+
+  overflowY: 'scroll',
   '&::-webkit-scrollbar': {
     width: '10px',
   },
@@ -78,4 +81,17 @@ export const StyledForm = styled('form')({
   width: '90%',
   height: '60%',
   display: 'flex',
+});
+
+export const StyledInput = styled(Input)({
+  width: '100%',
+  backgroundColor: 'white',
+  borderRadius: '10px',
+  outline: 'none',
+  padding: '16px',
+});
+
+export const SendBtn = styled(Button)({
+  backgroundColor: '#26446d',
+  marginLeft: '8px',
 });

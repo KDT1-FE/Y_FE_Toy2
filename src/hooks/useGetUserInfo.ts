@@ -1,7 +1,13 @@
 import React, { useCallback, useState, useEffect } from 'react';
 
+export type UserInfo = {
+  id: string;
+  name: string;
+  picture: string;
+};
+
 const useGetUserInfo = (accessToken: string | null) => {
-  const [name, setName] = useState('');
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   const getUserInfo = useCallback(async () => {
     const response = await fetch('https://fastcampus-chat.net/auth/me', {
@@ -15,14 +21,14 @@ const useGetUserInfo = (accessToken: string | null) => {
 
     const data = await response.json();
 
-    setName(data.user.name);
+    setUserInfo(data.user);
   }, [accessToken]);
 
   useEffect(() => {
     getUserInfo();
   }, [getUserInfo]);
 
-  return name;
+  return userInfo;
 };
 
 export default useGetUserInfo;

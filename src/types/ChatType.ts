@@ -1,10 +1,17 @@
 import { MessageType } from './MessageType';
 
-export interface User {
+type CommonUserType = {
   id: string;
-  name: string;
   picture: string;
-}
+};
+
+export type UserType = CommonUserType & {
+  name: string;
+};
+
+type User = CommonUserType & {
+  username: string;
+};
 
 export type ChatType = {
   id: string;

@@ -1,33 +1,34 @@
-import React, { ChangeEvent, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Button, Modal, Typography } from '@mui/material';
 import { Clear, MapsUgcRounded } from '@mui/icons-material';
 import { useRecoilValue } from 'recoil';
 import Hangul from 'hangul-js';
 import { useNavigate } from 'react-router-dom';
-import ChatCard from '../../components/chat/ChatCard';
 import { accessTokenState } from '../../atoms';
 import useChatAll from '../../hooks/useChatAll';
 import useUserAll from '../../hooks/useUserAll';
 import UserCard from '../../components/chat/UserCard';
 import * as S from '../../styles/chat/ChatListStyles';
-import { ChatType, User } from '../../types/ChatType';
+import { ChatType, UserType } from '../../types/ChatType';
 import useCreateChat from '../../hooks/useCreateChat';
 import Chats from '../../components/chat/Chats';
+import useGetUserInfo from '../../hooks/useGetUserInfo';
 
 function ChatList() {
+  const navigate = useNavigate();
+  const accessToken = useRecoilValue(accessTokenState);
   const [open, setOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User>({
+  const [selectedUser, setSelectedUser] = useState<UserType>({
     id: '',
     name: '',
     picture: '',
   });
   const [userList, setUserList] = useState([]);
-  const chatName = `${selectedUser.id}!@#$$#@!${selectedUser.name}`;
-  const accessToken = useRecoilValue(accessTokenState);
   const userAllList = useUserAll(accessToken);
+  const userInfo = useGetUserInfo(accessToken);
+  const chatName = [selectedUser.name, userInfo?.name].sort().join(',');
   const chatList = useChatAll(accessToken);
   const createChat = useCreateChat(accessToken, chatName, selectedUser.id);
-  const navigate = useNavigate();
 
   const handleCreateOrJoinChat = async () => {
     const findChat: ChatType = chatList.find(
@@ -55,9 +56,9 @@ function ChatList() {
     setOpen(false);
   };
 
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const searchList = userAllList.filter(
-      (user: User) => Hangul.search(user.name, e.target.value.trim()) >= 0,
+      (user: UserType) => Hangul.search(user.name, e.target.value.trim()) >= 0,
     );
 
     setUserList(searchList);

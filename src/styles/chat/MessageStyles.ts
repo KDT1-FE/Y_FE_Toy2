@@ -1,12 +1,42 @@
-import { styled } from '@mui/material';
+import { Box, Typography, styled } from '@mui/material';
 
 export const MessageContainer = styled('li')({
   display: 'flex',
+  flexDirection: 'column',
   padding: '0 5%',
   marginTop: '3px',
+  gap: '6px',
 });
 
-export const MessageBox = styled('div')({
+export const SenderWrapper = styled(Box)({
+  display: 'flex',
+});
+
+export const ImageWrapper = styled(Box)({
+  width: '30px',
+  height: '30px',
+});
+
+export const SenderImage = styled('img')({
+  width: '100%',
+  height: '100%',
+  borderRadius: ' 50%',
+});
+
+export const SenderName = styled('p')({
+  display: 'flex',
+  alignItems: 'end',
+  color: '#828282',
+  letterSpacing: '0.3px',
+  margin: '0 0 4px 8px',
+});
+
+export const MessageWrapper = styled(Box)({
+  display: 'flex',
+  alignItems: 'flex-end',
+});
+
+export const TextBox = styled(Box)({
   borderRadius: '20px',
   padding: '5px 20px',
   color: 'white',
@@ -14,18 +44,12 @@ export const MessageBox = styled('div')({
   maxWidth: '80%',
 });
 
-export const SentUser = styled('p')({
-  display: 'flex',
-  alignItems: 'end',
-  color: '#828282',
-  letterSpacing: '0.3px',
-  margin: '0 0 4px',
-});
-
 export const MessageText = styled('p')({
   width: '100%',
-  letterSpacing: '0',
-  float: 'left',
   fontSize: ' 1.1em',
-  wordWrap: 'break-word',
+});
+
+export const Date = styled(Typography)({
+  margin: '0 4px',
+  color: '#828282',
 });
