@@ -4,6 +4,8 @@ import ChannelPage from './pages/channel';
 import Chats from './pages/chats';
 import MyChannels from './components/channel/MyChannels';
 import ChannelList from './components/channel';
+import Join from './pages/join';
+
 function App() {
   return (
     <Router>
@@ -15,6 +17,7 @@ function App() {
           </Route>
           <Route path="/chats/:id" element={<Chats />} />
         </Route>
+        <Route path="/join" element={<Join />} />
       </Routes>
     </Router>
   );
