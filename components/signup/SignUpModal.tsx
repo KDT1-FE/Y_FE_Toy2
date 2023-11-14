@@ -42,6 +42,8 @@ export default function SignUpModal({
   const imageStyle = {
     borderRadius: '50%',
   };
+
+  console.log(defaultImgUrl);
   const handleInputClick = () => {
     if (imageRef.current) {
       imageRef.current.click();
@@ -77,9 +79,13 @@ export default function SignUpModal({
       if (selectedImg) {
         const storage = getStorage(app);
         const imagesRef = ref(storage, `images/${pictureName}`);
-        await uploadString(imagesRef, selectedImg, 'data_url');
-        const url = await getDownloadURL(imagesRef);
-        return url;
+
+        if (selectedImg !== defaultImgUrl) {
+          await uploadString(imagesRef, selectedImg, 'data_url');
+          const url = await getDownloadURL(imagesRef);
+          return url;
+        }
+        return defaultImgUrl;
       }
     } catch (error) {
       console.log(error);
