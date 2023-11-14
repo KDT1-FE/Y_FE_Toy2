@@ -85,10 +85,10 @@ function ChatRoom({
         });
       });
 
-      newSocket.emit("fetch-messages");
       newSocket.on("messages-to-client", (responseData) => {
         setMessages(responseData.messages);
       });
+      newSocket.emit("fetch-messages");
       setSocket(newSocket);
 
       return () => {

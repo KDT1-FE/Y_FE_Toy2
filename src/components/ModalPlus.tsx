@@ -76,10 +76,7 @@ const ModalExample: React.FC<ModalExampleProps> = ({
       newSocket.on(
         "users-server-to-client",
         (response: { users: string[] }) => {
-          console.log(
-            "Event: users-server-to-client, Online Users:",
-            response.users
-          );
+          console.log("Online Users:", response.users);
           setOnlineUsers(response.users);
         }
       );
@@ -112,21 +109,21 @@ const ModalExample: React.FC<ModalExampleProps> = ({
     }
   };
 
-  // const handleCheckboxChange = (userId: string) => {
-  //   const isAlreadySelected = localSelectedUsers.some(
-  //     (user) => user.id === userId
-  //   );
-  //   if (isAlreadySelected) {
-  //     setLocalSelectedUsers(
-  //       localSelectedUsers.filter((user) => user.id !== userId)
-  //     );
-  //   } else {
-  //     const userToAdd = onlineUsers.find((user) => user.id === userId);
-  //     if (userToAdd) {
-  //       setLocalSelectedUsers([...localSelectedUsers, userToAdd]);
-  //     }
-  //   }
-  // };
+  const handleCheckboxChange = (userId: string) => {
+    const isAlreadySelected = localSelectedUsers.some(
+      (user) => user.id === userId
+    );
+    if (isAlreadySelected) {
+      setLocalSelectedUsers(
+        localSelectedUsers.filter((user) => user.id !== userId)
+      );
+    } else {
+      const userToAdd = users.find((user) => user.id === userId);
+      if (userToAdd) {
+        setLocalSelectedUsers([...localSelectedUsers, userToAdd]);
+      }
+    }
+  };
 
   const submitModal = () => {
     setRoomName(roomNameInput);
@@ -165,10 +162,10 @@ const ModalExample: React.FC<ModalExampleProps> = ({
                   <OnlineIndicator
                     className={isUserOnline(user.id) ? "online" : ""}
                   />
-                  {/* <input
+                  <input
                     type="checkbox"
                     onChange={() => handleCheckboxChange(user.id)}
-                  /> */}
+                  />
                 </li>
               </BoxContent>
             ))}
