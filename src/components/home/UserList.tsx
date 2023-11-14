@@ -5,6 +5,7 @@ import List from '../../styles/home/UserList.styled';
 import User from './User';
 import { UserData, getData } from '../../utils/utils';
 import { accessTokenState } from '../../atoms';
+import { privateApi } from '../../libs/axios';
 
 function UserList({ language }: { language: string }) {
   const accessToken = useRecoilValue(accessTokenState);
@@ -41,7 +42,11 @@ function UserList({ language }: { language: string }) {
 
   const fetchData = async () => {
     const data = await getData(language);
-    setUserData(data);
+    const res = await privateApi('auth/me');
+    const { user } = res.data;
+
+    const exceptMe = data.filter((data) => data.id !== user.id);
+    setUserData(exceptMe);
   };
 
   useEffect(() => {
