@@ -17,7 +17,7 @@ const SpeedDialWithTextInside = () => {
 	const router = useRouter();
 
 	const handleOpenModal = (query: string) => {
-		router.replace(`/open?${new URLSearchParams({ type: query })}`);
+		router.replace(`/chatting?${new URLSearchParams({ type: query })}`);
 		setModalOpen(true);
 	};
 
