@@ -10,14 +10,16 @@ import icon_footer_open from '@/public/icon_footer_open.svg';
 import icon_footer_private from '@/public/icon_footer_private.svg';
 import icon_footer_search from '@/public/icon_footer_search.svg';
 import { Button, Tooltip } from '@material-tailwind/react';
+import { useRouter } from 'next/navigation';
 
 const Footer = () => {
+	const router = useRouter();
 	const handleLogout = () => {
 		removeCookie('accessToken');
 		removeCookie('refreshToken');
 		removeCookie('userId');
 		// Optionally, redirect the user to the login page or another page
-		window.location.href = '/login';
+		router.push('/login');
 	};
 
 	return (
@@ -35,7 +37,7 @@ const Footer = () => {
 						height={20}
 						src={icon_footer_cat}
 						alt="친구 목록 보기"
-						className="cursor-pointer hover:shadow-lg w-6 sm:w-10 "
+						className="cursor-pointer hover:shadow-lg w-8 sm:w-12 "
 					/>
 				</Link>
 			</Tooltip>
