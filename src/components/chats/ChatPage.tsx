@@ -55,8 +55,9 @@ const MyChats = ({ userType }: { userType: string }) => {
       <ChatContainer>
         <SearchMyChat userType={userType} />
         <ChatList>
-          {userId && data
-            ? filterChats.length > 0
+          {userId &&
+            data &&
+            (filterChats.length > 0
               ? sortTime(filterChats).map((chat) => (
                   <MyChatItem
                     key={chat.id}
@@ -67,18 +68,43 @@ const MyChats = ({ userType }: { userType: string }) => {
                     isPrivate={chat.isPrivate}
                   />
                 ))
-              : sortTime(data).map((chat) => (
-                  <MyChatItem
-                    key={chat.id}
-                    name={chat.name}
-                    latestMessage={chat.latestMessage}
-                    users={chat.users}
-                    onClick={() => enterChatRoom(chat)}
-                    isPrivate={chat.isPrivate}
-                  />
-                ))
-            : null}
+              : filterChats !== null &&
+                filterChats.length === 0 && (
+                  <NoUserWrap>
+                    <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
+                  </NoUserWrap>
+                ))}
         </ChatList>
+        {/* <ChatList>
+          {userId && data ? (
+            filterChats.length > 0 ? (
+              sortTime(filterChats).map((chat) => (
+                <MyChatItem
+                  key={chat.id}
+                  name={chat.name}
+                  latestMessage={chat.latestMessage}
+                  users={chat.users}
+                  onClick={() => enterChatRoom(chat)}
+                  isPrivate={chat.isPrivate}
+                />
+              ))
+            ) : (
+              <NoUserWrap>
+                <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
+              </NoUserWrap>
+            )
+          ) : // : sortTime(data).map((chat) => (
+          //     <MyChatItem
+          //       key={chat.id}
+          //       name={chat.name}
+          //       latestMessage={chat.latestMessage}
+          //       users={chat.users}
+          //       onClick={() => enterChatRoom(chat)}
+          //       isPrivate={chat.isPrivate}
+          //     />
+          //   ))
+          null}
+        </ChatList> */}
       </ChatContainer>
     </Wrapper>
   );
@@ -155,4 +181,19 @@ const Loading = styled.div`
       transform: rotate(360deg);
     }
   }
+`;
+
+const NoUserWrap = styled.div`
+  text-align: center;
+
+  margin-top: 8rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+`;
+
+const NoUserText = styled.h2`
+  color: ${({ theme }) => theme.color.darkGreen};
+  font-size: ${({ theme }) => theme.fontSize.xl};
 `;

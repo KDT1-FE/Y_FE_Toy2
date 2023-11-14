@@ -26,6 +26,7 @@ const SearchMyChat = ({ userType }: { userType: string }) => {
           return filterValue;
         });
         const filteredChats = [...filteringChats];
+        console.log(filteredChats);
         setFilteredChats(filteredChats);
       }
     },
