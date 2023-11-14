@@ -10,9 +10,14 @@ export default function CreateChat() {
 
   const createChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    chatListAPI.createChat({ name: newChatName, users: [] }).then(res => {
-      router.push(`/chat/${res.data.id}`);
-    });
+    chatListAPI
+      .createChat({ name: newChatName, users: [] })
+      .then(({ data }) => {
+        router.push({
+          pathname: `/chat/${data.id}`,
+          query: { name: data.name },
+        });
+      });
   };
   return (
     <>

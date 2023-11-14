@@ -7,6 +7,7 @@ import useOnClickOutside from '@/hooks/useOnClickOustside';
 import { Host } from '@/pages/host-list/hostList.types';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
+import { Chat } from '@/@types/types';
 import styles from './HostDetailsModal.module.scss';
 
 interface HostDetailsModalProps {
@@ -26,16 +27,44 @@ export default function HostDetailsModal({
   });
 
   const router = useRouter();
-  const createHostChat = () => {
-    chatListAPI
-      .createChat({
-        name: `${hostDetails.name}`,
-        users: [hostDetails.id],
-        isPrivate: true,
-      })
-      .then(res => {
-        router.push(`/chat/${res.data.id}`);
+  const createHostChat = async () => {
+    // 내가 참여 중인 채팅 목록
+    const chatMyList = await chatListAPI.getMyChatList();
+    // 숙소와의 채팅만 필터링
+    const hostChatList = chatMyList.data.chats.filter(
+      (chat: Chat) => chat.isPrivate,
+    );
+
+    let chatId = '';
+    let chatName = '';
+    // 숙소와의 채팅 존재 여부
+    const isExist = hostChatList.some((chat: Chat) => {
+      if (chat.users.some(user => user.id === hostDetails.id)) {
+        chatId = chat.id;
+        chatName = chat.name;
+        return true;
+      }
+      return false;
+    });
+    if (!isExist) {
+      chatListAPI
+        .createChat({
+          name: hostDetails.name,
+          users: [hostDetails.id],
+          isPrivate: true,
+        })
+        .then(res => {
+          router.push({
+            pathname: `/chat/${res.data.id}`,
+            query: { name: res.data.name },
+          });
+        });
+    } else {
+      router.push({
+        pathname: `/chat/${chatId}`,
+        query: { name: chatName },
       });
+    }
   };
   return (
     <>
