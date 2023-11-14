@@ -232,6 +232,11 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
                 placeholder="아이디"
                 value={profile.id}
                 readOnly
+                sx={{
+                  cursor: "not-allowed", // 마우스 커서 변경 방지
+                  _focus: { borderColor: "initial", boxShadow: "none" },
+                  _hover: { borderColor: "initial" },
+                }}
                 width="300px"
                 m="auto"
               />
