@@ -1,16 +1,18 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { IChat } from '@/@types/types';
+import { Chat } from '@/@types/types';
 import Image from 'next/image';
 import CreateChat from '@/components/ChatList/CreateChat';
+import { useRecoilValue } from 'recoil';
+import { userIdState } from '@/recoil/atoms/userIdState';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
 export default function AllChatList() {
   const router = useRouter();
 
-  const [allChatList, setAllChatList] = useState<IChat[]>([]);
+  const [allChatList, setAllChatList] = useState<Chat[]>([]);
   const getAllChat = async () => {
     const chatAllList = await chatListAPI.getAllChatList();
     setAllChatList(chatAllList.data.chats);
@@ -26,9 +28,9 @@ export default function AllChatList() {
     }
   };
 
+  const userId = useRecoilValue(userIdState);
   const checkIncluded = (element: { id: string }) => {
-    //  TODO|서지수 use3 기준이 아닌 로그인 유저 기능으로 수정하기
-    if (element.id === 'user3') {
+    if (element.id === userId) {
       return true;
     }
     return false;
