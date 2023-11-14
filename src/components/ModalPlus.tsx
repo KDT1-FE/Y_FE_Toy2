@@ -27,17 +27,33 @@ const ModalExample: React.FC<ModalExampleProps> = ({
   const [roomNameInput, setRoomNameInput] = useState("");
   const [localSelectedUsers, setLocalSelectedUsers] = useState<User[]>([]);
 
+  const areUsersDifferent = (
+    newUsers: string | any[],
+    currentUsers: string | any[]
+  ) => {
+    if (newUsers.length !== currentUsers.length) return true;
+    for (let i = 0; i < newUsers.length; i++) {
+      if (newUsers[i].id !== currentUsers[i].id) return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getData("https://fastcampus-chat.net/users");
-        setOnlineUsers(response);
+        if (areUsersDifferent(response, onlineUsers)) {
+          setOnlineUsers(response);
+        }
       } catch (error) {
         console.log(error);
       }
     };
-    fetchData();
-  }, [accessToken, getData]);
+
+    if (accessToken) {
+      fetchData();
+    }
+  }, [accessToken]);
 
   const openModal = () => {
     setModalIsOpen(true);
