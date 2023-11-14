@@ -1,0 +1,52 @@
+@use '@/styles/abstracts' as *;
+@use '@/styles/base' as *;
+
+.header {
+  @include flex-center-row();
+  padding: 1rem;
+  justify-content: space-between;
+  background-color: $header-purple;
+  color: $white;
+  font-size: $font-base;
+  font-family: $font-logo;
+
+  h1 {
+    font-family: $font-logo;
+    margin-left: 1rem;
+  }
+
+  &__right {
+    @include flex-center-row;
+    margin-right: 1rem;
+    gap: 2rem;
+
+    &__btn {
+      background-color: #835da3;
+      border: none;
+      color: white;
+      box-shadow: 0 0 10px #eee;
+      padding: 0 6rem;
+      height: 5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      background-image: linear-gradient(
+        to right,
+        #000000 0%,
+        #53346d 51%,
+        #000000 100%
+      );
+      background-size: 200% auto;
+      transition: 0.5s;
+
+      &:hover {
+        scale: 1.05;
+        background-color: #31114c;
+        background-position: right center;
+        color: #fff;
+      }
+      &:active {
+        box-shadow: 0 0 100px #eee;
+      }
+    }
+  }
+}

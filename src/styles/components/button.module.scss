@@ -1,0 +1,26 @@
+.btn {
+  background-color: #835da3;
+  border: none;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  padding: 0.4rem;
+  width: 30%;
+  height: 15%;
+  border-radius: 10px;
+  cursor: pointer;
+  background-image: linear-gradient(
+    to right,
+    #000000 0%,
+    #53346d 51%,
+    #000000 100%
+  );
+  background-size: 200% auto;
+  transition: 0.5s;
+
+  &:hover {
+    scale: 1.05;
+    background-color: #31114c;
+    background-position: right center;
+    color: #fff;
+  }
+}
