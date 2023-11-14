@@ -1,10 +1,18 @@
 import { AddIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { Button, Flex, Select, Icon, useDisclosure } from '@chakra-ui/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import NewGameRoomModal from './newGameRoomModal';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { randomNameFunc } from '../../util/util';
+import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
+import {
+  roomIdState,
+  usersInRoom,
+  allRoomNumberState,
+  sortSelect,
+} from '../../states/atom';
+import { getCookie } from '../../util/util';
 
 interface Chats {
   id: string;
@@ -28,18 +36,21 @@ interface Message {
   createAt: Date;
 }
 
-const LobbyListTop = () => {
-  const [sortOption, setSortOption] = useState('');
-  const [selectOption, setSelectOption] = useState('');
+const LobbyListTop: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [randomName, setRandomName] = useState('');
-  const userId = localStorage.getItem('id');
+  const allChatState = useRecoilValue(allRoomNumberState);
+  const setRoomId = useSetRecoilState(roomIdState);
+  const setUsersInRoom = useSetRecoilState(usersInRoom);
+  const [select, setSortSelect] = useRecoilState(sortSelect);
+  const userId = getCookie('userId');
+
   const navigate = useNavigate();
 
   const fastParticipate = async () => {
     try {
-      const allRoomsData = await getAllGameRooms();
-      const allChat = allRoomsData.chats;
+      console.log(allChatState);
+      const allChat = allChatState.chats;
 
       const lengthChats = allChat.filter(
         (chat: Chats) => chat.users.length < 4,
@@ -50,7 +61,8 @@ const LobbyListTop = () => {
 
       const randomIndex = Math.floor(Math.random() * nonMyIdChats.length);
       const randomPick = nonMyIdChats[randomIndex];
-
+      setRoomId(randomPick.index);
+      setUsersInRoom(randomPick.users.length + 1);
       await participateGameRoom(randomPick.id);
       navigate(`/room/:${randomPick.id}`);
     } catch (error) {
@@ -62,14 +74,14 @@ const LobbyListTop = () => {
     <>
       <Flex justifyContent={'space-between'} paddingBottom="10px">
         <Select
-          placeholder={selectOption}
           width={260}
           height="40px"
           backgroundColor={'white'}
           borderColor={'gray.200'}
-          fontSize={16}>
-          <option value="option1">모든 게임방 보기</option>
-          <option value="option2">참여 가능한 게임방 보기</option>
+          fontSize={16}
+          onChange={(e) => setSortSelect(e.target.value)}>
+          <option value="all">모든 게임방 보기</option>
+          <option value="possible">참여 가능한 게임방 보기</option>
         </Select>
         <Flex width={230} justifyContent={'space-between'}>
           <Button
