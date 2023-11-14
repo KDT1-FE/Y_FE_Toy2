@@ -1,23 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { Box, Button, Typography } from '@mui/material';
-import { PersonAdd } from '@mui/icons-material';
-import {
-  OpenchatCreateChatModal,
-  OpenchatCreateChatWrap,
-} from '../../../styles/OpenchatStyle';
-import { User } from '../../../types/User';
+import React, { useCallback, useState } from 'react';
+import { Modal } from '@mui/material';
+import { Clear } from '@mui/icons-material';
+import * as S from '../../../styles/chat/ChatListStyles';
 import OpenchatInviteFriends from './OpenchatInviteFriends';
+import { User } from '../../../types/User';
 
 interface OpenchatInviteModalProps {
-  isModalOpen: string | null;
-  toggle: (state: string | null) => void;
+  open: boolean;
+  handleClose: () => void;
+  handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   allUsers: User[];
 }
 
-function OpenchatInviteModal({
-  isModalOpen,
-  toggle,
+function OpenchatInviteModal2({
+  open,
+  handleClose,
+  handleSearch,
   allUsers,
 }: OpenchatInviteModalProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -35,46 +33,50 @@ function OpenchatInviteModal({
   );
 
   return (
-    <OpenchatCreateChatWrap isOpen={isModalOpen}>
-      <AnimatePresence>
-        {isModalOpen && (
-          <OpenchatCreateChatModal>
-            <Box>
-              <Typography variant="h5" className="modal-title">
-                <PersonAdd />
-                친구 초대하기
-              </Typography>
-              <OpenchatInviteFriends
-                allUsers={allUsers}
-                onClickSelectBtn={onClickSelectBtn}
-                selectedIds={selectedIds}
-              />
-              <Button
-                type="reset"
-                className="openchat__reset-btn"
-                onClick={() => toggle(null)}
-              >
-                취소
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                className="openchat__submit-btn"
-                // disabled={isOpenchatCreating}
-                // startIcon={
-                //   isOpenchatCreating && (
-                //     <CircularProgress color="primary" size={16} />
-                //   )
-                // }
-              >
-                초대하기
-              </Button>
-            </Box>
-          </OpenchatCreateChatModal>
-        )}
-      </AnimatePresence>
-    </OpenchatCreateChatWrap>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <S.ModalWrapper>
+        <S.ModalHeader>
+          <S.EmptyBox />
+          <S.Title>대화 상대 초대</S.Title>
+          <S.CancelBtn onClick={handleClose}>
+            <Clear />
+          </S.CancelBtn>
+        </S.ModalHeader>
+
+        <S.ModalPartnerSearch>
+          <S.Partner>초대할 사람:</S.Partner>
+          <S.SearchInput
+            placeholder="채팅방에 초대할 상대방의 이름을 검색하세요."
+            onChange={handleSearch}
+          />
+        </S.ModalPartnerSearch>
+
+        <S.ModalUserList>
+          <OpenchatInviteFriends
+            allUsers={allUsers}
+            onClickSelectBtn={onClickSelectBtn}
+            selectedIds={selectedIds}
+          />
+        </S.ModalUserList>
+
+        <S.ModalFooter>
+          <S.StartChatBtn
+            type="button"
+            variant="contained"
+            // disabled={!selectedUser.id}
+            onClick={() => {}}
+          >
+            채팅방에 초대하기
+          </S.StartChatBtn>
+        </S.ModalFooter>
+      </S.ModalWrapper>
+    </Modal>
   );
 }
 
-export default OpenchatInviteModal;
+export default OpenchatInviteModal2;

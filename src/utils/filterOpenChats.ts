@@ -76,4 +76,19 @@ export function filterOpenChatsUser<T extends User>(
   return arr.filter((obj) => userIds.includes(obj.id));
 }
 
+export function searchUsersByName<T extends User>(
+  users: T[],
+  searchTerm: string,
+): User[] {
+  // 대소문자를 구분하지 않고 검색하려면 searchTerm과 유저 이름을 모두 소문자로 변환합니다.
+  const searchTermLower = searchTerm.toLowerCase();
+
+  // 검색어와 일치하는 유저들을 필터링합니다.
+  const matchingUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTermLower),
+  );
+
+  return matchingUsers;
+}
+
 export default filterOpenChats;

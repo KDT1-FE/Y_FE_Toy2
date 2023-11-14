@@ -7,12 +7,12 @@ import {
 } from '../../../styles/OpenchatStyle';
 
 interface OpenchatNavInviteProps {
-  toggleModalOpen: (state: string | null) => void;
+  handleOpen: () => void;
 }
 
-function OpenchatNavInvite({ toggleModalOpen }: OpenchatNavInviteProps) {
+function OpenchatNavInvite({ handleOpen }: OpenchatNavInviteProps) {
   return (
-    <OpenchatNavUserItemLi onClick={() => toggleModalOpen('true')}>
+    <OpenchatNavUserItemLi onClick={handleOpen}>
       <OpenchatFriendWrap sx={{ width: '100%' }}>
         <div className="openchat__friend-img">
           <Box

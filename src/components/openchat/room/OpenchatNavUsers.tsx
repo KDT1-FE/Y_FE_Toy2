@@ -15,16 +15,16 @@ import OpenchatNavInvite from './OpenchatNavInvite';
 
 interface OpenchatNavUsersProps {
   users: User[];
-  toggleModalOpen: (state: string | null) => void;
+  handleOpen: () => void;
 }
 
-function OpenchatNavUsers({ users, toggleModalOpen }: OpenchatNavUsersProps) {
+function OpenchatNavUsers({ users, handleOpen }: OpenchatNavUsersProps) {
   return (
     <motion.ul>
       {users.map((user) => (
         <OpenchatNavUserItem key={user.id} user={user} />
       ))}
-      <OpenchatNavInvite toggleModalOpen={toggleModalOpen} />
+      <OpenchatNavInvite handleOpen={handleOpen} />
     </motion.ul>
   );
 }

@@ -20,6 +20,7 @@ function OpenchatInviteFriendItem({
   return (
     <OpenchatFriendWrap
       sx={{
+        padding: '10px',
         backgroundColor: isSeleted ? '#d7d7d7' : '#fff',
         transition: 'background-color 0.3s',
       }}
