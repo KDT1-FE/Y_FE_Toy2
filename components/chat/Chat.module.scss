@@ -30,7 +30,7 @@
     color: $light-pink;
     font-size: 2.4rem;
     cursor: pointer;
-    padding: 0 2rem;
+    margin: 0 2rem;
     &.right {
       position: relative;
       font-size: 1.8rem;
@@ -128,7 +128,7 @@
   }
 
   @media (max-width: 799px) {
-    width: 70%;
+    min-width: 70%;
     font-size: $font-size-base;
   }
 

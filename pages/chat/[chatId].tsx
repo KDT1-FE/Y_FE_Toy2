@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef,useMemo } from 'react';
-import { io, Socket } from 'socket.io-client';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { io } from 'socket.io-client';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useRecoilValue } from 'recoil';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
@@ -7,6 +9,8 @@ import ExitNotice from '@/components/chat/exitNotice';
 import ChatAlert from '@/components/chat/chatAlert';
 import { JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
+import { userIdState } from '@/recoil/atoms/userIdState';
+import { getStorage } from '@/utils/loginStorage';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
@@ -16,36 +20,32 @@ export default function Chat() {
   const router = useRouter();
   const { chatId, name } = router.query;
 
-  console.log(router.query);
-
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const userId = '';
+  const userId = useRecoilValue(userIdState);
 
-  const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
+  console.log(userId);
 
-    const socket = useMemo(() => {
-      return io(`${CLIENT_URL}?chatId=${chatId}`, {
-        extraHeaders: {
-          Authorization: `Bearer ${accessToken}`,
-          serverId: process.env.NEXT_PUBLIC_API_KEY,
-        },
-      });
-    }, [chatId, accessToken]);
+  const accessToken = getStorage('accessToken');
+
+  const socket = useMemo(() => {
+    return io(`${CLIENT_URL}?chatId=${chatId}`, {
+      extraHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+        serverId: process.env.NEXT_PUBLIC_API_KEY,
+      },
+    });
+  }, [chatId, accessToken]);
 
   useEffect(() => {
-    
     socket.on('connect', () => {
       console.log('Connected to chat server');
       setIsConnected(true);
-      
     });
-
 
     socket.on('messages-to-client', (messageArray: Message[]) => {
       setMessages(messageArray.messages);
@@ -106,14 +106,16 @@ export default function Chat() {
       <ChatroomHeader name={name} chatId={chatId} />
       <div className={styles.container}>
         <div className={styles.container}>
-          <EntryNotice />
-          <ExitNotice />
           <div>
-          {messages.map(msg => (
-              msg.userId === userId ? 
-              <MyChat key={msg.id} msg={msg} />
-              : <OtherChat key={msg.id} msg={msg}/>
-            ))}
+            {messages.map(msg =>
+              msg.userId === userId ? (
+                <MyChat key={msg.id} msg={msg} />
+              ) : (
+                <OtherChat key={msg.id} msg={msg} />
+              ),
+            )}
+            <EntryNotice />
+            <ExitNotice />
           </div>
           <div ref={messagesEndRef} />
           {showAlert && <ChatAlert />}
