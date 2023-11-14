@@ -17,11 +17,14 @@ import { getMyChats, getAllChats, partChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
 const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
+  // 검색창에 입력 중에 올바른 검색어 비교 위해 Input 값 전역 상태 관리
   const filterInputValue = useRecoilValue(searchInputState);
   const filterChats = useRecoilValue(searchChatsState);
+
   const router = useRouter();
   const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
+  // 채팅방 들어갈 때 새 유저면 채팅방에 새로 참여시키고 기존 유저는 그냥 들어가기
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       if (chat.users.every((user) => user.id !== userId)) {
@@ -30,10 +33,12 @@ const MyChats = ({ userType }: { userType: string }) => {
         console.log('새로 입장 성공');
       } else {
         router.push(`/chating/${chat.id}`);
-        console.log('그냥 들어가기 성공');
+        console.log('기존 유저 들어가기 성공');
       }
     }
   };
+
+  // react-query로 조건부 fetch
   const { data, isLoading } = useQuery<Chat[]>({
     queryKey: ['getChatsKey'],
     queryFn: userType === 'my' ? getMyChats : getAllChats,

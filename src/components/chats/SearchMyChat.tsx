@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { Chat, searchChatsState, searchInputState } from './chatsStore';
@@ -12,12 +12,14 @@ const SearchMyChat = ({ userType }: { userType: string }) => {
   const [input, setInput] = useRecoilState(searchInputState);
   const [filterChats, setFilteredChats] = useRecoilState(searchChatsState);
 
+  // react-query로 데이터 가져옴
   const { data: chats } = useQuery<Chat[], unknown>({
     queryKey: ['getChatsKey'],
     queryFn: userType === 'my' ? getMyChats : getAllChats,
     refetchOnWindowFocus: false,
     refetchInterval: 1000,
   });
+  // 입력값 받아오고 filtering 된 값 filterChats에 저장해서 전역 관리
   const onInputChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
     if (chats) {

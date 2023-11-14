@@ -6,7 +6,7 @@ export const headers = {
   Authorization: `Bearer ${accessToken}`,
   'Cache-Control': 'no-cache',
 };
-
+// 내 채팅 정보 조회
 export const getMyChats = async (): Promise<Chat[]> => {
   try {
     const res = await instance.get<Chat[], any>('chat', { headers });
@@ -21,7 +21,7 @@ export const getMyChats = async (): Promise<Chat[]> => {
     return [];
   }
 };
-
+// 모든 채팅 정보 조회
 export const getAllChats = async () => {
   try {
     const res = await instance.get<Chat[], any>(`chat/all`, { headers });
@@ -33,7 +33,7 @@ export const getAllChats = async () => {
     return [];
   }
 };
-
+// 채팅방 참여하기
 export const partChats = async (chatId: string) => {
   try {
     const res = await instance.patch<Chat[], any>(`chat/participate`, { chatId }, { headers });

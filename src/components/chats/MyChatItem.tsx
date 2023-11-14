@@ -144,8 +144,3 @@ const PrivateIcon = styled(AiFillLock)`
   height: 1.5rem;
   color: #00956e;
 `;
-
-// const OpenIcon = styled(AiFillUnlock)`
-//   background-color: #00956e;
-//   width: 1.5rem;
-// `;
