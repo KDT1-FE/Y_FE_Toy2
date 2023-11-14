@@ -17,8 +17,6 @@ export default function Chat() {
   const router = useRouter();
   const { chatId, name } = router.query;
 
-  // console.log(router.query);
-
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);

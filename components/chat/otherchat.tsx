@@ -1,17 +1,15 @@
 // OtherMessage.js
 import React from 'react';
+import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import styles from './Chat.module.scss';
-import { Message } from '../../@types/types';
+import { IMessage } from '../../@types/types';
 
-function OtherMessage({ msg }: { msg: Message }) {
-  const options = { hour: 'numeric', minute: 'numeric', hour12: true };
-  const timeString = new Date(msg.createdAt).toLocaleTimeString(
-    'ko-KR',
-    options,
-  );
-  const formattedTime = timeString
-    .replace('오전', '오전 ')
-    .replace('오후', '오후 ');
+function OtherMessage({ msg }: { msg: IMessage }) {
+
+  const today = new Date();
+  const isToday = today.toISOString().split('T')[0];
+  const dateString = todayDate(msg.createdAt);
+  const formattedTime = formattingTime(msg.createdAt);
 
   return (
     <div className={styles.otherFlex}>
@@ -24,7 +22,11 @@ function OtherMessage({ msg }: { msg: Message }) {
       </div>
       <div className={styles.otherMessage}>
         <div className={styles.content}>{msg.text}</div>
-        <span>{formattedTime}</span>
+        <span>
+          {isToday === dateString
+            ? `${formattedTime}`
+            : `${dateString} ${formattedTime}`}
+        </span>
       </div>
     </div>
   );
