@@ -9,7 +9,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			api_secret: process.env.CLOUDINARY_SECRET,
 		});
 
-		const { file } = req.body;
+		const { file, id, name, password } = req.body;
+
 		if (!file) {
 			return res.status(400).json({ message: '파일이 없습니다.' });
 		}
@@ -18,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			file,
 			{
 				folder: 'Home',
-				public_id: 'userImage0',
+				public_id: id,
 				overwrite: true,
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +29,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 				}
 			},
 		);
-		return res.status(200).json({ data: uploadResponse.url });
+
+		const userForm = {
+			id: id,
+			name: name,
+			password: password,
+			picture: uploadResponse.url,
+		};
+
+		return res.status(200).json({ data: userForm });
 	} catch (error) {
 		console.error(error);
 		return res.status(500).json({ message: '서버 에러' });

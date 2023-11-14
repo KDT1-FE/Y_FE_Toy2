@@ -10,6 +10,7 @@ import { Input } from '@material-tailwind/react';
 import Image from 'next/image';
 import DropZone from './DropZone/DropZone';
 import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 // import Image from 'next/image';
 
 type RequestBody = {
@@ -19,16 +20,62 @@ type RequestBody = {
 	picture: string; // 사용자 이미지(url or base64, under 1MB)
 };
 
+type FetchImageProps = {
+	file: string;
+	id: string;
+	password: string;
+	name: string;
+};
+
+const fetchImage = async (params: FetchImageProps) => {
+	const data = await axios.post('api/image/post', {
+		id: params.id,
+		name: params.name,
+		password: params.password,
+		file: params.file,
+	});
+	return data.data;
+};
+
 const JoinForm = () => {
 	const router = useRouter();
 	const [baseImageUrl, setBaseImageUrl] = React.useState<string>();
 
-	const fetchImage = async (file: string) => {
-		const data = await axios.post('api/image/post', {
-			file: file,
-		});
-		return data.data;
-	};
+	const mutation = useMutation({
+		mutationFn: (data: FetchImageProps) => fetchImage(data),
+		onSuccess: async (data) => {
+			const props = data.data;
+			const { message } = await fetchJoin(
+				props.id,
+				props.password,
+				props.name,
+				props.picture,
+			);
+			if (message === 'User created') {
+				Swal.fire({
+					text: '회원가입이 완료되었습니다.',
+					showCancelButton: false,
+					confirmButtonText: '확인',
+					confirmButtonColor: '#3085d6',
+				});
+				router.replace('/login');
+			} else {
+				console.log('이미 존재한 회원 입니다');
+				Swal.fire({
+					text: '이미 존재한 회원입니다.',
+					showCancelButton: false,
+					confirmButtonText: '확인',
+					confirmButtonColor: 'red',
+				});
+			}
+		},
+		onMutate: () => {
+			console.log('onMutate');
+		},
+		onError: (error) => {
+			console.log(error);
+		},
+	});
 
 	const {
 		register,
@@ -53,23 +100,13 @@ const JoinForm = () => {
 			return;
 		}
 
-		const picture = await fetchImage(baseImageUrl!);
-		const data = await fetchJoin(id, password, name, picture);
-		const { message } = data;
-		if (message === 'User created') {
-			router.replace('/login');
-		} else {
-			console.log('이미 존재한 회원 입니다');
-			Swal.fire({
-				text: '이미 존재한 회원입니다.',
-				showCancelButton: false,
-				confirmButtonText: '확인',
-				confirmButtonColor: '#3085d6',
-			});
-		}
+		mutation.mutate({
+			file: baseImageUrl!,
+			id: id,
+			password: password,
+			name: name,
+		});
 	};
-
-	// const image = watch('picture');
 
 	return (
 		// 전체
