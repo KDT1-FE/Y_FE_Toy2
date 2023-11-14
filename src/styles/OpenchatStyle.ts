@@ -1,5 +1,6 @@
-import { Box, styled } from '@mui/material';
+import { Box, Grid, styled } from '@mui/material';
 import { motion } from 'framer-motion';
+import React from 'react';
 
 export const OpenchatContainer = styled('main')<{ isOpenModal: boolean }>(
   ({ isOpenModal }) => ({
@@ -203,3 +204,99 @@ export const OpenchatFriendWrap = styled('div')(({ theme }) => ({
     },
   },
 }));
+
+export const OpenchatRoomAppbar = React.memo(
+  styled(Box)(({ theme }) => ({
+    position: 'sticky',
+    top: 0,
+    backgroundColor: theme.palette.background.paper,
+    height: '62px',
+    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+    padding: '5px 10px',
+    boxSizing: 'border-box',
+    zIndex: 1,
+    '& .openchat__room-appbar-wrap': {
+      display: 'flex',
+      alignItems: 'center',
+    },
+  })),
+);
+
+export const OpenchatMessageWrap = React.memo(
+  styled(Box)(({ theme }) => ({
+    padding: '0 0 62px',
+    minHeight: '100vh',
+    boxSizing: 'border-box',
+  })),
+);
+
+export const OpenchatMessageItemWrap = styled(Box)<{ isme: string }>(
+  ({ theme, isme }) => ({
+    padding: '1rem 0',
+    alignSelf: isme === 'true' ? 'flex-end' : 'flex-start',
+    display: 'flex',
+    gap: 10,
+    '& .openchat__msg-wrapper': {
+      display: 'flex',
+      alignItems: 'flex-end',
+      flexDirection: isme === 'true' ? 'row-reverse' : 'row',
+      gap: '8px',
+    },
+    '& .openchat__msg-box': {
+      flex: '1 1 auto',
+      maxWidth: '360px',
+      backgroundColor:
+        isme === 'true'
+          ? theme.palette.primary.main
+          : theme.palette.secondary.light,
+      color:
+        isme === 'true'
+          ? theme.palette.background.paper
+          : theme.palette.common.black,
+      padding: '1rem',
+      borderRadius: '10px',
+    },
+    '& .openchat__time-box': {
+      flex: '0 0 4rem',
+      textAlign: isme === 'true' ? 'right' : 'left',
+    },
+  }),
+);
+
+export const OpenchatSenderWrap = styled(Grid)(({ theme }) => ({
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  '& .openchat__sender-input': {
+    flex: '1 1 80%',
+    display: 'block',
+    padding: '10px',
+    border: 0,
+  },
+}));
+
+export const OpenchatNavUserItemLi = styled(motion.li)({
+  width: '100%',
+});
+
+export const OpenchatInviteModalWrap = styled(Box)({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'rgba(0,0,0,0.1)',
+  zIndex: 3,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  '& .openchat__invite-box': {
+    position: 'relative',
+    width: '100%',
+    height: '100vh',
+    maxWidth: '480px',
+    maxHeight: '660px',
+    backgroundColor: 'white',
+  },
+});

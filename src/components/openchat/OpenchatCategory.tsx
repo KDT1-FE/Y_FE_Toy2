@@ -10,7 +10,7 @@ interface OpenchatCategoryProps {
 }
 
 function OpenchatCategory({ isQuering, openchats }: OpenchatCategoryProps) {
-  const count2 = new Array(2).fill(0);
+  const count2 = ['skeleton1', 'skeleton2'];
   if (!openchats) return <div>채팅방이 없습니다.</div>;
   return (
     <Grid container spacing={2}>
@@ -18,7 +18,7 @@ function OpenchatCategory({ isQuering, openchats }: OpenchatCategoryProps) {
         ? openchats.map((openchat) => (
             <OpenchatItem key={openchat.id} openchat={openchat} />
           ))
-        : count2.map(() => <OpenchatItemSkeleton />)}
+        : count2.map((el) => <OpenchatItemSkeleton key={el} />)}
     </Grid>
   );
 }

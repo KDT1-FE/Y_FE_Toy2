@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Chip,
-  CircularProgress,
   Container,
   Grid,
   Stack,
@@ -16,20 +15,20 @@ import {
   OpenchatBox,
   OpenchatContainer,
   OpenchatCreateChatBtn,
-} from '../styles/OpenchatStyle';
+} from '../../styles/OpenchatStyle';
 
-import OpenchatCategory from '../components/openchat/OpenchatCategory';
-import OpenchatCreate from '../components/openchat/OpenchatCreate';
-import { privateApi } from '../libs/axios';
-import { UserSimple } from '../types/User';
-import useQueryOpenchats from '../hooks/useQueryOpenchats';
+import OpenchatCategory from '../../components/openchat/OpenchatCategory';
+import OpenchatCreate from '../../components/openchat/OpenchatCreate';
+import { privateApi } from '../../libs/axios';
+import { UserSimple } from '../../types/User';
+import useQueryOpenchats from '../../hooks/useQueryOpenchats';
 import {
   filterCateOpenChats,
   filterFriendsNotMe,
-} from '../utils/filterOpenChats';
-import { animal, hobby, sports } from '../types/Openchat';
-import OpenchatMy from '../components/openchat/OpenchatMy';
-import OpenchatFriends from '../components/openchat/OpenchatFriends';
+} from '../../utils/filterOpenChats';
+import { animal, hobby, sports } from '../../types/Openchat';
+import OpenchatMy from '../../components/openchat/OpenchatMy';
+import OpenchatFriends from '../../components/openchat/OpenchatFriends';
 
 function Openchat() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -72,22 +71,6 @@ function Openchat() {
       })();
     }
   }, [selectedId]);
-
-  // if (isQuering) {
-  //   return (
-  //     <Box
-  //       sx={{
-  //         display: 'flex',
-  //         justifyContent: 'center',
-  //         alignItems: 'center',
-  //         backgroundColor: '#f5f5f5',
-  //         height: '100vh',
-  //       }}
-  //     >
-  //       <CircularProgress />
-  //     </Box>
-  //   );
-  // }
 
   return (
     <OpenchatContainer isOpenModal={Boolean(selectedId)}>

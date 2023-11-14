@@ -36,7 +36,7 @@ interface Message {
   id: string;
   text: string;
   userId: string;
-  createAt: Date;
+  createdAt: Date;
 }
 
 export type ChatInfoWithId = ChatInfo & {
