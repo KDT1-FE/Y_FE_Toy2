@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Chat.module.scss';
 import { IMessage } from '../../@types/types';
 
-function MyMessage({ msg }: { msg: Message }) {
+function MyMessage({ msg }: { msg: IMessage }) {
   return (
     <div className={styles.myFlex}>
       <div className={styles.myMessage}>
