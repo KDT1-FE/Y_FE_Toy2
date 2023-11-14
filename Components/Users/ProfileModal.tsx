@@ -7,9 +7,10 @@ import {
 import { Chat, User } from '@/types';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import { getCookie } from '../Login/Cookie';
 import { convertPictureURL } from '@/hooks/Common/users';
+import { Input } from '@material-tailwind/react';
 
 const ProfileModal = ({
 	user,
@@ -22,36 +23,60 @@ const ProfileModal = ({
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const isMyProfile = searchParams?.get('isMyProfile') === 'true';
+	const [isEdit, setIsEdit] = useState<boolean>(false);
+	const [userInput, setUserInput] = useState<User>(user);
 
 	const chattingParticipateHandler = async () => {
 		if (existPrivateChat) {
-			const message = await participateChat(accessToken, existPrivateChat.id);
-			console.log('참여하기', message);
-			/* 채팅방으로 이동 시키기*/
+			await participateChat(accessToken, existPrivateChat.id);
 			router.push(`/chat/${existPrivateChat.id}?isPrivate=true`);
 		} else {
 			const chat = await createPrivateChat(accessToken, user);
-			const message = await participateChat(accessToken, chat.id);
-			console.log('새로 만든 후 참여하기', message);
-			/* 채팅방으로 이동 시키기*/
+			await participateChat(accessToken, chat.id);
 			router.push(`/chat/${chat.id}?isPrivate=true`);
 		}
 	};
 
-	const editProfileHandler = () => {
-		console.log('click editProfileHandler');
+	const handleEditUserData = async () => {};
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const userInputTemp = { ...userInput, name: event.target.value };
+		setUserInput(userInputTemp);
+	};
+
+	const handleCancelEdit = () => {
+		setIsEdit(false);
+		setUserInput(user);
 	};
 
 	return (
 		<section className="relative w-full h-full top-0 bg-gray-400 ">
-			<button
-				className="absolute top-5 right-5 text-white text-3xl"
-				onClick={() => {
-					router.back();
-				}}
-			>
-				X
-			</button>
+			{isEdit ? (
+				<button
+					className="absolute top-5 right-5 text-white text-3xl"
+					onClick={handleCancelEdit}
+				>
+					취소
+				</button>
+			) : (
+				<button
+					className="absolute top-5 right-5 text-white text-3xl"
+					onClick={() => {
+						router.back();
+					}}
+				>
+					X
+				</button>
+			)}
+
+			{isEdit && (
+				<button
+					className="absolute top-5 left-5 text-white text-3xl"
+					onClick={handleEditUserData}
+				>
+					확인
+				</button>
+			)}
 			<div className="w-full h-full flex flex-col justify-between items-center">
 				<div></div>
 
@@ -60,7 +85,7 @@ const ProfileModal = ({
 						<Image
 							fill={true}
 							alt={user.name}
-							src={convertPictureURL(user.picture)}
+							src={convertPictureURL(userInput.picture)}
 							className="rounded-full border-black"
 							style={{
 								position: 'absolute',
@@ -71,13 +96,28 @@ const ProfileModal = ({
 							}}
 						/>
 					</div>
-					<h3 className="text-2xl text-white">{user.name}</h3>
+					<Input
+						disabled={!isEdit}
+						crossOrigin="anonymous"
+						icon={
+							isEdit && (
+								<Image src="/icon_edit.svg" alt="이름 변경하기" fill={true} />
+							)
+						}
+						variant="static"
+						size="lg"
+						value={userInput.name}
+						onChange={handleChange}
+						className="text-center  text-white disabled:bg-transparent"
+						style={{ fontSize: '24px' }}
+					/>
+
 					<div className="w-full border-t-2 h-1 border-white "></div>
 					<div className="flex items-center">
 						{isMyProfile ? (
 							<div
 								className="flex flex-col items-center cursor-pointer"
-								onClick={editProfileHandler}
+								onClick={() => setIsEdit((prev) => !prev)}
 							>
 								<Image
 									className=""
