@@ -25,9 +25,13 @@ const ChannelExitDialog = ({ chatId }: Prop) => {
   const navigate = useNavigate();
 
   const handleExitChannel = async () => {
-    await exitChannel(chatId);
-    await onClose();
-    navigate('/');
+    try {
+      await exitChannel({ chatId });
+      onClose();
+      navigate('/');
+    } finally {
+      window.location.reload();
+    }
   };
 
   return (

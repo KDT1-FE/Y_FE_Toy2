@@ -2,7 +2,6 @@ import { ChatData } from './message';
 import { User } from './user';
 
 export interface ResponseValue {
-  [x: string]: any;
   chats: Channel[];
 }
 
