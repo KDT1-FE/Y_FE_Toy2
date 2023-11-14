@@ -8,9 +8,18 @@ export const middleware = (request: NextApiRequest) => {
 	if (cookie) {
 		return NextResponse.next();
 	}
-	return NextResponse.redirect(new URL('/home', request.url));
+	return NextResponse.redirect(new URL('/login', request.url));
 };
 
 export const config = {
-	matcher: ['/open', '/search', '/user', '/private'],
+	matcher: [
+		'/open',
+		'/search',
+		'/users',
+		'/private',
+		'/searchmychat',
+		'/chat',
+		'/profile',
+		'/chatProfile',
+	],
 };
