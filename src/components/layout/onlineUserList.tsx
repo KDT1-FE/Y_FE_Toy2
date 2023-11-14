@@ -1,5 +1,11 @@
-import { useRecoilValue } from 'recoil';
-import { allUserState, onlineUserState } from '../../states/atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  allUserState,
+  onlineUserState,
+  allRoomNumberState,
+  roomIdState,
+  usersInRoom,
+} from '../../states/atom';
 import userList from '../template/userList';
 import { Card, Flex, Heading, Image, Text, IconButton } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
@@ -41,6 +47,9 @@ const OnlineUserList = () => {
   const all = useRecoilValue(allUserState);
   const allOnlineUsers = onLine.users || [];
   const userId = localStorage.getItem('id');
+  const allChatState = useRecoilValue(allRoomNumberState);
+  const setRoomId = useSetRecoilState(roomIdState);
+  const setUsersInRoom = useSetRecoilState(usersInRoom);
 
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
@@ -79,6 +88,10 @@ const OnlineUserList = () => {
       alert('본인입니다.');
     } else {
       const chat = await createGameRooms(random, [element.id], false);
+      const chatLength = allChatState.chats.length;
+      console.log(chat);
+      setRoomId(chatLength + 1);
+      setUsersInRoom(2);
       navigate(`/room/:${chat.id}`);
     }
   };

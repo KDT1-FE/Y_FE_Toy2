@@ -5,6 +5,12 @@ import NewGameRoomModal from './newGameRoomModal';
 import { getAllGameRooms, participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { randomNameFunc } from '../../util/util';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import {
+  roomIdState,
+  usersInRoom,
+  allRoomNumberState,
+} from '../../states/atom';
 
 interface Chats {
   id: string;
@@ -33,13 +39,17 @@ const LobbyListTop = () => {
   const [selectOption, setSelectOption] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [randomName, setRandomName] = useState('');
+  const allChatState = useRecoilValue(allRoomNumberState);
+  const setRoomId = useSetRecoilState(roomIdState);
+  const setUsersInRoom = useSetRecoilState(usersInRoom);
   const userId = localStorage.getItem('id');
+
   const navigate = useNavigate();
 
   const fastParticipate = async () => {
     try {
-      const allRoomsData = await getAllGameRooms();
-      const allChat = allRoomsData.chats;
+      console.log(allChatState);
+      const allChat = allChatState.chats;
 
       const lengthChats = allChat.filter(
         (chat: Chats) => chat.users.length < 4,
@@ -50,7 +60,8 @@ const LobbyListTop = () => {
 
       const randomIndex = Math.floor(Math.random() * nonMyIdChats.length);
       const randomPick = nonMyIdChats[randomIndex];
-
+      setRoomId(randomPick.index);
+      setUsersInRoom(randomPick.users.length + 1);
       await participateGameRoom(randomPick.id);
       navigate(`/room/:${randomPick.id}`);
     } catch (error) {

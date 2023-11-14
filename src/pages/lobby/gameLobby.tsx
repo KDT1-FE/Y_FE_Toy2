@@ -5,7 +5,6 @@ import { Flex } from '@chakra-ui/react';
 import styled from 'styled-components';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
 import { controlLobbyReload, controlBack } from '../../hooks/leaveHandle';
-import CreateGameRoom from '../../components/layout/createGameRoom';
 
 const GameLobby = () => {
   controlLobbyReload();

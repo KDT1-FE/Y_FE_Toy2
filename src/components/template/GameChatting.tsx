@@ -9,12 +9,14 @@ import {
   createSeparatedTime,
   modifyDate,
 } from './useChattingSort';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   privateChatDetail,
   privateChatNew,
   myUserDataState,
   onlineUserStateInGameRoom,
+  roomIdState,
+  usersInRoom,
 } from '../../states/atom';
 import { getCookie } from '../../util/util';
 
@@ -27,10 +29,9 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [socket, setSocket] = useState<any>(null);
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
-  const [__, setUsersInGameRoom] = useRecoilState<string[]>(
-    onlineUserStateInGameRoom,
-  );
+  const setUsersInGameRoom = useSetRecoilState(onlineUserStateInGameRoom);
   const [lastDate, setLastDate] = useState<string | undefined>('');
+  const [usersInRoomData, setUsersInRoom] = useRecoilState(usersInRoom);
   const accessToken: any = getCookie('accessToken');
 
   const myUserData: any = useRecoilValue(myUserDataState);
@@ -87,11 +88,15 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
       newSocket.on('join', (data) => {
         console.log('들어온거 작동');
         setUsersInGameRoom(data.users);
+        setUsersInRoom(usersInRoomData + 1);
       });
 
       newSocket.on('leave', (data) => {
         console.log('나간거 작동');
         setUsersInGameRoom(data.users);
+        if (usersInRoomData > 0) {
+          setUsersInRoom(usersInRoomData - 1);
+        }
       });
 
       return () => {

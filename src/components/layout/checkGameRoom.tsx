@@ -3,12 +3,18 @@
 import { useState, useEffect } from 'react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { allRoomState, usersInRoom } from '../../states/atom';
+import {
+  allRoomState,
+  usersInRoom,
+  roomIdState,
+  allRoomNumberState,
+} from '../../states/atom';
 
 import {
   getAllGameRooms,
   // getOnlyGameRoom,
   participateGameRoom,
+  getAllMyChat,
 } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import usePollingData from '../template/usePollingData';
@@ -28,13 +34,12 @@ import {
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
-import { getAllMyChat } from '../../api';
 import { useSetRecoilState } from 'recoil';
-import { roomIdState } from '../../states/atom';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
+  const setRoomIdAllRooms = useSetRecoilState(allRoomNumberState);
 
   const setRoomId = useSetRecoilState(roomIdState);
   const setUsersInRoom = useSetRecoilState(usersInRoom);
@@ -59,7 +64,7 @@ const CheckGameRoom = () => {
   const fetchData = async () => {
     try {
       const allRoomsData = await getAllGameRooms();
-      console.log(allRoomsData);
+
       setTotalItemsCount(allRoomsData.chats.length);
 
       // 방번호 넣기
@@ -71,8 +76,10 @@ const CheckGameRoom = () => {
         })),
       };
 
+      setRoomIdAllRooms(plusIndex);
+
       // 배열을 역순으로 만들기 (최신순)
-      const reversedRooms = plusIndex.chats.reverse();
+      const reversedRooms = [...plusIndex.chats].reverse();
 
       // 서버에서 받아온 전체 데이터를 현재 페이지에 맞게 자름
       const startIndex = (currentPage - 1) * itemsPerPage;
@@ -111,7 +118,7 @@ const CheckGameRoom = () => {
       try {
         await participateGameRoom(chatId);
         setRoomId(roomId);
-        setUsersInRoom(numberOfPeople);
+        setUsersInRoom(numberOfPeople + 1);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
         console.log(error.response.data.message);
@@ -124,6 +131,7 @@ const CheckGameRoom = () => {
             type: errorType,
           });
         } else if (error.response.data.message === 'Already participated') {
+          setUsersInRoom(numberOfPeople);
           navigate(`/room/:${chatId}`);
         }
       } finally {
