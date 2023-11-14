@@ -12,6 +12,10 @@ import GameChatting from '../../components/template/GameChatting';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
 
+import { useRecoilValue } from 'recoil';
+import { roomIdState } from '../../states/atom';
+import { usersInRoom } from '../../states/atom';
+
 const GameRoom = () => {
   const { id } = useParams();
   const [chat, setChat] = useRecoilState(chattingIdState);
@@ -25,22 +29,22 @@ const GameRoom = () => {
   controlBack();
   console.log(chat);
 
+  const roomId = useRecoilValue(roomIdState);
+  const users = useRecoilValue(usersInRoom);
+  console.log(users);
+
   return (
     <Game>
       <RoomHeader>
         <RoomInfo>
           <RoomInformation>방 번호</RoomInformation>
-          <RoomInformation>{id?.slice(1, 5)}</RoomInformation>
+          <RoomInformation>{roomId}</RoomInformation>
           <RoomInformation>인원 수 </RoomInformation>
-          <RoomInformation>3 / 4</RoomInformation>
+          <RoomInformation>{users} / 4</RoomInformation>
           {/* 인원수 추가 */}
         </RoomInfo>
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
-          <InviteBtn>
-            <InviteImage src={inviteImg} alt="Invite" />
-            <div>초대하기</div>
-          </InviteBtn>
           <LeaveGameRoom chatId={chat}></LeaveGameRoom>
         </BtnGroup>
       </RoomHeader>
@@ -50,6 +54,7 @@ const GameRoom = () => {
 
         <GameChatting chatId={chat} />
       </RoomMain>
+
       <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
       <UserList>{/* <CheckUser /> */}</UserList>
     </Game>
@@ -98,35 +103,7 @@ const RoomInformation = styled.div`
 const BtnGroup = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 140px;
-`;
-
-const InviteBtn = styled.button`
-  background-color: #38b2ac;
-  color: white;
-  padding: 6px 25px;
-  border-radius: 7px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  transition: 0.2s;
-
-  div {
-    margin-left: 18px;
-  }
-
-  &:hover {
-    background-color: #4fd1c5;
-  }
-`;
-
-const InviteImage = styled.img`
-  position: absolute;
-  top: 9.5px;
-  left: 20px;
-  width: 22px;
-  height: 22px;
+  margin-left: 260px;
 `;
 
 const RoomMain = styled.div`

@@ -23,7 +23,6 @@ interface ChattingDetailProps {
 }
 
 const GameChatting = ({ chatId }: ChattingDetailProps) => {
-  console.log(chatId);
   const [postData, setPostData] = useState('');
   const [socket, setSocket] = useState<any>(null);
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
@@ -33,6 +32,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   );
   const [lastDate, setLastDate] = useState<string | undefined>('');
   const accessToken: any = getCookie('accessToken');
+
   const myUserData: any = useRecoilValue(myUserDataState);
   useEffect(() => {
     try {
@@ -101,7 +101,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
-  }, [chatId]);
+  }, [accessToken, chatId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPostData(e.target.value);
@@ -143,6 +143,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
               id="message"
               className={element.userId === myUserData.id ? 'mine' : ''}>
               {/* {"mine이면 파란색, ''이면 빨간색"} */}
+
               <p>{element.text}</p>
             </div>
             <p>{element.time}</p>

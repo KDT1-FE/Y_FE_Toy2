@@ -109,7 +109,7 @@ const UserImg = styled.img`
 `;
 
 const TextBox = styled.div`
-  margin-left: 15px;
+  margin-left: 20px;
   font-weight: 700;
 `;
 

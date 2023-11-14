@@ -1,8 +1,10 @@
 // checkGameRoom.tsx
 
 import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { allRoomState } from '../../states/atom';
+
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { allRoomState, usersInRoom } from '../../states/atom';
+
 import {
   getAllGameRooms,
   // getOnlyGameRoom,
@@ -27,10 +29,15 @@ import {
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
 import { getAllMyChat } from '../../api';
+import { useSetRecoilState } from 'recoil';
+import { roomIdState } from '../../states/atom';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
+
+  const setRoomId = useSetRecoilState(roomIdState);
+  const setUsersInRoom = useSetRecoilState(usersInRoom);
 
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -80,7 +87,11 @@ const CheckGameRoom = () => {
 
   usePollingData(fetchData, [currentPage]);
 
-  const handleParticipate = async (numberOfPeople: number, chatId: any) => {
+  const handleParticipate = async (
+    numberOfPeople: number,
+    chatId: any,
+    roomId: number,
+  ) => {
     if (numberOfPeople === 4) {
       let allMyChatData = await getAllMyChat();
       allMyChatData = allMyChatData.chats.filter((obj: any) => !obj.isPrivate);
@@ -99,6 +110,8 @@ const CheckGameRoom = () => {
     } else {
       try {
         await participateGameRoom(chatId);
+        setRoomId(roomId);
+        setUsersInRoom(numberOfPeople);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
         console.log(error.response.data.message);
@@ -156,9 +169,14 @@ const CheckGameRoom = () => {
                 backgroundColor:
                   element.users.length !== 4 ? 'gray.100' : 'gray.300',
               }}
-              onClick={() =>
-                handleParticipate(element.users.length, element.id)
-              }>
+              onClick={() => {
+                // handleSelectRoom(element?.index);
+                handleParticipate(
+                  element.users.length,
+                  element.id,
+                  element?.index,
+                );
+              }}>
               <Flex
                 lineHeight="50px"
                 fontSize={14}
