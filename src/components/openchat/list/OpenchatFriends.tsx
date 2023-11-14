@@ -1,6 +1,6 @@
 import React from 'react';
 import OpenchatFriendItem from './OpenchatFriendItem';
-import { UserInfoWithId } from '../../types/User';
+import { UserInfoWithId } from '../../../types/User';
 
 interface OpenchatFriendsProps {
   friends: UserInfoWithId[];

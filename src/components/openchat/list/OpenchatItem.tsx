@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Grid, Typography } from '@mui/material';
 import { Person } from '@mui/icons-material';
-import { OpenchatRoom } from '../../styles/OpenchatStyle';
-import { ChatInfoWithId } from '../../hooks/useQueryOpenchats';
-import OpenchatAvatar from './OpenchatAvatar';
+import { OpenchatRoom } from '../../../styles/OpenchatStyle';
+import { ChatInfoWithId } from '../../../hooks/useQueryOpenchats';
+import OpenchatAvatar from '../common/OpenchatAvatar';
 
 interface OpenchatCategoryProps {
   openchat: ChatInfoWithId;

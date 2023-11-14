@@ -17,8 +17,8 @@ import {
   OpenchatCreateChatBtn,
 } from '../../styles/OpenchatStyle';
 
-import OpenchatCategory from '../../components/openchat/OpenchatCategory';
-import OpenchatCreate from '../../components/openchat/OpenchatCreate';
+import OpenchatCategory from '../../components/openchat/list/OpenchatCategory';
+import OpenchatCreate from '../../components/openchat/new/OpenchatCreate';
 import { privateApi } from '../../libs/axios';
 import { UserSimple } from '../../types/User';
 import useQueryOpenchats from '../../hooks/useQueryOpenchats';
@@ -27,8 +27,8 @@ import {
   filterFriendsNotMe,
 } from '../../utils/filterOpenChats';
 import { animal, hobby, sports } from '../../types/Openchat';
-import OpenchatMy from '../../components/openchat/OpenchatMy';
-import OpenchatFriends from '../../components/openchat/OpenchatFriends';
+import OpenchatMy from '../../components/openchat/list/OpenchatMy';
+import OpenchatFriends from '../../components/openchat/list/OpenchatFriends';
 
 function Openchat() {
   const [selectedId, setSelectedId] = useState<string | null>(null);

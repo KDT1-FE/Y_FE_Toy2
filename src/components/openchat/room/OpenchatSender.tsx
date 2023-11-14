@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Grid, TextField } from '@mui/material';
 import { Send } from '@mui/icons-material';
-import { OpenchatSenderWrap } from '../../styles/OpenchatStyle';
+import { OpenchatSenderWrap } from '../../../styles/OpenchatStyle';
 
 interface OpenchatSenderProps {
   message: string;

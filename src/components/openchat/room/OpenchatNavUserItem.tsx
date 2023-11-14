@@ -1,15 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Typography } from '@mui/material';
-import { User } from '../../types/User';
-import { OpenchatFriendWrap } from '../../styles/OpenchatStyle';
+import { User } from '../../../types/User';
+import { OpenchatFriendWrap } from '../../../styles/OpenchatStyle';
 
 interface OpenchatNavUserItemProps {
   user: User;
 }
 
 function OpenchatNavUserItem({ user }: OpenchatNavUserItemProps) {
-  // const style = { border: `2px solid ${colors[i]}` };
   return (
     <motion.li>
       <OpenchatFriendWrap>
@@ -21,11 +20,6 @@ function OpenchatNavUserItem({ user }: OpenchatNavUserItemProps) {
             {user.name} ({user.id})
           </Typography>
         </div>
-        {/* <div className="openchat__friend-send">
-        <Tooltip title="메시지">
-          <Send sx={{ width: '20px' }} />
-        </Tooltip>
-      </div> */}
       </OpenchatFriendWrap>
     </motion.li>
   );

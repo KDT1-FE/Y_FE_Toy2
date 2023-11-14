@@ -1,8 +1,8 @@
 import React from 'react';
 import { Cycle, motion } from 'framer-motion';
 import { Box, Button, Typography } from '@mui/material';
-import { User } from '../../types/User';
-import { Chat } from '../../types/Openchat';
+import { User } from '../../../types/User';
+import { Chat } from '../../../types/Openchat';
 import OpenchatNavUsers from './OpenchatNavUsers';
 import styles from './OpenchatNav.module.css';
 

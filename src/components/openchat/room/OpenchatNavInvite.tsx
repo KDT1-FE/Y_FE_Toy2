@@ -1,12 +1,10 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import {
   OpenchatFriendWrap,
   OpenchatNavUserItemLi,
-} from '../../styles/OpenchatStyle';
+} from '../../../styles/OpenchatStyle';
 
 interface OpenchatNavInviteProps {
   toggleModalOpen: (state: string | null) => void;

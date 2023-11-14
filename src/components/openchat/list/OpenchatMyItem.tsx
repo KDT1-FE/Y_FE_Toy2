@@ -3,10 +3,10 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Person } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { OpenchatRoom } from '../../styles/OpenchatStyle';
-import OpenchatAvatar from './OpenchatAvatar';
-import { Openchat } from '../../types/Openchat';
-import { formatDate } from '../../utils/formatDate';
+import { OpenchatRoom } from '../../../styles/OpenchatStyle';
+import OpenchatAvatar from '../common/OpenchatAvatar';
+import { Openchat } from '../../../types/Openchat';
+import { formatDate } from '../../../utils/formatDate';
 
 interface OpenchatMyItemProps {
   openchat: Openchat;

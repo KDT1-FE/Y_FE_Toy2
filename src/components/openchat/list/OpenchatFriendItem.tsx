@@ -1,8 +1,8 @@
 import React from 'react';
 import { Tooltip, Typography } from '@mui/material';
 import { Send } from '@mui/icons-material';
-import { UserInfoWithId } from '../../types/User';
-import { OpenchatFriendWrap } from '../../styles/OpenchatStyle';
+import { UserInfoWithId } from '../../../types/User';
+import { OpenchatFriendWrap } from '../../../styles/OpenchatStyle';
 
 interface OpenchatFriendProps {
   friend: UserInfoWithId;
