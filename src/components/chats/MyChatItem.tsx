@@ -36,7 +36,7 @@ const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) =>
           </ChatInfo>
           <MessageCount>
             <ReceiveTime>{latestMessage ? formatCreatedAt(latestMessage.createdAt) : ''}</ReceiveTime>
-            <TypeCheckBox>{isPrivate ? <PrivateIcon /> : <OpenIcon />}</TypeCheckBox>
+            <TypeCheckBox>{isPrivate ? <PrivateIcon /> : ''}</TypeCheckBox>
           </MessageCount>
         </ChatDescContainer>
       </ChatBox>
@@ -136,16 +136,16 @@ const TypeCheckBox = styled.div`
   border-radius: 0.6rem;
   text-align: center;
   padding: 0.1rem 0.5rem;
-  background-color: #00956e;
   color: #fff;
 `;
 
 const PrivateIcon = styled(AiFillLock)`
-  background-color: #00956e;
   width: 1.5rem;
+  height: 1.5rem;
+  color: #00956e;
 `;
 
-const OpenIcon = styled(AiFillUnlock)`
-  background-color: #00956e;
-  width: 1.5rem;
-`;
+// const OpenIcon = styled(AiFillUnlock)`
+//   background-color: #00956e;
+//   width: 1.5rem;
+// `;

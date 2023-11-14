@@ -25,9 +25,12 @@ const MyChats = ({ userType }: { userType: string }) => {
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       if (chat.users.some((user) => user.id === userId)) {
-        alert('채팅에 참여하실건가요?');
+        partChats();
+        router.push(`/chating/${chat.id}`);
+        console.log('새로 입장 성공');
       }
       router.push(`/chating/${chat.id}`);
+      console.log('그냥 들어가기 성공');
     }
   };
   const { data, isLoading } = useQuery<Chat[]>({
@@ -88,31 +91,6 @@ const MyChats = ({ userType }: { userType: string }) => {
             )
           ) : null}
         </ChatList>
-        {/* <ChatList>
-          {userId && data
-            ? filterChats.length > 0
-              ? sortTime(filterChats).map((chat) => (
-                  <MyChatItem
-                    key={chat.id}
-                    name={chat.name}
-                    latestMessage={chat.latestMessage}
-                    users={chat.users}
-                    onClick={() => enterChatRoom(chat)}
-                    isPrivate={chat.isPrivate}
-                  />
-                ))
-              : sortTime(data).map((chat) => (
-                  <MyChatItem
-                    key={chat.id}
-                    name={chat.name}
-                    latestMessage={chat.latestMessage}
-                    users={chat.users}
-                    onClick={() => enterChatRoom(chat)}
-                    isPrivate={chat.isPrivate}
-                  />
-                ))
-            : null}
-        </ChatList> */}
       </ChatContainer>
     </Wrapper>
   );
@@ -120,7 +98,7 @@ const MyChats = ({ userType }: { userType: string }) => {
 
 export default MyChats;
 
-export const Wrapper = styled.div`
+const Wrapper = styled.div`
   width: 100%;
   display: flex;
   height: 100vh;
