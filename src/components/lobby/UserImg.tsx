@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from '@styles/components/userImg.module.scss';
+import styles from '@styles/components/lobby/userImg.module.scss';
 
 const UserImg = () => {
   const tmpImg =

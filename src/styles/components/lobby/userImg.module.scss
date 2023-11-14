@@ -1,5 +1,5 @@
-@use '../abstracts' as *;
-@use '../base' as *;
+@use '@/styles/abstracts' as *;
+@use '@/styles/base' as *;
 
 .userImg {
   @include flex-center-row;
