@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import React from 'react';
 import { getCookie } from '../Login/Cookie';
+import { convertPictureURL } from '@/hooks/Common/users';
 
 const ProfileModal = ({
 	user,
@@ -55,13 +56,21 @@ const ProfileModal = ({
 				<div></div>
 
 				<div className="flex flex-col w-full items-center gap-5 pb-20">
-					<Image
-						className="rounded-full"
-						src={user.picture}
-						alt={user.name}
-						height={150}
-						width={150}
-					/>
+					<div className="relative w-28 h-28">
+						<Image
+							fill={true}
+							alt={user.name}
+							src={convertPictureURL(user.picture)}
+							className="rounded-full border-black"
+							style={{
+								position: 'absolute',
+								top: 0,
+								left: 0,
+								objectFit: 'cover',
+								margin: 'auto',
+							}}
+						/>
+					</div>
 					<h3 className="text-2xl text-white">{user.name}</h3>
 					<div className="w-full border-t-2 h-1 border-white "></div>
 					<div className="flex items-center">
