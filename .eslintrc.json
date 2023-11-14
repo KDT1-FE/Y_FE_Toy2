@@ -27,6 +27,8 @@
     "@typescript-eslint/no-shadow": "off",
     "react-hooks/exhaustive-deps": "off",
     "default-case": "off",
-    "jsx-a11y/label-has-associated-control": "off"
+    "jsx-a11y/label-has-associated-control": "off",
+    "react/no-array-index-key": "off",
+    "import/no-cycle": "off"
   }
 }
