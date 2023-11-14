@@ -6,6 +6,7 @@ import Image from 'next/image';
 import CreateChat from '@/components/ChatList/CreateChat';
 import { useRecoilValue } from 'recoil';
 import { userIdState } from '@/recoil/atoms/userIdState';
+import formatTime from '@/utils/timeFormat';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -43,6 +44,7 @@ export default function AllChatList() {
     <ul>
       <CreateChat />
       {allChatList.map(chat => {
+        const { timeDiffText, className } = formatTime(chat.updatedAt);
         const isincluded = chat.users.some(checkIncluded);
         return (
           <li key={chat.id}>
@@ -72,8 +74,10 @@ export default function AllChatList() {
                     {chat.latestMessage?.text}
                   </div>
                 </div>
-                <div>
-                  <div className={styles.chat_updated}>{chat.updatedAt}</div>
+                <div className={styles.right}>
+                  <div className={styles.chat_updated}>
+                    <span className={styles[className]}>{timeDiffText}</span>
+                  </div>
                   {!isincluded && (
                     <button
                       type="button"

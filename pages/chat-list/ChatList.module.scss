@@ -40,4 +40,21 @@
 }
 
 .chat_updated {
+  position: relative;
+}
+
+.time-now {
+  @include time-diff($brand-pink);
+}
+
+.time-minutes {
+  @include time-diff($success);
+}
+
+.time-hours {
+  @include time-diff($blue);
+}
+
+.time-days {
+  @include time-diff(#aaa);
 }
