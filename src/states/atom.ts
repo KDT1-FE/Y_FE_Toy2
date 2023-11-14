@@ -68,3 +68,8 @@ export const usersInRoom = atom<number>({
   key: 'usersInRoom',
   default: 0,
 });
+
+export const sortSelect = atom<any>({
+  key: 'sortSelect',
+  default: '',
+});
