@@ -32,7 +32,6 @@ const UserInviteModal = ({ setUserList, chatId }: Props) => {
       const newChannelData = await inviteChannel(inviteData);
       const newUserList = newChannelData.users;
       setUserList(newUserList);
-      console.log('newUserList', newUserList);
       onClose();
     }
   };
