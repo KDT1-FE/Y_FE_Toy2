@@ -21,8 +21,12 @@ const Drawing = () => {
 
   // useEffect 하나 쓰려고 if문 썼습니다
   useEffect(() => {
-    const newRoomId = window.location.pathname.split('/')[2];
+    const pathParts = window.location.pathname.split('/');
+    const newRoomId = pathParts[2].startsWith(':')
+      ? pathParts[2].substring(1)
+      : pathParts[2];
     setRoomId(newRoomId);
+    console.log(roomId);
 
     const canvas = canvasRef.current; // 캔버스 Ref
     if (canvas && !contextRef.current) {
@@ -65,7 +69,8 @@ const Drawing = () => {
 
     ctx!.fillStyle = 'white';
     ctx!.fillRect(0, 0, 800, 450);
-    drawSocket.emit('erase');
+
+    drawSocket.emit('erase', { option: { roomId } });
   };
 
   /// 굵기 변경 함수
@@ -154,41 +159,52 @@ const Drawing = () => {
   };
 
   useEffect(() => {
-    drawSocket.connect();
-    const onDrawingEvent = ({
-      originalMousePosition,
-      newMousePosition,
-      option,
-    }: IReciveInfo) => {
-      const ctx = contextRef.current;
-      if (!ctx) return;
-      ctx.strokeStyle = option.color;
-      ctx.lineWidth = option.lineWidth;
-      ctx.beginPath();
-      ctx.moveTo(originalMousePosition.x, originalMousePosition.y);
-      ctx.lineTo(newMousePosition.x, newMousePosition.y);
-      ctx.closePath();
-      ctx.stroke();
-      ctx.strokeStyle = color;
-      ctx.lineWidth = lineWidth;
-    };
+    if (roomId) {
+      drawSocket.connect();
+      drawSocket.emit('joinRoom', roomId);
 
-    const onEraseEvent = () => {
-      const ctx = contextRef.current;
-      if (!ctx) return;
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, 800, 450);
-    };
+      const onDrawingEvent = ({
+        originalMousePosition,
+        newMousePosition,
+        option,
+      }: IReciveInfo) => {
+        const ctx = contextRef.current;
+        if (!ctx) {
+          console.error('Canvas context is not available.');
+          return;
+        }
 
-    drawSocket.on('drawing', onDrawingEvent);
-    drawSocket.on('erase', onEraseEvent);
+        try {
+          ctx.strokeStyle = option.color;
+          ctx.lineWidth = option.lineWidth;
+          ctx.beginPath();
+          ctx.moveTo(originalMousePosition.x, originalMousePosition.y);
+          ctx.lineTo(newMousePosition.x, newMousePosition.y);
+          ctx.closePath();
+          ctx.stroke();
+        } catch (error) {
+          console.error('Error while drawing on canvas:', error);
+        }
+      };
 
-    return () => {
-      drawSocket.off('drawing', onDrawingEvent);
-      drawSocket.off('erase', onEraseEvent);
-      drawSocket.disconnect();
-    };
-  }, [drawSocket]);
+      const onEraseEvent = () => {
+        const ctx = contextRef.current;
+        if (!ctx) return;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, 800, 450);
+      };
+
+      drawSocket.on('drawing', onDrawingEvent);
+      drawSocket.on('erase', onEraseEvent);
+
+      return () => {
+        // 컴포넌트 언마운트 시 소켓 연결 해제 및 이벤트 리스너 제거
+        drawSocket.off('drawing', onDrawingEvent);
+        drawSocket.off('erase', onEraseEvent);
+        drawSocket.disconnect();
+      };
+    }
+  }, [roomId, drawSocket]);
 
   /// JSX
   return (
