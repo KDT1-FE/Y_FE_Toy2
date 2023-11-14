@@ -1,7 +1,8 @@
-import { Chat } from '@/app/open/open.type';
+import { Chat } from '@/app/chatting/chatting.type';
 
 export type ChatListProps = {
 	myChatList: Chat[];
+	accessToken?: string;
 };
 
 export type ChatItemProps = {

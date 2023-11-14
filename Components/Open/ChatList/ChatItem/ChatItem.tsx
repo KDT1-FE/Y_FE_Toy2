@@ -3,7 +3,7 @@
 import { Avatar, Typography } from '@material-tailwind/react';
 import Image from 'next/image';
 import OpenPeopleSvg from '@/public/OpenPeopleSvg.svg';
-import { ChatItemProps } from './ChatList.type';
+import { ChatItemProps } from '../ChatList.type';
 import Link from 'next/link';
 
 const ChatItem = ({ chat }: ChatItemProps) => {

@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar } from '@material-tailwind/react';
-import { ChatItemProps } from './ChatList.type';
+import { ChatItemProps } from '../ChatList.type';
 
 const ChatItemDrag = ({ chat }: ChatItemProps) => {
 	const firstUserImage = chat.users[0].picture;

@@ -7,20 +7,11 @@ import {
 	TargetType,
 	ColumnNames,
 } from './ChatList.type';
-import { Chat } from '@/app/open/open.type';
-import { filterChat } from '@/app/open/open.utils';
-import ChatItem from './ChatItem';
-import { useQuery } from '@tanstack/react-query';
-import { getCookie } from '@/Components/Login/Cookie';
-import { fetchAllChat } from '@/app/open/open.utils';
-import {
-	DragDropContext,
-	Draggable,
-	DropResult,
-	Droppable,
-} from '@hello-pangea/dnd';
-import ChatItemDrag from './ChatItemDrag';
+import { Chat } from '@/app/chatting/chatting.type';
+import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { useFetchPatchDeleteChat } from '@/hooks/Open/useFetchPatchDeleteChat';
+import ChatDroppableDelete from './ChatDroppable/ChatDroppableDelete';
+import ChatDroppableList from './ChatDroppable/ChatDroppableList';
 
 const setNewListData = (
 	sourceColumn: SourceColumnProps,
@@ -43,22 +34,10 @@ const setNewListData = (
 	setFn(newState);
 };
 
-const ChatList = ({ myChatList }: ChatListProps) => {
-	const accessToken = getCookie('accessToken');
-	const { data: chatList } = useQuery({
-		queryKey: ['myChatList'],
-		queryFn: () => fetchAllChat(accessToken),
-		initialData: myChatList,
-		staleTime: 1000 * 60,
-		refetchInterval: 1000 * 60,
-	});
+const ChatList = ({ myChatList, accessToken }: ChatListProps) => {
+	const mutation = useFetchPatchDeleteChat(accessToken as string);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const mutation = useFetchPatchDeleteChat(accessToken);
-
-	const filteredChatList = filterChat(chatList.chats);
-
-	const idAddedfilteredChatList = filteredChatList.map(
+	const idAddedfilteredChatList = myChatList.map(
 		(chat: Chat, index: number) => {
 			return {
 				...chat,
@@ -67,7 +46,6 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 		},
 	);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [listData, setListData] = useState<TargetType>({
 		tasks: idAddedfilteredChatList,
 		columns: {
@@ -85,10 +63,8 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 		columnOrder: [0, 1],
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [openDeleteColumn, setOpenDeleteColumn] = useState(false);
 
-	console.log('컴포넌트 실행');
 	const onDragStart = () => {
 		setOpenDeleteColumn(true);
 	};
@@ -133,7 +109,7 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 
 			setNewListData(sourceColumn, newTaskIds, listData, setListData);
 
-			const queryId = chatList.chats[deleteChatIndex].id;
+			const queryId = myChatList[deleteChatIndex].id;
 			console.log(queryId);
 			mutation.mutate({
 				chatId: queryId,
@@ -154,58 +130,8 @@ const ChatList = ({ myChatList }: ChatListProps) => {
 		<>
 			{idAddedfilteredChatList && (
 				<DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={onDragStart}>
-					<Droppable droppableId="list-column">
-						{(droppableProvided) => (
-							<div
-								className="h-full w-full text-amber-900  overflow-y-scroll gap-5"
-								ref={droppableProvided.innerRef}
-								{...droppableProvided.droppableProps}
-							>
-								{chatListColumnTasks.map((chat, index: number) => {
-									return (
-										<Draggable
-											key={chat.indexId}
-											draggableId={chat.indexId.toString()}
-											index={index as number}
-										>
-											{(draggableProvided, snapshot) => (
-												<div
-													ref={draggableProvided.innerRef}
-													{...draggableProvided.draggableProps}
-													{...draggableProvided.dragHandleProps}
-													className="w-full"
-												>
-													{snapshot.isDragging ? (
-														<ChatItemDrag chat={chat} key={chat.id} />
-													) : (
-														<ChatItem chat={chat} key={chat.id} />
-													)}
-												</div>
-											)}
-										</Draggable>
-									);
-								})}
-								{droppableProvided.placeholder}
-							</div>
-						)}
-					</Droppable>
-					<Droppable droppableId="delete-column">
-						{(droppableProvided, snapshot) => (
-							<div
-								className={`${
-									openDeleteColumn
-										? 'visible opacity-100'
-										: 'invisible opacity-0'
-								} transition-opacity duration-1000 ease-linear h-24 absolute bg-trash-can bg-contain bg-no-repeat bg-center inset-x-0 bottom-[10%] w-[calc(100%-0.01px)] ${
-									snapshot.isUsingPlaceholder ? 'bg-red-700 bg-opacity-75' : ''
-								}`}
-								ref={droppableProvided.innerRef}
-								{...droppableProvided.droppableProps}
-							>
-								{droppableProvided.placeholder}
-							</div>
-						)}
-					</Droppable>
+					<ChatDroppableList chatListColumnTasks={chatListColumnTasks} />
+					<ChatDroppableDelete openDeleteColumn={openDeleteColumn} />
 				</DragDropContext>
 			)}
 		</>
