@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import styles from './signUp.module.scss';
+import styles from '../styles/pages/SignUp.module.scss';
 
 interface RequestBody {
   id: string; // 사용자 아이디 (필수!, 영어와 숫자만)

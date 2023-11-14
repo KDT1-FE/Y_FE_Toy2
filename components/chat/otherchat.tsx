@@ -1,13 +1,15 @@
 // OtherMessage.js
 import React from 'react';
+import Image from 'next/image';
 import styles from './Chat.module.scss';
 
 function OtherMessage() {
   return (
     <div className={styles.otherFlex}>
       <div className={styles.userInfo}>
-        <img
+        <Image
           src="https://avatars.githubusercontent.com/u/66263916?v=4"
+          alt="프로필 이미지"
           className={styles.profileImage}
         />
         <span className={styles.username}>이름</span>

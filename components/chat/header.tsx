@@ -20,9 +20,9 @@ export default function ChatroomHeader({ chatId }: Props) {
     setMenuOpen(!isMenuOpen);
   };
 
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
+  // const closeMenu = () => {
+  //   setMenuOpen(false);
+  // };
 
   const handleBackBtnClick = () => {
     router.back();
@@ -55,7 +55,7 @@ export default function ChatroomHeader({ chatId }: Props) {
         <HiArrowLongLeft onClick={handleBackBtnClick} />
       </div>
       <h3 className={styles.chatTitle}>채팅방 이름</h3>
-      <div className={styles.right} onClick={toggleMenu}>
+      <button type="button" className={styles.right} onClick={toggleMenu}>
         <MenuIcon />
         {/* Dropdown 메뉴 */}
         {isMenuOpen && (
@@ -79,7 +79,7 @@ export default function ChatroomHeader({ chatId }: Props) {
             </button>
           </div>
         )}
-      </div>
+      </button>
     </div>
   );
 }

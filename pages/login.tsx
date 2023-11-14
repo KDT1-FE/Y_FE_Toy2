@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import Auth from '@/apis/Auth';
-import styles from './login.module.scss';
+import styles from '../styles/pages/Login.module.scss';
 
 export default function Login() {
   const { login } = Auth();
