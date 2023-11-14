@@ -58,7 +58,20 @@ const ModalExample: React.FC<ModalExampleProps> = ({
   };
 
   const handleCheckboxChange = (userId: string) => {
-    const selectedUser = onlineUsers.find((user) => user.id === userId);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (accessToken) {
+        try {
+          const response = await getData("https://fastcampus-chat.net/users");
+          setOnlineUsers(response);
+        } catch (error) {
+          console.log(error);
+        }
+        fetchData();
+      }
+    };
+  }, [accessToken]);
+<!--     const selectedUser = onlineUsers.find((user) => user.id === userId);
     if (selectedUser) {
       setLocalSelectedUsers((prevSelected) => {
         const isAlreadySelected = prevSelected.some(
@@ -70,7 +83,7 @@ const ModalExample: React.FC<ModalExampleProps> = ({
           return [...prevSelected, selectedUser];
         }
       });
-    }
+    } -->
   };
 
   const submitModal = () => {
@@ -78,6 +91,7 @@ const ModalExample: React.FC<ModalExampleProps> = ({
     setSelectedUsers(localSelectedUsers);
     closeModal();
   };
+     
 
   return (
     <ChatTestWrap>

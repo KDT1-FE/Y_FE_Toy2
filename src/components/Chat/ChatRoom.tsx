@@ -1,5 +1,14 @@
 import styled from "styled-components";
 import ModalHamburger from "../ModalHamburger";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} from "react";
+import io, { Socket } from "socket.io-client";
+import { AuthContext } from "../../hooks/useAuth";
 
 export interface User {
   id: string;
@@ -8,11 +17,92 @@ export interface User {
 }
 
 interface ChatRoomProps {
+  roomId: string;
   roomName: string;
   selectedUsers: User[];
 }
 
-function ChatRoom({ roomName, selectedUsers }: ChatRoomProps) {
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createAt: Date;
+}
+
+function ChatRoom({ roomId, roomName, selectedUsers }: ChatRoomProps) {
+  const [text, setText] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const { accessToken } = useContext(AuthContext);
+  const [socket, setSocket] = useState<Socket>({} as Socket);
+  const [inputValue, setInputValue] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleClick = async () => {
+    try {
+      if (socket && text.trim()) {
+        socket.emit("message-to-server", text);
+        setText("");
+        setInputValue("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+    setInputValue(e.target.value);
+  };
+
+  useEffect(() => {
+    if (accessToken) {
+      console.log("방이 바뀜", roomId);
+      const newSocket = io(
+        `https://fastcampus-chat.net/chat?chatId=${roomId}`,
+        {
+          extraHeaders: {
+            Authorization: `Bearer ${accessToken}`,
+            serverId: "1601075b"
+          }
+        }
+      );
+
+      newSocket.on("message-to-client", (newMessage) => {
+        setMessages((prevMessages) => {
+          const isDuplicate = prevMessages.some(
+            (message) => message.id === newMessage.id
+          );
+          return isDuplicate ? prevMessages : [...prevMessages, newMessage];
+        });
+      });
+
+      newSocket.emit("fetch-messages");
+      newSocket.on("messages-to-client", (responseData) => {
+        setMessages(responseData.messages);
+      });
+      setSocket(newSocket);
+
+      return () => {
+        newSocket.off("message-to-client");
+        newSocket.off("messages-to-client");
+        newSocket.disconnect();
+      };
+    }
+  }, [accessToken, roomId]);
+
+  useLayoutEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+      });
+    }
+  }, [messages]);
+
+
+
+
+
   return (
     <ChatRoomWrap>
       <div className="chatroom__tit">
@@ -33,21 +123,21 @@ function ChatRoom({ roomName, selectedUsers }: ChatRoomProps) {
       <div className="chatroom__body">
         <div className="scroll-inner">
           <div className="alert">2023년 11월 8일</div>
-          <div className="message message__left">
-            <div className="img">
-              <img src="https://via.placeholder.com/150x150" alt="프로필" />
-            </div>
-            <div className="content">
-              <div className="inner">
-                <span className="name">테일러스위프트</span>
-                <span className="bubble">
-                  안녕하세요 내용 더 추가 안녕하세요? 무슨할말이있는고
-                  무슨말인데??
-                </span>
-              </div>
-              <div className="date">오전 10:30</div>
-            </div>
-          </div>
+          {/* Map through messages and render each message */}
+          {messages
+            ? messages.map((message) => (
+                <div key={message.id} className="message message__left">
+                  {/* Display the message content here */}
+                  <div className="content">
+                    <div className="inner">
+                      <span className="name">{message.userId}</span>
+                      <span className="bubble">{message.text}</span>
+                    </div>
+                    <div className="date">오전 10:30</div>
+                  </div>
+                </div>
+              ))
+            : ""}
           <div className="message message__right">
             <div className="content">
               <div className="inner">
@@ -59,11 +149,14 @@ function ChatRoom({ roomName, selectedUsers }: ChatRoomProps) {
             </div>
           </div>
           <div className="alert">테일러스위프트 님이 퇴장했습니다</div>
+          <div>
+            <div ref={messagesEndRef} />
+          </div>
         </div>
       </div>
       <div className="chatroom__send">
-        <input type="text" />
-        <button>
+        <input type="text" value={inputValue} onChange={handleChange} />
+        <button onClick={handleClick}>
           <img
             src="/src/assets/images/up-arrow-ico.png"
             alt="화살표"
