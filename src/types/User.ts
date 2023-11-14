@@ -10,7 +10,7 @@ export type FbUser = Omit<User, 'chats'> & {
   intro: string;
   language: string;
   level: string;
-  hashtag: string[];
+  hashtags: string[];
 };
 
 export type UserSimple = Pick<User, 'id' | 'name' | 'picture'>;

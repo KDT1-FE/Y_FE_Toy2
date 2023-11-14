@@ -1,38 +1,71 @@
-import React, { Dispatch, useState } from 'react';
-import { Visibility } from '@mui/icons-material';
-import { WordsType } from './InputWord';
-import { Answers, BoardFrame, MainWrapper, NoticeBox } from './boardStyle';
+import React from 'react';
+import { Timer } from '@mui/icons-material';
+import {
+  Answers,
+  BoardFrame,
+  CountDown,
+  MainWrapper,
+  MyRate,
+  MyRateBox,
+  NoticeBox,
+  RateBox,
+  TimerBox,
+} from './boardStyle';
 import Notice from './Notice';
 import SearchBar from './SearchBar';
+import StartBtn from './timer/StartBtn';
+import { StartType, TimeType, WordsType } from '../gameType';
 
-export default function MainBoard({ words, setWords }: WordsType) {
-  const [onAnswers, setOnAnswers] = useState(false);
+type Props = WordsType &
+  StartType &
+  TimeType & {
+    rate: number;
+    currentRate: number;
+  };
+
+export default function MainBoard({
+  words,
+  start,
+  setStart,
+  rate,
+  currentRate,
+  time,
+  setTime,
+}: Props) {
   return (
     <MainWrapper>
       <NoticeBox>
         <Notice />
-        {onAnswers ? (
-          <SearchBar setOnAnswers={setOnAnswers} words={words} />
-        ) : (
-          <Visibility
-            sx={{
-              fontSize: '50px',
-              cursor: 'pointer',
-              '&:hover': { scale: '1.03' },
-            }}
-            onClick={() => {
-              setOnAnswers(!onAnswers);
-            }}
-          />
-        )}
+        <RateBox>
+          <MyRateBox>
+            <MyRate>Score</MyRate>
+            <MyRate>{currentRate}</MyRate>
+          </MyRateBox>
+          <MyRateBox>
+            <MyRate>High Score</MyRate>
+            <MyRate>{rate}</MyRate>
+          </MyRateBox>
+        </RateBox>
       </NoticeBox>
       <BoardFrame>
-        {words.length !== 0 ? (
+        {start ? (
           <Answers>{words[words.length - 1]}</Answers>
         ) : (
-          <Answers>첫 단어를 입력해주세요!</Answers>
+          <StartBtn
+            time={time}
+            setTime={setTime}
+            start={start}
+            setStart={setStart}
+          />
         )}
       </BoardFrame>
+      {start ? (
+        <TimerBox>
+          <CountDown>{time}</CountDown>
+        </TimerBox>
+      ) : (
+        <Timer sx={{ fontSize: '50px' }} />
+      )}
     </MainWrapper>
   );
 }

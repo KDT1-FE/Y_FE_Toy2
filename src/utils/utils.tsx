@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Dispatch } from 'react';
+import { setTimeout } from 'timers/promises';
 import { db, storage } from '../firebaseSDK';
 
 export interface UserData {
@@ -79,7 +80,7 @@ export const getRate = async (
   setPeoples: Dispatch<
     React.SetStateAction<{ name: string; correct: number }[]>
   >,
-  name: string,
+  id: string,
   setRate: Dispatch<React.SetStateAction<number>>,
 ) => {
   const users: { name: string; correct: number }[] = [];
@@ -87,19 +88,36 @@ export const getRate = async (
     const userData = await getDocs(collection(db, 'user'));
     userData.docs.forEach((doc) => {
       users.push({ name: doc.data().name, correct: doc.data().correct });
-      if (doc.data().name === name) {
+      if (doc.id === id) {
         setRate(doc.data().correct);
       }
     });
+    setPeoples(users);
   } catch (error) {
     console.log(error);
-  } finally {
-    setPeoples(users);
   }
 };
 
 // 회원정보 업데이트 함수
-export const updateData = (id: string, userData: UserData | UserCorrect) => {
+export const updateData = async (
+  id: string,
+  userData: UserData | UserCorrect,
+) => {
   const docRef = doc(db, 'user', id);
-  updateDoc(docRef, { ...userData });
+  const update = await updateDoc(docRef, { ...userData });
+  return true;
+};
+
+// 랭킹 업데이트 함수
+export const updateRate = async (
+  setPeoples: Dispatch<
+    React.SetStateAction<{ name: string; correct: number }[]>
+  >,
+  id: string,
+  setRate: Dispatch<React.SetStateAction<number>>,
+  userData: UserData | UserCorrect,
+) => {
+  const update = await updateData(id, userData);
+  getRate(setPeoples, id, setRate);
+  return true;
 };

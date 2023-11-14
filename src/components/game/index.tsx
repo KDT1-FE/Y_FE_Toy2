@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
 import Rating from './rating/Rating';
 import MainBoard from './mainboard/MainBoard';
 import InputWord from './mainboard/InputWord';
+import { userState } from '../../atoms';
+import { getRate } from '../../utils/utils';
 
 const ScreenWrapper = styled.div`
   display: flex;
@@ -24,25 +27,47 @@ export default function Game() {
     [],
   );
   const [rate, setRate] = useState<number>(0);
+  const [currentRate, setCurrentRate] = useState<number>(0);
+  const [start, setStart] = useState<boolean>(false);
+  const [time, setTime] = useState<number>(1);
+  const user = useRecoilValue(userState);
+
+  useEffect(() => {
+    if (user) {
+      const data = JSON.parse(user);
+      if (data) {
+        getRate(setPeoples, data.id, setRate);
+      }
+    }
+  }, []);
 
   return (
     <Container>
       <ScreenWrapper>
-        <Rating
-          peoples={peoples}
-          setPeoples={setPeoples}
+        <Rating peoples={peoples} />
+        <MainBoard
+          setWords={setWords}
+          words={words}
+          start={start}
+          setStart={setStart}
           rate={rate}
-          setRate={setRate}
+          currentRate={currentRate}
+          time={time}
+          setTime={setTime}
         />
-        <MainBoard setWords={setWords} words={words} />
       </ScreenWrapper>
       <InputWord
         words={words}
         setWords={setWords}
-        peoples={peoples}
-        setPeoples={setPeoples}
+        currentRate={currentRate}
+        setCurrentRate={setCurrentRate}
         rate={rate}
         setRate={setRate}
+        setPeoples={setPeoples}
+        start={start}
+        setStart={setStart}
+        time={time}
+        setTime={setTime}
       />
     </Container>
   );
