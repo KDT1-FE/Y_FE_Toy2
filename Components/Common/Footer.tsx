@@ -3,15 +3,12 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getCookie, removeCookie } from '../Login/Cookie';
+import { removeCookie } from '../Login/Cookie';
 
 const Footer = () => {
 	const handleLogout = () => {
-		const accessToken = getCookie('accessToken');
-		const refreshToken = getCookie('refreshToken');
-
-		removeCookie(accessToken);
-		removeCookie(refreshToken);
+		removeCookie('accessToken');
+		removeCookie('refreshToken');
 		// Optionally, redirect the user to the login page or another page
 		window.location.href = '/login';
 	};
