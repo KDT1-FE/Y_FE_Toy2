@@ -1,13 +1,13 @@
-const storage = localStorage;
+const storage = typeof window !== 'undefined' ? localStorage : null;
 
 export const isLoginStorage = () => {
-  const state = localStorage.login;
+  const state = storage ? storage.login : null;
   return !!state;
 };
 
 export const getStorage = (key: string, defaultValue = undefined) => {
   try {
-    const storedValue = storage.getItem(key);
+    const storedValue = storage?.getItem(key);
 
     return storedValue || defaultValue;
   } catch (error) {
@@ -16,9 +16,9 @@ export const getStorage = (key: string, defaultValue = undefined) => {
   }
 };
 
-export const setStorage = (key: string, value: string | [string, unknown]) => {
+export const setStorage = (key: string, value: string) => {
   try {
-    storage.setItem(key, JSON.stringify(value));
+    storage?.setItem(key, JSON.stringify(value));
   } catch (error) {
     console.error(error);
   }
@@ -26,7 +26,7 @@ export const setStorage = (key: string, value: string | [string, unknown]) => {
 
 export const removeStorage = (key: string) => {
   try {
-    storage.removeItem(key);
+    storage?.removeItem(key);
   } catch (error) {
     console.error(error);
   }
