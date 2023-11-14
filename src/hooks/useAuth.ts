@@ -34,6 +34,7 @@ export const useAuth = () => {
       refreshToken: null,
       isAuthenticated: false,
     });
+    setUser({ id: null, isLoggedIn: false }); // 사용자 상태 초기화
   };
 
   // 새로운 액세스 토큰 받아옴
