@@ -3,6 +3,7 @@ import socket from '../api/socket';
 import { User2 } from '../@types/user';
 import { SOCKET } from '../constants/socket';
 import { getMemberData, findUserDataInChannel } from '../api/channel';
+import serverSocket from '../api/serverSocket';
 
 export const useJoinLeaveChannels = (chatId: string) => {
   const [userList, setUserList] = useState<User2[]>([]);
@@ -19,8 +20,19 @@ export const useJoinLeaveChannels = (chatId: string) => {
     socket.emit(SOCKET.USERS);
     socket.on(SOCKET.USER_TO_CLIENT, (messages: { users: string[] }) => {
       if (!messages) return;
-      setOnlineUsersIds(messages.users);
+      //setOnlineUsersIds(messages.users);
+      console.log('USER_TO_CLIENT', messages); // 현재방의 실시간유저, 방 랜더링 안되니까 당연히 안바뀜
     });
+
+    serverSocket.emit(SOCKET.USERS_SERVER);
+    serverSocket.on(
+      SOCKET.USERS_SERVER_TO_CLIENT,
+      (messages: { users: string[] }) => {
+        if (!messages) return;
+        setOnlineUsersIds(messages.users);
+        console.log('users-server-to-client', messages);
+      },
+    );
 
     socket.on(
       SOCKET.LEAVE,
@@ -32,7 +44,7 @@ export const useJoinLeaveChannels = (chatId: string) => {
 
     return () => {
       socket.off(SOCKET.LEAVE);
-      socket.off(SOCKET.USER_TO_CLIENT);
+      serverSocket.off(SOCKET.USERS_SERVER_TO_CLIENT);
     };
   }, [chatId]);
 

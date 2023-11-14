@@ -23,7 +23,11 @@ const ChannelMemberSideBar = () => {
     >
       <Flex align="center" mt="10" justifyContent="space-between">
         <Box fontSize="1g"> 채팅 참여 목록 {userList.length}</Box>
-        <UserInviteModal setUserList={setUserList} chatId={chatId} />
+        <UserInviteModal
+          userList={userList}
+          setUserList={setUserList}
+          chatId={chatId}
+        />
       </Flex>
       <Divider mt="1rem" borderColor={'gray.500'} />
 
