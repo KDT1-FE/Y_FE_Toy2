@@ -6,7 +6,6 @@ const Chat = ({ name, createdAt, text, picture }: Omit<ChatInfo, 'id'>) => {
   return (
     <Flex w="full" pt="2" pb="3">
       <Avatar
-        name="Dan Abrahmov"
         src={picture}
         w="3.125rem"
         h="3.125rem"
