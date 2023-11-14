@@ -1,0 +1,101 @@
+.modal__background {
+  background-color: rgb(50, 7, 72);
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+.modal_container {
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.modal__left_btn span {
+  font-size: 150px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.modal__right_btn span {
+  font-size: 150px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.modal__carousel_container {
+  width: 80%;
+  overflow: scroll;
+}
+
+.modal__carousel {
+  display: flex;
+}
+
+.radio_container {
+  display: flex;
+  justify-content: start;
+  width: 900px;
+}
+
+.radio_item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px;
+}
+
+.radio_item input {
+  appearance: none;
+}
+
+input:checked + label .character {
+  transition: 0.4s ease-in-out;
+  transform: scale(1.15);
+  border: 5px solid rgb(20, 255, 32);
+  border-radius: 20px;
+  margin: 0;
+}
+
+.character {
+  background-position: center;
+  background-size: cover;
+  width: 220px;
+  height: 220px;
+  border-radius: 20px;
+}
+
+.modal__submit_btn {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background-color: #835da3;
+  background-image: linear-gradient(
+    to right,
+    #000000 0%,
+    #53346d 51%,
+    #000000 100%
+  );
+  background-size: 200% auto;
+  transition: 0.5s;
+  box-shadow: 0 0 20px #eee;
+}
+
+.modal__submit_btn:hover {
+  scale: 1.05;
+  background-color: #31114c;
+  background-position: right center; /* change the direction of the change here */
+  text-decoration: none;
+}

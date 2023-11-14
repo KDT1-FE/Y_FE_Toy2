@@ -10,7 +10,6 @@ const Signin = () => {
   const [errors, setErrors] = useState('');
 
   // const navigate = useNavigate();
-  console.log('hello');
 
   const signin = async (event) => {
     event.preventDefault();

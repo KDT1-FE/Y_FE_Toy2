@@ -7,7 +7,7 @@ export const login = async (id, password) => {
     const response = await fetch('https://fastcampus-chat.net/login', {
       method: 'POST',
       headers: {
-        serverId: '3440b401',
+        serverId: `${import.meta.env.VITE_FAST_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
