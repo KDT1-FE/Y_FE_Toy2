@@ -1,29 +1,87 @@
-import { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { allUserState, onlineUserState } from '../../states/atom';
 import userList from '../template/userList';
-import {
-  Card,
-  Flex,
-  Heading,
-  Image,
-  Text,
-  IconButton,
-  background,
-} from '@chakra-ui/react';
+import { Card, Flex, Heading, Image, Text, IconButton } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import styled from 'styled-components';
+import { createGameRooms, getAllMyChat } from '../../api';
+import { randomNameFunc } from '../../util/util';
+import { useNavigate } from 'react-router-dom';
+
+interface ResponseValue {
+  chat: Chat;
+}
+
+interface Chat {
+  id: string;
+  name: string;
+  users: User[]; // 속한 유저 정보
+  isPrivate: boolean;
+  latestMessage: Message | null;
+  updatedAt: Date;
+}
+
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createAt: Date;
+}
 
 const OnlineUserList = () => {
   userList();
+  const navigate = useNavigate();
   const onLine = useRecoilValue(onlineUserState);
   const all = useRecoilValue(allUserState);
   const allOnlineUsers = onLine.users || [];
+  const userId = localStorage.getItem('id');
+
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
   });
+  const chathandler = async (element: User) => {
+    if (userId === element.id) {
+      alert('본인입니다.');
+    } else {
+      let allMyChatData = await getAllMyChat();
+      allMyChatData = allMyChatData.chats;
+
+      // 비공개방만 필터
+      const privateChatArray = await allMyChatData.filter(
+        (obj: any) => obj.isPrivate,
+      );
+
+      // 이미 해당 id와 생성된 방이 있는지 필터
+      const matchingChat = privateChatArray.find((chat: Chat) =>
+        chat.users.some((user: User) => user.id === element.id),
+      );
+
+      const chatId = matchingChat ? matchingChat.id : null;
+      if (chatId) {
+        //navigate(`/room/:${chatId}`);
+        console.log(privateChatArray);
+      } else {
+        const chat = await createGameRooms(element.id, [element.id], true);
+        //navigate(`/room/:${chat.id}`);
+      }
+    }
+  };
+
+  const gamehandler = async (element: User) => {
+    const random = randomNameFunc();
+    if (userId === element.id) {
+      alert('본인입니다.');
+    } else {
+      const chat = await createGameRooms(random, [element.id], false);
+      navigate(`/room/:${chat.id}`);
+    }
+  };
 
   return (
     <>
@@ -75,13 +133,16 @@ const OnlineUserList = () => {
               </Flex>
               <Flex gap="5px" alignItems={'center'}>
                 <IconButton
-                  aria-label="Add to friends"
+                  aria-label="1:1 대화하기"
                   icon={<ChatIcon color={'white'} />}
                   bgColor={'teal.300'}
                   _hover={{ background: 'teal.200' }}
+                  onClick={() => {
+                    chathandler(element);
+                  }}
                 />
                 <IconButton
-                  aria-label="Add to friends"
+                  aria-label="게임 같이하기"
                   icon={
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -96,6 +157,9 @@ const OnlineUserList = () => {
                   }
                   bgColor={'teal.400'}
                   _hover={{ background: 'teal.500' }}
+                  onClick={() => {
+                    gamehandler(element);
+                  }}
                 />
               </Flex>
             </Flex>

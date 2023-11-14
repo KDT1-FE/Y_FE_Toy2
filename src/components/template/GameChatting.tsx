@@ -14,6 +14,7 @@ import {
   privateChatDetail,
   privateChatNew,
   myUserDataState,
+  onlineUserStateInGameRoom,
   myMessageState,
 } from '../../states/atom';
 import { getCookie } from '../../util/util';
@@ -22,13 +23,16 @@ interface ChattingDetailProps {
   chatId: string;
 }
 const GameChatting = ({ chatId }: ChattingDetailProps) => {
-  // console.log(chatId);
   const [postData, setPostData] = useState('');
   const [socket, setSocket] = useState<any>(null);
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
-  const [lastDate, setLastDate] = useState('');
+  const [__, setUsersInGameRoom] = useRecoilState<string[]>(
+    onlineUserStateInGameRoom,
+  );
+  const [lastDate, setLastDate] = useState<string | undefined>('');
   const accessToken: any = getCookie('accessToken');
+
   const myUserData: any = useRecoilValue(myUserDataState);
   const [currentMessageObject, setCurrentMessageObject] =
     useRecoilState(myMessageState);
@@ -50,7 +54,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
         }));
 
         // 마지막 날짜 저장
-        setLastDate(SeparatedTime[SeparatedTime.length - 1].date);
+        setLastDate(SeparatedTime[SeparatedTime.length - 1]?.date);
 
         // 중복 날짜, 시간 null로 반환
         const modifyDateArray = modifyDate(SeparatedTime);
@@ -79,6 +83,26 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
           return modifyDateArray;
         });
       });
+
+      // 게임방 유저 목록 소켓 연결
+      newSocket.on('connect', () => {
+        socket.emit('users');
+      });
+
+      newSocket.on('users-to-client', (data) => {
+        setUsersInGameRoom(data.users);
+      });
+
+      newSocket.on('join', (data) => {
+        console.log('들어온거 작동');
+        setUsersInGameRoom(data.users);
+      });
+
+      newSocket.on('leave', (data) => {
+        console.log('나간거 작동');
+        setUsersInGameRoom(data.users);
+      });
+
       return () => {
         setNewChat([]);
         newSocket.disconnect();
@@ -86,7 +110,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
-  }, [chatId]);
+  }, [accessToken, chatId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPostData(e.target.value);
@@ -97,6 +121,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
     socket.emit('message-to-server', postData);
     setPostData('');
   };
+
   return (
     <Chat>
       <ChatHeader>
@@ -127,6 +152,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
               id="message"
               className={element.userId === myUserData.id ? 'mine' : ''}>
               {/* {"mine이면 파란색, ''이면 빨간색"} */}
+
               <p>{element.text}</p>
             </div>
             <p>{element.time}</p>

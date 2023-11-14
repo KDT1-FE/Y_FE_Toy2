@@ -2,8 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
-import { useRecoilState } from 'recoil';
-import { chattingIdState, myMessageState } from '../../states/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  chattingIdState,
+  myMessageState,
+  roomIdState,
+  usersInRoom,
+} from '../../states/atom';
 import styled from 'styled-components';
 import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
@@ -55,6 +60,7 @@ const GameRoom: React.FC = () => {
     // 채팅방 주소값 가져오기
     setMyMessage([]);
   }, []);
+
   useEffect(() => {
     if (id) {
       setRoomId(id.substring(1));
@@ -76,7 +82,7 @@ const GameRoom: React.FC = () => {
       });
 
       return () => {
-        gameSocket.off('drawing', handleGameStart);
+        gameSocket.off('game');
         gameSocket.disconnect();
       };
     }
@@ -100,40 +106,40 @@ const GameRoom: React.FC = () => {
   };
   controlBack();
 
+  const roomNum = useRecoilValue(roomIdState);
+  const users = useRecoilValue(usersInRoom);
+  console.log(users);
+
   return (
-    <>
-      {/* {submitVisible && <AnswerForm />} */}
-      <Game>
-        <RoomHeader>
-          <RoomInfo>
-            <RoomInformation>방 번호</RoomInformation>
-            <RoomInformation>{id?.slice(1, 5)}</RoomInformation>
-            <RoomInformation>인원 수 </RoomInformation>
-            <RoomInformation>3 / 4</RoomInformation>
-            {/* 인원수 추가 */}
-          </RoomInfo>
-          {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
-          <BtnGroup>
-            <InviteBtn>
-              <InviteImage src={inviteImg} alt="Invite" />
-              <div>초대하기</div>
-            </InviteBtn>
-            <button onClick={handleGameStart}>준비</button>
-            <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-          </BtnGroup>
-        </RoomHeader>
+    <Game>
+      <RoomHeader>
+        <RoomInfo>
+          <RoomInformation>방 번호</RoomInformation>
+          <RoomInformation>{roomNum}</RoomInformation>
+          <RoomInformation>인원 수 </RoomInformation>
+          <RoomInformation>{users} / 4</RoomInformation>
+          {/* 인원수 추가 */}
+        </RoomInfo>
+        {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
+        <BtnGroup>
+          <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
+          <button
+            onClick={() => {
+              handleGameStart();
+            }}>
+            게임 시작
+          </button>
+        </BtnGroup>
+      </RoomHeader>
 
-        <RoomMain>
-          <Drawing />
+      <RoomMain>
+        <Drawing />
 
-          <GameChatting chatId={roomId} />
-        </RoomMain>
-        <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
-        {/* <UserList>
-          <CheckUser />
-        </UserList> */}
-      </Game>
-    </>
+        <GameChatting chatId={roomId} />
+      </RoomMain>
+      <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
+      <UserList>{/* <CheckUser /> */}</UserList>
+    </Game>
   );
 };
 
@@ -179,35 +185,7 @@ const RoomInformation = styled.div`
 const BtnGroup = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 140px;
-`;
-
-const InviteBtn = styled.button`
-  background-color: #38b2ac;
-  color: white;
-  padding: 6px 25px;
-  border-radius: 7px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  transition: 0.2s;
-
-  div {
-    margin-left: 18px;
-  }
-
-  &:hover {
-    background-color: #4fd1c5;
-  }
-`;
-
-const InviteImage = styled.img`
-  position: absolute;
-  top: 9.5px;
-  left: 20px;
-  width: 22px;
-  height: 22px;
+  margin-left: 260px;
 `;
 
 const RoomMain = styled.div`

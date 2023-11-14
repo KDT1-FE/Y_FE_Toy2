@@ -21,7 +21,7 @@ import { useRecoilState } from 'recoil';
 import { onlineUserState } from '../../states/atom';
 import { postLogin } from '../../api/index';
 import { loginSocket } from '../../api/socket';
-import { setCookises } from '../../util/util';
+import { setCookies, removeCookies } from '../../util/util';
 
 function UserLogin() {
   const navigate = useNavigate();
@@ -36,11 +36,12 @@ function UserLogin() {
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    removeCookies();
 
     try {
       const res = await postLogin(id, password);
       const { accessToken, refreshToken } = res.data;
-      setCookises(accessToken, refreshToken);
+      setCookies(accessToken, refreshToken);
       localStorage.setItem('id', id);
 
       alert('로그인에 성공했습니다.');

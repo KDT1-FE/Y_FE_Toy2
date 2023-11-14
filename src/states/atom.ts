@@ -60,3 +60,13 @@ export const myMessageState = atom<
   key: 'myMessageState',
   default: [{ text: '', userId: '', chatId: '' }],
 });
+
+export const roomIdState = atom<any>({
+  key: 'roomIdState',
+  default: '',
+});
+
+export const usersInRoom = atom<any>({
+  key: 'usersInRoom',
+  default: '',
+});
