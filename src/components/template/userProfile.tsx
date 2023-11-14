@@ -19,7 +19,7 @@ import {
 import { getUserData, patchUserData } from '../../api';
 import { disconnectLoginSocket } from '../../api/socket';
 import { useNavigate } from 'react-router-dom';
-import { getCookie, removeCookie } from '../../util/util';
+import { getCookie, removeCookies } from '../../util/util';
 
 const UserProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -83,16 +83,18 @@ const UserProfile = () => {
     }
   };
 
-  const handleUserLogout = () => {
+  const handleUserLogout = async () => {
     try {
-      disconnectLoginSocket();
-      removeCookie();
+      await disconnectLoginSocket();
+      removeCookies();
       alert('로그아웃에 성공했습니다');
       navigate('/');
     } catch (error) {
       console.log(error);
+      alert('로그아웃 중 오류가 발생했습니다');
     }
   };
+
   return (
     <>
       <Flex

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
-import { removeCookie } from '../../util/util';
+import { removeCookies } from '../../util/util';
 import { disconnectLoginSocket } from '../../api/socket';
 
 function UserLogout() {
@@ -9,7 +9,7 @@ function UserLogout() {
   const handleLogout = () => {
     try {
       disconnectLoginSocket();
-      removeCookie();
+      removeCookies();
       navigate('/');
     } catch (error) {
       console.log(error);
