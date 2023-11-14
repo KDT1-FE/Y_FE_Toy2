@@ -1,43 +1,16 @@
 import { Box, Divider, Flex, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import ChannelMemberItem from './ChannelMemberItem';
 import UserInviteModal from './modal/UserInviteModal';
-import socket from '../../api/socket';
-import { getUser } from '../../api/user';
-import { User } from '../../@types/user';
 import ChannelExitDialog from './modal/ChannelExitDialog';
-
-interface UserIdDataProps {
-  users: string[];
-}
+import useJoinLeaveChannels from '../../hooks/useJoinLeaveChannel';
 
 const ChannelMemberSideBar = () => {
-  const [userList, setUserList] = useState<User[]>([]);
-  const { params } = useParams();
-  const chatId: string = params!;
+  const { id } = useParams();
+  const chatId = id!;
 
-  useEffect(() => {
-    const getMemberInfo = async (users: string[]) => {
-      const userListData = [];
-      for (const id of users) {
-        const response = await getUser(id);
-        if (response) {
-          const { name, picture } = response;
-          userListData.push({
-            id,
-            name,
-            picture,
-          });
-        }
-      }
-      setUserList(userListData);
-    };
-    socket.on('users-to-client', async (usersIdData: UserIdDataProps) => {
-      const { users } = usersIdData;
-      getMemberInfo(users);
-    });
-  }, []);
+  const { userList, onlineUserIds, setUserList } = useJoinLeaveChannels(chatId);
 
   return (
     <Box
@@ -58,8 +31,9 @@ const ChannelMemberSideBar = () => {
         {userList.map((user) => (
           <ChannelMemberItem
             key={user.id}
-            userName={user.name}
+            userName={user.name || user.username}
             src={user.picture}
+            isOnline={onlineUserIds.includes(user.id)}
           />
         ))}
       </VStack>

@@ -1,14 +1,15 @@
 import { Box, useRadio } from '@chakra-ui/react';
 import { useRecoilState } from 'recoil';
-import { channelState } from '../../../recoil/channel.atom';
+import { modalChannelState } from '../../../recoil/channel.atom';
 import { ChangeEvent } from 'react';
 
 const CategoryRadio = (props: ReturnType<typeof getRadioProps>) => {
   const { getInputProps, getRadioProps } = useRadio(props);
-  const [channel, setChannel] = useRecoilState(channelState);
+  const [channel, setChannel] = useRecoilState(modalChannelState);
 
   const input = getInputProps({
     onChange: (e: ChangeEvent<HTMLInputElement>) => {
+      console.log(e.target.value, channel.category);
       setChannel({ ...channel, category: e.target.value });
     },
   });
@@ -27,6 +28,9 @@ const CategoryRadio = (props: ReturnType<typeof getRadioProps>) => {
           bg: 'teal.600',
           color: 'white',
           borderColor: 'teal.600',
+        }}
+        _disabled={{
+          bg: 'gray.200',
         }}
         fontSize="xs"
         px={3}

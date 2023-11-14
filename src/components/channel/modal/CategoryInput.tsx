@@ -15,11 +15,15 @@ const CategoryInput = () => {
   return (
     <Box overflow="auto">
       <HStack {...group}>
-        {options.map((value) => {
-          const radio = getRadioProps({ value });
+        {options.map((option, index) => {
+          const radio = getRadioProps({ value: option.value });
           return (
-            <CategoryRadio key={value} {...radio}>
-              {value}
+            <CategoryRadio
+              key={option.name}
+              {...radio}
+              isDisabled={index === 0}
+            >
+              {option.name}
             </CategoryRadio>
           );
         })}
