@@ -10,6 +10,7 @@ export const ProfileContainer = styled.div`
   width: 600px;
   height: 600px;
   padding: 50px;
+  background-color: white;
 
   border-radius: 20px;
   border: 1px solid #e1e1e1;
@@ -18,24 +19,22 @@ export const ProfileContainer = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
+
   transform: translate(-50%, -50%);
+  z-index: 11;
 `;
 
-export const EditButton = styled.button`
-  width: 70px;
-  height: 30px;
-  background-color: #f0f0f0;
+export const Close = styled.div<Props>`
+  width: 15px;
+  height: 15px;
+  background-image: url(${(props) => props.image});
+  background-size: cover;
 
   position: absolute;
-  right: 10px;
-  top: -40px;
+  top: 20px;
+  right: 20px;
 
-  border: 1px solid #e1e1e1;
-  border-radius: 30px;
-
-  &:hover {
-    background-color: #e3e3e3;
-  }
+  cursor: pointer;
 `;
 
 export const Top = styled.div`
@@ -66,7 +65,7 @@ export const Right = styled.div`
   gap: 20px;
 `;
 
-export const UserName = styled.div`
+export const UserInfo = styled.div`
   width: 100%;
   height: 40px;
 
@@ -76,6 +75,26 @@ export const UserName = styled.div`
 
   display: flex;
   align-items: center;
+`;
+
+export const UserName = styled.div`
+  margin-right: 14px;
+`;
+
+export const SendMessage = styled.button`
+  width: 120px;
+  height: 30px;
+
+  border: none;
+  outline: none;
+  background-color: var(--color-primary);
+  border-radius: 5px;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray);
+
+  cursor: pointer;
 `;
 
 export const Language = styled.div`

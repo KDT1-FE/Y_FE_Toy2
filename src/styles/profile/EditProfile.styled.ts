@@ -72,7 +72,7 @@ export const ImageLabel = styled.label<Props>`
   border: 4px solid var(--color-gray);
 
   transition: 0.2s;
-
+  flex-shrink: 0;
   &:hover {
     cursor: pointer;
     border: 4px solid var(--color-primary);
