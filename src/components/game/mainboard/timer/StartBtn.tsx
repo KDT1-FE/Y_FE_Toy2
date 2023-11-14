@@ -1,5 +1,6 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { StartType, TimeType } from '../../gameType';
 
 const GameBtn = styled.button`
   width: 200px;
@@ -17,11 +18,8 @@ const GameBtn = styled.button`
   animation: 1s ease all;
 `;
 
-interface Props {
-  setStart: Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function StartBtn({ setStart }: Props) {
+type Props = StartType & TimeType;
+export default function StartBtn({ setTime, setStart }: Props) {
   function gameStart() {
     setStart(true);
   }
@@ -30,6 +28,7 @@ export default function StartBtn({ setStart }: Props) {
       <GameBtn
         onClick={() => {
           gameStart();
+          setTime(5);
         }}
       >
         Game Start!

@@ -59,12 +59,17 @@ export const CountDown = styled.span`
 
 export const RateBox = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 `;
 
 export const MyRateBox = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 `;
 export const MyRate = styled.span`
   font-size: 25px;

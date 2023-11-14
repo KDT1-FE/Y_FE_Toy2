@@ -1,13 +1,13 @@
-import React, { useState, useEffect, Dispatch } from 'react';
+import React from 'react';
 import { Typography } from '@mui/material';
 import styled from 'styled-components';
 import sorting from './sorting';
-import { getRate, updateData } from '../../../utils/utils';
+import { PeoplesType } from '../gameType';
 
 const RatingWrapper = styled.div`
   flex: 1;
   display: flex;
-  min-width: 300px;
+  min-width: 350px;
   height: calc(100vh - 80px);
   flex-direction: column;
   align-items: center;
@@ -25,37 +25,9 @@ const Ratings = styled.div`
   }
 `;
 
-export type PeoplesType = {
-  peoples: { name: string; correct: number }[];
-  setPeoples: Dispatch<
-    React.SetStateAction<{ name: string; correct: number }[]>
-  >;
-};
-export type RateType = {
-  rate: number;
-  setRate: Dispatch<React.SetStateAction<number>>;
-};
-export type PropsType = PeoplesType & RateType;
+export type PropsType = Pick<PeoplesType, 'peoples'>;
 
-export default function Rating({
-  peoples,
-  setPeoples,
-  rate,
-  setRate,
-}: PropsType) {
-  const [finish, setFinish] = useState(0);
-  useEffect(() => {
-    getRate(setPeoples, 'yamyamssi', setRate);
-    setFinish(1);
-    console.log(rate);
-  }, []);
-  useEffect(() => {
-    if (rate !== 0) {
-      updateData('rnffjt', { correct: rate });
-      getRate(setPeoples, 'yamyamssi', setRate);
-    }
-  }, [rate]);
-
+export default function Rating({ peoples }: PropsType) {
   return (
     <RatingWrapper>
       <Typography
@@ -73,8 +45,10 @@ export default function Rating({
         Rating!
       </Typography>
       <Ratings>
-        {{ finish } ? (
-          sorting(peoples).map((el, i) => (
+        {sorting(peoples).map((el, i) => {
+          const userName =
+            el.name.length > 9 ? el.name.substring(0, 9) : el.name;
+          return (
             <Typography
               variant="h1"
               sx={{
@@ -85,12 +59,10 @@ export default function Rating({
                 fontFamily: 'Bungee',
               }}
             >
-              {i + 1}. {el.name}
+              {i + 1}. {userName}
             </Typography>
-          ))
-        ) : (
-          <div>X</div>
-        )}
+          );
+        })}
       </Ratings>
     </RatingWrapper>
   );

@@ -1,20 +1,26 @@
-import React, { Dispatch, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Send } from '@mui/icons-material';
-import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import search from './searchWord';
-import { PeoplesType, RateType } from '../rating/Rating';
+import {
+  CurrentRateType,
+  PeoplesType,
+  RateType,
+  StartType,
+  TimeType,
+  WordsType,
+} from '../gameType';
+import timeLimit from './timer/timeLimit';
 import { userState } from '../../../atoms';
+import { getRate, updateData, updateRate } from '../../../utils/utils';
 
-export type WordsType = {
-  words: string[];
-  setWords: Dispatch<React.SetStateAction<string[]>>;
-  start: boolean;
-  setStart: Dispatch<React.SetStateAction<boolean>>;
-};
-
-type Props = WordsType & RateType;
+type Props = WordsType &
+  CurrentRateType &
+  Pick<PeoplesType, 'setPeoples'> &
+  RateType &
+  StartType &
+  TimeType;
 
 const InputBox = styled.form`
   width: 100%;
@@ -59,22 +65,59 @@ const GameInput = styled.input`
 export default function InputWord({
   words,
   setWords,
+  currentRate,
+  setCurrentRate,
   rate,
   setRate,
+  setPeoples,
   start,
   setStart,
+  time,
+  setTime,
 }: Props) {
-  const [existWord, setExistWord] = useState<string[]>();
+  const user = useRecoilValue(userState);
+
+  let interval: NodeJS.Timeout;
+  useEffect(() => {
+    interval = setInterval(() => {
+      setTime((prev) => prev - 1);
+    }, 1000);
+    if (time === 0) {
+      clearInterval(interval);
+      setWords([]);
+      setStart(false);
+      if (user) {
+        const data = JSON.parse(user);
+        if (data) {
+          if (currentRate === rate && start) {
+            updateRate(setPeoples, data.id, setRate, { correct: currentRate });
+          }
+        }
+      }
+      setCurrentRate(0);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [time]);
+
+  useEffect(() => {
+    if (currentRate > rate && start) {
+      setRate(currentRate);
+    }
+  }, [currentRate]);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const inputElement = (e.target as HTMLFormElement).querySelector('input');
     const inputValue = inputElement?.value;
-    const existCheck = existWord?.find((e) => e === inputValue);
+    const existCheck = words?.find((e) => e === inputValue);
+
     if (inputValue) {
       if (words.length === 0) {
         setWords([...words, inputValue]);
-        setExistWord([inputValue]);
-        setRate(rate + 1);
+        setCurrentRate(currentRate + 1);
         inputElement.value = '';
+        timeLimit(start, setTime);
         return true;
       }
       if (
@@ -83,21 +126,19 @@ export default function InputWord({
       ) {
         if (existCheck) {
           alert('이미 사용된 단어입니다');
+          return false;
         }
         setWords([...words, inputValue]);
-        setRate(rate + 1);
+        setCurrentRate(currentRate + 1);
         inputElement.value = '';
-        if (existWord) {
-          setExistWord([...existWord, inputValue]);
-          return true;
-        }
+        timeLimit(start, setTime);
       } else {
         alert('끝말이 이어지지 않습니다');
       }
     } else {
       alert('단어를 입력해주세요');
     }
-    return false;
+    return true;
   };
 
   return (
@@ -106,21 +147,25 @@ export default function InputWord({
         e.preventDefault();
         const inputValue = (e.target as HTMLFormElement).querySelector('input')
           ?.value;
-        if (inputValue) {
-          const isRealWord = await search(inputValue);
-          const isPossible =
-            /^(?=(?:.*[a-z]){3,})(?!.*([a-z])\1{2,})[a-z]{3,10}$/.test(
-              inputValue,
-            );
-          if (isPossible) {
-            if (isRealWord) {
-              handleSubmit(e);
+        if (start) {
+          if (inputValue) {
+            const isRealWord = await search(inputValue);
+            const isPossible =
+              /^(?=(?:.*[a-z]){3,})(?!.*([a-z])\1{2,})[a-z]{3,10}$/.test(
+                inputValue,
+              );
+            if (isPossible) {
+              if (isRealWord) {
+                handleSubmit(e);
+              } else {
+                alert('존재하지 않는 단어입니다!');
+              }
             } else {
-              alert('존재하지 않는 단어입니다!');
+              alert('형식에 맞지 않는 입력입니다!');
             }
-          } else {
-            alert('형식에 맞지 않는 입력입니다!');
           }
+        } else {
+          alert('시작 버튼을 눌러주세요!');
         }
       }}
     >
