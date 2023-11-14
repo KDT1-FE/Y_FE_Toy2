@@ -11,6 +11,7 @@ import Profile from "./components/Profile/Profile";
 import MainContents from "./pages/MainContents";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
+import ProfileFeedDetailPage from "./pages/Profile/ProfileFeedDetailPage";
 import Chat from "./pages/Chat";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
@@ -31,6 +32,8 @@ const router = createBrowserRouter([
         element: <ProfilePage />
       },
       { path: "profiles/:userid/edit", element: <ProfileEditPage /> },
+      { path: "profiles/:userid/:feedid", element: <ProfileFeedDetailPage /> },
+
       {
         path: "chat",
         element: <Chat />

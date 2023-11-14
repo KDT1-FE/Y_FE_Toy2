@@ -43,6 +43,7 @@ interface feed {
   contentText: string;
   likes: number;
   timeStamp: string;
+  commentList?: object;
 }
 interface feedData {
   [key: string]: feed;
@@ -56,6 +57,15 @@ function ProfileFeed(props: {
   return (
     <ProfileFeedContainer>
       <ProfileFeedImageWrap>
+        {props.isProfileMatchingLogin ? (
+          <ProfileFeedEditImage
+            onClick={() => {
+              props.setIsModalShow(true);
+            }}
+          >
+            <BsPlusCircle color="#BEBEBE" size="50"></BsPlusCircle>
+          </ProfileFeedEditImage>
+        ) : null}
         {props.feedData
           ? Object.values(props.feedData).map((feed, index) => (
               <ProfileFeedImage
@@ -66,15 +76,6 @@ function ProfileFeed(props: {
               />
             ))
           : null}
-        {props.isProfileMatchingLogin ? (
-          <ProfileFeedEditImage
-            onClick={() => {
-              props.setIsModalShow(true);
-            }}
-          >
-            <BsPlusCircle color="#BEBEBE" size="50"></BsPlusCircle>
-          </ProfileFeedEditImage>
-        ) : null}
       </ProfileFeedImageWrap>
     </ProfileFeedContainer>
   );

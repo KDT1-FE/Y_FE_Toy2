@@ -163,6 +163,7 @@ interface feed {
   contentText: string;
   likes: number;
   timeStamp: string;
+  commentList?: object;
 }
 interface feedData {
   [key: string]: feed;
