@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import MyChat from '@/components/chat/mychat';
-import OtherChat from '@/components/chat/otherchat';
+// import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
 import ExitNotice from '@/components/chat/exitNotice';
 import ChatAlert from '@/components/chat/chatAlert';
 import { JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { CLIENT_URL } from '../../apis/constant';
-import styles from './Chat.module.scss';
+import styles from '../../styles/pages/Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
+
+interface MessagesToClient {
+  messages: Message[];
+}
 
 export default function Chat() {
   const router = useRouter();
@@ -31,7 +35,7 @@ export default function Chat() {
     socketRef.current = io(`${CLIENT_URL}?chatId=${chatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
-        serverId: process.env.NEXT_PUBLIC_API_KEY,
+        serverId: process.env.NEXT_PUBLIC_API_KEY!,
       },
     });
 
@@ -43,9 +47,12 @@ export default function Chat() {
 
     socketRef.current.emit('fetch-messages');
 
-    socketRef.current.on('messages-to-client', (messageArray: Message[]) => {
-      setMessages(messageArray.messages.reverse());
-    });
+    socketRef.current.on(
+      'messages-to-client',
+      (messageArray: MessagesToClient) => {
+        setMessages(messageArray.messages.reverse());
+      },
+    );
 
     socketRef.current.on('message-to-client', (messageObject: Message) => {
       console.log(messageObject);
@@ -98,7 +105,7 @@ export default function Chat() {
 
   return (
     <>
-      <ChatroomHeader chatId={chatId} />
+      {typeof chatId === 'string' && <ChatroomHeader chatId={chatId} />}
       <div className={styles.container}>
         <div className={styles.container}>
           <EntryNotice />
