@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef,useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
@@ -14,7 +14,9 @@ import ChatroomHeader from '../../components/chat/header';
 
 export default function Chat() {
   const router = useRouter();
-  const { chatId } = router.query;
+  const { chatId, name } = router.query;
+
+  console.log(router.query);
 
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
@@ -22,49 +24,54 @@ export default function Chat() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const socketRef = useRef<Socket | null>(null);
+  const userId = '';
 
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
 
-  useEffect(() => {
-    socketRef.current = io(`${CLIENT_URL}?chatId=${chatId}`, {
-      extraHeaders: {
-        Authorization: `Bearer ${accessToken}`,
-        serverId: process.env.NEXT_PUBLIC_API_KEY,
-      },
-    });
+    const socket = useMemo(() => {
+      return io(`${CLIENT_URL}?chatId=${chatId}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+          serverId: process.env.NEXT_PUBLIC_API_KEY,
+        },
+      });
+    }, [chatId, accessToken]);
 
-    socketRef.current.on('connect', () => {
+  useEffect(() => {
+    
+    socket.on('connect', () => {
       console.log('Connected to chat server');
       setIsConnected(true);
-      console.log(socketRef.current);
+      
     });
 
-    socketRef.current.emit('fetch-messages');
 
-    socketRef.current.on('messages-to-client', (messageArray: Message[]) => {
-      setMessages(messageArray.messages.reverse());
+    socket.on('messages-to-client', (messageArray: Message[]) => {
+      setMessages(messageArray.messages);
     });
 
-    socketRef.current.on('message-to-client', (messageObject: Message) => {
-      console.log(messageObject);
+    socket.on('message-to-client', (messageObject: Message) => {
       setMessages(prevMessages => [...prevMessages, messageObject]);
     });
 
-    socketRef.current.on('join', (messageObject: JoinersData) => {
+    socket.emit('fetch-messages');
+
+    socket.on('join', (messageObject: JoinersData) => {
       console.log(messageObject, '123123123');
     });
 
-    socketRef.current.on('leave', (messageObject: LeaverData) => {
+    socket.on('leave', (messageObject: LeaverData) => {
       console.log(messageObject, '123123123');
     });
 
     return () => {
-      socketRef.current?.off('connect');
-      socketRef.current?.off('messages-to-client');
-      socketRef.current?.off('message-to-client');
-      socketRef.current?.disconnect();
+      socket.off('connect');
+      socket.off('messages-to-client');
+      socket.off('message-to-client');
+      socket.off('join');
+      socket.off('leave');
+      socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
@@ -90,22 +97,22 @@ export default function Chat() {
       return;
     }
 
-    if (socketRef.current?.connected) {
-      socketRef.current.emit('message-to-server', message);
-      setMessage('');
-    }
+    socket.emit('message-to-server', message);
+    setMessage('');
   };
 
   return (
     <>
-      <ChatroomHeader chatId={chatId} />
+      <ChatroomHeader name={name} chatId={chatId} />
       <div className={styles.container}>
         <div className={styles.container}>
           <EntryNotice />
           <ExitNotice />
           <div>
-            {messages.map(msg => (
+          {messages.map(msg => (
+              msg.userId === userId ? 
               <MyChat key={msg.id} msg={msg} />
+              : <OtherChat key={msg.id} msg={msg}/>
             ))}
           </div>
           <div ref={messagesEndRef} />
