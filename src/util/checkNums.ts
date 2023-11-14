@@ -5,7 +5,7 @@ const CheckNums = (): boolean => {
   const nowUsers = useRecoilValue(onlineUserStateInGameRoom);
   const len = nowUsers.length;
 
-  return len === 3;
+  return len === 2;
 };
 
 export default CheckNums;

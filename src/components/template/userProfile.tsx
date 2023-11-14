@@ -39,7 +39,7 @@ const UserProfile = () => {
       if (userId) {
         try {
           const res = await getUserData(userId);
-          console.log(res);
+          // console.log(res);
           setMyID(res.user.id);
           setMyname(res.user.name);
           setMyImg(res.user.picture);

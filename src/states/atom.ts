@@ -53,3 +53,20 @@ export const uniqueUserState = atom<any>({
   key: 'uniqueUserState',
   default: [],
 });
+
+export const myMessageState = atom<
+  Array<{ text: string; userId: string; chatId: string }>
+>({
+  key: 'myMessageState',
+  default: [{ text: '', userId: '', chatId: '' }],
+});
+
+export const buttonState = atom<any>({
+  key: 'buttonState',
+  default: true,
+});
+
+export const AnswerFormState = atom<any>({
+  key: 'AnswerFormState',
+  default: false,
+});

@@ -14,6 +14,7 @@ import {
   privateChatDetail,
   privateChatNew,
   myUserDataState,
+  myMessageState,
 } from '../../states/atom';
 import { getCookie } from '../../util/util';
 
@@ -29,7 +30,8 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [lastDate, setLastDate] = useState('');
   const accessToken: any = getCookie('accessToken');
   const myUserData: any = useRecoilValue(myUserDataState);
-  const [currentMessageObject, setCurrentMessageObject] = useState(null);
+  const [currentMessageObject, setCurrentMessageObject] =
+    useRecoilState(myMessageState);
   useEffect(() => {
     try {
       const newSocket = chatSocket(accessToken, chatId);
@@ -57,8 +59,14 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
       });
 
       newSocket.on('message-to-client', (messageObject) => {
-        console.log(messageObject);
-        setCurrentMessageObject(messageObject);
+        setCurrentMessageObject([
+          ...currentMessageObject,
+          {
+            text: messageObject.text,
+            userId: messageObject.userId,
+            chatId: chatId,
+          },
+        ]);
         setNewChat((newChat: any) => {
           // 중복 날짜, 시간 null로 반환
           const modifyDateArray = modifyDate([
