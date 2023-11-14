@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styles from './signUp.module.scss';
+import Link from 'next/link';
 
 interface RequestBody {
   id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -213,7 +214,11 @@ export default function SignUp() {
             </div>
             <div className={styles.button_box}>
               <button type="submit">가입하기</button>
-              <button type="button">뒤로가기</button>
+              <div className={styles.back_link}>
+                <Link href="/" className={styles.link}>
+                  뒤로가기
+                </Link>
+              </div>
             </div>
           </form>
         </div>
