@@ -58,32 +58,32 @@ const ModalExample: React.FC<ModalExampleProps> = ({
   };
 
   const handleCheckboxChange = (userId: string) => {
-  useEffect(() => {
-    const fetchData = async () => {
-      if (accessToken) {
-        try {
-          const response = await getData("https://fastcampus-chat.net/users");
-          setOnlineUsers(response);
-        } catch (error) {
-          console.log(error);
+    useEffect(() => {
+      const fetchData = async () => {
+        if (accessToken) {
+          try {
+            const response = await getData("https://fastcampus-chat.net/users");
+            setOnlineUsers(response);
+          } catch (error) {
+            console.log(error);
+          }
+          fetchData();
         }
-        fetchData();
-      }
-    };
-  }, [accessToken]);
-<!--     const selectedUser = onlineUsers.find((user) => user.id === userId);
-    if (selectedUser) {
-      setLocalSelectedUsers((prevSelected) => {
-        const isAlreadySelected = prevSelected.some(
-          (user) => user.id === userId
-        );
-        if (isAlreadySelected) {
-          return prevSelected.filter((user) => user.id !== userId);
-        } else {
-          return [...prevSelected, selectedUser];
-        }
-      });
-    } -->
+      };
+    }, [accessToken]);
+    //   const selectedUser = onlineUsers.find((user) => user.id === userId);
+    //   if (selectedUser) {
+    //     setLocalSelectedUsers((prevSelected) => {
+    //       const isAlreadySelected = prevSelected.some(
+    //         (user) => user.id === userId
+    //       );
+    //       if (isAlreadySelected) {
+    //         return prevSelected.filter((user) => user.id !== userId);
+    //       } else {
+    //         return [...prevSelected, selectedUser];
+    //       }
+    //     });
+    //   }
   };
 
   const submitModal = () => {
@@ -91,7 +91,6 @@ const ModalExample: React.FC<ModalExampleProps> = ({
     setSelectedUsers(localSelectedUsers);
     closeModal();
   };
-     
 
   return (
     <ChatTestWrap>
