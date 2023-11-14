@@ -5,15 +5,14 @@ import Image from 'next/image';
 import OpenPeopleSvg from '@/public/OpenPeopleSvg.svg';
 import { ChatItemProps } from '../ChatList.type';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const ChatItem = ({ chat }: ChatItemProps) => {
 	const firstUserImage = chat.users[0].picture;
-	const params = useSearchParams();
-	const isPrivate = params!.get('chatValue');
+	const pathName = usePathname();
 
 	const checkIsPrivate = () => {
-		if (isPrivate === 'private') {
+		if (pathName === '/private') {
 			return true;
 		}
 		return false;
