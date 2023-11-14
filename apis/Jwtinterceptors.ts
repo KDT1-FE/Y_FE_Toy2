@@ -60,6 +60,7 @@ const Jwtinterceptors = () => {
           throw new Error('Token or refreshToken is null');
         }
 
+        // TODO 검토 필요
         const newAccessToken = await refresh(refreshToken);
         setStorage('accessToken', newAccessToken);
         return newAccessToken;
@@ -73,28 +74,21 @@ const Jwtinterceptors = () => {
 
   instance.interceptors.request.use(
     async config => {
-      const accessToken = getStorage('accessToken');
-      if (accessToken) {
-        const tokenValid = await isAccessTokenValid(accessToken);
-        const isLogin = isLoginStorage();
+      let accessToken = getStorage('accessToken');
 
-        if (!isLogin) {
+      if (accessToken && !(await isAccessTokenValid(accessToken))) {
+        accessToken = await refreshingToken(accessToken); // 새 accessToken을 가져옴
+        if (!accessToken) {
+          alert('로그인 시간이 만료되었습니다\n다시 로그인 해주세요');
+          await logout();
           return config;
         }
-
-        if (!tokenValid) {
-          const refreshToken = await refreshingToken(accessToken);
-          if (!refreshToken) {
-            // eslint-disable-next-line
-            alert('로그인 시간이 만료되었습니다\n다시 로그인 해주세요');
-            await logout();
-            return config;
-          }
-
-          // eslint-disable-next-line
-          config.headers.Authorization = `Bearer ${refreshToken}`;
-        }
       }
+
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
+
       return config;
     },
 
