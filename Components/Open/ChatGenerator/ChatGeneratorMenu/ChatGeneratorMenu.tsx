@@ -24,7 +24,7 @@ const ChatGeneratorMenu = ({ register }: RegisterFn) => {
 			<MenuHandler>
 				<Button className="w-full">Menu</Button>
 			</MenuHandler>
-			<MenuList className="absolute z-40 max-h-64">
+			<MenuList className="absolute z-[62] max-h-64">
 				<MenuItem className="text-center text-xl font-bold">유저들</MenuItem>
 				{data?.map((user: User) => {
 					return (

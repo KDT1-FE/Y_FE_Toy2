@@ -1,4 +1,4 @@
-import { Chat, CatApiResponseType } from './open.type';
+import { Chat, CatApiResponseType } from './chatting.type';
 
 export const fetchAllChat = async (token: string) => {
 	const res = await fetch(`https://fastcampus-chat.net/chat`, {
@@ -15,7 +15,11 @@ export const fetchAllChat = async (token: string) => {
 };
 
 export const filterChat = (chatList: Chat[]) => {
-	return chatList.filter((chat: Chat) => chat.isPrivate !== true);
+	const OpenChatList = chatList.filter((chat: Chat) => chat.isPrivate !== true);
+	const PrivateChatList = chatList.filter(
+		(chat: Chat) => chat.isPrivate === true,
+	);
+	return { OpenChatList, PrivateChatList };
 };
 
 export const fetchRandomImage = async (chatNumber: number) => {

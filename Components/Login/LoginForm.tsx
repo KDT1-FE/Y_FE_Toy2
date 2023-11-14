@@ -41,6 +41,7 @@ const LoginForm = () => {
 		if (accessToken && refreshToken) {
 			setCookie('accessToken', accessToken, { path: '/', expires: time });
 			setCookie('refreshToken', refreshToken, { path: '/' });
+			setCookie('userId', id, { path: '/', expires: time });
 			router.replace('/users');
 		} else {
 			Swal.fire({

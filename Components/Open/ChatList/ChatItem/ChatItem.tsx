@@ -3,18 +3,28 @@
 import { Avatar, Typography } from '@material-tailwind/react';
 import Image from 'next/image';
 import OpenPeopleSvg from '@/public/OpenPeopleSvg.svg';
-import { ChatItemProps } from './ChatList.type';
+import { ChatItemProps } from '../ChatList.type';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const ChatItem = ({ chat }: ChatItemProps) => {
 	const firstUserImage = chat.users[0].picture;
+	const params = useSearchParams();
+	const isPrivate = params!.get('chatValue');
+
+	const checkIsPrivate = () => {
+		if (isPrivate === 'private') {
+			return true;
+		}
+		return false;
+	};
 
 	return (
 		<Link
 			key={chat.id}
 			href={{
 				pathname: `/chat/${chat.id}`,
-				query: { isPrivate: false },
+				query: { isPrivate: checkIsPrivate() },
 			}}
 		>
 			<div className="w-fulls border-4 border-primary hover:bg-gray-300 cursor-pointer rounded-xl ease-in transition-all duration-300 p-5">

@@ -17,12 +17,12 @@ const SpeedDialWithTextInside = () => {
 	const router = useRouter();
 
 	const handleOpenModal = (query: string) => {
-		router.replace(`/open?${new URLSearchParams({ type: query })}`);
+		router.replace(`/chatting?${new URLSearchParams({ type: query })}`);
 		setModalOpen(true);
 	};
 
 	return (
-		<div className="absolute bottom-3 right-3">
+		<div className="absolute z-50 bottom-3 right-3">
 			<SpeedDial>
 				<SpeedDialHandler>
 					<div className="flex flex-col justify-center items-center text-center text-sm rounded-full shadow-2xl hover:scale-105 transition-all duration-500 ease-in-out  w-16 h-16 bg-primary cursor-pointer">
