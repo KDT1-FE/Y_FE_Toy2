@@ -1,15 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from '@styles/pages/signin.module.scss';
 import { login } from '@api/login';
 import { useForm } from '@hooks/useForm';
 import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { getUserId } from '@/store/userSlice';
+
+// 로그인 성공 시에 로그인 유저 id 를 전역 상태로 뿌려주기
 
 const Signin = () => {
   const [id, onChangeId] = useForm();
   const [password, onChangePassword] = useForm();
   const [errors, setErrors] = useState('');
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const userId = useAppSelector((state) => state.userId);
+  const dispatch = useAppDispatch();
 
   const signin = async (event) => {
     event.preventDefault();
@@ -23,7 +29,8 @@ const Signin = () => {
       const { accessToken, refreshToken } = result;
       localStorage.setItem('access_token', accessToken);
       localStorage.setItem('refresh_token', refreshToken);
-      // navigate("/Loby");
+      dispatch(getUserId(id));
+      navigate('/');
     }
   };
   return (
@@ -45,7 +52,9 @@ const Signin = () => {
             onChange={onChangePassword}
             value={password}
           />
-          {errors && <span className={styles.signin__form_error}>{errors}</span>}
+          {errors && (
+            <span className={styles.signin__form_error}>{errors}</span>
+          )}
 
           {/* 로그인 api */}
           <button
