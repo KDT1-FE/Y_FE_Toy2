@@ -214,6 +214,7 @@ export const OpenchatRoomAppbar = React.memo(
     boxShadow: '0 0 10px rgba(0,0,0,0.1)',
     padding: '5px 10px',
     boxSizing: 'border-box',
+    zIndex: 1,
     '& .openchat__room-appbar-wrap': {
       display: 'flex',
       alignItems: 'center',
@@ -274,3 +275,28 @@ export const OpenchatSenderWrap = styled(Grid)(({ theme }) => ({
     border: 0,
   },
 }));
+
+export const OpenchatNavUserItemLi = styled(motion.li)({
+  width: '100%',
+});
+
+export const OpenchatInviteModalWrap = styled(Box)({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'rgba(0,0,0,0.1)',
+  zIndex: 3,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  '& .openchat__invite-box': {
+    position: 'relative',
+    width: '100%',
+    height: '100vh',
+    maxWidth: '480px',
+    maxHeight: '660px',
+    backgroundColor: 'white',
+  },
+});

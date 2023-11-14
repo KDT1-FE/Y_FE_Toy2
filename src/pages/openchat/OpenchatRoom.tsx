@@ -18,6 +18,7 @@ import useQueryOpenchatById from '../../hooks/useQueryOpenchatById';
 import OpenchatNav from '../../components/openchat/OpenchatNav';
 import MenuToggle from '../../components/openchat/MenuToggle';
 import useSocketConnect from '../../hooks/useSocketConnect';
+import OpenchatInviteModal from '../../components/openchat/OpenchatInviteModal';
 
 function OpenchatRoom() {
   const { chatId = '' } = useParams();
@@ -30,6 +31,7 @@ function OpenchatRoom() {
   const user = JSON.parse(userStr) as UserSimple;
   const { isQuering, data, users, allUsers } = useQueryOpenchatById(chatId);
   const [isOpen, toggleOpen] = useCycle(false, true);
+  const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
 
   const tempMsg = useMemo(
     () => [
@@ -124,11 +126,16 @@ function OpenchatRoom() {
   };
 
   return (
-    <div>
+    <Box>
       <MenuToggle isOpen={isOpen} toggle={() => toggleOpen()} />
       <AnimatePresence>
         {isOpen && (
-          <OpenchatNav data={data} users={users} allUsers={allUsers} />
+          <OpenchatNav
+            data={data}
+            users={users}
+            allUsers={allUsers}
+            toggleModalOpen={setIsModalOpen}
+          />
         )}
       </AnimatePresence>
       <OpenchatMessageWrap
@@ -166,7 +173,13 @@ function OpenchatRoom() {
           onClick={submitMessage}
         />
       )}
-    </div>
+      {/* 친구초대 모달 */}
+      <OpenchatInviteModal
+        isModalOpen={isModalOpen}
+        toggle={setIsModalOpen}
+        allUsers={allUsers}
+      />
+    </Box>
   );
 }
 
