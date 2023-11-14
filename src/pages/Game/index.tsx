@@ -1,8 +1,8 @@
 import { Button, Card, Center, Grid, GridItem, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import GameChat from "../../components/Game/GameChat";
-import Keyword from "../../components/Game/Keyword";
 import useFireFetch from "../../hooks/useFireFetch";
+import GameStart from "../../components/Game/GameStart";
 
 interface ProfileCardProps {
   userId: string;
@@ -32,6 +32,7 @@ const Game = () => {
   const fireFetch = useFireFetch();
   const gameData = fireFetch.useGetSome("game", "id", gameId as string);
   const [status, setStatus] = useState("");
+  const [users, setUsers] = useState([]);
 
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
@@ -39,11 +40,20 @@ const Game = () => {
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
       setStatus(gameData.data[0].status);
+      setUsers(gameData.data?.[0]?.users);
+    } else {
+      setUsers([]);
     }
   }, [gameData.data]);
 
   useEffect(() => {
     if (status === "게임중") {
+      // 저장된 유저 순서 로컬 스토리지에서 가져오기
+      const shuffledUsers = JSON.parse(
+        window.localStorage.getItem("shuffledUsers") || "[]",
+      );
+      setUsers(shuffledUsers);
+
       const currentCategory = window.localStorage.getItem("category") ?? "";
       const currentKeyword = window.localStorage.getItem("keyword") ?? "";
 
@@ -62,6 +72,7 @@ const Game = () => {
 
   console.log(gameData.data);
   console.log(category, keyword);
+  console.log(users);
 
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
@@ -109,22 +120,27 @@ const Game = () => {
           </Card>
         </GridItem>
         <GridItem>
-          <Button w="200px" mr="20px">
-            <Keyword status={status} updateStatus={updateStatus} />
-          </Button>
+          <GameStart
+            status={status}
+            updateStatus={updateStatus}
+            gameData={gameData.data[0]}
+            onGameStart={(shuffleUsers) => setUsers(shuffleUsers)}
+          />
         </GridItem>
         <GridItem>
-          <ProfileCard userId={gameData.data[0].users[0]}></ProfileCard>
-          <ProfileCard userId={gameData.data[0].users[1]}></ProfileCard>
-          <ProfileCard userId={gameData.data[0].users[2]}></ProfileCard>
+          {users?.slice(0, 3).map((user, index) => {
+            return <ProfileCard key={index} userId={user}></ProfileCard>;
+          })}
         </GridItem>
         <GridItem>
           <GameChat gameId={gameId} gameData={gameData.data[0]} />
         </GridItem>
         <GridItem>
-          <ProfileCard userId={gameData.data[0].users[3]}></ProfileCard>
-          <ProfileCard userId={gameData.data[0].users[4]}></ProfileCard>
-          <ProfileCard userId={gameData.data[0].users[5]}></ProfileCard>
+          <GridItem>
+            {users?.slice(3, 6).map((user, index) => {
+              return <ProfileCard key={index} userId={user}></ProfileCard>;
+            })}
+          </GridItem>
         </GridItem>
       </Grid>
     </>
