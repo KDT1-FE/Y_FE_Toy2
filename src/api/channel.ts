@@ -3,8 +3,10 @@ import {
   InviteRequestBody,
   InviteResponseValue,
   ExitResponseValue,
+  Channel,
 } from '../@types/channel';
 import instance from './axios';
+import { getUser } from './user';
 
 export interface CreateChannelBody {
   name: string;
@@ -43,10 +45,33 @@ export const inviteChannel = async (inviteData: InviteRequestBody) => {
   return response.data;
 };
 
-export const exitChannel = async (chatId: string) => {
+export const exitChannel = async (chatId: { chatId: string }) => {
   const response = await instance.patch<ExitResponseValue>(
     '/chat/leave',
     chatId,
   );
   return response.data;
+};
+
+export const findUserDataInChannel = async (chatId: string) => {
+  const response = await instance.get<{ chat: Channel }>(
+    `/chat/only?chatId=${chatId}`,
+  );
+  return response;
+};
+
+export const getMemberData = async (users: string[]) => {
+  const userListData = [];
+  for (const id of users) {
+    const response = await getUser(id);
+    if (response) {
+      const { name, picture } = response;
+      userListData.push({
+        id,
+        name,
+        picture,
+      });
+    }
+  }
+  return userListData;
 };

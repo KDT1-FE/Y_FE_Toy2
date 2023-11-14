@@ -1,23 +1,38 @@
-import { LockIcon, ViewIcon } from '@chakra-ui/icons';
-import { Box, Flex, Text } from '@chakra-ui/layout';
-import React from 'react';
+import { LockIcon } from '@chakra-ui/icons';
+import { Link as ReactRouterLink, useParams } from 'react-router-dom';
+import { Box, Flex, Link as ChakraLink } from '@chakra-ui/react';
+import { splitChannelName } from '../../utils';
 
 interface Props {
   myChannelName: string;
   isPrivate: boolean;
+  channelId: string;
 }
 
-// 나중에 채널 아이디 받아서 Link 처리
-const MyChannelItem = ({ myChannelName, isPrivate }: Props) => {
+const MyChannelItem = ({ myChannelName, isPrivate, channelId }: Props) => {
+  const { title } = splitChannelName(myChannelName);
+  const { id } = useParams();
+  const isActive = channelId === id;
+
   return (
-    <Flex align="center" mb="1rem">
-      {isPrivate ? (
-          <LockIcon boxSize="1.5rem" />
-        ) : (
-          <ViewIcon boxSize="1.4rem" />
-        )}
-      <Box ml="1rem">{myChannelName} </Box>
-    </Flex>
+    <ChakraLink as={ReactRouterLink} to={`/chats/${channelId}`}>
+      <Flex
+        overflow="hidden"
+        align="center"
+        mx="1rem"
+        my="4px"
+        p="4px"
+        borderRadius="md"
+        fontWeight={isActive ? 'bold' : 'normal'}
+        bg={isActive ? 'blue.500' : 'gray.50'}
+        color={isActive ? 'white' : 'black'}
+      >
+        {isPrivate ? <LockIcon boxSize="1.5rem" /> : <Box boxSize="1.4rem" />}
+        <Box ml="1rem" mr="0.5rem" isTruncated>
+          {title}
+        </Box>
+      </Flex>
+    </ChakraLink>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
@@ -6,44 +6,38 @@ import {
   Divider,
   Heading,
   Link as ChakraLink,
-  LinkProps,
 } from '@chakra-ui/react';
-import { AddIcon, EditIcon, ChatIcon } from '@chakra-ui/icons';
+import { EditIcon, ChatIcon } from '@chakra-ui/icons';
 import MyChannelItem from './MyChannelItem';
 import { useMyChannels } from '../../hooks/useMyChannels';
 
 const SideBar = () => {
-  const channels = useMyChannels();
+  const { data: channels } = useMyChannels();
 
   return (
-    <Box w="18rem" h="100vh" bg="gray.50" color="black" p="10px" boxShadow="xl">
-      <Text fontSize="4xl" fontWeight="extrabold" mb="6px">
-        로고자리
-      </Text>
+    <Box w="18rem" h="100vh" bg="gray.50" color="black" p="20px" boxShadow="xl">
+      <Heading my="2rem">로고자리</Heading>
       <Box color="#828C98">
-        <ChakraLink as={ReactRouterLink} to="/" mb={4}>
+        <ChakraLink as={ReactRouterLink} to="/" fontSize={'lg'}>
           <ChatIcon mr={2} />
           전체 채팅방 조회
         </ChakraLink>
-
-        <Text mb={4}>
-          <AddIcon mr={2} />
-          새로운 채팅방 생성
-        </Text>
-
-        <Text mb={4}>
+        <Text fontSize={'lg'} mt="1rem">
           <EditIcon mr={2} />
           개인 정보 수정
         </Text>
       </Box>
       <Divider my={50} />
       <Box>
-        <Heading mb={6}>나의 채팅방</Heading>
-        <Box>
+        <Heading size="lg" mb="2rem">
+          나의 채팅방
+        </Heading>
+        <Box h="50vh" overflowY="scroll">
           {channels ? (
             channels.map((channel) => (
               <MyChannelItem
                 key={channel.id}
+                channelId={channel.id}
                 myChannelName={channel.name}
                 isPrivate={channel.isPrivate}
               />
