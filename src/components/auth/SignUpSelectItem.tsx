@@ -5,6 +5,7 @@ import { Box, Button, Grid, Menu, MenuItem } from '@mui/material';
 interface SignUpSelectItemProps {
   name: string;
   flag: string;
+  value: string;
   setLangLv: (name: string, lv: number) => void;
   isClicked: boolean;
 }
@@ -12,6 +13,7 @@ interface SignUpSelectItemProps {
 function SignUpSelectItem({
   name,
   flag,
+  value,
   setLangLv,
   isClicked = false,
 }: SignUpSelectItemProps) {
@@ -21,16 +23,14 @@ function SignUpSelectItem({
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (lv: number) => {
-    setLangLv(name, lv);
+    setLangLv(value, lv);
     setAnchorEl(null);
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <Grid
       item
       xs={6}
-      // onClick={handleClick}
       sx={{
         cursor: 'pointer',
       }}
