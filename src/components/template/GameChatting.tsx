@@ -78,7 +78,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
 
       // 게임방 유저 목록 소켓 연결
       newSocket.on('connect', () => {
-        socket.emit('users');
+        newSocket.emit('users');
       });
 
       newSocket.on('users-to-client', (data) => {
