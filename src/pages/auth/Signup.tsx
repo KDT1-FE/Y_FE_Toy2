@@ -1,4 +1,4 @@
-import styles from '@styles/pages/singup.module.scss';
+import styles from '@styles/pages/signup.module.scss'
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '@hooks/useForm';
 import { signup } from '@api/signup';
@@ -47,7 +47,7 @@ const Signup = () => {
   };
 
   const setProfileStyle = {
-    backgroundImage: character ? `url(${character})` : `url("profile.jpeg")`,
+    backgroundImage: character ? `url(${character})` : `url("/src/assets/images/profile.jpeg")`,
   };
 
   const handleModal = () => {
@@ -55,16 +55,16 @@ const Signup = () => {
   };
 
   return (
-    <div className={styles.main__background}>
+    <div className={styles.signup}>
       <div>
         <button
           onClick={() => setIsModalOpen(true)}
           style={setProfileStyle}
-          className={styles.main_profile}></button>
+          className={styles.signup__profile}></button>
         <p>프로필 선택</p>
       </div>
-      <div className={styles.signup_container}>
-        <form className={styles.signup_form}>
+      <div className={styles.signup__container}>
+        <form className={styles.signup__form}>
           <input
             type="text"
             placeholder="ID"
@@ -105,13 +105,13 @@ const Signup = () => {
             <span className={styles.form_error}>{errors?.assurer}</span>
           )}
           <button
-            className={styles.signup_btn}
+            className={styles.signup__btn}
             onClick={(event) => register(event)}>
             회원가입
           </button>
         </form>
       </div>
-      <div className={styles.signin_link}>
+      <div className={styles.signin__link}>
         <Link to="/signin">로그인하러 가기</Link>
       </div>
       {/* {isModalOpen ? <SignupModal /> : null} */}

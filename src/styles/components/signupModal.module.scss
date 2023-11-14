@@ -1,66 +1,66 @@
-.modal__background {
+.singupModal {
   background-color: rgb(50, 7, 72);
   position: absolute;
   background-size: cover;
   background-position: center;
   width: 100%;
   height: 100%;
-}
 
-.modal_container {
-  height: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.modal__left_btn span {
-  font-size: 150px;
-  &:hover {
-    cursor: pointer;
+  &__container {
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
-}
 
-.modal__right_btn span {
-  font-size: 150px;
-  &:hover {
-    cursor: pointer;
+  &__left_btn span {
+    font-size: 150px;
+    transition: .3s;
+      &:hover {
+        cursor: pointer;
+        scale: 1.3;
+      }
   }
-}
 
-.modal__carousel_container {
-  width: 80%;
-  overflow: scroll;
-}
+  &__right_btn span {
+    font-size: 150px;
+    transition: .3s;
+    &:hover {
+      cursor: pointer;
+      scale: 1.3;
+    }
+  }
 
-.modal__carousel {
-  display: flex;
-}
+  &__carousel_container {
+    width: 80%;
+    overflow: scroll;
+  }
+    
+  &__radio_container {
+    display: flex;
+    justify-content: start;
+    width: 900px;
+  }
 
-.radio_container {
-  display: flex;
-  justify-content: start;
-  width: 900px;
-}
+  &__radio_item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
 
-.radio_item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 30px;
-}
+    & input {
+      appearance: none;
+    }
 
-.radio_item input {
-  appearance: none;
-}
-
-input:checked + label .character {
-  transition: 0.4s ease-in-out;
-  transform: scale(1.15);
-  border: 5px solid rgb(20, 255, 32);
-  border-radius: 20px;
-  margin: 0;
+    & input:checked + label .character {
+      transition: 0.4s ease-in-out;
+      transform: scale(1.15);
+      border: 5px solid rgb(20, 255, 32);
+      border-radius: 20px;
+      margin: 0;
+    }
+  }
 }
 
 .character {
@@ -91,11 +91,11 @@ input:checked + label .character {
   background-size: 200% auto;
   transition: 0.5s;
   box-shadow: 0 0 20px #eee;
-}
 
-.modal__submit_btn:hover {
-  scale: 1.05;
-  background-color: #31114c;
-  background-position: right center; /* change the direction of the change here */
-  text-decoration: none;
+  &:hover  {
+    scale: 1.05;
+    background-color: #31114c;
+    background-position: right center; /* change the direction of the change here */
+    text-decoration: none;
+  }
 }
