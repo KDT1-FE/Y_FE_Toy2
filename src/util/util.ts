@@ -5,10 +5,12 @@ import { disconnectChattingSocket } from '../api/socket';
 export const setCookises = async (
   accessToken: string,
   refreshToken: string,
+  userId: string,
 ) => {
   try {
     document.cookie = `accessToken=${accessToken};max-age=3600;path=/;secure`;
     document.cookie = `refreshToken=${refreshToken};max-age=604800;path=/;secure`;
+    document.cookie = `userId=${userId};max-age=3600;path=/;secure`;
   } catch (e) {
     console.error(e);
     alert('쿠키설정에 실패했습니다.');
@@ -25,6 +27,17 @@ export function getCookie(name: string): string | undefined {
 
   return cookieValue || undefined;
 }
+
+export const removeCookie = async () => {
+  try {
+    document.cookie = `accessToken='';expires=0;`;
+    document.cookie = `refreshToken='';expires=0;`;
+    document.cookie = `userId='';expires=0;`;
+  } catch (e) {
+    console.error(e);
+    alert('쿠키삭제에 실패했습니다.');
+  }
+};
 
 export const getAllUsersData = async () => {
   try {
