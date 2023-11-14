@@ -167,8 +167,8 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
 };
 
 const Chat = styled.div`
-  width: 370px;
-  height: 450px;
+  width: 450px;
+  height: 563px;
   background-color: #fff;
   border-radius: 15px;
   text-align: center;

@@ -95,8 +95,8 @@ const UserNick = styled.div`
 `;
 
 const UserBox = styled.div`
-  width: 285px;
-  height: 110px;
+  width: 335px;
+  height: 120px;
   background-color: #fff;
   display: flex;
   align-items: center;

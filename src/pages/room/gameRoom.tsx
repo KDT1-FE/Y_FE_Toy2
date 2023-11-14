@@ -55,14 +55,15 @@ const GameRoom = () => {
         <GameChatting chatId={chat} />
       </RoomMain>
 
-      <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
-      <UserList>{/* <CheckUser /> */}</UserList>
+      <UserList>
+        <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
+      </UserList>
     </Game>
   );
 };
 
 const Game = styled.div`
-  width: 1200px;
+  width: 1400px;
   display: flex;
   flex-direction: column;
 `;
@@ -113,7 +114,7 @@ const RoomMain = styled.div`
 `;
 
 const UserList = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
 `;
 
 export default GameRoom;
