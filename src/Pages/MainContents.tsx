@@ -1,9 +1,13 @@
 import styled from "styled-components";
+import Carousel from "../components/Carousel";
 
 function MainContents() {
+
   return (
     <Wrapper>
-      <Banner>메인 배너</Banner>
+      {/* <Banner> */}
+        <Carousel />
+      {/* </Banner> */}
       <FirstContent>
         <TextSection>
           <span className="small-title">프로필</span>
