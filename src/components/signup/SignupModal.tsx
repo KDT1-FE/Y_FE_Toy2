@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PocketBase from 'pocketbase';
 import { getCharacters } from '@store/ghostSlice';
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
@@ -8,7 +8,6 @@ import styles from '@styles/components/signupModal.module.scss';
 const pb = new PocketBase('https://full-oil.pockethost.io');
 
 const SignupModal = ({ handleModal }) => {
-  const [ghostRecords, setGhostRecords] = useState([]);
   const dispatch = useAppDispatch();
   const ghosts = useAppSelector((state) => state.ghosts);
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,7 +71,6 @@ const SignupModal = ({ handleModal }) => {
     const fetchData = async () => {
       try {
         const records = await getGhosts();
-        setGhostRecords(records.items);
         await getURLs(records.items);
       } catch (error) {
         console.error('Error fetching ghost records:', error);
@@ -115,19 +113,19 @@ const SignupModal = ({ handleModal }) => {
   };
 
   return (
-    <div className={styles.modal__background}>
-      <div className={styles.modal_container}>
-        <div className={styles.modal__left_btn}>
+    <div className={styles.singupModal}>
+      <div className={styles.singupModal__container}>
+        <div className={styles.singupModal__left_btn}>
           <span
             onClick={() => goPrevious()}
             className="material-symbols-outlined">
             arrow_left
           </span>
         </div>
-        <div className={styles.modal__carousel_container}>
-          <div className={styles.radio_container}>
+        <div className={styles.singupModal__carousel_container}>
+          <div className={styles.singupModal__radio_container}>
             {ghosts.slice(offset, offset + limit).map((ghost) => (
-              <div key={ghost.id} className={styles.radio_item}>
+              <div key={ghost.id} className={styles.singupModal__radio_item}>
                 <input
                   type="radio"
                   id={ghost.id}
@@ -144,7 +142,7 @@ const SignupModal = ({ handleModal }) => {
             ))}
           </div>
         </div>
-        <div className={styles.modal__right_btn}>
+        <div className={styles.singupModal__right_btn}>
           <span onClick={() => goNext()} className="material-symbols-outlined">
             arrow_right
           </span>
