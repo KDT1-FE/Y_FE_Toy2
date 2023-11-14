@@ -34,9 +34,9 @@ export const getAllChats = async () => {
   }
 };
 
-export const partChats = async () => {
+export const partChats = async (chatId: string) => {
   try {
-    const res = await instance.patch<Chat[], any>(`chat/participate`, { headers });
+    const res = await instance.patch<Chat[], any>(`chat/participate`, { chatId }, { headers });
     if (res) {
       return res.chats;
       console.log(res.chats);
