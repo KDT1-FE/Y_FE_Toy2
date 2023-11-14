@@ -135,11 +135,11 @@ const ChatContainer = styled.div`
   text-align: center;
   margin: 2rem;
   background-color: transparent;
+  height: calc(50rem - 7rem);
 `;
 
 const ChatList = styled.div`
   overflow-y: auto;
-  height: 50rem;
   &::-webkit-scrollbar {
     /*크롬, 사파리, 오페라, 엣지*/
     display: none;
