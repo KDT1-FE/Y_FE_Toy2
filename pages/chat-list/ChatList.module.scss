@@ -1,5 +1,9 @@
 @import '@/styles/index.scss';
 
+.list_container {
+  @include container;
+}
+
 .container {
   @include container;
   display: flex;
