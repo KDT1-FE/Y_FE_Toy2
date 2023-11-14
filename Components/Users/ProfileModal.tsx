@@ -20,7 +20,7 @@ const ProfileModal = ({
 	const accessToken = getCookie('accessToken');
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const isMyProfile = searchParams.get('isMyProfile') === 'true';
+	const isMyProfile = searchParams?.get('isMyProfile') === 'true';
 
 	const chattingParticipateHandler = async () => {
 		if (existPrivateChat) {

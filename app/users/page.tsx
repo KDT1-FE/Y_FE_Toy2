@@ -1,11 +1,11 @@
 import React from 'react';
 import { fetchAllUsers, fetchMyUser } from './users.utils';
-import FriendProfile from '@/Components/Users/FriendProfiles';
 import MyProfile from '@/Components/Users/MyProfile';
 import Header from '@/Components/Common/Header';
 import { User } from '@/types';
 import { cookies } from 'next/headers';
 import Footer from '@/Components/Common/Footer';
+import FriendProfilesCheckOnline from '@/Components/Users/FriendProfilesCheckOnline';
 
 const Users = async () => {
 	const cookieStore = cookies();
@@ -23,7 +23,7 @@ const Users = async () => {
 					친구{allUsersExceptMe?.length}명
 				</h4>
 			</div>
-			<FriendProfile allUsers={allUsersExceptMe} />
+			<FriendProfilesCheckOnline allUsersExceptMe={allUsersExceptMe} />
 			<Footer />
 		</section>
 	);

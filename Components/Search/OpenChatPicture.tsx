@@ -15,11 +15,16 @@ const OpenChatPicture = ({ openChatUsers }: { openChatUsers: User[] }) => {
 						return null; // 사진이 4개 이상인 경우 렌더링을 하지 않음
 					}
 
+					const picture =
+						user.picture.trim().split('.')[0] === 'https://avatars'
+							? user.picture
+							: '/icon_cat.svg';
+
 					return (
 						<li key={user.id} className="relative w-10 h-10 -m-1">
 							<Image
 								fill={true}
-								src={user.picture}
+								src={picture}
 								alt="user picture"
 								className="rounded"
 								style={{
