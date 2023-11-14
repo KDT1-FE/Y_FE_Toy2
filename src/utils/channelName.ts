@@ -1,3 +1,5 @@
+import { Channel } from '../@types/channel';
+
 export const checkChannelName = (name: string) => {
   if (name.length === 0) {
     return { isValid: false, errorMessage: '채널명을 입력하세요.' };
@@ -26,4 +28,11 @@ export const createChannelNameWithCategory = (
 ) => {
   const channelName = `${name}#${category}`;
   return channelName.trim();
+};
+
+export const filterChannels = (title: string, channels: Channel[]) => {
+  if (title === '') return channels;
+  return channels.filter((channel) =>
+    channel.name.split('#')[0].includes(title),
+  );
 };
