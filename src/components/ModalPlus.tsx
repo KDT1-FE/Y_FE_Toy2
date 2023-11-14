@@ -1,14 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Modal, { Styles } from "react-modal";
 import styled from "styled-components";
 import "../style/Modal.css";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
+import { Socket, io } from "socket.io-client";
 
 export interface User {
   id: string;
   name: string;
   picture: string;
+}
+
+export interface ChatI {
+  id: string;
+  name: string;
+  users: User[];
+  isPrivate: boolean;
+  updatedAt: string;
+  latestMessage: string;
 }
 
 interface ModalExampleProps {
@@ -20,31 +30,20 @@ const ModalExample: React.FC<ModalExampleProps> = ({
   setRoomName,
   setSelectedUsers
 }) => {
+  const [users, setUsers] = useState<User[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const { getData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [roomNameInput, setRoomNameInput] = useState("");
-  const [localSelectedUsers, setLocalSelectedUsers] = useState<User[]>([]);
-
-  const areUsersDifferent = (
-    newUsers: string | any[],
-    currentUsers: string | any[]
-  ) => {
-    if (newUsers.length !== currentUsers.length) return true;
-    for (let i = 0; i < newUsers.length; i++) {
-      if (newUsers[i].id !== currentUsers[i].id) return true;
-    }
-    return false;
-  };
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [localSelectedUsers, setLocalSelectedUsers] = useState<User[]>([]); //보류
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getData("https://fastcampus-chat.net/users");
-        if (areUsersDifferent(response, onlineUsers)) {
-          setOnlineUsers(response);
-        }
+        setUsers(response);
       } catch (error) {
         console.log(error);
       }
@@ -63,6 +62,46 @@ const ModalExample: React.FC<ModalExampleProps> = ({
     setModalIsOpen(false);
   };
 
+  // 현재 온라인인 유저 실시간 출력
+  useEffect(() => {
+    if (!socket && accessToken) {
+      console.log("Creating new socket connection");
+      const newSocket = io(`https://fastcampus-chat.net/server`, {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+          serverId: "1601075b"
+        }
+      });
+
+      newSocket.on(
+        "users-server-to-client",
+        (response: { users: string[] }) => {
+          console.log(
+            "Event: users-server-to-client, Online Users:",
+            response.users
+          );
+          setOnlineUsers(response.users);
+        }
+      );
+
+      setSocket(newSocket);
+
+      return () => {
+        console.log("Disconnecting socket");
+        newSocket.off("users-to-client");
+        newSocket.disconnect();
+      };
+    }
+  }, [accessToken]);
+
+  // 모든 유저 중 현재 온라인인 유저만 필터링
+  const isUserOnline = useCallback(
+    (userId: string) => {
+      return onlineUsers.includes(userId);
+    },
+    [onlineUsers]
+  );
+
   const openBlock = () => {
     const memberBox = document.getElementById("memberBox");
     if (memberBox) {
@@ -73,34 +112,21 @@ const ModalExample: React.FC<ModalExampleProps> = ({
     }
   };
 
-  const handleCheckboxChange = (userId: string) => {
-    useEffect(() => {
-      const fetchData = async () => {
-        if (accessToken) {
-          try {
-            const response = await getData("https://fastcampus-chat.net/users");
-            setOnlineUsers(response);
-          } catch (error) {
-            console.log(error);
-          }
-          fetchData();
-        }
-      };
-    }, [accessToken]);
-    //   const selectedUser = onlineUsers.find((user) => user.id === userId);
-    //   if (selectedUser) {
-    //     setLocalSelectedUsers((prevSelected) => {
-    //       const isAlreadySelected = prevSelected.some(
-    //         (user) => user.id === userId
-    //       );
-    //       if (isAlreadySelected) {
-    //         return prevSelected.filter((user) => user.id !== userId);
-    //       } else {
-    //         return [...prevSelected, selectedUser];
-    //       }
-    //     });
-    //   }
-  };
+  // const handleCheckboxChange = (userId: string) => {
+  //   const isAlreadySelected = localSelectedUsers.some(
+  //     (user) => user.id === userId
+  //   );
+  //   if (isAlreadySelected) {
+  //     setLocalSelectedUsers(
+  //       localSelectedUsers.filter((user) => user.id !== userId)
+  //     );
+  //   } else {
+  //     const userToAdd = onlineUsers.find((user) => user.id === userId);
+  //     if (userToAdd) {
+  //       setLocalSelectedUsers([...localSelectedUsers, userToAdd]);
+  //     }
+  //   }
+  // };
 
   const submitModal = () => {
     setRoomName(roomNameInput);
@@ -131,15 +157,18 @@ const ModalExample: React.FC<ModalExampleProps> = ({
         <InputBtn onClick={openBlock}>초대할 멤버를 선택해주세요 ▼</InputBtn>
         <MemberBox id="memberBox">
           <ul>
-            {onlineUsers.map((user) => (
+            {users.map((user) => (
               <BoxContent key={user.id}>
                 <li>
                   <SmallImg src={user.picture} alt={user.name} />
                   {user.name}
-                  <input
+                  <OnlineIndicator
+                    className={isUserOnline(user.id) ? "online" : ""}
+                  />
+                  {/* <input
                     type="checkbox"
                     onChange={() => handleCheckboxChange(user.id)}
-                  />
+                  /> */}
                 </li>
               </BoxContent>
             ))}
@@ -256,3 +285,16 @@ const customStyles: Styles = {
     borderRadius: "20px"
   }
 };
+
+const OnlineIndicator = styled.span`
+  height: 10px;
+  width: 10px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+
+  &.online {
+    background-color: #0f0;
+  }
+`;
