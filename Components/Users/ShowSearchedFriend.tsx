@@ -1,3 +1,4 @@
+import { convertPictureURL } from '@/hooks/Common/users';
 import { User } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,10 +16,7 @@ const ShowSearchedFriend = ({
 	return (
 		<div className="grid grid-cols-5">
 			{searchedUserUpToFour?.map((user) => {
-				const picture =
-					user.picture.trim().split('.')[0] === 'https://avatars'
-						? user.picture
-						: '/icon_cat.svg';
+				const picture = convertPictureURL(user.picture);
 				return (
 					<div key={user.id + `search`} className="flex flex-col items-center ">
 						<Link

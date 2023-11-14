@@ -4,9 +4,10 @@ import Image from 'next/image';
 import React from 'react';
 import { User } from '@/types';
 import Link from 'next/link';
+import { convertPictureURL } from '@/hooks/Common/users';
 
 const MyProfile = ({ user }: { user: User }) => {
-	const picture = user.picture || '/icon_cat.svg';
+	const picture = convertPictureURL(user.picture);
 
 	return (
 		<div className="mt-3">
@@ -17,13 +18,19 @@ const MyProfile = ({ user }: { user: User }) => {
 				}}
 			>
 				<div className="flex w-full align-center mb-4">
-					<div className="user-component__column">
+					<div className="relative w-16 h-16 mr-5">
 						<Image
-							width={70}
-							height={70}
+							fill={true}
 							alt={user.name}
 							src={picture}
-							className="rounded-3xl mr-5"
+							className="rounded-3xl"
+							style={{
+								position: 'absolute',
+								top: 0,
+								left: 0,
+								objectFit: 'cover',
+								margin: 'auto',
+							}}
 						/>
 					</div>
 
