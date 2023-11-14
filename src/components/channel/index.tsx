@@ -5,13 +5,12 @@ import ChannelCard from './ChannelCard';
 import { filterChannels } from '../../utils';
 import LoadingSkeleton, { skeletons } from './LoadingSkeleton';
 import ChannelSelector from './ChannelSelector';
+import { useRecoilValue } from 'recoil';
+import { channelState } from '../../recoil/channel.atom';
 
-interface Props {
-  title: string;
-}
-
-const ChannelList = ({ title }: Props) => {
+const ChannelList = () => {
   const { data: channels, isLoading, isFetching } = useChannels();
+  const channel = useRecoilValue(channelState);
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
 
   const handleCategoryChange = (category: string) => {
@@ -24,7 +23,7 @@ const ChannelList = ({ title }: Props) => {
     // 여기에서 상태값이 변경된 후 수행할 작업을 추가할 수 있습니다.
   }, [selectedCategory]);
 
-  const deferredTitle = useDeferredValue(title);
+  const deferredTitle = useDeferredValue(channel.title);
   const filteredChannels = channels
     ? filterChannels(deferredTitle, selectedCategory, channels)
     : [];

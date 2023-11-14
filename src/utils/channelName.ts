@@ -30,9 +30,20 @@ export const createChannelNameWithCategory = (
   return channelName.trim();
 };
 
-export const filterChannels = (title: string, channels: Channel[]) => {
-  if (title === '') return channels;
-  return channels.filter((channel) =>
-    channel.name.split('#')[0].includes(title),
-  );
+export const filterChannels = (
+  title: string,
+  selectedCategory: string,
+  channels: Channel[],
+) => {
+  if (title === '' && selectedCategory === '') return channels;
+
+  const filteredByTitle = channels.filter((channel) => {
+    console.log(title);
+    return channel.name.split('#')[0].includes(title);
+  });
+
+  return filteredByTitle.filter((channel) => {
+    const { category } = splitChannelName(channel.name);
+    return category === selectedCategory;
+  });
 };

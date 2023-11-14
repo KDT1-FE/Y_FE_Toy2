@@ -9,6 +9,6 @@ export const channelState = atom<ChannelState>({
   key: 'channelState',
   default: {
     title: '',
-    category: '기타',
+    category: '',
   },
 });

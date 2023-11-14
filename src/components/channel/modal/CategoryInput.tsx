@@ -7,7 +7,7 @@ const CategoryInput = () => {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'category',
-    defaultValue: '기타',
+    defaultValue: '',
   });
 
   const group = getRootProps();
@@ -15,11 +15,11 @@ const CategoryInput = () => {
   return (
     <Box overflow="auto">
       <HStack {...group}>
-        {options.map((value) => {
-          const radio = getRadioProps({ value });
+        {options.map((option) => {
+          const radio = getRadioProps({ value: option.value });
           return (
-            <CategoryRadio key={value} {...radio}>
-              {value}
+            <CategoryRadio key={option.name} {...radio}>
+              {option.name}
             </CategoryRadio>
           );
         })}

@@ -12,6 +12,7 @@ const ChannelRadio = (props: any) => {
       setCategoryChannel({ ...categoryChannel, category: e.target.value });
     },
   });
+
   const checkbox = getRadioProps();
 
   useEffect(() => {

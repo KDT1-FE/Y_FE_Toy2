@@ -3,11 +3,9 @@ import ChannelList from '../../components/channel';
 import CreateChannelModal from '../../components/channel/modal/CreateChannelModal';
 import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import ChannelSearchInput from '../../components/channel/ChannelSearchInput';
-import { useState } from 'react';
 
 const ChannelPage = () => {
   const location = useLocation();
-  const [title, setTitle] = useState('');
 
   const handleNavBarStyle = (path: string) => {
     return location.pathname === path ? '1' : '0.3';
@@ -32,9 +30,9 @@ const ChannelPage = () => {
       </Text>
       <Flex gap="2">
         <CreateChannelModal />
-        <ChannelSearchInput title={title} setTitle={setTitle} />
+        <ChannelSearchInput />
       </Flex>
-      <ChannelList title={title} />
+      <ChannelList />
     </Box>
   );
 };

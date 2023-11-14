@@ -9,7 +9,7 @@ const ChannelSelector = ({ onSelectCategory }: any) => {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'Category',
-    defaultValue: '전체',
+    defaultValue: '',
   });
 
   const group = getRootProps();
@@ -34,16 +34,16 @@ const ChannelSelector = ({ onSelectCategory }: any) => {
         >
           <ScrollContainer className="scroll-container">
             <HStack {...group} align="center" spacing={4} mb="1">
-              {options.map((value) => {
-                const radio = getRadioProps({ value });
+              {options.map((option) => {
+                const radio = getRadioProps({ value: option.value });
                 return (
                   <ChannelRadio
-                    key={value}
+                    key={option.name}
                     {...radio}
-                    customColor={CATEGORY_COLOR_SCHEMES[value]}
+                    customColor={CATEGORY_COLOR_SCHEMES[option.name]}
                     onSelectCategory={onSelectCategory}
                   >
-                    {value}
+                    {option.name}
                   </ChannelRadio>
                 );
               })}
