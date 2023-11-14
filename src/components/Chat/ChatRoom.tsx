@@ -4,36 +4,17 @@ import { useContext, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import { AuthContext } from "../../hooks/useAuth";
 import Loader from "../Loader/Loader";
+import { ChatI } from "../../pages/Chat";
 
-interface Chat {
-  id: string;
-  name: string;
-  users: User[]; // 속한 유저 id
-  isPrivate: boolean;
-  latestMessage: Message | null;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-
-interface Message {
-  id: string;
-  text: string;
-  userId: string;
-  createAt: Date;
-}
-
-function ChatRoom({ roomId }: { roomId: string }) {
+function ChatRoom({ roomId, setChatRoom }: ChartRoomProps) {
   const [text, setText] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { accessToken } = useContext(AuthContext);
-  const [socket, setSocket] = useState<Socket>({} as Socket);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const [joinUser, setJoinUser] = useState<JoinUser | null>(null);
+  const [leaveUser, setLeaveUser] = useState<LeaveUser | null>(null);
 
   const handleClick = async () => {
     try {
@@ -53,10 +34,9 @@ function ChatRoom({ roomId }: { roomId: string }) {
   };
 
   useEffect(() => {
-    if (accessToken && roomId) {
+    if (accessToken) {
       const fetchData = async () => {
         try {
-          setLoading(!loading);
           const newSocket = io(
             `https://fastcampus-chat.net/chat?chatId=${roomId}`,
             {
@@ -66,22 +46,32 @@ function ChatRoom({ roomId }: { roomId: string }) {
               }
             }
           );
+          setSocket(newSocket);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }
+  }, [accessToken, roomId]);
 
-          newSocket.on("message-to-client", (responseData) => {
+  useEffect(() => {
+    if (socket) {
+      const fetchData = async () => {
+        try {
+          socket.on("message-to-client", (responseData) => {
             setMessages((prevMessages) => [...prevMessages, responseData]);
           });
-
-          newSocket.emit("fetch-messages");
-          newSocket.on("messages-to-client", (responseData) => {
+          socket.on("messages-to-client", (responseData) => {
             setMessages(responseData.messages);
+            console.log(roomId);
           });
+          socket.emit("fetch-messages");
 
-          console.log("데이터 불러오기 성공 : ", messages);
-          setSocket(newSocket);
           return () => {
-            newSocket.off("message-to-client");
-            newSocket.off("messages-to-client");
-            newSocket.disconnect();
+            socket.off("message-to-client");
+            socket.off("messages-to-client");
+            socket.disconnect();
           };
         } catch (error) {
           console.error(error);
@@ -91,7 +81,54 @@ function ChatRoom({ roomId }: { roomId: string }) {
       };
       fetchData();
     }
-  }, [accessToken, roomId]);
+  }, [roomId]);
+
+  useEffect(() => {
+    if (joinUser && socket) {
+      socket.on("join", (responseData) => {
+        setJoinUser(responseData);
+        console.log("들어온 유저", responseData);
+      });
+    }
+  }, [joinUser]);
+
+  useEffect(() => {
+    if (leaveUser && socket) {
+      socket.on("leave", (responseData) => {
+        setLeaveUser(responseData);
+        console.log("나간 유저", responseData);
+      });
+    }
+  }, [leaveUser]);
+
+  const convertToKoreanTime = (utcDateString: Date) => {
+    const koreanDate = new Date(utcDateString);
+    const formattedDate = koreanDate.toLocaleString("ko-KR", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZone: "Asia/Seoul"
+    });
+    return formattedDate;
+  };
+
+  const groupMessagesByDate = (messages: Message[]) => {
+    const groupedMessages: Record<string, Message[]> = {};
+
+    messages.forEach((message) => {
+      const messageDate = new Date(message.createdAt).toLocaleDateString(
+        "ko-KR"
+      );
+      if (!groupedMessages[messageDate]) {
+        groupedMessages[messageDate] = [];
+      }
+      groupedMessages[messageDate].push(message);
+    });
+
+    return groupedMessages;
+  };
+
+  const groupedMessages = groupMessagesByDate(messages);
 
   return (
     <ChatRoomWrap>
@@ -112,37 +149,42 @@ function ChatRoom({ roomId }: { roomId: string }) {
           <p className="util-input">
             <input type="text" />
           </p>
-          <ModalHamburger />
+          <ModalHamburger roomId={roomId} setChatRoom={setChatRoom} />
         </div>
       </div>
       <div className="chatroom__body">
         <div className="scroll-inner">
-          <div className="alert">2023년 11월 8일</div>
-          {/* Map through messages and render each message */}
-          {messages
-            ? messages.map((message) => (
-                <div key={message.id} className="message message__left">
-                  {/* Display the message content here */}
+          {Object.keys(groupedMessages).map((date) => (
+            <div key={date}>
+              <div className="date">
+                <h3>{date}</h3>
+              </div>
+              {groupedMessages[date].map((message) => (
+                <div
+                  key={message.id}
+                  className={`message ${
+                    message.userId === sessionStorage.getItem("userId")
+                      ? "message__right"
+                      : "message__left"
+                  }`}
+                >
                   <div className="content">
                     <div className="inner">
-                      <span className="name">{message.userId}</span>
+                      <span className="name">
+                        {message.userId === sessionStorage.getItem("userId")
+                          ? ""
+                          : message.userId}
+                      </span>
                       <span className="bubble">{message.text}</span>
                     </div>
-                    <div className="date">오전 10:30</div>
+                    <div className="date">
+                      {convertToKoreanTime(message.createdAt)}
+                    </div>
                   </div>
                 </div>
-              ))
-            : ""}
-          <div className="message message__right">
-            <div className="content">
-              <div className="inner">
-                <span className="bubble">
-                  안녕하세요 내용 더 추가 안녕하세요? 어디까지? 여기까지
-                </span>
-              </div>
-              <div className="date">오전 10:30</div>
+              ))}
             </div>
-          </div>
+          ))}
           <div className="alert">테일러스위프트 님이 퇴장했습니다</div>
         </div>
       </div>
@@ -161,6 +203,43 @@ function ChatRoom({ roomId }: { roomId: string }) {
 }
 
 export default ChatRoom;
+
+interface ChartRoomProps {
+  roomId: string;
+  setChatRoom: React.Dispatch<React.SetStateAction<ChatI[]>>;
+}
+
+interface Chat {
+  id: string;
+  name: string;
+  users: User[]; // 속한 유저 id
+  isPrivate: boolean;
+  latestMessage: Message | null;
+  updatedAt: Date;
+}
+
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createdAt: Date;
+}
+
+interface JoinUser {
+  users: string[];
+  joiners: string[];
+}
+
+interface LeaveUser {
+  users: string[];
+  leaver: string;
+}
 
 const ChatRoomWrap = styled.div`
   flex: 1 0 70%;
@@ -239,6 +318,17 @@ const ChatRoomWrap = styled.div`
       font-size: 0.9rem;
       overflow-y: scroll;
       height: 400px;
+      .date {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px 0;
+        h3 {
+          padding: 15px;
+          border-radius: 10px;
+          background-color: #eeeeee;
+        }
+      }
       .message {
         display: flex;
         gap: 10px;
@@ -301,6 +391,9 @@ const ChatRoomWrap = styled.div`
             flex-direction: row-reverse;
             .bubble {
               border-radius: 20px 0 20px 20px;
+            }
+            .name {
+              margin-left: auto;
             }
           }
           .date {

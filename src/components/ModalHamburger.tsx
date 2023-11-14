@@ -1,12 +1,41 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import "../style/Modal.css";
+import useApi from "../hooks/useApi";
+import { ChatI } from "../pages/Chat";
+import { getTime } from "../utils/getTime";
 
-const ModalExample = () => {
+const ModalExample = ({ roomId, setChatRoom }: ModalHamburgerProps) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { patchData, getData } = useApi();
 
   const openModal = () => {
     setModalIsOpen((prev) => !prev);
+  };
+
+  const leaveChatRoom = async (roomId: string) => {
+    try {
+      const requestBody = {
+        chatId: roomId
+      };
+
+      const res = await patchData(
+        `https://fastcampus-chat.net/chat/leave`,
+        requestBody
+      );
+
+      res;
+
+      const data = await getData("https://fastcampus-chat.net/chat");
+      const chatData = data.chats;
+
+      const myRoom = getTime(chatData);
+
+      setChatRoom(myRoom);
+      console.log("success");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -34,7 +63,7 @@ const ModalExample = () => {
       {modalIsOpen && (
         <ButtonWrap>
           <button>대화상대 초대하기</button>
-          <button>채팅방 나가기</button>
+          <button onClick={() => leaveChatRoom(roomId)}>채팅방 나가기</button>
         </ButtonWrap>
       )}
     </ModalWrap>
@@ -42,6 +71,11 @@ const ModalExample = () => {
 };
 
 export default ModalExample;
+
+interface ModalHamburgerProps {
+  roomId: string;
+  setChatRoom: React.Dispatch<React.SetStateAction<ChatI[]>>;
+}
 
 const ModalWrap = styled.div`
   position: relative;

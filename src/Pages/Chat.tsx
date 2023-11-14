@@ -72,6 +72,7 @@ function Chat() {
 
   const handleClick = (roomId: string) => {
     setRoomId(roomId);
+    console.log("클릭된 방 아이디", roomId);
   };
 
   return (
@@ -99,7 +100,7 @@ function Chat() {
             <ModalPlus />
           </CatePlus>
         </ChatCategory>
-        <ChatRoom roomId={roomId} />
+        <ChatRoom roomId={roomId} setChatRoom={setChatRoom} />
       </ChatWrapper>
     </>
   );
