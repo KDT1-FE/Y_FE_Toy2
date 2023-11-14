@@ -5,10 +5,18 @@ export interface ChannelState {
   category: string;
 }
 
-export const channelState = atom<ChannelState>({
-  key: 'channelState',
+export const modalChannelState = atom<ChannelState>({
+  key: 'modalChannelState',
   default: {
     title: '',
-    category: '기타',
+    category: '',
+  },
+});
+
+export const categoryChannelState = atom<ChannelState>({
+  key: 'categoryChannelState',
+  default: {
+    title: '',
+    category: '',
   },
 });
