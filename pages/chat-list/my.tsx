@@ -36,7 +36,6 @@ export default function MyChatList() {
                   pathname: `/chat/${chat.id}`,
                   query: { name: chat.name },
                 }}
-                as={`/chat/${chat.id}`}
                 className={styles.container}
               >
                 <Image
@@ -73,7 +72,6 @@ export default function MyChatList() {
                   pathname: `/chat/${chat.id}`,
                   query: { name: chat.name },
                 }}
-                as={`/chat/${chat.id}`}
                 className={styles.container}
               >
                 <Image
