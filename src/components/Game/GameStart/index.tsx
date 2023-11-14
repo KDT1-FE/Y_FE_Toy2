@@ -74,9 +74,6 @@ const GameStart: React.FC<GameStartProps> = ({
       selectedCategory.keyword[getRandNum(selectedCategory.keyword.length)];
     const ranLiar = users[getRandNum(users.length)];
 
-    setCategory(selectedCategory);
-    setKeyword(ranKeyword);
-
     // 유저 순서 랜덤으로 섞기
     const shuffledUsers: string[] = users
       .map(
@@ -87,6 +84,16 @@ const GameStart: React.FC<GameStartProps> = ({
       )
       .sort((a: UserWithSort, b: UserWithSort): number => a.sort - b.sort)
       .map(({ value }: UserWithSort): string => value);
+
+    socket.emit("message-to-client", {
+      category: selectedCategory.category,
+      keyword: ranKeyword,
+      liar: ranLiar,
+      shuffledUsers,
+    });
+
+    setCategory(selectedCategory);
+    setKeyword(ranKeyword);
 
     window.localStorage.setItem("shuffledUsers", JSON.stringify(shuffledUsers));
     window.localStorage.setItem("category", selectedCategory.category);

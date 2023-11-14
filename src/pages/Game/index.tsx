@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 import GameChat from "../../components/Game/GameChat";
 import useFireFetch from "../../hooks/useFireFetch";
 import GameStart from "../../components/Game/GameStart";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
+// import { useRecoilValue } from "recoil";
+// import { userState } from "../../recoil/atoms/userState";
+import connect from "../../socket/socket";
 
 interface ProfileCardProps {
   userId: string;
@@ -26,6 +29,8 @@ interface Categories {
 [];
 
 const Game = () => {
+  // const user = useRecoilValue(userState);
+
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);
   const gameId = searchParams.get("gameId");
@@ -38,14 +43,15 @@ const Game = () => {
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
 
-  const token = JSON.parse(localStorage.getItem("token") as string);
+  // const token = JSON.parse(localStorage.getItem("token") as string);
 
-  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
-    extraHeaders: {
-      Authorization: `Bearer ${token.accessToken}`,
-      serverId: import.meta.env.VITE_APP_SERVER_ID,
-    },
-  });
+  const socket = connect(gameId as string);
+  // const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
+  //   extraHeaders: {
+  //     Authorization: `Bearer ${token.accessToken}`,
+  //     serverId: import.meta.env.VITE_APP_SERVER_ID,
+  //   },
+  // });
 
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
@@ -55,6 +61,18 @@ const Game = () => {
       setUsers([]);
     }
   }, [gameData.data]);
+
+  useEffect(() => {
+    // 메시지 수신 리스너 설정
+    socket.on("message", (message) => {
+      console.log("Received message:", message);
+    });
+
+    // 컴포넌트 언마운트 시 연결 해제
+    return () => {
+      socket.disconnect();
+    };
+  }, [gameId]);
 
   useEffect(() => {
     if (status === "게임중") {
