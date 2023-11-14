@@ -8,10 +8,21 @@ const RatingWrapper = styled.div`
   flex: 1;
   display: flex;
   min-width: 300px;
-  height: 100%;
+  height: calc(100vh - 80px);
   flex-direction: column;
   align-items: center;
-  padding: 1.6rem 0;
+  padding: 2.5rem 0;
+  box-sizing: border-box;
+`;
+const Ratings = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export type PeoplesType = {
@@ -34,13 +45,14 @@ export default function Rating({
 }: PropsType) {
   const [finish, setFinish] = useState(0);
   useEffect(() => {
-    getRate(setPeoples, '백상원', setRate);
+    getRate(setPeoples, 'yamyamssi', setRate);
     setFinish(1);
+    console.log(rate);
   }, []);
   useEffect(() => {
     if (rate !== 0) {
-      updateData('qorrla5433', { correct: rate });
-      getRate(setPeoples, '백상원', setRate);
+      updateData('rnffjt', { correct: rate });
+      getRate(setPeoples, 'yamyamssi', setRate);
     }
   }, [rate]);
 
@@ -49,19 +61,20 @@ export default function Rating({
       <Typography
         variant="h1"
         sx={{
-          fontSize: '2rem',
+          fontSize: '2.5rem',
           color: '#457b9d',
           mt: 2,
           mb: 4,
           fontFamily: 'Bungee',
+          margin: 0,
+          padding: '0 0 2.5rem 0',
         }}
       >
         Rating!
       </Typography>
-      {{ finish } ? (
-        sorting(peoples)
-          .slice(0, 10)
-          .map((el, i) => (
+      <Ratings>
+        {{ finish } ? (
+          sorting(peoples).map((el, i) => (
             <Typography
               variant="h1"
               sx={{
@@ -75,9 +88,10 @@ export default function Rating({
               {i + 1}. {el.name}
             </Typography>
           ))
-      ) : (
-        <div>X</div>
-      )}
+        ) : (
+          <div>X</div>
+        )}
+      </Ratings>
     </RatingWrapper>
   );
 }

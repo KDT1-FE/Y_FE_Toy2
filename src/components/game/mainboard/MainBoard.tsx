@@ -1,38 +1,75 @@
 import React, { Dispatch, useState } from 'react';
-import { Visibility } from '@mui/icons-material';
+import { Timer, Visibility } from '@mui/icons-material';
 import { WordsType } from './InputWord';
-import { Answers, BoardFrame, MainWrapper, NoticeBox } from './boardStyle';
+import {
+  Answers,
+  BoardFrame,
+  CountDown,
+  MainWrapper,
+  MyRate,
+  MyRateBox,
+  NoticeBox,
+  RateBox,
+  TimerBox,
+} from './boardStyle';
 import Notice from './Notice';
 import SearchBar from './SearchBar';
+import StartBtn from './timer/StartBtn';
 
-export default function MainBoard({ words, setWords }: WordsType) {
+type Props = WordsType & {
+  rate: number;
+  currentRate: number;
+};
+
+export default function MainBoard({
+  words,
+  start,
+  setStart,
+  rate,
+  currentRate,
+}: Props) {
   const [onAnswers, setOnAnswers] = useState(false);
+  const [time, setTime] = useState(3);
   return (
     <MainWrapper>
       <NoticeBox>
         <Notice />
-        {onAnswers ? (
-          <SearchBar setOnAnswers={setOnAnswers} words={words} />
+        {start ? (
+          // <SearchBar setOnAnswers={setOnAnswers} words={words} />
+          <TimerBox>
+            <CountDown>{time}</CountDown>
+          </TimerBox>
         ) : (
-          <Visibility
-            sx={{
-              fontSize: '50px',
-              cursor: 'pointer',
-              '&:hover': { scale: '1.03' },
-            }}
-            onClick={() => {
-              setOnAnswers(!onAnswers);
-            }}
-          />
+          // <Visibility
+          //   sx={{
+          //     fontSize: '50px',
+          //     cursor: 'pointer',
+          //     '&:hover': { scale: '1.03' },
+          //   }}
+          //   onClick={() => {
+          //     setOnAnswers(!onAnswers);
+          //   }}
+          // />
+          <Timer sx={{ fontSize: '50px' }} />
         )}
       </NoticeBox>
       <BoardFrame>
-        {words.length !== 0 ? (
+        {start ? (
           <Answers>{words[words.length - 1]}</Answers>
         ) : (
-          <Answers>첫 단어를 입력해주세요!</Answers>
+          <StartBtn setStart={setStart} />
         )}
       </BoardFrame>
+      <RateBox>
+        <MyRateBox>
+          <MyRate>Score</MyRate>
+          <MyRate>{currentRate}</MyRate>
+        </MyRateBox>
+        <MyRateBox>
+          <MyRate>High Score</MyRate>
+          <MyRate>{rate}</MyRate>
+        </MyRateBox>
+      </RateBox>
     </MainWrapper>
   );
 }

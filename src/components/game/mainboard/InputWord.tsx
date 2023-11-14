@@ -1,15 +1,20 @@
 import React, { Dispatch, useState } from 'react';
 import styled from 'styled-components';
 import { Send } from '@mui/icons-material';
+import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 import search from './searchWord';
 import { PeoplesType, RateType } from '../rating/Rating';
+import { userState } from '../../../atoms';
 
 export type WordsType = {
   words: string[];
   setWords: Dispatch<React.SetStateAction<string[]>>;
+  start: boolean;
+  setStart: Dispatch<React.SetStateAction<boolean>>;
 };
 
-type Props = WordsType & PeoplesType & RateType;
+type Props = WordsType & RateType;
 
 const InputBox = styled.form`
   width: 100%;
@@ -54,10 +59,10 @@ const GameInput = styled.input`
 export default function InputWord({
   words,
   setWords,
-  peoples,
-  setPeoples,
   rate,
   setRate,
+  start,
+  setStart,
 }: Props) {
   const [existWord, setExistWord] = useState<string[]>();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

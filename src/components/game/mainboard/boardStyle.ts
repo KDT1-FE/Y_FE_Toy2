@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 export const MainWrapper = styled.div`
   position: relative;
@@ -40,4 +40,32 @@ export const BoardFrame = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
+
+export const TimerBox = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 80px;
+  background-color: #e63946;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const CountDown = styled.span`
+  font-size: 30px;
+  color: #fefefe;
+`;
+
+export const RateBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const MyRateBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+export const MyRate = styled.span`
+  font-size: 25px;
 `;

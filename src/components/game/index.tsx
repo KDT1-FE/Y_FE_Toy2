@@ -24,6 +24,8 @@ export default function Game() {
     [],
   );
   const [rate, setRate] = useState<number>(0);
+  const [start, setStart] = useState<boolean>(false);
+  const [currentRate, setCurrentRate] = useState<number>(0);
 
   return (
     <Container>
@@ -34,15 +36,22 @@ export default function Game() {
           rate={rate}
           setRate={setRate}
         />
-        <MainBoard setWords={setWords} words={words} />
+        <MainBoard
+          setWords={setWords}
+          words={words}
+          start={start}
+          setStart={setStart}
+          rate={rate}
+          currentRate={currentRate}
+        />
       </ScreenWrapper>
       <InputWord
         words={words}
         setWords={setWords}
-        peoples={peoples}
-        setPeoples={setPeoples}
-        rate={rate}
-        setRate={setRate}
+        rate={currentRate}
+        setRate={setCurrentRate}
+        start={start}
+        setStart={setStart}
       />
     </Container>
   );
