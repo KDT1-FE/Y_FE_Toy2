@@ -96,6 +96,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
 
       return () => {
         setNewChat([]);
+        setUsersInGameRoom([]);
         newSocket.disconnect();
       };
     } catch (error) {
