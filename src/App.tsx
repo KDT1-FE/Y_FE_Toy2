@@ -8,6 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route element={<Layout />}>
+          <Route path="/" element={<ChannelPage />} />
           <Route path="/chats" element={<Chats />} />
         </Route>
         <Route path="/join" element={<Join />} />

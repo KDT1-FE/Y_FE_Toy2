@@ -1,8 +1,16 @@
-export const checkChannelName = (name: string) => {
-  const [title] = name.split('#');
+import { Channel } from '../@types/channel';
 
-  if (title.length === 0) return false;
-  return true;
+export const checkChannelName = (name: string) => {
+  if (name.length === 0) {
+    return { isValid: false, errorMessage: '채널명을 입력하세요.' };
+  } else if (name.includes('#')) {
+    return {
+      isValid: false,
+      errorMessage: '채널명에 #을 포함할 수 없습니다.',
+    };
+  }
+
+  return { isValid: true, errorMessage: '' };
 };
 
 export const splitChannelName = (name: string) => {
@@ -20,4 +28,11 @@ export const createChannelNameWithCategory = (
 ) => {
   const channelName = `${name}#${category}`;
   return channelName.trim();
+};
+
+export const filterChannels = (title: string, channels: Channel[]) => {
+  if (title === '') return channels;
+  return channels.filter((channel) =>
+    channel.name.split('#')[0].includes(title),
+  );
 };

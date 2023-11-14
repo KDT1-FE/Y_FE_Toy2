@@ -3,6 +3,7 @@ import Chat from '.';
 import useChatList from '../../hooks/useChatList';
 import ChatListSkeleton from './ChatListSkeleton';
 import useScroll from '../../hooks/useScroll';
+import { alertChatState } from '../../constants/chats';
 
 const ChatList = () => {
   const { chats, isLoading } = useChatList();
@@ -47,9 +48,7 @@ const ChatList = () => {
           />
         );
       })}
-      {!isLoading && chats.length === 0 && (
-        <div>아직 채팅방에 대화가 없습니다!</div>
-      )}
+      {!isLoading && chats.length === 0 && <div>{alertChatState}</div>}
     </Box>
   );
 };

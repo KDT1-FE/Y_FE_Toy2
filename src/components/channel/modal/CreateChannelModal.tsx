@@ -17,36 +17,47 @@ import CategoryInput from './CategoryInput';
 import { ChangeEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { channelState } from '../../../recoil/channel.atom';
-import { createChannel } from '../../../api/channel';
-import { createChannelNameWithCategory } from '../../../utils';
+import {
+  checkChannelName,
+  createChannelNameWithCategory,
+} from '../../../utils';
 import ChannelModalUserList from './ChannelModalUserList';
+import { useCreateChannel } from '../../../hooks/useChannels';
 
 const CreateChannelModal = () => {
+  const mutation = useCreateChannel();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [channel, setChannel] = useRecoilState(channelState);
   const [users, setUsers] = useState<string[]>([]);
   const [isPrivate, setPrivate] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChannelName = (e: ChangeEvent<HTMLInputElement>) => {
     setChannel({ ...channel, title: e.target.value });
+    setErrorMessage(checkChannelName(e.target.value).errorMessage);
   };
 
-  const handleCreateChannel = () => {
+  const handleCreateChannel = async () => {
+    const isValidTitle = checkChannelName(channel.title);
+    if (!isValidTitle.isValid) {
+      alert(isValidTitle.errorMessage);
+      return;
+    }
+
     const channelData = {
       name: createChannelNameWithCategory(channel.title, channel.category),
       users,
       isPrivate,
     };
-    console.log(channelData);
 
-    createChannel(channelData);
+    mutation.mutate(channelData);
     onClose();
-    setChannel({ title: '', category: '' });
+    setChannel({ title: '', category: '기타' });
   };
 
   return (
     <>
-      <Button colorScheme="blue" onClick={onOpen}>
+      <Button colorScheme="blue" onClick={onOpen} mb="2">
         새로운 채팅
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -71,6 +82,9 @@ const CreateChannelModal = () => {
               onChange={handleChannelName}
               mb="2"
             />
+            <Text fontSize="sm" color="red.500" mb="2">
+              {errorMessage}
+            </Text>
             <CategoryInput />
             <ChannelModalUserList setUsers={setUsers} />
           </ModalBody>

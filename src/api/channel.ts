@@ -1,5 +1,9 @@
-import { ResponseValue, Channel } from '../@types/channel';
-import { checkChannelName } from '../utils';
+import {
+  ResponseValue,
+  InviteRequestBody,
+  InviteResponseValue,
+  ExitResponseValue,
+} from '../@types/channel';
 import instance from './axios';
 
 export interface CreateChannelBody {
@@ -10,17 +14,11 @@ export interface CreateChannelBody {
 
 export const getChannels = async () => {
   const response = await instance.get<ResponseValue>('/chat/all');
-
   return response.data.chats;
 };
 
 export const createChannel = async (data: CreateChannelBody) => {
   try {
-    console.log(data.name);
-
-    const isValidChannelName = checkChannelName(data.name);
-    if (!isValidChannelName) return alert('채널 이름이 유효하지 않습니다.');
-
     const response = await instance.post('/chat', {
       name: data.name,
       users: data.users,
@@ -33,8 +31,22 @@ export const createChannel = async (data: CreateChannelBody) => {
 };
 
 export const getMyChannels = async () => {
-  const response = await instance.get<{ chats: Channel[] }>('/chat');
-  const chatsData = await response.data.chats;
+  const response = await instance.get<ResponseValue>('/chat');
+  return response.data.chats;
+};
 
-  return chatsData;
+export const inviteChannel = async (inviteData: InviteRequestBody) => {
+  const response = await instance.patch<InviteResponseValue>(
+    '/chat/invite',
+    inviteData,
+  );
+  return response.data;
+};
+
+export const exitChannel = async (chatId: string) => {
+  const response = await instance.patch<ExitResponseValue>(
+    '/chat/leave',
+    chatId,
+  );
+  return response.data;
 };

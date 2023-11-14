@@ -5,29 +5,27 @@ import ChannelMemberSideBar from '../../components/channelMemberSideBar';
 
 const Chats = () => {
   return (
-    <Box flex="1">
-      <Flex>
-        <Box flex="3" h="100vh">
-          <Flex
-            alignItems="center"
-            borderBottom="1px solid #E2E8F0"
-            w="full"
-            h="44px"
-          >
-            <Text fontSize="1rem" fontWeight={600}>
-              3번 채팅방
-            </Text>
-          </Flex>
-          <Box>
-            <ChatList />
-            <ChatInput />
-          </Box>
+    <Flex>
+      <Box flex="3" h="100vh">
+        <Flex
+          alignItems="center"
+          borderBottom="1px solid #E2E8F0"
+          w="full"
+          h="44px"
+        >
+          <Text fontSize="1rem" fontWeight={600}>
+            3번 채팅방
+          </Text>
+        </Flex>
+        <Box>
+          <ChatList />
+          <ChatInput />
         </Box>
-        <Box flex="1" h="100vh">
-          <ChannelMemberSideBar />
-        </Box>
-      </Flex>
-    </Box>
+      </Box>
+      <Box flex="1" h="100vh">
+        <ChannelMemberSideBar />
+      </Box>
+    </Flex>
   );
 };
 

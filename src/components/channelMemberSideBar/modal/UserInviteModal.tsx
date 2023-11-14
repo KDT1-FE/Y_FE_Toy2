@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -12,12 +12,32 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import UserInviteList from './UserInviteList';
+import { inviteChannel } from '../../../api/channel';
+import ChannelModalUserList from '../../channel/modal/ChannelModalUserList';
+import { User } from '../../../@types/user';
 
-const UserInviteModal = () => {
+interface Props {
+  setUserList: React.Dispatch<React.SetStateAction<User[]>>;
+  chatId: string;
+}
+
+const UserInviteModal = ({ setUserList, chatId }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [users, setUsers] = useState<string[]>([]);
+  const btnRef = useRef(null);
 
-  const btnRef = React.useRef(null);
+  const handleInviteUsers = async () => {
+    if (users) {
+      console.log('users', users);
+      const inviteData = { chatId, users };
+      const newChannelData = await inviteChannel(inviteData);
+      const newUserList = newChannelData.users;
+      await setUserList(newUserList);
+      await console.log('inviteData', inviteData);
+      onClose();
+    }
+  };
+
   return (
     <>
       <AddIcon boxSize="25px" color="#191919" ref={btnRef} onClick={onOpen} />
@@ -38,8 +58,7 @@ const UserInviteModal = () => {
             <ModalCloseButton />
 
             <ModalBody>
-              {/* map으로 뿌리는거 구현 */}
-              <UserInviteList />
+              <ChannelModalUserList setUsers={setUsers} />
             </ModalBody>
 
             <ModalFooter justifyContent="center">
@@ -52,7 +71,7 @@ const UserInviteModal = () => {
               >
                 취소
               </Button>
-              <Button size="lg" colorScheme="blue" onClick={onClose}>
+              <Button size="lg" colorScheme="blue" onClick={handleInviteUsers}>
                 초대
               </Button>
             </ModalFooter>
