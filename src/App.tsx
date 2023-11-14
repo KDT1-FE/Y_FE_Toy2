@@ -2,12 +2,12 @@ import React from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/common/Layout';
-import Game from './components/game';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import AuthLayout from './components/common/AuthLayout';
 import Home from './pages/home';
 import Openchat from './pages/Openchat';
+import Game from './pages/Game';
 
 function App() {
   return (

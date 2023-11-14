@@ -10,7 +10,7 @@ import {
   StartType,
   TimeType,
   WordsType,
-} from '../gameType';
+} from '../../../types/gameType';
 import timeLimit from './timer/timeLimit';
 import { userState } from '../../../atoms';
 import { getRate, updateData, updateRate } from '../../../utils/utils';
@@ -111,7 +111,6 @@ export default function InputWord({
     const inputElement = (e.target as HTMLFormElement).querySelector('input');
     const inputValue = inputElement?.value;
     const existCheck = words?.find((e) => e === inputValue);
-
     if (inputValue) {
       if (words.length === 0) {
         setWords([...words, inputValue]);

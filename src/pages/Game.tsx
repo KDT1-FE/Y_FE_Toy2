@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import Rating from './rating/Rating';
-import MainBoard from './mainboard/MainBoard';
-import InputWord from './mainboard/InputWord';
-import { userState } from '../../atoms';
-import { getRate } from '../../utils/utils';
+import Rating from '../components/game/rating/Rating';
+import MainBoard from '../components/game/mainboard/MainBoard';
+import InputWord from '../components/game/mainboard/InputWord';
+import { userState } from '../atoms';
+import { getRate } from '../utils/utils';
 
 const ScreenWrapper = styled.div`
   display: flex;
@@ -46,12 +46,13 @@ export default function Game() {
       <ScreenWrapper>
         <Rating peoples={peoples} />
         <MainBoard
-          setWords={setWords}
           words={words}
+          setWords={setWords}
           start={start}
           setStart={setStart}
           rate={rate}
           currentRate={currentRate}
+          setCurrentRate={setCurrentRate}
           time={time}
           setTime={setTime}
         />
