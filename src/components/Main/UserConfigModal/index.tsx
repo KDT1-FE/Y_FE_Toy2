@@ -1,30 +1,28 @@
-import React, { useCallback, useRef, useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
 import {
-  Input,
-  Button,
   Alert,
   AlertIcon,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
-  ModalBody,
+  Box,
+  Button,
   FormControl,
   FormErrorMessage,
-  Box,
   Image,
-  Text,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
   Spinner,
+  Text,
 } from "@chakra-ui/react";
-import { useRecoilValue } from "recoil";
-import { authState } from "../../../recoil/atoms/authState";
 import axios from "axios";
-import styled from "styled-components";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { FaImage } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
+import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch";
-
-const MAX_IMAGE_SIZE = 1024 * 1024; // 1MB
+import { authState } from "../../../recoil/atoms/authState";
 
 interface FormData {
   id: string;
@@ -32,6 +30,7 @@ interface FormData {
   picture?: string;
 }
 
+const MAX_IMAGE_SIZE = 1024 * 1024; // 1MB
 const DragDropBox = styled(Box)`
   border: 3px dashed #dbdbdb;
   position: relative;

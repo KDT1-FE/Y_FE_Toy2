@@ -63,7 +63,7 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
   } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const MAX_IMAGE_SIZE = 1024 * 1024; // 1MB
   // ID 중복 검사
   const checkIdDuplication = async (id: string): Promise<boolean> => {
     try {
@@ -81,6 +81,11 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
+      if (file.size > MAX_IMAGE_SIZE) {
+        // 파일 크기 초과 에러 처리
+        alert("이미지는 1MB 이하이어야 합니다.");
+        return;
+      }
       setSelectedFile(file);
     }
   };
