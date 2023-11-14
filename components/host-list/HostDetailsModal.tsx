@@ -5,6 +5,8 @@ import Button from '@/components/host-list/Button';
 import Modal from '@/components/common/Modal';
 import useOnClickOutside from '@/hooks/useOnClickOustside';
 import { Host } from '@/pages/host-list/hostList.types';
+import chatListAPI from '@/apis/chatListAPI';
+import { useRouter } from 'next/router';
 import styles from './HostDetailsModal.module.scss';
 
 interface HostDetailsModalProps {
@@ -22,6 +24,19 @@ export default function HostDetailsModal({
   useOnClickOutside(ref, () => {
     onClose();
   });
+
+  const router = useRouter();
+  const createHostChat = () => {
+    chatListAPI
+      .createChat({
+        name: `${hostDetails.name}`,
+        users: [hostDetails.id],
+        isPrivate: true,
+      })
+      .then(res => {
+        router.push(`/chat/${res.data.id}`);
+      });
+  };
   return (
     <>
       <div className={styles.dim} />
@@ -39,7 +54,11 @@ export default function HostDetailsModal({
           />
           <p className={styles['flex-row']}>
             <h4 className={styles.title}>{hostDetails.name}</h4>
-            <Button className="fill-btn" text="문의하기" />
+            <Button
+              className="fill-btn"
+              text="문의하기"
+              onClick={createHostChat}
+            />
           </p>
           <p className={styles.text}>
             <b>주소 :</b> {hostDetails.location} {hostDetails.address}
