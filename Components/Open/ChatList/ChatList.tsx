@@ -129,7 +129,13 @@ const ChatList = ({ myChatList, accessToken }: ChatListProps) => {
 	return (
 		<>
 			{idAddedfilteredChatList && (
-				<DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={onDragStart}>
+				<DragDropContext
+					onDragEnd={onDragEnd}
+					onBeforeDragStart={onDragStart}
+					// autoScrollerOptions={{
+					// 	disabled: openDeleteColumn,
+					// }}
+				>
 					<ChatDroppableList chatListColumnTasks={chatListColumnTasks} />
 					<ChatDroppableDelete openDeleteColumn={openDeleteColumn} />
 				</DragDropContext>

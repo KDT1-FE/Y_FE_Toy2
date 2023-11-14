@@ -34,7 +34,7 @@ const OpenChatDivider = ({ myChatList }: ChatListProps) => {
 	const { PublicChat } = filterChat(chatList.chats);
 	return (
 		<>
-			<Tabs value="open">
+			<Tabs value="open" className="bg-blue-gray-400 overflow-y-scroll">
 				<TabsHeader>
 					{data.map((item) => (
 						<Tab key={item.value} value={item.value}>
