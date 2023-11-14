@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CONTENT_TYPE, SERVER_ID, SERVER_URL } from '../constant';
 import { JoinData } from '../interfaces/interface';
-import { getCookie, setCookises } from '../util/util';
+import { getCookie, setAccessToken } from '../util/util';
 
 const client = axios.create({
   baseURL: SERVER_URL,
@@ -24,7 +24,7 @@ client.interceptors.request.use(
   },
 );
 
-axios.interceptors.response.use(
+client.interceptors.response.use(
   (response) => response,
   async (error) => {
     // 401 에러를 체크하여 토큰 재발급 시도
@@ -33,19 +33,15 @@ axios.interceptors.response.use(
       if (refreshToken) {
         try {
           const res = await postRefresh(refreshToken);
-          setCookises(res.data.accessToken);
+          setAccessToken(res.data.accessToken);
           return axios(error.config); // 원래 요청을 재시도
         } catch (refreshError) {
-          // 토큰 재발급 실패에 대한 새로운 에러 메시지
           console.error('토큰 재발급 시도 실패: ', refreshError);
-          // 추가적인 에러 핸들링 로직
         }
       } else {
-        // 리프레시 토큰이 없을 경우의 에러 메시지
-        console.error('리프레시 토큰이 없어 토큰 재발급이 불가능합니다.');
+        alert('리프레시 토큰이 없어 토큰 재발급이 불가능합니다.');
       }
     } else {
-      // 다른 종류의 에러에 대한 메시지
       console.error('API 요청 실패: ', error);
     }
     return Promise.reject(error);
