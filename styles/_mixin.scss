@@ -10,11 +10,12 @@
   clip-path: polygon(0 0, 0 0, 0 0);
 }
 
-@mixin container {
-  max-width: 76.8rem;
+@mixin container() {
+  max-width: $max-width;
   width: 100%;
   margin: 0 auto;
   font-size: $font-size-base;
+  box-sizing: border-box;
 }
 
 @mixin flex-center-row() {
@@ -47,3 +48,41 @@
   border: none;
   background: transparent;
 }
+
+@mixin fill-btn() {
+  border-radius: 5px;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  color: #fff;
+  background: $light-pink;
+  border: none;
+  transition: color 0.3s;
+  margin: 1rem 0 0;
+  &:hover {
+    background: $brand-pink;
+  }
+}
+@mixin line-btn() {
+  color: $light-pink;
+  background: transparent;
+  border: 1px solid $light-pink;
+  transition: color 0.3s;
+  border-radius: 5px;
+  padding: 1rem 2rem;
+  margin: 1rem 0 0;
+  cursor: pointer;
+  &:hover {
+    color: #fff;
+    background: $brand-pink;
+  }
+}
+
+@mixin dim() {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba($color: $black, $alpha: 0.7);
+}
+

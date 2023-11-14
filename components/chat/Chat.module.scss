@@ -123,7 +123,7 @@
   font-size: $font-size-base;
 
   @media (min-width: 800px) {
-    width: 60%;
+    width: 70rem;
     font-size: $font-size-lg;
   }
 
@@ -213,9 +213,8 @@
       margin-bottom: 0.4rem;
     }
 
-    .content {
-      max-width: 50%; /* 채팅 메시지 최대 너비 설정 */
-
+    .content { /* 채팅 메시지 최대 너비 설정 */
+      max-width: 580px;
       background-color: #ff347879;
 
       padding: 1rem;
