@@ -3,12 +3,11 @@
 import { useState, useEffect } from 'react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { accessTokenState, allRoomState, usersInRoom } from '../../states/atom';
+import { allRoomState, usersInRoom } from '../../states/atom';
 
 import {
   getAllGameRooms,
   // getOnlyGameRoom,
-  leaveGameRoom,
   participateGameRoom,
 } from '../../api';
 import { useNavigate } from 'react-router-dom';
@@ -29,10 +28,7 @@ import {
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
-import {
-  disconnectChattingSocket,
-  disconnectLoginSocket,
-} from '../../api/socket';
+import { getAllMyChat } from '../../api';
 import { useSetRecoilState } from 'recoil';
 import { roomIdState } from '../../states/atom';
 
@@ -52,6 +48,8 @@ const CheckGameRoom = () => {
   // Pagination 관련 상태와 핸들러 추가
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItemsCount, setTotalItemsCount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorType, setErrorType] = useState('');
   const itemsPerPage = 10; // 한 페이지당 표시할 아이템 수
 
   const handlePageChange = (page: any) => {
@@ -61,6 +59,7 @@ const CheckGameRoom = () => {
   const fetchData = async () => {
     try {
       const allRoomsData = await getAllGameRooms();
+      console.log(allRoomsData);
       setTotalItemsCount(allRoomsData.chats.length);
 
       // 방번호 넣기
@@ -71,7 +70,6 @@ const CheckGameRoom = () => {
           index: index + 1,
         })),
       };
-      console.log(plusIndex);
 
       // 배열을 역순으로 만들기 (최신순)
       const reversedRooms = plusIndex.chats.reverse();
@@ -82,7 +80,6 @@ const CheckGameRoom = () => {
       const paginatedRooms = reversedRooms.slice(startIndex, endIndex);
 
       setAllRooms(paginatedRooms);
-      console.log(paginatedRooms);
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
@@ -96,10 +93,20 @@ const CheckGameRoom = () => {
     roomId: number,
   ) => {
     if (numberOfPeople === 4) {
-      const errorMessage = `방이 꽉 찼어요.`;
-      const errorType = 'full';
-      setShowAlert({ active: true, message: errorMessage, type: errorType });
-      console.log(showAlert);
+      let allMyChatData = await getAllMyChat();
+      allMyChatData = allMyChatData.chats.filter((obj: any) => !obj.isPrivate);
+
+      // chatId와 allMyChatData의 배열 요소의 id 값이 일치하는지 확인
+      const matchingChat = allMyChatData.find(
+        (chat: any) => chat.id === chatId,
+      );
+      if (matchingChat) {
+        navigate(`/room/:${chatId}`);
+      } else {
+        setErrorMessage('방이 꽉 찼어요.');
+        setErrorType('full');
+        setShowAlert({ active: true, message: errorMessage, type: errorType });
+      }
     } else {
       try {
         await participateGameRoom(chatId);
@@ -109,18 +116,15 @@ const CheckGameRoom = () => {
       } catch (error: any) {
         console.log(error.response.data.message);
         if (error.response.data.message === 'Chat not found') {
-          alert('방이 사라졌어요');
+          setErrorMessage('방이 없습니다. 잠시 후 다시 시도해 주세요');
+          setErrorType('none');
+          setShowAlert({
+            active: true,
+            message: errorMessage,
+            type: errorType,
+          });
         } else if (error.response.data.message === 'Already participated') {
-          alert('이미 참여한 방입니다. 로그아웃 합니다.');
-          try {
-            await leaveGameRoom(chatId);
-          } catch (error) {
-            console.error(error);
-          } finally {
-            disconnectChattingSocket();
-            disconnectLoginSocket();
-            navigate('/');
-          }
+          navigate(`/room/:${chatId}`);
         }
       } finally {
         // const res = await getOnlyGameRoom(chatId);
@@ -130,11 +134,11 @@ const CheckGameRoom = () => {
   };
 
   useEffect(() => {
-    // alert 창 1초 후에 사라지게 하기
+    // alert 창 5초 후에 사라지게 하기
     if (showAlert.active) {
       const timer = setTimeout(() => {
         setShowAlert({ active: false, message: '', type: '' });
-      }, 1000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [showAlert.active]);
@@ -196,7 +200,6 @@ const CheckGameRoom = () => {
             </ListItem>
           ))}
 
-          {/* Pagination 컴포넌트를 추가합니다. */}
           <PaginationWrap>
             <Pagination
               activePage={currentPage}

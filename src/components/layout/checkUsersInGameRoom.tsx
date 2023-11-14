@@ -23,43 +23,9 @@ interface User {
 }
 
 const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
-  const [UsersInGameRoom, setUsersInGameRoom] = useRecoilState<string[]>(
-    onlineUserStateInGameRoom,
-  );
+  const UsersInGameRoom = useRecoilValue(onlineUserStateInGameRoom);
   const [profiles, setProfiles] = useState<ResponseValue[]>([]);
-  const accessToken: any = getCookie('accessToken');
-  useEffect(() => {
-    try {
-      const socket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
-        extraHeaders: {
-          Authorization: `Bearer ${accessToken}`,
-          serverId: SERVER_ID,
-        },
-      });
 
-      socket.on('connect', () => {
-        socket?.emit('users');
-      });
-
-      socket.on('users-to-client', (data) => {
-        setUsersInGameRoom(data.users);
-      });
-
-      socket.on('join', (data) => {
-        console.log(data);
-        // setTimeout(() => {
-        setUsersInGameRoom(data.users);
-        // }, 5000);
-      });
-
-      socket.on('leave', (data) => {
-        console.log(data);
-        setUsersInGameRoom(data.users);
-      });
-    } catch (error) {
-      console.error('Error retrieving data:', error);
-    }
-  }, [chatId]);
   useEffect(() => {
     const fetchUserProfiles = async () => {
       const profilesArray: ResponseValue[] = [];
