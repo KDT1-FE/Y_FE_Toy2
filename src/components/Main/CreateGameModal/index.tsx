@@ -275,7 +275,7 @@ const CreateGameModal = ({ setModal, socket }: Props) => {
       // 파이어베이스 게임 데이터 생성
       const newData = {
         ...roomData,
-        users: [...roomData.users, user.id],
+        users: [user.id],
         id: createGame.result.id,
         host: user.id,
         createdAt: serverTimestamp(),

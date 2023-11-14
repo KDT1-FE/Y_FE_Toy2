@@ -245,7 +245,7 @@ const Example = () => {
       </Button>
       {modal ? <CreateGameModal setModal={setModal} socket={socket} /> : null}
       {toast && roomData ? (
-        <ToastNotice roomData={roomData} setToast={setToast} />
+        <ToastNotice roomData={roomData} setToast={setToast} socket={socket} />
       ) : null}
     </>
   );
