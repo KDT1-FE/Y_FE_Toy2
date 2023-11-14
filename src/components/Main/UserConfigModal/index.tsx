@@ -52,6 +52,7 @@ interface UserConfigModalProps {
   onClose: () => void;
 }
 
+// 프로필 설정 모달
 const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
   const auth = useRecoilValue(authState);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -70,45 +71,31 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
     control,
     handleSubmit,
     setValue,
-    setError,
-    clearErrors,
     formState: { errors },
   } = useForm<FormData>();
 
-  // 사용자 정보를 가져오기.
-  const { result: userInfo, refresh: refreshUserInfo } = useFetch({
-    url: "https://fastcampus-chat.net/auth/me", // 사용자 정보를 가져오는 URL
+  // 사용자 정보 가져오기.
+  const { result: userInfo } = useFetch({
+    url: "https://fastcampus-chat.net/auth/me",
     method: "GET",
     start: isOpen, // 모달이 열릴 때 요청 시작
   });
 
+  // 사용자 정보를 폼에 설정
   useEffect(() => {
     if (userInfo && userInfo.auth) {
-      console.log("UserInfo:", userInfo); // 로깅 추가
+      console.log("UserInfo:", userInfo);
+      //  폼 값 설정 로직
       setValue("id", userInfo.user.id);
       setValue("name", userInfo.user.name);
       setValue("picture", userInfo.user.picture);
       setProfile({
-        ...profile,
         id: userInfo.user.id,
         name: userInfo.user.name,
         picture: userInfo.user.picture,
       });
     }
   }, [userInfo, setValue, setProfile, isOpen]);
-
-  // ID 중복 검사
-  const checkIdDuplication = async (id: string): Promise<boolean> => {
-    try {
-      const response = await axios.post("https://fastcampus-chat.net/auth/me", {
-        id,
-      });
-      return response.data.isDuplicated;
-    } catch (error) {
-      console.error("Error checking ID duplication", error);
-      return false;
-    }
-  };
 
   // 파일 선택 변경
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,14 +128,6 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
     fileInputRef.current?.click();
   };
 
-  // 사용자 정보 업데이트
-  const updateUserInfo = useFetch({
-    url: "https://fastcampus-chat.net/user",
-    method: "PATCH",
-    data: {},
-    start: false,
-  });
-
   // 프로필 수정 제출
   const onSubmit = async (formData: FormData) => {
     const toBase64 = (file: File) =>
@@ -163,15 +142,27 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
       name: formData.name,
       picture: selectedFile ? await toBase64(selectedFile) : profile.picture,
     };
-
     try {
-      updateUserInfo.refresh({ data: updatedData }); // 데이터 업데이트 요청
-
-      // 결과 확인
-      if (updateUserInfo.statusCode === 200) {
+      // axios 요청 및 응답 처리
+      const response = await axios.patch(
+        "https://fastcampus-chat.net/user",
+        updatedData,
+        {
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        },
+      );
+      if (response.status === 200) {
         setUpdateStatus({
           type: "success",
           message: "프로필이 업데이트 되었습니다.",
+        });
+      } else {
+        setUpdateStatus({
+          type: "error",
+          message: "프로필 업데이트에 실패했습니다. ",
         });
       }
     } catch (error) {
@@ -179,7 +170,6 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
         type: "error",
         message: "프로필 업데이트에 실패했습니다.",
       });
-      console.error("프로필 업데이트 실패:", error);
     }
   };
 
@@ -204,7 +194,7 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
               {updateStatus.message}
             </Alert>
           )}
-          {/* 회원가입 폼 */}
+          {/* 프로필 폼 */}
           <form onSubmit={handleSubmit(onSubmit)}>
             <DragDropBox
               onDrop={onDrop}
@@ -237,46 +227,14 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
             </DragDropBox>
             {/* 아이디 입력 */}
             <FormControl isInvalid={!!errors.id} my={4} justifyContent="center">
-              <Controller
-                name="id"
-                control={control}
-                rules={{
-                  required: "ID is required.",
-                  pattern: {
-                    value: /^[A-Za-z0-9]+$/,
-                    message: "ID는 영문자와 숫자만 사용할 수 있습니다.",
-                  },
-                  validate: async (id) => {
-                    try {
-                      const isDuplicated = await checkIdDuplication(id);
-                      if (isDuplicated) {
-                        setError("id", {
-                          type: "manual",
-                          message: "이미 사용중인 ID입니다.",
-                        });
-                        return false;
-                      }
-                      clearErrors("id");
-                      return true;
-                    } catch (error) {
-                      console.error("ID 중복 확인 중 오류 발생:", error);
-                      return "ID 중복 확인 중 오류가 발생했습니다.";
-                    }
-                  },
-                }}
-                render={({ field }) => (
-                  <Input
-                    type="text"
-                    placeholder="아이디 입력"
-                    {...field}
-                    width="300px"
-                    m="auto"
-                  />
-                )}
+              <Input
+                type="text"
+                placeholder="아이디"
+                value={profile.id}
+                readOnly
+                width="300px"
+                m="auto"
               />
-              <FormErrorMessage>
-                {errors.id && errors.id.message}
-              </FormErrorMessage>
             </FormControl>
             {/* 닉네임 입력 */}
             <FormControl isInvalid={!!errors.name} my={4}>
@@ -292,13 +250,7 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
                 {errors.name && errors.name.message}
               </FormErrorMessage>
             </FormControl>
-            <Button
-              type="submit"
-              // isLoading={isUpdating}
-              width="300px"
-              m="auto"
-              my={14}
-            >
+            <Button type="submit" width="300px" m="auto" my={14}>
               설정완료
             </Button>
           </form>
