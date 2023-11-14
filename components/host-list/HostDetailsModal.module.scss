@@ -1,0 +1,67 @@
+@import '@/styles/index.scss';
+.dim {
+  @include dim;
+}
+
+.ModalBox {
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  box-sizing: border-box;
+  @include shadow-bottom;
+  // transition:
+  //   opacity 0.3s,
+  //   transform 0.3s;
+  // opacity: 0;
+  // visibility: hidden;
+  // &.open {
+  //   opacity: 1;
+  //   visibility: visible;
+  //   transform: translate(-50%, -50%) scale(1);
+  // }
+  .close-icon {
+    font-size: 2.4rem;
+    position: absolute;
+    right: 1rem;
+    font-weight: bold;
+  }
+
+  .flex-row {
+    @include flex-center-row;
+    gap: 2rem;
+    button,
+    p {
+      margin: 0;
+    }
+  }
+  .host-img {
+    width: 100%;
+    border-radius: 1rem;
+  }
+  .title {
+    font-size: $font-size-lg;
+  }
+  .text {
+    margin-top: 0;
+    line-height: 1.8rem;
+    b {
+      display: inline-block;
+      margin-bottom: 0.4rem;
+    }
+  }
+}
+@media screen and (min-width: 260px) and (max-width: 500px) {
+  .dim {
+    display: none;
+  }
+  .ModalBox {
+    display: block;
+    width: 100vw;
+    height: 100%;
+    overflow-y: scroll;
+    border-radius: 0;
+    left: 0;
+    top: 0;
+  }
+}

@@ -14,7 +14,9 @@ import ChatroomHeader from '../../components/chat/header';
 
 export default function Chat() {
   const router = useRouter();
-  const { chatId } = router.query;
+  const { chatId, name } = router.query;
+
+  // console.log(router.query);
 
   const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
@@ -22,9 +24,7 @@ export default function Chat() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  //const socketRef = useRef<Socket | null>(null);
-
-  const userId = 'user3';
+  const userId = 'user';
 
   const accessToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
@@ -49,7 +49,6 @@ export default function Chat() {
     });
 
     socket.on('message-to-client', (messageObject: Message) => {
-      console.log(messageObject);
       setMessages(prevMessages => [...prevMessages, messageObject]);
     });
 
@@ -101,11 +100,9 @@ export default function Chat() {
 
   return (
     <>
-      <ChatroomHeader chatId={chatId} />
+      <ChatroomHeader name={name} chatId={chatId} />
       <div className={styles.container}>
         <div className={styles.container}>
-          <EntryNotice />
-          <ExitNotice />
           <div>
             {messages.map(msg =>
               msg.userId === userId ? (
@@ -114,6 +111,8 @@ export default function Chat() {
                 <OtherChat key={msg.id} msg={msg} />
               ),
             )}
+            <EntryNotice />
+            <ExitNotice />
           </div>
           <div ref={messagesEndRef} />
           {showAlert && <ChatAlert />}
