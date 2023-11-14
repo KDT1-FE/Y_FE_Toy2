@@ -22,10 +22,9 @@ const SearchMyChat = ({ userType }: { userType: string }) => {
       setInput(e.target.value);
       if (chats) {
         const filteringChats = chats.filter((chat) => {
-          const filterValue = chat.name.toLowerCase().startsWith(e.target.value.toLowerCase());
+          const filterValue = chat.name.toLowerCase().includes(e.target.value.toLowerCase());
           return filterValue;
         });
-        console.log('Filtering Chats:', filteringChats);
         const filteredChats = [...filteringChats];
         setFilteredChats(filteredChats);
       }

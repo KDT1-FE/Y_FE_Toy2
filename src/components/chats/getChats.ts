@@ -10,7 +10,6 @@ export const headers = {
 export const getMyChats = async (): Promise<Chat[]> => {
   try {
     const res = await instance.get<Chat[], any>('chat', { headers });
-    console.log('getMyChats response:', res);
     if (res.chats) {
       return res.chats;
     } else {
@@ -26,6 +25,18 @@ export const getMyChats = async (): Promise<Chat[]> => {
 export const getAllChats = async () => {
   try {
     const res = await instance.get<Chat[], any>(`chat/all`, { headers });
+    if (res) {
+      return res.chats;
+    }
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+export const partChats = async () => {
+  try {
+    const res = await instance.patch<Chat[], any>(`chat/participate`, { headers });
     if (res) {
       return res.chats;
     }

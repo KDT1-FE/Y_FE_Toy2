@@ -13,7 +13,7 @@ import { Chat, searchChatsState } from './chatsStore';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
 
-import { getMyChats, getAllChats } from './getChats';
+import { getMyChats, getAllChats, partChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
 const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
@@ -23,6 +23,9 @@ const MyChats = ({ userType }: { userType: string }) => {
 
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
+      if (chat.users.some((user) => user.id === userId)) {
+        alert('채팅에 참여하실건가요?');
+      }
       router.push(`/chating/${chat.id}`);
     }
   };
@@ -86,6 +89,7 @@ export default MyChats;
 export const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  height: 100vh;
   flex-direction: column;
   justify-content: center;
 `;
