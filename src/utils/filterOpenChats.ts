@@ -1,5 +1,5 @@
 import { ChatUser } from '../types/Openchat';
-import { UserSimple } from '../types/User';
+import { User } from '../types/User';
 
 interface MyObject {
   id: string;
@@ -66,6 +66,14 @@ export function filterCateOpenChats<T extends ChatObject>(
   return arr.filter((obj) =>
     obj.hashtags.some((tag) => category.includes(tag)),
   );
+}
+
+export function filterOpenChatsUser<T extends User>(
+  arr: T[],
+  userIds: string[],
+): T[] {
+  if (!arr) return [];
+  return arr.filter((obj) => userIds.includes(obj.id));
 }
 
 export default filterOpenChats;

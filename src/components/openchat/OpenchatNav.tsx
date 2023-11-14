@@ -4,26 +4,16 @@ import useDimensions from '../../hooks/useDimensions';
 import OpenchatNavItems from './OpenchatNavItems';
 
 import styles from './OpenchatNav.module.css';
+import { User } from '../../types/User';
+import { Chat } from '../../types/Openchat';
 
-const sidebar = {
-  open: (height = 1000) => ({
-    x: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-    },
-  }),
-  closed: {
-    x: 300,
-    transition: {
-      delay: 0.2,
-      type: 'spring',
-      stiffness: 100,
-    },
-  },
-};
+interface OpenchatNavProps {
+  data?: Chat;
+  users: User[];
+  allUsers: User[];
+}
 
-function OpenchatNav() {
+function OpenchatNav({ data, users, allUsers }: OpenchatNavProps) {
   return (
     <motion.nav
       initial={{ x: '100%' }}
@@ -36,9 +26,25 @@ function OpenchatNav() {
       transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
       className={styles.nav}
     >
-      네비게이션!
+      <div>
+        {users.map((user) => (
+          <div>
+            <img src={user.picture} alt={user.name} />
+            <p>{user.name}</p>
+          </div>
+        ))}
+      </div>
+      {/* <div>
+        추가할 유저{' '}
+        {allUsers.map((user) => (
+          <p>{user.name}</p>
+        ))}
+      </div> */}
     </motion.nav>
   );
 }
+OpenchatNav.defaultProps = {
+  data: null,
+};
 
 export default OpenchatNav;

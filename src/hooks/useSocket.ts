@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { MessageType } from '../types/MessageType';
 
@@ -12,40 +12,46 @@ const useSocket = (chatId: string) => {
   useEffect(() => {
     // Socket.IO 서버의 주소를 입력합니다.
     const socket = io(`https://fastcampus-chat.net/chat?chatId=${chatId}`, {
+      autoConnect: false,
       extraHeaders: {
         serverId: '9b9a6496',
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
-    // 연결이 성공했을 때 실행됩니다.
+    socket.connect();
+    socket.emit('fetch-messages');
     socket.on('connect', () => {
-      socket.emit('fetch-messages');
-
-      socket.on('messages-to-client', (data) => {
-        console.log('messages 받기');
-        setMessages([...data.messages]);
-      });
-
-      socket.on('message-to-client', (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
       setConnected(true);
     });
-
-    // 연결이 끊겼을 때 실행됩니다.
     socket.on('disconnect', () => {
-      socket.off('messages-to-client');
-      socket.off('message-to-client');
       setConnected(false);
-      setSocket(socket);
     });
-
     // 컴포넌트가 언마운트되면 소켓 연결을 해제합니다.
     return () => {
       socket.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    socketIo?.on('messages-to-client', (data) => {
+      console.log(data.messages);
+      setMessages([...data.messages]);
+    });
+
+    return () => {
+      socketIo?.off('messages-to-client');
+    };
+  }, [messages, isConnected]);
+
+  useEffect(() => {
+    socketIo?.on('message-to-client', (message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socketIo?.off('message-to-client');
+    };
+  }, [messages, isConnected]);
 
   return { isConnected, socket: socketIo, messages };
 };

@@ -233,6 +233,8 @@ export const OpenchatMessageItemWrap = styled(Box)<{ isme: string }>(
   ({ theme, isme }) => ({
     padding: '1rem 0',
     alignSelf: isme === 'true' ? 'flex-end' : 'flex-start',
+    display: 'flex',
+    gap: 10,
     '& .openchat__msg-wrapper': {
       display: 'flex',
       alignItems: 'flex-end',
