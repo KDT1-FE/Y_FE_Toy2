@@ -10,19 +10,16 @@ import {
 import io, { Socket } from "socket.io-client";
 import { AuthContext } from "../../hooks/useAuth";
 
-interface Chat {
-  id: string;
-  name: string;
-  users: User[]; // 속한 유저 id
-  isPrivate: boolean;
-  latestMessage: Message | null;
-  updatedAt: Date;
-}
-
-interface User {
+export interface User {
   id: string;
   name: string;
   picture: string;
+}
+
+interface ChatRoomProps {
+  roomId: string;
+  roomName: string;
+  selectedUsers: User[];
 }
 
 interface Message {
@@ -32,7 +29,7 @@ interface Message {
   createAt: Date;
 }
 
-function ChatRoom({ roomId }: { roomId: string }) {
+function ChatRoom({ roomId, roomName, selectedUsers }: ChatRoomProps) {
   const [text, setText] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { accessToken } = useContext(AuthContext);
@@ -102,18 +99,18 @@ function ChatRoom({ roomId }: { roomId: string }) {
     }
   }, [messages]);
 
+
+
+
+
   return (
     <ChatRoomWrap>
       <div className="chatroom__tit">
         <div className="tit-bx">
-          {/* 채팅방의 img 속성은 없음 */}
-          {/* <div className="img">
-            <img src="https://via.placeholder.com/150x150" alt="프로필" />
-          </div> */}
-          <p className="tit">수다수다방</p>
+          <p className="tit">{roomName}</p>
           <p className="count">
             <img src="/src/assets/images/user-ico.png" width="14"></img>
-            <span className="num">2</span>
+            <span className="num">{selectedUsers.length}</span>
           </p>
         </div>
         <div className="util-bx">
