@@ -1,9 +1,0 @@
-.ModalBox {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #f8f9fa;
-  z-index: 1;
-  border-radius: 1rem;
-}/*# sourceMappingURL=Modal.module.css.map */
