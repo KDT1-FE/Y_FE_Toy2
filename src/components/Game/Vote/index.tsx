@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -12,8 +12,9 @@ import {
   RadioGroup,
   Stack,
 } from "@chakra-ui/react";
-import useFireFetch from "../../../hooks/useFireFetch";
-import { arrayUnion } from "firebase/firestore";
+// import useFireFetch from "../../../hooks/useFireFetch";
+import { db } from "../../../firebase/firebase";
+import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import calculateVote from "./CalculateVote";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/atoms/userState";
@@ -35,9 +36,26 @@ const Vote: React.FC<VoteProps> = ({
   gameData,
 }): React.ReactElement => {
   const [selectedUser, setSelectedUser] = useState<string>("");
-  const fireFetch = useFireFetch();
-  const fetchData = fireFetch.useGetSome("game", "id", gameData.id)
-    .data[0] as GameData;
+  const [fetchData, setFetchData] = useState<GameData | null>(null);
+  // const fireFetch = useFireFetch();
+  useEffect(() => {
+    const fetchDataFromFirebase = async () => {
+      try {
+        const docRef = doc(db, "game", gameData.id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const updatedData = docSnap.data() as GameData;
+          console.log("updatedData :", updatedData);
+          setFetchData(updatedData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchDataFromFirebase();
+  }, []);
 
   const user = useRecoilValue(userState);
 
@@ -45,18 +63,26 @@ const Vote: React.FC<VoteProps> = ({
     setSelectedUser(value);
   };
 
-  const handleVoteSubmit = () => {
+  const handleVoteSubmit = async () => {
     if (selectedUser !== "") {
-      fireFetch.updateData("game", gameData.id, {
-        votedFor: arrayUnion({ by: user.id, liar: selectedUser }),
-      });
+      try {
+        const docRef = doc(db, "game", gameData.id);
+        await updateDoc(docRef, {
+          votedFor: arrayUnion({ by: user.id, liar: selectedUser }),
+        });
 
-      console.log("fetchData", fetchData);
-      const voteResult = calculateVote(fetchData);
+        const updatedDocSnap = await getDoc(docRef);
+        const updatedData = updatedDocSnap.data() as GameData;
 
-      console.log("Vote result: " + voteResult);
+        console.log("submit/ Updated Data:", updatedData);
 
-      onClose(selectedUser);
+        const voteResult = calculateVote(updatedData);
+        console.log("Vote result: " + voteResult);
+
+        onClose(selectedUser);
+      } catch (error) {
+        console.error("Error updating data:", error);
+      }
     }
   };
 
@@ -70,11 +96,12 @@ const Vote: React.FC<VoteProps> = ({
           <ModalBody>
             <RadioGroup value={selectedUser} onChange={handleUserChange}>
               <Stack spacing={2}>
-                {gameData.users.map((user) => (
-                  <Radio key={user} value={user}>
-                    {user}
-                  </Radio>
-                ))}
+                {fetchData &&
+                  fetchData.users.map((user) => (
+                    <Radio key={user} value={user}>
+                      {user}
+                    </Radio>
+                  ))}
               </Stack>
             </RadioGroup>
           </ModalBody>
