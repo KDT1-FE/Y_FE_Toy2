@@ -1,21 +1,51 @@
+import { accessTokenSelector } from '@/recoil/atoms/tokenState';
+import axios from 'axios';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import Auth from '@/apis/Auth';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
+import { login, refresh } from '@/apis/Auth';
 import styles from './login.module.scss';
 
+interface LoginRequestBody {
+  id: string; // 사용자 아이디 (필수!)
+  password: string; // 사용자 비밀번호 (필수!)
+  accessToken: string | null;
+}
+
 export default function Login() {
-  const { login } = Auth();
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm();
-  const handleLoginClick: SubmitHandler<FieldValues> = async data => {
-    const id = data.loginId as string;
-    const password = data.password as string;
+  } = useForm<LoginRequestBody>();
+  const [accessTokenAtom, setAccessTokenAtom] =
+    useRecoilState(accessTokenSelector);
 
-    await login({ id, password });
+  const handleLoginClick: SubmitHandler<LoginRequestBody> = async ({
+    id,
+    password,
+  }) => {
+    try {
+      const { accessToken, refreshToken } = await login({
+        id,
+        password,
+      });
+      setAccessTokenAtom(accessToken);
+      cookies().set('refreshToken', refreshToken);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.status === 401) {
+          throw Error(error.message);
+        }
+
+        if (accessTokenAtom) {
+          const accessToken = await refresh();
+          setAccessTokenAtom(accessToken);
+        }
+      }
+    }
   };
 
   return (
@@ -33,7 +63,7 @@ export default function Login() {
           onSubmit={handleSubmit(handleLoginClick)}
         >
           <div className={styles.input_box}>
-            <input type="text" placeholder="아이디" {...register('loginId')} />
+            <input type="text" placeholder="아이디" {...register('id')} />
             <input
               type="password"
               placeholder="비밀번호"

@@ -1,30 +1,29 @@
-import { UserLogin } from '@/@types/user';
-import { userIdState } from '@/recoil/atoms/userIdState';
-import { setStorage } from '@/utils/loginStorage';
-import { useRouter } from 'next/router';
-import { useSetRecoilState } from 'recoil';
-import Jwtinterceptors from './Jwtinterceptors';
+import instance from '@/apis/axios';
+import { cookies } from 'next/headers';
+import { ClientRefresh, UserLoginResponse } from '@/@types/user';
 
-const Auth = () => {
-  const { instance } = Jwtinterceptors();
-  const router = useRouter();
-  const setUserId = useSetRecoilState(userIdState);
+interface LoginRequestBody {
+  id: string; // 사용자 아이디 (필수!)
+  password: string; // 사용자 비밀번호 (필수!)
+}
 
-  // 로그인 (로그인유지)
-  const login = async (userLogin: UserLogin) => {
-    try {
-      const response = await instance.post('/login', userLogin);
-      setStorage('accessToken', response.data.accessToken);
-      setStorage('refreshToken', response.data.refreshToken);
-      setStorage('isLogin', 'true');
-      setUserId(userLogin.id);
-      router.push('/');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const login = async ({ id, password }: LoginRequestBody) => {
+  const { data } = await instance.post<UserLoginResponse>('/login', {
+    id,
+    password,
+  });
 
-  return { login };
+  return data;
 };
 
-export default Auth;
+export const refresh = async () => {
+  const refreshToken = cookies().get('refreshToken');
+  if (refreshToken) {
+    const { data } = await instance.post<ClientRefresh>('/refresh', {
+      refreshToken: refreshToken.value,
+    });
+
+    return data.accessToken;
+  }
+  throw Error('refreshToken이 없어요');
+};
