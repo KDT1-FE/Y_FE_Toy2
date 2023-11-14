@@ -1,41 +1,26 @@
 import styled from "styled-components";
 import ModalHamburger from "../ModalHamburger";
 
-// interface Chat {
-//   id: string;
-//   name: string;
-//   users: User[]; // 속한 유저 id
-//   isPrivate: boolean;
-//   latestMessage: Message | null;
-//   updatedAt: Date;
-// }
+export interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
 
-// interface User {
-//   id: string;
-//   name: string;
-//   picture: string;
-// }
+interface ChatRoomProps {
+  roomName: string;
+  selectedUsers: User[];
+}
 
-// interface Message {
-//   id: string;
-//   text: string;
-//   userId: string;
-//   createAt: Date;
-// }
-
-function ChatRoom() {
+function ChatRoom({ roomName, selectedUsers }: ChatRoomProps) {
   return (
     <ChatRoomWrap>
       <div className="chatroom__tit">
         <div className="tit-bx">
-          {/* 채팅방의 img 속성은 없음 */}
-          {/* <div className="img">
-            <img src="https://via.placeholder.com/150x150" alt="프로필" />
-          </div> */}
-          <p className="tit">수다수다방</p>
+          <p className="tit">{roomName}</p>
           <p className="count">
             <img src="/src/assets/images/user-ico.png" width="14"></img>
-            <span className="num">2</span>
+            <span className="num">{selectedUsers.length}</span>
           </p>
         </div>
         <div className="util-bx">
