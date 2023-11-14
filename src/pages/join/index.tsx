@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import JoinInputBox from '../../components/join/JoinInputBox';
 import JoinIdInputBox from '../../components/join/JoinIdInputBox';
 import JoinImageInputBox from '../../components/join/JoinImageInputBox';
+import { REGISTER } from '../../constants/join';
 
 export interface JoinForm {
   password: string;
@@ -27,7 +28,7 @@ const Join = () => {
     setIsChecking(false);
   };
   const onSubmit: SubmitHandler<JoinForm> = () => {
-    console.log('first');
+    // onSubmit
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,10 +64,10 @@ const Join = () => {
           />
           <JoinIdInputBox
             register={register('id', {
-              required: '필수 입력입니다',
+              required: REGISTER.REQUIRED_MESSAGE,
               pattern: {
                 value: /^[A-Za-z0-9]+$/,
-                message: '영어로만 입력해주세요',
+                message: REGISTER.ID_MESSAGE,
               },
               onChange: () => {
                 if (isChecking !== null) {
@@ -74,26 +75,32 @@ const Join = () => {
                 }
               },
             })}
-            placeholder="영어로만 입력해주세요"
+            placeholder={REGISTER.ID_MESSAGE}
             errors={errors.id}
             isChecking={isChecking}
             handleCheckId={handleCheckId}
           />
           <JoinInputBox
             register={register('password', {
-              required: '필수 입력입니다',
-              minLength: { value: 5, message: '5자 이상 입력해주세요' },
+              required: REGISTER.REQUIRED_MESSAGE,
+              minLength: {
+                value: REGISTER.PASSWORD_MIN_LENGTH,
+                message: REGISTER.PASSWORD_MESSAGE,
+              },
             })}
-            placeholder="5자 이상 입력해주세요"
+            placeholder={REGISTER.PASSWORD_MESSAGE}
             InputId="password"
             errors={errors.password}
           />
           <JoinInputBox
             register={register('name', {
-              required: '필수 입력입니다',
-              maxLength: { value: 20, message: '20자 이하로 입력해주세요' },
+              required: REGISTER.REQUIRED_MESSAGE,
+              maxLength: {
+                value: REGISTER.NAME_MAX_LENGTH,
+                message: REGISTER.NAME_MESSAGE,
+              },
             })}
-            placeholder="20자 이하로 입력해주세요"
+            placeholder={REGISTER.NAME_MESSAGE}
             InputId="name"
             errors={errors.name}
           />
