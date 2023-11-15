@@ -7,3 +7,8 @@ export interface Host {
   description?: string;
   service?: string;
 }
+export interface UserList {
+  id: string;
+  name: string;
+  picture: string;
+}

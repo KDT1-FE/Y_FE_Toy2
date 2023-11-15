@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import HostListItem from '@/components/HostList/HostListItem';
-import classNames from 'classnames/bind';
 import {
-  addHostsToFirestore,
   getHostsByLocation,
-  updateHostsInfo,
   locations,
+  fetchHostUsers,
 } from '@/utils/hostsStorage';
 
 import Search from '@/components/HostList/Search';
 import HostDetailsModal from '@/components/HostList/HostDetailsModal';
 import styles from '@/components/HostList/hostList.module.scss';
-import { Host } from '@/components/HostList/hostList.types';
+import { Host, UserList } from '@/components/HostList/hostList.types';
 
 export default function HostListPage() {
   const [hosts, setHosts] = useState<Host[]>([]);
+  const [userData, setUserData] = useState<UserList[]>([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedHostDetails, setSelectedHostDetails] = useState<Host | null>(
     null,
@@ -24,6 +24,18 @@ export default function HostListPage() {
   const [locationsToShow, setLocationsToShow] = useState<string[]>(locations);
   const [noResultsMessage, setNoResultsMessage] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetchHostUsers();
+        setUserData(response);
+      } catch (error) {
+        console.error('사용자 데이터를 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     function handleScroll() {
@@ -68,10 +80,10 @@ export default function HostListPage() {
       : hosts;
     setFilteredHosts(filtered);
 
-    // 검색 결과에 따라 locationsToShow를 업데이트합니다.
+    // 검색 결과에 따라 locationsToShow를 업데이트
     const newLocationsToShow = query
       ? Array.from(new Set(filtered.map(host => host.location)))
-      : locations; // Array.from을 사용하여 Set을 배열로 변환합니다.
+      : locations; // Array.from을 사용하여 Set을 배열로 변환
     setLocationsToShow(newLocationsToShow);
 
     if (filtered.length === 0) {
@@ -79,8 +91,8 @@ export default function HostListPage() {
       setTimeout(() => {
         setNoResultsMessage(false);
         setSearchQuery('');
-        setFilteredHosts(hosts); // 원본 목록으로 재설정
-        setLocationsToShow([...locations]); // 전체 지역 태그를 다시 보여줌
+        setFilteredHosts(hosts);
+        setLocationsToShow([...locations]);
       }, 2000);
     }
   };
@@ -98,10 +110,10 @@ export default function HostListPage() {
   const scrollToLocation = (location: string) => {
     const element = document.getElementById(location);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      const yOffset = element.getBoundingClientRect().top - 100;
+      window.scrollBy({ top: yOffset, behavior: 'smooth' });
     }
   };
-
   const displayHosts = searchQuery ? filteredHosts : hosts;
 
   return (
@@ -139,8 +151,8 @@ export default function HostListPage() {
                       <HostListItem
                         key={host.id}
                         host={host}
+                        userData={userData}
                         openModal={() => handleOpenModal(host)}
-                        isModalOpen={isModalOpen}
                       />
                     ))
                 : hosts
@@ -149,8 +161,8 @@ export default function HostListPage() {
                       <HostListItem
                         key={host.id}
                         host={host}
+                        userData={userData}
                         openModal={() => handleOpenModal(host)}
-                        isModalOpen={isModalOpen}
                       />
                     ))}
             </ul>
@@ -158,25 +170,13 @@ export default function HostListPage() {
         ))}
       </div>
       {noResultsMessage && <p>검색 결과가 없습니다.</p>}
-      <button
-        className={styles.uploadDb}
-        type="button"
-        onClick={addHostsToFirestore}
-      >
-        hostData업뎃
-      </button>
-      <button
-        className={styles.uploadApi}
-        type="button"
-        onClick={updateHostsInfo}
-      >
-        api 업뎃
-      </button>
+
       {isModalOpen && (
         <HostDetailsModal
           hostDetails={selectedHostDetails!}
           onClose={handleCloseModal}
           isModalOpen={isModalOpen}
+          userData={userData}
         />
       )}
     </section>

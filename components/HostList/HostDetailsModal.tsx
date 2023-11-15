@@ -8,23 +8,25 @@ import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
 import styles from '@/components/HostList/HostDetailsModal.module.scss';
-import { Host } from '@/components/HostList/hostList.types';
+import { Host, UserList } from '@/components/HostList/hostList.types';
 
 interface HostDetailsModalProps {
   onClose: () => void;
   hostDetails: Host;
   isModalOpen: boolean;
+  userData: UserList[];
 }
 
 export default function HostDetailsModal({
   onClose,
   hostDetails,
   isModalOpen,
+  userData,
 }: HostDetailsModalProps) {
-  // const ref = useRef<HTMLDivElement>(null);
-  // useOnClickOutside(ref, () => {
-  //   onClose();
-  // });
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref, () => {
+    onClose();
+  });
 
   const router = useRouter();
   const createHostChat = async () => {
@@ -66,23 +68,25 @@ export default function HostDetailsModal({
       });
     }
   };
+
+  const findUser = userData.find(
+    user => user.id === hostDetails.id,
+  ) as UserList;
+
   return (
     <>
       <div className={styles.dim} />
       <Modal onClose={onClose}>
-        <div
-          className={`${styles.ModalBox} ${isModalOpen ? 'open' : ''}`}
-          ref={ref}
-        >
+        <div className={styles.ModalBox} ref={ref}>
           <BsXCircle className={styles['close-icon']} onClick={onClose} />
 
           <img
             className={styles['host-img']}
-            src={hostDetails.picture}
-            alt={hostDetails.name}
+            src={findUser?.picture}
+            alt={findUser?.name}
           />
           <div className={styles['flex-row']}>
-            <h4 className={styles.title}>{hostDetails.name}</h4>
+            <h4 className={styles.title}>{findUser?.name}</h4>
             <Button
               className="fill-btn"
               text="문의하기"
