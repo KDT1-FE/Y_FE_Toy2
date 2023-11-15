@@ -20,10 +20,7 @@ export const login = async (LoginForm: LoginForm) => {
   };
 
   try {
-    const response = await instance.post<ResponseValue>(
-      'https://fastcampus-chat.net/login',
-      requestBody,
-    );
+    const response = await instance.post<ResponseValue>('/login', requestBody);
 
     return response.data;
   } catch (error) {
