@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
@@ -6,12 +5,14 @@ import Image from 'next/image';
 import { useRecoilValue } from 'recoil';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import formatTime from '@/utils/timeFormat';
-import ChatListModal from '@/components/ChatList/ChatListModal';
 import { sortChatList } from '@/utils/chatList';
 import useConnectServerSocket from '@/hooks/useConnectServerSocket';
 import Header from '@/components/Header/Header';
-import CreateChatButton from '@/components/ChatList/CreateChatButton';
-import JudgeWrapper from '@/components/ChatList/JudgeWrapper';
+import {
+  ChatListModal,
+  CreateChatButton,
+  JudgeWrapper,
+} from '@/components/ChatList';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -49,10 +50,6 @@ export default function AllChatList() {
       return true;
     }
     return false;
-  };
-
-  const routerChat = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
   };
 
   const handleModal = () => {
