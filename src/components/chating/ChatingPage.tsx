@@ -7,7 +7,6 @@ import io from 'socket.io-client';
 import { useRouter, usePathname } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
-import { formatCreatedAt } from '../chats/useFormatCreatedAt';
 import { getCookie } from '@/lib/cookie';
 
 interface Message {
@@ -59,6 +58,7 @@ export default function ChatingPage() {
         setLoading(false);
         setMessages(messageObject.messages.reverse());
         clearInterval(FetchMessagesInterval);
+
         // 유저 입장 억지로..
         if (users.length > 2 && userId) {
           let isEnter = true;
@@ -154,6 +154,31 @@ export default function ChatingPage() {
     return undefined;
   };
 
+  // 날짜 변환
+
+  const formatCreatedAt = (createdAt: Date) => {
+    const date = new Date(createdAt);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const amOrPm = hours >= 12 ? '오후' : '오전';
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${amOrPm} ${formattedHours}시 ${formattedMinutes}분`;
+  };
+
+  const formatGetDay = (createdAt: Date) => {
+    const date = new Date(createdAt);
+    return date.getDate();
+  };
+
+  const formatGetFullDay = (createdAt: Date) => {
+    const date = new Date(createdAt);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}년 ${month}월 ${day}일`;
+  };
+
   return (
     <main>
       {loading ? (
@@ -167,37 +192,73 @@ export default function ChatingPage() {
             {messages
               ? messages.map((message: Message, i: number) =>
                   message.text.split(':')[0] == 'notice09' ? (
-                    <NoticeMessageWrapper>
-                      <NoticeText>{message.text.split(':')[1]}</NoticeText>
-                    </NoticeMessageWrapper>
+                    <>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
+                      <NoticeMessageWrapper>
+                        <NoticeText>{message.text.split(':')[1]}</NoticeText>
+                      </NoticeMessageWrapper>
+                    </>
                   ) : userId == message.userId || userId == message.userId ? (
-                    <MyMessageWrapper key={message.id}>
-                      <MyMessageText>{message.text}</MyMessageText>
-                      <MyMessageTime>{formatCreatedAt(message.createdAt)}</MyMessageTime>
-                    </MyMessageWrapper>
+                    <>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
+                      <MyMessageWrapper key={message.id}>
+                        <MyMessageText>{message.text}</MyMessageText>
+                        <MyMessageTime>{formatCreatedAt(message.createdAt)}</MyMessageTime>
+                      </MyMessageWrapper>
+                    </>
                   ) : messages[i].userId == messages[i + 1]?.userId || messages[i].userId == messages[i + 1]?.userId ? (
-                    <YourMessageWrapper key={message.id}>
-                      <YourMessageTextWrapper>
-                        <YourMessageText>{message.text}</YourMessageText>
-                        <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
-                      </YourMessageTextWrapper>
-                    </YourMessageWrapper>
+                    <>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
+                      <YourMessageWrapper key={message.id}>
+                        <YourMessageTextWrapper>
+                          <YourMessageText>{message.text}</YourMessageText>
+                          <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
+                        </YourMessageTextWrapper>
+                      </YourMessageWrapper>
+                    </>
                   ) : (
-                    <YourMessageWrapper key={message.id}>
-                      <YourMessageNameWrapper>
-                        <YourMessagePicture
-                          src={
-                            findUserPicture(message.userId) ||
-                            'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
-                          }
-                        />
-                        <YourMessageName>{findUserName(message.userId) || message.userId}</YourMessageName>
-                      </YourMessageNameWrapper>
-                      <YourMessageTextWrapper>
-                        <YourMessageText>{message.text}</YourMessageText>
-                        <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
-                      </YourMessageTextWrapper>
-                    </YourMessageWrapper>
+                    <>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
+                      <YourMessageWrapper key={message.id}>
+                        <YourMessageNameWrapper>
+                          <YourMessagePicture
+                            src={
+                              findUserPicture(message.userId) ||
+                              'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
+                            }
+                          />
+                          <YourMessageName>{findUserName(message.userId) || message.userId}</YourMessageName>
+                        </YourMessageNameWrapper>
+                        <YourMessageTextWrapper>
+                          <YourMessageText>{message.text}</YourMessageText>
+                          <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
+                        </YourMessageTextWrapper>
+                      </YourMessageWrapper>
+                    </>
                   ),
                 )
               : ''}
