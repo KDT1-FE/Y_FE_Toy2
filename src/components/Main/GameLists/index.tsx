@@ -5,9 +5,6 @@ import {
   Container,
   Grid,
   Image,
-  Input,
-  InputGroup,
-  InputRightElement,
   Text,
 } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -22,6 +19,9 @@ import { useRecoilValue } from "recoil";
 import UserConfigModal from "../../../components/Main/UserConfigModal";
 import { useAuth } from "../../../hooks/useAuth";
 import { authState } from "../../../recoil/atoms/authState";
+import { io } from "socket.io-client";
+import GameListChat from "../GameListsChat";
+import CreateGameModal from "../CreateGameModal";
 
 interface ResponseValue {
   accessToken: string; // 사용자 접근 토큰
@@ -78,7 +78,25 @@ const GameLists = () => {
   const [isUserConfigModalOpen, setIsUserConfigModalOpen] = useState(false);
   const [token, setToken] = useState<ResponseValue>();
   const [gameLists, setGameLists] = useState<(GameRoom | DocumentData)[]>([]);
+  const [modal, setModal] = useState(false);
   const fireFetch = useFireFetch();
+
+  const socket = io(
+    `https://fastcampus-chat.net/chat?chatId=9984747e-389a-4aef-9a8f-968dc86a44e4`,
+    {
+      extraHeaders: {
+        Authorization: `Bearer ${token?.accessToken}`,
+        serverId: "6603aca7",
+      },
+    },
+  );
+
+  useEffect(() => {
+    socket.on("message-to-client", (messageObject) => {
+      console.log(messageObject);
+    });
+  }, [socket]);
+
   const { result: userInfo }: FetchResultUser = useFetch({
     url: `https://fastcampus-chat.net/user?userId=${token?.id}`,
     method: "GET",
@@ -160,6 +178,9 @@ const GameLists = () => {
               bg="blackAlpha.800"
               color="white"
               _hover={{ bg: "blackAlpha.900" }}
+              onClick={() => {
+                setModal(true);
+              }}
             >
               방 만들기
             </Button>
@@ -171,17 +192,7 @@ const GameLists = () => {
               ))}
             </Grid>
           </Box>
-          <Box bg="white" borderRadius="5">
-            <Box height="200px"></Box>
-            <InputGroup size="md">
-              <Input pr="5rem" placeholder="Enter password" />
-              <InputRightElement width="5.5rem">
-                <Button h="1.75rem" size="sm" textTransform="uppercase">
-                  enter
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-          </Box>
+          <GameListChat />
         </Box>
         <Box flex="2" display="flex" flexDirection="column" rowGap="5">
           <Card height="160px" padding="5" rowGap="5">
@@ -269,6 +280,7 @@ const GameLists = () => {
             </Box>
           </Card>
         </Box>
+        {modal ? <CreateGameModal setModal={setModal} socket={socket} /> : null}
       </Container>
     );
   }
