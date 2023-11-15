@@ -73,3 +73,13 @@ export const sortSelect = atom<any>({
   key: 'sortSelect',
   default: '',
 });
+
+export const openChatDetailState = atom<boolean>({
+  key: 'openChatDetailState',
+  default: false,
+});
+
+export const openNewChatState = atom<boolean>({
+  key: 'openNewChatState',
+  default: false,
+});

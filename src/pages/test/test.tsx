@@ -16,7 +16,6 @@ const GameLobby = () => {
   return (
     <>
       <h2 style={{ fontWeight: 'bold' }}>1:1대화</h2>
-      <CheckPrivateChat></CheckPrivateChat>
       <MyUserData></MyUserData>
       <br></br>
       <OnlineUserList />

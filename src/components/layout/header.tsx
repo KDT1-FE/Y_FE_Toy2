@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { titleAction } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
+import { useDisclosure } from '@chakra-ui/hooks';
 import { ChatIcon, HamburgerIcon } from '@chakra-ui/icons';
 import LoginModal from './loginModal';
 import { useRecoilValue } from 'recoil';
 import { chattingIdState } from '../../states/atom';
+import CheckPrivateChat from './checkPrivateChat';
 
 const Header: React.FC = () => {
   const id: string = useRecoilValue(chattingIdState);
@@ -21,10 +23,10 @@ const Header: React.FC = () => {
   };
 
   const handleChatContainerClick = () => {
-    setIsChatContainerClicked(true);
+    setIsChatContainerClicked(!isChatContainerClicked);
     setIsMenuContainerClicked(false);
     setIsMenuModalOpen(false);
-    setIsChatModalOpen(true);
+    setIsChatModalOpen(!isChatModalOpen);
   };
 
   const handleMenuContainerClick = () => {
@@ -35,6 +37,12 @@ const Header: React.FC = () => {
 
   const closeMenuModal = () => {
     setIsMenuModalOpen(false);
+    setIsChatContainerClicked(false);
+    setIsMenuContainerClicked(false);
+  };
+
+  const closeChatModal = () => {
+    setIsChatModalOpen(false);
     setIsChatContainerClicked(false);
     setIsMenuContainerClicked(false);
   };
@@ -57,6 +65,7 @@ const Header: React.FC = () => {
         </StyledContainer>
       </LogoContainer>
 
+      <CheckPrivateChat isOpen={isChatModalOpen} onClose={closeChatModal} />
       <LoginModal isOpen={isMenuModalOpen} onClose={closeMenuModal} />
     </HeaderContainer>
   );
@@ -67,6 +76,7 @@ const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
+  position: relative;
 `;
 
 const Title = styled.div`
@@ -89,6 +99,7 @@ const StyledContainer = styled.div<{ $isClicked: boolean }>`
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-left: 10px;
   background-color: ${(props) =>
     props.$isClicked ? '#e2e8f0' : 'transparent'};
 

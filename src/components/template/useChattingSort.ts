@@ -6,7 +6,7 @@ export const sortCreatedAt = (messages: any[]) => {
 };
 
 // createdAt을 날짜와 시간으로 분리하는 함수
-export const createSeparatedTime = (createdAt: string) => {
+export const createSeparatedTime = (createdAt: Date) => {
   return {
     date: new Date(createdAt).toLocaleDateString().replace(/\.$/, ''), // 마지막의 마침표를 제거
     time: new Date(createdAt).toLocaleTimeString([], {
