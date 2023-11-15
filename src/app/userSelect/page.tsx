@@ -5,6 +5,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdClose, MdSearch } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
+import { getCookie } from '@/lib/cookie';
 
 interface User {
   id: string;
@@ -22,8 +23,8 @@ function UserSelect() {
 
   const router = useRouter();
   const [newChatId, setNewChatId] = useState<string | null>(null);
-  const accessToken = sessionStorage.getItem('accessToken');
-  const userId = sessionStorage.getItem('userId');
+  const accessToken = getCookie('accessToken');
+  const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
   const handleChatClick = async () => {
     try {
