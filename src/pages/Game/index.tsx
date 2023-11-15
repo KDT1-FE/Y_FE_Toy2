@@ -11,6 +11,13 @@ interface ProfileCardProps {
   userId: string;
 }
 
+interface GameInfo {
+  category: string;
+  keyword: string;
+  liar: string;
+  users: string[];
+}
+
 const ProfileCard: React.FC<ProfileCardProps> = ({ userId }) => {
   return (
     <Card w="200px" h="200px" justify="center" mb="20px">
@@ -37,7 +44,7 @@ const Game = () => {
   const fireFetch = useFireFetch();
   const gameData = fireFetch.useGetSome("game", "id", gameId as string);
   const [status, setStatus] = useState("");
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<string[]>([]);
 
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -82,6 +89,14 @@ const Game = () => {
     }
   };
 
+  const handleGameInfoReceived = (gameInfo: GameInfo) => {
+    setCategory(gameInfo.category);
+    setKeyword(gameInfo.keyword);
+    setLiar(gameInfo.liar);
+    setUsers(gameInfo.users);
+    setStatus("게임중");
+  };
+
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
   }
@@ -108,10 +123,7 @@ const Game = () => {
             <Center fontWeight="bold">
               {status === "게임중" ? (
                 <>
-                  <p>
-                    주제는 {window.localStorage.getItem("category")} 입니다.
-                    &nbsp;
-                  </p>
+                  <p>주제는 {category} 입니다. &nbsp;</p>
 
                   {liar === user.id ? (
                     <p>당신은 Liar 입니다. </p>
@@ -140,7 +152,11 @@ const Game = () => {
           })}
         </GridItem>
         <GridItem>
-          <GameChat socket={socket} gameData={gameData.data[0]} />
+          <GameChat
+            socket={socket}
+            gameData={gameData.data[0]}
+            onGameInfoReceived={handleGameInfoReceived}
+          />
         </GridItem>
         <GridItem>
           <GridItem>

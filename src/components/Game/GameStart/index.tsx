@@ -100,6 +100,7 @@ const GameStart: React.FC<GameStartProps> = ({
       keyword: ranKeyword,
       liar: ranLiar,
       users: shuffledUsers,
+      status: status,
     });
 
     // 모든 클라이언트에게 게임 정보를 포함하는 이벤트 전송

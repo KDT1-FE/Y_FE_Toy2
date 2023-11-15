@@ -20,6 +20,13 @@ interface Message {
 interface GameChatProps {
   socket: Socket;
   gameData: any;
+  onGameInfoReceived: (gameInfo: {
+    category: string;
+    keyword: string;
+    liar: string;
+    users: string[];
+    status: string;
+  }) => void;
 }
 
 interface UserResponse {
@@ -28,7 +35,11 @@ interface UserResponse {
   leaver?: string;
 }
 
-const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
+const GameChat: React.FC<GameChatProps> = ({
+  socket,
+  gameData,
+  onGameInfoReceived,
+}) => {
   console.log("GameChat/ gameData:", gameData);
 
   const [message, setMessage] = useState<Message>({
@@ -61,13 +72,7 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
       if (messageObject.text.split("~")[1] === "!@##") {
         const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
         console.log("parseData:", gameInfo);
-        window.localStorage.setItem(
-          "shuffledUsers",
-          JSON.stringify(gameInfo.users),
-        );
-        window.localStorage.setItem("category", gameInfo.category);
-        window.localStorage.setItem("keyword", gameInfo.keyword);
-        window.localStorage.setItem("liar", gameInfo.liar);
+        onGameInfoReceived(gameInfo);
         return;
       }
       // 메시지 데이터, 작성 유저 상태 저장
