@@ -1,4 +1,4 @@
-import styles from '@styles/pages/signup.module.scss'
+import styles from '@styles/pages/signup.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '@hooks/useForm';
 import { signup } from '@api/signup';
@@ -37,7 +37,7 @@ const Signup = () => {
       console.log(validId);
       if (!invalidId) {
         await signup(id, password, name, character);
-        // navigate('/signin');
+        navigate('/signin');
       } else {
         setInvalidId(true);
       }
@@ -46,7 +46,9 @@ const Signup = () => {
   };
 
   const setProfileStyle = {
-    backgroundImage: character ? `url(${character})` : `url("/src/assets/images/profile.jpeg")`,
+    backgroundImage: character
+      ? `url(${character})`
+      : `url("/src/assets/images/profile.jpeg")`,
   };
 
   const handleModal = () => {
@@ -73,8 +75,8 @@ const Signup = () => {
           {errors?.id && (
             <span className={styles.signup__form_error}>{errors?.id}</span>
           )}
-          {!invalidId && (
-            <span className={styles.signup__form}>이미 존재하는 아이디입니다.</span>
+          {invalidId && (
+            <span className={styles.error}>이미 존재하는 아이디입니다.</span>
           )}
           <input
             type="text"
@@ -92,7 +94,7 @@ const Signup = () => {
             onChange={onChangePassword}
           />
           {errors?.password && (
-            <span className={styles.signup__form_error}>{errors?.password}</span>
+            <span className={styles.form_error}>{errors?.password}</span>
           )}
           <input
             type="password"
