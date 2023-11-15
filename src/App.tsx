@@ -13,15 +13,15 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Lobby />} />
-        <Route path="/signin" element={<Signin />} />
+        <Route path="/" element={<Signin />} />
+        <Route path="/lobby" element={<Lobby />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/hanging" element={<Hanging />} />
-        <Route path="/night" element={<Night />} />
-        <Route path="/result" element={<Result />} />
-        <Route path="/role" element={<Role />} />
-        <Route path="/vote" element={<Vote />} />
+        <Route path="/chat/:id" element={<Chat />} />
+        <Route path="/hanging/:id" element={<Hanging />} />
+        <Route path="/night/:id" element={<Night />} />
+        <Route path="/result/:id" element={<Result />} />
+        <Route path="/role/:id" element={<Role />} />
+        <Route path="/vote/:id" element={<Vote />} />
       </Routes>
     </BrowserRouter>
   );
