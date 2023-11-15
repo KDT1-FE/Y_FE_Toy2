@@ -11,6 +11,8 @@ function Carousel() {
     infinite: true,
     speed: 500,
     arrows: false,
+    autoplay: true,
+    autoplaySpeed: 3000
   }
 
   return (
@@ -31,13 +33,25 @@ function Carousel() {
         <Slides>
           <div className='slide-inner'>
             <p className="slide-tit">
-              취향으로<br />
-              만나는 우리
+              나의 취미<br />
+              함께 즐겨요
               <span className='slide-des'>
-                관심사 기반 커뮤니티
+                프로필 채팅 서비스
               </span>
             </p>
             <img src="/src/assets/images/mainban-img5.png" alt="배너" />
+          </div>
+        </Slides>
+        <Slides>
+          <div className='slide-inner'>
+            <p className="slide-tit">
+              서로 노하우<br />
+              공유해요
+              <span className='slide-des'>
+                취미 클래스 커뮤니티
+              </span>
+            </p>
+            <img src="/src/assets/images/mainban-img6.png" alt="배너" />
           </div>
         </Slides>
       </Slider>

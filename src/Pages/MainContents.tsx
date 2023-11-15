@@ -3,6 +3,7 @@ import Carousel from "../components/Main/Carousel";
 import { db } from "../firebase/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 interface ProfileI {
   name: string;
@@ -44,9 +45,7 @@ function MainContents() {
 
   return (
     <Wrapper>
-      {/* <Banner> */}
         <Carousel />
-      {/* </Banner> */}
       <FirstContent>
         <div className="inner">
           <TextSection>
@@ -65,7 +64,7 @@ function MainContents() {
         <div className="inner">
           <TextSection>
             <span className="small-title">프로필</span>
-            <span className="title">함께 할 멤버들의 취향 미리보기</span>
+            <span className="title">나와 비슷한<br /> 관심사를 가진 멤버들</span>
             <Gallery>
               {
                 profile && profile.map((item) => (
@@ -76,21 +75,23 @@ function MainContents() {
                     </div>
                   </Photo>
                   <UserInfo>
+                    <div className="userName">{item.name}</div>
+                    <div className="userInfo">
+                      {item.introText}
+                    </div>
                     <div className="hobby">
                     {item.hobby.slice(0, 5).map((h, index) => (
                       <div key={index}>{h}</div>
                     ))}
-                    </div>
-                    <div className="userName">{item.name}</div>
-                    <div className="userInfo">
-                      {item.introText}
                     </div>
                   </UserInfo>
                 </GalleryItem>
                 ))
               }
             </Gallery>
-            <MoreInfoBtn>더보기 &gt;</MoreInfoBtn>
+            <MoreInfoBtn to={'/profiles'}>
+              더보기 <img src="/src/assets/images/arrow-chevron.svg" alt="화살표" />
+            </MoreInfoBtn>
           </TextSection>
         </div>
       </SecondContent>
@@ -100,9 +101,11 @@ function MainContents() {
           <div className="title-wrap">
             <p className="tit">언제나 어디서나
             <br /> 관심사로 연결되는 새로운 세상</p>
-            <p className="text">문토에서 취향이 통하는 친구를 만나요.</p>
+            <p className="text">취미메이트에서 취향이 통하는 친구를 만나요.</p>
             <p className="btn-wrap">
-              <MoreInfoBtn>채팅하러가기 &gt;</MoreInfoBtn>
+              <MoreInfoBtn to={'/chat'} className="left">
+                채팅하기 <img src="/src/assets/images/arrow-chevron.svg" alt="화살표" />
+              </MoreInfoBtn>
             </p>
           </div>
         </div>
@@ -152,13 +155,14 @@ const Gallery = styled.div`
   grid-template-columns: 50% 50%;
   margin-left: -5px;
   margin-right: -5px;
+  margin-top:2em;
 `;
 const GalleryItem = styled.div`
   background-color: white;
   padding: 1em;
   border-radius: 2em;
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   gap:1em;
   margin: 0 5px;
   margin-bottom: 10px;
@@ -189,20 +193,22 @@ const UserInfo = styled.div`
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    margin-bottom:1em;
+    margin-top:1em;
     div {
       font-size: 0.8em;
       margin-right: 5px;
-      margin-bottom: 5px;
-      background-color: #feebea;
+      margin-top: 5px;
       border-radius: 1em;
       padding: 0.5em 0.7em;
-      color: #f43630;
     }
   }
-  .hobby div:first-child {
+  .hobby div:nth-child(odd) {
     background-color: #f4f4f4;
     color: #999696;
+  }
+  .hobby div:nth-child(even) {
+    background-color: #feebea;
+    color: #f43630;
   }
   .userName {
     width: 90%;
@@ -231,17 +237,18 @@ const TextSection = styled.div`
   width:100%;
   .small-title {
     font-size: 1em;
-    font-weight: 700;
+    font-weight: 600;
     color: #f43630;
   }
   .title {
     font-size: 2.3rem;
     font-weight: 700;
+    line-height: 2.6rem;
   }
   .text {
-    font-size: 0.8em;
+    font-size: 1rem;
     color: #5d5d5d;
-    line-height: 1.2em;
+    line-height: 1.4em;
   }
 `;
 
@@ -259,19 +266,19 @@ const ThirdContent = styled.div`
     padding: 5rem 0;
   }
   .title-wrap{
-
   .tit {
     font-size: 2.3rem;
     font-weight: 700;
+    line-height: 2.6rem;
   }
   .text {
-    font-size: 0.8em;
+    font-size: 1rem;
     color: #5d5d5d;
-    line-height: 1.2em;
-    margin-top:30px;
+    line-height: 1.4em;
+    margin-top: 2em;
   }
   .btn-wrap{
-    margin-top:30px;
+    margin-top:2em;
   }
   }
   img{
@@ -302,12 +309,21 @@ const SecondGallery = styled.div`
     margin-top:15px;
   }
 `;
-const MoreInfoBtn = styled.button`
+const MoreInfoBtn = styled(Link)`
+  display:block;
+  text-decoration: none;
   width: 10em;
   height: 3em;
+  text-align: center;
+  line-height: 3em;
   background-color: white;
+  color:#373535;
   border: 1px solid #f4f4f4;
   border-radius: 5em;
-  font-weight: 700;
+  font-weight: 500;
   margin: 0 auto;
+  cursor: pointer;
+  &.left{
+    margin-left: 0;
+  }
 `;
