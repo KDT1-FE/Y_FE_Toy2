@@ -7,7 +7,6 @@ import { fetchJoin } from '@/app/join/join.utils';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
-import Image from 'next/image';
 import DropZone from './DropZone/DropZone';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
@@ -108,17 +107,7 @@ const JoinForm = () => {
 			<div className="flex flex-col w-full h-full items-center justify-center ">
 				{/* 이미지 */}
 				<div className="mb-10">
-					{baseImageUrl ? (
-						<Image
-							src={baseImageUrl}
-							alt="Picture of the author"
-							width={100}
-							height={100}
-							className="h-[200px] w-[200px] rounded-full bg-blue-500 "
-						/>
-					) : (
-						<div className="h-[200px] w-[200px] rounded-full bg-blue-500" />
-					)}
+					<DropZone setFn={setBaseImageUrl} baseImageUrl={baseImageUrl} />
 				</div>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -201,7 +190,6 @@ const JoinForm = () => {
 							</Typography>
 						</div>
 					</div>
-					<DropZone setFn={setBaseImageUrl} />
 					<Button type="submit" className="w-full bg-main mt-10">
 						회원가입
 					</Button>
