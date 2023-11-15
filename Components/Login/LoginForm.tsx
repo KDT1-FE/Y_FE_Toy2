@@ -72,6 +72,7 @@ const LoginForm = () => {
 				{/* 5자 이상 */}
 				<Input
 					placeholder="password"
+					type="password"
 					className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500"
 					labelProps={{
 						className: 'hidden',

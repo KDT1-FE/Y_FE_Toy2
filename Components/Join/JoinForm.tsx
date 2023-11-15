@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Button, Typography } from '@material-tailwind/react';
+import { Button } from '@material-tailwind/react';
 import { fetchJoin } from '@/app/join/join.utils';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
