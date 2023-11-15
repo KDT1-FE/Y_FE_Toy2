@@ -151,6 +151,7 @@ interface FormData {
   name: string;
   password: string;
   confirmPw: string;
+  profile: string;
   [key: string]: string;
 }
 
