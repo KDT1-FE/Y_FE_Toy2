@@ -80,23 +80,34 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
   }, [UsersInGameRoom, setProfiles]);
   console.log(profiles);
 
-  return (
-    <UserList>
-      {profiles.map((element, index) => (
-        <div key={index}>
-          <UserBox>
-            <ImgBox>
-              <UserImage src={element.user.picture} alt="profileImg" />
-            </ImgBox>
+  const MAX_USERS = 4;
 
-            <TextBox>
-              <UserId>{element.user.id}</UserId>
-              <UserNick>{element.user.name}</UserNick>
-            </TextBox>
-          </UserBox>
-        </div>
-      ))}
-    </UserList>
+  return (
+    <>
+      <UserList>
+        {Array.from({ length: MAX_USERS }).map((_, index) => {
+          const user = profiles[index];
+          return (
+            <div key={index}>
+              {user ? (
+                <UserBox>
+                  <ImgBox>
+                    <UserImage src={user.user.picture} alt="profileImg" />
+                  </ImgBox>
+
+                  <TextBox>
+                    <UserId>{user.user.id}</UserId>
+                    <UserNick>{user.user.name}</UserNick>
+                  </TextBox>
+                </UserBox>
+              ) : (
+                <UserBoxEmpty />
+              )}
+            </div>
+          );
+        })}
+      </UserList>
+    </>
   );
 };
 
@@ -125,6 +136,10 @@ const UserBox = styled.div`
   border-radius: 10px;
   box-shadow: 0px 3px 5px 0px #e2e8f0;
 
+  &:first-child {
+    margin-left: 0;
+  }
+
   &[id='painter'] {
     background-image: linear-gradient(90deg, #313860 10%, #151928 90%);
 
@@ -136,6 +151,17 @@ const UserBox = styled.div`
       color: #cbd5e0;
     }
   }
+`;
+
+const UserBoxEmpty = styled.div`
+  width: 335px;
+  height: 120px;
+  background-color: #edf2f7;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0px 3px 5px 0px #edf2f7;
+  margin-left: 20px;
 `;
 
 const ImgBox = styled.div`

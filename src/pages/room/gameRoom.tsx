@@ -37,7 +37,6 @@ const GameRoom: React.FC = () => {
 
   const lastMessage = messages[messages.length - 1];
   const myId = getCookie('userId');
-  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     if (lastMessage.text !== '') {
@@ -79,7 +78,6 @@ const GameRoom: React.FC = () => {
   const startGame = () => {
     gameSocket.emit('start_game', { roomId, myId });
     setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
-    setIsFinished(false);
   };
 
   const handleSetAnswerChange = (
@@ -117,11 +115,15 @@ const GameRoom: React.FC = () => {
         alert('축하합니다! 정답입니다!');
         console.log('정답');
         alert('끝');
+
+        console.log('끝');
         // gameSocket.emit('end_game', { roomId: roomId });
       } else if (data.winner !== myId) {
         alert('누군가 정답을 맞췄습니다!');
-        // console.log('누군가 정답 맞춤');
+        console.log('누군가 정답 맞춤');
         alert('끝');
+        console.log('끝');
+
       }
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
@@ -228,5 +230,6 @@ const RoomMain = styled.div`
 
 const UserList = styled.div`
   margin-top: 30px;
+  margin-bottom: 30px;
 `;
 export default GameRoom;
