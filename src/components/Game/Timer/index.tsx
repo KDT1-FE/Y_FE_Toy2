@@ -1,3 +1,4 @@
+import { Center, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
 interface Props {
@@ -35,9 +36,17 @@ const Timer = ({ current, setCurrent }: Props) => {
   }, [seconds]);
 
   return (
-    <div style={{ border: "1px solid red" }}>
-      <h1>{seconds}초</h1>
-    </div>
+    <Center>
+      <Text
+        mt="0.3rem"
+        mb="-3rem"
+        color="#FF8A80"
+        fontSize="1.2rem"
+        fontWeight="600"
+      >
+        {seconds}초
+      </Text>
+    </Center>
   );
 };
 

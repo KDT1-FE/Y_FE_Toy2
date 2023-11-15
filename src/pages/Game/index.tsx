@@ -1,4 +1,12 @@
-import { Button, Card, Center, Grid, GridItem, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Card,
+  Center,
+  Flex,
+  Grid,
+  GridItem,
+  Text,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import GameChat from "../../components/Game/GameChat";
 import useFireFetch from "../../hooks/useFireFetch";
@@ -12,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 
 interface ProfileCardProps {
   userId: string;
+  speaking: string;
+  status: string;
 }
 
 interface GameInfo {
@@ -22,12 +32,28 @@ interface GameInfo {
   status: string;
 }
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ userId }) => {
+const ProfileCard: React.FC<ProfileCardProps> = ({
+  userId,
+  speaking,
+  status,
+}) => {
   return (
-    <Card w="200px" h="200px" justify="center" mb="20px">
-      <Center>
+    <Card
+      background={status === "게임중" && userId === speaking ? "#3182ce" : ""}
+      color={status === "게임중" && userId === speaking ? "#fff" : "#000"}
+      w="200px"
+      h="200px"
+      justify="center"
+      mb="20px"
+    >
+      <Flex direction="column" align="center">
+        {status === "게임중" && userId === speaking && (
+          <Text fontSize="0.95rem" mt="-0.5rem">
+            키워드에 대해 설명해주세요
+          </Text>
+        )}
         <Text fontWeight="bold">{userId}</Text>
-      </Center>
+      </Flex>
     </Card>
   );
 };
@@ -47,6 +73,7 @@ const Game = () => {
   const [num, setNum] = useState(0);
 
   const fireFetch = useFireFetch();
+
   const gameData = fireFetch.useGetSome("game", "id", gameId as string);
   const [status, setStatus] = useState("");
   const [users, setUsers] = useState<string[]>([]);
@@ -58,8 +85,6 @@ const Game = () => {
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
   const [liar, setLiar] = useState("");
-
-  // console.log(category, keyword);
 
   useEffect(() => {
     setSpeaking(users[0]);
@@ -98,7 +123,12 @@ const Game = () => {
     setUsers(gameInfo.users);
     setStatus(gameInfo.status);
 
-    setCurrent("개별발언");
+    if (current === "투표중") {
+      setCurrent("");
+      setNum(0);
+    } else {
+      setCurrent("개별발언");
+    }
     setSpeaking(users[0]);
   };
   console.log(current, speaking);
@@ -112,8 +142,10 @@ const Game = () => {
   }
 
   return (
-    <>
-      <Timer current={current} setCurrent={setCurrent} />
+    <Flex direction="column">
+      {current === "자유발언" && (
+        <Timer current={current} setCurrent={setCurrent} />
+      )}
       <Grid
         templateColumns="200px 1fr 200px"
         templateRows="60px 1fr"
@@ -150,6 +182,7 @@ const Game = () => {
         </GridItem>
         <GridItem>
           <GameStart
+            gameId={gameId}
             socket={socket}
             status={status}
             users={users}
@@ -158,7 +191,14 @@ const Game = () => {
         </GridItem>
         <GridItem>
           {users?.slice(0, 3).map((user, index) => {
-            return <ProfileCard key={index} userId={user}></ProfileCard>;
+            return (
+              <ProfileCard
+                key={index}
+                userId={user}
+                speaking={speaking}
+                status={status}
+              ></ProfileCard>
+            );
           })}
         </GridItem>
         <GridItem>
@@ -196,12 +236,19 @@ const Game = () => {
         <GridItem>
           <GridItem>
             {users?.slice(3, 6).map((user, index) => {
-              return <ProfileCard key={index} userId={user}></ProfileCard>;
+              return (
+                <ProfileCard
+                  key={index}
+                  userId={user}
+                  speaking={speaking}
+                  status={status}
+                ></ProfileCard>
+              );
             })}
           </GridItem>
         </GridItem>
       </Grid>
-    </>
+    </Flex>
   );
 };
 

@@ -14,8 +14,10 @@ import data from "../../../data/category.json";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/atoms/userState";
 import { Socket } from "../../Main/CreateGameModal";
+import useFireFetch from "../../../hooks/useFireFetch";
 
 interface GameStartProps {
+  gameId: string;
   socket: Socket;
   status: string;
   users: string[];
@@ -28,6 +30,7 @@ interface UserWithSort {
 }
 
 const GameStart: React.FC<GameStartProps> = ({
+  gameId,
   socket,
   status,
   users,
@@ -36,6 +39,9 @@ const GameStart: React.FC<GameStartProps> = ({
   const user = useRecoilValue(userState);
 
   const categories = data.CategoryList;
+
+  const fireFetch = useFireFetch();
+
   // const { isOpen, onClose, onOpen } = useDisclosure();
   // const [showStartModal, setShowStartModal] = useState(false);
 
@@ -65,6 +71,8 @@ const GameStart: React.FC<GameStartProps> = ({
 
   // 게임 시작 함수
   const handleStart = async () => {
+    fireFetch.updateData("game", gameId as string, { status: "게임중" });
+
     const selectedCategory = categories[getRandNum(categories.length)];
     const ranKeyword =
       selectedCategory.keyword[getRandNum(selectedCategory.keyword.length)];
@@ -107,6 +115,8 @@ const GameStart: React.FC<GameStartProps> = ({
     });
 
     socket.emit("message-to-server", gameInfo + "~##@!");
+    fireFetch.updateData("game", gameId as string, { votedFor: [] });
+    fireFetch.updateData("game", gameId as string, { status: "대기중" });
 
     // setShowStartModal(false);
   };
