@@ -62,9 +62,11 @@ const GameRoom: React.FC = () => {
       console.log(myId, quizMasterId);
       if (true) {
         if (myId === quizMasterId) {
-          alert('당신은 출제자 입니다!');
+          // alert('당신은 출제자 입니다!');
+          console.log('당신은 출제자 입니다');
         } else {
-          alert('새로운 출제자가 선정되었습니다!');
+          // alert('새로운 출제자가 선정되었습니다!');
+          console.log('새로운 출제자가 선정되었습니다');
         }
         setIsQuizMasterAlertShown(true);
       }
@@ -94,7 +96,8 @@ const GameRoom: React.FC = () => {
   useEffect(() => {
     gameSocket.on('alert_all', (message: string) => {
       if (message) {
-        alert('문제 출제 끝');
+        // alert('문제 출제 끝');
+        console.log('문제 출제 끝');
       }
     });
     return () => {
@@ -102,14 +105,15 @@ const GameRoom: React.FC = () => {
     };
   }, [roomId]);
 
-  const gameEnd = () => {
+  useEffect(() => {
     gameSocket.on('game_ended', (message) => {
-      alert(message);
+      // alert(message);
+      console.log(message);
     });
     return () => {
       gameSocket.off('game_ended');
     };
-  };
+  }, [roomId]);
 
   useEffect(() => {
     if (userMessage) {
@@ -120,17 +124,19 @@ const GameRoom: React.FC = () => {
     const handleCorrectAnswer = (data: { winner: string }) => {
       console.log(data.winner, myId);
       if (data.winner === myId) {
-        alert('축하합니다! 정답입니다!');
+        // alert('축하합니다! 정답입니다!');
+        console.log('정답');
       } else if (data.winner !== myId) {
-        alert('누군가 정답을 맞췄습니다!');
+        // alert('누군가 정답을 맞췄습니다!');
+        console.log('누군가 정답 맞춤');
       }
+      gameSocket.emit('end_game', { roomId: roomId });
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
-    gameSocket.emit('end_game', { roomId: roomId });
 
     return () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);
-      gameSocket.off('end_game', { roomId: roomId });
+      gameSocket.off('end_game');
     };
   }, [roomId, gameSocket, userMessage]);
 
@@ -158,7 +164,6 @@ const GameRoom: React.FC = () => {
               onChange={handleSetAnswerChange}
             />
             <button onClick={submitSetAnswer}>Submit Answer</button>
-            <button onClick={gameEnd}>Game</button>
           </div>
           {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>

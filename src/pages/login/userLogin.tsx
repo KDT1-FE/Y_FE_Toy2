@@ -49,7 +49,7 @@ function UserLogin() {
       loginSocket(accessToken, (data: any) => {
         // console.log('Data received from socket:', data);
         setOnlineUsers(data);
-        console.log(onlineUsers);
+        // console.log(onlineUsers);
       });
 
       navigate('/lobby');

@@ -7,6 +7,7 @@ import { allRoomState, usersInRoom } from '../../states/atom';
 
 import {
   getAllGameRooms,
+  leaveGameRoom,
   // getOnlyGameRoom,
   participateGameRoom,
 } from '../../api';
@@ -59,7 +60,7 @@ const CheckGameRoom = () => {
   const fetchData = async () => {
     try {
       const allRoomsData = await getAllGameRooms();
-      console.log(allRoomsData);
+      // console.log(allRoomsData);
       setTotalItemsCount(allRoomsData.chats.length);
 
       // 방번호 넣기
@@ -124,7 +125,8 @@ const CheckGameRoom = () => {
             type: errorType,
           });
         } else if (error.response.data.message === 'Already participated') {
-          navigate(`/room/:${chatId}`);
+          setErrorMessage('이미 들어가 있어요.');
+          await leaveGameRoom(chatId);
         }
       } finally {
         // const res = await getOnlyGameRoom(chatId);
