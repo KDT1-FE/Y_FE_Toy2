@@ -11,18 +11,18 @@ const ProgressBar = () => {
 			setValue((oldValue) => {
 				const newValue = oldValue + 10;
 
-				if (newValue === 100) {
+				if (newValue >= 100) {
 					clearInterval(interval);
 				}
 
 				return newValue;
 			});
 		}, 600);
-	});
+	}, []);
 
 	return (
 		<>
-			<Progress value={value} color="red" />
+			<Progress value={value} size="sm" color="pink" className="h-1" />
 		</>
 	);
 };
