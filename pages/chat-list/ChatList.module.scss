@@ -10,6 +10,15 @@
   @include container;
   display: flex;
   padding: 1rem;
+  margin : 2rem auto;
+  
+  button {
+    @include fill-btn;
+    margin : 0;
+    padding : 1rem 1.5rem;
+    font-size: 1rem;
+
+  }
 }
 
 .user_profile {
@@ -30,11 +39,17 @@
 
 .chatNameWrap {
   display: flex;
+
+  span {
+    color: #aaa;
+    margin-left: 1.7rem;
+  }
 }
 
 .chatName {
   font-size: $font-size-lg;
   margin-bottom: 1rem;
+  font-weight: bolder;
 }
 
 .chatLastestMesaage {
