@@ -5,25 +5,34 @@ import {
   Container,
   Grid,
   Image,
+  Input,
+  InputGroup,
+  InputRightElement,
   Text,
 } from "@chakra-ui/react";
-import { DocumentData } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { BiBell } from "react-icons/bi";
 import { IoSettingsOutline } from "react-icons/io5";
+import { BiBell } from "react-icons/bi";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import useFetch from "../../../hooks/useFetch";
+import useFireFetch from "../../../hooks/useFireFetch";
+import { DocumentData } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import UserConfigModal from "../../../components/Main/UserConfigModal";
 import { useAuth } from "../../../hooks/useAuth";
-import useFetch from "../../../hooks/useFetch";
-import useFireFetch from "../../../hooks/useFireFetch";
 import { authState } from "../../../recoil/atoms/authState";
 import { userState } from "../../../recoil/atoms/userState";
 import connect from "../../../socket/socket";
 import ToastNotice from "../../common/ToastNotice";
 import CreateGameModal from "../CreateGameModal";
 import GameCard from "../GameCard";
-import GameListChat from "../GameListsChat";
+import useInput from "../../../hooks/useInput";
+import MyChatBubble from "../../common/MyChatBubble";
+
+interface Message {
+  text: string;
+  id: string;
+}
 
 interface ResponseValue {
   accessToken: string; // 사용자 접근 토큰
@@ -123,6 +132,9 @@ const GameLists = () => {
   const [toast, setToast] = useState(false);
   const [modal, setModal] = useState(false);
 
+  const { value, onChange } = useInput("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  // 소켓 연결
   const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   useEffect(() => {
@@ -271,6 +283,20 @@ const GameLists = () => {
     }
   }, []);
 
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleMessage();
+    }
+  };
+  const handleMessage = () => {
+    if (!value) {
+      return alert("전송할 메시지를 입력해주세요:)");
+    }
+    // 메시지 전송하는 부분 구현
+    socket.emit("message-to-server", value);
+    inputRef?.current?.focus();
+  };
+
   if (isAuthenticated) {
     return (
       <Container
@@ -309,7 +335,36 @@ const GameLists = () => {
               ))}
             </Grid>
           </Box>
-          <GameListChat />
+          <Box bg="white" borderRadius="5">
+            <Box overflowY="auto" maxHeight="200px" height="200px">
+              {messages.map((message, index) => (
+                <MyChatBubble
+                  key={index}
+                  userId={message?.id}
+                  text={message?.text}
+                />
+              ))}
+            </Box>
+            <InputGroup size="md">
+              <Input
+                pr="5rem"
+                placeholder="Enter password"
+                onChange={onChange}
+                onKeyDown={onKeyDown}
+                value={value}
+              />
+              <InputRightElement width="5.5rem">
+                <Button
+                  h="1.75rem"
+                  size="sm"
+                  textTransform="uppercase"
+                  onClick={handleMessage}
+                >
+                  enter
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </Box>
         </Box>
         <Box flex="2" display="flex" flexDirection="column" rowGap="5">
           <Card height="160px" padding="5" rowGap="5">

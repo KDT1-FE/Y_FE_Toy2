@@ -72,7 +72,6 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
       });
       return response.data.isDuplicated;
     } catch (error) {
-      console.error("Error checking ID duplication", error);
       return false;
     }
   };
@@ -144,7 +143,6 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
         },
       );
       if (response.status === 200) {
-        console.log("회원가입 성공:", response.data);
         setSignUpStatus({
           type: "success",
           message: "회원가입에 성공하였습니다.",
@@ -157,7 +155,6 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
           message: "이미 사용중인 ID입니다.",
         });
       } else {
-        console.error("회원가입 실패:", error);
         setSignUpStatus({
           type: "error",
           message: "회원가입에 실패하였습니다.",
@@ -245,7 +242,6 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
                         clearErrors("id");
                         return true;
                       } catch (error) {
-                        console.error("ID 중복 확인 중 오류 발생:", error);
                         return "ID 중복 확인 중 오류가 발생했습니다.";
                       }
                     },

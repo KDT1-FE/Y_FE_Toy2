@@ -72,7 +72,6 @@ export const useAuth = () => {
         throw new Error("Failed to refresh token");
       }
     } catch (error) {
-      console.error("Token refresh error:", error);
       logout();
     }
   };
