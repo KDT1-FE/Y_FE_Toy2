@@ -26,10 +26,9 @@ interface ModalExampleProps {
   setSelectedUsers: (users: User[]) => void;
 }
 
-const ModalExample: React.FC<ModalExampleProps> = ({
-  setRoomName,
-  setSelectedUsers
-}) => {
+const ModalExample: React.FC<
+  ModalExampleProps & { addNewChatRoom: (name: string, users: User[]) => void }
+> = ({ setRoomName, setSelectedUsers, addNewChatRoom }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
@@ -128,6 +127,7 @@ const ModalExample: React.FC<ModalExampleProps> = ({
   const submitModal = () => {
     setRoomName(roomNameInput);
     setSelectedUsers(localSelectedUsers);
+    addNewChatRoom(roomNameInput, localSelectedUsers);
     closeModal();
   };
 

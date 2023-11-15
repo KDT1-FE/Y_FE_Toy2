@@ -76,20 +76,39 @@ function ChatRoom({
         }
       );
 
-      newSocket.on("message-to-client", (newMessage) => {
-        setMessages((prevMessages) => {
-          const isDuplicate = prevMessages.some(
-            (message) => message.id === newMessage.id
-          );
-          return isDuplicate ? prevMessages : [...prevMessages, newMessage];
-        });
-      });
+      // newSocket.on("message-to-client", (newMessage) => {
+      //   setMessages((prevMessages) => {
+      //     const isDuplicate = prevMessages.some(
+      //       (message) => message.id === newMessage.id
+      //     );
+      //     return isDuplicate ? prevMessages : [...prevMessages, newMessage];
+      //   });
+      // });
 
-      newSocket.on("messages-to-client", (responseData) => {
-        setMessages(responseData.messages);
-      });
-      newSocket.emit("fetch-messages");
-      setSocket(newSocket);
+      // newSocket.on("messages-to-client", (responseData) => {
+      //   setMessages(responseData.messages);
+      // });
+      // newSocket.emit("fetch-messages");
+      // setSocket(newSocket);
+
+      setTimeout(() => {
+        newSocket.on("message-to-client", (newMessage) => {
+          setMessages((prevMessages) => {
+            const isDuplicate = prevMessages.some(
+              (message) => message.id === newMessage.id
+            );
+            return isDuplicate ? prevMessages : [...prevMessages, newMessage];
+          });
+        });
+        setTimeout(() => {
+          newSocket.on("messages-to-client", (responseData) => {
+            setMessages(responseData.messages);
+          });
+          setTimeout(() => {
+            newSocket.emit("fetch-messages");
+          }, 100);
+        }, 100);
+      }, 100);
 
       return () => {
         newSocket.off("message-to-client");
