@@ -1,4 +1,4 @@
-import { Box, Button, Heading } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import JoinInputBox from '../../components/join/JoinInputBox';
@@ -48,8 +48,11 @@ const Join = () => {
       height="95vh"
       flexDir="column"
     >
-      <Box color="blackAlpha.800" mb="5" fontSize="30" fontWeight="bold">
-        smartalk 회원가입
+      <Box color="blue.400" mb="2" fontSize="50" fontWeight="bold">
+        smartalk
+      </Box>
+      <Box color="blackAlpha.800" mb="5" fontSize="30" fontWeight="semibold">
+        회원가입
       </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
