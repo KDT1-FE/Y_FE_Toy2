@@ -1,3 +1,4 @@
+import { UserData } from '../utils/utils';
 import { MessageType } from './MessageType';
 
 type CommonUserType = {
@@ -5,12 +6,12 @@ type CommonUserType = {
   picture: string;
 };
 
-export type UserType = CommonUserType & {
-  name: string;
-};
-
 type User = CommonUserType & {
   username: string;
+};
+
+export type UserType = CommonUserType & {
+  name: string;
 };
 
 export type ChatType = {

@@ -3,19 +3,17 @@ import { Box, Button, Modal, Typography } from '@mui/material';
 import { Clear, MapsUgcRounded } from '@mui/icons-material';
 import { useRecoilValue } from 'recoil';
 import Hangul from 'hangul-js';
-import { useNavigate } from 'react-router-dom';
 import { accessTokenState } from '../../atoms';
 import useChatAll from '../../hooks/useChatAll';
 import useUserAll from '../../hooks/useUserAll';
 import UserCard from '../../components/chat/UserCard';
 import * as S from '../../styles/chat/ChatListStyles';
-import { ChatType, UserType } from '../../types/ChatType';
-import useCreateChat from '../../hooks/useCreateChat';
+import { UserType } from '../../types/ChatType';
 import Chats from '../../components/chat/Chats';
 import useGetUserInfo from '../../hooks/useGetUserInfo';
+import useCreateOrJoinChat from '../../hooks/useCreateOrJoinChat';
 
 function ChatList() {
-  const navigate = useNavigate();
   const accessToken = useRecoilValue(accessTokenState);
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserType>({
@@ -26,23 +24,13 @@ function ChatList() {
   const [userList, setUserList] = useState([]);
   const userAllList = useUserAll(accessToken);
   const userInfo = useGetUserInfo(accessToken);
-  const chatName = [selectedUser.name, userInfo?.name].sort().join(',');
   const chatList = useChatAll(accessToken);
-  const createChat = useCreateChat(accessToken, chatName, selectedUser.id);
-
-  const handleCreateOrJoinChat = async () => {
-    const findChat: ChatType = chatList.find(
-      (chat: ChatType) => chat.name === chatName,
-    )!;
-
-    if (findChat) {
-      navigate(`/chat/${findChat.id}`);
-      return;
-    }
-
-    const data: ChatType = await createChat();
-    navigate(`/chat/${data.id}`);
-  };
+  const handleCreateOrJoinChat = useCreateOrJoinChat(
+    accessToken,
+    chatList,
+    selectedUser,
+    userInfo,
+  );
 
   const getUserList = useCallback(() => {
     setUserList(userAllList);

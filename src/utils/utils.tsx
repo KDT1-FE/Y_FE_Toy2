@@ -12,6 +12,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebaseSDK';
 
 export interface UserData {
+  correct?: number;
   name?: string;
   image?: string;
   language?: string;
