@@ -2,12 +2,11 @@
 
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Button, Typography } from '@material-tailwind/react';
+import { Button } from '@material-tailwind/react';
 import { fetchJoin } from '@/app/join/join.utils';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
-import Image from 'next/image';
 import DropZone from './DropZone/DropZone';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
@@ -81,8 +80,6 @@ const JoinForm = () => {
 		password,
 		name,
 	}) => {
-		loadingControl(true);
-
 		if (!baseImageUrl) {
 			Swal.fire({
 				text: '이미지를 넣어주세요.',
@@ -92,6 +89,7 @@ const JoinForm = () => {
 			});
 			return;
 		}
+		loadingControl(true);
 
 		mutation.mutate({
 			file: baseImageUrl!,
@@ -108,17 +106,7 @@ const JoinForm = () => {
 			<div className="flex flex-col w-full h-full items-center justify-center ">
 				{/* 이미지 */}
 				<div className="mb-10">
-					{baseImageUrl ? (
-						<Image
-							src={baseImageUrl}
-							alt="Picture of the author"
-							width={100}
-							height={100}
-							className="h-[200px] w-[200px] rounded-full bg-blue-500 "
-						/>
-					) : (
-						<div className="h-[200px] w-[200px] rounded-full bg-blue-500" />
-					)}
+					<DropZone setFn={setBaseImageUrl} baseImageUrl={baseImageUrl} />
 				</div>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -194,18 +182,16 @@ const JoinForm = () => {
 								)}
 							</div>
 						</div>
-						{/* 이미지 url */}
-						<div className="flex h-[90] w-full  flex-col  mt-5">
-							<Typography color="brown" className=" text-sm text-gray-700">
-								이미지를 넣어주세요.
-							</Typography>
-						</div>
 					</div>
-					<DropZone setFn={setBaseImageUrl} />
-					<Button type="submit" className="w-full bg-main mt-10">
+					<Button type="submit" className="w-full bg-main mt-10 text-subtext">
 						회원가입
 					</Button>
-					<div>{baseImageUrl}</div>
+					<Button
+						className="bg-pink-200 w-full mt-3"
+						onClick={() => router.push('/login')}
+					>
+						로그인
+					</Button>
 				</form>
 			</div>
 		</div>

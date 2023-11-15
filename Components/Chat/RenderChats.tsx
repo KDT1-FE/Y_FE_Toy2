@@ -1,6 +1,6 @@
 import { getCookie } from '@/Components/Login/Cookie';
 import React, { useEffect, useRef } from 'react';
-import { Chat, Message } from '@/types';
+import { Message, User } from '@/types';
 import Chats from '@/Components/Chat/Chats';
 
 const RenderChats = ({
@@ -9,7 +9,7 @@ const RenderChats = ({
 	useModal,
 }: {
 	messages: Message[];
-	chatUsers: Chat;
+	chatUsers: User[];
 	useModal: boolean;
 }) => {
 	const myId = getCookie('userId');
@@ -32,9 +32,7 @@ const RenderChats = ({
 		<>
 			<ul>
 				{messages.map((message, index) => {
-					const myUser = chatUsers.users.find(
-						(user) => user.id === message.userId,
-					);
+					const myUser = chatUsers.find((user) => user.id === message.userId);
 
 					if (myUser) {
 						return (

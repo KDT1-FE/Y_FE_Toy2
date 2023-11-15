@@ -1,6 +1,7 @@
 'use client';
 
 import { Chat } from '@/types';
+import { getCookie } from '@/Components/Login/Cookie';
 import OpenChatText from './OpenChatText';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -8,6 +9,7 @@ import { useRouter } from 'next/navigation';
 const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 	const TEXT_SIZE = 'text-2xl';
 	const router = useRouter();
+	const accessToken = getCookie('accessToken');
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const joinChat = async () => {
@@ -16,10 +18,9 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 			headers: {
 				'Content-Type': 'application/json',
 				serverId: process.env.NEXT_PUBLIC_SERVER_ID as string,
-				Authorization:
-					`Bearer ${process.env.NEXT_PUBLIC_ACCESSTOKEN}` as string,
+				Authorization: `Bearer ${accessToken}` as string,
 			},
-			body: JSON.stringify({ chatId: process.env.NEXT_PUBLIC_CHAT_ID }),
+			body: JSON.stringify({ chatId: modalChat.id }),
 		});
 
 		router.push(`/chat/${modalChat.id}?isPrivate=false`);
