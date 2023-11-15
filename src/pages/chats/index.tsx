@@ -2,8 +2,11 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import ChatList from '../../components/chats/ChatList';
 import ChatInput from '../../components/chats/ChatInput';
 import ChannelMemberSideBar from '../../components/channelMemberSideBar';
+import { useParams } from 'react-router';
 
 const Chats = () => {
+  const { id } = useParams();
+  if (!id) return <></>;
   return (
     <Flex>
       <Box flex="3" h="100vh">
@@ -14,12 +17,12 @@ const Chats = () => {
           h="44px"
         >
           <Text fontSize="1rem" fontWeight={600}>
-            3번 채팅방
+            채팅방
           </Text>
         </Flex>
         <Box>
-          <ChatList />
-          <ChatInput />
+          <ChatList chatId={id} />
+          <ChatInput chatId={id} />
         </Box>
       </Box>
       <Box flex="1" h="100vh">
