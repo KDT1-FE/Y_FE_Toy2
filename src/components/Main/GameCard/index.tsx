@@ -25,9 +25,7 @@ interface Props {
   game: Game | DocumentData;
 }
 
-const GameCard = ({ game: { id, bg, name, num, status, users } }: Props) => {
-  console.log(id);
-
+const GameCard = ({ game: { bg, name, num, status, users } }: Props) => {
   return (
     <Card
       direction={{ base: "column", sm: "row" }}
