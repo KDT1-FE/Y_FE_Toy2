@@ -21,28 +21,31 @@ const Chats = ({
 
 	return (
 		<>
-			{user.id === myId ? null : (
-				<>
-					{useModal ? (
-						<Image
-							src={user.picture}
-							width={50}
-							height={50}
-							alt="User Picture"
-							onClick={openProfile}
-						/>
-					) : (
-						<Image
-							src={user.picture}
-							width={50}
-							height={50}
-							alt="User Picture"
-						/>
-					)}
-				</>
+			{user.id === myId ? (
+				<li key={message.id} className="flex m-2 place-self-end text-white">
+					<div className="flex flex-col ml-2">
+						<p className="px-5 py-2 text-sm bg-gray-500 rounded-xl">
+							{message.text}
+						</p>
+					</div>
+				</li>
+			) : (
+				<li key={message.id} className="flex m-2 place-self-start">
+					<Image
+						src={user.picture}
+						width={50}
+						height={50}
+						alt="User Picture"
+						onClick={useModal ? openProfile : undefined}
+					/>
+					<div className="flex flex-col ml-2">
+						<p className="text-xs">{user.username}</p>
+						<p className="mt-1 px-5 py-2 text-sm text-white bg-pink-200 rounded-xl ">
+							{message.text}
+						</p>
+					</div>
+				</li>
 			)}
-			<p>{user.username}</p>
-			<p>{message.text}</p>
 		</>
 	);
 };

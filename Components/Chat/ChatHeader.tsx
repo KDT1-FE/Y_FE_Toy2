@@ -1,5 +1,6 @@
 import { getCookie } from '@/Components/Login/Cookie';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const ChatHeader = ({
 	chatId,
@@ -33,12 +34,38 @@ const ChatHeader = ({
 	};
 
 	return (
-		<>
-			<button onClick={handleBackChat}>뒤로 가기</button>
-			<span>{chatName}</span>
-			<span>{chatUsers}</span>
-			<button onClick={handleLeaveChat}>채팅방 나가기</button>
-		</>
+		<div className="w-full sm:w-[425px] h-14 flex justify-between items-center py-8 bg-gray-200">
+			<Image
+				src={'/icon_back.svg'}
+				alt="뒤로 가기"
+				width={25}
+				height={25}
+				onClick={handleBackChat}
+				className="ml-3"
+			/>
+			<div className="w-full flex justify-center items-center">
+				<span className="text-lg font-normal">{chatName}</span>
+				<div className="flex justify-center items-center mt-3">
+					<Image
+						src={'/icon_user.svg'}
+						alt="참여자 수"
+						width={12}
+						height={12}
+						onClick={handleLeaveChat}
+						className="ml-2 mr-1"
+					/>
+					<span className="text-xs">{chatUsers}</span>
+				</div>
+			</div>
+			<Image
+				src={'/icon_exit.svg'}
+				alt="나가기"
+				width={20}
+				height={20}
+				onClick={handleLeaveChat}
+				className="mr-3"
+			/>
+		</div>
 	);
 };
 
