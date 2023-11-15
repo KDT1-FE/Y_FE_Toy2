@@ -29,10 +29,9 @@ export default function useConnectServerSocket() {
     return () => {
       serverSocket.off('connect');
       serverSocket.off('error');
-      //   serverSocket.off('new-chat');
       serverSocket.disconnect();
     };
-  }, []);
+  }, [serverSocket]);
 
   return serverSocket;
 }
