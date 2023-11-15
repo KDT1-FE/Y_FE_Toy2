@@ -15,6 +15,7 @@ import {
   privateChatDetail,
   privateChatNew,
   onlineUserStateInGameRoom,
+  myMessageState,
   roomIdState,
   usersInRoom,
 } from '../../states/atom';
@@ -38,8 +39,12 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [usersInRoomData, setUsersInRoom] = useRecoilState(usersInRoom);
   const accessToken: any = getCookie('accessToken');
 
+
   const myUserId = localStorage.getItem('id');
-  console.log(myUserId);
+
+  const myUserData: any = useRecoilValue(myUserDataState);
+  const [currentMessageObject, setCurrentMessageObject] =
+    useRecoilState(myMessageState);
 
   useEffect(() => {
     try {
@@ -47,7 +52,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
-        console.log('Fetched messages:', messageData.messages);
+        // console.log('Fetched messages:', messageData.messages);
 
         // createdAt을 기준으로 시간순서 정렬
         const sortedMessages = sortCreatedAt(messageData.messages);
@@ -68,7 +73,14 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
       });
 
       newSocket.on('message-to-client', (messageObject) => {
-        console.log(messageObject);
+        setCurrentMessageObject([
+          ...currentMessageObject,
+          {
+            text: messageObject.text,
+            userId: messageObject.userId,
+            chatId: chatId,
+          },
+        ]);
         setNewChat((newChat: any) => {
           // 중복 날짜, 시간 null로 반환
           const modifyDateArray = modifyDate([

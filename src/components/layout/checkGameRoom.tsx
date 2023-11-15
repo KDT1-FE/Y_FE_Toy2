@@ -36,6 +36,7 @@ import {
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
 import { useSetRecoilState } from 'recoil';
+import Spiner from '../template/Spiner';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
@@ -44,6 +45,8 @@ const CheckGameRoom = () => {
   const setRoomId = useSetRecoilState(roomIdState);
   const setUsersInRoom = useSetRecoilState(usersInRoom);
   const allChatState = useRecoilValue(sortSelect);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -63,6 +66,7 @@ const CheckGameRoom = () => {
   };
 
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const allRoomsData = await getAllGameRooms();
 
@@ -96,6 +100,8 @@ const CheckGameRoom = () => {
       setAllRooms(paginatedRooms);
     } catch (error) {
       console.error('Error retrieving data:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -128,7 +134,7 @@ const CheckGameRoom = () => {
         setUsersInRoom(numberOfPeople + 1);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
-        console.log(error.response.data.message);
+        // console.log(error.response.data.message);
         if (error.response.data.message === 'Chat not found') {
           setErrorMessage('방이 없습니다. 잠시 후 다시 시도해 주세요');
           setErrorType('none');
@@ -160,129 +166,144 @@ const CheckGameRoom = () => {
 
   return (
     <>
-      <LobbyListTop />
-      <Card
-        boxShadow="0 3.5px 5px 0 rgba(0, 0, 0, 0.05)"
-        padding={30}
-        borderRadius={15}
-        position="relative">
-        <List spacing="10px">
-          {allRooms.map((element, index) => (
-            <ListItem
-              width="100%"
-              height={50}
-              borderRadius={10}
-              backgroundColor={
-                element.users.length !== 4 ? 'gray.50' : 'gray.300 '
-              }
-              key={index}
-              cursor={'pointer'}
-              border="1px solid"
-              borderColor={'gray.200'}
-              padding="0 30px"
-              _hover={{
-                backgroundColor:
-                  element.users.length !== 4 ? 'gray.100' : 'gray.300',
-              }}
-              onClick={() => {
-                // handleSelectRoom(element?.index);
-                handleParticipate(
-                  element.users.length,
-                  element.id,
-                  element?.index,
-                );
-              }}>
-              <Flex
-                lineHeight="50px"
-                fontSize={14}
-                fontWeight={600}
-                color={'gray.500'}
-                justifyContent={'space-between'}>
-                <Text>{element?.index}</Text>
-                <Text>{element?.name}</Text>
-                <Flex
-                  alignItems={'center'}
-                  width={50}
-                  justifyContent={'space-between'}>
-                  <Text>{element?.users?.length} / 4</Text>
-                  {element.users.length === 4 ? (
-                    <RoundRight className="false"></RoundRight>
-                  ) : (
-                    <RoundRight className="true"></RoundRight>
-                  )}
-                </Flex>
-              </Flex>
-            </ListItem>
-          ))}
+      {isLoading ? (
+        <SpinerWrap>
+          <Spiner />
+        </SpinerWrap>
+      ) : (
+        <>
+          <LobbyListTop />
+          <Card
+            boxShadow="0 3.5px 5px 0 rgba(0, 0, 0, 0.05)"
+            padding={30}
+            borderRadius={15}
+            position="relative">
+            <List spacing="10px">
+              {allRooms.map((element, index) => (
+                <ListItem
+                  width="100%"
+                  height={50}
+                  borderRadius={10}
+                  backgroundColor={
+                    element.users.length !== 4 ? 'gray.50' : 'gray.300 '
+                  }
+                  key={index}
+                  cursor={'pointer'}
+                  border="1px solid"
+                  borderColor={'gray.200'}
+                  padding="0 30px"
+                  _hover={{
+                    backgroundColor:
+                      element.users.length !== 4 ? 'gray.100' : 'gray.300',
+                  }}
+                  onClick={() => {
+                    // handleSelectRoom(element?.index);
+                    handleParticipate(
+                      element.users.length,
+                      element.id,
+                      element?.index,
+                    );
+                  }}>
+                  <Flex
+                    lineHeight="50px"
+                    fontSize={14}
+                    fontWeight={600}
+                    color={'gray.500'}
+                    justifyContent={'space-between'}>
+                    <Text>{element?.index}</Text>
+                    <Text>{element?.name}</Text>
+                    <Flex
+                      alignItems={'center'}
+                      width={50}
+                      justifyContent={'space-between'}>
+                      <Text>{element?.users?.length} / 4</Text>
+                      {element.users.length === 4 ? (
+                        <RoundRight className="false"></RoundRight>
+                      ) : (
+                        <RoundRight className="true"></RoundRight>
+                      )}
+                    </Flex>
+                  </Flex>
+                </ListItem>
+              ))}
 
-          <PaginationWrap>
-            <Pagination
-              activePage={currentPage}
-              itemsCountPerPage={itemsPerPage}
-              totalItemsCount={totalItemsCount}
-              pageRangeDisplayed={5}
-              firstPageText={
-                <svg viewBox="-20 -20 65 65" focusable="false">
-                  <g fill="currentColor">
-                    <path d="M10.416,12a2.643,2.643,0,0,1,.775-1.875L20.732.584a1.768,1.768,0,0,1,2.5,2.5l-8.739,8.739a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5l-9.541-9.541A2.643,2.643,0,0,1,10.416,12Z"></path>
-                    <path d="M.25,12a2.643,2.643,0,0,1,.775-1.875L10.566.584a1.768,1.768,0,0,1,2.5,2.5L4.327,11.823a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5L1.025,13.875A2.643,2.643,0,0,1,.25,12Z"></path>
-                  </g>
-                </svg>
-              }
-              prevPageText={
-                <svg viewBox="-5 -5 34 34" focusable="false">
-                  <path
-                    fill="currentColor"
-                    d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                </svg>
-              }
-              nextPageText={
-                <svg viewBox="-5 -5 34 34" focusable="false">
-                  <path
-                    fill="currentColor"
-                    d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                </svg>
-              }
-              lastPageText={
-                <svg viewBox="-20 -20 65 65" focusable="false">
-                  <g fill="currentColor">
-                    <path d="M13.584,12a2.643,2.643,0,0,1-.775,1.875L3.268,23.416a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L.768,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,13.584,12Z"></path>
-                    <path d="M23.75,12a2.643,2.643,0,0,1-.775,1.875l-9.541,9.541a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L10.934,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,23.75,12Z"></path>
-                  </g>
-                </svg>
-              }
-              activeClass={'active'}
-              itemClassFirst={'first'}
-              itemClassPrev={'prev'}
-              itemClassNext={'next'}
-              itemClassLast={'last'}
-              onChange={handlePageChange}
-            />
-          </PaginationWrap>
-        </List>
-      </Card>
-      <Fade in={showAlert.active}>
-        <Alert
-          marginTop={10}
-          status="error"
-          width={400}
-          height={70}
-          variant="solid"
-          borderRadius={6}
-          position="absolute"
-          bottom={30}
-          left="50%"
-          marginLeft={-200}>
-          <AlertIcon />
-          <Box>
-            <AlertTitle mr={2}>방 입장 오류</AlertTitle>
-            <AlertDescription>{showAlert.message}</AlertDescription>
-          </Box>
-        </Alert>
-      </Fade>
+              <PaginationWrap>
+                <Pagination
+                  activePage={currentPage}
+                  itemsCountPerPage={itemsPerPage}
+                  totalItemsCount={totalItemsCount}
+                  pageRangeDisplayed={5}
+                  firstPageText={
+                    <svg viewBox="-20 -20 65 65" focusable="false">
+                      <g fill="currentColor">
+                        <path d="M10.416,12a2.643,2.643,0,0,1,.775-1.875L20.732.584a1.768,1.768,0,0,1,2.5,2.5l-8.739,8.739a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5l-9.541-9.541A2.643,2.643,0,0,1,10.416,12Z"></path>
+                        <path d="M.25,12a2.643,2.643,0,0,1,.775-1.875L10.566.584a1.768,1.768,0,0,1,2.5,2.5L4.327,11.823a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5L1.025,13.875A2.643,2.643,0,0,1,.25,12Z"></path>
+                      </g>
+                    </svg>
+                  }
+                  prevPageText={
+                    <svg viewBox="-5 -5 34 34" focusable="false">
+                      <path
+                        fill="currentColor"
+                        d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                    </svg>
+                  }
+                  nextPageText={
+                    <svg viewBox="-5 -5 34 34" focusable="false">
+                      <path
+                        fill="currentColor"
+                        d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                    </svg>
+                  }
+                  lastPageText={
+                    <svg viewBox="-20 -20 65 65" focusable="false">
+                      <g fill="currentColor">
+                        <path d="M13.584,12a2.643,2.643,0,0,1-.775,1.875L3.268,23.416a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L.768,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,13.584,12Z"></path>
+                        <path d="M23.75,12a2.643,2.643,0,0,1-.775,1.875l-9.541,9.541a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L10.934,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,23.75,12Z"></path>
+                      </g>
+                    </svg>
+                  }
+                  activeClass={'active'}
+                  itemClassFirst={'first'}
+                  itemClassPrev={'prev'}
+                  itemClassNext={'next'}
+                  itemClassLast={'last'}
+                  onChange={handlePageChange}
+                />
+              </PaginationWrap>
+            </List>
+          </Card>
+          <Fade in={showAlert.active}>
+            <Alert
+              marginTop={10}
+              status="error"
+              width={400}
+              height={70}
+              variant="solid"
+              borderRadius={6}
+              position="absolute"
+              bottom={30}
+              left="50%"
+              marginLeft={-200}>
+              <AlertIcon />
+              <Box>
+                <AlertTitle mr={2}>방 입장 오류</AlertTitle>
+                <AlertDescription>{showAlert.message}</AlertDescription>
+              </Box>
+            </Alert>
+          </Fade>
+        </>
+      )}
     </>
   );
 };
+
+const SpinerWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const RoundRight = styled.span`
   width: 12px;

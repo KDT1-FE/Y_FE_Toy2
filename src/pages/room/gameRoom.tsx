@@ -1,59 +1,177 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { chattingIdState } from '../../states/atom';
-// import InviteGameRoom from '../../components/template/inviteGameRoom';
+import {
+  chattingIdState,
+  myMessageState,
+  roomIdState,
+  usersInRoom,
+} from '../../states/atom';
 import styled from 'styled-components';
 import GameChatting from '../../components/template/GameChatting';
-// import CheckUser from '../../components/template/CheckUser';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
-import { roomIdState, usersInRoom } from '../../states/atom';
+import CheckNums from '../../util/checkNums';
+import { gameSocket } from '../../api/socket';
+import AnswerForm from '../../components/template/AnswerForm';
 
-const GameRoom = () => {
-  const { id } = useParams();
-  const [chat, setChat] = useRecoilState(chattingIdState);
+const GameRoom: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [roomId, setRoomId] = useRecoilState(chattingIdState);
+  const [buttonVisible, setButtonVisible] = useState(true);
+  const [submitVisible, setSubmitVisible] = useState(false);
+  const [whoIsCaptain, SetWhoIsCaptain] = useState('');
+
+  const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
+  const [answer, setAnswer] = useState<string>(''); // 답 지정하기
+  const [messages, setMessages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
+  const [userMessage, setUserMessage] = useState<{
+    chatId: string;
+    text: string;
+    userId: string;
+  }>({
+    chatId: '',
+    text: '',
+    userId: '',
+  });
+
+  const lastMessage = messages[messages.length - 1];
+  const myId = localStorage.getItem('id');
+  useEffect(() => {
+    if (lastMessage.text !== '') {
+      setUserMessage(lastMessage);
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
     if (id) {
-      setChat(id.substring(1));
+      setRoomId(id.substring(1));
     }
-  }, [id, setChat]);
-  // controlGameRoomReload(chat);
-  controlBack();
-  console.log(chat);
+  }, [id, setRoomId]);
 
-  const roomId = useRecoilValue(roomIdState);
+  // 게임로직 소켓
+  useEffect(() => {
+    gameSocket.connect();
+
+    gameSocket.emit('joinRoom', roomId);
+
+    gameSocket.on('quiz_master_set', (quizMasterId: string) => {
+      console.log(myId, quizMasterId);
+      if (true) {
+        if (myId === quizMasterId) {
+          alert('당신은 출제자 입니다!');
+        } else {
+          alert('새로운 출제자가 선정되었습니다!');
+        }
+        setIsQuizMasterAlertShown(true);
+      }
+    });
+
+    return () => {
+      gameSocket.off('quiz_master_set');
+    };
+  }, [roomId]);
+
+  const startGame = () => {
+    gameSocket.emit('start_game', { roomId, myId });
+    // setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
+  };
+
+  const handleSetAnswerChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setAnswer(event.target.value);
+  };
+
+  const submitSetAnswer = () => {
+    gameSocket.emit('set_answer', answer, { roomId, myId, notifyAll: true });
+
+    setAnswer(''); // 입력 필드 초기화
+  };
+  useEffect(() => {
+    gameSocket.on('alert_all', (message: string) => {
+      if (message) {
+        alert('문제 출제 끝');
+      }
+    });
+    return () => {
+      gameSocket.off('alert_all');
+    };
+  }, [roomId]);
+
+  useEffect(() => {
+    gameSocket.on('game_ended', (message) => {
+      alert(message);
+    });
+    return () => {
+      gameSocket.off('game_ended');
+    };
+  }, [roomId]);
+
+  useEffect(() => {
+    if (userMessage) {
+      if (userMessage.userId === myId) {
+        gameSocket.emit('submit_answer', userMessage, { roomId, myId });
+      }
+    }
+    const handleCorrectAnswer = (data: { winner: string }) => {
+      console.log(data.winner, myId);
+      if (data.winner === myId) {
+        alert('축하합니다! 정답입니다!');
+      } else if (data.winner !== myId) {
+        alert('누군가 정답을 맞췄습니다!');
+      }
+      gameSocket.emit('end_game', { roomId: roomId });
+    };
+    gameSocket.on('correct_answer', handleCorrectAnswer);
+
+    return () => {
+      gameSocket.off('correct_answer', handleCorrectAnswer);
+      gameSocket.off('end_game');
+    };
+  }, [roomId, gameSocket, userMessage]);
+
+  const roomNum = useRecoilValue(roomIdState);
   const users = useRecoilValue(usersInRoom);
-  console.log(users);
 
   return (
     <Game>
       <RoomHeader>
         <RoomInfo>
           <RoomInformation>방 번호</RoomInformation>
-          <RoomInformation>{roomId}</RoomInformation>
+          <RoomInformation>{roomNum}</RoomInformation>
           <RoomInformation>인원 수 </RoomInformation>
           <RoomInformation>{users} / 4</RoomInformation>
           {/* 인원수 추가 */}
         </RoomInfo>
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
-          <LeaveGameRoom chatId={chat}></LeaveGameRoom>
+          <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
+          <button onClick={startGame}>start game</button>
+          <div>
+            <input
+              type="text"
+              value={answer}
+              onChange={handleSetAnswerChange}
+            />
+            <button onClick={submitSetAnswer}>Submit Answer</button>
+          </div>
+          {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>
       </RoomHeader>
 
       <RoomMain>
         <Drawing />
 
-        <GameChatting chatId={chat} />
+        <GameChatting chatId={roomId} />
       </RoomMain>
 
       <UserList>
         <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
       </UserList>
+
     </Game>
   );
 };
@@ -112,5 +230,4 @@ const RoomMain = styled.div`
 const UserList = styled.div`
   margin-top: 30px;
 `;
-
 export default GameRoom;
