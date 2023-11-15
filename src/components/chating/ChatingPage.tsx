@@ -35,6 +35,55 @@ export default function ChatingPage() {
   const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
   const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
+  useEffect(() => {
+    getUsers();
+  }, [getUserToggle]);
+
+  useEffect(() => {
+    try {
+      socket.on('connect', () => {
+        console.log('Socket connected');
+        setTimeout(() => {
+          socket.emit('fetch-messages');
+        }, 500);
+      });
+      socket.on('disconnect', () => {
+        console.log('disconnect');
+        router.back();
+      });
+
+      socket.emit('fetch-messages');
+
+      socket.on('messages-to-client', (messageObject) => {
+        console.log(messageObject);
+        setMessages(messageObject.messages.reverse());
+      });
+
+      socket.on('message-to-client', (messageObject) => {
+        setMessages((prevMessages) => [messageObject, ...prevMessages]);
+      });
+
+      // socket.emit('users');
+
+      // socket.on('users-to-client', (data) => {
+      //     console.log(data, 'users-to-client');
+      // });
+
+      socket.on('join', (data) => {
+        console.log(data, 'join');
+        setGetUserToggle(!getUserToggle);
+      });
+      socket.on('leave', (data) => {
+        console.log(data, 'leave');
+        setGetUserToggle(!getUserToggle);
+      });
+      return () => {
+        socket.disconnect();
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   const getUsers = async () => {
     const response = await fetch('https://fastcampus-chat.net/chat', {
       method: 'GET',
@@ -78,57 +127,6 @@ export default function ChatingPage() {
       serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
     },
   });
-
-  useEffect(() => {
-    getUsers();
-  }, [getUserToggle]);
-
-  useEffect(() => {
-    try {
-      socket.on('connect', () => {
-        console.log('Socket connected');
-        setTimeout(() => {
-          socket.emit('fetch-messages');
-          console.log(1);
-        }, 500);
-      });
-      socket.on('disconnect', () => {
-        console.log('disconnect');
-        router.back();
-      });
-
-      socket.emit('fetch-messages');
-
-      socket.on('messages-to-client', (messageObject) => {
-        console.log(messageObject);
-        setMessages(messageObject.messages.reverse());
-      });
-
-      socket.on('message-to-client', (messageObject) => {
-        setMessages((prevMessages) => [messageObject, ...prevMessages]);
-      });
-
-      // socket.emit('users');
-
-      // socket.on('users-to-client', (data) => {
-      //     console.log(data, 'users-to-client');
-      // });
-
-      socket.on('join', (data) => {
-        console.log(data, 'join');
-        setGetUserToggle(!getUserToggle);
-      });
-      socket.on('leave', (data) => {
-        console.log(data, 'leave');
-        setGetUserToggle(!getUserToggle);
-      });
-      return () => {
-        socket.disconnect();
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
 
   return (
     <main>
@@ -181,6 +179,11 @@ const MessagesContainer = styled.div`
   flex-direction: column-reverse;
 
   overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const YourMessageWrapper = styled.div`
