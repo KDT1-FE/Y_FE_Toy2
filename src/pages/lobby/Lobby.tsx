@@ -240,7 +240,6 @@ const tmpData = [
 ];
 
 const Lobby = ({ userId }): JSX.Element => {
-  console.log(userId);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [page, setPage] = useState(1);
   const limit: number = 8;

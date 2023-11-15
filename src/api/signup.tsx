@@ -1,4 +1,4 @@
-export const signup = async (id, password, name, character, ) => {
+export const signup = async (id, password, name, character) => {
   const data = {
     id: id,
     password: password,
@@ -17,7 +17,6 @@ export const signup = async (id, password, name, character, ) => {
 
     const json = await response.json();
     return json;
-
   } catch (error) {
     console.error('회원가입 실패:', error);
     throw error;

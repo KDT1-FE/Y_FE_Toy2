@@ -17,7 +17,7 @@ const Signin = () => {
   const navigate = useNavigate();
 
   const userId = useAppSelector((state) => state.userId);
-  console.log(userId)
+  console.log(userId);
 
   const signin = async (event) => {
     event.preventDefault();
@@ -32,7 +32,7 @@ const Signin = () => {
       localStorage.setItem('refresh_token', refreshToken);
 
       dispatch(getUserId(id));
-      navigate('/');
+      navigate('/lobby');
     }
   };
   return (
