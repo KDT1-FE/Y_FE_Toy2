@@ -1,9 +1,11 @@
+'use client';
+
 import ChatingPage from '../../../components/chating/ChatingPage';
 
 export default function Chating() {
-    return (
-        <main>
-            <ChatingPage />
-        </main>
-    );
+  return (
+    <main>
+      <ChatingPage />
+    </main>
+  );
 }

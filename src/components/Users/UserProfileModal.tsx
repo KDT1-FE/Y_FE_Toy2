@@ -4,6 +4,7 @@ import { ImBubble } from 'react-icons/im';
 import { MdClose } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
 import { BiSolidCircle } from 'react-icons/bi';
+import { getCookie } from '@/lib/cookie';
 
 // types 폴더 나중에 만들어서 type 빼놓기
 interface User {
@@ -28,8 +29,9 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
   const router = useRouter();
 
   const { id, name, picture } = user;
-  const accessToken = sessionStorage.getItem('accessToken');
-  const userId = sessionStorage.getItem('userId');
+
+  const accessToken = getCookie('accessToken');
+  const userId = localStorage.getItem('userId');
 
   const handleChatClick = async () => {
     try {
@@ -99,7 +101,6 @@ const UserModalBox = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-
   width: 100%;
   height: 100%;
 

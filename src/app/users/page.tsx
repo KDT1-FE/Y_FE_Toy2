@@ -7,6 +7,7 @@ import { MdClose, MdSearch } from 'react-icons/md';
 import Navigation from '@/components/Navigation';
 import { io } from 'socket.io-client';
 import React from 'react';
+import { getCookie } from '@/lib/cookie';
 
 interface User {
   id: string;
@@ -27,7 +28,7 @@ const Users = () => {
   const getUsers = async () => {
     try {
       let res = await instance.get<unknown, User[]>('/users');
-      res = res.filter((user) => user.id !== sessionStorage.getItem('userId'));
+      res = res.filter((user) => user.id !== localStorage.getItem('userId'));
       setUsers(res);
       setLoading(false);
     } catch (error) {
@@ -55,7 +56,7 @@ const Users = () => {
     users: [],
   });
   const [connectUserIdList, setConnectUserIdList] = useState<ConnectUserIdList>({ users: [] });
-  const accessToken = sessionStorage.getItem('accessToken');
+  const accessToken = getCookie('accessToken');
 
   const socket = io(`https://fastcampus-chat.net/server`, {
     extraHeaders: {

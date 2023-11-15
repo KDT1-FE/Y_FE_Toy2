@@ -1,17 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: false,
-    swcMinify: true,
-    compiler: {
-        styledComponents: true,
-    },
-    webpack(config) {
-        config.module.rules.push({
-            test: /\.svg$/,
-            use: ['@svgr/webpack'],
-        });
+  reactStrictMode: false,
+  swcMinify: true,
+  compiler: {
+    styledComponents: true,
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
 
-        return config;
-    },
+    return config;
+  },
 };
 module.exports = nextConfig;

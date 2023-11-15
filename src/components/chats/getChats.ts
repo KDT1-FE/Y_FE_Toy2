@@ -1,7 +1,10 @@
 import { instance } from '@/lib/api';
 import { Chat } from './chatsStore';
 import { AxiosResponse } from 'axios';
-const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+import { getCookie } from '@/lib/cookie';
+
+const accessToken = getCookie('accessToken');
+
 export const headers = {
   Authorization: `Bearer ${accessToken}`,
   'Cache-Control': 'no-cache',
