@@ -25,7 +25,6 @@ export default function useConnectServerSocket() {
     serverSocket.on('disconnect', () => {
       console.log('Disconnected from server socket');
     });
-    
 
     return () => {
       serverSocket.off('connect');

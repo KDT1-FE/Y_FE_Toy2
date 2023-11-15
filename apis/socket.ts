@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { CLIENT_URL } from './constant';
 
-const chatSocket = (accessToken: any, chatId: string) => {
+const chatSocket = (accessToken: string, chatId: string) => {
   const chattingSocket = io(`${CLIENT_URL}?chatId=${chatId}`, {
     extraHeaders: {
       Authorization: `Bearer ${accessToken}`,
