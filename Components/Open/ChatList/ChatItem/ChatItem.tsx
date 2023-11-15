@@ -27,9 +27,9 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 				query: { isPrivate: checkIsPrivate() },
 			}}
 		>
-			<div className="w-fulls hover:bg-gray-300 cursor-pointer rounded-xl ease-in transition-all duration-300 p-1 ">
-				<div className="flex gap-5 h-full">
-					<div className="w-fit h-fit border-2 rounded-lg border-bgfill">
+			<div className="w-full hover:bg-gray-300 cursor-pointer rounded-xl ease-in transition-all duration-300 p-1 ">
+				<div className="flex gap-5 h-full items-center">
+					<div className="w-fit h-fit rounded-lg shadow-md">
 						<OpenChatPicture openChatUsers={chat.users} />
 					</div>
 					<div
