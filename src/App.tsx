@@ -43,10 +43,6 @@ const router = createBrowserRouter([
       },
       { path: "profiles/:userid/edit", element: <ProfileEditPage /> },
       {
-        path: "chat",
-        element: <Chat />
-      },
-      {
         path: "login",
         element: <Login />
       },
@@ -67,6 +63,10 @@ const router = createBrowserRouter([
         element: <ChatRoom />
       }
     ]
+  },
+  {
+    path: "chat",
+    element: <Chat />
   },
   {
     path: "*",
