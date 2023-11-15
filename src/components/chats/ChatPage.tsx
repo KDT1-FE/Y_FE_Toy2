@@ -21,6 +21,10 @@ const MyChats = ({ userType }: { userType: string }) => {
   const router = useRouter();
   const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
+  const navigateToUserSelection = () => {
+    router.push('userSelect'); 
+};
+
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       router.push(`/chating/${chat.id}`);
@@ -42,7 +46,7 @@ const MyChats = ({ userType }: { userType: string }) => {
       <ChatHeader>
         <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
         <IconBar>
-          <AddChatIcon onClick={onAddHandler} />
+          <AddChatIcon onClick={navigateToUserSelection} />
         </IconBar>
       </ChatHeader>
       <ChatContainer>
