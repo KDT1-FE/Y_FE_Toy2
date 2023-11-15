@@ -5,14 +5,14 @@ import ChatListSkeleton from './ChatListSkeleton';
 import useScroll from '../../hooks/useScroll';
 import { alertChatState } from '../../constants/chats';
 
-const ChatList = () => {
-  const { chats, isLoading } = useChatList();
+const ChatList = ({ chatId }: { chatId: string }) => {
+  const { chats, isLoading } = useChatList(chatId);
   const chatElement = useScroll(chats);
 
   return (
     <Box
       id="scrollableBox"
-      maxWidth={700}
+      maxWidth={750}
       m="0 auto"
       mt="5"
       h="85vh"
@@ -42,8 +42,7 @@ const ChatList = () => {
           <Chat
             key={index}
             text={chat.text}
-            name={chat.name}
-            picture={chat.picture}
+            userId={chat.userId}
             createdAt={chat.createdAt}
           />
         );

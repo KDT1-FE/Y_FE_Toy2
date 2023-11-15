@@ -1,6 +1,6 @@
 import { LockIcon } from '@chakra-ui/icons';
-import { Link as ReactRouterLink, useParams } from 'react-router-dom';
-import { Box, Flex, Link as ChakraLink } from '@chakra-ui/react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Flex } from '@chakra-ui/react';
 import { splitChannelName } from '../../utils';
 
 interface Props {
@@ -13,9 +13,15 @@ const MyChannelItem = ({ myChannelName, isPrivate, channelId }: Props) => {
   const { title } = splitChannelName(myChannelName);
   const { id } = useParams();
   const isActive = channelId === id;
+  const navigate = useNavigate();
 
   return (
-    <ChakraLink as={ReactRouterLink} to={`/chats/${channelId}`}>
+    <Box
+      onClick={() => {
+        navigate(`chats/${channelId}`);
+        location.reload();
+      }}
+    >
       <Flex
         overflow="hidden"
         align="center"
@@ -32,7 +38,7 @@ const MyChannelItem = ({ myChannelName, isPrivate, channelId }: Props) => {
           {title}
         </Box>
       </Flex>
-    </ChakraLink>
+    </Box>
   );
 };
 

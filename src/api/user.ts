@@ -2,15 +2,8 @@ import { AuthResponseValue, User } from '../@types/user';
 import instance from './axios';
 
 export const getUser = async (userId: string) => {
-  try {
-    const response = await instance.get<{ user: User }>(
-      `user?userId=${userId}`,
-    );
-    const { name, picture } = response.data.user;
-    return { name, picture };
-  } catch (error) {
-    console.log(error);
-  }
+  const response = await instance.get<{ user: User }>(`user?userId=${userId}`);
+  return response.data.user;
 };
 
 export const getAllUsers = async () => {
