@@ -1,5 +1,6 @@
 'use clinet';
 
+import Image from 'next/image';
 import { useCallback } from 'react';
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
 import Swal from 'sweetalert2';
@@ -12,9 +13,10 @@ type onDropProps = <T extends File>(
 
 type DropZoneProps = {
 	setFn: React.Dispatch<React.SetStateAction<string | undefined>>;
+	baseImageUrl?: string;
 };
 
-const DropZone = ({ setFn }: DropZoneProps) => {
+const DropZone = ({ setFn, baseImageUrl }: DropZoneProps) => {
 	const onDrop: onDropProps = useCallback(
 		(acceptedFiles, fileRejections) => {
 			if (acceptedFiles.length > 0) {
@@ -43,7 +45,7 @@ const DropZone = ({ setFn }: DropZoneProps) => {
 	);
 
 	const { getRootProps, getInputProps, isDragAccept } = useDropzone({
-		accept: { 'image/*': ['.png', '.jpg', '.jpeg'] },
+		accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.svg'] },
 		maxFiles: 1,
 		maxSize: 1024 * 1024,
 		onDrop,
@@ -56,11 +58,22 @@ const DropZone = ({ setFn }: DropZoneProps) => {
 	return (
 		<div
 			{...getRootProps({
-				className: 'bg-red-700',
+				className:
+					'border-4 w-[200px] h-[200px] rounded-full overflow-hidden flex flex-col items-center justify-content',
 			})}
 		>
 			<input {...getInputProps()} />
-			<p>여기에 파일 드래그 드랍 해주세요</p>
+			{baseImageUrl ? (
+				<Image
+					src={baseImageUrl}
+					alt="유저이미지"
+					width={100}
+					height={100}
+					className="w-full h-full"
+				/>
+			) : (
+				<div className="w-full h-full flex flex-col justify-center items-center bg-camera-icon bg-50% bg-no-repeat bg-center"></div>
+			)}
 		</div>
 	);
 };

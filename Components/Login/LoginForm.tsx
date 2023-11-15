@@ -39,7 +39,7 @@ const LoginForm = () => {
 			router.replace('/users');
 		} else {
 			Swal.fire({
-				text: '등록된 유저가 없습니다.',
+				text: '로그인 정보를 확인해주세요 ‼',
 				showCancelButton: false,
 				confirmButtonText: '확인',
 				confirmButtonColor: '#3085d6',
@@ -72,6 +72,7 @@ const LoginForm = () => {
 				{/* 5자 이상 */}
 				<Input
 					placeholder="password"
+					type="password"
 					className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500"
 					labelProps={{
 						className: 'hidden',
@@ -83,7 +84,7 @@ const LoginForm = () => {
 				<Button type="submit" className=" bg-pink-200 w-full mt-10">
 					로그인
 				</Button>
-				<Link href="/join">
+				<Link href="/join" passHref>
 					<div className="text-gray-700  text-[10px] mt-4 mb-14">회원가입</div>
 				</Link>
 			</form>
