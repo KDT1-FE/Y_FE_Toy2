@@ -3,19 +3,18 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import PageNotFound from "./components/PageNotFound";
 import { Theme, darkTheme, lightTheme } from "./style/theme";
-import Profile from "./components/Profile/Profile";
+
 import { AuthProvider } from "./hooks/useAuth";
 import { createContext } from "react";
 import { useDarkMode } from "./hooks/useDarkMode";
-import ProfilePage from "./pages/Profile/ProfilePage";
-import MainContents from "./pages/MainContents";
-import ProfileEditPage from "./pages/Profile/ProfileEditPage";
-import Chat from "./pages/Chat";
-import Login from "./pages/Login/Login";
-import SignUp from "./pages/SignUp/SignUp";
-import ChatTest from "./pages/ChatTest";
-import ChatTesters from "./pages/ChatTesters";
-import ChatRoom from "./pages/ChatRoom";
+import ProfileDefaultPage from "./Pages/Profile/ProfileDefaultPage";
+import MainContents from "./Pages/MainContents";
+import ProfilePage from "./Pages/Profile/ProfilePage";
+import Login from "./Pages/Login/Login";
+import SignUp from "./Pages/SignUp/SignUp";
+import Chat from "./Pages/Chat";
+import ProfileEditPage from "./Pages/Profile/ProfileEditPage";
+import ProfileFeedDetailPage from "./Pages/Profile/ProfileFeedDetailPage";
 
 interface ContextProps {
   theme: Theme;
@@ -34,14 +33,17 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <MainContents /> },
       {
-        path: "/profiles",
-        element: <Profile />
+        path: "profiles",
+        element: <ProfileDefaultPage />
       },
       {
         path: "/profiles/:userid",
         element: <ProfilePage />
       },
-      { path: "/profiles/:userid/edit", element: <ProfileEditPage /> },
+      { path: "profiles/:userid/edit", element: <ProfileEditPage /> },
+
+      { path: "profiles/:userid/:feedid", element: <ProfileFeedDetailPage /> },
+
       {
         path: "/login",
         element: <Login />
@@ -49,18 +51,6 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignUp />
-      },
-      {
-        path: "/chattest",
-        element: <ChatTest />
-      },
-      {
-        path: "/chattst",
-        element: <ChatTesters />
-      },
-      {
-        path: "/chatrm",
-        element: <ChatRoom />
       }
     ]
   },
