@@ -30,7 +30,9 @@ const MyChats = ({ userType }: { userType: string }) => {
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       if (chat.users.every((user) => user.id !== userId)) {
+        // setChatModalOpen(true);
         partChats(chat.id);
+        setChatModalOpen(false);
         router.push(`/chating/${chat.id}`);
         console.log('새로 입장 성공');
       } else {
@@ -52,6 +54,18 @@ const MyChats = ({ userType }: { userType: string }) => {
     setAddChatOpen(!addChatOpen);
   };
 
+  const onModalHandler = () => {
+    setChatModalOpen(!chatModalOpen);
+  };
+
+  // const onEnterChatRoom = (chat: Chat) => {
+  //   if (chat.id && chat.users) {
+  //     partChats(chat.id);
+  //     setChatModalOpen(false);
+  //     router.push(`/chating/${chat.id}`);
+  //   }
+  // };
+
   return (
     <Wrapper>
       <ChatHeader>
@@ -63,6 +77,7 @@ const MyChats = ({ userType }: { userType: string }) => {
       <SearchMyChat userType={userType} />
       <ChatContainer>
         <ChatList>
+          {/* <EnterChatRoomModal isOpen={chatModalOpen} onEnterClick={enterChatRoom} onCancleClick={onModalHandler} />  */}
           {isLoading && <Loading />}
           {userId && data ? (
             filterInputValue ? (
