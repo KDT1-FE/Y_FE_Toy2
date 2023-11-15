@@ -106,6 +106,12 @@ const Game = () => {
     }
   }, [gameData.data]);
 
+  useEffect(() => {
+    if (current === "게임종료") {
+      window.location.reload();
+    }
+  }, [current]);
+
   // 게임 나가기 api 선언 (호출 X)
   const leave = useFetch({
     url: "https://fastcampus-chat.net/chat/leave",
@@ -188,6 +194,8 @@ const Game = () => {
             status={status}
             users={users}
             host={gameData.data[0].host}
+            current={current}
+            setCurrent={setCurrent}
           />
         </GridItem>
         <GridItem>
