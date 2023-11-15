@@ -23,6 +23,11 @@ export default function AllChatList() {
   };
   useEffect(() => {
     getAllChat();
+    const timer = setInterval(() => {
+      getAllChat();
+    }, 30000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const participateChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
