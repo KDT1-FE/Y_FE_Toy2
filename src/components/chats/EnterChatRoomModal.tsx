@@ -33,8 +33,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  z-index: 999;
-  background-color: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const ModalContainer = styled.div`
@@ -46,6 +45,7 @@ const ModalContainer = styled.div`
   border: none;
   border-radius: 0.6rem;
   background-color: ${({ theme }) => theme.color.mainGreen};
+  box-shadow: ${({ theme }) => theme.shadow.list};
 `;
 
 const ModalMainText = styled.div`
