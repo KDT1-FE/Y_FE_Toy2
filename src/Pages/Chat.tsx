@@ -76,6 +76,20 @@ function Chat() {
     console.log("클릭된 방 아이디", roomId);
   };
 
+  // 새로운 채팅방 추가 함수
+  const addNewChatRoom = (newRoomName: string, newSelectedUsers: User[]) => {
+    const newRoom: ChatI = {
+      id: Math.random().toString(), // 임시 ID, 서버에서 생성되는 ID로 변경 가능
+      name: newRoomName,
+      users: newSelectedUsers,
+      isPrivate: false,
+      updatedAt: new Date().toISOString(),
+      latestMessage: ""
+    };
+
+    setChatRoom((prevRooms) => [...prevRooms, newRoom]); // 기존 채팅방 목록에 새로운 채팅방 추가
+  };
+
   return (
     <>
       <ChatWrapper>
@@ -97,6 +111,7 @@ function Chat() {
             <ModalPlus
               setRoomName={setRoomName}
               setSelectedUsers={setSelectedUsers}
+              addNewChatRoom={addNewChatRoom} // 함수를 ModalPlus에 전달
             />
           </CatePlus>
         </ChatCategory>
