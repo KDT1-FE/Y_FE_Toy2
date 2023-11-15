@@ -57,13 +57,13 @@ export default function AllChatList() {
   const serverSocket = useConnectServerSocket();
   useEffect(() => {
     serverSocket.on('new-chat', ({ responseChat }) => {
-      console.log(responseChat);
       setAllChatList(preState => [responseChat, ...preState]);
     });
     return () => {
       serverSocket.off('new-chat');
     };
   }, []);
+
   return (
     <ul>
       <button
