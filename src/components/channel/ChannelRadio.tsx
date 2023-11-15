@@ -27,9 +27,10 @@ const ChannelRadio = (props: any) => {
           boxShadow="md"
           color="black"
           _checked={{
-            bg: props.customColor, // 커스텀 컬러 지정
-            color: 'white',
-            borderColor: props.customColor, // 커스텀 컬러 지정
+            bg: props.customColor,
+            color: '#1A202C',
+            borderColor: props.customColor,
+            fontWeight: 'bold',
           }}
           fontSize="xs"
           px="3"
