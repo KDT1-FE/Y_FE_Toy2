@@ -98,14 +98,12 @@ function Chat() {
       };
 
       fetchData();
-      console.log(chatRoom);
     }
   }, [accessToken, roomId]);
   // TODO : 여기에 의존성배열로 chatRoom 을 넣어줘야하는데 그러면 너무 렌더링이 많아져서 또 채팅방 내역을 잘 못 불러옴
 
   const handleClick = (roomId: string) => {
     setRoomId(roomId);
-    console.log("클릭된 방 아이디", roomId);
   };
 
   // 새로운 채팅방 추가 함수

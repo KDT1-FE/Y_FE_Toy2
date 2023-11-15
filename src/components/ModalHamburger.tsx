@@ -60,17 +60,19 @@ const ModalExample = ({
 
   return (
     <ModalWrap ref={menuRef}>
-      <HamButton
-        onClick={() => {
-          openModal();
-          setIsShowRoom(false);
-        }}
-      >
+      <HamButton onClick={() => openModal()}>
         <img src="/src/assets/images/menu-ico.png" alt="메뉴" width="30" />
       </HamButton>
       {modalIsOpen && (
         <ButtonWrap>
-          <button onClick={() => leaveChatRoom(roomId)}>채팅방 나가기</button>
+          <button
+            onClick={() => {
+              leaveChatRoom(roomId);
+              setIsShowRoom(false);
+            }}
+          >
+            채팅방 나가기
+          </button>
         </ButtonWrap>
       )}
     </ModalWrap>
