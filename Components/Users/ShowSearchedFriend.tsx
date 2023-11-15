@@ -14,7 +14,7 @@ const ShowSearchedFriend = ({
 	const searchedUserUpToFour = searchedUsers?.slice(0, 4);
 	const isUpToFour = searchedUsers.length > 4 ? true : false;
 	return (
-		<div className="grid grid-cols-5">
+		<div className="grid grid-cols-5 my-4">
 			{searchedUserUpToFour?.map((user) => {
 				const picture = convertPictureURL(user.picture);
 				return (
@@ -25,13 +25,22 @@ const ShowSearchedFriend = ({
 								query: { isMyProfile: false },
 							}}
 						>
-							<Image
-								src={picture}
-								alt={user.id + `picture`}
-								width={50}
-								height={50}
-								className="rounded-full"
-							/>
+							<div className="relative w-10 h-10 mx-auto">
+								<Image
+									src={picture}
+									alt={user.id + `picture`}
+									fill={true}
+									className="rounded-full"
+									style={{
+										display: 'block',
+										position: 'absolute',
+										top: 0,
+										left: 0,
+										objectFit: 'cover',
+										margin: 'auto',
+									}}
+								/>
+							</div>
 							<h4>{user.name}</h4>
 						</Link>
 					</div>

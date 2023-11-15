@@ -110,7 +110,12 @@ const SearchOpenChat = ({
 							))}
 						</>
 					) : (
-						<h1 className="mx-auto my-2">검색된 내 채팅이 없습니다. </h1>
+						<>
+							<h1 className="mx-auto my-2">검색된 내 채팅이 없습니다. </h1>
+							<Link href="/search" className="mx-auto underline">
+								오픈채팅방 보러가기
+							</Link>
+						</>
 					)}
 				</>
 			)}
