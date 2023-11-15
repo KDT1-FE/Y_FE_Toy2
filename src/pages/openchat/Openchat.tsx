@@ -135,12 +135,12 @@ function Openchat() {
             </OpenchatBox>
           </Grid>
           <Grid item xs={12} sm={12} md={3}>
-            <OpenchatBox
-              sx={{ position: 'sticky', top: 0, paddingTop: '58px' }}
-            >
-              <Box bgcolor="white" p={2}>
-                <Typography variant="h5">🙌 추천 친구</Typography>
-                <Typography variant="body2" color="GrayText" mt={1} mb={2}>
+            <OpenchatBox issticky="sticky">
+              <Box bgcolor="white">
+                <Typography variant="h5" p={2}>
+                  🙌 추천 친구
+                </Typography>
+                <Typography variant="body2" color="GrayText" mb={2} px={2}>
                   비슷한 관심사를 가지고 있는 친구
                 </Typography>
                 {friends && <OpenchatFriends friends={friendsExcludMe} />}
