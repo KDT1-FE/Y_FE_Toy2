@@ -79,15 +79,15 @@ function Chat() {
   // 새로운 채팅방 추가 함수
   const addNewChatRoom = (newRoomName: string, newSelectedUsers: User[]) => {
     const newRoom: ChatI = {
-      id: Math.random().toString(), // 임시 ID 생성, 서버에서 ID 생성 시 변경 필요
+      id: Math.random().toString(), // 임시 ID, 서버에서 생성되는 ID로 변경 가능
       name: newRoomName,
       users: newSelectedUsers,
-      isPrivate: false, // 필요에 따라 설정
-      updatedAt: new Date().toISOString(), // 현재 시간, 서버에서 설정할 수도 있음
-      latestMessage: "" // 필요에 따라 설정
+      isPrivate: false,
+      updatedAt: new Date().toISOString(),
+      latestMessage: ""
     };
 
-    setChatRoom([...chatRoom, newRoom]); // 기존 채팅방 목록에 새로운 채팅방 추가
+    setChatRoom((prevRooms) => [...prevRooms, newRoom]); // 기존 채팅방 목록에 새로운 채팅방 추가
   };
 
   return (
