@@ -57,11 +57,6 @@ const ChatRoom = ({
 			});
 
 			socket.on('join', (responseData) => {
-				// console.log('join 이벤트 리슨');
-				// console.log('responseData: ', responseData);
-				// console.log('responseData.users: ', responseData.users);
-				// console.log('responseData.joiner: ', responseData.joiners);
-
 				setChatUsers([...chatUsers, ...responseData.users]);
 				socket.emit(
 					'message-to-server',
@@ -70,11 +65,6 @@ const ChatRoom = ({
 			});
 
 			socket.on('leave', (responseData) => {
-				// console.log('leave 이벤트 리슨');
-				// console.log('responseData: ', responseData);
-				// console.log('responseData.users: ', responseData.users);
-				// console.log('responseData.leaver: ', responseData.leaver);
-
 				setChatUsers([...chatUsers, ...responseData.users]);
 				socket.emit(
 					'message-to-server',
@@ -115,7 +105,6 @@ const ChatRoom = ({
 	return (
 		<>
 			<ChatHeader
-				socket={socket}
 				chatId={chatId}
 				chatName={chatName}
 				chatUsers={chatUsers.length}

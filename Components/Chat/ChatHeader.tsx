@@ -1,15 +1,11 @@
 import { getCookie } from '@/Components/Login/Cookie';
 import { useRouter } from 'next/navigation';
-import { Socket } from 'socket.io-client';
-import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 const ChatHeader = ({
-	socket,
 	chatId,
 	chatName,
 	chatUsers,
 }: {
-	socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 	chatId: string;
 	chatName: string;
 	chatUsers: number;
@@ -19,7 +15,6 @@ const ChatHeader = ({
 	const accessToken = getCookie('accessToken');
 
 	const handleBackChat = () => {
-		socket.disconnect();
 		router.back();
 	};
 
@@ -34,7 +29,6 @@ const ChatHeader = ({
 			body: JSON.stringify({ chatId }),
 		});
 
-		socket.disconnect();
 		router.back();
 	};
 
