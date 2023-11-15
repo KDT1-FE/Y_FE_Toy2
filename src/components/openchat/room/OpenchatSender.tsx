@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Button, Grid, TextField } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { Send } from '@mui/icons-material';
+import toast from 'react-hot-toast';
 import { OpenchatSenderWrap } from '../../../styles/OpenchatStyle';
 
 interface OpenchatSenderProps {
@@ -10,6 +11,12 @@ interface OpenchatSenderProps {
 }
 
 function OpenchatSender({ message, onChange, onClick }: OpenchatSenderProps) {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onClick();
+    }
+  };
+
   return (
     <OpenchatSenderWrap container>
       <Grid
@@ -35,6 +42,7 @@ function OpenchatSender({ message, onChange, onClick }: OpenchatSenderProps) {
             type="text"
             value={message}
             onChange={onChange}
+            onKeyDown={handleKeyPress}
             placeholder="메시지를 입력해주세요"
             className="openchat__sender-input"
           />

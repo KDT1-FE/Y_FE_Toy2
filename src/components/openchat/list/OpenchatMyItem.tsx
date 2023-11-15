@@ -3,6 +3,8 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Person } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { OpenchatRoom } from '../../../styles/OpenchatStyle';
 import OpenchatAvatar from '../common/OpenchatAvatar';
 import { Openchat } from '../../../types/Openchat';
@@ -13,6 +15,10 @@ interface OpenchatMyItemProps {
 }
 
 function OpenchatMyItem({ openchat }: OpenchatMyItemProps) {
+  dayjs.extend(relativeTime);
+  const receivedTime = dayjs(openchat.latestMessage?.createdAt);
+  const relativeTimeText = receivedTime.fromNow();
+
   return (
     <Grid item xs={12} sm={6}>
       <Link to={openchat.id}>
@@ -42,7 +48,7 @@ function OpenchatMyItem({ openchat }: OpenchatMyItemProps) {
               color="GrayText"
               className="openchat__room-lastdate"
             >
-              {/* {formatDate(new Date(openchat.latestMessage?.createdAt ?? ''))} */}
+              {relativeTimeText}
             </Typography>
           </div>
         </OpenchatRoom>
