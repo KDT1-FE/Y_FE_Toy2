@@ -43,7 +43,7 @@ const DropZone = ({ setFn }: DropZoneProps) => {
 	);
 
 	const { getRootProps, getInputProps, isDragAccept } = useDropzone({
-		accept: { 'image/*': ['.png', '.jpg', '.jpeg'] },
+		accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.svg'] },
 		maxFiles: 1,
 		maxSize: 1024 * 1024,
 		onDrop,
