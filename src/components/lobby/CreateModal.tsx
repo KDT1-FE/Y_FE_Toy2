@@ -39,11 +39,11 @@ const CreateModal = ({ toggleModal }: Props): JSX.Element => {
         ],
       });
 
-      navigate(`/chat/${fastResponse.id}`);
+      navigate(`/chat?chatId=${fastResponse.id}&pocketId=${pocketResponse.id}`);
 
       console.log(
         `fastResponse: ${fastResponse.id}`,
-        `pocketResponse: ${pocketResponse}`,
+        `pocketResponse: ${pocketResponse.id}`,
       );
     } catch (error) {
       console.error('Creat Room Request Error');
