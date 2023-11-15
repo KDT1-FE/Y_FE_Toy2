@@ -16,7 +16,12 @@ const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) =>
       ? users[1].picture // private 하지 않으면서 1대1 인 경우
       : '/assets/x.svg';
   const usersNumber = users && users.length > 0 ? users.length : '';
-  const chatsName = users && users.length === 1 ? '상대방이 채팅방을 나간 상태입니다.' : name;
+  const chatsName =
+    users && users.length === 1
+      ? '상대방이 채팅방을 나갔습니다.'
+      : users && users.length === 2
+      ? users[0].username
+      : name;
   return (
     <Wrapper>
       <ChatBox onClick={onClick}>
