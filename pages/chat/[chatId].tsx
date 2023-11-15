@@ -29,7 +29,6 @@ export default function Chatting() {
   const [showEntryNotice, setShowEntryNotice] = useState(false);
   const [showExitNotice, setShowExitNotice] = useState(false);
 
-  const [chatData, setChatData] = useState<Chat | null>();
   const [enterName, setEnterName] = useState<string>('');
   const [exitName, setExitName] = useState<string>('');
 
@@ -93,24 +92,6 @@ export default function Chatting() {
   }, [socket]); // 이제 chatId와 accessToken이 변경될 때
 
   useEffect(() => {
-    const fetchChatData = async () => {
-      try {
-        if (chatId && typeof chatId === 'string') {
-          const response = await chatAPI.getChatInfo(chatId);
-          const chatInfo: Chat = response.data.chat;
-          setChatData(chatInfo);
-        }
-      } catch (error) {
-        console.error('Error fetching chat data:', error);
-      }
-    };
-
-    if (chatId) {
-      fetchChatData();
-    }
-  }, [chatId]);
-
-  useEffect(() => {
     if (enterName) {
       setShowEntryNotice(true); // Show entry notice
 
@@ -167,13 +148,7 @@ export default function Chatting() {
 
   return (
     <>
-      {chatData ? (
-        <ChatroomHeader
-          name={chatData.name}
-          chatId={chatData.id}
-          users={chatData.users}
-        />
-      ) : null}
+      {typeof chatId === 'string' && <ChatroomHeader chatId={chatId} />}
       <div className={styles2.container}>
         <div className={styles2.container}>
           <div>
