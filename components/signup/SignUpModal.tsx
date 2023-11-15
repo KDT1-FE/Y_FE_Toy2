@@ -113,48 +113,50 @@ export default function SignUpModal({
   };
 
   return (
-    <Modal>
-      <div className={styles.signUpModalBox}>
-        <h2>프로필 사진 설정</h2>
-        <div className={styles.userImgBox}>
-          {selectedImg ? (
-            <Image
-              src={selectedImg}
-              alt="이미지 미리보기"
-              width={160}
-              height={160}
-              style={imageStyle}
+    <div className={styles.dim}>
+      <Modal>
+        <div className={styles.signUpModalBox}>
+          <h2>프로필 사진 설정</h2>
+          <div className={styles.userImgBox}>
+            {selectedImg ? (
+              <Image
+                src={selectedImg}
+                alt="이미지 미리보기"
+                width={160}
+                height={160}
+                style={imageStyle}
+              />
+            ) : (
+              ''
+            )}
+            <BsCameraFill
+              className={styles.camaraIcon}
+              onClick={handleInputClick}
             />
-          ) : (
-            ''
-          )}
-          <BsCameraFill
-            className={styles.camaraIcon}
-            onClick={handleInputClick}
-          />
 
-          <BsFillTrash3Fill
-            className={styles.resetIcon}
-            onClick={handleImgResetClick}
-          />
+            <BsFillTrash3Fill
+              className={styles.resetIcon}
+              onClick={handleImgResetClick}
+            />
+          </div>
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              ref={imageRef}
+            />
+          </div>
+          <div className={styles.actionButtonsWrapper}>
+            <button type="button" onClick={handleSignUpClick}>
+              가입하기
+            </button>
+            <button type="button" onClick={handleModal}>
+              뒤로가기
+            </button>
+          </div>
         </div>
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            ref={imageRef}
-          />
-        </div>
-        <div className={styles.actionButtonsWrapper}>
-          <button type="button" onClick={handleSignUpClick}>
-            가입하기
-          </button>
-          <button type="button" onClick={handleModal}>
-            뒤로가기
-          </button>
-        </div>
-      </div>
-    </Modal>
+      </Modal>
+    </div>
   );
 }
