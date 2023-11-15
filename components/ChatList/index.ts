@@ -1,5 +1,5 @@
 import ChatListModal from './ChatListModal/ChatListModal';
 import CreateChatButton from './CreateChatButton/CreateChatButton';
-import JudgeWrapper from './JudgeWrapper/JudgeWrapper';
+import AllChatListItem from './AllChatListItem/AllChatListItem';
 
-export { ChatListModal, CreateChatButton, JudgeWrapper };
+export { ChatListModal, CreateChatButton, AllChatListItem };
