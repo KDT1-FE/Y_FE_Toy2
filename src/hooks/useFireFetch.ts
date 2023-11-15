@@ -31,12 +31,15 @@ interface Victory {
 }
 
 interface ChatRoom {
+  users: (string | null)[];
+  id: any;
+  host: string | null;
+  createdAt: FieldValue;
+  bg: string;
+  status: string;
   name: string;
-  users: string[];
-  isPrivate?: boolean;
-  num?: number;
-  bg?: string;
-  status?: string;
+  isPrivate?: boolean | undefined;
+  num: number;
 }
 
 const useFireFetch = () => {
