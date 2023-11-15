@@ -30,10 +30,10 @@ interface UserResponse {
 const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
   console.log("GameChat/ gameData:", gameData);
 
-  const [message, setMessage] = useState<Message>({
-    id: "",
-    text: "",
-  });
+  // const [message, setMessage] = useState<Message>({
+  //   id: "",
+  //   text: "",
+  // });
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
   const [users, setUsers] = useState<string[]>([]);
@@ -58,10 +58,10 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
   useEffect(() => {
     socket.on("message-to-client", (messageObject: any) => {
       // 메시지 데이터, 작성 유저 상태 저장
-      const copy = { ...message };
-      copy.id = messageObject.userId;
-      copy.text = messageObject.text;
-      setMessage(copy);
+      setMessages((prevMessages: Message[]) => [
+        ...prevMessages,
+        { id: messageObject.userId, text: messageObject.text },
+      ]);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,14 +87,14 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setMessages, socket]);
 
-  // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
-  useEffect(() => {
-    if (message.id !== "") {
-      console.log(message);
-      setMessages([...messages, message]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message.text, message.id]);
+  // // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
+  // useEffect(() => {
+  //   if (message.id !== "") {
+  //     console.log(message);
+  //     setMessages([...messages, message]);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [message.text, message.id]);
 
   const submitMessage = () => {
     if (messageRef.current && messageRef.current.value) {
