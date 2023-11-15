@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import unidentified from '@/assets/images/unidentified.gif';
 import roleSchema from '@/utils/role/schema';
 
 import styles from '@/styles/pages/role.module.scss';
 
 const Role = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoding] = useState(true);
-  const tmpRole = 'mafia';
+  const tmpRole = 'citizen';
+  const { id } = useParams();
 
   useEffect(() => {
-    setTimeout(() => setIsLoding(false), 5000);
+    setTimeout(() => setIsLoding(false), 3000);
+    setTimeout(() => navigate(`/chat/${id}`), 6000);
   }, []);
 
   return (

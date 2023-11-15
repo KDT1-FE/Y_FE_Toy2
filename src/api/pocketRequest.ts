@@ -11,6 +11,11 @@ const pocketRequest = {
   },
 
   post: async (collection: string, data: object, id?: string) => {
+    console.log(
+      `${import.meta.env.VITE_POCKET_API}/${collection}/records${
+        id ? `/${id}` : ''
+      }`,
+    );
     return await fetch(
       `${import.meta.env.VITE_POCKET_API}/${collection}/records${
         id ? `/${id}` : ''
