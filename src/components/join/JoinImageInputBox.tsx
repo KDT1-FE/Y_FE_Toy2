@@ -3,14 +3,34 @@ import { Avatar, Box, Button, FormLabel, Input } from '@chakra-ui/react';
 interface JoinImageInputBoxProps {
   image: string;
   setImage: React.Dispatch<React.SetStateAction<string>>;
-  // eslint-disable-next-line no-unused-vars
-  handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
-const JoinImageInputBox = ({
-  image,
-  setImage,
-  handleImageChange,
-}: JoinImageInputBoxProps) => {
+const JoinImageInputBox = ({ image, setImage }: JoinImageInputBoxProps) => {
+  const maxSize = 1024 * 1024;
+
+  const imageFileToBase64 = (file: File) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      const result = fileReader.result;
+      if (typeof result === 'string') setImage(result);
+    };
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      event.currentTarget.files &&
+      event.currentTarget instanceof HTMLInputElement
+    ) {
+      const file = event.currentTarget.files[0];
+      if (!file) return;
+      if (maxSize < file.size) {
+        alert('이미지 용량은 1MB를 넘을 수 없습니다');
+        return;
+      }
+      imageFileToBase64(file);
+    }
+  };
+
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
       <FormLabel
@@ -31,9 +51,9 @@ const JoinImageInputBox = ({
 
         <Input
           type="file"
-          display="none"
           id="file"
           onChange={handleImageChange}
+          display="none"
         />
       </FormLabel>
       {image !== '' && (

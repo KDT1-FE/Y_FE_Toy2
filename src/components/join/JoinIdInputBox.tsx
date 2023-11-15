@@ -1,20 +1,38 @@
 import { Box, Button, FormLabel, Input } from '@chakra-ui/react';
-import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
+import {
+  FieldError,
+  UseFormRegisterReturn,
+  UseFormWatch,
+} from 'react-hook-form';
+import { useCheckId } from '../../hooks/join';
+import { JoinForm } from '../../@types/join';
 
 interface JoinIdInputBoxProps {
   register: UseFormRegisterReturn<'id'>;
   placeholder: string;
   errors: FieldError | undefined;
   isChecking: boolean | null;
-  handleCheckId: () => void;
+  watch: UseFormWatch<JoinForm>;
+  setIsChecking: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 const JoinIdInputBox = ({
   register,
   placeholder,
   errors,
   isChecking,
-  handleCheckId,
+  watch,
+  setIsChecking,
 }: JoinIdInputBoxProps) => {
+  const mutation = useCheckId();
+  const handleCheckId = () => {
+    const id = watch('id');
+    if (id === '') return;
+    mutation.mutate(id, {
+      onSuccess: (response) => {
+        setIsChecking(!response.isDuplicated);
+      },
+    });
+  };
   return (
     <Box>
       <FormLabel>ID</FormLabel>
