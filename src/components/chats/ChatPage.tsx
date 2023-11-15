@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import MyChatItem from '@/components/chats/MyChatItem';
 import SearchMyChat from '@/components/chats/SearchMyChat';
 // svgr import
-import AddChat from '../../../public/assets/addChat.svg';
+import { TbMessageCirclePlus } from 'react-icons/tb';
 import { Chat, searchChatsState, searchInputState } from './chatsStore';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
@@ -16,7 +16,7 @@ import { sortTime } from './useFormatCreatedAt';
 import { getMyChats, getAllChats, partChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
 import EnterChatRoomModal from './EnterChatRoomModal';
-import Navigation from '../Navigation';
+
 const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
   const [chatModalOpen, setChatModalOpen] = useState(false);
@@ -42,6 +42,7 @@ const MyChats = ({ userType }: { userType: string }) => {
       }
     }
   };
+
   const onEnterHandler = () => {
     if (selectedChat && selectedChat.id) {
       partChats(selectedChat.id);
@@ -72,40 +73,23 @@ const MyChats = ({ userType }: { userType: string }) => {
     <Wrapper>
       <ChatHeader>
         <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
-        <IconBar>
-          <AddChatIcon onClick={onAddHandler} />
-        </IconBar>
+        <AddChatButton onClick={onAddHandler}>
+          <TbMessageCirclePlus className="addChatIcon" size="33" />
+        </AddChatButton>
       </ChatHeader>
       <SearchMyChat userType={userType} />
-      <ChatContainer>
-        <ChatList>
-          <EnterChatRoomModal
-            isOpen={chatModalOpen}
-            onEnterClick={onEnterHandler}
-            onCancelClick={onModalHandler}
-            selectedChat={selectedChat}
-          />
-          {isLoading && <Loading />}
-          {userId && data ? (
-            filterInputValue ? (
-              filterChats.length > 0 ? (
-                sortTime(filterChats).map((chat) => (
-                  <MyChatItem
-                    key={chat.id}
-                    name={chat.name}
-                    latestMessage={chat.latestMessage}
-                    users={chat.users}
-                    onClick={() => enterChatRoom(chat)}
-                    isPrivate={chat.isPrivate}
-                  />
-                ))
-              ) : (
-                <NoUserWrap>
-                  <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
-                </NoUserWrap>
-              )
-            ) : (
-              sortTime(data).map((chat) => (
+      <ChatList>
+        <EnterChatRoomModal
+          isOpen={chatModalOpen}
+          onEnterClick={onEnterHandler}
+          onCancelClick={onModalHandler}
+          selectedChat={selectedChat}
+        />
+        {isLoading && <Loading />}
+        {userId && data ? (
+          filterInputValue ? (
+            filterChats.length > 0 ? (
+              sortTime(filterChats).map((chat) => (
                 <MyChatItem
                   key={chat.id}
                   name={chat.name}
@@ -115,10 +99,25 @@ const MyChats = ({ userType }: { userType: string }) => {
                   isPrivate={chat.isPrivate}
                 />
               ))
+            ) : (
+              <NoUserWrap>
+                <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
+              </NoUserWrap>
             )
-          ) : null}
-        </ChatList>
-      </ChatContainer>
+          ) : (
+            sortTime(data).map((chat) => (
+              <MyChatItem
+                key={chat.id}
+                name={chat.name}
+                latestMessage={chat.latestMessage}
+                users={chat.users}
+                onClick={() => enterChatRoom(chat)}
+                isPrivate={chat.isPrivate}
+              />
+            ))
+          )
+        ) : null}
+      </ChatList>
     </Wrapper>
   );
 };
@@ -126,46 +125,44 @@ const MyChats = ({ userType }: { userType: string }) => {
 export default MyChats;
 
 const Wrapper = styled.div`
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-bottom: 6rem;
-  height: 100vh;
+  gap: 1rem;
+
+  padding: 3rem;
 `;
 
 const ChatHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 4rem 2rem 1rem;
+  align-items: center;
 `;
 
-const MyChatBar = styled.div`
+const MyChatBar = styled.h1`
   color: ${({ theme }) => theme.color.mainGreen};
-  font-weight: bold;
-  font-size: 1.5rem;
-`;
-const IconBar = styled.div`
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 0.6rem;
+  font-size: ${({ theme }) => theme.fontSize.title};
 `;
 
-const AddChatIcon = styled(AddChat)`
-  position: relative;
+const AddChatButton = styled.div`
   cursor: pointer;
-`;
 
-const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  margin: 0 2rem 4rem 2rem;
-  background-color: transparent;
-  height: 50rem;
+  .addChatIcon {
+    color: ${({ theme }) => theme.color.mainGreen};
+  }
+
+  &:hover .addChatIcon {
+    color: ${({ theme }) => theme.color.darkGreen};
+    transition: 0.4s;
+  }
 `;
 
 const ChatList = styled.div`
+  margin-top: 1rem;
+
+  padding: 1rem;
+
+  height: 80%;
   overflow-y: auto;
   &::-webkit-scrollbar {
     /*크롬, 사파리, 오페라, 엣지*/
@@ -185,7 +182,7 @@ const Loading = styled.div`
 
   animation: spin 1s linear infinite;
 
-  margin: 0 auto 8rem;
+  margin: 8rem auto 0;
 
   @keyframes spin {
     0% {
