@@ -1,6 +1,6 @@
 import ProfilesDefault from "../../components/Profile/ProfilesDefault";
 
-function ProfileDefault(): JSX.Element {
+function ProfileDefaultPage(): JSX.Element {
   return (
     <>
       <ProfilesDefault></ProfilesDefault>
@@ -8,4 +8,4 @@ function ProfileDefault(): JSX.Element {
   );
 }
 
-export default ProfileDefault;
+export default ProfileDefaultPage;
