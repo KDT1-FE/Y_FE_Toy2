@@ -9,6 +9,7 @@ import MyChatItem from '@/components/chats/MyChatItem';
 import SearchMyChat from '@/components/chats/SearchMyChat';
 // svgr import
 import AddChat from '../../../public/assets/addChat.svg';
+import { TbMessageCirclePlus } from 'react-icons/tb';
 import { Chat, searchChatsState, searchInputState } from './chatsStore';
 import { useRouter } from 'next/navigation';
 import { sortTime } from './useFormatCreatedAt';
@@ -58,33 +59,16 @@ const MyChats = ({ userType }: { userType: string }) => {
     <Wrapper>
       <ChatHeader>
         <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
-        <IconBar>
-          <AddChatIcon onClick={onAddHandler} />
-        </IconBar>
+        <AddChatButton onClick={onAddHandler}>
+          <TbMessageCirclePlus className="addChatIcon" size="33" />
+        </AddChatButton>
       </ChatHeader>
-      <ChatContainer>
-        <SearchMyChat userType={userType} />
-        <ChatList>
-          {userId && data ? (
-            filterInputValue ? (
-              filterChats.length > 0 ? (
-                sortTime(filterChats).map((chat) => (
-                  <MyChatItem
-                    key={chat.id}
-                    name={chat.name}
-                    latestMessage={chat.latestMessage}
-                    users={chat.users}
-                    onClick={() => enterChatRoom(chat)}
-                    isPrivate={chat.isPrivate}
-                  />
-                ))
-              ) : (
-                <NoUserWrap>
-                  <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
-                </NoUserWrap>
-              )
-            ) : (
-              sortTime(data).map((chat) => (
+      <SearchMyChat userType={userType} />
+      <ChatList>
+        {userId && data ? (
+          filterInputValue ? (
+            filterChats.length > 0 ? (
+              sortTime(filterChats).map((chat) => (
                 <MyChatItem
                   key={chat.id}
                   name={chat.name}
@@ -94,10 +78,25 @@ const MyChats = ({ userType }: { userType: string }) => {
                   isPrivate={chat.isPrivate}
                 />
               ))
+            ) : (
+              <NoUserWrap>
+                <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
+              </NoUserWrap>
             )
-          ) : null}
-        </ChatList>
-      </ChatContainer>
+          ) : (
+            sortTime(data).map((chat) => (
+              <MyChatItem
+                key={chat.id}
+                name={chat.name}
+                latestMessage={chat.latestMessage}
+                users={chat.users}
+                onClick={() => enterChatRoom(chat)}
+                isPrivate={chat.isPrivate}
+              />
+            ))
+          )
+        ) : null}
+      </ChatList>
     </Wrapper>
   );
 };
@@ -105,45 +104,44 @@ const MyChats = ({ userType }: { userType: string }) => {
 export default MyChats;
 
 const Wrapper = styled.div`
-  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 1rem;
+
+  padding: 3rem;
 `;
 
 const ChatHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 4rem 2rem 1rem;
+  align-items: center;
 `;
 
-const MyChatBar = styled.div`
-  color: #00956e;
-  font-weight: bold;
-  font-size: 1.5rem;
-`;
-const IconBar = styled.div`
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 0.6rem;
+const MyChatBar = styled.h1`
+  color: ${({ theme }) => theme.color.mainGreen};
+  font-size: ${({ theme }) => theme.fontSize.title};
 `;
 
-const AddChatIcon = styled(AddChat)`
-  position: relative;
+const AddChatButton = styled.div`
   cursor: pointer;
-`;
 
-const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  margin: 2rem;
-  background-color: transparent;
-  height: calc(50rem - 7rem);
+  .addChatIcon {
+    color: ${({ theme }) => theme.color.mainGreen};
+  }
+
+  &:hover .addChatIcon {
+    color: ${({ theme }) => theme.color.darkGreen};
+    transition: 0.4s;
+  }
 `;
 
 const ChatList = styled.div`
+  margin-top: 1rem;
+
+  padding: 1rem;
+
+  height: 80%;
   overflow-y: auto;
   &::-webkit-scrollbar {
     /*크롬, 사파리, 오페라, 엣지*/
