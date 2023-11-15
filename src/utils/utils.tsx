@@ -4,6 +4,7 @@ import {
   collection,
   query,
   where,
+  getDoc,
   getDocs,
   updateDoc,
   onSnapshot,
@@ -14,6 +15,7 @@ import { setTimeout } from 'timers/promises';
 import { db, storage } from '../firebaseSDK';
 
 export interface UserData {
+  correct?: number;
   name?: string;
   image?: string;
   language?: string;
@@ -55,6 +57,13 @@ export const addImage = async (image: File) =>
 // 회원정보 저장 함수
 export const setData = (id: string, userData: UserData) => {
   setDoc(doc(db, 'user', id), userData);
+};
+
+// 회원정보 읽기 함수
+export const getUserData = async (id: string) => {
+  const docRef = doc(db, 'user', id);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data();
 };
 
 // 언어별 회원정보 읽기 함수
