@@ -35,10 +35,9 @@ const Signup = () => {
     if (Object.keys(newErrors).length === 0) {
       const validId = await idCheck(user.id);
       console.log(validId);
-      console.log('okay');
-      if (validId) {
+      if (!invalidId) {
         await signup(id, password, name, character);
-        navigate('/signin');
+        // navigate('/signin');
       } else {
         setInvalidId(true);
       }
@@ -72,10 +71,10 @@ const Signup = () => {
             onChange={onChangeId}
           />
           {errors?.id && (
-            <span className={styles.form_error}>{errors?.id}</span>
+            <span className={styles.signup__form_error}>{errors?.id}</span>
           )}
-          {invalidId && (
-            <span className={styles.error}>이미 존재하는 아이디입니다.</span>
+          {!invalidId && (
+            <span className={styles.signup__form}>이미 존재하는 아이디입니다.</span>
           )}
           <input
             type="text"
@@ -84,7 +83,7 @@ const Signup = () => {
             onChange={onChangeName}
           />
           {errors?.name && (
-            <span className={styles.form_error}>{errors?.name}</span>
+            <span className={styles.signup__form_error}>{errors?.name}</span>
           )}
           <input
             type="password"
@@ -93,7 +92,7 @@ const Signup = () => {
             onChange={onChangePassword}
           />
           {errors?.password && (
-            <span className={styles.form_error}>{errors?.password}</span>
+            <span className={styles.signup__form_error}>{errors?.password}</span>
           )}
           <input
             type="password"
@@ -102,7 +101,7 @@ const Signup = () => {
             onChange={onChangeAssurer}
           />
           {errors?.assurer && (
-            <span className={styles.form_error}>{errors?.assurer}</span>
+            <span className={styles.signup__form_error}>{errors?.assurer}</span>
           )}
           <button
             className={styles.signup__btn}

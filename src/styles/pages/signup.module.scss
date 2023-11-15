@@ -67,6 +67,12 @@
     }
   }
 
+  &__form_error {
+    color: gray;
+    font-size: 1.3rem;
+    font-weight: 400;
+  }
+
   &__btn {
     background-color: #835da3;
     border: none;
