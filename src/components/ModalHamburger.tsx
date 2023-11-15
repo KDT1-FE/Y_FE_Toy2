@@ -8,7 +8,6 @@ import { getTime } from "../utils/getTime";
 const ModalExample = ({ roomId, setChatRoom }: ModalHamburgerProps) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { patchData, getData } = useApi();
-
   const openModal = () => {
     setModalIsOpen((prev) => !prev);
   };
