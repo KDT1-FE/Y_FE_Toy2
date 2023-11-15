@@ -64,8 +64,8 @@ export default function AllChatList() {
       {allChatList.map(chat => {
         const { timeDiffText, className } = formatTime(chat.updatedAt);
         const isincluded = chat.users.some(checkIncluded);
-        const dateString = todayDate(chat.updatedAt);
-        const formattedTime = formattingTime(chat.updatedAt);
+        // const dateString = todayDate(chat.updatedAt);
+        // const formattedTime = formattingTime(chat.updatedAt);
         return (
           <li key={chat.id}>
             <Link
@@ -97,9 +97,9 @@ export default function AllChatList() {
                   <div className={styles.chat_updated}>
                     <span className={styles[className]}>{timeDiffText}</span>
                   </div>
-                  <div className={styles.chat_updated}>
+                  {/* <div className={styles.chat_updated}>
                     {isToday === dateString ? formattedTime : `${dateString}`}
-                  </div>
+                  </div> */}
                   {!isincluded && (
                     <button
                       type="button"
