@@ -43,13 +43,14 @@ const SideBar = () => {
         </Heading>
         <Box h="50vh" overflowY="scroll">
           {channels ? (
-            channels.map((channel) => (
-              <MyChannelItem
-                key={channel.id}
-                channelId={channel.id}
-                myChannelName={channel.name}
-                isPrivate={channel.isPrivate}
-              />
+            channels.map((channel, index) => (
+              <Box key={index}>
+                <MyChannelItem
+                  channelId={channel.id}
+                  myChannelName={channel.name}
+                  isPrivate={channel.isPrivate}
+                />
+              </Box>
             ))
           ) : (
             <Box>내가 속한 채팅방이 없습니다.</Box>

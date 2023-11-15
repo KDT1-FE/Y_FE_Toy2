@@ -1,35 +1,30 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChatInfo, ChatData } from '../@types/message';
-import socket from '../api/socket';
+import { ChatData } from '../@types/message';
 import { SOCKET } from '../constants/socket';
-import {
-  getAllChats,
-  getChat,
-  getLeaverName,
-  getJoinersName,
-} from '../api/chat';
+import { getLeaverName, getJoinersName } from '../api/chat';
 import { ToastId, useToast } from '@chakra-ui/react';
 import { getJoinerMessage, getLeaverMessage } from '../utils/chat';
+import getSocket from '../api/socket';
 
-const useChatList = () => {
-  const [chats, setChats] = useState<ChatInfo[]>([]);
+const useChatList = (chatId: string) => {
+  const [chats, setChats] = useState<ChatData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const toast = useToast();
   const toastIdRef = useRef<ToastId>();
 
   useEffect(() => {
+    const socket = getSocket(chatId);
     socket.emit(SOCKET.FETCH_MESSAGES);
     socket.on(
       SOCKET.MESSAGES_TO_CLIENT,
       async ({ messages }: { messages: ChatData[] }) => {
-        const allChats = await getAllChats(messages);
-        if (allChats) setChats(allChats);
+        setIsLoading(true);
+        if (messages) setChats(messages);
         setIsLoading(false);
       },
     );
     socket.on(SOCKET.MESSAGE_TO_CLIENT, async (message: ChatData) => {
-      const chat = await getChat(message);
-      if (chat) setChats((prevValue) => [...prevValue, chat]);
+      if (message) setChats((prevValue) => [...prevValue, message]);
     });
     socket.on(
       SOCKET.JOIN,

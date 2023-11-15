@@ -5,12 +5,9 @@ import JoinInputBox from '../../components/join/JoinInputBox';
 import JoinIdInputBox from '../../components/join/JoinIdInputBox';
 import JoinImageInputBox from '../../components/join/JoinImageInputBox';
 import { REGISTER } from '../../constants/join';
-
-export interface JoinForm {
-  password: string;
-  name: string;
-  id: string;
-}
+import { JoinForm, JoinInfo } from '../../@types/join';
+import { useJoin } from '../../hooks/join';
+import { useNavigate } from 'react-router';
 
 const Join = () => {
   const {
@@ -21,25 +18,26 @@ const Join = () => {
   } = useForm<JoinForm>({ mode: 'onChange' });
   const [isChecking, setIsChecking] = useState<boolean | null>(null);
   const [image, setImage] = useState('');
+  const mutation = useJoin();
+  const navigate = useNavigate();
 
-  const handleCheckId = () => {
-    const id = watch('id');
-    if (id === '') return;
-    setIsChecking(false);
-  };
-  const onSubmit: SubmitHandler<JoinForm> = () => {
-    // onSubmit
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (
-      event.currentTarget.files &&
-      event.currentTarget instanceof HTMLInputElement
-    ) {
-      const selectedFile = event.currentTarget.files[0];
-      const fileUrl = URL.createObjectURL(selectedFile);
-      setImage(fileUrl);
+  const onSubmit: SubmitHandler<JoinForm> = (event) => {
+    if (isChecking === null) {
+      alert('중복 확인을 해주세요');
+      return;
     }
+    const joinInfo: JoinInfo = {
+      name: event.name,
+      id: event.id,
+      password: event.password,
+    };
+    if (image) joinInfo.picture = image;
+    mutation.mutate(joinInfo, {
+      onSuccess: () => {
+        alert('회원 가입에 성공했습니다!');
+        navigate('/login');
+      },
+    });
   };
 
   return (
@@ -57,11 +55,7 @@ const Join = () => {
           justifyContent="space-evenly"
           height="34rem"
         >
-          <JoinImageInputBox
-            image={image}
-            setImage={setImage}
-            handleImageChange={handleImageChange}
-          />
+          <JoinImageInputBox image={image} setImage={setImage} />
           <JoinIdInputBox
             register={register('id', {
               required: REGISTER.REQUIRED_MESSAGE,
@@ -78,7 +72,8 @@ const Join = () => {
             placeholder={REGISTER.ID_MESSAGE}
             errors={errors.id}
             isChecking={isChecking}
-            handleCheckId={handleCheckId}
+            watch={watch}
+            setIsChecking={setIsChecking}
           />
           <JoinInputBox
             register={register('password', {
@@ -117,7 +112,14 @@ const Join = () => {
             </Button>
             <Box color="blackAlpha.600" alignSelf="end">
               이미 회원이신가요?
-              <Button color="blue.300" _hover={{ bg: 'white' }} bg="white">
+              <Button
+                color="blue.300"
+                _hover={{ bg: 'white' }}
+                bg="white"
+                onClick={() => {
+                  navigate('/login');
+                }}
+              >
                 로그인 하러 가기
               </Button>
             </Box>

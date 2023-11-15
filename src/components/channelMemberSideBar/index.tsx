@@ -8,7 +8,8 @@ import useJoinLeaveChannels from '../../hooks/useJoinLeaveChannel';
 
 const ChannelMemberSideBar = () => {
   const { id } = useParams();
-  const chatId = id!;
+  if (!id) return <></>;
+  const chatId = id;
 
   const { userList, setUserList } = useJoinLeaveChannels(chatId);
 
