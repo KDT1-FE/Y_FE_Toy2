@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import useUserData from "./useUserData";
 import { useCallback, useEffect, useState } from "react";
@@ -178,9 +178,10 @@ interface allUserData {
 }
 
 function ProfileFeedDetail() {
+  const navigate = useNavigate()
   const { userid, feedid } = useParams<string>();
   const { userData, feedData, fetchData } = useUserData();
-
+  
   const [commentValue, setCommentValue] = useState("");
 
   const [commentList, setCommentList] = useState<{}>({});
@@ -191,10 +192,10 @@ function ProfileFeedDetail() {
 
   if (feedData && feedid) {
     if (!feedData || feedData[feedid] === undefined) {
-      window.location.href = "/404";
+      navigate( "/404")
     }
   }
-
+  
   useEffect(() => {
     fetchData();
   }, [commentList]);
@@ -248,7 +249,7 @@ function ProfileFeedDetail() {
     const minutes = `0${currentDate.getMinutes()}`.slice(-2);
 
     const formattedDate = `${year}.${month}.${day} ${hours}:${minutes}`;
-
+    
     if (userData && feedData) {
       const feedInfo = feedData[feedid ? feedid : "1"];
 
@@ -368,6 +369,7 @@ function ProfileFeedDetail() {
           setCommentValue("");
 
           fetchData();
+          
         } else {
           alert("해당 피드 또는 댓글 목록이 존재하지 않습니다.");
         }
@@ -424,7 +426,7 @@ function ProfileFeedDetail() {
           }
 
           await fetchData();
-          window.location.href = `/profiles/${userid}`;
+          navigate(`/profiles/${userid}`)
         } else {
           alert("해당 피드가 존재하지 않습니다.");
         }

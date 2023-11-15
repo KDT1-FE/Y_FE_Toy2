@@ -19,10 +19,12 @@ const ProfileFeedImage = styled.div`
   width: 280px;
   height: 350px;
 
-  background-image: url("https://images.pexels.com/photos/18968296/pexels-photo-18968296.jpeg");
+  
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  cursor: pointer;
 `;
 const ProfileFeedEditImage = styled.div`
   width: 280px;

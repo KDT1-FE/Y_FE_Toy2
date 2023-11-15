@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 const Container = styled.div`
@@ -18,14 +19,15 @@ const Container = styled.div`
 
     font-size: 18px;
 
-    .name {
+    .name span {
       color: #000;
       font-weight: 600;
+      cursor: pointer;
     }
-    .text {
+    .text span{
       color: #383535;
     }
-    .timeStamp {
+    .timeStamp span{
       color: #999696;
       font-size: 16px;
     }
@@ -85,7 +87,7 @@ export default function ProfileFeedComment(props: {
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(props.comment.text);
-
+  const navigate = useNavigate()
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -111,9 +113,11 @@ export default function ProfileFeedComment(props: {
           <input type="text" value={editedText} onChange={handleTextChange} />
         ) : (
           <div className="commentContentWrap">
-            <div className="name">{props.comment.name}</div>
-            <div className="text">{props.comment.text}</div>
-            <div className="timeStamp">{props.comment.timeStamp}</div>
+            <div className="name"><span onClick={()=>{
+              navigate(`/profiles/${props.comment.id}`)
+            }}>{props.comment.name}</span></div>
+            <div className="text"><span>{props.comment.text}</span></div>
+            <div className="timeStamp"><span>{props.comment.timeStamp}</span></div>
           </div>
         )}
       </div>

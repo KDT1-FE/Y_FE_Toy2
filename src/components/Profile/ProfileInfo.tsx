@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { BsPencilFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const ProfileInfoWrap = styled.div`
   width: 1200px;
@@ -87,6 +88,7 @@ function ProfileInfo(props: {
   userData: usertData | null;
   isProfileMatchingLogin: boolean | null;
 }) {
+  const navigate = useNavigate();
   return (
     <ProfileInfoWrap>
       <ProfileInfoImgWrap>
@@ -96,7 +98,7 @@ function ProfileInfo(props: {
           {props.isProfileMatchingLogin ? (
             <ProfileInfoEditBtn
               onClick={() => {
-                window.location.href = `/profiles/${props.userData?.id}/edit`;
+                navigate(`/profiles/${props.userData?.id}/edit`)
               }}
             >
               <BsPencilFill color="#BEBEBE" />

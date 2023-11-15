@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { BsFillCameraFill } from "react-icons/bs";
 import InputStyle from "../../style/InputStyle";
 import StyledButton from "../../style/ButtonStyle";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, ChangeEvent } from "react";
 import Modal from "react-modal";
 import useUserData from "./useUserData";
@@ -179,7 +179,7 @@ function Profile() {
   const { userid } = useParams<string>();
   const loginId = sessionStorage.getItem("userId");
   const { userData } = useUserData();
-
+  const navigate = useNavigate();
   const [backgroundImageUrl, setBackgroundImageUrl] = useState(
     userData?.backgroundImgUrl
   );
@@ -187,7 +187,7 @@ function Profile() {
     userData?.profileImgUrl
   );
 
-  //////////////////////////////////////////////////
+  
   const { getData, postData, patchData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [isState, setIsState] = useState(false);
@@ -247,7 +247,7 @@ function Profile() {
       console.log("맞음");
     } else {
       alert("잘못된 접근입니다.");
-      window.location.href = `/profiles/${userid}`;
+      navigate(`/profiles/${userid}`)
     }
   }, [userid]);
 
@@ -263,6 +263,14 @@ function Profile() {
             return { ...hobby, isClick: true };
           }
           return hobby;
+        });
+      });
+      setActivityArray((prevActiviyArray) => {
+        return prevActiviyArray.map((acitivity) => {
+          if (userData?.hobby.includes(acitivity.activityName)) {
+            return { ...acitivity, isClick: true };
+          }
+          return acitivity;
         });
       });
       setIsState(false);
@@ -284,20 +292,6 @@ function Profile() {
     setIntroText(e.target.value);
   };
 
-  // const uploadImage = (e) => {
-  //   const file = e.target.files[0];
-  //   const storage = getStorage();
-  //   const storageRef = ref(storage, 'profile-images/' + file.name);
-
-  //   uploadBytes(storageRef, file).then((snapshot) => {
-  //     console.log('Uploaded a file:', snapshot);
-
-  //     getDownloadURL(snapshot.ref).then((downloadURL) => {
-  //       console.log('File available at', downloadURL);
-  //       setProfileImageUrl(downloadURL); // 이 URL을 state에 저장하여 나중에 사용
-  //     });
-  //   });
-  // };
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [backgroundImageFile, setBackgroundImageFile] = useState<File | null>(
     null
@@ -331,24 +325,17 @@ function Profile() {
       });
     }
 
-    // const user = {
-    //   id: {user.id},
-    //   name: {user.name},
-    //   profileImgUrl:
-    //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2FdefaultProfileImg.jpg?alt=media&token=4cd53e01-4bc1-404e-ba10-c29a4638e53d",
-    //   backgroundImgUrl:
-    //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2FdefaultBackgroundImg.png?alt=media&token=50349c73-07e3-44e2-abeb-b3be14cdcc11",
-    //   introText: "",
-    //   hobby: []
-    // };
-    // const userRef = doc(db, "Users", userData.id);
-    // setDoc(userRef, user, { merge: true })
-
-    const copyHobbyArray: string[] = [];
+    const copyTagArray: string[] = [];
 
     hobbyArray.forEach((hobby) => {
       if (hobby.isClick) {
-        copyHobbyArray.push(hobby.hobbyName);
+        copyTagArray.push(hobby.hobbyName);
+      }
+    });
+
+    activityArray.forEach((activity) => {
+      if (activity.isClick) {
+        copyTagArray.push(activity.activityName);
       }
     });
 
@@ -358,14 +345,14 @@ function Profile() {
       introText: introText,
       profileImgUrl: profileImageUrl,
       backgroundImgUrl: backgroundImageUrl,
-      hobby: copyHobbyArray
+      hobby: copyTagArray
     };
 
     if (userData) {
       const userRef = doc(db, "Users", userData.id);
       setIsState(true);
       setDoc(userRef, updateUser, { merge: true }).then(() => {
-        window.location.href = `/profiles/${userid}`;
+        navigate( `/profiles/${userid}`)
       });
     }
   };
@@ -389,9 +376,134 @@ function Profile() {
     {
       hobbyName: "댄스",
       isClick: false
-    }
+    },
+    {
+      hobbyName: "노레",
+      isClick: false
+    },
+    {
+      hobbyName: "글쓰기",
+      isClick: false
+    },
+    {
+      hobbyName: "방탈출",
+      isClick: false
+    },
+    {
+      hobbyName: "봉사활동",
+      isClick: false
+    },
+    {
+      hobbyName: "영상",
+      isClick: false
+    },
+    {
+      hobbyName: "게임",
+      isClick: false
+    },
+    {
+      hobbyName: "음악감상",
+      isClick: false
+    },
+    {
+      hobbyName: "악기연주",
+      isClick: false
+    },
+    {
+      hobbyName: "캘리그리피",
+      isClick: false
+    },
+    {
+      hobbyName: "반려동물",
+      isClick: false
+    },
+    {
+      hobbyName: "만화",
+      isClick: false
+    },
   ]);
-
+  const [activityArray, setActivityArray] = useState([
+    {
+      activityName: "등산",
+      isClick: false
+    },
+    {
+      activityName: "산책",
+      isClick: false
+    },
+    {
+      activityName: "다이어트",
+      isClick: false
+    },
+    {
+      activityName: "러닝",
+      isClick: false
+    },
+    {
+      activityName: "배드민턴",
+      isClick: false
+    },
+    {
+      activityName: "클라이밍",
+      isClick: false
+    },
+    {
+      activityName: "필라테스",
+      isClick: false
+    },
+    {
+      activityName: "축구",
+      isClick: false
+    },
+    {
+      activityName: "헬스",
+      isClick: false
+    },
+    {
+      activityName: "볼링",
+      isClick: false
+    },
+    {
+      activityName: "야구",
+      isClick: false
+    },
+    {
+      activityName: "요가",
+      isClick: false
+    },
+    {
+      activityName: "수영",
+      isClick: false
+    },
+    {
+      activityName: "서핑",
+      isClick: false
+    },
+    {
+      activityName: "자전거",
+      isClick: false
+    },
+    {
+      activityName: "다이빙",
+      isClick: false
+    },
+    {
+      activityName: "농구",
+      isClick: false
+    },
+    {
+      activityName: "골프",
+      isClick: false
+    },
+    {
+      activityName: "플로깅",
+      isClick: false
+    },
+    {
+      activityName: "풋살",
+      isClick: false
+    },
+  ])
   const handleHobbySelect = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setHobbyArray(
@@ -404,7 +516,18 @@ function Profile() {
       })
     );
   };
-
+  const handleActivitySelect = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setActivityArray(
+      activityArray.map((activity) => {
+        if (activity.activityName == e.currentTarget.innerText) {
+          const isClick = !activity.isClick;
+          return { ...activity, isClick: isClick };
+        }
+        return activity;
+      })
+    );
+  };
   return (
     <ProfileEditContainer>
       <ProfileEditFormContainer>
@@ -461,7 +584,7 @@ function Profile() {
             ></textarea>
           </ProfileEditInputWrap>
           <ProfileEditTagWrap>
-            <span>태그</span>
+            <span>취미</span>
             {hobbyArray.map((hobby, index) => (
               <StyledButton
                 key={index}
@@ -470,6 +593,19 @@ function Profile() {
                 onClick={handleHobbySelect}
               >
                 {hobby.hobbyName}
+              </StyledButton>
+            ))}
+          </ProfileEditTagWrap>
+          <ProfileEditTagWrap>
+            <span>액티비티</span>
+            {activityArray.map((activity, index) => (
+              <StyledButton
+                key={index}
+                backgroundColor={activity.isClick ? "red" : "white"}
+                size="s"
+                onClick={handleActivitySelect}
+              >
+                {activity.activityName}
               </StyledButton>
             ))}
           </ProfileEditTagWrap>

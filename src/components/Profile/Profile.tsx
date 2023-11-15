@@ -150,47 +150,7 @@ const ModalAddFeedWrap = styled.div`
 `;
 
 function Profile() {
-  // const user = {
-  //   id: "test1",
-  //   name: "홍길동",
-  //   ProfileImg:
-  //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286",
-  //   BackgroundImg:
-  //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286",
-  //   introText: "반갑습니다.",
-  //   hobby: ["취미", "축구", "밥"]
-  // };
-
-  // const cityRef = doc(db, "Users", user.id);
-
-  // setDoc(cityRef, user, { merge: true });
-
-  // const Feed = {
-  //   id: "test1",
-  //   feedId: "1",
-  //   feedImageUrl:
-  //     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286",
-  //   contentText: "사진",
-  //   likes: 0,
-  //   timeStamp: "231109"
-  // };
-  // const cityRef = doc(db, "Feeds", user.id);
-
-  // updateDoc(cityRef, {
-  //   [`${Feed.feedId}`]: Feed
-  // });
-
-  // async function someFunction() {
-  //   const docRef = doc(db, "Users", "test1");
-  //   const docSnap = await getDoc(docRef);
-
-  //   if (docSnap.exists()) {
-  //     console.log("Document data:", docSnap.data());
-  //   } else {
-  //     console.log("No such document!");
-  //   }
-  // }
-  // someFunction();
+  const navigate = useNavigate();
   const [modalPreview, setModalPreview] = useState(
     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286"
   );
@@ -275,14 +235,14 @@ function Profile() {
               setDoc(cityRef, {
                 [`${Feed.feedId}`]: Feed
               }).then(() => {
-                window.location.href = `/profiles/${userData.id}`;
+                navigate(`/profiles/${userData.id}`)
               });
             } else {
               const cityRef = doc(db, "Feeds", userData.id);
               updateDoc(cityRef, {
                 [`${Feed.feedId}`]: Feed
               }).then(() => {
-                window.location.href = `/profiles/${userData.id}`;
+                navigate(`/profiles/${userData.id}`)
               });
             }
           }
@@ -314,7 +274,7 @@ function Profile() {
               onChange={handleModalPreview}
             />
             <span>본문</span>
-            {/* <InputStyle type="text"></InputStyle> */}
+            
             <textarea
               value={context}
               placeholder="내용"
