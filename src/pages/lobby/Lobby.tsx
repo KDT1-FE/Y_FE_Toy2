@@ -239,7 +239,7 @@ const tmpData = [
   },
 ];
 
-const Lobby = (): JSX.Element => {
+const Lobby = ({ userId }): JSX.Element => {
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [page, setPage] = useState(1);
   const limit: number = 8;

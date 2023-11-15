@@ -46,6 +46,12 @@
     border-radius: 20px;
   }
 
+  &__form_error {
+    color: gray;
+    font-size: 1.3rem;
+    font-weight: 400;
+  }
+
   &__form {
     @include flex-center-col();
     padding: 5% 0;
@@ -62,9 +68,14 @@
 
       &:hover {
         background-color: white;
-
       }
     }
+  }
+
+  &__form_error {
+    color: gray;
+    font-size: 1.3rem;
+    font-weight: 400;
   }
 
   &__btn {
@@ -104,11 +115,9 @@
     left: 50%;
     transform: translateX(-50%);
     font-size: 1.5rem;
-  
+
     &:hover {
       color: white;
     }
-  
   }
 }
-
