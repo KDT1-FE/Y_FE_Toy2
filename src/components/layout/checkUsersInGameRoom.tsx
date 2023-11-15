@@ -88,7 +88,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
         {Array.from({ length: MAX_USERS }).map((_, index) => {
           const user = profiles[index];
           return (
-            <UserWrap key={index}>
+            <div key={index}>
               {user ? (
                 <UserBox>
                   <ImgBox>
@@ -103,7 +103,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
               ) : (
                 <UserBoxEmpty />
               )}
-            </UserWrap>
+            </div>
           );
         })}
       </UserList>
@@ -116,8 +116,6 @@ const UserList = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-
-const UserWrap = styled.div``;
 
 const UserId = styled.div`
   color: #2d3748;
@@ -162,7 +160,7 @@ const UserBoxEmpty = styled.div`
   display: flex;
   align-items: center;
   border-radius: 10px;
-  box-shadow: 0px 3px 5px 0px #edf2f7; // 또는 원하는 스타일
+  box-shadow: 0px 3px 5px 0px #edf2f7;
   margin-left: 20px;
 `;
 

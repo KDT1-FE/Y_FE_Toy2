@@ -230,5 +230,6 @@ const RoomMain = styled.div`
 
 const UserList = styled.div`
   margin-top: 30px;
+  margin-bottom: 30px;
 `;
 export default GameRoom;
