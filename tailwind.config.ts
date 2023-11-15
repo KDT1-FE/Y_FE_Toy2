@@ -24,11 +24,11 @@ const config: Config = withMT({
 		},
 		extend: {
 			colors: {
-				primary: '#FFB8DA',
+				primary: '#FB72B4',
+				secondary: '#FFD4E9',
 				text: '#764242',
 				white: '#FFFFFF',
-				secondary: '#FFD4E9',
-				subtext: '#7E7E7E',
+				fill: '#EFEFEF',
 			},
 			backgroundImage: {
 				'trash-can': "url('../public/icon_trash.svg')",
