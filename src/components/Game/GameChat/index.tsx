@@ -75,6 +75,8 @@ const GameChat: React.FC<GameChatProps> = ({
   const [selectedUser, setSelectedUser] = useState<string | null>("");
   const [voteResult, setVoteResult] = useState<string | null>(null);
 
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+
   const handleOpenVoteModal = () => {
     setShowVoteModal(true);
   };
@@ -137,6 +139,12 @@ const GameChat: React.FC<GameChatProps> = ({
   }, [socket, voteResult]);
 
   useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  useEffect(() => {
     // 유저 입장 메시지 수신
     socket.on("join", (responseData: UserResponse) => {
       const systemMessage = `${responseData.joiners!.join} 님이 입장했습니다.`;
@@ -185,6 +193,7 @@ const GameChat: React.FC<GameChatProps> = ({
             <ChatBubble key={index} userId={message.id} text={message.text} />
           ),
         )}
+        <div ref={messageEndRef}></div>
         {current === "투표중" && (
           <Center>
             <Button size="md" onClick={handleOpenVoteModal}>
