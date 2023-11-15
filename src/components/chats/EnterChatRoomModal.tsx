@@ -4,7 +4,13 @@ import styled from 'styled-components';
 import { EnterChatRoomModalProps } from './chatsStore';
 import { textModalData } from './ModalTextData';
 
-const EnterChatRoomModal = ({ isOpen }: EnterChatRoomModalProps) => {
+const EnterChatRoomModal = ({ isOpen, onEnterClick, onCancelClick, selectedChat }: EnterChatRoomModalProps) => {
+  const handleEnterClick = () => {
+    onEnterClick();
+  };
+  const handleCancelClick = () => {
+    onCancelClick();
+  };
   return (
     <Wrapper style={{ display: isOpen ? 'block' : 'none' }}>
       <ModalContainer>
@@ -12,8 +18,8 @@ const EnterChatRoomModal = ({ isOpen }: EnterChatRoomModalProps) => {
           <span>{textModalData.enter}</span>
         </ModalMainText>
         <ModalBtnContainer>
-          <EnterBtn>{textModalData.enterBtn}</EnterBtn>
-          <CancelBtn>{textModalData.cancelBtn}</CancelBtn>
+          <EnterBtn onClick={handleEnterClick}>{textModalData.enterBtn}</EnterBtn>
+          <CancelBtn onClick={handleCancelClick}>{textModalData.cancelBtn}</CancelBtn>
         </ModalBtnContainer>
       </ModalContainer>
     </Wrapper>
@@ -28,6 +34,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   z-index: 999;
+  background-color: rgba(0, 0, 0, 0.4);
 `;
 
 const ModalContainer = styled.div`

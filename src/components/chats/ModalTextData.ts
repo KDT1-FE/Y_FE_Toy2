@@ -5,3 +5,7 @@ export const textModalData = {
   outBtn: '나가기',
   cancelBtn: '취소',
 };
+
+export const eclipsText = (text: string, maxLength: number) => {
+  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+};
