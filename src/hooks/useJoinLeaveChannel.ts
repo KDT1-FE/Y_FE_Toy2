@@ -17,11 +17,6 @@ export const useJoinLeaveChannels = (chatId: string) => {
     };
     getAllMemberList();
 
-    socket.emit(SOCKET.USERS);
-    socket.on(SOCKET.USER_TO_CLIENT, (messages: { users: string[] }) => {
-      if (!messages) return;
-    });
-
     serverSocket.emit(SOCKET.USERS_SERVER);
     serverSocket.on(
       SOCKET.USERS_SERVER_TO_CLIENT,

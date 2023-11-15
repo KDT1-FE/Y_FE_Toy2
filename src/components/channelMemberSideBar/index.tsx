@@ -37,7 +37,6 @@ const ChannelMemberSideBar = () => {
             key={user.id}
             userName={user.name || user.username}
             src={user.picture}
-            isOnline={onlineUserIds.includes(user.id)}
           />
         ))}
       </VStack>
