@@ -21,7 +21,7 @@ export default function TimeGauge({ time }: PropsType) {
           width: '100%',
         }}
         animate={{
-          width: `${(time - 1) * 25}%`,
+          width: `${(time - 1) * 28.5}%`,
         }}
         transition={{
           ease: 'linear',

@@ -6,6 +6,7 @@ import {
   TimeType,
   WordsType,
 } from '../../../../types/gameType';
+import soundPlay from '../../sound/soundPlay';
 
 type Props = Pick<StartType, 'setStart'> &
   Pick<TimeType, 'setTime'> &
@@ -38,6 +39,7 @@ export default function StartBtn({
   }
 
   function gameStart() {
+    soundPlay('start');
     setStart(true);
     randomAlphabet();
     setCurrentRate(0);
