@@ -20,6 +20,13 @@ export const FriendProfilesCheckOnline = ({
 		allUsersExceptMe?.map((user) => {
 			return { ...user, isOnline: userNameConnected.includes(user.id) };
 		}) || [];
+	// users.sort((a) => {
+	// 	if (a.isOnline) {
+	// 		return 1;
+	// 	} else {
+	// 		return -1;
+	// 	}
+	// });
 
 	useEffect(() => {
 		const socket = io(`https://fastcampus-chat.net/server`, {
