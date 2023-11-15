@@ -34,7 +34,7 @@ export const getUsers = async () => {
 
 export const getAuthUser = async () => {
   try {
-    const response = await instance.get<AuthResponseValue>('/users');
+    const response = await instance.get<AuthResponseValue>('/auth/me');
     const authUserId = response.data.user?.id;
 
     return authUserId;
