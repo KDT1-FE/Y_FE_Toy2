@@ -1,15 +1,4 @@
-import {
-  Button,
-  // useDisclosure,
-  // Modal,
-  // ModalOverlay,
-  // ModalContent,
-  // ModalBody,
-  // ModalCloseButton,
-  // Center,
-  // Flex,
-} from "@chakra-ui/react";
-// import { useEffect, useState } from "react";
+import { Button } from "@chakra-ui/react";
 import data from "../../../data/category.json";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/atoms/userState";
@@ -46,28 +35,6 @@ const GameStart: React.FC<GameStartProps> = ({
   const categories = data.CategoryList;
 
   const fireFetch = useFireFetch();
-
-  // const { isOpen, onClose, onOpen } = useDisclosure();
-  // const [showStartModal, setShowStartModal] = useState(false);
-
-  // useEffect(() => {
-  //   if (showStartModal) {
-  //     onOpen();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [showStartModal]);
-
-  // // 모달 자동 닫기 로직
-  // useEffect(() => {
-  //   let timer: NodeJS.Timeout;
-
-  //   if (isOpen) {
-  //     timer = setTimeout(() => {
-  //       onClose();
-  //     }, 2500);
-  //   }
-  //   return () => clearTimeout(timer);
-  // }, [isOpen, onClose]);
 
   // 랜덤 숫자 계산 함수
   const getRandNum = (length: number): number => {
@@ -152,39 +119,6 @@ const GameStart: React.FC<GameStartProps> = ({
           게임 종료
         </Button>
       )}
-      {/* <Modal isOpen={isOpen} onClose={onClose} closeOnEsc={true}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          {showStartModal && (
-            <ModalBody>
-              <Center
-                fontWeight="bold"
-                h="100%"
-                fontSize="1.2rem"
-                pt="20"
-                pb="20"
-              >
-                <Flex
-                  direction="column"
-                  alignContent="center"
-                  justifyContent="center"
-                >
-                  <Center>주제는 {category?.category} 입니다.</Center>
-                  {window.localStorage.getItem("liar") === user.id ? (
-                    <>
-                      <Center>당신은 Liar 입니다.</Center>
-                      <Center>키워드를 추리하세요.</Center>
-                    </>
-                  ) : (
-                    <Center>키워드는 {keyword} 입니다.</Center>
-                  )}
-                </Flex>
-              </Center>
-            </ModalBody>
-          )}
-        </ModalContent>
-      </Modal> */}
     </>
   );
 };

@@ -129,7 +129,7 @@ const Game = () => {
     setUsers(gameInfo.users);
     setStatus(gameInfo.status);
 
-    if (current === "투표중") {
+    if (current === "게임종료") {
       setCurrent("");
       setNum(0);
     } else {
@@ -152,6 +152,7 @@ const Game = () => {
       {current === "자유발언" && (
         <Timer current={current} setCurrent={setCurrent} />
       )}
+
       <Grid
         templateColumns="200px 1fr 200px"
         templateRows="60px 1fr"
