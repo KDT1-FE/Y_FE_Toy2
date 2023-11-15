@@ -6,14 +6,13 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import styles from './signUp.module.scss';
 import Link from 'next/link';
+import styles from './signUp.module.scss';
 
 interface RequestBody {
   id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
   password: string; // 사용자 비밀번호, 5자 이상 (필수!)
   name: string; // 사용자 이름, 20자 이하 (필수!)
-  picture: string; // 사용자 이미지(url or base64, under 1MB)
 }
 
 interface FormTypes extends RequestBody {
@@ -36,23 +35,16 @@ export default function SignUp() {
     id: '',
     password: '',
     name: '',
-    picture: '',
   });
+  const [defaultImgUrl, setDefaultImgUrl] = useState<string | null>(null);
   const [checkId, setCheckId] = useState(false);
   const [checkIdMessage, setCheckIdMessage] = useState('');
   const storage = getStorage(app);
 
-  const fetchImageUrl = (url: string) => {
-    setFormData((prev: RequestBody) => ({
-      ...prev,
-      picture: url,
-    }));
-  };
-
-  const getImageUrl = async () => {
+  const getDefaultImageUrl = async () => {
     const defaultImageRef = ref(storage, 'images/default.jpg');
     await getDownloadURL(defaultImageRef).then(url => {
-      return fetchImageUrl(url);
+      return setDefaultImgUrl(url);
     });
   };
 
@@ -84,7 +76,7 @@ export default function SignUp() {
   };
 
   useEffect(() => {
-    getImageUrl();
+    getDefaultImageUrl();
   }, []);
 
   useEffect(() => {
@@ -228,7 +220,7 @@ export default function SignUp() {
             <SignUpModal
               handleModal={handleModal}
               formData={formData}
-              fetchImageUrl={fetchImageUrl}
+              defaultImgUrl={defaultImgUrl}
             />,
             portalElement,
           )
