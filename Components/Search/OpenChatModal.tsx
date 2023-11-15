@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
-	const TEXT_SIZE = 'text-2xl';
 	const router = useRouter();
 	const accessToken = getCookie('accessToken');
 
@@ -38,6 +37,7 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 			/>
 
 			<button
+				type="button"
 				className="absolute right-5 top-5 text-white text-lg"
 				onClick={() => router.back()}
 			>
@@ -47,12 +47,13 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 					height={20}
 					alt="취소 버튼"
 				/>
+				{''}
 			</button>
 
 			<div className="h-1/6 bg-black"></div>
 			<div className="absolute flex flex-col justify-end w-full h-2/5 bottom-0 left-0">
 				<div className="h-4/6 ml-5 text-white">
-					<OpenChatText openChat={modalChat} textSize={TEXT_SIZE} />
+					<OpenChatText openChat={modalChat} />
 				</div>
 				<button className="h-1/6 bg-yellow-500 font-medium" onClick={joinChat}>
 					오픈 채팅방 참여하기

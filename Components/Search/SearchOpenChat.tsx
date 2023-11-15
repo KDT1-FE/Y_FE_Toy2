@@ -25,14 +25,15 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 
 	return (
 		<>
-			<div className="relative flex items-center pt-3 px-3">
+			<div className="relative flex items-center pt-3 mb-5 px-3">
 				<Input
 					onChange={getUserInput}
 					onKeyPress={handleKeyPress}
-					label="검색 Input"
+					label="원하는 오픈 채팅방을 검색하세요"
 					crossOrigin={undefined}
 					value={userInput}
-					className="px-3"
+					color="pink"
+					className="px-3 text-primary"
 				/>
 				<Image
 					width={20}
@@ -48,8 +49,6 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 			</div>
 			{searchedChats.length ? (
 				<div className="w-full px-3">
-					<strong className="mt-5">오픈 채팅방</strong>
-
 					{searchedChats.map((chat) => (
 						<Link
 							href={{
@@ -58,9 +57,9 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 							}}
 							key={chat.id}
 						>
-							<li className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer">
+							<div className="w-full flex justify-between hover:bg-gray-300 rounded-t-md py-3 border-b-[0.5px] border-bgfill cursor-pointer">
 								<ShowAllOpenChat key={chat.id} chat={chat} />
-							</li>
+							</div>
 						</Link>
 					))}
 				</div>

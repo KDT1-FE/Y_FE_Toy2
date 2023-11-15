@@ -6,11 +6,12 @@ import OpenChatText from './OpenChatText';
 import OpenChatPicture from './OpenChatPicture';
 
 const ShowAllOpenChat = ({ chat }: { chat: Chat }) => {
-	const TEXT_SIZE = 'text-sm';
 	return (
 		<>
-			<OpenChatText openChat={chat} textSize={TEXT_SIZE} />
-			<OpenChatPicture openChatUsers={chat.users} />
+			<div className="w-fit h-fit shadow-md rounded-lg">
+				<OpenChatPicture openChatUsers={chat.users} />
+			</div>
+			<OpenChatText openChat={chat} />
 		</>
 	);
 };
