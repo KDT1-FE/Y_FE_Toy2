@@ -31,9 +31,9 @@ function LoginForm() {
           const refreshToken = data.refreshToken;
           setAccessToken(token);
           sessionStorage.setItem("refreshToken", refreshToken);
-          sessionStorage.setItem("userId", loginData.id)
+          sessionStorage.setItem("userId", loginData.id);
           setLoading(false);
-          navigate('/');
+          navigate("/");
         })
         .catch((error) => {
           console.error(error);
@@ -66,7 +66,6 @@ function LoginForm() {
       />
       <ErrorMessage>{errorMessage}</ErrorMessage>
       <FormInputBtn value={"로그인"} />
-      <p>{accessToken ? "로그인 상태" : "로그아웃"}</p>
     </LoginContainer>
   );
 }
