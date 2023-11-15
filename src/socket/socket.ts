@@ -1,7 +1,9 @@
 import { io } from "socket.io-client";
+import { authState } from "../recoil/atoms/authState";
+import { useRecoilValue } from "recoil";
 
 const connect = (chatId: string) => {
-  const token = JSON.parse(localStorage.getItem("token") as string);
+  const auth = useRecoilValue(authState);
 
   const socket = io(
     `https://fastcampus-chat.net/${
@@ -9,7 +11,7 @@ const connect = (chatId: string) => {
     }`,
     {
       extraHeaders: {
-        Authorization: `Bearer ${token.accessToken}`,
+        Authorization: `Bearer ${auth.accessToken}`,
         serverId: import.meta.env.VITE_APP_SERVER_ID,
       },
     },
