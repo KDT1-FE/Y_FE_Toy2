@@ -32,6 +32,7 @@ client.interceptors.response.use(
       const refreshToken = getCookie('refreshToken');
       if (refreshToken) {
         try {
+          console.log('응답 인터셉터 실행');
           const res = await postRefresh(refreshToken);
           setAccessToken(res.data.accessToken);
           return axios(error.config); // 원래 요청을 재시도
@@ -80,7 +81,13 @@ export const getUserData = async (userId: string) => {
 };
 
 export const patchUserData = async (name: string, picture: string) => {
-  const res = await client.patch(`user`, { name: name, picture: picture });
+  const payload = {
+    ...(name !== undefined && { name }),
+    ...(picture !== undefined && { picture }),
+  };
+  if (name) payload.name = name;
+  if (picture) payload.picture = picture;
+  const res = await client.patch(`user`, payload);
   return res;
 };
 

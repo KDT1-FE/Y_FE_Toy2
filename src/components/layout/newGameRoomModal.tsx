@@ -13,8 +13,13 @@ import {
 } from '@chakra-ui/react';
 import { createGameRooms } from '../../api';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { allRoomState } from '../../states/atom';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import {
+  allRoomState,
+  roomIdState,
+  usersInRoom,
+  allRoomNumberState,
+} from '../../states/atom';
 
 interface ModalProps {
   isOpen: boolean;
@@ -29,6 +34,9 @@ const NewGameRoomModal: React.FC<ModalProps> = ({
 }) => {
   const [name, setName] = useState('');
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
+  const allChatState = useRecoilValue(allRoomNumberState);
+  const setRoomId = useSetRecoilState(roomIdState);
+  const setUsersInRoom = useSetRecoilState(usersInRoom);
 
   const navigate = useNavigate();
 
@@ -46,7 +54,10 @@ const NewGameRoomModal: React.FC<ModalProps> = ({
       alert('중복된 방이 있습니다.');
     } else {
       alert('방 생성 성공.');
-      setAllRooms([...allRooms, check]);
+      console.log(allRooms);
+      const chatLength = allChatState.chats.length;
+      setRoomId(chatLength + 1);
+      setUsersInRoom(1);
       navigate(`/room/:${check.id}`);
     }
   };
