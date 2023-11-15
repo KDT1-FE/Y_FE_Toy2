@@ -12,6 +12,7 @@ import { AuthContext } from "../../hooks/useAuth";
 import { ChatI } from "../../pages/Chat";
 import SearchInput from "../SearchInput/SearchInput";
 import UserCount from "./UserCount";
+import RoomName from "./RoomName";
 
 export interface User {
   id: string;
@@ -147,7 +148,7 @@ function ChatRoom({
     <ChatRoomWrap>
       <div className="chatroom__tit">
         <div className="tit-bx">
-          <p className="tit">{roomName}</p>
+          <RoomName roomId={roomId}/>
           <UserCount roomId={roomId} />
         </div>
         <div className="util-bx">
