@@ -6,10 +6,15 @@ import OpenPeopleSvg from '@/public/OpenPeopleSvg.svg';
 import { ChatItemProps } from '../ChatList.type';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import moment from 'moment-timezone';
 
 const ChatItem = ({ chat }: ChatItemProps) => {
 	const firstUserImage = chat.users[0].picture;
 	const pathName = usePathname();
+
+	const koreanTime = (dateString: Date) => {
+		return moment(dateString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss');
+	};
 
 	const checkIsPrivate = () => {
 		if (pathName === '/private') {
@@ -17,6 +22,8 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 		}
 		return false;
 	};
+
+	console.log(chat);
 
 	return (
 		<Link
@@ -58,12 +65,12 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 							{`${chat.users.length}명 참여중`}
 						</Typography>
 						<Typography variant="small" color="gray" className="font-normal">
-							{chat.messages
-								? chat.messages[chat.messages.length]?.text
+							{chat.latestMessage
+								? chat.latestMessage.text
 								: '아직 채팅이 없습니다.'}
 						</Typography>
 						<Typography variant="small" color="gray" className="font-normal">
-							{`${chat.updatedAt}`}
+							{`${koreanTime(chat.updatedAt)}`}
 						</Typography>
 					</div>
 				</div>
