@@ -1,6 +1,11 @@
 @import '@/styles/index.scss';
 @import '../../styles/_variables';
 
+.allContainer {
+  @include container;
+  margin-top: 8rem;
+}
+
 
 .list_container {
   @include container;

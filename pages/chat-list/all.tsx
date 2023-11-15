@@ -9,6 +9,7 @@ import formatTime from '@/utils/timeFormat';
 import ChatListModal from '@/components/ChatList/ChatListModal';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
+import Header from '@/components/Header/Header';
 
 export default function AllChatList() {
   const router = useRouter();
@@ -48,7 +49,9 @@ export default function AllChatList() {
     setIsModal(!isModal);
   };
   return (
-    <ul>
+    <div className={styles.allContainer}>
+      <Header pageName="All"/>
+      <ul>
       <button
         className={styles.chatPlusBtn}
         type="button"
@@ -113,5 +116,8 @@ export default function AllChatList() {
         );
       })}
     </ul>
+
+    </div>
+    
   );
 }

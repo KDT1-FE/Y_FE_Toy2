@@ -3,6 +3,7 @@ import { Chat } from '@/@types/types';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 import MyChatListItem from '@/components/ChatList/MyChatListItem';
+import Header from '@/components/Header/Header';
 
 
 export default function MyChatList() {
@@ -25,7 +26,9 @@ export default function MyChatList() {
 
 
   return (
-    <div className={styles.list_container}>
+    <div className={styles.allContainer}>
+      <Header pageName="My"/>
+      <div className={styles.list_container}>
         <div>숙소와 채팅</div>
         <ul>
           {myHostChatList.map(chat => {
@@ -42,4 +45,7 @@ export default function MyChatList() {
         })}
         </ul>
       </div>
+
+    </div>
+    
   )};
