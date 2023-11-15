@@ -1,30 +1,32 @@
 import React, { useRef } from 'react';
 
 import { BsXCircle } from 'react-icons/bs';
-import Button from '@/components/host-list/Button';
-import Modal from '@/components/common/Modal';
+import Button from '@/components/HostList/Button';
+import Modal from '@/components/Common/Modal';
 import useOnClickOutside from '@/hooks/useOnClickOustside';
-import { Host } from '@/pages/host-list/hostList.types';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
-import styles from './HostDetailsModal.module.scss';
+import styles from '@/components/HostList/HostDetailsModal.module.scss';
+import { Host, UserList } from '@/components/HostList/hostList.types';
 
 interface HostDetailsModalProps {
   onClose: () => void;
   hostDetails: Host;
   isModalOpen: boolean;
+  userData: UserList[];
 }
 
 export default function HostDetailsModal({
   onClose,
   hostDetails,
   isModalOpen,
+  userData,
 }: HostDetailsModalProps) {
-  // const ref = useRef<HTMLDivElement>(null);
-  // useOnClickOutside(ref, () => {
-  //   onClose();
-  // });
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref, () => {
+    onClose();
+  });
 
   const router = useRouter();
   const createHostChat = async () => {
@@ -66,29 +68,31 @@ export default function HostDetailsModal({
       });
     }
   };
+
+  const findUser = userData.find(
+    user => user.id === hostDetails.id,
+  ) as UserList;
+
   return (
     <>
       <div className={styles.dim} />
       <Modal onClose={onClose}>
-        <div
-          className={`${styles.ModalBox} ${isModalOpen ? 'open' : ''}`}
-          ref={ref}
-        >
+        <div className={styles.ModalBox} ref={ref}>
           <BsXCircle className={styles['close-icon']} onClick={onClose} />
 
           <img
             className={styles['host-img']}
-            src={hostDetails.picture}
-            alt={hostDetails.name}
+            src={findUser?.picture}
+            alt={findUser?.name}
           />
-          <p className={styles['flex-row']}>
-            <h4 className={styles.title}>{hostDetails.name}</h4>
+          <div className={styles['flex-row']}>
+            <h4 className={styles.title}>{findUser?.name}</h4>
             <Button
               className="fill-btn"
               text="문의하기"
               onClick={createHostChat}
             />
-          </p>
+          </div>
           <p className={styles.text}>
             <b>주소 :</b> {hostDetails.location} {hostDetails.address}
           </p>
