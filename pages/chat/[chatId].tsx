@@ -12,7 +12,6 @@ import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
 import { CLIENT_URL } from '../../apis/constant';
-import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
 
@@ -26,12 +25,15 @@ export default function Chat() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  const [showEntryNotice, setShowEntryNotice] = useState(false);
+  const [showExitNotice, setShowExitNotice] = useState(false);
+
   const [joiners, setJoiners] = useState<string[]>([]);
   const [leavers, setLeavers] = useState<string[]>([]);
 
   const userId = useRecoilValue(userIdState);
 
-  console.log(userId);
+  // console.log(userId);
 
   const accessToken = getStorage('accessToken');
 
@@ -81,15 +83,43 @@ export default function Chat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
 
+  useEffect(() => {
+    if (joiners.length > 0) {
+      setShowEntryNotice(true); // Show entry notice
+
+      const entryTimer = setTimeout(() => {
+        setShowEntryNotice(false); // Hide entry notice after 3 seconds
+        setJoiners([]);
+      }, 3000);
+
+      return () => clearTimeout(entryTimer);
+    }
+  }, [joiners]);
+
+  useEffect(() => {
+    if (leavers.length > 0) {
+      setShowExitNotice(true); // Show exit notice
+
+      const exitTimer = setTimeout(() => {
+        setShowExitNotice(false); // Hide exit notice after 3 seconds
+        setLeavers([]);
+      }, 3000);
+
+      return () => clearTimeout(exitTimer);
+    }
+  }, [leavers]);
+
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({
+        behavior: 'smooth',
+      });
     }
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, showEntryNotice, showExitNotice]);
 
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
@@ -109,14 +139,9 @@ export default function Chat() {
   return (
     <>
       <ChatroomHeader name={name} chatId={chatId} />
-      <div className={styles.container}>
-        <div className={styles.container}>
+      <div className={styles2.container}>
+        <div className={styles2.container}>
           <div>
-            {leavers.length === 0
-              ? null
-              : leavers.map((leaver, index) => (
-                  <ExitNotice key={index} leaver={leaver} />
-                ))}
             {messages.map(msg =>
               msg.userId === userId ? (
                 <MyChat key={msg.id} msg={msg} />
@@ -124,8 +149,13 @@ export default function Chat() {
                 <OtherChat key={msg.id} msg={msg} />
               ),
             )}
-            <EntryNotice joiners={joiners} />
           </div>
+          {joiners.length > 0 && showEntryNotice && (
+            <EntryNotice joiners={joiners} />
+          )}
+          {leavers.length > 0 && showExitNotice && (
+            <ExitNotice leaver={leavers[0]} />
+          )}
           <div ref={messagesEndRef} />
           {showAlert && <ChatAlert />}
         </div>
