@@ -180,8 +180,24 @@ const GameLists = () => {
         );
 
         setGameLists(copy);
-      } else if (messageObject.text.endsWith("@#$%")) {
-        console.log("대기중");
+      } else if (messageObject.text.endsWith("~!@##")) {
+        const arr = messageObject.text.split(":");
+        const gameId = arr[0];
+
+        const copy = [...gameLists];
+        const index = copy.findIndex((value) => value.id === gameId);
+
+        copy[index].status = "게임중";
+        setGameLists(copy);
+      } else if (messageObject.text.endsWith("~!a%2@##")) {
+        const arr = messageObject.text.split(":");
+        const gameId = arr[0];
+
+        const copy = [...gameLists];
+        const index = copy.findIndex((value) => value.id === gameId);
+
+        copy[index].status = "대기중";
+        setGameLists(copy);
       } else {
         // 메시지 데이터, 작성 유저 상태 저장
         const message = {
