@@ -15,8 +15,10 @@ import { sortTime } from './useFormatCreatedAt';
 
 import { getMyChats, getAllChats, partChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
+import EnterChatRoomModal from './EnterChatRoomModal';
 const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
+  const [chatModalOpen, setChatModalOpen] = useState(false);
   // 검색창에 입력 중에 올바른 검색어 비교 위해 Input 값 전역 상태 관리
   const filterInputValue = useRecoilValue(searchInputState);
   const filterChats = useRecoilValue(searchChatsState);
@@ -28,7 +30,9 @@ const MyChats = ({ userType }: { userType: string }) => {
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       if (chat.users.every((user) => user.id !== userId)) {
+        // setChatModalOpen(true);
         partChats(chat.id);
+        setChatModalOpen(false);
         router.push(`/chating/${chat.id}`);
         console.log('새로 입장 성공');
       } else {
@@ -46,13 +50,21 @@ const MyChats = ({ userType }: { userType: string }) => {
     refetchInterval: 1000,
   });
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   const onAddHandler = () => {
     setAddChatOpen(!addChatOpen);
   };
+
+  const onModalHandler = () => {
+    setChatModalOpen(!chatModalOpen);
+  };
+
+  // const onEnterChatRoom = (chat: Chat) => {
+  //   if (chat.id && chat.users) {
+  //     partChats(chat.id);
+  //     setChatModalOpen(false);
+  //     router.push(`/chating/${chat.id}`);
+  //   }
+  // };
 
   return (
     <Wrapper>
@@ -62,9 +74,11 @@ const MyChats = ({ userType }: { userType: string }) => {
           <AddChatIcon onClick={onAddHandler} />
         </IconBar>
       </ChatHeader>
+      <SearchMyChat userType={userType} />
       <ChatContainer>
-        <SearchMyChat userType={userType} />
         <ChatList>
+          {/* <EnterChatRoomModal isOpen={chatModalOpen} onEnterClick={enterChatRoom} onCancleClick={onModalHandler} />  */}
+          {isLoading && <Loading />}
           {userId && data ? (
             filterInputValue ? (
               filterChats.length > 0 ? (
@@ -118,7 +132,7 @@ const ChatHeader = styled.div`
 `;
 
 const MyChatBar = styled.div`
-  color: #00956e;
+  color: ${({ theme }) => theme.color.mainGreen};
   font-weight: bold;
   font-size: 1.5rem;
 `;
@@ -140,7 +154,7 @@ const ChatContainer = styled.div`
   text-align: center;
   margin: 2rem;
   background-color: transparent;
-  height: calc(50rem - 7rem);
+  height: calc(50rem - 14rem);
 `;
 
 const ChatList = styled.div`
@@ -163,7 +177,7 @@ const Loading = styled.div`
 
   animation: spin 1s linear infinite;
 
-  margin: 20rem auto 0;
+  margin: 0 auto 8rem;
 
   @keyframes spin {
     0% {

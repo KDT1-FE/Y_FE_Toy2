@@ -48,12 +48,13 @@ const Wrapper = styled.div`
 `;
 
 const SearchUserBox = styled.div`
-  background-color: white;
+  background-color: #fff;
 
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadow.search};
 
   width: 100%;
+  margin: 2rem 2rem 0 2rem;
   height: 3.5rem;
 
   display: flex;
