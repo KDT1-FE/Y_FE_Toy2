@@ -15,6 +15,13 @@ export const fetchAllChat = async (token: string) => {
 };
 
 export const filterChat = (chatList: Chat[]) => {
+	// Date기준으로 정렬
+	chatList.sort((oldest: Chat, latest: Chat) => {
+		if (oldest.updatedAt > latest.updatedAt) return -1;
+		if (oldest.updatedAt < latest.updatedAt) return 1;
+		return 0;
+	});
+
 	const PersonalChat = chatList.filter(
 		(chat: Chat) => chat.isPrivate === true && chat.users.length === 2,
 	);

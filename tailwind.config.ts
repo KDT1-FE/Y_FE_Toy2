@@ -18,6 +18,9 @@ const config: Config = withMT({
 		},
 		backgroundSize: {
 			'50%': '50%',
+			contain: 'contain',
+			cover: 'cover',
+			fill: 'fill',
 		},
 		extend: {
 			colors: {

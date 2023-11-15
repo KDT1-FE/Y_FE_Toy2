@@ -20,6 +20,7 @@ export type Chat = {
 	users: User[];
 	messages: Message[]; // message 객체가 속합니다.
 	updatedAt: Date;
+	latestMessage?: Message;
 	indexId?: number;
 };
 

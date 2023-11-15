@@ -6,6 +6,7 @@ import OpenPeopleSvg from '@/public/OpenPeopleSvg.svg';
 import { ChatItemProps } from '../ChatList.type';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { koreanTime } from '@/utils/changeKoreanTime';
 
 const ChatItem = ({ chat }: ChatItemProps) => {
 	const firstUserImage = chat.users[0].picture;
@@ -58,12 +59,12 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 							{`${chat.users.length}명 참여중`}
 						</Typography>
 						<Typography variant="small" color="gray" className="font-normal">
-							{chat.messages
-								? chat.messages[chat.messages.length]?.text
+							{chat.latestMessage
+								? chat.latestMessage.text
 								: '아직 채팅이 없습니다.'}
 						</Typography>
 						<Typography variant="small" color="gray" className="font-normal">
-							{`${chat.updatedAt}`}
+							{`${koreanTime(chat.updatedAt)}`}
 						</Typography>
 					</div>
 				</div>
