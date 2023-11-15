@@ -1,7 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import Auth from '@/apis/Auth';
+import { useSetRecoilState } from 'recoil';
+import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import styles from './login.module.scss';
 
 export default function Login() {
@@ -17,6 +20,13 @@ export default function Login() {
 
     await login({ id, password });
   };
+  const setShowNavigation = useSetRecoilState(showNavigationState);
+  useEffect(() => {
+    setShowNavigation(false);
+    return () => {
+      setShowNavigation(true);
+    };
+  }, []);
 
   return (
     <div className={styles.login_container}>

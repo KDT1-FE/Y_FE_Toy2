@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io } from 'socket.io-client';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
 // import chatSocket from '@/apis/socket';
+import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
@@ -25,6 +26,14 @@ export default function Chat() {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const setShowNavigation = useSetRecoilState(showNavigationState);
+  useEffect(() => {
+    setShowNavigation(false);
+    return () => {
+      setShowNavigation(true);
+    };
+  }, []);
+
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const userId = useRecoilValue(userIdState);

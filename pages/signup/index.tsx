@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { useSetRecoilState } from 'recoil';
+import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import styles from './signUp.module.scss';
 
 interface RequestBody {
@@ -108,6 +110,14 @@ export default function SignUp() {
   const onInValid = () => {
     console.log('유효하지 않는 입력이다.');
   };
+
+  const setShowNavigation = useSetRecoilState(showNavigationState);
+  useEffect(() => {
+    setShowNavigation(false);
+    return () => {
+      setShowNavigation(true);
+    };
+  }, []);
 
   return (
     <>
