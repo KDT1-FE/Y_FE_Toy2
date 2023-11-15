@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import ChatBubble from "../../common/ChatBubble";
 import SystemChat from "../../common/SystemChat";
 import Vote from "../Vote";
+import { Socket } from "../../Main/CreateGameModal";
 
 interface Message {
   id: string;
@@ -17,7 +18,7 @@ interface Message {
 }
 
 interface GameChatProps {
-  socket: any;
+  socket: Socket;
   gameData: any;
 }
 
@@ -57,6 +58,18 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject: any) => {
+      if (messageObject.text.split("~")[1] === "!@##") {
+        const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
+        console.log("parseData:", gameInfo);
+        window.localStorage.setItem(
+          "shuffledUsers",
+          JSON.stringify(gameInfo.users),
+        );
+        window.localStorage.setItem("category", gameInfo.category);
+        window.localStorage.setItem("keyword", gameInfo.keyword);
+        window.localStorage.setItem("liar", gameInfo.liar);
+        return;
+      }
       // 메시지 데이터, 작성 유저 상태 저장
       const copy = { ...message };
       copy.id = messageObject.userId;
