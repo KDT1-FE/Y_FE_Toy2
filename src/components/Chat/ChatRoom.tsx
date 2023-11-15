@@ -102,7 +102,7 @@ function ChatRoom({
         newSocket.disconnect();
       };
     }
-  }, [accessToken, roomId, messages]);
+  }, [accessToken, roomId]);
 
   useLayoutEffect(() => {
     if (messagesEndRef.current) {

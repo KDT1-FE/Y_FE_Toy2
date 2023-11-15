@@ -76,20 +76,18 @@ function Chat() {
                 updatedAtString = `${daysDifference}일 전`;
               }
 
-              const res = await getData(
-                `https://fastcampus-chat.net/user?userId=${sessionStorage.getItem(
-                  "userId"
-                )}`
-              );
-              setLoginUser(res.user);
-
               return {
                 ...room,
                 updatedAt: updatedAtString
               };
             })
           );
-
+          const res = await getData(
+            `https://fastcampus-chat.net/user?userId=${sessionStorage.getItem(
+              "userId"
+            )}`
+          );
+          setLoginUser(res.user);
           setChatRoom(myRoom);
         } catch (error) {
           console.error(error);
