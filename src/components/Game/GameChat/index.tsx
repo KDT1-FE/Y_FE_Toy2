@@ -12,6 +12,7 @@ import { userState } from "../../../recoil/atoms/userState";
 import ChatBubble from "../../common/ChatBubble";
 import SystemChat from "../../common/SystemChat";
 import Vote from "../Vote";
+import { Socket } from "../../Main/CreateGameModal";
 import MyChatBubble from "../../common/MyChatBubble";
 
 interface Message {
@@ -20,8 +21,15 @@ interface Message {
 }
 
 interface GameChatProps {
-  socket: any;
+  socket: Socket;
   gameData: any;
+  onGameInfoReceived: (gameInfo: {
+    category: string;
+    keyword: string;
+    liar: string;
+    users: string[];
+    status: string;
+  }) => void;
 }
 
 interface UserResponse {
@@ -30,7 +38,12 @@ interface UserResponse {
   leaver?: string;
 }
 
-const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
+const GameChat: React.FC<GameChatProps> = ({
+  socket,
+  gameData,
+  onGameInfoReceived,
+}) => {
+  console.log("GameChat/ gameData:", gameData);
   const user = useRecoilValue(userState);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
@@ -56,6 +69,18 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject: any) => {
+      // 게임 시작 메시지
+      if (messageObject.text.split("~")[1] === "!@##") {
+        const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
+        onGameInfoReceived(gameInfo);
+        return;
+      }
+      // 게임 종료 메시지
+      if (messageObject.text.split("~")[1] === "##@!") {
+        const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
+        onGameInfoReceived(gameInfo);
+        return;
+      }
       // 메시지 데이터, 작성 유저 상태 저장
       setMessages((prevMessages: Message[]) => [
         ...prevMessages,

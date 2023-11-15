@@ -1,32 +1,26 @@
 import {
   Button,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalCloseButton,
-  Center,
-  Flex,
+  // useDisclosure,
+  // Modal,
+  // ModalOverlay,
+  // ModalContent,
+  // ModalBody,
+  // ModalCloseButton,
+  // Center,
+  // Flex,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import data from "../../../data/category.json";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/atoms/userState";
+import { Socket } from "../../Main/CreateGameModal";
 
 interface GameStartProps {
-  socket: any;
+  socket: Socket;
   status: string;
   users: string[];
   host: string;
-  updateStatus: (newStatus: string) => void;
 }
-
-interface Categories {
-  category: string;
-  keyword: string[];
-}
-[];
 
 interface UserWithSort {
   value: string;
@@ -38,37 +32,31 @@ const GameStart: React.FC<GameStartProps> = ({
   status,
   users,
   host,
-  updateStatus,
 }) => {
   const user = useRecoilValue(userState);
 
   const categories = data.CategoryList;
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const [category, setCategory] = useState<Categories | null>(null);
-  const [keyword, setKeyword] = useState("");
-  const [liar, setLiar] = useState("");
-  const [showStartModal, setShowStartModal] = useState(false);
+  // const { isOpen, onClose, onOpen } = useDisclosure();
+  // const [showStartModal, setShowStartModal] = useState(false);
 
-  console.log(liar);
+  // useEffect(() => {
+  //   if (showStartModal) {
+  //     onOpen();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [showStartModal]);
 
-  useEffect(() => {
-    if (showStartModal) {
-      onOpen();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showStartModal]);
+  // // 모달 자동 닫기 로직
+  // useEffect(() => {
+  //   let timer: NodeJS.Timeout;
 
-  // 모달 자동 닫기 로직
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    if (isOpen) {
-      timer = setTimeout(() => {
-        onClose();
-      }, 3000);
-    }
-    return () => clearTimeout(timer);
-  }, [isOpen, onClose]);
+  //   if (isOpen) {
+  //     timer = setTimeout(() => {
+  //       onClose();
+  //     }, 2500);
+  //   }
+  //   return () => clearTimeout(timer);
+  // }, [isOpen, onClose]);
 
   // 랜덤 숫자 계산 함수
   const getRandNum = (length: number): number => {
@@ -77,15 +65,13 @@ const GameStart: React.FC<GameStartProps> = ({
 
   // 게임 시작 함수
   const handleStart = async () => {
-    updateStatus("게임중");
-
     const selectedCategory = categories[getRandNum(categories.length)];
     const ranKeyword =
       selectedCategory.keyword[getRandNum(selectedCategory.keyword.length)];
     const ranLiar = users[getRandNum(users.length)];
 
     // 유저 순서 랜덤으로 섞기
-    const shuffledUsers: string[] = users
+    const newUsers: string[] = users
       .map(
         (userId: string): UserWithSort => ({
           value: userId, // 실제 유저 ID
@@ -100,33 +86,29 @@ const GameStart: React.FC<GameStartProps> = ({
       category: selectedCategory.category,
       keyword: ranKeyword,
       liar: ranLiar,
-      users: shuffledUsers,
+      users: newUsers,
+      status: "게임중",
     });
 
     // 모든 클라이언트에게 게임 정보를 포함하는 이벤트 전송
-    socket.emit("message-to-server", gameInfo + "~!@");
+    socket.emit("message-to-server", gameInfo + "~!@##");
 
-    setCategory(selectedCategory);
-    setKeyword(ranKeyword);
-    setLiar(ranLiar);
-    setShowStartModal(true);
-
-    window.localStorage.setItem("shuffledUsers", JSON.stringify(shuffledUsers));
-    window.localStorage.setItem("category", selectedCategory.category);
-    window.localStorage.setItem("keyword", ranKeyword);
-    window.localStorage.setItem("liar", ranLiar);
-    // onOpen();
+    // setShowStartModal(true);
   };
 
   // 게임 종료
   const hadleEnd = () => {
-    updateStatus("대기중");
+    const gameInfo = JSON.stringify({
+      category: "",
+      keyword: "",
+      liar: "",
+      users: users,
+      status: "대기중",
+    });
 
-    window.localStorage.setItem("category", "");
-    window.localStorage.setItem("keyword", "");
-    window.localStorage.setItem("liar", "false");
-    setCategory(null);
-    setKeyword("");
+    socket.emit("message-to-server", gameInfo + "~##@!");
+
+    // setShowStartModal(false);
   };
 
   return (
@@ -150,7 +132,7 @@ const GameStart: React.FC<GameStartProps> = ({
           게임 종료
         </Button>
       )}
-      <Modal isOpen={isOpen} onClose={onClose} closeOnEsc={true}>
+      {/* <Modal isOpen={isOpen} onClose={onClose} closeOnEsc={true}>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
@@ -169,7 +151,7 @@ const GameStart: React.FC<GameStartProps> = ({
                   justifyContent="center"
                 >
                   <Center>주제는 {category?.category} 입니다.</Center>
-                  {window.localStorage.getItem("liar") === "true" ? (
+                  {window.localStorage.getItem("liar") === user.id ? (
                     <>
                       <Center>당신은 Liar 입니다.</Center>
                       <Center>키워드를 추리하세요.</Center>
@@ -182,7 +164,7 @@ const GameStart: React.FC<GameStartProps> = ({
             </ModalBody>
           )}
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   );
 };
