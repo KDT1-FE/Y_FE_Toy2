@@ -12,6 +12,7 @@ import { useRef, useState } from 'react';
 import { BsCameraFill, BsFillTrash3Fill } from 'react-icons/bs';
 import Modal from '../Common/Modal';
 import styles from './SignUpModal.module.scss';
+import Loading from './Loading';
 
 interface RequestBody {
   id: string;
@@ -42,6 +43,7 @@ export default function SignUpModal({
   const imageStyle = {
     borderRadius: '50%',
   };
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log(defaultImgUrl);
   const handleInputClick = () => {
@@ -95,6 +97,8 @@ export default function SignUpModal({
 
   const handleSignUpClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setIsLoading(true); // 로딩 시작
+    console.log(isLoading);
     try {
       const selectedImgUrl: string | undefined = await handleImageUpload();
       if (selectedImgUrl) {
@@ -103,58 +107,67 @@ export default function SignUpModal({
           picture: selectedImgUrl,
         };
         await instance.post('/signup', requestUserData);
-        alert('회원가입이 완료되었습니다.');
-        handleModal();
+        // 회원가입 성공 알림
         router.push('/login');
       }
     } catch (error) {
       console.log(error);
+      // 에러 처리 알림
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
+  
+ 
+    return (
+      <div className={styles.dim}>
+        {isLoading ? <Loading /> : 
+        
+        <Modal>
+          <div className={styles.signUpModalBox}>
+            <h2>프로필 사진 설정</h2>
+            <div className={styles.userImgBox}>
+              {selectedImg ? (
+                <Image
+                  src={selectedImg}
+                  alt="이미지 미리보기"
+                  width={160}
+                  height={160}
+                  style={imageStyle}
+                />
+              ) : (
+                ''
+              )}
+              <BsCameraFill
+                className={styles.camaraIcon}
+                onClick={handleInputClick}
+              />
 
-  return (
-    <Modal>
-      <div className={styles.signUpModalBox}>
-        <h2>프로필 사진 설정</h2>
-        <div className={styles.userImgBox}>
-          {selectedImg ? (
-            <Image
-              src={selectedImg}
-              alt="이미지 미리보기"
-              width={160}
-              height={160}
-              style={imageStyle}
-            />
-          ) : (
-            ''
-          )}
-          <BsCameraFill
-            className={styles.camaraIcon}
-            onClick={handleInputClick}
-          />
-
-          <BsFillTrash3Fill
-            className={styles.resetIcon}
-            onClick={handleImgResetClick}
-          />
-        </div>
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            ref={imageRef}
-          />
-        </div>
-        <div className={styles.actionButtonsWrapper}>
-          <button type="button" onClick={handleSignUpClick}>
-            가입하기
-          </button>
-          <button type="button" onClick={handleModal}>
-            뒤로가기
-          </button>
-        </div>
+              <BsFillTrash3Fill
+                className={styles.resetIcon}
+                onClick={handleImgResetClick}
+              />
+            </div>
+            <div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                ref={imageRef}
+              />
+            </div>
+            <div className={styles.actionButtonsWrapper}>
+              <button type="button" onClick={handleSignUpClick}>
+                가입하기
+              </button>
+              <button type="button" onClick={handleModal}>
+                뒤로가기
+              </button>
+            </div>
+          </div>
+        </Modal>
+        }
       </div>
-    </Modal>
-  );
+    );
+  
 }

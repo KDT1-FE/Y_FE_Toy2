@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { useSetRecoilState } from 'recoil';
+import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import styles from './signUp.module.scss';
 
 interface RequestBody {
@@ -109,12 +111,20 @@ export default function SignUp() {
     console.log('유효하지 않는 입력이다.');
   };
 
+  const setShowNavigation = useSetRecoilState(showNavigationState);
+  useEffect(() => {
+    setShowNavigation(false);
+    return () => {
+      setShowNavigation(true);
+    };
+  }, []);
+
   return (
     <>
       <div className={styles.signUp_container}>
         <div className={styles.signUp_box}>
           <Image
-            src="/images/logo.png"
+            src="/images/Talkhaja.svg"
             alt="talkhaja_logo"
             width={200}
             height={80}
