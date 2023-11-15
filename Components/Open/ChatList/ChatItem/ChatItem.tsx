@@ -1,15 +1,15 @@
 'use client';
 
-import { Avatar, Typography } from '@material-tailwind/react';
+import { Typography } from '@material-tailwind/react';
 import Image from 'next/image';
 import OpenPeopleSvg from '@/public/OpenPeopleSvg.svg';
 import { ChatItemProps } from '../ChatList.type';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { koreanTime } from '@/utils/changeKoreanTime';
+import OpenChatPicture from '@/Components/Search/OpenChatPicture';
 
 const ChatItem = ({ chat }: ChatItemProps) => {
-	const firstUserImage = chat.users[0].picture;
 	const pathName = usePathname();
 
 	const checkIsPrivate = () => {
@@ -27,15 +27,9 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 				query: { isPrivate: checkIsPrivate() },
 			}}
 		>
-			<div className="w-fulls border-4 border-primary hover:bg-gray-300 cursor-pointer rounded-xl ease-in transition-all duration-300 p-5">
+			<div className="w-fulls  hover:bg-gray-300 cursor-pointer rounded-xl ease-in transition-all duration-300 p-5">
 				<div className="flex gap-5 h-full">
-					<Avatar
-						src={firstUserImage}
-						alt="candice"
-						width={5}
-						height={5}
-						className="rounded-full w-8 h-8"
-					/>
+					<OpenChatPicture openChatUsers={chat.users} />
 					<div>
 						<Typography
 							variant="h6"
