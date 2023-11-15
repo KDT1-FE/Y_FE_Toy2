@@ -1,19 +1,21 @@
 import { Button } from '@chakra-ui/button';
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/input';
-import socket from '../../api/socket';
 import { useState } from 'react';
 import { SOCKET } from '../../constants/socket';
+import getSocket from '../../api/socket';
 
-const ChatInput = () => {
+const ChatInput = ({ chatId }: { chatId: string }) => {
   const [value, setValue] = useState('');
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
 
   const sendChat = () => {
     if (value === '') return;
-    socket.emit(SOCKET.MESSAGE_TO_SERVER, value);
+    const socket = getSocket(chatId);
+    socket.emit(SOCKET.MESSAGE_TO_SERVER, value, (error: Error) => {
+      if (error) alert('알 수 없는 오류입니다');
+    });
     setValue('');
   };
 
@@ -24,7 +26,7 @@ const ChatInput = () => {
   };
 
   return (
-    <InputGroup size="lg" zIndex="1" maxWidth={700} m="0 auto">
+    <InputGroup size="lg" zIndex="1" maxWidth={750} m="0 auto">
       <Input
         pr="4.5rem"
         overflowY="scroll"

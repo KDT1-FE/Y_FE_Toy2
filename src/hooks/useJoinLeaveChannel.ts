@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import socket from '../api/socket';
 import { User2 } from '../@types/user';
 import { SOCKET } from '../constants/socket';
 import { getMemberData, findUserDataInChannel } from '../api/channel';
+import getSocket from '../api/socket';
 
 export const useJoinLeaveChannels = (chatId: string) => {
   const [userList, setUserList] = useState<User2[]>([]);
@@ -15,7 +15,7 @@ export const useJoinLeaveChannels = (chatId: string) => {
       setUserList(firstMemberList);
     };
     getAllMemberList();
-
+    const socket = getSocket(chatId);
     socket.emit(SOCKET.USERS);
     socket.on(SOCKET.USER_TO_CLIENT, (messages: { users: string[] }) => {
       if (!messages) return;
@@ -34,7 +34,7 @@ export const useJoinLeaveChannels = (chatId: string) => {
       socket.off(SOCKET.LEAVE);
       socket.off(SOCKET.USER_TO_CLIENT);
     };
-  }, [chatId]);
+  }, []);
 
   return { userList, onlineUserIds, setUserList };
 };

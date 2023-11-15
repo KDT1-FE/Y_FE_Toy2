@@ -13,7 +13,6 @@ import { useMyChannels } from '../../hooks/useMyChannels';
 
 const SideBar = () => {
   const { data: channels } = useMyChannels();
-
   return (
     <Box w="18rem" h="100vh" bg="gray.50" color="black" p="20px" boxShadow="xl">
       <Heading my="2rem">로고자리</Heading>
@@ -34,13 +33,14 @@ const SideBar = () => {
         </Heading>
         <Box h="50vh" overflowY="scroll">
           {channels ? (
-            channels.map((channel) => (
-              <MyChannelItem
-                key={channel.id}
-                channelId={channel.id}
-                myChannelName={channel.name}
-                isPrivate={channel.isPrivate}
-              />
+            channels.map((channel, index) => (
+              <Box key={index}>
+                <MyChannelItem
+                  channelId={channel.id}
+                  myChannelName={channel.name}
+                  isPrivate={channel.isPrivate}
+                />
+              </Box>
             ))
           ) : (
             <Box>내가 속한 채팅방이 없습니다.</Box>

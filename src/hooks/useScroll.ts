@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { ChatInfo } from '../@types/message';
+import { ChatData } from '../@types/message';
 
-const useScroll = (chats: ChatInfo[]) => {
+const useScroll = (chats: ChatData[]) => {
   const chatElement = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!chatElement.current) return;
