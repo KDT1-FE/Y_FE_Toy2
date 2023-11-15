@@ -64,7 +64,11 @@ const OpenChatDivider = ({ myChatList }: ChatListProps) => {
 				</div>
 				<TabsBody>
 					<TabPanel value="open" className="min-h-[calc(80vh)]">
-						<ChatList myChatList={PublicChat} accessToken={accessToken} />
+						{PublicChat.length ? (
+							<ChatList myChatList={PublicChat} accessToken={accessToken} />
+						) : (
+							<h1 className="mx-auto my-2">오픈채팅방이 없습니다.</h1>
+						)}
 					</TabPanel>
 				</TabsBody>
 			</Tabs>

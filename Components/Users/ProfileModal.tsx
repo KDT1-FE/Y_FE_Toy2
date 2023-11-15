@@ -13,6 +13,8 @@ import { convertPictureURL } from '@/hooks/Common/users';
 import { Input } from '@material-tailwind/react';
 import axios from 'axios';
 import { editUser } from '@/app/users/users.utils';
+import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
+import Swal from 'sweetalert2';
 
 type FetchImageProps = {
 	file: string;
@@ -42,6 +44,7 @@ const ProfileModal = ({
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
+	const setLoading = useAsyncLoading();
 	const [isEdit, setIsEdit] = useState<boolean>(false);
 	const [userInput, setUserInput] = useState<User>({
 		...user,
@@ -54,11 +57,15 @@ const ProfileModal = ({
 	/* 1:1 채팅방 참여 */
 	const chattingParticipateHandler = async () => {
 		if (existPrivateChat) {
+			setLoading(true);
 			await participateChat(accessToken, existPrivateChat.id);
+			setLoading(false);
 			router.push(`/chat/${existPrivateChat.id}?isPrivate=true`);
 		} else {
+			setLoading(true);
 			const chat = await createPrivateChat(accessToken, user);
 			await participateChat(accessToken, chat.id);
+			setLoading(false);
 			router.push(`/chat/${chat.id}?isPrivate=true`);
 		}
 	};
@@ -69,6 +76,7 @@ const ProfileModal = ({
 		let photoUrl: string = '';
 
 		try {
+			setLoading(true);
 			/* 이미지가 변경 됐을 경우*/
 			if (userInput.picture.slice(0, 10) === 'data:image') {
 				isEditUserImage = true;
@@ -87,18 +95,17 @@ const ProfileModal = ({
 
 			if (isEditUserImage) {
 				/* url가지고 정보 수정 */
-				const message = await editUser(accessToken, userInput.name, photoUrl);
+				await editUser(accessToken, userInput.name, photoUrl);
 				setUserInput({ ...user, picture: photoUrl });
-				console.log(message);
 			} else if (isEditUserName) {
 				/* 이름만 정보 수정 */
-				const message = await editUser(accessToken, userInput.name);
-				console.log(message);
+				await editUser(accessToken, userInput.name);
 			}
 		} catch (e) {
 			console.error(e);
 		} finally {
 			setIsEdit(false);
+			setLoading(false);
 		}
 	};
 
@@ -119,6 +126,7 @@ const ProfileModal = ({
 		}
 	};
 
+	const invalidImageType = ['svg', 'png', 'jpg', 'jpeg'];
 	const handleFileChange = () => {
 		let file = null;
 		if (fileInputRef.current?.files) {
@@ -126,10 +134,19 @@ const ProfileModal = ({
 			file = fileInputRef.current.files[0];
 			reader.onload = (e) => {
 				const base64DataUrl = e.target!.result as string;
-				console.log({ ...userInput, picture: base64DataUrl });
 				setUserInput({ ...userInput, picture: base64DataUrl });
 			};
-			reader.readAsDataURL(file);
+			if (invalidImageType.includes(file.type.split('/')[1])) {
+				console.log(file.type.split('/')[1]);
+				reader.readAsDataURL(file);
+			} else {
+				Swal.fire({
+					text: '이미지 타입을 확인해주세요(svg, jpg, jpeg, png만 가능합니다)',
+					showCancelButton: false,
+					confirmButtonText: '확인',
+					confirmButtonColor: 'red',
+				});
+			}
 		}
 	};
 

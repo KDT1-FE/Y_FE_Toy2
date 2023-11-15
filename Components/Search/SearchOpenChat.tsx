@@ -7,6 +7,7 @@ import { Input } from '@material-tailwind/react';
 import { Chat } from '@/types';
 import { search, toLower } from '@/hooks/Common/search';
 import ShowAllOpenChat from './ShowAllOpenChat';
+import Footer from '../Common/Footer';
 
 const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 	const [userInput, setUserInput] = useState('');
@@ -53,7 +54,6 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 					}}
 				/>
 			</div>
-
 			{searchedChats.length ? (
 				<>
 					<strong className="mt-5">오픈 채팅방</strong>
@@ -75,6 +75,7 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 			) : (
 				<h1 className="m-auto">검색 결과가 없습니다.</h1>
 			)}
+			<Footer />
 		</>
 	);
 };

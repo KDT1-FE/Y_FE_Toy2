@@ -40,7 +40,7 @@ const OpenUl = () => {
 	return (
 		<ul className="flex align-center gap-3">
 			<li className="flex align-center cursor-pointer">
-				<Link href={'/search'}>
+				<Link href={'/searchmychat'}>
 					<Image
 						width={25}
 						height={25}
