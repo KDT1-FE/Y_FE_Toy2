@@ -34,8 +34,6 @@ function Chat() {
   const { getData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
-  // const [cateLinkRefs, setCateLinkRefs] = useState<React.RefObject<HTMLLIElement>[]>([]);
-
 
   useEffect(() => {
     if (accessToken) {
@@ -79,21 +77,6 @@ function Chat() {
         
           setChatRoom(myRoom);
 
-          // const updatedRefs = myRoom.map((room: ChatI) => {
-          //   const newRef = React.createRef<HTMLLIElement>();
-          //   return room.id === roomId ? newRef : null;
-          // });
-          // setCateLinkRefs(updatedRefs);
-
-          // updatedRefs.forEach((ref) => {
-          //   if (ref && ref.current) {
-          //     ref.current.classList.add('highlighted');
-          //     setTimeout(() => {
-          //       ref.current?.classList.remove('highlighted');
-          //     }, 3000);
-          //   }
-          // });
-
         } catch (error) {
           console.error(error);
         }
@@ -113,7 +96,7 @@ function Chat() {
       <ChatWrapper>
         <ChatCategory>
           {chatRoom.map((room) => (
-              <CateLink key={room.id}>
+              <CateLink key={room.id} className={room.id === roomId ? 'highlight' : ''}>
                 <div
                   className="catelink__wrap"
                   onClick={() => handleClick(room.id)}
@@ -169,6 +152,15 @@ const CateLink = styled.li`
   padding: 10px;
   border-bottom: 1px solid #e8e8e8;
   cursor: pointer;
+  &.highlight{
+    .catelink{
+      &__name{
+        .tit{
+          color: #ff9999;
+        }
+      }
+    }
+  }
   .catelink {
     &__wrap {
       gap: 16px;
