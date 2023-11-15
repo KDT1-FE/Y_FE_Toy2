@@ -109,6 +109,12 @@ const GameChat: React.FC<GameChatProps> = ({
           ...prevMessages,
           { id: messageObject.userId, text: arr[0] },
         ]);
+      } else if (messageObject.text.endsWith("%G@#C")) {
+        const arr = messageObject.text.split(":");
+
+        if (arr[0] !== "null") {
+          setVoteResult(arr[0]);
+        }
       } else {
         // 메시지 데이터, 작성 유저 상태 저장
         setMessages((prevMessages: Message[]) => [
@@ -140,14 +146,6 @@ const GameChat: React.FC<GameChatProps> = ({
       setMessages([...messages, { id: "system", text: systemMessage }]);
       setUsers(responseData.users);
     });
-
-    if (voteResult) {
-      socket.on("message-to-client", () => {
-        const systemMessage = `${voteResult} 님이 최종라이어로 지목되었습니다.`;
-        setMessages([...messages, { id: "system", text: systemMessage }]);
-        setVoteResult(null);
-      });
-    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voteResult, setMessages, socket]);
@@ -190,6 +188,7 @@ const GameChat: React.FC<GameChatProps> = ({
             gameData={gameData}
             onClose={handleCloseVoteModal}
             onVoteResult={handleVoteResult}
+            socket={socket}
           />
         )}
         {selectedUser && (
@@ -205,7 +204,8 @@ const GameChat: React.FC<GameChatProps> = ({
           ref={messageRef}
           disabled={
             (current === "개별발언" && speaking === user.id) ||
-            current === "자유발언"
+            current === "자유발언" ||
+            current === ""
               ? false
               : true
           }

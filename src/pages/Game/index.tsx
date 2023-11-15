@@ -41,7 +41,7 @@ const Game = () => {
   const gameId = searchParams.get("gameId");
 
   // 게임 진행 상황 상태
-  const [current, setCurrent] = useState("개별발언");
+  const [current, setCurrent] = useState("");
   // 현재 발언자 상태
   const [speaking, setSpeaking] = useState("qwer1234");
   // 개별 발언 종료 확인을 위한 상태
@@ -55,7 +55,7 @@ const Game = () => {
   // 게임 소켓 서버 연결
   const socket = connect(gameId as string);
   // 메인 소켓 서버 연결 (메인페이지 상태 변경 통신)
-  const socketMain = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
+  const socketMain = connect("b5275c5d-6561-413b-b828-5c66646a940f");
 
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");

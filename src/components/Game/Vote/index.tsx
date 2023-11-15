@@ -17,6 +17,7 @@ import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import calculateVote from "./CalculateVote";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/atoms/userState";
+import { Socket } from "../../Main/CreateGameModal";
 
 interface GameData {
   id: string;
@@ -28,12 +29,14 @@ interface VoteProps {
   onClose: (selectedUser: string) => void;
   onVoteResult: (result: string | null) => void;
   gameData: GameData;
+  socket: Socket;
 }
 
 const Vote: React.FC<VoteProps> = ({
   onClose,
   onVoteResult,
   gameData,
+  socket,
 }): React.ReactElement => {
   const [selectedUser, setSelectedUser] = useState<string>("");
   const [fetchData, setFetchData] = useState<GameData | null>(null);
@@ -75,12 +78,13 @@ const Vote: React.FC<VoteProps> = ({
         const updatedDocSnap = await getDoc(docRef);
         const updatedData = updatedDocSnap.data() as GameData;
 
-        console.log("submit/ Updated Data:", updatedData);
+        // console.log("submit/ Updated Data:", updatedData);
 
         const voteResult = calculateVote(updatedData);
         onVoteResult(voteResult);
         console.log("submit/ Vote result: " + voteResult);
 
+        socket.emit("message-to-server", voteResult + ":" + "%G@#C");
         onClose(selectedUser);
       } catch (error) {
         console.error("Error updating data:", error);
