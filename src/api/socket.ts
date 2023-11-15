@@ -65,6 +65,13 @@ export const drawSocket = io(
   },
 );
 
+export const gameSocket = io(
+  'https://young-wave-37170-0a19781643d5.herokuapp.com/',
+  {
+    withCredentials: true,
+  },
+);
+
 export const disconnectLoginSocket = () => {
   if (serverSocket) {
     serverSocket.disconnect();

@@ -128,7 +128,7 @@ const CheckGameRoom = () => {
         setUsersInRoom(numberOfPeople + 1);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
-        console.log(error.response.data.message);
+        // console.log(error.response.data.message);
         if (error.response.data.message === 'Chat not found') {
           setErrorMessage('방이 없습니다. 잠시 후 다시 시도해 주세요');
           setErrorType('none');

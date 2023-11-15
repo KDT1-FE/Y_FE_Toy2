@@ -46,7 +46,6 @@ function UserLogin() {
       setCookies(accessToken, refreshToken, id);
 
       alert('로그인에 성공했습니다.');
-
       navigate('/lobby');
     } catch (e: any) {
       let errorMessage = '';
