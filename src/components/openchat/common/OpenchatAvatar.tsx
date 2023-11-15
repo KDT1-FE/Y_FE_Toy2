@@ -1,5 +1,5 @@
 import React from 'react';
-import { OpenchatAvatarWrap } from '../../styles/OpenchatStyle';
+import { OpenchatAvatarWrap } from '../../../styles/OpenchatStyle';
 
 interface OpenchatAvatarProps {
   src: string;
