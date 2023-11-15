@@ -11,7 +11,7 @@ import { JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
-import { chatSocket } from '@/apis/socket';
+// import chatSocket from '@/apis/socket';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
@@ -31,65 +31,54 @@ export default function Chat() {
 
   const accessToken = getStorage('accessToken');
 
-  // useEffect(() => {
-  //   socket.on('connect', () => {
-  //     console.log('Connected to chat server');
-  //     setIsConnected(true);
-  //   });
+  const socket = useMemo(() => {
+    return io(`${CLIENT_URL}?chatId=${chatId}`, {
+      extraHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+        serverId: process.env.NEXT_PUBLIC_API_KEY,
+      },
+    });
+  }, [chatId, accessToken]);
 
-  //   socket.on('messages-to-client', (messageArray: Message[]) => {
-  //     setMessages(messageArray.messages);
-  //   });
-
-  //   socket.on('message-to-client', (messageObject: Message) => {
-  //     setMessages(prevMessages => [...prevMessages, messageObject]);
-  //   });
-
-  //   socket.emit('fetch-messages');
-
-  //   socket.on('join', (messageObject: JoinersData) => {
-  //     console.log(messageObject, '123123123');
-  //   });
-
-  //   socket.on('leave', (messageObject: LeaverData) => {
-  //     console.log(messageObject, '123123123');
-  //   });
-
-  //   return () => {
-  //     socket.off('connect');
-  //     socket.off('messages-to-client');
-  //     socket.off('message-to-client');
-  //     socket.off('join');
-  //     socket.off('leave');
-  //     socket.disconnect();
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
-  const [socket, setSocket] = useState<any>(null);
   useEffect(() => {
-    if (typeof chatId === 'string') {
-      try {
-        const newSocket = chatSocket(accessToken, chatId);
-        setSocket(newSocket);
+    if (socket) {
+      socket.on('connect', () => {
+        console.log('Connected from server');
+        setTimeout(() => {
+          socket.emit('fetch-messages');
+        }, 500);
+      });
+      socket.emit('fetch-messages');
 
-        newSocket.on('messages-to-client', messageData => {
-          console.log('Fetched messages:', messageData.messages);
-          setMessages(messageData.messages);
-        });
+      socket.on('messages-to-client', (messageArray: Message[]) => {
+        setMessages(messageArray.messages);
+      });
 
-        newSocket.on('message-to-client', messageObject => {
-          setMessages(prevMessages => [...prevMessages, messageObject]);
-          console.log(messageObject);
-        });
+      socket.on('message-to-client', (messageObject: Message) => {
+        setMessages(prevMessages => [...prevMessages, messageObject]);
+      });
 
-        return () => {
-          newSocket.disconnect();
-        };
-      } catch (error) {
-        console.error('Error retrieving data:', error);
-      }
+      socket.emit('fetch-messages');
+
+      socket.on('join', (messageObject: JoinersData) => {
+        console.log(messageObject, '123123123');
+      });
+
+      socket.on('leave', (messageObject: LeaverData) => {
+        console.log(messageObject, '123123123');
+      });
     }
-  }, [chatId]);
+
+    return () => {
+      socket.off('connect');
+      socket.off('messages-to-client');
+      socket.off('message-to-client');
+      socket.off('join');
+      socket.off('leave');
+      socket.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]); // 이제 chatId와 accessToken이 변경될 때
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -98,7 +87,9 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    setTimeout(() => {
+      scrollToBottom();
+    }, 500);
   }, [messages]);
 
   const handleSendMessage = (event: React.FormEvent) => {
