@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { HiArrowLongLeft } from 'react-icons/hi2';
 import { IoMdMenu } from 'react-icons/io';
 import { Chat, ChatUser } from '@/@types/types';
 import chatAPI from '@/apis/chatAPI';
+import Image from 'next/image';
 import styles from './Chat.module.scss';
 import Jwtinterceptors from '../../apis/Jwtinterceptors';
 
 interface Props {
-  chatId: string;
+  chatData: Chat;
 }
 
-export default function ChatroomHeader({ chatId }: Props) {
+export default function ChatroomHeader({ chatData }: Props) {
   const router = useRouter();
 
   const { instance } = Jwtinterceptors();
-  const [chatData, setChatData] = useState<Chat | null>();
 
   const accessToken: string = localStorage.getItem('accessToken');
 
@@ -38,7 +38,7 @@ export default function ChatroomHeader({ chatId }: Props) {
       const response = await instance.patch(
         '/chat/leave',
         {
-          chatId, // API에 chatId 전달
+          chatId: chatData.id,
         },
         {
           headers: {
@@ -52,24 +52,6 @@ export default function ChatroomHeader({ chatId }: Props) {
     }
   };
 
-  useEffect(() => {
-    const fetchChatData = async () => {
-      try {
-        if (chatId && typeof chatId === 'string') {
-          const response = await chatAPI.getChatInfo(chatId);
-          const chatInfo: Chat = response.data.chat;
-          setChatData(chatInfo);
-        }
-      } catch (error) {
-        console.error('Error fetching chat data:', error);
-      }
-    };
-
-    if (chatId) {
-      fetchChatData();
-    }
-  }, [chatId]);
-
   return (
     <div className={styles.header}>
       <div className={styles.left}>
@@ -80,7 +62,6 @@ export default function ChatroomHeader({ chatId }: Props) {
           <h3 className={styles.chatTitle}>{chatData.name}</h3>
           <div className={styles.right} onClick={toggleMenu}>
             <IoMdMenu />
-            {/* Dropdown 메뉴 */}
             {isMenuOpen && (
               <div className={styles.dropdownMenu}>
                 <ul>
@@ -91,7 +72,9 @@ export default function ChatroomHeader({ chatId }: Props) {
                   <div className={styles.userDiv}>
                     {chatData.users.map(user => (
                       <li key={user.id}>
-                        <img
+                        <Image
+                          width={35}
+                          height={35}
                           src={user.picture}
                           className={styles.profileImage}
                           alt="User"

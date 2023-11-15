@@ -26,6 +26,8 @@ export default function Chatting() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  const [chatData, setChatData] = useState<Chat | null>();
+
   const [showEntryNotice, setShowEntryNotice] = useState(false);
   const [showExitNotice, setShowExitNotice] = useState(false);
 
@@ -44,6 +46,22 @@ export default function Chatting() {
       },
     });
   }, [chatId, accessToken]);
+
+  useEffect(() => {
+    const fetchChatData = async () => {
+      try {
+        const response = await chatAPI.getChatInfo(chatId);
+        const chatInfo: Chat = response.data.chat;
+        setChatData(chatInfo);
+      } catch (error) {
+        console.error('Error fetching chat data:', error);
+      }
+    };
+
+    if (chatId) {
+      fetchChatData();
+    }
+  }, [chatId]);
 
   useEffect(() => {
     if (socket) {
@@ -67,17 +85,19 @@ export default function Chatting() {
 
       socket.on('join', async (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');
-        const response = await chatAPI.getUserInfo(
+        const joinUserInfo = await chatAPI.getUserInfo(
           messageObject.joiners[0]?.id.split(':')[1],
         );
-        console.log(response);
-        setEnterName(response.data.user.name);
+        setEnterName(joinUserInfo.data.user.name);
       });
 
       socket.on('leave', async (messageObject: LeaverData) => {
         console.log(messageObject, '채팅방 퇴장');
         const response = await chatAPI.getUserInfo(messageObject.leaver);
         setExitName(response.data.user.name);
+        setChatData(prevState => {
+          user;
+        });
       });
     }
     return () => {
@@ -148,7 +168,7 @@ export default function Chatting() {
 
   return (
     <>
-      {typeof chatId === 'string' && <ChatroomHeader chatId={chatId} />}
+      {chatData && <ChatroomHeader chatData={chatData} />}
       <div className={styles2.container}>
         <div className={styles2.container}>
           <div>
