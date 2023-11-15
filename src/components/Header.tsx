@@ -202,6 +202,7 @@ const UserSubMenu = styled.div`
   gap: 0.2em;
   opacity: 0;
   pointer-events: auto;
+  z-index: 0;
   button {
     padding: 0;
     background-color: transparent;
