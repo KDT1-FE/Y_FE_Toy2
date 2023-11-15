@@ -15,7 +15,7 @@ const Chatting = async () => {
 	const result = await fetchAllChat(accessToken);
 
 	return (
-		<div className="flex flex-col h-[calc(100vh-3.5rem)] w-full bg-white">
+		<div className="relative flex flex-col h-[calc(100vh-3.5rem)] w-full bg-white">
 			<Header />
 			<OpenChatDivider myChatList={result} />
 			<ChatGenerator />
