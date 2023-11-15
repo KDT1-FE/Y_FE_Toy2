@@ -12,6 +12,9 @@ import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
 import { FetchImageProps, RequestBody } from './Join.types';
+import icon_arrow_left from '@/public/icon_arrow_left.svg';
+import Image from 'next/image';
+import Link from 'next/link';
 // import Image from 'next/image';
 
 const fetchImage = async (params: FetchImageProps) => {
@@ -101,7 +104,7 @@ const JoinForm = () => {
 
 	return (
 		// 전체
-		<div className="w-full h-full flex flex-col items-center justify-center">
+		<div className="w-full h-full flex flex-col items-center justify-center relative">
 			{/* 이미지 & 입력폼 & 회원가입 버튼 */}
 			<div className="flex flex-col w-full h-full items-center justify-center ">
 				{/* 이미지 */}
@@ -189,14 +192,17 @@ const JoinForm = () => {
 					>
 						회원가입
 					</Button>
-					<Button
-						className="bg-pink-200 w-full mt-3"
-						onClick={() => router.push('/login')}
-					>
-						로그인
-					</Button>
 				</form>
 			</div>
+			<Link href="/login" passHref>
+				<Image
+					src={icon_arrow_left}
+					width={50}
+					height={50}
+					alt="뒤로가기"
+					className="absolute top-3 left-3 w-5"
+				/>
+			</Link>
 		</div>
 	);
 };
