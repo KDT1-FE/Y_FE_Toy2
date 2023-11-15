@@ -12,6 +12,8 @@ interface GameStartProps {
   status: string;
   users: string[];
   host: string;
+  current: string;
+  setCurrent: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface UserWithSort {
@@ -26,6 +28,7 @@ const GameStart: React.FC<GameStartProps> = ({
   status,
   users,
   host,
+  setCurrent,
 }) => {
   const user = useRecoilValue(userState);
 
@@ -74,7 +77,7 @@ const GameStart: React.FC<GameStartProps> = ({
   };
 
   // 게임 종료
-  const hadleEnd = () => {
+  const handleEnd = () => {
     const gameInfo = JSON.stringify({
       category: "",
       keyword: "",
@@ -87,8 +90,9 @@ const GameStart: React.FC<GameStartProps> = ({
     fireFetch.updateData("game", gameId as string, { votedFor: [] });
     fireFetch.updateData("game", gameId as string, { status: "대기중" });
 
-    socketMain.emit("message-to-server", gameId + ":" + "~!a%2@##");
+    setCurrent("게임종료");
 
+    socketMain.emit("message-to-server", gameId + ":" + "~!a%2@##");
     // setShowStartModal(false);
   };
 
@@ -109,7 +113,7 @@ const GameStart: React.FC<GameStartProps> = ({
           w="200px"
           h="100%"
           mr="20px"
-          onClick={hadleEnd}
+          onClick={handleEnd}
           isDisabled={host !== user.id}
         >
           게임 종료
