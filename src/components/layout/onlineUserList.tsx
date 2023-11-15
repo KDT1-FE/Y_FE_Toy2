@@ -1,12 +1,18 @@
-import { useRecoilValue } from 'recoil';
-import { allUserState, onlineUserState } from '../../states/atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  allUserState,
+  onlineUserState,
+  allRoomNumberState,
+  roomIdState,
+  usersInRoom,
+} from '../../states/atom';
 import userList from '../template/userList';
 import { Card, Flex, Heading, Image, Text, IconButton } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { createGameRooms, getAllMyChat } from '../../api';
-import { randomNameFunc } from '../../util/util';
+import { randomNameFunc, getCookie } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
 
 interface ResponseValue {
@@ -40,7 +46,10 @@ const OnlineUserList = () => {
   const onLine = useRecoilValue(onlineUserState);
   const all = useRecoilValue(allUserState);
   const allOnlineUsers = onLine.users || [];
-  const userId = localStorage.getItem('id');
+  const userId = getCookie('userId');
+  const allChatState = useRecoilValue(allRoomNumberState);
+  const setRoomId = useSetRecoilState(roomIdState);
+  const setUsersInRoom = useSetRecoilState(usersInRoom);
 
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
@@ -65,7 +74,6 @@ const OnlineUserList = () => {
       const chatId = matchingChat ? matchingChat.id : null;
       if (chatId) {
         //navigate(`/room/:${chatId}`);
-        console.log(privateChatArray);
       } else {
         const chat = await createGameRooms(element.id, [element.id], true);
         //navigate(`/room/:${chat.id}`);
@@ -79,6 +87,10 @@ const OnlineUserList = () => {
       alert('본인입니다.');
     } else {
       const chat = await createGameRooms(random, [element.id], false);
+      const chatLength = allChatState.chats.length;
+      console.log(chat);
+      setRoomId(chatLength + 1);
+      setUsersInRoom(2);
       navigate(`/room/:${chat.id}`);
     }
   };

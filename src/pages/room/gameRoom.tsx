@@ -9,6 +9,8 @@ import {
   roomIdState,
   usersInRoom,
 } from '../../states/atom';
+import { chattingIdState } from '../../states/atom';
+// import InviteGameRoom from '../../components/template/inviteGameRoom';
 import styled from 'styled-components';
 import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
@@ -45,6 +47,11 @@ const GameRoom: React.FC = () => {
       setUserMessage(lastMessage);
     }
   }, [lastMessage]);
+import { roomIdState, usersInRoom } from '../../states/atom';
+
+const GameRoom = () => {
+  const { id } = useParams();
+  const [chat, setChat] = useRecoilState(chattingIdState);
 
   useEffect(() => {
     if (id) {
