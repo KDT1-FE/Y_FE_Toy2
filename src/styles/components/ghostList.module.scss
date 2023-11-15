@@ -1,9 +1,28 @@
 @use '../abstracts' as *;
 @use '../base' as *;
 
-.ghosts {
-  margin: 0;
-  padding-top: 4rem;
-  text-align: center;
-  max-height: 90%;
+.vote {
+  @include flex-center-col;
+  height: 80%;
+  .ghosts {
+    margin: 0;
+
+    &__button {
+      font-size: $font-lg;
+      width: 100%;
+      text-align: end;
+      button {
+        margin-right: 5rem;
+        background-color: transparent;
+        border: none;
+        color: $white;
+
+        &:hover {
+          cursor: pointer;
+          transform: scale(0.95);
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
