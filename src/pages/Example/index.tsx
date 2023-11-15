@@ -135,7 +135,7 @@ const Example = () => {
 
   //팝업 변화 감지
   useEffect(() => {
-    if (toastUser[0] !== "") {
+    if (toastUser[0] !== "" && user.id) {
       if (toastUser.includes(user.id)) {
         console.log(roomData);
         setToast(true);

@@ -141,7 +141,7 @@ interface UserType {
   picture: string;
 }
 
-interface Socket {
+export interface Socket {
   on(event: string, callback: any): void;
   emit(event: string, data: any): void;
 }

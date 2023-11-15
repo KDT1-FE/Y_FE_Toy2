@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import GameChat from "../../components/Game/GameChat";
 import useFireFetch from "../../hooks/useFireFetch";
 import GameStart from "../../components/Game/GameStart";
-import { io } from "socket.io-client";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../recoil/atoms/userState";
+import connect from "../../socket/socket";
 
 interface ProfileCardProps {
   userId: string;
@@ -21,11 +21,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ userId }) => {
   );
 };
 
-interface Categories {
-  category: string;
-  keyword: string[];
-}
-[];
+// interface Categories {
+//   category: string;
+//   keyword: string[];
+// }
+// [];
 
 const Game = () => {
   const user = useRecoilValue(userState);
@@ -39,21 +39,13 @@ const Game = () => {
   const [status, setStatus] = useState("");
   const [users, setUsers] = useState([]);
 
-  const [category, setCategory] = useState<Categories | null>(null);
+  const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
   const [liar, setLiar] = useState("");
 
   console.log(category, keyword);
 
-  const token = JSON.parse(localStorage.getItem("token") as string);
-
-  // const socket = connect(gameId as string);
-  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
-    extraHeaders: {
-      Authorization: `Bearer ${token.accessToken}`,
-      serverId: import.meta.env.VITE_APP_SERVER_ID,
-    },
-  });
+  const socket = connect(gameId as string);
 
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
@@ -63,34 +55,6 @@ const Game = () => {
       setUsers([]);
     }
   }, [gameData.data]);
-
-  useEffect(() => {
-    // 메시지 수신 리스너 설정
-    socket.on("messeage-to-client", (data) => {
-      console.log(data);
-      const [jsonString, delimiter] = data.text.split("~");
-
-      if (delimiter === "!@") {
-        console.log(delimiter);
-        try {
-          // JSON 문자열 객체로 변환
-          const gameInfo = JSON.parse(jsonString);
-          console.log("parseData:", gameInfo);
-          setCategory(gameInfo.category);
-          setKeyword(gameInfo.keyword);
-          setLiar(gameInfo.liar);
-          setUsers(gameInfo.users);
-
-          // 필요한 작업 수행...
-        } catch (error) {
-          console.error("JSON Parsing Error: ", error);
-          throw error;
-        }
-      }
-    });
-    // onOpen();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket]);
 
   useEffect(() => {
     if (status === "게임중") {
@@ -104,7 +68,7 @@ const Game = () => {
       const currentKeyword = window.localStorage.getItem("keyword") ?? "";
       const currentLiar = window.localStorage.getItem("liar") ?? "";
 
-      setCategory({ category: currentCategory, keyword: [currentKeyword] });
+      setCategory(currentCategory);
       setKeyword(currentKeyword);
       setLiar(currentLiar);
     }
@@ -152,9 +116,7 @@ const Game = () => {
                   {liar === user.id ? (
                     <p>당신은 Liar 입니다. </p>
                   ) : (
-                    <p>
-                      키워드는 {window.localStorage.getItem("keyword")} 입니다.
-                    </p>
+                    <p>키워드는 {keyword} 입니다.</p>
                   )}
                 </>
               ) : (
