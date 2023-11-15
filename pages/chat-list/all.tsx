@@ -11,6 +11,7 @@ import { sortChatList } from '@/utils/chatList';
 import useConnectServerSocket from '@/hooks/useConnectServerSocket';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
+import Header from '@/components/Header/Header';
 
 export default function AllChatList() {
   const router = useRouter();
@@ -66,7 +67,9 @@ export default function AllChatList() {
   }, []);
 
   return (
-    <ul>
+    <div className={styles.allContainer}>
+      <Header pageName="All"/>
+      <ul>
       <button
         className={styles.chatPlusBtn}
         type="button"
@@ -131,5 +134,8 @@ export default function AllChatList() {
         );
       })}
     </ul>
+
+    </div>
+    
   );
 }
