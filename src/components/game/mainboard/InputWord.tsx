@@ -12,7 +12,8 @@ import {
 } from '../../../types/gameType';
 import { userState } from '../../../atoms';
 import { updateRate } from '../../../utils/utils';
-import checkWord from './handleSubmit';
+import checkWord from './checkWord';
+import soundPlay from '../sound/soundPlay';
 
 type Props = WordsType &
   CurrentRateType &
@@ -80,18 +81,22 @@ export default function InputWord({
     const interval = setInterval(() => {
       setTime((prev) => prev - 1);
     }, 1000);
-    if (time === 0) {
+    if (time === 0 && start) {
       clearInterval(interval);
       setWords([]);
-      setStart(false);
+      soundPlay('end');
       if (user) {
         const data = JSON.parse(user);
         if (data) {
-          if (currentRate === rate && start) {
+          if (currentRate === rate) {
             updateRate(setPeoples, data.id, setRate, { correct: currentRate });
           }
         }
       }
+      setStart(false);
+      setCurrentRate(0);
+    }
+    if (currentRate > 0 && !start) {
       setCurrentRate(0);
     }
     return () => {

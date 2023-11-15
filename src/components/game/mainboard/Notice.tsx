@@ -1,5 +1,5 @@
+import React from 'react';
 import { Campaign } from '@mui/icons-material';
-import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const NoticeWrap = styled.div`
@@ -7,14 +7,13 @@ const NoticeWrap = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const Rules = styled.div<{ props: boolean }>`
+const Rules = styled.div`
   position: relative;
   margin-left: 20px;
   padding: 5px 20px;
   color: #fff;
   border-radius: 8px 10px 10px 10px;
   background-color: #f1faee;
-  visibility: ${(props) => (props.props ? 'visible' : 'hidden')};
   &::before {
     content: '';
     position: absolute;
@@ -31,17 +30,10 @@ const Rule = styled.p`
 `;
 
 export default function Notice() {
-  const [openRule, setOpenRule] = useState(true);
-
   return (
     <NoticeWrap>
-      <Campaign
-        sx={{ fontSize: 50, cursor: 'pointer' }}
-        onClick={() => {
-          setOpenRule(!openRule);
-        }}
-      />
-      <Rules props={openRule}>
+      <Campaign sx={{ fontSize: 50 }} />
+      <Rules>
         <Rule>1. 5초 안에 끝말잇기를 하여 최고의 기록을 세워보세요.</Rule>
         <Rule>
           2. 같은 알파벳이 3번 이상 반복될 수 없고 최소 3글자 이상 최대 10글자

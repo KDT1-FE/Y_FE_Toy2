@@ -18,7 +18,6 @@ const search = async (word: string): Promise<boolean> => {
     if (responseData.length === 0) {
       return false;
     }
-
     return true;
   } catch (error) {
     console.log(error);
