@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import type { SignUpFormProps } from '../../pages/auth/SignUp';
 import SignUpSelectTag from './SignUpSelectTag';
 import {
@@ -53,7 +54,7 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (clickedItem.size < 0 && clickedItem.size >= 5) {
-      console.log('1~5개 까지 선택 가능합니다.');
+      toast.error('1~5개 까지 선택 가능합니다.');
       return;
     }
     const newForm: FbUser = {
@@ -69,7 +70,6 @@ function SignUpForm4({ setStep }: SignUpFormProps) {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
-    // 메시지를 보여주고 이동시켜야 할것같은데 일단 이동하기
     navigate('/');
     // console.log(newForm);
   };

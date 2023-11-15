@@ -15,17 +15,18 @@ function Layout() {
       >
         <Grid
           item
-          xs={0}
-          sm={2}
+          xs={12}
+          sm={12}
+          md={2}
           sx={{
-            display: { xs: 'none', sm: 'block' },
+            display: { xs: 'none', sm: 'none', md: 'block' },
           }}
         >
           <AppBar position="sticky" sx={{ minHeight: '100vh' }}>
             <Sidebar />
           </AppBar>
         </Grid>
-        <Grid item xs={12} sm={10}>
+        <Grid item xs={12} sm={12} md={10}>
           <Outlet />
         </Grid>
       </Grid>
