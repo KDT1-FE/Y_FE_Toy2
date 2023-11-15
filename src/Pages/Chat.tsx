@@ -175,6 +175,7 @@ const CateLink = styled.li`
         overflow: hidden;
         text-overflow: ellipsis;
         padding-bottom: 2px;
+        cursor: pointer;
       }
       .content {
         white-space: nowrap;
@@ -182,6 +183,7 @@ const CateLink = styled.li`
         text-overflow: ellipsis;
         color: #999696;
         margin-bottom: 10px;
+        cursor: pointer;
       }
     }
     &__time {
