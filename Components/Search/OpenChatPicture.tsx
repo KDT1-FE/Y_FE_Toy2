@@ -1,14 +1,16 @@
 import React from 'react';
 import { User } from '@/app/search/search.type';
-import Image from 'next/image';
 import { convertPictureURL } from '@/hooks/Common/users';
+import { Avatar } from '@material-tailwind/react';
 
 const OpenChatPicture = ({ openChatUsers }: { openChatUsers: User[] }) => {
 	let userCount = 0;
 
 	return (
 		<>
-			<ol className="relative w-20 h-20 flex justify-center items-center flex-wrap">
+			<div
+				className={`relative w-12 h-12 flex items-center justify-center box-border -space-x-4 bg-brown-600`}
+			>
 				{openChatUsers.map((user) => {
 					userCount++;
 
@@ -19,24 +21,16 @@ const OpenChatPicture = ({ openChatUsers }: { openChatUsers: User[] }) => {
 					const picture = convertPictureURL(user.picture);
 
 					return (
-						<li key={user.id} className="relative w-10 h-10 -m-1">
-							<Image
-								fill={true}
-								src={picture}
-								alt="user picture"
-								className="rounded"
-								style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									objectFit: 'cover',
-									margin: 'auto',
-								}}
-							/>
-						</li>
+						<Avatar
+							key={user.id}
+							src={picture}
+							variant="circular"
+							alt="user picture"
+							className="border-2 border-white hover:z-10 focus:z-10 w-1/2 h-1/2 object-cover"
+						/>
 					);
 				})}
-			</ol>
+			</div>
 		</>
 	);
 };
