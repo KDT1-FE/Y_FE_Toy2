@@ -8,6 +8,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
 import { formatCreatedAt } from '../chats/useFormatCreatedAt';
+import { instance } from '@/lib/api';
 
 interface Message {
   id: string;
@@ -27,6 +28,7 @@ export default function ChatingPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [chatName, setChatName] = useState<string>('');
   const [getUserToggle, setGetUserToggle] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
@@ -44,17 +46,18 @@ export default function ChatingPage() {
       socket.on('connect', () => {
         console.log('Socket connected');
         setTimeout(() => {
+          console.log(1);
           socket.emit('fetch-messages');
-        }, 500);
+        }, 2000);
       });
+
       socket.on('disconnect', () => {
         console.log('disconnect');
-        router.back();
       });
 
-      socket.emit('fetch-messages');
-
       socket.on('messages-to-client', (messageObject) => {
+        setLoading(false);
+
         console.log(messageObject);
         setMessages(messageObject.messages.reverse());
       });
@@ -63,16 +66,11 @@ export default function ChatingPage() {
         setMessages((prevMessages) => [messageObject, ...prevMessages]);
       });
 
-      // socket.emit('users');
-
-      // socket.on('users-to-client', (data) => {
-      //     console.log(data, 'users-to-client');
-      // });
-
       socket.on('join', (data) => {
         console.log(data, 'join');
         setGetUserToggle(!getUserToggle);
       });
+
       socket.on('leave', (data) => {
         console.log(data, 'leave');
         setGetUserToggle(!getUserToggle);
@@ -84,22 +82,40 @@ export default function ChatingPage() {
       console.log(error);
     }
   }, []);
-  const getUsers = async () => {
-    const response = await fetch('https://fastcampus-chat.net/chat', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-        serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-      },
-    });
-    const data = await response.json();
 
-    for (let i = 0; i < data.chats.length; i++) {
-      if (chatId == data.chats[i].id) {
-        setChatName(data.chats[i].name);
-        setUsers(data.chats[i].users);
-      }
+  const socket = io(`wss://fastcampus-chat.net/chat?chatId=${chatId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${accessToken}`,
+      serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+    },
+  });
+
+  // const getUsers = async () => {
+  //   const response = await fetch(`https://fastcampus-chat.net/chat/only?chatId=${chatId}`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${accessToken}`,
+  //       serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+  //     },
+  //   });
+  //   const data = await response.json();
+  //   console.log(data);
+
+  //   setChatName(data.chat.name);
+  //   setUsers(data.chat.users);
+  // };
+
+  const getUsers = async () => {
+    try {
+      let res = await instance.get<unknown, any>(`https://fastcampus-chat.net/chat/only?chatId=${chatId}`);
+      const data = await res;
+      console.log(data);
+
+      setChatName(data.chat.name);
+      setUsers(data.chat.users);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -121,17 +137,11 @@ export default function ChatingPage() {
     return undefined;
   };
 
-  const socket = io(`wss://fastcampus-chat.net/chat?chatId=${chatId}`, {
-    extraHeaders: {
-      Authorization: `Bearer ${accessToken}`,
-      serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-    },
-  });
-
   return (
     <main>
       <ChatingNavigation chatName={chatName} />
       <ChatingModal users={users} chatId={chatId} />
+      {loading && <Loading />}
 
       <MessagesContainer>
         {messages
@@ -151,8 +161,13 @@ export default function ChatingPage() {
               ) : (
                 <YourMessageWrapper key={message.id}>
                   <YourMessageNameWrapper>
-                    <YourMessagePicture src={findUserPicture(message.userId)} />
-                    <YourMessageName>{findUserName(message.userId) || ''}</YourMessageName>
+                    <YourMessagePicture
+                      src={
+                        findUserPicture(message.userId) ||
+                        'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
+                      }
+                    />
+                    <YourMessageName>{findUserName(message.userId) || message.userId}</YourMessageName>
                   </YourMessageNameWrapper>
                   <YourMessageTextWrapper>
                     <YourMessageText>{message.text}</YourMessageText>
@@ -270,4 +285,31 @@ const MyMessageTime = styled.div`
 
   display: flex;
   flex-direction: column-reverse;
+`;
+
+const Loading = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 50px;
+  height: 50px;
+
+  border: 5.5px solid rgba(255, 255, 255, 0.3);
+  border-top: 5.5px solid ${({ theme }) => theme.color.mainGreen};
+  border-radius: 50%;
+
+  animation: spin 1s linear infinite;
+
+  margin: 8rem auto 0;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
