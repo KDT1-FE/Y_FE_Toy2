@@ -1,18 +1,25 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { EnterChatRoomModalProps } from './chatsStore';
+import { textModalData } from './ModalTextData';
 
-const EnterChatRoomModal = ({ isOpen, onEnterClick, onCancleClick }: EnterChatRoomModalProps) => {
+const EnterChatRoomModal = ({ isOpen, onEnterClick, onCancelClick, selectedChat }: EnterChatRoomModalProps) => {
+  const handleEnterClick = () => {
+    onEnterClick();
+  };
+  const handleCancelClick = () => {
+    onCancelClick();
+  };
   return (
     <Wrapper style={{ display: isOpen ? 'block' : 'none' }}>
       <ModalContainer>
         <ModalMainText>
-          <span>채팅방에 입장하시겠습니까?</span>
+          <span>{textModalData.enter}</span>
         </ModalMainText>
         <ModalBtnContainer>
-          <EnterBtn onClick={onEnterClick}>입장하기</EnterBtn>
-          <CancelBtn onClick={onCancleClick}>취소</CancelBtn>
+          <EnterBtn onClick={handleEnterClick}>{textModalData.enterBtn}</EnterBtn>
+          <CancelBtn onClick={handleCancelClick}>{textModalData.cancelBtn}</CancelBtn>
         </ModalBtnContainer>
       </ModalContainer>
     </Wrapper>
@@ -26,7 +33,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  z-index: 999;
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const ModalContainer = styled.div`
@@ -38,6 +45,7 @@ const ModalContainer = styled.div`
   border: none;
   border-radius: 0.6rem;
   background-color: ${({ theme }) => theme.color.mainGreen};
+  box-shadow: ${({ theme }) => theme.shadow.list};
 `;
 
 const ModalMainText = styled.div`

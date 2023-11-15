@@ -16,12 +16,15 @@ import { sortTime } from './useFormatCreatedAt';
 import { getMyChats, getAllChats, partChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
 import EnterChatRoomModal from './EnterChatRoomModal';
+import Navigation from '../Navigation';
 const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   // 검색창에 입력 중에 올바른 검색어 비교 위해 Input 값 전역 상태 관리
   const filterInputValue = useRecoilValue(searchInputState);
   const filterChats = useRecoilValue(searchChatsState);
+
+  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
 
   const router = useRouter();
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
@@ -30,10 +33,8 @@ const MyChats = ({ userType }: { userType: string }) => {
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       if (chat.users.every((user) => user.id !== userId)) {
-        // setChatModalOpen(true);
-        partChats(chat.id);
-        setChatModalOpen(false);
-        router.push(`/chating/${chat.id}`);
+        setSelectedChat(chat);
+        setChatModalOpen(true);
         console.log('새로 입장 성공');
       } else {
         router.push(`/chating/${chat.id}`);
@@ -41,7 +42,16 @@ const MyChats = ({ userType }: { userType: string }) => {
       }
     }
   };
-
+  const onEnterHandler = () => {
+    if (selectedChat && selectedChat.id) {
+      partChats(selectedChat.id);
+      setChatModalOpen(false);
+      router.push(`/chating/${selectedChat.id}`);
+      console.log('새로 입장 성공');
+    } else {
+      alert('입장 실패');
+    }
+  };
   // react-query로 조건부 fetch
   const { data, isLoading } = useQuery<Chat[]>({
     queryKey: ['getChatsKey'],
@@ -58,14 +68,6 @@ const MyChats = ({ userType }: { userType: string }) => {
     setChatModalOpen(!chatModalOpen);
   };
 
-  // const onEnterChatRoom = (chat: Chat) => {
-  //   if (chat.id && chat.users) {
-  //     partChats(chat.id);
-  //     setChatModalOpen(false);
-  //     router.push(`/chating/${chat.id}`);
-  //   }
-  // };
-
   return (
     <Wrapper>
       <ChatHeader>
@@ -77,7 +79,12 @@ const MyChats = ({ userType }: { userType: string }) => {
       <SearchMyChat userType={userType} />
       <ChatContainer>
         <ChatList>
-          {/* <EnterChatRoomModal isOpen={chatModalOpen} onEnterClick={enterChatRoom} onCancleClick={onModalHandler} />  */}
+          <EnterChatRoomModal
+            isOpen={chatModalOpen}
+            onEnterClick={onEnterHandler}
+            onCancelClick={onModalHandler}
+            selectedChat={selectedChat}
+          />
           {isLoading && <Loading />}
           {userId && data ? (
             filterInputValue ? (
@@ -119,10 +126,11 @@ const MyChats = ({ userType }: { userType: string }) => {
 export default MyChats;
 
 const Wrapper = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-bottom: 6rem;
+  height: 100vh;
 `;
 
 const ChatHeader = styled.div`
@@ -152,9 +160,9 @@ const ChatContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  margin: 2rem;
+  margin: 0 2rem 4rem 2rem;
   background-color: transparent;
-  height: calc(50rem - 14rem);
+  height: 50rem;
 `;
 
 const ChatList = styled.div`

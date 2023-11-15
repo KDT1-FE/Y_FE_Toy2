@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Chat } from './chatsStore';
 import { formatCreatedAt } from '@/components/chats/useFormatCreatedAt';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
+import { eclipsText } from './ModalTextData';
 const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) => {
   const chatsPicture =
     isPrivate && users && users.length > 2 // private 한 그룹 채팅인 경우
@@ -36,7 +37,7 @@ const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) =>
                   {chatsName} <span>{usersNumber}</span>
                 </ChatName>
               </ChatPart>
-              <LateMessage>{latestMessage ? latestMessage.text : ''} </LateMessage>
+              <LateMessage>{latestMessage ? eclipsText(latestMessage.text, 20) : ''} </LateMessage>
             </ChatDesc>
           </ChatInfo>
           <MessageCount>
@@ -67,10 +68,10 @@ const ChatBox = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
   border-radius: 20px;
   font-weight: bold;
+  cursor: pointer;
   &:hover {
-    background: ${({ theme }) => theme.color.mainGreen};
-    color: #ffffff;
-    font-weight: bold;
+    opacity: 70%;
+    transition: 0.4s;
   }
 `;
 
@@ -125,6 +126,9 @@ const LateMessage = styled.p`
   color: #626262;
   padding: 0;
   margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const MessageCount = styled(ChatDesc)`
