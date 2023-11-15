@@ -51,7 +51,7 @@ export default function ChatingModal(props: ChatingModalProps) {
     });
     if (userId) {
       const userName = findUserName(userId);
-      props.socket.emit('message-to-server', `notice09out:${userName}님이 채팅방을 나갔습니다.`);
+      props.socket.emit('message-to-server', `notice09:${userName}님이 채팅방을 나갔습니다.`);
     }
     router.back();
   };

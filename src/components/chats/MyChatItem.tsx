@@ -31,7 +31,13 @@ const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) =>
                   {chatsName} <span>{usersNumber}</span>
                 </ChatName>
               </ChatPart>
-              <LateMessage>{latestMessage ? latestMessage.text : ''} </LateMessage>
+              <LateMessage>
+                {latestMessage
+                  ? latestMessage.text.split(':')[0] == 'notice09'
+                    ? latestMessage.text.split(':')[1]
+                    : latestMessage.text
+                  : ''}{' '}
+              </LateMessage>
             </ChatDesc>
           </ChatInfo>
           <MessageCount>
