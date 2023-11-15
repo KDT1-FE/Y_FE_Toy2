@@ -41,12 +41,22 @@ const GameStart: React.FC<GameStartProps> = ({
   updateStatus,
 }) => {
   const user = useRecoilValue(userState);
-  console.log(socket);
 
   const categories = data.CategoryList;
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
+  const [liar, setLiar] = useState("");
+  const [showStartModal, setShowStartModal] = useState(false);
+
+  console.log(liar);
+
+  useEffect(() => {
+    if (showStartModal) {
+      onOpen();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showStartModal]);
 
   // 모달 자동 닫기 로직
   useEffect(() => {
@@ -85,21 +95,27 @@ const GameStart: React.FC<GameStartProps> = ({
       .sort((a: UserWithSort, b: UserWithSort): number => a.sort - b.sort)
       .map(({ value }: UserWithSort): string => value);
 
-    socket.emit("message-to-client", {
+    // 게임 정보를 모든 클라이언트에게 전송
+    const gameInfo = JSON.stringify({
       category: selectedCategory.category,
       keyword: ranKeyword,
       liar: ranLiar,
-      shuffledUsers,
+      users: shuffledUsers,
     });
+
+    // 모든 클라이언트에게 게임 정보를 포함하는 이벤트 전송
+    socket.emit("message-to-server", gameInfo + "~!@");
 
     setCategory(selectedCategory);
     setKeyword(ranKeyword);
+    setLiar(ranLiar);
+    setShowStartModal(true);
 
     window.localStorage.setItem("shuffledUsers", JSON.stringify(shuffledUsers));
     window.localStorage.setItem("category", selectedCategory.category);
     window.localStorage.setItem("keyword", ranKeyword);
-    window.localStorage.setItem("liar", ranLiar === user.id ? "true" : "false");
-    onOpen();
+    window.localStorage.setItem("liar", ranLiar);
+    // onOpen();
   };
 
   // 게임 종료
@@ -138,31 +154,33 @@ const GameStart: React.FC<GameStartProps> = ({
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
-          <ModalBody>
-            <Center
-              fontWeight="bold"
-              h="100%"
-              fontSize="1.2rem"
-              pt="20"
-              pb="20"
-            >
-              <Flex
-                direction="column"
-                alignContent="center"
-                justifyContent="center"
+          {showStartModal && (
+            <ModalBody>
+              <Center
+                fontWeight="bold"
+                h="100%"
+                fontSize="1.2rem"
+                pt="20"
+                pb="20"
               >
-                <Center>주제는 {category?.category} 입니다.</Center>
-                {window.localStorage.getItem("liar") === "true" ? (
-                  <>
-                    <Center>당신은 Liar 입니다.</Center>
-                    <Center>키워드를 추리하세요.</Center>
-                  </>
-                ) : (
-                  <Center>키워드는 {keyword} 입니다.</Center>
-                )}
-              </Flex>
-            </Center>
-          </ModalBody>
+                <Flex
+                  direction="column"
+                  alignContent="center"
+                  justifyContent="center"
+                >
+                  <Center>주제는 {category?.category} 입니다.</Center>
+                  {window.localStorage.getItem("liar") === "true" ? (
+                    <>
+                      <Center>당신은 Liar 입니다.</Center>
+                      <Center>키워드를 추리하세요.</Center>
+                    </>
+                  ) : (
+                    <Center>키워드는 {keyword} 입니다.</Center>
+                  )}
+                </Flex>
+              </Center>
+            </ModalBody>
+          )}
         </ModalContent>
       </Modal>
     </>

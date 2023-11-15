@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import GameChat from "../../components/Game/GameChat";
 import useFireFetch from "../../hooks/useFireFetch";
 import GameStart from "../../components/Game/GameStart";
-// import { io } from "socket.io-client";
-// import { useRecoilValue } from "recoil";
-// import { userState } from "../../recoil/atoms/userState";
-import connect from "../../socket/socket";
+import { io } from "socket.io-client";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../recoil/atoms/userState";
 
 interface ProfileCardProps {
   userId: string;
@@ -29,7 +28,7 @@ interface Categories {
 [];
 
 const Game = () => {
-  // const user = useRecoilValue(userState);
+  const user = useRecoilValue(userState);
 
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);
@@ -42,16 +41,19 @@ const Game = () => {
 
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
+  const [liar, setLiar] = useState("");
 
-  // const token = JSON.parse(localStorage.getItem("token") as string);
+  console.log(category, keyword);
 
-  const socket = connect(gameId as string);
-  // const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
-  //   extraHeaders: {
-  //     Authorization: `Bearer ${token.accessToken}`,
-  //     serverId: import.meta.env.VITE_APP_SERVER_ID,
-  //   },
-  // });
+  const token = JSON.parse(localStorage.getItem("token") as string);
+
+  // const socket = connect(gameId as string);
+  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${token.accessToken}`,
+      serverId: import.meta.env.VITE_APP_SERVER_ID,
+    },
+  });
 
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
@@ -64,15 +66,31 @@ const Game = () => {
 
   useEffect(() => {
     // 메시지 수신 리스너 설정
-    socket.on("message", (message) => {
-      console.log("Received message:", message);
-    });
+    socket.on("messeage-to-client", (data) => {
+      console.log(data);
+      const [jsonString, delimiter] = data.text.split("~");
 
-    // 컴포넌트 언마운트 시 연결 해제
-    return () => {
-      socket.disconnect();
-    };
-  }, [gameId]);
+      if (delimiter === "!@") {
+        console.log(delimiter);
+        try {
+          // JSON 문자열 객체로 변환
+          const gameInfo = JSON.parse(jsonString);
+          console.log("parseData:", gameInfo);
+          setCategory(gameInfo.category);
+          setKeyword(gameInfo.keyword);
+          setLiar(gameInfo.liar);
+          setUsers(gameInfo.users);
+
+          // 필요한 작업 수행...
+        } catch (error) {
+          console.error("JSON Parsing Error: ", error);
+          throw error;
+        }
+      }
+    });
+    // onOpen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]);
 
   useEffect(() => {
     if (status === "게임중") {
@@ -84,9 +102,11 @@ const Game = () => {
 
       const currentCategory = window.localStorage.getItem("category") ?? "";
       const currentKeyword = window.localStorage.getItem("keyword") ?? "";
+      const currentLiar = window.localStorage.getItem("liar") ?? "";
 
       setCategory({ category: currentCategory, keyword: [currentKeyword] });
       setKeyword(currentKeyword);
+      setLiar(currentLiar);
     }
   }, [status]);
 
@@ -97,10 +117,6 @@ const Game = () => {
       fireFetch.updateData("game", gameId, { status: newStatus });
     }
   };
-
-  console.log(gameData.data);
-  console.log(category, keyword);
-  console.log(users);
 
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
@@ -133,7 +149,7 @@ const Game = () => {
                     &nbsp;
                   </p>
 
-                  {window.localStorage.getItem("liar") === "true" ? (
+                  {liar === user.id ? (
                     <p>당신은 Liar 입니다. </p>
                   ) : (
                     <p>
