@@ -83,13 +83,31 @@
     padding: 1rem;
     border-bottom: 0.1rem solid $brand-pink;
   }
+  .userDiv {
+    max-height: 20rem; /* 목록의 최대 높이 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤을 생성 */
+  }
   li {
     padding: 0.8rem 0;
-
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     cursor: pointer;
 
     &:hover {
       background-color: $light-gray; // 항목에 호버 시 배경색 변경
+    }
+    .profileImage {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .username {
+      font-size: $font-size-s;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 

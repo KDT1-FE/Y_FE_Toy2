@@ -10,7 +10,6 @@ interface GetUserNameResponseBody {
 }
 
 function OtherMessage({ msg }: { msg: Message }) {
-
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];
   const dateString = todayDate(msg.createdAt);
@@ -24,18 +23,19 @@ function OtherMessage({ msg }: { msg: Message }) {
   useEffect(() => {
     const getUserName = async () => {
       try {
-        const response = await instance.get<GetUserNameResponseBody>(`/user?userId=${msg.userId}`);
+        const response = await instance.get<GetUserNameResponseBody>(
+          `/user?userId=${msg.userId}`,
+        );
         setUserName(response.data.user.name);
         setUserPicture(response.data.user.picture);
       } catch (error) {
         console.error('Failed to fetch user name:', error);
       }
     };
-  
+
     getUserName();
   }, [instance, msg.userId]); // 의존성 배열에는 getUserName 함수가 사용하는 모든 변수를 포함시켜야 합니다.
-  
-  
+
   return (
     <div className={styles.otherFlex}>
       <div className={styles.userInfo}>
