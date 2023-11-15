@@ -4,7 +4,7 @@ import { Draggable } from '@hello-pangea/dnd';
 import React from 'react';
 import ChatItemDrag from '../ChatItem/ChatItemDrag';
 import ChatItem from '../ChatItem/ChatItem';
-import { Chat } from '@/app/chatting/chatting.type';
+import { Chat } from '@/app/private/chatting.type';
 
 type ChatDraggableProps = {
 	chat: Chat;

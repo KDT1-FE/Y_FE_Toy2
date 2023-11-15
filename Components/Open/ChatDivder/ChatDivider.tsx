@@ -4,7 +4,7 @@ import React from 'react';
 import { ChatListProps } from '../ChatList/ChatList.type';
 import { getCookie } from '@/Components/Login/Cookie';
 import { useQuery } from '@tanstack/react-query';
-import { fetchAllChat, filterChat } from '@/app/chatting/chatting.utils';
+import { fetchAllChat, filterChat } from '@/app/private/chatting.utils';
 import ChatList from '../ChatList/ChatList';
 import {
 	Tab,
@@ -17,12 +17,12 @@ import {
 const ChatDivder = ({ myChatList }: ChatListProps) => {
 	const data = [
 		{
-			label: '내가 참여한 오픈 채팅방',
-			value: 'open',
+			label: '개인 채팅방',
+			value: 'personal',
 		},
 		{
-			label: '내가 참여한 비밀 채팅방',
-			value: 'private',
+			label: '단체 채팅방',
+			value: 'multi',
 		},
 	];
 
@@ -35,11 +35,10 @@ const ChatDivder = ({ myChatList }: ChatListProps) => {
 		refetchInterval: 1000 * 5,
 	});
 
-	const { OpenChatList, PrivateChatList } = filterChat(chatList.chats);
-
+	const { PersonalChat, MultiChat } = filterChat(chatList.chats);
 	return (
 		<>
-			<Tabs value="open">
+			<Tabs value="personal" className="overflow-y-scroll">
 				<TabsHeader>
 					{data.map((item) => (
 						<Tab key={item.value} value={item.value}>
@@ -47,12 +46,12 @@ const ChatDivder = ({ myChatList }: ChatListProps) => {
 						</Tab>
 					))}
 				</TabsHeader>
-				<TabsBody>
-					<TabPanel value="open">
-						<ChatList myChatList={OpenChatList} accessToken={accessToken} />
+				<TabsBody className="h-full">
+					<TabPanel value="personal" className="min-h-[calc(80vh)]">
+						<ChatList myChatList={PersonalChat} accessToken={accessToken} />
 					</TabPanel>
-					<TabPanel value="private">
-						<ChatList myChatList={PrivateChatList} accessToken={accessToken} />
+					<TabPanel value="multi" className="min-h-[calc(80vh)]">
+						<ChatList myChatList={MultiChat} accessToken={accessToken} />
 					</TabPanel>
 				</TabsBody>
 			</Tabs>

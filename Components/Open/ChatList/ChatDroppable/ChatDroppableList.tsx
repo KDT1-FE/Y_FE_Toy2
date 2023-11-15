@@ -12,7 +12,6 @@ const ChatDroppableList = ({ chatListColumnTasks }: ChatDroppableListProps) => {
 		<Droppable droppableId="list-column">
 			{(droppableProvided) => (
 				<div
-					className="h-full w-full text-amber-900  overflow-y-scroll gap-5"
 					ref={droppableProvided.innerRef}
 					{...droppableProvided.droppableProps}
 				>

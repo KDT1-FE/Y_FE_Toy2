@@ -16,6 +16,12 @@ export const useFetchPostNewChat = (token: string) => {
 				},
 				body: JSON.stringify(data),
 			}),
+		onSuccess: async (data) => {
+			// console.log response url
+			const response = await data.json();
+			const chatId = response.id;
+			window.location.href = `/chat/${chatId}?isPrivate=${response.isPrivate}`;
+		},
 	});
 
 	return mutation;

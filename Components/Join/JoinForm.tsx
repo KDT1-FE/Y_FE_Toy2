@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, Typography } from '@material-tailwind/react';
 import { fetchJoin } from '@/app/join/join.utils';
@@ -11,21 +11,9 @@ import Image from 'next/image';
 import DropZone from './DropZone/DropZone';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
+import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
+import { FetchImageProps, RequestBody } from './Join.types';
 // import Image from 'next/image';
-
-type RequestBody = {
-	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
-	password: string; // 사용자 비밀번호, 5자 이상 (필수!)
-	name: string; // 사용자 이름, 20자 이하 (필수!)
-	picture: string; // 사용자 이미지(url or base64, under 1MB)
-};
-
-type FetchImageProps = {
-	file: string;
-	id: string;
-	password: string;
-	name: string;
-};
 
 const fetchImage = async (params: FetchImageProps) => {
 	const data = await axios.post('api/image/post', {
@@ -38,8 +26,9 @@ const fetchImage = async (params: FetchImageProps) => {
 };
 
 const JoinForm = () => {
+	const loadingControl = useAsyncLoading();
 	const router = useRouter();
-	const [baseImageUrl, setBaseImageUrl] = React.useState<string>();
+	const [baseImageUrl, setBaseImageUrl] = useState<string>();
 
 	const mutation = useMutation({
 		mutationFn: (data: FetchImageProps) => fetchImage(data),
@@ -51,6 +40,7 @@ const JoinForm = () => {
 				props.name,
 				props.picture,
 			);
+			console.log(props);
 			if (message === 'User created') {
 				Swal.fire({
 					text: '회원가입이 완료되었습니다.',
@@ -68,6 +58,7 @@ const JoinForm = () => {
 					confirmButtonColor: 'red',
 				});
 			}
+			loadingControl(false);
 		},
 		onMutate: () => {
 			console.log('onMutate');
@@ -90,6 +81,8 @@ const JoinForm = () => {
 		password,
 		name,
 	}) => {
+		loadingControl(true);
+
 		if (!baseImageUrl) {
 			Swal.fire({
 				text: '이미지를 넣어주세요.',

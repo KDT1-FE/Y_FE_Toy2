@@ -55,7 +55,7 @@ const ChatGenerator = () => {
 			{chatModal && (
 				<div
 					ref={modalRef}
-					className={`absolute z-[60]  w-full  inset-0 flex flex-col items-center justify-center bg-white border-4 box-border`}
+					className={`absolute z-[60] w-full  inset-0 flex flex-col items-center justify-center bg-white border-4 box-border`}
 				>
 					<button
 						type="button"
@@ -65,9 +65,6 @@ const ChatGenerator = () => {
 						X
 					</button>
 					<Card color="transparent" shadow={false}>
-						<Typography color="gray" className="mt-1 font-normal">
-							채팅방 주제 잘 정하고 만드세요!
-						</Typography>
 						<form
 							onSubmit={handleSubmit(onSubmit)}
 							className="mt-8 mb-2 w-full"
@@ -99,13 +96,7 @@ const ChatGenerator = () => {
 										color="gray"
 										className="flex items-center font-normal"
 									>
-										I agree the
-										<a
-											href="#"
-											className="font-medium transition-colors hover:text-gray-900"
-										>
-											&nbsp;Terms and Conditions
-										</a>
+										채팅방에서 폭언과 욕설을 하지 아니합니다.
 									</Typography>
 								}
 								containerProps={{ className: '-ml-2.5' }}

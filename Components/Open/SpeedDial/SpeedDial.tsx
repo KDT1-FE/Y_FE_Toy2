@@ -10,14 +10,15 @@ import {
 import { chatModalAtom } from '@/atoms/chatModalAtom';
 import { useSetRecoilState } from 'recoil';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const SpeedDialWithTextInside = () => {
 	const setModalOpen = useSetRecoilState(chatModalAtom);
+	const params = usePathname();
 	const router = useRouter();
 
 	const handleOpenModal = (query: string) => {
-		router.replace(`/chatting?${new URLSearchParams({ type: query })}`);
+		router.replace(`${params}?${new URLSearchParams({ type: query })}`);
 		setModalOpen(true);
 	};
 
@@ -48,7 +49,7 @@ const SpeedDialWithTextInside = () => {
 					>
 						<Link href={`?${new URLSearchParams({ type: 'private' })}`}>
 							<Typography color="blue-gray" className="text-xs font-normal">
-								비밀채팅
+								개인채팅
 							</Typography>
 						</Link>
 					</SpeedDialAction>

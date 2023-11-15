@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import ClientProviders from '@/Components/Provider/ClientProvider';
 import Wrapper from '@/Components/Wrapper';
+import AsyncLoadingProvider from '@/Components/Common/AsyncLoading/AsyncLoading';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,7 +22,10 @@ export default function RootLayout({
 			<body className={inter.className}>
 				<ClientProviders>
 					<div className="bg-gray-500 h-screen">
-						<Wrapper>{children}</Wrapper>
+						<Wrapper>
+							<AsyncLoadingProvider />
+							{children}
+						</Wrapper>
 					</div>
 				</ClientProviders>
 			</body>
