@@ -1081,7 +1081,7 @@ interface ResponseData {
 
 ## 🧑🏻‍💻 Contributor
 > @[YongYong21](https://github.com/YongYong21) (박용희) : 프로필 레이아웃 <br />
-> @[jinuk0316](https://github.com/KittelLee) (이진욱) : 모달, 채팅 <br />
+> @[KittelLee](https://github.com/KittelLee) (이진욱) : 모달, 채팅 <br />
 > @[tkyoun0421](https://github.com/tkyoun0421) (윤태관) : 채팅, 로그인, 회원가입 <br />
 > @[furaha707](https://github.com/furaha707) (이예인) : 레이아웃, 채팅 <br />
 > @[mysdpy30s](https://github.com/mysdpy30s) (김미정) : 컴포넌트 레이아웃 <br />
