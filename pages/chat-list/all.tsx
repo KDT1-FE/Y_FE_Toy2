@@ -8,6 +8,7 @@ import { userIdState } from '@/recoil/atoms/userIdState';
 import formatTime from '@/utils/timeFormat';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import ChatListModal from '@/components/ChatList/ChatListModal';
+import { sortChatList } from '@/utils/chatList';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -16,8 +17,9 @@ export default function AllChatList() {
   const [isModal, setIsModal] = useState(false);
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
   const getAllChat = async () => {
-    const chatAllList = await chatListAPI.getAllChatList();
-    setAllChatList(chatAllList.data.chats);
+    const allChats: Chat[] = (await chatListAPI.getAllChatList()).data.chats;
+    const sortedAllChatList = sortChatList(allChats);
+    setAllChatList(sortedAllChatList);
   };
   useEffect(() => {
     getAllChat();
