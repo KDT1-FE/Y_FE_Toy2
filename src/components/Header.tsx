@@ -89,7 +89,7 @@ const Header = () => {
                 <UserImg src={currentUser?.picture} />{" "}
                 <UserName to={""}>{currentUser?.name}</UserName>님
                 <UserSubMenu>
-                  <StyledSubLink to={`/profiles/:${currentUser?.id}`}>
+                  <StyledSubLink to={`/profiles/${currentUser?.id}`}>
                     내 프로필 가기
                   </StyledSubLink>
                   <Logout />
