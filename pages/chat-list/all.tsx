@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useRecoilValue } from 'recoil';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import formatTime from '@/utils/timeFormat';
-import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import ChatListModal from '@/components/ChatList/ChatListModal';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
@@ -44,9 +43,6 @@ export default function AllChatList() {
   const routerChat = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
   };
-
-  const today = new Date();
-  const isToday = today.toISOString().split('T')[0];
 
   const handleModal = () => {
     setIsModal(!isModal);
