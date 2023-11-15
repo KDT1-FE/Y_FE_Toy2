@@ -1,10 +1,9 @@
 import { Box, Flex, HStack, useRadioGroup } from '@chakra-ui/react';
-import React from 'react';
 import { CATEGORIES, CATEGORY_COLOR_SCHEMES } from '../../constants/channel';
 import ChannelRadio from './ChannelRadio';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
-const ChannelSelector = ({ onSelectCategory }: any) => {
+const ChannelSelector = () => {
   const options = CATEGORIES;
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -22,7 +21,7 @@ const ChannelSelector = ({ onSelectCategory }: any) => {
           justifyContent="center"
           alignContent="center"
           bg="#F4F4F4"
-          w={920}
+          w="full"
           mt="4"
           mb="4"
           color="black"
@@ -41,7 +40,6 @@ const ChannelSelector = ({ onSelectCategory }: any) => {
                     key={option.name}
                     {...radio}
                     customColor={CATEGORY_COLOR_SCHEMES[option.name]}
-                    onSelectCategory={onSelectCategory}
                   >
                     {option.name}
                   </ChannelRadio>
