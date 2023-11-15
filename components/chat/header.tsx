@@ -2,15 +2,17 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { HiArrowLongLeft } from 'react-icons/hi2';
 import { IoMdMenu } from 'react-icons/io';
+import { ChatUser } from '@/@types/types';
 import styles from './Chat.module.scss';
 import Jwtinterceptors from '../../apis/Jwtinterceptors';
 
 interface Props {
   chatId: string;
   name: string;
+  users: ChatUser[];
 }
 
-export default function ChatroomHeader({ chatId, name }: Props) {
+export default function ChatroomHeader({ chatId, name, users }: Props) {
   const router = useRouter();
 
   const { instance } = Jwtinterceptors();
@@ -65,11 +67,20 @@ export default function ChatroomHeader({ chatId, name }: Props) {
           <div className={styles.dropdownMenu}>
             <ul>
               <div>
-                <p>현재 인원 수</p>
-                <h6>OO명</h6>
+                <p>현재 채팅인원 수</p>
+                <h6>{users.length}명</h6>
               </div>
-              <div>
-                <li>참여자 1</li>
+              <div className={styles.userDiv}>
+                {users.map(user => (
+                  <li key={user.id}>
+                    <img
+                      src={user.picture}
+                      className={styles.profileImage}
+                      alt="User"
+                    />
+                    <span className={styles.username}>{user.username}</span>
+                  </li>
+                ))}
               </div>
             </ul>
             <button
