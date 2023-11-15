@@ -6,6 +6,8 @@ import GameStart from "../../components/Game/GameStart";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../recoil/atoms/userState";
 import connect from "../../socket/socket";
+import useFetch from "../../hooks/useFetch";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileCardProps {
   userId: string;
@@ -29,14 +31,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ userId }) => {
   );
 };
 
-// interface Categories {
-//   category: string;
-//   keyword: string[];
-// }
-// [];
-
 const Game = () => {
   const user = useRecoilValue(userState);
+  const navigate = useNavigate();
 
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);
@@ -47,13 +44,17 @@ const Game = () => {
   const [status, setStatus] = useState("");
   const [users, setUsers] = useState<string[]>([]);
 
+  // 게임 소켓 서버 연결
+  const socket = connect(gameId as string);
+  // 메인 소켓 서버 연결 (메인페이지 상태 변경 통신)
+  const socketMain = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
+
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
   const [liar, setLiar] = useState("");
 
-  console.log(category, keyword);
-
-  const socket = connect(gameId as string);
+  const [current, setCurrent] = useState("");
+  const [speaking, setSpeaking] = useState("");
 
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
@@ -64,13 +65,15 @@ const Game = () => {
     }
   }, [gameData.data]);
 
-  // status 업데이트 함수
-  const updateStatus = (newStatus: string) => {
-    setStatus(newStatus);
-    if (gameId) {
-      fireFetch.updateData("game", gameId, { status: newStatus });
-    }
-  };
+  // 게임 나가기 api 선언 (호출 X)
+  const leave = useFetch({
+    url: "https://fastcampus-chat.net/chat/leave",
+    method: "PATCH",
+    data: {
+      chatId: gameId,
+    },
+    start: false,
+  });
 
   const handleGameInfoReceived = (gameInfo: GameInfo) => {
     setCategory(gameInfo.category);
@@ -78,7 +81,11 @@ const Game = () => {
     setLiar(gameInfo.liar);
     setUsers(gameInfo.users);
     setStatus(gameInfo.status);
+
+    setCurrent("개별발언");
+    setSpeaking(users[0]);
   };
+  console.log(current, speaking);
 
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
@@ -97,7 +104,22 @@ const Game = () => {
         mt="50px"
       >
         <GridItem>
-          <Button w="200px" mr="20px">
+          <Button
+            w="200px"
+            mr="20px"
+            onClick={() => {
+              const newUsers = users.filter((value) => value !== user.id);
+              socketMain.emit(
+                "message-to-server",
+                `${user.id}:${gameId}:)*^$@`,
+              );
+              fireFetch.updateData("game", gameId as string, {
+                users: newUsers,
+              });
+              leave.refresh();
+              navigate("/gameLists");
+            }}
+          >
             뒤로가기
           </Button>
         </GridItem>
@@ -126,7 +148,6 @@ const Game = () => {
             status={status}
             users={users}
             host={gameData.data[0].host}
-            updateStatus={updateStatus}
           />
         </GridItem>
         <GridItem>

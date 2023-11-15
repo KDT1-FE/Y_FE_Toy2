@@ -1,6 +1,6 @@
 import {
   Button,
-  useDisclosure,
+  // useDisclosure,
   // Modal,
   // ModalOverlay,
   // ModalContent,
@@ -9,7 +9,7 @@ import {
   // Center,
   // Flex,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import data from "../../../data/category.json";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/atoms/userState";
@@ -20,14 +20,7 @@ interface GameStartProps {
   status: string;
   users: string[];
   host: string;
-  updateStatus: (newStatus: string) => void;
 }
-
-// interface Categories {
-//   category: string;
-//   keyword: string[];
-// }
-// [];
 
 interface UserWithSort {
   value: string;
@@ -39,36 +32,31 @@ const GameStart: React.FC<GameStartProps> = ({
   status,
   users,
   host,
-  updateStatus,
 }) => {
   const user = useRecoilValue(userState);
 
   const categories = data.CategoryList;
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  // const [category, setCategory] = useState<Categories | null>(null);
-  // const [keyword, setKeyword] = useState("");
-  // const [liar, setLiar] = useState("");
-  const [showStartModal, setShowStartModal] = useState(false);
-  // const [shuffledUsers, setshuffledUsers] = useState<string[]>([]);
+  // const { isOpen, onClose, onOpen } = useDisclosure();
+  // const [showStartModal, setShowStartModal] = useState(false);
 
-  useEffect(() => {
-    if (showStartModal) {
-      onOpen();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showStartModal]);
+  // useEffect(() => {
+  //   if (showStartModal) {
+  //     onOpen();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [showStartModal]);
 
-  // 모달 자동 닫기 로직
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
+  // // 모달 자동 닫기 로직
+  // useEffect(() => {
+  //   let timer: NodeJS.Timeout;
 
-    if (isOpen) {
-      timer = setTimeout(() => {
-        onClose();
-      }, 2500);
-    }
-    return () => clearTimeout(timer);
-  }, [isOpen, onClose]);
+  //   if (isOpen) {
+  //     timer = setTimeout(() => {
+  //       onClose();
+  //     }, 2500);
+  //   }
+  //   return () => clearTimeout(timer);
+  // }, [isOpen, onClose]);
 
   // 랜덤 숫자 계산 함수
   const getRandNum = (length: number): number => {
@@ -77,8 +65,6 @@ const GameStart: React.FC<GameStartProps> = ({
 
   // 게임 시작 함수
   const handleStart = async () => {
-    updateStatus("게임중");
-
     const selectedCategory = categories[getRandNum(categories.length)];
     const ranKeyword =
       selectedCategory.keyword[getRandNum(selectedCategory.keyword.length)];
@@ -104,21 +90,14 @@ const GameStart: React.FC<GameStartProps> = ({
       status: "게임중",
     });
 
-    // setshuffledUsers(newUsers);
-
     // 모든 클라이언트에게 게임 정보를 포함하는 이벤트 전송
     socket.emit("message-to-server", gameInfo + "~!@##");
 
-    // setCategory(selectedCategory);
-    // setKeyword(ranKeyword);
-    // setLiar(ranLiar);
-    setShowStartModal(true);
+    // setShowStartModal(true);
   };
 
   // 게임 종료
   const hadleEnd = () => {
-    updateStatus("대기중");
-
     const gameInfo = JSON.stringify({
       category: "",
       keyword: "",
@@ -129,7 +108,7 @@ const GameStart: React.FC<GameStartProps> = ({
 
     socket.emit("message-to-server", gameInfo + "~##@!");
 
-    setShowStartModal(false);
+    // setShowStartModal(false);
   };
 
   return (
