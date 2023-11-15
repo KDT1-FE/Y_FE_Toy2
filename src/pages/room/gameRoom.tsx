@@ -22,7 +22,6 @@ import { getCookie } from '../../util/util';
 const GameRoom: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [roomId, setRoomId] = useRecoilState(chattingIdState);
-  const [isFinished, setIsFinished] = useState(false); // 게임 끝 확인 알람
   const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
   const [answer, setAnswer] = useState<string>(''); // 답 지정하기
   const [messages, setMessages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
@@ -38,7 +37,6 @@ const GameRoom: React.FC = () => {
 
   const lastMessage = messages[messages.length - 1];
   const myId = getCookie('userId');
-  const isFinishedRef = useRef(false);
 
   useEffect(() => {
     if (lastMessage.text !== '') {
@@ -80,7 +78,6 @@ const GameRoom: React.FC = () => {
   const startGame = () => {
     gameSocket.emit('start_game', { roomId, myId });
     setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
-    setIsFinished(false);
   };
 
   const handleSetAnswerChange = (
@@ -107,16 +104,6 @@ const GameRoom: React.FC = () => {
   }, [roomId]);
 
   useEffect(() => {
-    gameSocket.on('game_ended', (message) => {
-      alert(message);
-      // console.log(message);
-    });
-    return () => {
-      gameSocket.off('game_ended');
-    };
-  }, [roomId]);
-
-  useEffect(() => {
     if (userMessage) {
       if (userMessage.userId === myId) {
         gameSocket.emit('submit_answer', userMessage, { roomId, myId });
@@ -125,16 +112,18 @@ const GameRoom: React.FC = () => {
     const handleCorrectAnswer = (data: { winner: string }) => {
       console.log(data.winner, myId);
       if (data.winner === myId) {
-        // alert('축하합니다! 정답입니다!');
+        alert('축하합니다! 정답입니다!');
         console.log('정답');
+        alert('끝');
+        console.log('끝');
+        // gameSocket.emit('end_game', { roomId: roomId });
       } else if (data.winner !== myId) {
-        // alert('누군가 정답을 맞췄습니다!');
+        alert('누군가 정답을 맞췄습니다!');
         console.log('누군가 정답 맞춤');
+        alert('끝');
+        console.log('끝');
       }
-      if (!isFinishedRef.current) {
-        isFinishedRef.current = true;
-        gameSocket.emit('end_game', { roomId: roomId });
-      }
+      gameSocket.emit('end_game', { roomId: roomId });
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
 
