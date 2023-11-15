@@ -19,7 +19,7 @@ const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
   const filterChats = useRecoilValue(searchChatsState);
   const router = useRouter();
-  const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
