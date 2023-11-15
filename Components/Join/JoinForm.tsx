@@ -80,8 +80,6 @@ const JoinForm = () => {
 		password,
 		name,
 	}) => {
-		loadingControl(true);
-
 		if (!baseImageUrl) {
 			Swal.fire({
 				text: '이미지를 넣어주세요.',
@@ -91,6 +89,7 @@ const JoinForm = () => {
 			});
 			return;
 		}
+		loadingControl(true);
 
 		mutation.mutate({
 			file: baseImageUrl!,
@@ -183,17 +182,10 @@ const JoinForm = () => {
 								)}
 							</div>
 						</div>
-						{/* 이미지 url */}
-						<div className="flex h-[90] w-full  flex-col  mt-5">
-							<Typography color="brown" className=" text-sm text-gray-700">
-								이미지를 넣어주세요.
-							</Typography>
-						</div>
 					</div>
-					<Button type="submit" className="w-full bg-main mt-10">
+					<Button type="submit" className="w-full bg-main mt-10 text-subtext">
 						회원가입
 					</Button>
-					<div>{baseImageUrl}</div>
 				</form>
 			</div>
 		</div>
