@@ -35,9 +35,9 @@ const Signup = () => {
     if (Object.keys(newErrors).length === 0) {
       const validId = await idCheck(user.id);
       console.log(validId);
-      if (!invalidId && character) {
+      if (!validId && character) {
         await signup(id, password, name, character);
-        navigate('/signin');
+        navigate('/');
       } else {
         setInvalidId(true);
       }
@@ -113,9 +113,8 @@ const Signup = () => {
         </form>
       </div>
       <div className={styles.signin__link}>
-        <Link to="/signin">로그인하러 가기</Link>
+        <Link to="/">로그인하러 가기</Link>
       </div>
-      {/* {isModalOpen ? <SignupModal /> : null} */}
       {isModalOpen ? <SignupModal handleModal={handleModal} /> : null}
     </div>
   );
