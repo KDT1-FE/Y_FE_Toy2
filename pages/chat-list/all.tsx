@@ -11,6 +11,7 @@ import { sortChatList } from '@/utils/chatList';
 import useConnectServerSocket from '@/hooks/useConnectServerSocket';
 import Header from '@/components/Header/Header';
 import CreateChatButton from '@/components/ChatList/CreateChatButton';
+import JudgeWrapper from '@/components/ChatList/JudgeWrapper';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -71,23 +72,14 @@ export default function AllChatList() {
     <div className={styles.allContainer}>
       <Header pageName="All" />
       <CreateChatButton setIsModal={setIsModal} />
+      {isModal && <ChatListModal handleModal={handleModal} />}
       <ul>
-        {isModal && <ChatListModal handleModal={handleModal} />}
         {allChatList.map(chat => {
           const { timeDiffText, className } = formatTime(chat.updatedAt);
           const isincluded = chat.users.some(checkIncluded);
-          // const dateString = todayDate(chat.updatedAt);
-          // const formattedTime = formattingTime(chat.updatedAt);
           return (
             <li key={chat.id}>
-              <Link
-                href={{
-                  pathname: `/chat/${chat.id}`,
-                  query: { name: chat.name },
-                }}
-                className={styles.container}
-                onClick={isincluded ? undefined : routerChat}
-              >
+              <JudgeWrapper isincluded={isincluded} chatId={chat.id}>
                 <Image
                   alt={`${chat.users[0].username}의 프로필 사진`}
                   src={chat.users[0].picture}
@@ -128,7 +120,7 @@ export default function AllChatList() {
                     )}
                   </div>
                 </div>
-              </Link>
+              </JudgeWrapper>
             </li>
           );
         })}
