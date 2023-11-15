@@ -41,33 +41,28 @@ export default function Chat() {
   }, [chatId, accessToken]);
 
   useEffect(() => {
-    if (socket) {
-      socket.on('connect', () => {
-        console.log('Connected from server');
-        setTimeout(() => {
-          socket.emit('fetch-messages');
-        }, 500);
-      });
-      socket.emit('fetch-messages');
+    socket.on('connect', () => {
+      console.log('Connected from server');
+      setTimeout(() => {
+        socket.emit('fetch-messages');
+      }, 500);
+    });
 
-      socket.on('messages-to-client', (messageArray: Message[]) => {
-        setMessages(messageArray.messages);
-      });
+    socket.on('messages-to-client', (messageArray: Message[]) => {
+      setMessages(messageArray.messages);
+    });
 
-      socket.on('message-to-client', (messageObject: Message) => {
-        setMessages(prevMessages => [...prevMessages, messageObject]);
-      });
+    socket.on('message-to-client', (messageObject: Message) => {
+      setMessages(prevMessages => [...prevMessages, messageObject]);
+    });
 
-      socket.emit('fetch-messages');
+    socket.on('join', (messageObject: JoinersData) => {
+      console.log(messageObject, '123123123');
+    });
 
-      socket.on('join', (messageObject: JoinersData) => {
-        console.log(messageObject, '123123123');
-      });
-
-      socket.on('leave', (messageObject: LeaverData) => {
-        console.log(messageObject, '123123123');
-      });
-    }
+    socket.on('leave', (messageObject: LeaverData) => {
+      console.log(messageObject, '123123123');
+    });
 
     return () => {
       socket.off('connect');
