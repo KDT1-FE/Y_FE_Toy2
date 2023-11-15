@@ -1,21 +1,33 @@
-// import { useState } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import { GlobalStyle } from "./style/GlobalStyle";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import PageNotFound from "./components/PageNotFound";
-import { darkTheme, lightTheme } from "./style/theme";
-import { useEffect, useState } from "react";
-import { DarkModeProvider } from "./hooks/useDarkMode";
-import ProfileDefault from "./Pages/Profile/ProfileDefaultPage";
-import MainContents from "./pages/MainContents";
-import ProfilePage from "./pages/Profile/ProfilePage";
-import ProfileEditPage from "./pages/Profile/ProfileEditPage";
-import ProfileFeedDetailPage from "./pages/Profile/ProfileFeedDetailPage";
-import Chat from "./pages/Chat";
-import Login from "./pages/Login/Login";
-import SignUp from "./pages/SignUp/SignUp";
+import { Theme, darkTheme, lightTheme } from "./style/theme";
+import MainContents from "./Pages/MainContents";
+
+import ProfilePage from "./Pages/Profile/ProfilePage";
+import ProfileEditPage from "./Pages/Profile/ProfileEditPage";
+import ProfileFeedDetailPage from "./Pages/Profile/ProfileFeedDetailPage";
+import ProfileDefaultPage from "./Pages/Profile/ProfileDefaultPage";
+
+import Login from "./Pages/Login/Login";
+import SignUp from "./Pages/SignUp/SignUp";
+import Chat from "./Pages/Chat";
 import { AuthProvider } from "./hooks/useAuth";
+import { createContext } from "react";
+import { useDarkMode } from "./hooks/useDarkMode";
+import ChatTest from "./Pages/ChatTest";
+
+interface ContextProps {
+  theme: Theme;
+  toggleTheme: () => void;
+}
+
+export const ThemeContext = createContext<ContextProps>({
+  theme: lightTheme,
+  toggleTheme: () => {}
+});
 
 const router = createBrowserRouter([
   {
@@ -25,13 +37,14 @@ const router = createBrowserRouter([
       { path: "", element: <MainContents /> },
       {
         path: "profiles",
-        element: <ProfileDefault />
+        element: <ProfileDefaultPage />
       },
       {
         path: "profiles/:userid",
         element: <ProfilePage />
       },
       { path: "profiles/:userid/edit", element: <ProfileEditPage /> },
+
       { path: "profiles/:userid/:feedid", element: <ProfileFeedDetailPage /> },
 
       {
@@ -45,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />
+      },
+      {
+        path: "chattest",
+        element: <ChatTest />
       }
     ]
   },
@@ -54,30 +71,20 @@ const router = createBrowserRouter([
   }
 ]);
 
-function App() {
-  const [isDarkMode, setisDarkMode] = useState(false);
+const App: React.FC = () => {
+  const { theme, toggleTheme } = useDarkMode();
 
-  useEffect(() => {
-    const storedMode = window.localStorage.getItem("isDarkMode");
-    if (storedMode) {
-      setisDarkMode(storedMode === "true");
-    }
-  }, []);
-
-  const theme = isDarkMode ? darkTheme : lightTheme;
   return (
-    <DarkModeProvider>
-      <Wrapper>
-        <AuthProvider>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <RouterProvider router={router} />
-          </ThemeProvider>
-        </AuthProvider>
-      </Wrapper>
-    </DarkModeProvider>
+    <Wrapper>
+      <AuthProvider>
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+          <GlobalStyle theme={theme === lightTheme ? lightTheme : darkTheme} />
+          <RouterProvider router={router} />
+        </ThemeContext.Provider>
+      </AuthProvider>
+    </Wrapper>
   );
-}
+};
 
 export default App;
 
