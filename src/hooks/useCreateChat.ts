@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { ChatType } from '../types/ChatType';
 
 const useCreateChat = (
   accessToken: string | null,
