@@ -11,6 +11,7 @@ import { JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
+import { chatSocket } from '@/apis/socket';
 import { CLIENT_URL } from '../../apis/constant';
 import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
@@ -28,53 +29,67 @@ export default function Chat() {
 
   const userId = useRecoilValue(userIdState);
 
-  console.log(userId);
-
   const accessToken = getStorage('accessToken');
 
-  const socket = useMemo(() => {
-    return io(`${CLIENT_URL}?chatId=${chatId}`, {
-      extraHeaders: {
-        Authorization: `Bearer ${accessToken}`,
-        serverId: process.env.NEXT_PUBLIC_API_KEY,
-      },
-    });
-  }, [chatId, accessToken]);
+  // useEffect(() => {
+  //   socket.on('connect', () => {
+  //     console.log('Connected to chat server');
+  //     setIsConnected(true);
+  //   });
 
+  //   socket.on('messages-to-client', (messageArray: Message[]) => {
+  //     setMessages(messageArray.messages);
+  //   });
+
+  //   socket.on('message-to-client', (messageObject: Message) => {
+  //     setMessages(prevMessages => [...prevMessages, messageObject]);
+  //   });
+
+  //   socket.emit('fetch-messages');
+
+  //   socket.on('join', (messageObject: JoinersData) => {
+  //     console.log(messageObject, '123123123');
+  //   });
+
+  //   socket.on('leave', (messageObject: LeaverData) => {
+  //     console.log(messageObject, '123123123');
+  //   });
+
+  //   return () => {
+  //     socket.off('connect');
+  //     socket.off('messages-to-client');
+  //     socket.off('message-to-client');
+  //     socket.off('join');
+  //     socket.off('leave');
+  //     socket.disconnect();
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
+  const [socket, setSocket] = useState<any>(null);
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('Connected to chat server');
-      setIsConnected(true);
-    });
+    if (typeof chatId === 'string') {
+      try {
+        const newSocket = chatSocket(accessToken, chatId);
+        setSocket(newSocket);
 
-    socket.on('messages-to-client', (messageArray: Message[]) => {
-      setMessages(messageArray.messages);
-    });
+        newSocket.on('messages-to-client', messageData => {
+          console.log('Fetched messages:', messageData.messages);
+          setMessages(messageData.messages);
+        });
 
-    socket.on('message-to-client', (messageObject: Message) => {
-      setMessages(prevMessages => [...prevMessages, messageObject]);
-    });
+        newSocket.on('message-to-client', messageObject => {
+          setMessages(prevMessages => [...prevMessages, messageObject]);
+          console.log(messageObject);
+        });
 
-    socket.emit('fetch-messages');
-
-    socket.on('join', (messageObject: JoinersData) => {
-      console.log(messageObject, '123123123');
-    });
-
-    socket.on('leave', (messageObject: LeaverData) => {
-      console.log(messageObject, '123123123');
-    });
-
-    return () => {
-      socket.off('connect');
-      socket.off('messages-to-client');
-      socket.off('message-to-client');
-      socket.off('join');
-      socket.off('leave');
-      socket.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
+        return () => {
+          newSocket.disconnect();
+        };
+      } catch (error) {
+        console.error('Error retrieving data:', error);
+      }
+    }
+  }, [chatId]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {

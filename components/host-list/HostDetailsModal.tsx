@@ -29,12 +29,15 @@ export default function HostDetailsModal({
   const createHostChat = () => {
     chatListAPI
       .createChat({
-        name: `${hostDetails.name}`,
+        name: hostDetails.name,
         users: [hostDetails.id],
         isPrivate: true,
       })
       .then(res => {
-        router.push(`/chat/${res.data.id}`);
+        router.push({
+          pathname: `/chat/${res.data.id}`,
+          query: { name: res.data.name },
+        });
       });
   };
   return (
