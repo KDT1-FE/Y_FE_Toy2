@@ -47,7 +47,7 @@ const ChatDivder = ({ myChatList }: ChatListProps) => {
 					))}
 				</TabsHeader>
 				<TabsBody className="h-full">
-					<TabPanel valㄹue="personal" className="min-h-[calc(80vh)]">
+					<TabPanel value="personal" className="min-h-[calc(80vh)]">
 						{PersonalChat.length ? (
 							<ChatList myChatList={PersonalChat} accessToken={accessToken} />
 						) : (
