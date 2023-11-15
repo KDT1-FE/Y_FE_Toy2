@@ -46,9 +46,7 @@ export default function ChatroomHeader({ chatId, name, users }: Props) {
           },
         },
       );
-      console.log(response);
       router.push('/chat-list/my');
-      // 채팅방 나가기 성공 후 추가적인 로직이 필요할 수 있습니다.
     } catch (error) {
       console.error(error);
     }

@@ -39,10 +39,7 @@ function OtherMessage({ msg }: { msg: Message }) {
   return (
     <div className={styles.otherFlex}>
       <div className={styles.userInfo}>
-        <img
-          src="https://avatars.githubusercontent.com/u/66263916?v=4"
-          className={styles.profileImage}
-        />
+        <img src={userPicture} className={styles.profileImage} alt="유저사진" />
         <span className={styles.username}>{userName}</span>
       </div>
       <div className={styles.otherMessage}>

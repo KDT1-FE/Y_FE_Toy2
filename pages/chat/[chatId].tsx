@@ -7,7 +7,13 @@ import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
 import ExitNotice from '@/components/chat/exitNotice';
 import ChatAlert from '@/components/chat/chatAlert';
-import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
+import {
+  Chat,
+  ChatUser,
+  JoinersData,
+  LeaverData,
+  Message,
+} from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
@@ -21,24 +27,6 @@ export default function Chatting() {
   const router = useRouter();
   const { chatId } = router.query;
 
-  const [chatData, setChatData] = useState<Chat | null>();
-
-  useEffect(() => {
-    const fetchChatData = async () => {
-      try {
-        if (chatId && typeof chatId === 'string') {
-          const response = await chatAPI.getChatInfo(chatId);
-          const chatInfo: Chat = response.data.chat;
-          setChatData(chatInfo);
-        }
-      } catch (error) {
-        console.error('Error fetching chat data:', error);
-      }
-    };
-
-    fetchChatData();
-  }, [chatId]);
-
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [showAlert, setShowAlert] = useState(false);
@@ -47,8 +35,12 @@ export default function Chatting() {
   const [showEntryNotice, setShowEntryNotice] = useState(false);
   const [showExitNotice, setShowExitNotice] = useState(false);
 
-  const [joiners, setJoiners] = useState<string[]>([]);
-  const [leavers, setLeavers] = useState<string[]>([]);
+  const [joiner, setJoiner] = useState<string>('');
+  const [leaver, setLeaver] = useState<string>('');
+
+  const [chatData, setChatData] = useState<Chat | null>();
+  const [enterName, setEnterName] = useState<string>('');
+  const [exitName, setExitName] = useState<string>('');
 
   const userId = useRecoilValue(userIdState);
 
@@ -85,12 +77,13 @@ export default function Chatting() {
 
       socket.on('join', (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');
-        setJoiners(prevJoiners => [...prevJoiners, ...messageObject.joiners]);
+        setJoiner(messageObject.joiners[0]?.id.split(':')[1]);
       });
 
       socket.on('leave', (messageObject: LeaverData) => {
         console.log(messageObject, '채팅방 퇴장');
-        setLeavers(prevLeavers => [...prevLeavers, messageObject.leaver]);
+        setLeaver(messageObject.leaver);
+        console.log('123', leaver);
       });
     }
     return () => {
@@ -105,30 +98,70 @@ export default function Chatting() {
   }, [socket]); // 이제 chatId와 accessToken이 변경될 때
 
   useEffect(() => {
-    if (joiners.length > 0) {
+    const fetchChatData = async () => {
+      try {
+        if (chatId && typeof chatId === 'string') {
+          const response = await chatAPI.getChatInfo(chatId);
+          const chatInfo: Chat = response.data.chat;
+          setChatData(chatInfo);
+        }
+      } catch (error) {
+        console.error('Error fetching chat data:', error);
+      }
+    };
+
+    fetchChatData();
+  }, [chatId]);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const response = await chatAPI.getUserInfo(joiner);
+        setEnterName(response.data.user.name);
+      } catch (error) {
+        console.error('Error fetching user name:', error);
+      }
+    };
+    fetchUserId();
+  }, [joiner]);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const response = await chatAPI.getUserInfo(leaver);
+        setExitName(response.data.user.name);
+      } catch (error) {
+        console.error('Error fetching user name:', error);
+      }
+    };
+    fetchUserId();
+  }, [leaver]);
+
+  useEffect(() => {
+    if (joiner !== '') {
       setShowEntryNotice(true); // Show entry notice
 
       const entryTimer = setTimeout(() => {
         setShowEntryNotice(false); // Hide entry notice after 3 seconds
-        setJoiners([]);
-      }, 3000);
+        // setJoiner('');
+      }, 10000);
 
       return () => clearTimeout(entryTimer);
     }
-  }, [joiners]);
+  }, [joiner]);
 
   useEffect(() => {
-    if (leavers.length > 0) {
+    if (leaver !== '') {
       setShowExitNotice(true); // Show exit notice
 
       const exitTimer = setTimeout(() => {
         setShowExitNotice(false); // Hide exit notice after 3 seconds
-        setLeavers([]);
-      }, 3000);
+        // setLeaver('');
+      }, 10000);
 
       return () => clearTimeout(exitTimer);
     }
-  }, [leavers]);
+  }, [leaver]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -179,12 +212,8 @@ export default function Chatting() {
               ),
             )}
           </div>
-          {joiners.length > 0 && showEntryNotice && (
-            <EntryNotice joiners={joiners} />
-          )}
-          {leavers.length > 0 && showExitNotice && (
-            <ExitNotice leaver={leavers[0]} />
-          )}
+          {showEntryNotice && <EntryNotice joiner={enterName} />}
+          {showExitNotice && <ExitNotice leaver={exitName} />}
           <div ref={messagesEndRef} />
           {showAlert && <ChatAlert />}
         </div>
