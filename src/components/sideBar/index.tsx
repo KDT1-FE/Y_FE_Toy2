@@ -22,15 +22,12 @@ const SideBar = () => {
   return (
     <Box
       w="18rem"
-      position="fixed"
+      position="sticky"
       h="100vh"
       bg="gray.50"
       color="black"
       p="20px"
       boxShadow="xl"
-      top="50%"
-      left="15%"
-      transform="translate(-50%, -50%)"
     >
       <Heading my="2rem" size={'2xl'} color={'blue.400'}>
         smartalk
