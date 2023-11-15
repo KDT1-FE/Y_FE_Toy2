@@ -31,10 +31,10 @@ const Drawing = () => {
     const canvas = canvasRef.current; // 캔버스 Ref
     if (canvas && !contextRef.current) {
       // 최초 마운트 시에만 실행
-      canvas.width = 800;
-      canvas.height = 450;
-      canvas.style.width = '800px';
-      canvas.style.height = '450px';
+      canvas.width = 940;
+      canvas.height = 563;
+      canvas.style.width = '940px';
+      canvas.style.height = '563px';
       canvas.style.backgroundColor = 'white';
 
       // 그리기
@@ -68,7 +68,7 @@ const Drawing = () => {
     const ctx = canvas?.getContext('2d');
 
     ctx!.fillStyle = 'white';
-    ctx!.fillRect(0, 0, 800, 450);
+    ctx!.fillRect(0, 0, 940, 563);
 
     drawSocket.emit('erase', { option: { roomId } });
   };
@@ -191,7 +191,7 @@ const Drawing = () => {
         const ctx = contextRef.current;
         if (!ctx) return;
         ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, 800, 450);
+        ctx.fillRect(0, 0, 940, 563);
       };
 
       drawSocket.on('drawing', onDrawingEvent);
@@ -265,10 +265,12 @@ const Drawing = () => {
 const DrawingBox = styled.div``;
 
 const DrawingCanvas = styled.div`
-  width: 800px;
-  height: 450px;
+  width: 940px;
+  height: 563px;
   position: relative;
   .canvas {
+    width: 100%;
+    height: 100%;
     border: 2px solid #4fd1c5;
     margin: 0 auto;
     border-radius: 15px;

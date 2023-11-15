@@ -3,13 +3,20 @@
 import { useState, useEffect } from 'react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { allRoomState, usersInRoom } from '../../states/atom';
+import {
+  allRoomState,
+  usersInRoom,
+  roomIdState,
+  allRoomNumberState,
+  sortSelect,
+} from '../../states/atom';
 
 import {
   getAllGameRooms,
   leaveGameRoom,
   // getOnlyGameRoom,
   participateGameRoom,
+  getAllMyChat,
 } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import usePollingData from '../template/usePollingData';
@@ -29,16 +36,18 @@ import {
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
-import { getAllMyChat } from '../../api';
 import { useSetRecoilState } from 'recoil';
-import { roomIdState } from '../../states/atom';
+import Spiner from '../template/Spiner';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
-
+  const setRoomIdAllRooms = useSetRecoilState(allRoomNumberState);
   const setRoomId = useSetRecoilState(roomIdState);
   const setUsersInRoom = useSetRecoilState(usersInRoom);
+  const allChatState = useRecoilValue(sortSelect);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -58,9 +67,10 @@ const CheckGameRoom = () => {
   };
 
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const allRoomsData = await getAllGameRooms();
-      // console.log(allRoomsData);
+
       setTotalItemsCount(allRoomsData.chats.length);
 
       // 방번호 넣기
@@ -72,8 +82,16 @@ const CheckGameRoom = () => {
         })),
       };
 
+      setRoomIdAllRooms(plusIndex);
+
       // 배열을 역순으로 만들기 (최신순)
-      const reversedRooms = plusIndex.chats.reverse();
+      let reversedRooms = [...plusIndex.chats].reverse();
+
+      if (allChatState === 'possible') {
+        // 풀방 확인
+        reversedRooms = reversedRooms.filter((item) => item.users.length < 4);
+        setTotalItemsCount(reversedRooms.length);
+      }
 
       // 서버에서 받아온 전체 데이터를 현재 페이지에 맞게 자름
       const startIndex = (currentPage - 1) * itemsPerPage;
@@ -83,10 +101,12 @@ const CheckGameRoom = () => {
       setAllRooms(paginatedRooms);
     } catch (error) {
       console.error('Error retrieving data:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  usePollingData(fetchData, [currentPage]);
+  usePollingData(fetchData, [currentPage, allChatState]);
 
   const handleParticipate = async (
     numberOfPeople: number,
@@ -112,7 +132,7 @@ const CheckGameRoom = () => {
       try {
         await participateGameRoom(chatId);
         setRoomId(roomId);
-        setUsersInRoom(numberOfPeople);
+        setUsersInRoom(numberOfPeople + 1);
         navigate(`/room/:${chatId}`);
       } catch (error: any) {
         // console.log(error.response.data.message);
@@ -127,6 +147,7 @@ const CheckGameRoom = () => {
         } else if (error.response.data.message === 'Already participated') {
           setErrorMessage('이미 들어가 있어요.');
           await leaveGameRoom(chatId);
+          setUsersInRoom(numberOfPeople);
         }
       } finally {
         // const res = await getOnlyGameRoom(chatId);
@@ -147,129 +168,144 @@ const CheckGameRoom = () => {
 
   return (
     <>
-      <LobbyListTop />
-      <Card
-        boxShadow="0 3.5px 5px 0 rgba(0, 0, 0, 0.05)"
-        padding={30}
-        borderRadius={15}
-        position="relative">
-        <List spacing="10px">
-          {allRooms.map((element, index) => (
-            <ListItem
-              width="100%"
-              height={50}
-              borderRadius={10}
-              backgroundColor={
-                element.users.length !== 4 ? 'gray.50' : 'gray.300 '
-              }
-              key={index}
-              cursor={'pointer'}
-              border="1px solid"
-              borderColor={'gray.200'}
-              padding="0 30px"
-              _hover={{
-                backgroundColor:
-                  element.users.length !== 4 ? 'gray.100' : 'gray.300',
-              }}
-              onClick={() => {
-                // handleSelectRoom(element?.index);
-                handleParticipate(
-                  element.users.length,
-                  element.id,
-                  element?.index,
-                );
-              }}>
-              <Flex
-                lineHeight="50px"
-                fontSize={14}
-                fontWeight={600}
-                color={'gray.500'}
-                justifyContent={'space-between'}>
-                <Text>{element?.index}</Text>
-                <Text>{element?.name}</Text>
-                <Flex
-                  alignItems={'center'}
-                  width={50}
-                  justifyContent={'space-between'}>
-                  <Text>{element?.users?.length} / 4</Text>
-                  {element.users.length === 4 ? (
-                    <RoundRight className="false"></RoundRight>
-                  ) : (
-                    <RoundRight className="true"></RoundRight>
-                  )}
-                </Flex>
-              </Flex>
-            </ListItem>
-          ))}
+      {isLoading ? (
+        <SpinerWrap>
+          <Spiner />
+        </SpinerWrap>
+      ) : (
+        <>
+          <LobbyListTop />
+          <Card
+            boxShadow="0 3.5px 5px 0 rgba(0, 0, 0, 0.05)"
+            padding={30}
+            borderRadius={15}
+            position="relative">
+            <List spacing="10px">
+              {allRooms.map((element, index) => (
+                <ListItem
+                  width="100%"
+                  height={50}
+                  borderRadius={10}
+                  backgroundColor={
+                    element.users.length !== 4 ? 'gray.50' : 'gray.300 '
+                  }
+                  key={index}
+                  cursor={'pointer'}
+                  border="1px solid"
+                  borderColor={'gray.200'}
+                  padding="0 30px"
+                  _hover={{
+                    backgroundColor:
+                      element.users.length !== 4 ? 'gray.100' : 'gray.300',
+                  }}
+                  onClick={() => {
+                    // handleSelectRoom(element?.index);
+                    handleParticipate(
+                      element.users.length,
+                      element.id,
+                      element?.index,
+                    );
+                  }}>
+                  <Flex
+                    lineHeight="50px"
+                    fontSize={14}
+                    fontWeight={600}
+                    color={'gray.500'}
+                    justifyContent={'space-between'}>
+                    <Text>{element?.index}</Text>
+                    <Text>{element?.name}</Text>
+                    <Flex
+                      alignItems={'center'}
+                      width={50}
+                      justifyContent={'space-between'}>
+                      <Text>{element?.users?.length} / 4</Text>
+                      {element.users.length === 4 ? (
+                        <RoundRight className="false"></RoundRight>
+                      ) : (
+                        <RoundRight className="true"></RoundRight>
+                      )}
+                    </Flex>
+                  </Flex>
+                </ListItem>
+              ))}
 
-          <PaginationWrap>
-            <Pagination
-              activePage={currentPage}
-              itemsCountPerPage={itemsPerPage}
-              totalItemsCount={totalItemsCount}
-              pageRangeDisplayed={5}
-              firstPageText={
-                <svg viewBox="-20 -20 65 65" focusable="false">
-                  <g fill="currentColor">
-                    <path d="M10.416,12a2.643,2.643,0,0,1,.775-1.875L20.732.584a1.768,1.768,0,0,1,2.5,2.5l-8.739,8.739a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5l-9.541-9.541A2.643,2.643,0,0,1,10.416,12Z"></path>
-                    <path d="M.25,12a2.643,2.643,0,0,1,.775-1.875L10.566.584a1.768,1.768,0,0,1,2.5,2.5L4.327,11.823a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5L1.025,13.875A2.643,2.643,0,0,1,.25,12Z"></path>
-                  </g>
-                </svg>
-              }
-              prevPageText={
-                <svg viewBox="-5 -5 34 34" focusable="false">
-                  <path
-                    fill="currentColor"
-                    d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                </svg>
-              }
-              nextPageText={
-                <svg viewBox="-5 -5 34 34" focusable="false">
-                  <path
-                    fill="currentColor"
-                    d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                </svg>
-              }
-              lastPageText={
-                <svg viewBox="-20 -20 65 65" focusable="false">
-                  <g fill="currentColor">
-                    <path d="M13.584,12a2.643,2.643,0,0,1-.775,1.875L3.268,23.416a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L.768,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,13.584,12Z"></path>
-                    <path d="M23.75,12a2.643,2.643,0,0,1-.775,1.875l-9.541,9.541a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L10.934,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,23.75,12Z"></path>
-                  </g>
-                </svg>
-              }
-              activeClass={'active'}
-              itemClassFirst={'first'}
-              itemClassPrev={'prev'}
-              itemClassNext={'next'}
-              itemClassLast={'last'}
-              onChange={handlePageChange}
-            />
-          </PaginationWrap>
-        </List>
-      </Card>
-      <Fade in={showAlert.active}>
-        <Alert
-          marginTop={10}
-          status="error"
-          width={400}
-          height={70}
-          variant="solid"
-          borderRadius={6}
-          position="absolute"
-          bottom={30}
-          left="50%"
-          marginLeft={-200}>
-          <AlertIcon />
-          <Box>
-            <AlertTitle mr={2}>방 입장 오류</AlertTitle>
-            <AlertDescription>{showAlert.message}</AlertDescription>
-          </Box>
-        </Alert>
-      </Fade>
+              <PaginationWrap>
+                <Pagination
+                  activePage={currentPage}
+                  itemsCountPerPage={itemsPerPage}
+                  totalItemsCount={totalItemsCount}
+                  pageRangeDisplayed={5}
+                  firstPageText={
+                    <svg viewBox="-20 -20 65 65" focusable="false">
+                      <g fill="currentColor">
+                        <path d="M10.416,12a2.643,2.643,0,0,1,.775-1.875L20.732.584a1.768,1.768,0,0,1,2.5,2.5l-8.739,8.739a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5l-9.541-9.541A2.643,2.643,0,0,1,10.416,12Z"></path>
+                        <path d="M.25,12a2.643,2.643,0,0,1,.775-1.875L10.566.584a1.768,1.768,0,0,1,2.5,2.5L4.327,11.823a.25.25,0,0,0,0,.354l8.739,8.739a1.768,1.768,0,0,1-2.5,2.5L1.025,13.875A2.643,2.643,0,0,1,.25,12Z"></path>
+                      </g>
+                    </svg>
+                  }
+                  prevPageText={
+                    <svg viewBox="-5 -5 34 34" focusable="false">
+                      <path
+                        fill="currentColor"
+                        d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                    </svg>
+                  }
+                  nextPageText={
+                    <svg viewBox="-5 -5 34 34" focusable="false">
+                      <path
+                        fill="currentColor"
+                        d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                    </svg>
+                  }
+                  lastPageText={
+                    <svg viewBox="-20 -20 65 65" focusable="false">
+                      <g fill="currentColor">
+                        <path d="M13.584,12a2.643,2.643,0,0,1-.775,1.875L3.268,23.416a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L.768,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,13.584,12Z"></path>
+                        <path d="M23.75,12a2.643,2.643,0,0,1-.775,1.875l-9.541,9.541a1.768,1.768,0,0,1-2.5-2.5l8.739-8.739a.25.25,0,0,0,0-.354L10.934,3.084a1.768,1.768,0,0,1,2.5-2.5l9.541,9.541A2.643,2.643,0,0,1,23.75,12Z"></path>
+                      </g>
+                    </svg>
+                  }
+                  activeClass={'active'}
+                  itemClassFirst={'first'}
+                  itemClassPrev={'prev'}
+                  itemClassNext={'next'}
+                  itemClassLast={'last'}
+                  onChange={handlePageChange}
+                />
+              </PaginationWrap>
+            </List>
+          </Card>
+          <Fade in={showAlert.active}>
+            <Alert
+              marginTop={10}
+              status="error"
+              width={400}
+              height={70}
+              variant="solid"
+              borderRadius={6}
+              position="absolute"
+              bottom={30}
+              left="50%"
+              marginLeft={-200}>
+              <AlertIcon />
+              <Box>
+                <AlertTitle mr={2}>방 입장 오류</AlertTitle>
+                <AlertDescription>{showAlert.message}</AlertDescription>
+              </Box>
+            </Alert>
+          </Fade>
+        </>
+      )}
     </>
   );
 };
+
+const SpinerWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const RoundRight = styled.span`
   width: 12px;

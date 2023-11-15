@@ -10,13 +10,13 @@ import {
   usersInRoom,
 } from '../../states/atom';
 import styled from 'styled-components';
-import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
 import CheckNums from '../../util/checkNums';
 import { gameSocket } from '../../api/socket';
 import AnswerForm from '../../components/template/AnswerForm';
+import { ResponsiveValue } from '@chakra-ui/react';
 
 const GameRoom: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -40,6 +40,7 @@ const GameRoom: React.FC = () => {
 
   const lastMessage = messages[messages.length - 1];
   const myId = localStorage.getItem('id');
+
   useEffect(() => {
     if (lastMessage.text !== '') {
       setUserMessage(lastMessage);
@@ -174,14 +175,16 @@ const GameRoom: React.FC = () => {
 
         <GameChatting chatId={roomId} />
       </RoomMain>
-      <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
-      <UserList>{/* <CheckUser /> */}</UserList>
+
+      <UserList>
+        <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
+      </UserList>
     </Game>
   );
 };
 
 const Game = styled.div`
-  width: 1200px;
+  width: 1400px;
   display: flex;
   flex-direction: column;
 `;
@@ -232,6 +235,6 @@ const RoomMain = styled.div`
 `;
 
 const UserList = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
 `;
 export default GameRoom;
