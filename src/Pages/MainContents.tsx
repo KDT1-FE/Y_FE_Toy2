@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Carousel from "../components/Main/Carousel";
 import { db } from "../firebase/firebase";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 interface ProfileI {
@@ -16,7 +16,6 @@ interface ProfileI {
 function MainContents() {
 
   const [profile, setProfile] = useState<ProfileI[]>([]);
-  const [sortedProfile, setSortedProfile] = useState();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -42,8 +41,6 @@ function MainContents() {
     }
     fetchProfile();
   }, [])
-
-  console.log(profile);
 
   return (
     <Wrapper>
@@ -74,11 +71,13 @@ function MainContents() {
                 profile && profile.map((item) => (
                   <GalleryItem>
                   <Photo>
-                    <img src={item.profileImgUrl} alt="프로필" />
+                    <div className="photo-inner">
+                      <img src={item.profileImgUrl} alt="프로필" />
+                    </div>
                   </Photo>
                   <UserInfo>
                     <div className="hobby">
-                    {item.hobby.map((h, index) => (
+                    {item.hobby.slice(0, 5).map((h, index) => (
                       <div key={index}>{h}</div>
                     ))}
                     </div>
@@ -150,27 +149,30 @@ const SecondContent = styled.div`
 `; 
 const Gallery = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
+  grid-template-columns: 50% 50%;
+  margin-left: -5px;
+  margin-right: -5px;
 `;
 const GalleryItem = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
   background-color: white;
-  padding: 2em 1em;
+  padding: 1em;
   border-radius: 2em;
-  gap: 1em;
+  display: inline-flex;
+  align-items: flex-start;
+  gap:1em;
+  margin: 0 5px;
+  margin-bottom: 10px;
 `;
 const Photo = styled.div`
-  width: 7em;
-  height: 7em;
-  background-color: #ff9999;
-  border-radius: 1em;
-  overflow:hidden;
+  flex: 1 0 30%;
+  max-width: 30%;
+  .photo-inner{
+    width:7em;
+    height:7em;
+    background-color: #ff9999;
+    border-radius: 1em;
+    overflow:hidden;
+  }
   img{
     max-width: 100%;
   }
@@ -180,13 +182,18 @@ const UserInfo = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  text-align: left;
+  flex: 1 0 70%;
+  max-width: 70%;
   .hobby {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
-    margin-bottom: 1em;
+    margin-bottom:1em;
     div {
       font-size: 0.8em;
-      margin-right: 1em;
+      margin-right: 5px;
+      margin-bottom: 5px;
       background-color: #feebea;
       border-radius: 1em;
       padding: 0.5em 0.7em;
@@ -198,13 +205,23 @@ const UserInfo = styled.div`
     color: #999696;
   }
   .userName {
+    width: 90%;
     font-size: 0.8em;
     font-weight: 700;
     margin-bottom: 0.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .userInfo {
+    width: 90%;
     font-size: 0.8em;
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 `;
 const TextSection = styled.div`
@@ -270,9 +287,7 @@ const SecondGallery = styled.div`
   justify-content: flex-start;
   gap:2em;
   color: #8b8b8b;
-  .photo-wrap{
-    
-  }
+
   .photo {
     overflow:hidden;
     width: 12em;
