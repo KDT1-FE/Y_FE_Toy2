@@ -30,8 +30,8 @@ export const fetchMyUser = async (token: string) => {
 
 export const editUser = async (
 	token: string,
-	name: string,
-	picture: string,
+	name?: string,
+	picture?: string,
 ) => {
 	const res = await fetch('https://fastcampus-chat.net/user', {
 		method: 'PATCH',

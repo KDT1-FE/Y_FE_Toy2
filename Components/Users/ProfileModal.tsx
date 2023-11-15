@@ -7,10 +7,29 @@ import {
 import { Chat, User } from '@/types';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { getCookie } from '../Login/Cookie';
 import { convertPictureURL } from '@/hooks/Common/users';
 import { Input } from '@material-tailwind/react';
+import axios from 'axios';
+import { editUser } from '@/app/users/users.utils';
+
+type FetchImageProps = {
+	file: string;
+	id: string;
+	password: string;
+	name: string;
+};
+
+const fetchImage = async (params: FetchImageProps) => {
+	const data = await axios.post('/api/image/post', {
+		id: params.id,
+		name: params.name,
+		password: params.password,
+		file: params.file,
+	});
+	return data.data;
+};
 
 const ProfileModal = ({
 	user,
@@ -22,10 +41,17 @@ const ProfileModal = ({
 	const accessToken = getCookie('accessToken');
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const isMyProfile = searchParams?.get('isMyProfile') === 'true';
-	const [isEdit, setIsEdit] = useState<boolean>(false);
-	const [userInput, setUserInput] = useState<User>(user);
 
+	const [isEdit, setIsEdit] = useState<boolean>(false);
+	const [userInput, setUserInput] = useState<User>({
+		...user,
+		picture: convertPictureURL(user.picture),
+	});
+	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const isMyProfile = searchParams?.get('isMyProfile') === 'true';
+
+	/* 1:1 채팅방 참여 */
 	const chattingParticipateHandler = async () => {
 		if (existPrivateChat) {
 			await participateChat(accessToken, existPrivateChat.id);
@@ -37,7 +63,44 @@ const ProfileModal = ({
 		}
 	};
 
-	const handleEditUserData = async () => {};
+	const handleEditUserData = async () => {
+		let isEditUserImage = false;
+		let isEditUserName = false;
+		let photoUrl: string = '';
+
+		try {
+			/* 이미지가 변경 됐을 경우*/
+			if (userInput.picture.slice(0, 10) === 'data:image') {
+				isEditUserImage = true;
+				const req = await fetchImage({
+					file: userInput.picture,
+					id: userInput.id,
+					password: userInput.password,
+					name: userInput.name,
+				});
+				photoUrl = req.data.picture;
+			}
+			/* 이름이 변경 됐을 경우*/
+			if (userInput.name !== user.name) {
+				isEditUserName = true;
+			}
+
+			if (isEditUserImage) {
+				/* url가지고 정보 수정 */
+				const message = await editUser(accessToken, userInput.name, photoUrl);
+				setUserInput({ ...user, picture: photoUrl });
+				console.log(message);
+			} else if (isEditUserName) {
+				/* 이름만 정보 수정 */
+				const message = await editUser(accessToken, userInput.name);
+				console.log(message);
+			}
+		} catch (e) {
+			console.error(e);
+		} finally {
+			setIsEdit(false);
+		}
+	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const userInputTemp = { ...userInput, name: event.target.value };
@@ -49,11 +112,32 @@ const ProfileModal = ({
 		setUserInput(user);
 	};
 
+	const handleEditUserImage = () => {
+		if (!isEdit) return;
+		if (fileInputRef?.current) {
+			fileInputRef.current.click();
+		}
+	};
+
+	const handleFileChange = () => {
+		let file = null;
+		if (fileInputRef.current?.files) {
+			const reader = new FileReader();
+			file = fileInputRef.current.files[0];
+			reader.onload = (e) => {
+				const base64DataUrl = e.target!.result as string;
+				console.log({ ...userInput, picture: base64DataUrl });
+				setUserInput({ ...userInput, picture: base64DataUrl });
+			};
+			reader.readAsDataURL(file);
+		}
+	};
+
 	return (
 		<section className="relative w-full h-full top-0 bg-gray-400 ">
 			{isEdit ? (
 				<button
-					className="absolute top-5 right-5 text-white text-3xl"
+					className="absolute top-5 right-5 text-white text-2xl"
 					onClick={handleCancelEdit}
 				>
 					취소
@@ -71,22 +155,31 @@ const ProfileModal = ({
 
 			{isEdit && (
 				<button
-					className="absolute top-5 left-5 text-white text-3xl"
+					className="absolute top-5 left-5 text-white text-2xl"
 					onClick={handleEditUserData}
 				>
 					확인
 				</button>
 			)}
 			<div className="w-full h-full flex flex-col justify-between items-center">
-				<div></div>
+				<div>{/* Flex 레이아웃용 */}</div>
 
 				<div className="flex flex-col w-full items-center gap-5 pb-20">
-					<div className="relative w-28 h-28">
+					<input
+						type="file"
+						ref={fileInputRef}
+						className="hidden"
+						accept="image/*"
+						onChange={handleFileChange}
+					/>
+					<div className="relative w-28 h-28" onClick={handleEditUserImage}>
 						<Image
 							fill={true}
 							alt={user.name}
-							src={convertPictureURL(userInput.picture)}
-							className="rounded-full border-black"
+							src={userInput.picture}
+							className={`rounded-full border-black ${
+								isEdit && 'cursor-pointer'
+							}`}
 							style={{
 								position: 'absolute',
 								top: 0,
@@ -95,6 +188,15 @@ const ProfileModal = ({
 								margin: 'auto',
 							}}
 						/>
+						{isEdit && (
+							<Image
+								src="/icon_edit.svg"
+								width={40}
+								height={40}
+								alt="프로필 변경하기"
+								className="absolute bottom-0 right-0 "
+							/>
+						)}
 					</div>
 					<Input
 						disabled={!isEdit}
@@ -121,7 +223,7 @@ const ProfileModal = ({
 							>
 								<Image
 									className=""
-									src="/icon_edit.svg"
+									src="/icon_edit2.svg"
 									alt="프로필 편집하기"
 									height={50}
 									width={50}
