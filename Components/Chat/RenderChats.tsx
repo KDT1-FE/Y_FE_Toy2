@@ -30,26 +30,25 @@ const RenderChats = ({
 
 	return (
 		<>
-			<ul>
+			<ul className="w-full flex flex-col items-center">
 				{messages.map((message, index) => {
 					const myUser = chatUsers.find((user) => user.id === message.userId);
 
 					if (myUser) {
 						return (
-							<li
-								key={message.id}
-								className={
-									message.userId === myId ? 'bg-pink-500' : 'bg-pink-100'
-								}
-							>
+							<React.Fragment key={message.id}>
 								{index === 0 ||
 								new Date(message.createdAt).toDateString() !==
 									new Date(messages[index - 1].createdAt).toDateString() ? (
-									<div className="h-[25px] bg-blue-300">
-										{new Date(message.createdAt).toDateString()}
-									</div>
+									<li
+										key={`${message.id}-date`} // 고유한 키를 생성
+										className="my-2 w-[130px] flex justify-center items-center h-8 bg-gray-200 rounded-2xl"
+									>
+										<span className="text-xs">
+											{new Date(message.createdAt).toDateString()}
+										</span>
+									</li>
 								) : null}
-
 								<Chats
 									key={message.id}
 									message={message}
@@ -57,7 +56,7 @@ const RenderChats = ({
 									myId={myId}
 									useModal={useModal}
 								/>
-							</li>
+							</React.Fragment>
 						);
 					}
 				})}
@@ -66,5 +65,4 @@ const RenderChats = ({
 		</>
 	);
 };
-
 export default RenderChats;

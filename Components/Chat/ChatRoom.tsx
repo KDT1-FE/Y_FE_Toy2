@@ -6,6 +6,7 @@ import { Chat, Message, chatUsersObject, User } from '@/types';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import ChatHeader from '@/Components/Chat/ChatHeader';
 import RenderChats from '@/Components/Chat/RenderChats';
+import Image from 'next/image';
 
 const ChatRoom = ({
 	socket,
@@ -103,7 +104,7 @@ const ChatRoom = ({
 	};
 
 	return (
-		<>
+		<div className="h-screen">
 			<ChatHeader
 				chatId={chatId}
 				chatName={chatName}
@@ -113,7 +114,6 @@ const ChatRoom = ({
 				<>
 					{chatUsers.length === 2 || chatUsers.length === 1 ? (
 						<>
-							<p>1대1 채팅방 입니다.</p>
 							<RenderChats
 								messages={messages}
 								chatUsers={chatUsers}
@@ -122,7 +122,6 @@ const ChatRoom = ({
 						</>
 					) : (
 						<>
-							<p> true 그룹 채팅방 입니다.</p>
 							<RenderChats
 								messages={messages}
 								chatUsers={chatUsers}
@@ -133,7 +132,6 @@ const ChatRoom = ({
 				</>
 			) : (
 				<>
-					<p> false 오픈 채팅방 입니다. </p>
 					<RenderChats
 						messages={messages}
 						chatUsers={chatUsers}
@@ -142,14 +140,26 @@ const ChatRoom = ({
 				</>
 			)}
 
-			<input
-				type="text"
-				value={newMessage}
-				onChange={(e) => setNewMessage(e.target.value)}
-				onKeyPress={handleKeyPress}
-			/>
-			<button onClick={sendMessage}>전송</button>
-		</>
+			<div className="w-full sm:w-[425px] h-14 flex justify-evenly items-center py-8 bg-gray-100 fixed bottom-0">
+				<input
+					type="text"
+					value={newMessage}
+					onChange={(e) => setNewMessage(e.target.value)}
+					onKeyPress={handleKeyPress}
+					className="w-4/5 px-4 py-3 rounded-2xl"
+				/>
+				<div className="flex justify-center items-center w-10 h-10 bg-pink-100 rounded-lg">
+					<Image
+						src={'/icon_send.svg'}
+						width={25}
+						height={25}
+						alt="전송"
+						className="cursor-pointer hover:shadow-lg"
+						onClick={sendMessage}
+					/>
+				</div>
+			</div>
+		</div>
 	);
 };
 
