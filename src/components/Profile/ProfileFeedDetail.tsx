@@ -423,9 +423,6 @@ function ProfileFeedDetail() {
             }
           }
 
-          // 필요한 로직이 있다면 추가
-
-          // 예시로 fetchData 함수 호출 및 페이지 리다이렉트
           await fetchData();
           window.location.href = `/profiles/${userid}`;
         } else {
