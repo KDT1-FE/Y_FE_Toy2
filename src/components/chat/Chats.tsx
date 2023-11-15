@@ -1,13 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import ChatCard from './ChatCard';
 import { ChatType } from '../../types/ChatType';
 import { ChatsWrapper } from '../../styles/chat/ChatListStyles';
 
-function Chats({ chatList }: any) {
+interface IChatsProps {
+  chatList: ChatType[];
+}
+
+function Chats({ chatList }: IChatsProps) {
   return (
     <ChatsWrapper>
-      {chatList.map((chat: any, index: any) => (
+      {chatList.map((chat: ChatType, index: React.Key) => (
         <ChatCard chat={chat} key={index} />
       ))}
     </ChatsWrapper>

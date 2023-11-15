@@ -25,23 +25,26 @@ export const SenderImage = styled('img')({
 
 export const SenderName = styled('p')({
   display: 'flex',
-  alignItems: 'end',
+  alignItems: 'flex-end',
   color: '#828282',
   letterSpacing: '0.3px',
   margin: '0 0 4px 8px',
 });
 
 export const MessageWrapper = styled(Box)({
+  width: '100%',
+
   display: 'flex',
   alignItems: 'flex-end',
 });
 
 export const TextBox = styled(Box)({
+  maxWidth: '50%',
   borderRadius: '20px',
   padding: '5px 20px',
   color: 'white',
+
   display: 'inline-block',
-  maxWidth: '80%',
 });
 
 export const MessageText = styled('p')({

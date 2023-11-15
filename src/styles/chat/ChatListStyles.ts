@@ -20,6 +20,22 @@ export const NewMessageWrapper = styled('div')({
   gap: '20px',
 });
 
+export const NewMessageImgBox = styled(Box)({
+  width: '60px',
+  height: '60px',
+});
+
+export const NewMessageTitle = styled(Typography)({
+  fontSize: '1.25rem',
+});
+
+export const NewMessageBody = styled(Typography)({
+  fontSize: '0.825rem',
+  color: '#737373',
+});
+
+export const NewMessageBtn = styled(Button)({});
+
 export const ModalWrapper = styled('div')({
   width: '550px',
   height: '620px',
@@ -45,7 +61,7 @@ export const ModalHeader = styled('div')({
 
 export const EmptyBox = styled(Box)({ width: '46px', height: '100%' });
 
-export const Title = styled(Typography)({
+export const ModalTitle = styled(Typography)({
   fontWeight: 700,
 
   display: 'flex',
@@ -82,6 +98,11 @@ export const ModalUserList = styled('div')({
     backgroundColor: '#1D3557',
     borderRadius: '25px',
   },
+});
+
+export const UserNotFound = styled(Typography)({
+  padding: '16px',
+  color: '#737373',
 });
 
 export const ModalFooter = styled('div')({
