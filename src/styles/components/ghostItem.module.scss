@@ -3,10 +3,10 @@
 
 .ghost {
   @include flex-center-row();
-  display: inline-flex;
   font-family: $font-main;
-  padding: 1rem;
-  width: 40%;
+  padding: 2rem;
+  margin: 1rem 0;
+  width: 100%;
 
   &__image {
     position: relative;
@@ -47,6 +47,7 @@
     background-color: $gray;
     font-size: $font-base;
     font-weight: $font-normal;
+    text-align: center;
   }
 
   &:hover {
