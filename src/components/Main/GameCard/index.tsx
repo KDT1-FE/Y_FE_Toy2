@@ -105,6 +105,7 @@ const GameCard = ({
             color="white"
             _hover={{ bg: "blackAlpha.900" }}
             onClick={joinGame}
+            isDisabled={status === "게임중" ? true : false}
           >
             입장하기
           </Button>
