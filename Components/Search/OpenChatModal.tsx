@@ -49,18 +49,6 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 				/>
 			</button>
 
-			<div className="h-4/6 ml-5 text-white">
-				<OpenChatText openChat={modalChat} textSize={TEXT_SIZE} />
-			</div>
-			<button
-				className="h-1/6 bg-yellow-500 font-medium"
-				onClick={() => {
-					router.push(`chat/${modalChat.id}?isPrivate=false`);
-				}}
-			>
-				오픈 채팅방 참여하기
-			</button>
-
 			<div className="h-1/6 bg-black"></div>
 			<div className="absolute flex flex-col justify-end w-full h-2/5 bottom-0 left-0">
 				<div className="h-4/6 ml-5 text-white">

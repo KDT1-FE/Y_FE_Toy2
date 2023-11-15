@@ -48,10 +48,18 @@ const ChatDivder = ({ myChatList }: ChatListProps) => {
 				</TabsHeader>
 				<TabsBody className="h-full">
 					<TabPanel value="personal" className="min-h-[calc(80vh)]">
-						<ChatList myChatList={PersonalChat} accessToken={accessToken} />
+						{PersonalChat.length ? (
+							<ChatList myChatList={PersonalChat} accessToken={accessToken} />
+						) : (
+							<h1 className="mx-auto my-2">개인 채팅방이 없습니다.</h1>
+						)}
 					</TabPanel>
 					<TabPanel value="multi" className="min-h-[calc(80vh)]">
-						<ChatList myChatList={MultiChat} accessToken={accessToken} />
+						{MultiChat.length ? (
+							<ChatList myChatList={MultiChat} accessToken={accessToken} />
+						) : (
+							<h1 className="mx-auto my-2">단체 채팅방이 없습니다.</h1>
+						)}
 					</TabPanel>
 				</TabsBody>
 			</Tabs>

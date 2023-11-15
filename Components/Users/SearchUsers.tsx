@@ -10,6 +10,7 @@ import ShowSearchedFriend from './ShowSearchedFriend';
 import FriendProfiles from '../Users/FriendProfiles';
 import ShowAllOpenChat from '../Search/ShowAllOpenChat';
 import { useRouter } from 'next/navigation';
+import Footer from '../Common/Footer';
 
 const SearchOpenChat = ({
 	allUsersExceptMe,
@@ -81,17 +82,19 @@ const SearchOpenChat = ({
 			)}
 			{!isShowMore && (
 				<>
-					{searchedChats.length || searchedUsers.length ? (
-						<>
-							<strong className="mt-5">내 친구 찾기</strong>
-							{allUsersExceptMe && (
-								<ShowSearchedFriend
-									setIsShowMore={setIsShowMore}
-									searchedUsers={searchedUsers as User[]}
-								/>
-							)}
+					<strong className="mt-5">내 친구 찾기</strong>
+					{searchedUsers.length ? (
+						<ShowSearchedFriend
+							setIsShowMore={setIsShowMore}
+							searchedUsers={searchedUsers as User[]}
+						/>
+					) : (
+						<h1 className="mx-auto my-2">검색된 내 친구가 없습니다.</h1>
+					)}
 
-							<strong className="mt-5">내 채팅방 찾기</strong>
+					<strong className="mt-5">내 채팅방 찾기</strong>
+					{searchedChats.length ? (
+						<>
 							{searchedChats.map((chat) => (
 								<Link
 									href={{
@@ -107,10 +110,16 @@ const SearchOpenChat = ({
 							))}
 						</>
 					) : (
-						<h1 className="m-auto">검색 결과가 없습니다.</h1>
+						<>
+							<h1 className="mx-auto my-2">검색된 내 채팅이 없습니다. </h1>
+							<Link href="/search" className="mx-auto underline">
+								오픈채팅방 보러가기
+							</Link>
+						</>
 					)}
 				</>
 			)}
+			<Footer />
 		</>
 	);
 };
