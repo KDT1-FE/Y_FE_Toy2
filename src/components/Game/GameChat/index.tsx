@@ -43,7 +43,7 @@ interface GameChatProps {
 
 interface UserResponse {
   users: string[];
-  joiners?: string[];
+  joiners?: any[];
   leaver?: string;
 }
 
@@ -61,13 +61,10 @@ const GameChat: React.FC<GameChatProps> = ({
   setCurrent,
 }) => {
   const user = useRecoilValue(userState);
-  console.log("Chat/ liar:" + liar);
   const [message] = useState<Message>({
     id: "",
     text: "",
   });
-  console.log("current,", current);
-  // console.log("GameChat/ gameData:", gameData);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
   const [, setUsers] = useState<string[]>([]);
@@ -147,10 +144,20 @@ const GameChat: React.FC<GameChatProps> = ({
   useEffect(() => {
     // 유저 입장 메시지 수신
     socket.on("join", (responseData: UserResponse) => {
-      const systemMessage = `${responseData.joiners!.join} 님이 입장했습니다.`;
-
-      setMessages([...messages, { id: "system", text: systemMessage }]);
-      setUsers(responseData.users);
+      console.log(
+        "responseData:",
+        responseData,
+        "responseData.joiners:",
+        responseData.joiners,
+      );
+      if (responseData.joiners) {
+        const idParts = responseData.joiners[0].id.split(":");
+        const joinId =
+          idParts.length > 1 ? idParts[1] : responseData.joiners[0].id;
+        const systemMessage = `${joinId} 님이 입장했습니다.`;
+        setMessages([...messages, { id: "system", text: systemMessage }]);
+        setUsers(responseData.users);
+      }
     });
 
     // 유저 퇴장 메시지 수신
