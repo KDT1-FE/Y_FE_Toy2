@@ -1,4 +1,4 @@
-import styles from '@styles/pages/signup.module.scss'
+import styles from '@styles/pages/signup.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '@hooks/useForm';
 import { signup } from '@api/signup';
@@ -47,7 +47,9 @@ const Signup = () => {
   };
 
   const setProfileStyle = {
-    backgroundImage: character ? `url(${character})` : `url("/src/assets/images/profile.jpeg")`,
+    backgroundImage: character
+      ? `url(${character})`
+      : `url("/src/assets/images/profile.jpeg")`,
   };
 
   const handleModal = () => {
@@ -72,10 +74,12 @@ const Signup = () => {
             onChange={onChangeId}
           />
           {errors?.id && (
-            <span className={styles.form_error}>{errors?.id}</span>
+            <span className={styles.signup__form_error}>{errors?.id}</span>
           )}
           {invalidId && (
-            <span className={styles.error}>이미 존재하는 아이디입니다.</span>
+            <span className={styles.signup__form_error}>
+              이미 존재하는 아이디입니다.
+            </span>
           )}
           <input
             type="text"
@@ -84,7 +88,7 @@ const Signup = () => {
             onChange={onChangeName}
           />
           {errors?.name && (
-            <span className={styles.form_error}>{errors?.name}</span>
+            <span className={styles.signup__form_error}>{errors?.name}</span>
           )}
           <input
             type="password"
@@ -93,7 +97,9 @@ const Signup = () => {
             onChange={onChangePassword}
           />
           {errors?.password && (
-            <span className={styles.form_error}>{errors?.password}</span>
+            <span className={styles.signup__form_error}>
+              {errors?.password}
+            </span>
           )}
           <input
             type="password"
@@ -102,7 +108,7 @@ const Signup = () => {
             onChange={onChangeAssurer}
           />
           {errors?.assurer && (
-            <span className={styles.form_error}>{errors?.assurer}</span>
+            <span className={styles.signup__form_error}>{errors?.assurer}</span>
           )}
           <button
             className={styles.signup__btn}
