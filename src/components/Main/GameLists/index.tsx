@@ -12,26 +12,25 @@ import {
 } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiBell } from "react-icons/bi";
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import { DocumentData } from "firebase/firestore";
-import GameCard from "../GameCard";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import UserConfigModal from "../../../components/Main/UserConfigModal";
 import { useAuth } from "../../../hooks/useAuth";
 import { authState } from "../../../recoil/atoms/authState";
-import CreateGameModal from "../CreateGameModal";
+import { userState } from "../../../recoil/atoms/userState";
 import connect from "../../../socket/socket";
+import ToastNotice from "../../common/ToastNotice";
+import CreateGameModal from "../CreateGameModal";
+import GameCard from "../GameCard";
 import useInput from "../../../hooks/useInput";
-import ChatBubble from "../../common/ChatBubble";
 import MyChatBubble from "../../common/MyChatBubble";
 
 interface Message {
-  userId: string;
   text: string;
-  createdAt: Date;
   id: string;
 }
 
@@ -81,45 +80,169 @@ interface GameRoom {
   id: string;
 }
 
+interface MessageInfo {
+  id: string;
+  text: string;
+}
+
 type ChatResponseValue = { chats: Chat[] };
 
 const GameLists = () => {
-  const { isAuthenticated } = useRecoilValue(authState);
-  const { logout } = useAuth();
+  // 페이지 입장시 자동으로 해당 채팅방으로 입장
+  useFetch({
+    url: "https://fastcampus-chat.net/chat/participate",
+    method: "PATCH",
+    data: {
+      chatId: "9984747e-389a-4aef-9a8f-968dc86a44e4",
+    },
+    start: true,
+  });
+
+  const fireFetch = useFireFetch();
   const navigate = useNavigate();
+
+  const { isAuthenticated } = useRecoilValue(authState);
+  const user = useRecoilValue(userState);
+  const { logout } = useAuth();
+
   const [isUserConfigModalOpen, setIsUserConfigModalOpen] = useState(false);
   const [token, setToken] = useState<ResponseValue>();
   const [gameLists, setGameLists] = useState<(GameRoom | DocumentData)[]>([]);
+
+  // 메세지 데이터
+  const [messages, setMessages] = useState<MessageInfo[]>([]);
+
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
+
+  // 초대방 정보 데이터
+  const [roomData, setRoomData] = useState({
+    id: "",
+    name: "",
+    host: "",
+    bg: "",
+    users: [""],
+  });
+
+  // 팝업 데이터
+  const [toastUser, setToastUser] = useState([""]);
+
+  // 토스트 모달
+  const [toast, setToast] = useState(false);
   const [modal, setModal] = useState(false);
+
   const { value, onChange } = useInput("");
-  const [messages, setMessages] = useState<Message[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const fireFetch = useFireFetch();
   // 소켓 연결
   const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
-      setMessages((prev) => [...prev, messageObject]);
+      // 메시지 구분
+      if (messageObject.text.slice(-5, -2) === "*&^") {
+        // 초대 상태 저장
+        const usersArr = JSON.parse(messageObject.text);
+        const users = [...usersArr];
+        users.pop();
+        users.pop();
+        const room = usersArr[usersArr.length - 2];
+
+        const copy = [...gameLists];
+        copy.push(room);
+
+        setGameLists(copy);
+        setToastUser(users);
+        setRoomData(room);
+      } else if (messageObject.text.endsWith("!#%&(")) {
+        // 유저 입장 구분
+        const arr = messageObject.text.split(":");
+        const gameId = arr[1];
+        const userData = arr[0];
+
+        const copy = [...gameLists];
+        const index = copy.findIndex((value) => value.id === gameId);
+
+        copy[index].users = [...copy[index].users, userData];
+
+        setGameLists(copy);
+      } else if (messageObject.text.endsWith(")*^$@")) {
+        // 유저 퇴장 구분
+        const arr = messageObject.text.split(":");
+        const gameId = arr[1];
+        const userData = arr[0];
+
+        const copy = [...gameLists];
+        const index = copy.findIndex((value) => value.id === gameId);
+
+        copy[index].users = copy[index].users.filter(
+          (value: any) => value !== userData,
+        );
+
+        setGameLists(copy);
+      } else if (messageObject.text.endsWith("~!@##")) {
+        const arr = messageObject.text.split(":");
+        const gameId = arr[0];
+
+        const copy = [...gameLists];
+        const index = copy.findIndex((value) => value.id === gameId);
+
+        copy[index].status = "게임중";
+        setGameLists(copy);
+      } else if (messageObject.text.endsWith("~!a%2@##")) {
+        const arr = messageObject.text.split(":");
+        const gameId = arr[0];
+
+        const copy = [...gameLists];
+        const index = copy.findIndex((value) => value.id === gameId);
+
+        copy[index].status = "대기중";
+        setGameLists(copy);
+      } else {
+        // 메시지 데이터, 작성 유저 상태 저장
+        const message = {
+          id: messageObject.userId,
+          text: messageObject.text,
+        };
+
+        console.log(message);
+        setMessages((prev) => [...prev, message]);
+      }
     });
+
+    // 채팅 기록 확인
+    socket.on("messages-to-client", (messagesObject) => {
+      console.log(messagesObject);
+    });
+
+    // 유저 join확인
+    socket.on("join", (users) => {
+      console.log(users);
+    });
+
+    // 유저 leave확인
+    socket.on("leave", (users) => {
+      console.log(users);
+    });
+
     return () => {
       socket.off("message-to-client");
+      socket.off("join");
+      socket.off("leave");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
-  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleMessage();
+  //팝업 변화 감지
+  useEffect(() => {
+    if (toastUser[0] !== "" && user.id) {
+      if (toastUser.includes(user.id)) {
+        console.log(roomData);
+        setToast(true);
+      }
     }
-  };
-  const handleMessage = () => {
-    if (!value) {
-      return alert("전송할 메시지를 입력해주세요:)");
-    }
-    // 메시지 전송하는 부분 구현
-    socket.emit("message-to-server", value);
-    inputRef?.current?.focus();
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toastUser]);
 
   const { result: userInfo }: FetchResultUser = useFetch({
     url: `https://fastcampus-chat.net/user?userId=${token?.id}`,
@@ -178,6 +301,20 @@ const GameLists = () => {
     }
   }, []);
 
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleMessage();
+    }
+  };
+  const handleMessage = () => {
+    if (!value) {
+      return alert("전송할 메시지를 입력해주세요:)");
+    }
+    // 메시지 전송하는 부분 구현
+    socket.emit("message-to-server", value);
+    inputRef?.current?.focus();
+  };
+
   if (isAuthenticated) {
     return (
       <Container
@@ -212,16 +349,16 @@ const GameLists = () => {
           <Box overflowY="auto" maxHeight="350px">
             <Grid templateColumns="repeat(2, 1fr)" gap={3}>
               {gameLists.map((game) => (
-                <GameCard key={game.id} game={game} />
+                <GameCard key={game.id} game={game} socket={socket} />
               ))}
             </Grid>
           </Box>
           <Box bg="white" borderRadius="5">
             <Box overflowY="auto" maxHeight="200px" height="200px">
-              {messages.map((message: Message, index) => (
+              {messages.map((message, index) => (
                 <MyChatBubble
                   key={index}
-                  userId={message?.userId}
+                  userId={message?.id}
                   text={message?.text}
                 />
               ))}
@@ -334,6 +471,13 @@ const GameLists = () => {
           </Card>
         </Box>
         {modal ? <CreateGameModal setModal={setModal} socket={socket} /> : null}
+        {toast && roomData ? (
+          <ToastNotice
+            roomData={roomData}
+            setToast={setToast}
+            socket={socket}
+          />
+        ) : null}
       </Container>
     );
   }
