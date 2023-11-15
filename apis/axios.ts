@@ -8,12 +8,4 @@ const instance = axios.create({
   },
 });
 
-instance.interceptors.request.use(config => {
-  if (!config.headers.Authorization) return config;
-});
-
-instance.interceptors.response.use(response => {
-  return console.log(response);
-});
-
 export default instance;
