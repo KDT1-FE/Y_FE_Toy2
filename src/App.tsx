@@ -21,9 +21,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         {isAuthenticated ? (
           <Route element={<Layout />}>
-            <Route index element={<ChannelPage />} />
-            <Route path="/" element={<ChannelList />} />
-            <Route path="/my-chats" element={<MyChannels />} />
+            <Route element={<ChannelPage />}>
+              <Route path="/" element={<ChannelList />} />
+              <Route path="/my-chats" element={<MyChannels />} />
+            </Route>
             <Route path="/chats/:id" element={<Chats />} />
           </Route>
         ) : (
