@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../hooks/useAuth";
 import Logout from "./Logout";
 import { ThemeContext } from "../App";
 import { lightTheme } from "../style/theme";
+import useApi from "../hooks/useApi";
 
 interface MenuListItem {
   key: number;
@@ -12,9 +13,46 @@ interface MenuListItem {
   text: string;
 }
 
+interface User {
+  id: string;
+  name: string;
+  picture: string;
+}
+
+interface ResponseValue {
+  auth: boolean;
+  user?: User;
+}
+
 const Header = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { accessToken } = useContext(AuthContext);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const { getData } = useApi();
+
+  useEffect(() => {
+    // 현재 로그인한 유저 정보 출력
+    const checkCurrentUser = async () => {
+      if (!accessToken) {
+        console.log("No access token available.");
+        return;
+      }
+      try {
+        const response: ResponseValue = await getData(
+          "https://fastcampus-chat.net/auth/me"
+        );
+        if (response.auth && response.user) {
+          setCurrentUser(response.user);
+          console.log("Current User:", response.user);
+        } else {
+          console.log("Authentication failed or no user data.");
+        }
+      } catch (error) {
+        console.error("Error fetching current user information:", error);
+      }
+    };
+    checkCurrentUser();
+  }, [accessToken]);
 
   const menuList: MenuListItem[] = [
     {
@@ -46,12 +84,23 @@ const Header = () => {
       <UserBar>
         <UserInfo>
           {accessToken ? (
-            <Logout></Logout>
-          ) : (
             <>
+              <UserProfile>
+                <UserImg src={currentUser?.picture} />{" "}
+                <UserName to={""}>{currentUser?.name}</UserName>님
+                <UserSubMenu>
+                  <StyledLink to={`profiles/:${currentUser?.id}`}>
+                    내 프로필 가기
+                  </StyledLink>
+                  <Logout />
+                </UserSubMenu>
+              </UserProfile>
+            </>
+          ) : (
+            <UserProfile>
               <StyledLink to={"login"}>로그인</StyledLink> |{" "}
               <StyledLink to={"signup"}>회원가입</StyledLink>
-            </>
+            </UserProfile>
           )}
         </UserInfo>
         <ToggleBtn onClick={toggleTheme}>
@@ -105,11 +154,18 @@ const StyledLink = styled(Link)`
 const UserBar = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: right;
   align-items: center;
   gap: 1em;
   font-size: 0.9em;
 `;
-const UserInfo = styled.div``;
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+  gap: 2em;
+`;
 const ToggleBtn = styled.button`
   padding: 0;
   background-color: transparent;
@@ -129,4 +185,60 @@ const ToggleBtn = styled.button`
       opacity: 0.8;
     }
   }
+`;
+const UserSubMenu = styled.div`
+  position: absolute;
+  background-color: white;
+  border: 1px solid #f2f2f2;
+  border-radius: 1em;
+  width: 8em;
+  height: 4em;
+  top: 1.7em;
+  left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2em;
+  opacity: 0;
+  pointer-events: auto;
+  button {
+    padding: 0;
+    background-color: transparent;
+    appearance: none;
+    border: none;
+    font-size: inherit;
+    font-weight: inherit;
+    &:hover {
+      color: #f43630;
+      font-weight: 700;
+    }
+  }
+`;
+const UserProfile = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  position: relative;
+  &:hover {
+    & ${UserSubMenu} {
+      opacity: 1;
+    }
+  }
+`;
+const UserImg = styled.img`
+  width: 2em;
+  height: 2em;
+  border-radius: 2em;
+`;
+
+const UserName = styled(Link)`
+  font-size: 1.1em;
+  text-decoration: none;
+  color: inherit;
+  &:hover {
+    color: #f43630;
+  }
+  margin-right: 0.4em;
 `;
