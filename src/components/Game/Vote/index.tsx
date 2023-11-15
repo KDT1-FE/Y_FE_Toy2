@@ -55,6 +55,7 @@ const Vote: React.FC<VoteProps> = ({
     };
 
     fetchDataFromFirebase();
+    // eslint-disable-next-line
   }, []);
 
   const user = useRecoilValue(userState);

@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 export interface UserState {
-  id: string;
+  id: string | null;
   isLoggedIn: boolean;
 }
 
