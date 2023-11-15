@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Send } from '@mui/icons-material';
 import { useRecoilValue } from 'recoil';
+import toast from 'react-hot-toast';
 import search from './searchWord';
 import {
   CurrentRateType,
@@ -13,7 +14,7 @@ import {
 } from '../../../types/gameType';
 import timeLimit from './timer/timeLimit';
 import { userState } from '../../../atoms';
-import { getRate, updateData, updateRate } from '../../../utils/utils';
+import { updateRate } from '../../../utils/utils';
 
 type Props = WordsType &
   CurrentRateType &
@@ -124,7 +125,7 @@ export default function InputWord({
         inputValue.charAt(0)
       ) {
         if (existCheck) {
-          alert('이미 사용된 단어입니다');
+          toast.error('이미 사용된 단어입니다');
           return false;
         }
         setWords([...words, inputValue]);
@@ -132,10 +133,10 @@ export default function InputWord({
         inputElement.value = '';
         timeLimit(start, setTime);
       } else {
-        alert('끝말이 이어지지 않습니다');
+        toast.error('끝말이 이어지지 않습니다');
       }
     } else {
-      alert('단어를 입력해주세요');
+      toast.error('단어를 입력해주세요');
     }
     return true;
   };
@@ -157,14 +158,14 @@ export default function InputWord({
               if (isRealWord) {
                 handleSubmit(e);
               } else {
-                alert('존재하지 않는 단어입니다!');
+                toast.error('존재하지 않는 단어입니다!');
               }
             } else {
-              alert('형식에 맞지 않는 입력입니다!');
+              toast.error('형식에 맞지 않는 입력입니다!');
             }
           }
         } else {
-          alert('시작 버튼을 눌러주세요!');
+          toast.error('시작 버튼을 눌러주세요!');
         }
       }}
     >

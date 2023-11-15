@@ -93,18 +93,14 @@ export const getRate = async (
   setRate: Dispatch<React.SetStateAction<number>>,
 ) => {
   const users: { name: string; correct: number }[] = [];
-  try {
-    const userData = await getDocs(collection(db, 'user'));
-    userData.docs.forEach((doc) => {
-      users.push({ name: doc.data().name, correct: doc.data().correct });
-      if (doc.id === id) {
-        setRate(doc.data().correct);
-      }
-    });
-    setPeoples(users);
-  } catch (error) {
-    console.log(error);
-  }
+  const userData = await getDocs(collection(db, 'user'));
+  userData.docs.forEach((doc) => {
+    users.push({ name: doc.data().name, correct: doc.data().correct });
+    if (doc.id === id) {
+      setRate(doc.data().correct);
+    }
+  });
+  setPeoples(users);
 };
 
 // 회원정보 업데이트 함수

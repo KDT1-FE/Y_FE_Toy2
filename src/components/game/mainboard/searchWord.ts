@@ -18,12 +18,11 @@ const search = async (word: string): Promise<boolean> => {
     if (responseData.length === 0) {
       return false;
     }
-    console.log(responseData);
 
     return true;
   } catch (error) {
     console.log(error);
-    throw error; // You can also handle or rethrow the error as needed.
+    throw error;
   }
 };
 
