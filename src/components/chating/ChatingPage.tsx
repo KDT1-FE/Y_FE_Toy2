@@ -36,20 +36,21 @@ export default function ChatingPage() {
   const pathname = usePathname();
   const chatId = pathname.split('/')[2];
   const accessToken = getCookie('accessToken');
-  const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
   useEffect(() => {
     getUsers();
   }, [getUserToggle]);
 
   useEffect(() => {
+    const FetchMessagesInterval: any = setInterval(() => {
+      console.log(1);
+      socket.emit('fetch-messages');
+    }, 2000);
     try {
       socket.on('connect', () => {
         console.log('Socket connected');
-        setTimeout(() => {
-          console.log(1);
-          socket.emit('fetch-messages');
-        }, 2000);
+        FetchMessagesInterval();
       });
 
       socket.on('disconnect', () => {
@@ -61,6 +62,7 @@ export default function ChatingPage() {
 
         console.log(messageObject);
         setMessages(messageObject.messages.reverse());
+        clearInterval(FetchMessagesInterval);
       });
 
       socket.on('message-to-client', (messageObject) => {
