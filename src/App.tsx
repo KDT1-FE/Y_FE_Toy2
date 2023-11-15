@@ -7,7 +7,7 @@ import PageNotFound from "./components/PageNotFound";
 import { darkTheme, lightTheme } from "./style/theme";
 import { useEffect, useState } from "react";
 import { DarkModeProvider } from "./hooks/useDarkMode";
-import Profile from "./components/Profile/Profile";
+import Profile from "./components/Profile/Main/Profile";
 import MainContents from "./pages/MainContents";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";

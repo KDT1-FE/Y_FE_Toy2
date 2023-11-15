@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import useUserData from "./useUserData";
+import useUserData from "../useUserData";
 import { useCallback, useEffect, useState } from "react";
-import { theme } from "./../../style/theme";
+import { theme } from "../../../style/theme"; 
 import {
   doc,
   setDoc,
@@ -15,8 +15,9 @@ import {
   deleteField,
   arrayRemove
 } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
+import { db } from "../../../firebase/firebase";
 import ProfileFeedComment from "./ProfileFeedComment";
+
 
 const ProfileFeedDetailContainer = styled.div`
   width: 1200px;

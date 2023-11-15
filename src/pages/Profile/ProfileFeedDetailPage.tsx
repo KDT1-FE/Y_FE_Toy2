@@ -1,4 +1,4 @@
-import ProfileFeedDetail from "../../components/Profile/ProfileFeedDetail";
+import ProfileFeedDetail from "../../components/Profile/Feed/ProfileFeedDetail";
 
 function ProfileFeedDetailPage(): JSX.Element {
   return (

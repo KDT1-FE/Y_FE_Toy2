@@ -2,7 +2,7 @@ import styled from "styled-components";
 import ProfileInfo from "./ProfileInfo";
 import ProfileFeed from "./ProfileFeed";
 import { doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
+import { db } from "../../../firebase/firebase";
 import { useState, useEffect } from "react";
 import {
   getStorage,
@@ -13,10 +13,10 @@ import {
 } from "firebase/storage";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "react-modal";
-import InputStyle from "../../style/InputStyle";
-import { theme } from "../../style/theme";
-import StyledButton from "../../style/ButtonStyle";
-import useUserData from "./useUserData";
+import InputStyle from "../../../style/InputStyle";
+import { theme } from "../../../style/theme";
+import StyledButton from "../../../style/ButtonStyle";
+import useUserData from "../useUserData";
 const ProfileContainer = styled.div`
   width: 100%;
 
@@ -155,7 +155,7 @@ function Profile() {
     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286"
   );
 
-  const { userData, feedData } = useUserData();
+  const { userData, feedData, fetchData } = useUserData();
 
   const [isModalShow, setIsModalShow] = useState(false);
 
@@ -235,14 +235,16 @@ function Profile() {
               setDoc(cityRef, {
                 [`${Feed.feedId}`]: Feed
               }).then(() => {
-                navigate(`/profiles/${userData.id}`)
+                fetchData()
+                setIsModalShow(false)
               });
             } else {
               const cityRef = doc(db, "Feeds", userData.id);
               updateDoc(cityRef, {
                 [`${Feed.feedId}`]: Feed
               }).then(() => {
-                navigate(`/profiles/${userData.id}`)
+                fetchData()
+                setIsModalShow(false)
               });
             }
           }

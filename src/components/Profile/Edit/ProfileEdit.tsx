@@ -1,17 +1,17 @@
 import styled from "styled-components";
 import { BsFillCameraFill } from "react-icons/bs";
-import InputStyle from "../../style/InputStyle";
-import StyledButton from "../../style/ButtonStyle";
+import InputStyle from "../../../style/InputStyle";
+import StyledButton from "../../../style/ButtonStyle";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, ChangeEvent } from "react";
 import Modal from "react-modal";
-import useUserData from "./useUserData";
+import useUserData from "../useUserData";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
-import useApi from "../../hooks/useApi";
+import { db } from "../../../firebase/firebase";
+import useApi from "../../../hooks/useApi";
 import { useContext } from "react";
-import { AuthContext } from "../../hooks/useAuth";
+import { AuthContext } from "../../../hooks/useAuth";
 
 const ProfileEditContainer = styled.div`
   width: 100%;

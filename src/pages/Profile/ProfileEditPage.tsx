@@ -1,4 +1,4 @@
-import ProfileEdit from "../../components/Profile/ProfileEdit";
+import ProfileEdit from "../../components/Profile/Edit/ProfileEdit";
 
 function ProfileEditPage(): JSX.Element {
   return (
