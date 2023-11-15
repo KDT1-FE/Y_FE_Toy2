@@ -1,9 +1,9 @@
 import { io } from "socket.io-client";
 import { authState } from "../recoil/atoms/authState";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue as recoil } from "recoil";
 
 const connect = (chatId: string) => {
-  const auth = useRecoilValue(authState);
+  const auth = recoil(authState);
 
   const socket = io(
     `https://fastcampus-chat.net/${
