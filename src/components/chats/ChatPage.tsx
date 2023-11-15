@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import MyChatItem from '@/components/chats/MyChatItem';
 import SearchMyChat from '@/components/chats/SearchMyChat';
 // svgr import
-import AddChat from '../../../public/assets/addChat.svg';
 import { TbMessageCirclePlus } from 'react-icons/tb';
 import { Chat, searchChatsState, searchInputState } from './chatsStore';
 import { useRouter } from 'next/navigation';
@@ -16,11 +15,16 @@ import { sortTime } from './useFormatCreatedAt';
 
 import { getMyChats, getAllChats, partChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
+import EnterChatRoomModal from './EnterChatRoomModal';
+
 const MyChats = ({ userType }: { userType: string }) => {
   const [addChatOpen, setAddChatOpen] = useState(false);
+  const [chatModalOpen, setChatModalOpen] = useState(false);
   // 검색창에 입력 중에 올바른 검색어 비교 위해 Input 값 전역 상태 관리
   const filterInputValue = useRecoilValue(searchInputState);
   const filterChats = useRecoilValue(searchChatsState);
+
+  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
 
   const router = useRouter();
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
@@ -29,8 +33,8 @@ const MyChats = ({ userType }: { userType: string }) => {
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       if (chat.users.every((user) => user.id !== userId)) {
-        partChats(chat.id);
-        router.push(`/chating/${chat.id}`);
+        setSelectedChat(chat);
+        setChatModalOpen(true);
         console.log('새로 입장 성공');
       } else {
         router.push(`/chating/${chat.id}`);
@@ -39,6 +43,16 @@ const MyChats = ({ userType }: { userType: string }) => {
     }
   };
 
+  const onEnterHandler = () => {
+    if (selectedChat && selectedChat.id) {
+      partChats(selectedChat.id);
+      setChatModalOpen(false);
+      router.push(`/chating/${selectedChat.id}`);
+      console.log('새로 입장 성공');
+    } else {
+      alert('입장 실패');
+    }
+  };
   // react-query로 조건부 fetch
   const { data, isLoading } = useQuery<Chat[]>({
     queryKey: ['getChatsKey'],
@@ -47,12 +61,12 @@ const MyChats = ({ userType }: { userType: string }) => {
     refetchInterval: 1000,
   });
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   const onAddHandler = () => {
     setAddChatOpen(!addChatOpen);
+  };
+
+  const onModalHandler = () => {
+    setChatModalOpen(!chatModalOpen);
   };
 
   return (
@@ -65,6 +79,13 @@ const MyChats = ({ userType }: { userType: string }) => {
       </ChatHeader>
       <SearchMyChat userType={userType} />
       <ChatList>
+        <EnterChatRoomModal
+          isOpen={chatModalOpen}
+          onEnterClick={onEnterHandler}
+          onCancelClick={onModalHandler}
+          selectedChat={selectedChat}
+        />
+        {isLoading && <Loading />}
         {userId && data ? (
           filterInputValue ? (
             filterChats.length > 0 ? (
@@ -161,7 +182,7 @@ const Loading = styled.div`
 
   animation: spin 1s linear infinite;
 
-  margin: 20rem auto 0;
+  margin: 8rem auto 0;
 
   @keyframes spin {
     0% {

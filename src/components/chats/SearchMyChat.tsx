@@ -40,7 +40,7 @@ const SearchMyChat = ({ userType }: { userType: string }) => {
 export default SearchMyChat;
 
 const SearchUserBox = styled.div`
-  background-color: white;
+  background-color: #fff;
 
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadow.search};
@@ -56,7 +56,7 @@ const SearchUserBox = styled.div`
 
 const SearchItem = styled.input`
   border: none;
-  width: 75%;
+  width: 70%;
   outline: none;
   font-size: ${({ theme }) => theme.fontSize.lg};
 `;

@@ -4,21 +4,28 @@ import styled from 'styled-components';
 import { Chat } from './chatsStore';
 import { formatCreatedAt } from '@/components/chats/useFormatCreatedAt';
 import { FaLock } from 'react-icons/fa6';
+import { eclipsText } from './ModalTextData';
 
 const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) => {
   const chatsPicture =
     isPrivate && users && users.length > 2 // private 한 그룹 채팅인 경우
       ? '/assets/groupPrivate.svg'
       : isPrivate && users && users.length === 2 // private이면서 1대1 채팅인 경우
-      ? users[1].picture
+      ? users[0].picture
       : !isPrivate && users && users.length > 2 // private 아니면서 그룹채팅인 경우
       ? '/assets/groupUsers.svg'
       : !isPrivate && users && users.length === 2
-      ? users[1].picture // private 하지 않으면서 1대1 인 경우
+      ? users[0].picture // private 하지 않으면서 1대1 인 경우
       : '/assets/noUser.svg';
 
   const usersNumber = users && users.length > 0 ? users.length : '';
-  const chatsName = users && users.length === 1 ? '상대방이 채팅방을 나간 상태입니다.' : name;
+
+  const chatsName =
+    users && users.length === 1
+      ? '상대방이 채팅방을 나갔습니다.'
+      : users && users.length === 2
+      ? users[0].username
+      : name;
 
   return (
     <ChatBox onClick={onClick}>
@@ -29,7 +36,7 @@ const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) =>
             {chatsName} <span>{usersNumber}</span>
           </ChatName>
         </ChatPart>
-        <LateMessage>{latestMessage ? latestMessage.text : ''} </LateMessage>
+        <LateMessage>{latestMessage ? eclipsText(latestMessage.text, 20) : ''} </LateMessage>
       </ChatInfo>
       <MessageCount>
         <ReceiveTime>{latestMessage ? formatCreatedAt(latestMessage.createdAt) : ''}</ReceiveTime>
@@ -105,7 +112,10 @@ const LateMessage = styled.p`
   color: ${({ theme }) => theme.color.darkGray};
 
   padding: 0;
-  margin: 0;
+  margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const MessageCount = styled.div`
