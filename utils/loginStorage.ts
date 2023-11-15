@@ -1,10 +1,5 @@
 const storage = typeof window !== 'undefined' ? localStorage : null;
 
-export const isLoginStorage = () => {
-  const state = storage ? storage.login : null;
-  return !!state;
-};
-
 export const getStorage = (key: string, defaultValue = undefined) => {
   try {
     const storedValue = storage?.getItem(key);
@@ -18,7 +13,7 @@ export const getStorage = (key: string, defaultValue = undefined) => {
 
 export const setStorage = (key: string, value: string) => {
   try {
-    storage?.setItem(key, JSON.stringify(value));
+    storage?.setItem(key, value);
   } catch (error) {
     console.error(error);
   }
