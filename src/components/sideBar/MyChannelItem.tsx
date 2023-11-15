@@ -26,14 +26,14 @@ const MyChannelItem = ({ myChannelName, isPrivate, channelId }: Props) => {
         overflow="hidden"
         align="center"
         mx="1rem"
-        my="4px"
+        my="2px"
         p="4px"
         borderRadius="md"
         fontWeight={isActive ? 'bold' : 'normal'}
-        bg={isActive ? 'blue.500' : 'gray.50'}
+        bg={isActive ? 'blue.400' : 'gray.50'}
         color={isActive ? 'white' : 'black'}
       >
-        {isPrivate ? <LockIcon boxSize="1.5rem" /> : <Box boxSize="1.4rem" />}
+        {isPrivate ? <LockIcon boxSize="20px" /> : <Box boxSize="20px" />}
         <Box ml="1rem" mr="0.5rem" isTruncated>
           {title}
         </Box>

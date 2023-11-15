@@ -5,6 +5,7 @@ import { ToastId, useToast } from '@chakra-ui/react';
 import { splitChannelName } from '../utils';
 import { SOCKET } from '../constants/socket';
 import { getAuthUser } from '../api/user';
+import { Channel } from '../@types/channel';
 
 interface InviteResponseData {
   responseChat: {
@@ -17,6 +18,7 @@ interface InviteResponseData {
 }
 
 export const useInviteData = () => {
+  const [myChannelList, setMyChannelList] = useState<Channel[]>();
   const toast = useToast();
   const toastIdRef = useRef<ToastId>();
 
@@ -29,16 +31,18 @@ export const useInviteData = () => {
     serverSocket.on(SOCKET.INVITE, async (messages: InviteResponseData) => {
       if (!messages) return;
       const chatName = fetchInviteChannelName(messages.responseChat.name);
-      const userId = messages.responseChat.users;
-      const authId = await getAuthUser();
-      const invitedUserId = userId.filter((id) => authId == id);
       toastIdRef.current = toast({
-        description: `${chatName} 방에 초대되었습니다.`,
+        description: `${chatName} 방이 내 채팅에 추가되었습니다.`,
       });
+
+      const newMyChannelList = await getMyChannels();
+      console.log('newMyChannelList', newMyChannelList);
+      setMyChannelList(newMyChannelList);
     });
 
     return () => {
       serverSocket.off(SOCKET.INVITE);
     };
-  }, []);
+  }, [myChannelList]);
+  return { myChannelList };
 };

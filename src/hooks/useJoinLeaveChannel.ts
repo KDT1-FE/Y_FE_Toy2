@@ -35,7 +35,7 @@ export const useJoinLeaveChannels = (chatId: string) => {
       socket.off(SOCKET.JOIN);
       socket.off(SOCKET.LEAVE);
     };
-  }, []);
+  }, [chatId]);
 
   return { userList, setUserList };
 };
