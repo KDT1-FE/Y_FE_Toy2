@@ -14,6 +14,7 @@ import { Input } from '@material-tailwind/react';
 import axios from 'axios';
 import { editUser } from '@/app/users/users.utils';
 import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
+import Swal from 'sweetalert2';
 
 type FetchImageProps = {
 	file: string;
@@ -125,6 +126,7 @@ const ProfileModal = ({
 		}
 	};
 
+	const invalidImageType = ['svg', 'png', 'jpg', 'jpeg'];
 	const handleFileChange = () => {
 		let file = null;
 		if (fileInputRef.current?.files) {
@@ -134,7 +136,17 @@ const ProfileModal = ({
 				const base64DataUrl = e.target!.result as string;
 				setUserInput({ ...userInput, picture: base64DataUrl });
 			};
-			reader.readAsDataURL(file);
+			if (invalidImageType.includes(file.type.split('/')[1])) {
+				console.log(file.type.split('/')[1]);
+				reader.readAsDataURL(file);
+			} else {
+				Swal.fire({
+					text: '이미지 타입을 확인해주세요(svg, jpg, jpeg, png만 가능합니다)',
+					showCancelButton: false,
+					confirmButtonText: '확인',
+					confirmButtonColor: 'red',
+				});
+			}
 		}
 	};
 
