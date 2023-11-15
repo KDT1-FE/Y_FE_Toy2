@@ -36,7 +36,7 @@ instance.interceptors.response.use(
         const originalResponse = await axios.request(error.config);
         return originalResponse;
       } else {
-        window.localStorage.clear();
+        window.localStorage.removeItem(response.refreshToken);
         window.location.href = '/login';
       }
     }
