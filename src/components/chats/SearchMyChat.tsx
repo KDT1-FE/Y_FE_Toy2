@@ -1,75 +1,64 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { Chat, searchChatsState } from './chatsStore';
+import { Chat, searchChatsState, searchInputState } from './chatsStore';
 import { MdSearch } from 'react-icons/md';
 import { getAllChats, getMyChats } from './getChats';
 import { useQuery } from '@tanstack/react-query';
+import { debounce } from 'lodash';
 
 const SearchMyChat = ({ userType }: { userType: string }) => {
-  const [input, setInput] = useState<string>('');
+  const [input, setInput] = useRecoilState(searchInputState);
   const [filterChats, setFilteredChats] = useRecoilState(searchChatsState);
 
+  // react-query로 데이터 가져옴
   const { data: chats } = useQuery<Chat[], unknown>({
     queryKey: ['getChatsKey'],
     queryFn: userType === 'my' ? getMyChats : getAllChats,
     refetchOnWindowFocus: false,
     refetchInterval: 1000,
   });
-  const onInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setInput(e.target.value);
-      if (chats) {
-        const filteringChats = chats.filter((chat) => {
-          const filterValue = chat.name.toLowerCase().startsWith(e.target.value.toLowerCase());
-          return filterValue;
-        });
-        console.log('Filtering Chats:', filteringChats);
-        const filteredChats = [...filteringChats];
-        setFilteredChats(filteredChats);
-      }
-    },
-    [chats],
-  );
+  // 입력값 받아오고 filtering 된 값 filterChats에 저장해서 전역 관리
+  const onInputChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+    if (chats) {
+      const filteringChats = chats.filter((chat) => chat.name.includes(e.target.value));
+      setFilteredChats(filteringChats);
+    }
+  }, 300);
   return (
-    <Wrapper>
-      <SearchUserBox>
-        <SearchButton>
-          <MdSearch className="searchIcon" size="35" color="white" />
-        </SearchButton>
-        <SearchItem type="text" placeholder="검색" onChange={onInputChange} />
-      </SearchUserBox>
-    </Wrapper>
+    <SearchUserBox>
+      <SearchButton>
+        <MdSearch className="searchIcon" size="35" color="white" />
+      </SearchButton>
+      <SearchItem type="text" placeholder="검색" onChange={onInputChange} />
+    </SearchUserBox>
   );
 };
 
 export default SearchMyChat;
 
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
 const SearchUserBox = styled.div`
-  background-color: white;
+  background-color: #fff;
 
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadow.search};
 
-  width: 100%;
+  width: 96%;
   height: 3.5rem;
 
   display: flex;
   gap: 3%;
+
+  margin: 0 auto;
 `;
 
 const SearchItem = styled.input`
   border: none;
-  width: 32rem;
+  width: 70%;
   outline: none;
-  font-size: 1.2rem;
+  font-size: ${({ theme }) => theme.fontSize.lg};
 `;
 
 const SearchButton = styled.div`
@@ -82,4 +71,5 @@ const SearchButton = styled.div`
 
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
+  box-shadow: ${({ theme }) => theme.shadow.search};
 `;

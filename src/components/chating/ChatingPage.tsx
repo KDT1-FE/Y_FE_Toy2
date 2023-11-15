@@ -288,6 +288,36 @@ const MyMessageTime = styled.div`
 
   display: flex;
   flex-direction: column-reverse;
+<<<<<<< HEAD
+=======
+`;
+
+const Loading = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 50px;
+  height: 50px;
+
+  border: 5.5px solid rgba(255, 255, 255, 0.3);
+  border-top: 5.5px solid ${({ theme }) => theme.color.mainGreen};
+  border-radius: 50%;
+
+  animation: spin 1s linear infinite;
+
+  margin: 8rem auto 0;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+>>>>>>> c423fdcf2a9d43c89230080501c0c4f0ac51a450
 `;
 
 const Loading = styled.div`
