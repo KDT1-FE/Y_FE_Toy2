@@ -57,7 +57,7 @@ const GameChat: React.FC<GameChatProps> = ({
 }) => {
   const user = useRecoilValue(userState);
 
-  const [message, setMessage] = useState<Message>({
+  const [message] = useState<Message>({
     id: "",
     text: "",
   });
@@ -65,7 +65,7 @@ const GameChat: React.FC<GameChatProps> = ({
   // console.log("GameChat/ gameData:", gameData);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
-  const [users, setUsers] = useState<string[]>([]);
+  const [_, setUsers] = useState<string[]>([]);
   // console.log("users: ", users);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>("");
