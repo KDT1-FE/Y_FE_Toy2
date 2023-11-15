@@ -26,8 +26,7 @@ const config: Config = withMT({
 			colors: {
 				primary: '#FB72B4',
 				secondary: '#FFD4E9',
-				text: '#764242',
-				white: '#FFFFFF',
+				text: '#FF59A9',
 				fill: '#EFEFEF',
 			},
 			backgroundImage: {
