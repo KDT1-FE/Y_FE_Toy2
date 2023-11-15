@@ -39,7 +39,7 @@ export default function AllChatList() {
     return () => {
       serverSocket.off('new-chat');
     };
-  }, []);
+  }, [serverSocket]);
 
   return (
     <div className={styles.allContainer}>
