@@ -6,13 +6,9 @@ const getGameData = async (id: string) => {
 };
 
 const patchGameResult = async (id: string, data: object) => {
-  try {
-    const gameData = await pocketRequest.patch('game', id, data);
-    console.log(gameData);
-  } catch (error) {
-    console.error('Pocket API: GET 요청 실패');
-    console.log(error);
-  }
+  const gameData = await pocketRequest.patch('game', id, data);
+  console.log(gameData);
+  return gameData;
 };
 
 export { getGameData, patchGameResult };
