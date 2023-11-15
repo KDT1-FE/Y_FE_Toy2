@@ -23,7 +23,7 @@ const Footer = () => {
 	};
 
 	return (
-		<div className="w-full sm:w-[425px] md:w-[645px] h-14 flex justify-around items-center bg-primary mx-auto fixed inset-x-0 bottom-0">
+		<div className="w-full sm:w-[425px]  h-14 flex justify-around items-center bg-primary mx-auto fixed inset-x-0 bottom-0">
 			<Tooltip
 				content="유저들 👋"
 				animate={{

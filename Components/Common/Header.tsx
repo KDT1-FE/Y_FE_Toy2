@@ -12,7 +12,7 @@ const Header = () => {
 	else if (pathname === '/private') headerInfo = privates;
 
 	return (
-		<header className="flex w-full justify-between align-center py-3 ">
+		<header className="flex w-full justify-between align-center py-3 bg-bglight">
 			<strong className="text-3xl">{headerInfo.Heading}</strong>
 			<headerInfo.HeaderUl />
 		</header>
@@ -55,7 +55,7 @@ const OpenUl = () => {
 
 const friends = {
 	HeaderUl: UsersUl,
-	Heading: '집사들',
+	Heading: '냥집사',
 };
 
 const privates = {

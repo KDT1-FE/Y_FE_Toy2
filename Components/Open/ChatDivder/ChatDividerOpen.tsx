@@ -5,6 +5,7 @@ import { ChatListProps } from '../ChatList/ChatList.type';
 import { getCookie } from '@/Components/Login/Cookie';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAllChat, filterChat } from '@/app/private/chatting.utils';
+import icon_people from '@/public/OpenPeopleSvg.svg';
 import ChatList from '../ChatList/ChatList';
 import {
 	Tab,
@@ -13,6 +14,7 @@ import {
 	TabsBody,
 	TabsHeader,
 } from '@material-tailwind/react';
+import Image from 'next/image';
 
 const OpenChatDivider = ({ myChatList }: ChatListProps) => {
 	const data = [
@@ -34,14 +36,32 @@ const OpenChatDivider = ({ myChatList }: ChatListProps) => {
 	const { PublicChat } = filterChat(chatList.chats);
 	return (
 		<>
-			<Tabs value="open" className="overflow-y-scroll">
-				<TabsHeader>
-					{data.map((item) => (
-						<Tab key={item.value} value={item.value}>
-							{item.label}
-						</Tab>
-					))}
-				</TabsHeader>
+			<Tabs
+				value="open"
+				className="overflow-y-scroll w-full flex flex-col items-center"
+			>
+				<div className="w-[95%] shadow-md">
+					<TabsHeader className="w-56 bg-white">
+						{data.map((item) => (
+							<Tab
+								key={item.value}
+								value={item.value}
+								activeClassName="text-blue-500"
+							>
+								<div className="w-full flex items-center gap-2">
+									<Image
+										src={icon_people}
+										alt="candice"
+										width={10}
+										height={10}
+										className="rounded-full w-4 h-4 object-contain"
+									/>
+									<p>{item.label}</p>
+								</div>
+							</Tab>
+						))}
+					</TabsHeader>
+				</div>
 				<TabsBody>
 					<TabPanel value="open" className="min-h-[calc(80vh)]">
 						{PublicChat.length ? (

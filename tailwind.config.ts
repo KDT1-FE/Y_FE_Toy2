@@ -29,10 +29,13 @@ const config: Config = withMT({
 				text: '#FF59A9',
 				fill: '#EFEFEF',
 				bgfill: '#7E7E7E',
+				chat: '#5B5B5B',
+				bglight: '#EFEFEF',
 			},
 			backgroundImage: {
 				'trash-can': "url('../public/icon_trash.svg')",
 				'camera-icon': "url('../public/icon_camera.svg')",
+				'mountain-icon': "url('../public/icon_mountain.svg')",
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic':
 					'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',

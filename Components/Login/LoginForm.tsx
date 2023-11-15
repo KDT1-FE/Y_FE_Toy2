@@ -92,7 +92,9 @@ const LoginForm = () => {
 					로그인
 				</Button>
 				<Link href="/join" passHref>
-					<div className="text-md text-black mt-3">새로운 집사 되기!</div>
+					<div className="text-md text-black mt-3 transition-colors duration-300 ease-linear hover:text-white">
+						새로운 집사 되기!
+					</div>
 				</Link>
 			</form>
 			<Typography variant="h3" className="absolute bottom-8">
