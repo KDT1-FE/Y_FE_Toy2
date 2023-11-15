@@ -9,6 +9,7 @@ import formatTime from '@/utils/timeFormat';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import ChatListModal from '@/components/ChatList/ChatListModal';
 import { sortChatList } from '@/utils/chatList';
+import useConnectServerSocket from '@/hooks/useConnectServerSocket';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -53,6 +54,16 @@ export default function AllChatList() {
   const handleModal = () => {
     setIsModal(!isModal);
   };
+  const serverSocket = useConnectServerSocket();
+  useEffect(() => {
+    serverSocket.on('new-chat', ({ responseChat }) => {
+      console.log(responseChat);
+      setAllChatList(preState => [responseChat, ...preState]);
+    });
+    return () => {
+      serverSocket.off('new-chat');
+    };
+  }, []);
   return (
     <ul>
       <button
