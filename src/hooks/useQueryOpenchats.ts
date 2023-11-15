@@ -19,7 +19,7 @@ import filterOpenChats, {
 } from '../utils/filterOpenChats';
 import { userInfoConverter } from '../libs/firestoreConverter';
 import { userState } from '../atoms';
-import { UserInfoWithId, UserSimple } from '../types/User';
+import { User, UserInfoWithId, UserSimple } from '../types/User';
 
 export type ChatInfoWithId = ChatInfo & {
   id: string;
@@ -64,8 +64,9 @@ function useQueryOpenchats() {
     const openchatRef = collection(db, 'user').withConverter(userInfoConverter);
     const q = query(openchatRef, where('hashtags', 'array-contains-any', arr));
     const querySn = await getDocs(q);
-    querySn.forEach((doc) => {
-      data.push({ id: doc.id, ...doc.data() });
+    querySn.forEach(async (doc) => {
+      const userData = doc.data();
+      data.push({ id: doc.id, ...userData });
     });
     return data;
   };

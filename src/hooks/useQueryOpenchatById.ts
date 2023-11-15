@@ -19,12 +19,6 @@ function useQueryOpenchatById(chatId: string) {
   const getOpenchatData = useCallback(async () => {
     setIsQuering(true);
     try {
-      // chatId를 기준으로 방 상세 정보 가져오기
-      // const docRef = doc(db, 'openchat', chatId).withConverter(
-      //   ChatInfoConverter,
-      // );
-      // const docSn = await getDoc(docRef);
-      // if (docSn.exists()) setData(docSn.data());
       const datas = await Promise.all([
         privateApi.get<Root>(`chat/only?chatId=${chatId}`),
         privateApi.get<User[]>('users'),
@@ -53,6 +47,7 @@ function useQueryOpenchatById(chatId: string) {
     data,
     users,
     allUsers,
+    getOpenchatData,
   };
 }
 

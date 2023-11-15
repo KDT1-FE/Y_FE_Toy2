@@ -37,7 +37,8 @@ function OpenchatRoom() {
   const [messages, setMessages] = useState<MessageType[]>([]); // 소켓을 통해 받아온 메시지들
   const userStr = useRecoilValue(userState);
   const user = JSON.parse(userStr) as UserSimple;
-  const { isQuering, data, users, allUsers } = useQueryOpenchatById(chatId);
+  const { isQuering, data, users, allUsers, getOpenchatData } =
+    useQueryOpenchatById(chatId);
   const [isOpen, toggleOpen] = useCycle(false, true);
   const [open, setOpen] = useState(false);
   // 친구 검색 기능을 위한 state
@@ -208,7 +209,10 @@ function OpenchatRoom() {
         open={open}
         handleClose={handleClose}
         handleSearch={handleSearch}
+        users={users}
         allUsers={searchResults.length ? searchResults : allUsers}
+        chatId={chatId}
+        getOpenchatData={getOpenchatData}
       />
     </Box>
   );

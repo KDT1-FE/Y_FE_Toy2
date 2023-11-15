@@ -30,8 +30,20 @@ function useMutationParticipate() {
       if (isAxiosError(error)) toast.error('나가는중에 오류가 발생했습니다.');
     }
   }, []);
+  const invite = useCallback(async (chatId: string, users: string[]) => {
+    try {
+      const { data } = await privateApi.patch('chat/invite', {
+        chatId,
+        users,
+      });
+      toast.success(`${users.join(', ')} 친구가 초대되었습니다.`);
+    } catch (error) {
+      // 에러 발생시 toast로 메시지 보여주기
+      if (isAxiosError(error)) toast.error('초대과정에서 오류가 발생했습니다.');
+    }
+  }, []);
 
-  return { participate, leave };
+  return { participate, leave, invite };
 }
 
 export default useMutationParticipate;

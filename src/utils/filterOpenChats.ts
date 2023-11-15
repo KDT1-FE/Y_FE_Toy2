@@ -59,6 +59,21 @@ export function filterFriendsNotMe<T extends MyObject>(arr: T[]): T[] {
   return friends;
 }
 
+/**
+ * 모든 유저중에 초대할 친구를 필터링하는 함수입니다.
+ * @param arr1 모든 유저정보
+ * @param arr2 현재 이미 초대된 유저 id 배열
+ * @returns 초대할 친구 데이터의 배열
+ */
+export function filterInviteUsers<T extends MyObject>(
+  arr1: T[],
+  arr2: string[],
+): T[] {
+  const uniqueIds = new Set(arr2);
+  const filteredObjects = arr1.filter((obj) => !uniqueIds.has(obj.id));
+  return filteredObjects;
+}
+
 interface ChatObject {
   users: ChatUser[];
   hashtags: string[];
