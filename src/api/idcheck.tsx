@@ -7,5 +7,8 @@ export const idCheck = async (id) => {
     },
     body: JSON.stringify({ id }),
   });
-  return result;
+  const response = await result.json();
+  const res = response.isDuplicated;
+  console.log(res);
+  return res ;
 };
