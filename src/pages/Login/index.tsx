@@ -1,10 +1,10 @@
+import { Flex, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import useInput from "../../hooks/useInput";
-import SignUpModal from "../../components/Login/SignUpModal/index";
-import LoginForm from "../../components/Login/LoginForm";
 import styled from "styled-components";
 import backgroundImage from "../../assets/bg.png";
-import { Flex, Text } from "@chakra-ui/react";
+import LoginForm from "../../components/Login/LoginForm";
+import SignUpModal from "../../components/Login/SignUpModal/index";
+import useInput from "../../hooks/useInput";
 
 const Background = styled.div`
   background-image: url(${backgroundImage});
@@ -63,7 +63,6 @@ const Login = () => {
   }, []);
   const idInput = useInput("");
   const pwInput = useInput("");
-  // const [loginError, setLoginError] = useState("");
 
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   // 모달 토글
@@ -83,9 +82,6 @@ const Login = () => {
         <LoginForm
           idInput={idInput}
           pwInput={pwInput}
-          // loginError={loginError}
-          // setLoginError={setLoginError}
-          // handleLogin={handleLogin}
           toggleSignUpModal={toggleSignUpModal}
         />
         {isSignUpModalOpen && (
