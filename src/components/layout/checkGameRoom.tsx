@@ -36,6 +36,8 @@ import {
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
 import { useSetRecoilState } from 'recoil';
+import { Chat } from '../../interfaces/interface';
+import { sortCreatedAt } from '../../util/util';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
@@ -68,11 +70,13 @@ const CheckGameRoom = () => {
 
       setTotalItemsCount(allRoomsData.chats.length);
 
+      const createAtData: Chat[] = sortCreatedAt(allRoomsData);
+
       // 방번호 넣기
       const plusIndex = {
-        ...allRoomsData,
-        chats: allRoomsData.chats.map((room: any, index: any) => ({
-          ...room,
+        ...createAtData,
+        chats: createAtData.map((chat, index) => ({
+          ...chat,
           index: index + 1,
         })),
       };
@@ -84,8 +88,10 @@ const CheckGameRoom = () => {
 
       if (allChatState === 'possible') {
         // 풀방 확인
-        reversedRooms = reversedRooms.filter((item) => item.users.length < 4);
-        setTotalItemsCount(reversedRooms.length);
+        const plusIndex = reversedRooms.filter(
+          (item: Chat) => item.users.length < 4,
+        );
+        setTotalItemsCount(plusIndex.length);
       }
 
       // 서버에서 받아온 전체 데이터를 현재 페이지에 맞게 자름
@@ -93,6 +99,7 @@ const CheckGameRoom = () => {
       const endIndex = startIndex + itemsPerPage;
       const paginatedRooms = reversedRooms.slice(startIndex, endIndex);
 
+      console.log(paginatedRooms);
       setAllRooms(paginatedRooms);
     } catch (error) {
       console.error('Error retrieving data:', error);

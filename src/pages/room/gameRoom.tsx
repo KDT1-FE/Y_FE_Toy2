@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
@@ -11,33 +11,93 @@ import GameChatting from '../../components/template/GameChatting';
 // import CheckUser from '../../components/template/CheckUser';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
-import { roomIdState, usersInRoom } from '../../states/atom';
+import { sortCreatedAt } from '../../util/util';
+import { Chat, ChatResponse } from '../../interfaces/interface';
+import { getAllGameRooms } from '../../api';
 
 const GameRoom = () => {
   const { id } = useParams();
   const [chat, setChat] = useRecoilState(chattingIdState);
+  const [roomNumber, setRoomNumber] = useState<number | null>(null);
+  const [roomUser, setRoomUser] = useState<number | null>(null);
+  const [allRooms, setAllRooms] = useState<ChatResponse | null>(null);
 
   useEffect(() => {
     if (id) {
       setChat(id.substring(1));
     }
+    fetchRoomNumber();
+    if (allRooms && roomNumber && id) {
+      fetchRoomUser();
+    }
   }, [id, setChat]);
   // controlGameRoomReload(chat);
   controlBack();
-  console.log(chat);
 
-  const roomId = useRecoilValue(roomIdState);
-  const users = useRecoilValue(usersInRoom);
-  console.log(users);
+  const fetchRoomNumber = async () => {
+    try {
+      const allRoomsData = await getAllGameRooms();
+      setAllRooms(allRoomsData);
+      const createAtData: Chat[] = await sortCreatedAt(allRoomsData);
+      // 방번호 넣기
+      const plusIndex = {
+        ...createAtData,
+        chats: createAtData.map((chat, index) => ({
+          ...chat,
+          index: index + 1,
+        })),
+      };
+
+      const findIndex = async (
+        chatData: ChatResponse,
+        chatId: string,
+      ): Promise<number | null> => {
+        const foundChat = await plusIndex?.chats.find(
+          (chat) => chat.id === chatId,
+        );
+        if (foundChat) {
+          return foundChat.index;
+        }
+        return null;
+      };
+
+      const roomData = await findIndex(plusIndex, chat);
+      setRoomNumber(roomData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchRoomUser = async () => {
+    try {
+      const findUser = async (
+        chatData: ChatResponse | null,
+        chatId: string,
+      ): Promise<number | null> => {
+        const foundChat = await allRooms?.chats.find(
+          (chat) => chat.id === chatId,
+        );
+        if (foundChat) {
+          return foundChat.users.length;
+        }
+        return null;
+      };
+      const roomUser = await findUser(allRooms, chat);
+
+      setRoomUser(roomUser);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Game>
       <RoomHeader>
         <RoomInfo>
           <RoomInformation>방 번호</RoomInformation>
-          <RoomInformation>{roomId}</RoomInformation>
+          <RoomInformation>{roomNumber}</RoomInformation>
           <RoomInformation>인원 수 </RoomInformation>
-          <RoomInformation>{users} / 4</RoomInformation>
+          <RoomInformation>{roomUser} / 4</RoomInformation>
           {/* 인원수 추가 */}
         </RoomInfo>
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
