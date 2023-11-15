@@ -14,9 +14,8 @@ const AllUserBar = () => {
   const userData = useUserData();
 
   return (
-    <Box flex="1">
+    <Box>
       <Flex>
-        <Box flex="3"></Box>
         <Stack direction="row" h="100vh">
           <Divider mt="12" orientation="vertical" borderColor={'gray.400'} />
         </Stack>

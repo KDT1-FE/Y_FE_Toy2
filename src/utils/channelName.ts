@@ -40,7 +40,7 @@ export const filterChannels = (
       ? channels.filter((channel) => channel.name.split('#')[0].includes(title))
       : channels;
 
-  if (selectedCategory !== '') {
+  if (selectedCategory !== '' && selectedCategory !== '전체') {
     filteredChannels = filteredChannels.filter((channel) => {
       const channelCategory = channel.name.split('#')[1];
       return channelCategory === selectedCategory;

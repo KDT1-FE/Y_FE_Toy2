@@ -1,7 +1,6 @@
-import { Link, useLocation } from 'react-router-dom';
-import ChannelList from '../../components/channel';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import CreateChannelModal from '../../components/channel/modal/CreateChannelModal';
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react';
 import ChannelSearchInput from '../../components/channel/ChannelSearchInput';
 import AllUserBar from '../../components/allUserBar';
 
@@ -13,8 +12,8 @@ const ChannelPage = () => {
   };
 
   return (
-    <Flex>
-      <Box>
+    <Grid gridTemplateColumns={'1fr 250px'}>
+      <GridItem p={20}>
         <Flex gap="4">
           <Heading as="h1" fontSize="2xl" opacity={handleNavBarStyle('/')}>
             <Link to="/">전체 채팅</Link>
@@ -34,10 +33,12 @@ const ChannelPage = () => {
           <CreateChannelModal />
           <ChannelSearchInput />
         </Flex>
-        <ChannelList />
-      </Box>
-      <AllUserBar />
-    </Flex>
+        <Outlet />
+      </GridItem>
+      <GridItem>
+        <AllUserBar />
+      </GridItem>
+    </Grid>
   );
 };
 
