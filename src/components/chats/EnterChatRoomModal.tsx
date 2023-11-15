@@ -29,7 +29,7 @@ const ModalContainer = styled.div`
   left: 50%;
   border: 1px solid black;
   border-radius: 0.6rem;
-  background: #00956e;
+  background-color: ${({ theme }) => theme.color.mainGreen};
 `;
 
 const ModalMainText = styled.p`

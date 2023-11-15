@@ -9,11 +9,11 @@ const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) =>
     isPrivate && users && users.length > 2 // private 한 그룹 채팅인 경우
       ? '/assets/chat-private-line.svg'
       : isPrivate && users && users.length === 2 // private이면서 1대1 채팅인 경우
-      ? users[1].picture
+      ? users[0].picture
       : !isPrivate && users && users.length > 2 // private 아니면서 그룹채팅인 경우
       ? '/assets/groupUsers.svg'
       : !isPrivate && users && users.length === 2
-      ? users[1].picture // private 하지 않으면서 1대1 인 경우
+      ? users[0].picture // private 하지 않으면서 1대1 인 경우
       : '/assets/x.svg';
   const usersNumber = users && users.length > 0 ? users.length : '';
   const chatsName =
@@ -68,7 +68,7 @@ const ChatBox = styled.div`
   border-radius: 20px;
   font-weight: bold;
   &:hover {
-    background: #00956e;
+    background: ${({ theme }) => theme.color.mainGreen};
     color: #ffffff;
     font-weight: bold;
   }
@@ -147,5 +147,5 @@ const TypeCheckBox = styled.div`
 const PrivateIcon = styled(AiFillLock)`
   width: 1.5rem;
   height: 1.5rem;
-  color: #00956e;
+  color: ${({ theme }) => theme.color.mainGreen};
 `;
