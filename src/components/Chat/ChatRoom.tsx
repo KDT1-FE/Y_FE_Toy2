@@ -196,7 +196,6 @@ function ChatRoom({
               ))}
             </div>
           ))}
-          <div className="alert">테일러스위프트 님이 퇴장했습니다</div>
           <div>
             <div ref={messagesEndRef} />
           </div>
@@ -213,20 +212,14 @@ function ChatRoom({
             type="text"
             value={inputValue}
             onChange={handleChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleClick();
-              }
-            }}
+            // onKeyDown={(e) => {
+            //   if (e.key === "Enter") {
+            //     e.preventDefault();
+            //     handleClick();
+            //   }
+            // }}
           />
-          <button type="submit">
-            <img
-              src="/src/assets/images/up-arrow-ico.png"
-              alt="화살표"
-              width="20"
-            />
-          </button>
+          <input type="submit" value={"전송"}></input>
         </form>
       </div>
     </ChatRoomWrap>

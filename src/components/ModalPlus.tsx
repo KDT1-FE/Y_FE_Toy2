@@ -29,7 +29,7 @@ interface ModalExampleProps {
 
 const ModalExample: React.FC<
   ModalExampleProps & { addNewChatRoom: (name: string, users: User[]) => void }
-> = ({ setSelectedUsers, addNewChatRoom }) => {
+> = ({ setSelectedUsers, addNewChatRoom, setRoomName, loginUser }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
@@ -65,7 +65,6 @@ const ModalExample: React.FC<
   // 현재 온라인인 유저 실시간 출력
   useEffect(() => {
     if (!socket && accessToken) {
-      console.log("Creating new socket connection");
       const newSocket = io(`https://fastcampus-chat.net/server`, {
         extraHeaders: {
           Authorization: `Bearer ${accessToken}`,
