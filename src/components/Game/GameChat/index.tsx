@@ -7,10 +7,13 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../../recoil/atoms/userState";
 import ChatBubble from "../../common/ChatBubble";
 import SystemChat from "../../common/SystemChat";
 import Vote from "../Vote";
 import { Socket } from "../../Main/CreateGameModal";
+import MyChatBubble from "../../common/MyChatBubble";
 
 interface Message {
   id: string;
@@ -41,11 +44,7 @@ const GameChat: React.FC<GameChatProps> = ({
   onGameInfoReceived,
 }) => {
   console.log("GameChat/ gameData:", gameData);
-
-  const [message, setMessage] = useState<Message>({
-    id: "",
-    text: "",
-  });
+  const user = useRecoilValue(userState);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
   const [users, setUsers] = useState<string[]>([]);
@@ -65,6 +64,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
   const handleVoteResult = (result: string | null) => {
     setVoteResult(result);
+    console.log("Chat/ voteResult", voteResult);
   };
 
   useEffect(() => {
@@ -82,21 +82,22 @@ const GameChat: React.FC<GameChatProps> = ({
         return;
       }
       // 메시지 데이터, 작성 유저 상태 저장
-      const copy = { ...message };
-      copy.id = messageObject.userId;
-      copy.text = messageObject.text;
-      setMessage(copy);
+      setMessages((prevMessages: Message[]) => [
+        ...prevMessages,
+        { id: messageObject.userId, text: messageObject.text },
+      ]);
     });
+    return () => {
+      socket.off("message-to-client");
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket]);
+  }, [socket, voteResult]);
 
   useEffect(() => {
     // 유저 입장 메시지 수신
     socket.on("join", (responseData: UserResponse) => {
-      const systemMessage = `${responseData.joiners!.join(
-        ", ",
-      )} 님이 입장했습니다.`;
+      const systemMessage = `${responseData.joiners!.join} 님이 입장했습니다.`;
 
       setMessages([...messages, { id: "system", text: systemMessage }]);
       setUsers(responseData.users);
@@ -108,17 +109,17 @@ const GameChat: React.FC<GameChatProps> = ({
       setMessages([...messages, { id: "system", text: systemMessage }]);
       setUsers(responseData.users);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setMessages, socket]);
 
-  // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
-  useEffect(() => {
-    if (message.id !== "") {
-      console.log(message);
-      setMessages([...messages, message]);
+    if (voteResult) {
+      socket.on("message-to-client", () => {
+        const systemMessage = `${voteResult} 님이 최종라이어로 지목되었습니다.`;
+        setMessages([...messages, { id: "system", text: systemMessage }]);
+        setVoteResult(null);
+      });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message.text, message.id]);
+  }, [voteResult, setMessages, socket]);
 
   const submitMessage = () => {
     if (messageRef.current && messageRef.current.value) {
@@ -136,11 +137,12 @@ const GameChat: React.FC<GameChatProps> = ({
 
   return (
     <Card p={3} h="100%" mb="20px">
-      <CardBody>
+      <CardBody maxHeight="640px" overflowY="scroll">
         {messages.map((message: Message, index: number) =>
-          // 시스템 메시지인 경우 SystemMessage 컴포넌트 사용
           message.id === "system" ? (
             <SystemChat key={index} text={message.text} />
+          ) : message.id === user.id ? (
+            <MyChatBubble key={index} userId={message.id} text={message.text} />
           ) : (
             <ChatBubble key={index} userId={message.id} text={message.text} />
           ),
@@ -158,11 +160,7 @@ const GameChat: React.FC<GameChatProps> = ({
         {selectedUser && (
           <SystemChat text={`${selectedUser}님을 라이어로 지목했습니다.`} />
         )}
-        {voteResult !== null && (
-          <SystemChat
-            text={`${voteResult}님이 라이어로 최종 지목되었습니다.`}
-          />
-        )}
+        {voteResult && <SystemChat text={`투표 결과: ${voteResult}`} />}
       </CardBody>
       <InputGroup size="md">
         <Input
