@@ -5,8 +5,8 @@ import styled from "styled-components";
 const Bubble = styled.div`
   margin: 8px 0px 12px;
   padding: 8px;
-  background-color: #e2e8f0;
-  color: "black";
+  background-color: #3182ce;
+  color: white;
   width: fit-content;
   max-width: 300px;
   border-radius: 0 12px 12px 12px;
@@ -17,7 +17,7 @@ interface ChatBubbleProps extends BoxProps {
   text: string;
 }
 
-const ChatBubble: React.FC<ChatBubbleProps> = ({ userId, text }) => {
+const MyChatBubble: React.FC<ChatBubbleProps> = ({ userId, text }) => {
   return (
     <Container>
       <Text fontWeight="bold" mb="0px">
@@ -30,4 +30,4 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ userId, text }) => {
   );
 };
 
-export default ChatBubble;
+export default MyChatBubble;
