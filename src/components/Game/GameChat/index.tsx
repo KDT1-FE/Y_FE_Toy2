@@ -11,6 +11,8 @@ import ChatBubble from "../../common/ChatBubble";
 import SystemChat from "../../common/SystemChat";
 import Vote from "../Vote";
 import { Socket } from "../../Main/CreateGameModal";
+import { userState } from "../../../recoil/atoms/userState";
+import { useRecoilValue } from "recoil";
 
 interface Message {
   id: string;
@@ -20,6 +22,12 @@ interface Message {
 interface GameChatProps {
   socket: Socket;
   gameData: any;
+  current: string;
+  speaking: string;
+  num: number;
+  player: string[];
+  setNum: React.Dispatch<React.SetStateAction<number>>;
+  setSpeaking: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface UserResponse {
@@ -28,8 +36,19 @@ interface UserResponse {
   leaver?: string;
 }
 
-const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
-  console.log("GameChat/ gameData:", gameData);
+const GameChat: React.FC<GameChatProps> = ({
+  socket,
+  gameData,
+  current,
+  speaking,
+  player,
+  num,
+  setNum,
+  setSpeaking,
+}) => {
+  const user = useRecoilValue(userState);
+
+  // console.log("GameChat/ gameData:", gameData);
 
   const [message, setMessage] = useState<Message>({
     id: "",
@@ -38,7 +57,7 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
   const [users, setUsers] = useState<string[]>([]);
-  console.log("users: ", users);
+  // console.log("users: ", users);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>("");
   const [voteResult, setVoteResult] = useState<string | null>(null);
@@ -69,12 +88,21 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
         window.localStorage.setItem("keyword", gameInfo.keyword);
         window.localStorage.setItem("liar", gameInfo.liar);
         return;
+      } else if (messageObject.text.endsWith("~!@%^&")) {
+        const arr = messageObject.text.split(":");
+        const copy = { ...message };
+        copy.id = messageObject.userId;
+        copy.text = arr[0];
+        setNum((prev) => prev + 1);
+        setSpeaking(player[num + 1]);
+        setMessage(copy);
+      } else {
+        // 메시지 데이터, 작성 유저 상태 저장
+        const copy = { ...message };
+        copy.id = messageObject.userId;
+        copy.text = messageObject.text;
+        setMessage(copy);
       }
-      // 메시지 데이터, 작성 유저 상태 저장
-      const copy = { ...message };
-      copy.id = messageObject.userId;
-      copy.text = messageObject.text;
-      setMessage(copy);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +140,11 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
   const submitMessage = () => {
     if (messageRef.current && messageRef.current.value) {
       const messageValue = messageRef.current.value;
-      socket.emit("message-to-server", messageValue);
+      if (current === "개별발언") {
+        socket.emit("message-to-server", messageValue + ":" + "~!@%^&");
+      } else {
+        socket.emit("message-to-server", messageValue);
+      }
       messageRef.current.value = "";
     }
   };
@@ -159,6 +191,12 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
           type="text"
           placeholder="채팅내용"
           ref={messageRef}
+          disabled={
+            (current === "개별발언" && speaking === user.id) ||
+            current === "자유발언"
+              ? false
+              : true
+          }
           onKeyPress={handleKeyPress}
         />
         <InputRightElement width="4.5rem">

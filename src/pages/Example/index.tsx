@@ -44,6 +44,19 @@ const Example = () => {
 
         setToastUser(users);
         setRoomData(room);
+      } else if (messageObject.text.endsWith("!#%&(")) {
+        // // 유저 입장 구분
+        const arr = messageObject.text.split(":");
+        // const gameId = arr[1];
+        const userData = arr[0];
+
+        // const copy = [...gameList];
+        // const index = copy.findIndex((value) => value.id === gameId);
+
+        // copy[index].users = [...copy[index].users, userData];
+
+        // setGameList(copy);
+        setRoomData({ ...roomData, users: [...roomData.users, userData] });
       } else {
         // 메시지 데이터, 작성 유저 상태 저장
         const message = {
