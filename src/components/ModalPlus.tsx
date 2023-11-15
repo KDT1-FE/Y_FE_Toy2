@@ -24,11 +24,12 @@ export interface ChatI {
 interface ModalExampleProps {
   setRoomName: (name: string) => void;
   setSelectedUsers: (users: User[]) => void;
+  loginUser: User | null;
 }
 
 const ModalExample: React.FC<
   ModalExampleProps & { addNewChatRoom: (name: string, users: User[]) => void }
-> = ({ setRoomName, setSelectedUsers, addNewChatRoom }) => {
+> = ({ setRoomName, setSelectedUsers, addNewChatRoom, loginUser }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
@@ -109,26 +110,23 @@ const ModalExample: React.FC<
   };
 
   const handleCheckboxChange = (userId: string) => {
-    const isAlreadySelected = localSelectedUsers.some(
-      (user) => user.id === userId
-    );
-    if (isAlreadySelected) {
+    const isSelected = localSelectedUsers.some((user) => user.id === userId);
+
+    if (isSelected) {
       setLocalSelectedUsers(
         localSelectedUsers.filter((user) => user.id !== userId)
       );
     } else {
-      const userToAdd = users.find((user) => user.id === userId);
-      if (userToAdd) {
-        setLocalSelectedUsers([...localSelectedUsers, userToAdd]);
-      }
+      // 선택된 아이디만 추가
+      setLocalSelectedUsers([...localSelectedUsers, { id: userId }]);
     }
   };
 
-  const submitModal = () => {
-    setRoomName(roomNameInput);
-    setSelectedUsers(localSelectedUsers);
-    addNewChatRoom(roomNameInput, localSelectedUsers);
-    closeModal();
+  const submitModal = async () => {
+    await setRoomName(roomNameInput);
+    await setSelectedUsers([...localSelectedUsers, loginUser]);
+    await addNewChatRoom(roomNameInput, localSelectedUsers);
+    await closeModal();
   };
 
   return (
