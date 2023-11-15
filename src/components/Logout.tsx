@@ -26,13 +26,12 @@ function Logout() {
 
 export default Logout;
 
-const LogoutBtn = styled.button`
+const LogoutBtn = styled.span`
   padding: 0;
   background-color: transparent;
   appearance: none;
   border: none;
-  font-size: inherit;
-  font-weight: inherit;
+  color: black;
   cursor: pointer;
   &:hover {
     color: #f43630;
