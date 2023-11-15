@@ -71,7 +71,7 @@ const Header = () => {
     <NavBar>
       <SubMenu>
         <Logo>
-          <StyledLink to={""}>CHWIMIMATE</StyledLink>
+          <StyledLink to={"/"}>CHWIMIMATE</StyledLink>
         </Logo>
         <Menu>
           {menuList.map((menu) => (
@@ -89,7 +89,7 @@ const Header = () => {
                 <UserImg src={currentUser?.picture} />{" "}
                 <UserName to={""}>{currentUser?.name}</UserName>님
                 <UserSubMenu>
-                  <StyledLink to={`profiles/:${currentUser?.id}`}>
+                  <StyledLink to={`/profiles/:${currentUser?.id}`}>
                     내 프로필 가기
                   </StyledLink>
                   <Logout />
@@ -98,8 +98,8 @@ const Header = () => {
             </>
           ) : (
             <UserProfile>
-              <StyledLink to={"login"}>로그인</StyledLink> |{" "}
-              <StyledLink to={"signup"}>회원가입</StyledLink>
+              <StyledLink to={"/login"}>로그인</StyledLink> |{" "}
+              <StyledLink to={"/signup"}>회원가입</StyledLink>
             </UserProfile>
           )}
         </UserInfo>

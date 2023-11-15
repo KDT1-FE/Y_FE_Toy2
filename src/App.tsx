@@ -32,40 +32,40 @@ const router = createBrowserRouter([
     path: "",
     element: <Layout />,
     children: [
-      { path: "", element: <MainContents /> },
+      { path: "/", element: <MainContents /> },
       {
-        path: "profiles",
+        path: "/profiles",
         element: <Profile />
       },
       {
-        path: "profiles/:userid",
+        path: "/profiles/:userid",
         element: <ProfilePage />
       },
-      { path: "profiles/:userid/edit", element: <ProfileEditPage /> },
+      { path: "/profiles/:userid/edit", element: <ProfileEditPage /> },
       {
-        path: "login",
+        path: "/login",
         element: <Login />
       },
       {
-        path: "signup",
+        path: "/signup",
         element: <SignUp />
       },
       {
-        path: "chattest",
+        path: "/chattest",
         element: <ChatTest />
       },
       {
-        path: "chattst",
+        path: "/chattst",
         element: <ChatTesters />
       },
       {
-        path: "chatrm",
+        path: "/chatrm",
         element: <ChatRoom />
       }
     ]
   },
   {
-    path: "chat",
+    path: "/chat",
     element: <Chat />
   },
   {
@@ -90,5 +90,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-
