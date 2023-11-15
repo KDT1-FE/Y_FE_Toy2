@@ -20,6 +20,8 @@ const Login = () => {
       const result: LoginResToken = await login(data);
 
       if (result.accessToken && result.refreshToken) {
+        localStorage.setItem('accessToken', result.accessToken);
+        localStorage.setItem('refreshToken', result.refreshToken);
         alert('로그인에 성공하셨습니다');
 
         navigate('/');
