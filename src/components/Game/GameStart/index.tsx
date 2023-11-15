@@ -19,6 +19,7 @@ import useFireFetch from "../../../hooks/useFireFetch";
 interface GameStartProps {
   gameId: string;
   socket: Socket;
+  socketMain: Socket;
   status: string;
   users: string[];
   host: string;
@@ -34,6 +35,7 @@ interface UserWithSort {
 const GameStart: React.FC<GameStartProps> = ({
   gameId,
   socket,
+  socketMain,
   status,
   users,
   host,
@@ -103,7 +105,7 @@ const GameStart: React.FC<GameStartProps> = ({
 
     // 모든 클라이언트에게 게임 정보를 포함하는 이벤트 전송
     socket.emit("message-to-server", gameInfo + "~!@##");
-
+    socketMain.emit("message-to-server", gameId + ":" + "~!@##");
     // setShowStartModal(true);
   };
 
@@ -120,7 +122,10 @@ const GameStart: React.FC<GameStartProps> = ({
     socket.emit("message-to-server", gameInfo + "~##@!");
     fireFetch.updateData("game", gameId as string, { votedFor: [] });
     fireFetch.updateData("game", gameId as string, { status: "대기중" });
+
     setCurrent("게임종료");
+
+    socketMain.emit("message-to-server", gameId + ":" + "~!a%2@##");
     // setShowStartModal(false);
   };
 
