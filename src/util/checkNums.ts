@@ -6,7 +6,7 @@ const CheckNums = (): boolean => {
   console.log(nowUsers);
   const len = nowUsers.length;
 
-  return len === 4;
+  return len === 2;
 };
 
 export default CheckNums;

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
@@ -6,7 +6,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   chattingIdState,
   myMessageState,
-  onlineUserStateInGameRoom,
   roomIdState,
   usersInRoom,
 } from '../../states/atom';
@@ -24,14 +23,28 @@ const GameRoom: React.FC = () => {
   const [roomId, setRoomId] = useRecoilState(chattingIdState);
   const [buttonVisible, setButtonVisible] = useState(true);
   const [submitVisible, setSubmitVisible] = useState(false);
-  const [ans, setAns] = useState('');
-  const [myMessage, setMyMessage] = useRecoilState(myMessageState);
-  let cntRef = useRef(0);
+  const [whoIsCaptain, SetWhoIsCaptain] = useState('');
 
+  const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
+  const [answer, setAnswer] = useState<string>(''); // 답 지정하기
+  const [messages, setMessages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
+  const [userMessage, setUserMessage] = useState<{
+    chatId: string;
+    text: string;
+    userId: string;
+  }>({
+    chatId: '',
+    text: '',
+    userId: '',
+  });
+
+  const lastMessage = messages[messages.length - 1];
+  const myId = localStorage.getItem('id');
   useEffect(() => {
-    // 채팅방 주소값 가져오기
-    setMyMessage([]);
-  }, []);
+    if (lastMessage.text !== '') {
+      setUserMessage(lastMessage);
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
     if (id) {
@@ -39,155 +52,75 @@ const GameRoom: React.FC = () => {
     }
   }, [id, setRoomId]);
 
-  const shouldStartGame = CheckNums(); // 시작인원 설정
-  console.log(shouldStartGame);
-  const myId = localStorage.getItem('id');
+  // 게임로직 소켓
+  useEffect(() => {
+    gameSocket.connect();
+
+    gameSocket.emit('joinRoom', roomId);
+
+    gameSocket.on('quiz_master_set', (quizMasterId: string) => {
+      console.log(myId, quizMasterId);
+      if (true) {
+        if (myId === quizMasterId) {
+          alert('당신은 출제자 입니다!');
+        } else {
+          alert('새로운 출제자가 선정되었습니다!');
+        }
+        setIsQuizMasterAlertShown(true);
+      }
+    });
+
+    return () => {
+      gameSocket.off('quiz_master_set');
+    };
+  }, [roomId]);
+
+  const startGame = () => {
+    gameSocket.emit('start_game', { roomId, myId });
+    // setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
+  };
+
+  const handleSetAnswerChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setAnswer(event.target.value);
+  };
+
+  const submitSetAnswer = () => {
+    gameSocket.emit('set_answer', answer, { roomId, myId, notifyAll: true });
+
+    setAnswer(''); // 입력 필드 초기화
+  };
+  useEffect(() => {
+    gameSocket.on('alert_all', (message: string) => {
+      if (message) {
+        alert('문제 출제 끝');
+      }
+    });
+    return () => {
+      gameSocket.off('alert_all');
+    };
+  }, [roomId]);
 
   useEffect(() => {
-    // shouldStartGame이 true일 때만 실행
-    if (shouldStartGame && roomId) {
-      gameSocket.connect();
-      gameSocket.emit('joinRoom', roomId);
-
-      // 서버로부터 'game' 이벤트 수신 리스너 설정
-      gameSocket.on('game', (data) => {
-        // 여기에서 필요한 상태 업데이트나 UI 반영
-        console.log('this is', data);
-        if (data.isBtnVisible === false && data.isSubmitVisible === true) {
-          setButtonVisible(false);
-          cntRef.current += 1;
-          alert(`출제자는 바로 ${data.captain}`);
-        }
-
-        if (data.isSubmitVisible === true && data.captain === myId) {
-          setSubmitVisible(true);
-          cntRef.current += 1;
-        }
-
-        if (
-          data.isSubmitVisible === false &&
-          data.isBtnVisible === false &&
-          data.userId === ''
-        ) {
-          setSubmitVisible(false);
-          cntRef.current += 1;
-          alert('이제 퀴즈 시작');
-        }
-
-        if (
-          data.text === data.solution &&
-          data.userId !== data.captain &&
-          data.solution.length > 0
-        ) {
-          alert(`${data.userId}님이 승리했어요!`);
-          setButtonVisible(true);
-          cntRef.current = 0;
-          gameSocket.emit('game', {
-            roomId: roomId,
-            captain: '',
-            isBtnVisible: null,
-            isSubmitVisible: null,
-            solution: '',
-            text: '',
-            userId: '',
-          });
-          alert('다시 시작하려면 게임 시작 버튼을 눌러주세요');
-        }
-
-        if (
-          data.text === data.solution &&
-          data.userId === data.captain &&
-          data.solution.length > 0
-        ) {
-          alert('방장님 뭐해요?');
-          setButtonVisible(true);
-          cntRef.current = 0;
-          gameSocket.emit('game', {
-            roomId: roomId,
-            captain: '',
-            isBtnVisible: null,
-            isSubmitVisible: null,
-            solution: '',
-            text: '',
-            userId: '',
-          });
-          alert('다시 시작하려면 게임 시작 버튼을 눌러주세요');
-        }
-      });
-
-      return () => {
-        gameSocket.off('game');
-        gameSocket.disconnect();
-      };
+    if (userMessage) {
+      if (userMessage.userId === myId) {
+        gameSocket.emit('submit_answer', userMessage, { roomId, myId });
+      }
     }
-  }, [shouldStartGame, roomId, myId]);
-  console.log(cntRef.current);
-  useEffect(() => {
-    const lastMessage = myMessage[myMessage.length - 1];
-    if (lastMessage && lastMessage?.text !== '' && ans.length > 0) {
-      if (cntRef.current >= 0 && gameSocket?.connected) {
-        gameSocket.emit('game', {
-          roomId: roomId,
-          captain: myId,
-          isBtnVisible: false,
-          isSubmitVisible: false,
-          solution: ans,
-          text: lastMessage.text,
-          userId: lastMessage.userId,
-        });
+    const handleCorrectAnswer = (data: { winner: string }) => {
+      if (data.winner === myId) {
+        alert('축하합니다! 정답입니다!');
       } else {
-        console.warn('Socket is not connected or cntRef is less than 3.');
+        alert('누군가 정답을 맞췄습니다!');
       }
-    }
-  }, [cntRef.current, gameSocket, myId, roomId, ans, myMessage]);
+    };
+    gameSocket.on('correct_answer', handleCorrectAnswer);
 
-  useEffect(() => {
-    // 소켓이 존재하고 연결이 끊어진 경우
-    if (gameSocket && !gameSocket.connected) {
-      console.log('Socket disconnected. Reconnecting...');
-      gameSocket.connect();
-      if (roomId) {
-        gameSocket.emit('joinRoom', roomId);
-      }
-    }
-  }, [gameSocket, roomId]);
-
-  const handleGameStart = () => {
-    console.log('게임이 시작되었습니다!');
-    // 서버에 'game' 이벤트 전송
-    if (gameSocket?.connected) {
-      gameSocket.emit('game', {
-        roomId: roomId,
-        captain: myId,
-        isBtnVisible: false,
-        isSubmitVisible: true,
-        solution: '',
-        text: '',
-        userId: '',
-      });
-    } else {
-      console.warn('Socket is not connected.');
-    }
-  };
-
-  const handleSubmit = (answer: string) => {
-    console.log('정답 입력해주세요');
-    setAns(answer);
-    if (gameSocket?.connected) {
-      gameSocket.emit('game', {
-        roomId: roomId,
-        captain: myId,
-        isBtnVisible: false,
-        isSubmitVisible: false,
-        solution: answer,
-        text: '',
-        userId: '',
-      });
-    } else {
-      console.warn('Socket is not connected.');
-    }
-  };
-  controlBack();
+    return () => {
+      gameSocket.off('correct_answer', handleCorrectAnswer);
+    };
+  }, [roomId, gameSocket, userMessage]);
 
   const roomNum = useRecoilValue(roomIdState);
   const users = useRecoilValue(usersInRoom);
@@ -205,15 +138,22 @@ const GameRoom: React.FC = () => {
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
           <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-          {buttonVisible && shouldStartGame && (
-            <button onClick={handleGameStart}>게임 시작</button>
-          )}
-          {submitVisible && <AnswerForm onSubmit={handleSubmit} />}
+          <button onClick={startGame}>start game</button>
+          <div>
+            <input
+              type="text"
+              value={answer}
+              onChange={handleSetAnswerChange}
+            />
+            <button onClick={submitSetAnswer}>Submit Answer</button>
+          </div>
+          {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>
       </RoomHeader>
 
       <RoomMain>
         <Drawing />
+
         <GameChatting chatId={roomId} />
       </RoomMain>
       <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
