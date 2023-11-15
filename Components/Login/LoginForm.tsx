@@ -11,11 +11,7 @@ import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
 import Image from 'next/image';
 import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
-
-type IFormInput = {
-	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
-	password: string; // 사용자 비밀번호, 5자 이상 (필수!)
-};
+import { IFormInput } from './Login.types';
 
 const LoginForm = () => {
 	const loadingControl = useAsyncLoading();
@@ -30,8 +26,6 @@ const LoginForm = () => {
 	// 로그인 버튼 클릭 시
 	const onSubmit: SubmitHandler<IFormInput> = async ({ id, password }) => {
 		loadingControl(true);
-		const data = await fetchLogin(id, password);
-		console.log(data);
 		const { accessToken, refreshToken } = await fetchLogin(id, password);
 		// 현재 시간
 		const time = new Date();
