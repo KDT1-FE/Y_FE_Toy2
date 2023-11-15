@@ -12,13 +12,15 @@ import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
 export default function AllChatList() {
-  const [isModal, setIsModal] = useState(false);
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
+
   const getAllChat = async () => {
     const allChats: Chat[] = (await chatListAPI.getAllChatList()).data.chats;
     const sortedAllChatList = sortChatList(allChats);
     setAllChatList(sortedAllChatList);
   };
+
+  // 30초마다 채팅방 목록 재요청
   useEffect(() => {
     getAllChat();
     const timer = setInterval(() => {
@@ -28,9 +30,12 @@ export default function AllChatList() {
     return () => clearInterval(timer);
   }, []);
 
+  const [isModal, setIsModal] = useState(false);
+
   const handleModal = () => {
     setIsModal(!isModal);
   };
+
   const serverSocket = useConnectServerSocket();
   useEffect(() => {
     serverSocket.on('new-chat', ({ responseChat }) => {
