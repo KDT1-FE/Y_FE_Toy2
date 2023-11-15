@@ -72,7 +72,7 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
         const chatName = `1:1 Chat with ${user.name}`;
         // await getMyChats()
         if (user.name) {
-            // await getMyChats();
+            await getMyChats();
 
             const existingChat = myChats.find(chat => chat.name === chatName);
             
@@ -105,7 +105,7 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
                         // 생성된 채팅 방으로 이동
                         const data = await response.json();
                         const generatedChatId = `1on1_${user.id}_${userId}`;
-                        router.push(`/chating/${data.id}`);
+                        router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
                     } else {
                         console.error('Failed to create chat room');
                     }
@@ -125,10 +125,10 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
                     <UserInfo>
                         <UserName>{name}</UserName>
                         <UserState>
-                            <BiSolidCircle
-                                size="13"
-                                color={connectUserIdList.users.includes(id) ? '#00956e' : '#950000'}
-                            />
+                        <BiSolidCircle
+                            size="13"
+                            color={(connectUserIdList?.users || []).includes(id) ? '#00956e' : '#950000'}
+                        />
                             {connectUserIdList.users.includes(id) ? (
                                 <UserStateTextBlack>online</UserStateTextBlack>
                             ) : (

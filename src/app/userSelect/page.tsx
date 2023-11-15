@@ -45,9 +45,7 @@ function UserSelect() {
             const latestMessageQuery = JSON.stringify(chat.latestMessage);
 
             router.push(
-                `/chating/${chat.id}?name=${chat.name}&isPrivate=${
-                    chat.isPrivate
-                }&users=${users}&latestMessage=${encodeURIComponent(latestMessageQuery)}&updatedAt=${chat.updatedAt}`,
+                `/chating/${chat.id}`,
             );
         }
     };

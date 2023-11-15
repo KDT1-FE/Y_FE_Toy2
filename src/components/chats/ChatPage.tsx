@@ -29,6 +29,10 @@ const MyChats = ({ userType }: { userType: string }) => {
   const router = useRouter();
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
+  const navigateToUserSelection = () => {
+    router.push('userSelect'); // 적절한 경로로 수정하세요.
+};
+
   // 채팅방 들어갈 때 새 유저면 채팅방에 새로 참여시키고 기존 유저는 그냥 들어가기
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
@@ -73,7 +77,7 @@ const MyChats = ({ userType }: { userType: string }) => {
     <Wrapper>
       <ChatHeader>
         <MyChatBar>{userType === 'all' ? '오픈 채팅' : '내 채팅'}</MyChatBar>
-        <AddChatButton onClick={onAddHandler}>
+        <AddChatButton onClick={navigateToUserSelection}>
           <TbMessageCirclePlus className="addChatIcon" size="33" />
         </AddChatButton>
       </ChatHeader>
