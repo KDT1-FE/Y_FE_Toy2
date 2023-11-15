@@ -1,134 +1,115 @@
 import styled from "styled-components";
+import Carousel from "../components/Main/Carousel";
+import { db } from "../firebase/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+interface ProfileI {
+  name: string;
+  introText: string;
+  id: string;
+  hobby: string[];
+  backgroundImgUrl: string;
+  profileImgUrl: string;
+}
 
 function MainContents() {
+
+  const [profile, setProfile] = useState<ProfileI[]>([]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const usersCollection = collection(db, 'Users');
+        const querySnapshot = await getDocs(usersCollection);
+
+        const profileData = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            name: data.name || '',
+            introText: data.introText || '',
+            hobby: data.hobby || [],
+            backgroundImgUrl: data.backgroundImgUrl || '',
+            profileImgUrl: data.profileImgUrl || '',
+          };
+        });
+        setProfile(profileData);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    }
+    fetchProfile();
+  }, [])
+
   return (
     <Wrapper>
-      <Banner>메인 배너</Banner>
+        <Carousel />
       <FirstContent>
-        <TextSection>
-          <span className="small-title">프로필</span>
-          <span className="title">함께 할 멤버들의 취향 미리보기</span>
-          <span className="text">
-            프로필 사진, 자기소개, 관심사, 피드 등<br /> 취향으로 가득한
-            멤버들의 프로필로 <br />
-            나와 취향이 통하는지 확인할 수 있어요.
-          </span>
-        </TextSection>
-        <ImgSection />
+        <div className="inner">
+          <TextSection>
+            <span className="small-title">프로필</span>
+            <span className="title">함께 할 멤버들의<br /> 취향 미리보기</span>
+            <span className="text">
+              프로필 사진, 자기소개, 관심사, 피드 등<br /> 취향으로 가득한
+              멤버들의 프로필로 <br />
+              나와 취향이 통하는지 확인할 수 있어요.
+            </span>
+          </TextSection>
+          <img src="/src/assets/images/pc_mannerscore.webp" alt="이미지"/>
+        </div>
       </FirstContent>
       <SecondContent>
-        <TextSection>
-          <span className="small-title">프로필</span>
-          <span className="title">함께 할 멤버들의 취향 미리보기</span>
-          <Gallery>
-            <GalleryItem>
-              <Photo />
-              <UserInfo>
-                <div className="hobby">
-                  <div>등산</div>
-                  <div>요리</div>
-                  <div>헬스</div>
-                </div>
-                <div className="userName">유저네임</div>
-                <div className="userInfo">
-                  자기소개는 두 줄 이상이고 또 두 줄 이상이어야 하는데..
-                </div>
-              </UserInfo>
-            </GalleryItem>
-            <GalleryItem>
-              <Photo />
-              <UserInfo>
-                <div className="hobby">
-                  <div>등산</div>
-                  <div>요리</div>
-                  <div>헬스</div>
-                </div>
-                <div className="userName">유저네임</div>
-                <div className="userInfo">
-                  자기소개는 두 줄 이상이고 또 두 줄 이상이어야 하는데..
-                </div>
-              </UserInfo>
-            </GalleryItem>
-            <GalleryItem>
-              <Photo />
-              <UserInfo>
-                <div className="hobby">
-                  <div>등산</div>
-                  <div>요리</div>
-                  <div>헬스</div>
-                </div>
-                <div className="userName">유저네임</div>
-                <div className="userInfo">
-                  자기소개는 두 줄 이상이고 또 두 줄 이상이어야 하는데..
-                </div>
-              </UserInfo>
-            </GalleryItem>
-            <GalleryItem>
-              <Photo />
-              <UserInfo>
-                <div className="hobby">
-                  <div>등산</div>
-                  <div>요리</div>
-                  <div>헬스</div>
-                </div>
-                <div className="userName">유저네임</div>
-                <div className="userInfo">
-                  자기소개는 두 줄 이상이고 또 두 줄 이상이어야 하는데..
-                </div>
-              </UserInfo>
-            </GalleryItem>
-          </Gallery>
-          <MoreInfoBtn>더보기 &gt;</MoreInfoBtn>
-        </TextSection>
+        <div className="inner">
+          <TextSection>
+            <span className="small-title">프로필</span>
+            <span className="title">나와 비슷한<br /> 관심사를 가진 멤버들</span>
+            <Gallery>
+              {
+                profile && profile.map((item) => (
+                  <GalleryItem>
+                  <Photo>
+                    <div className="photo-inner">
+                      <img src={item.profileImgUrl} alt="프로필" />
+                    </div>
+                  </Photo>
+                  <UserInfo>
+                    <div className="userName">{item.name}</div>
+                    <div className="userInfo">
+                      {item.introText}
+                    </div>
+                    <div className="hobby">
+                    {item.hobby.slice(0, 5).map((h, index) => (
+                      <div key={index}>{h}</div>
+                    ))}
+                    </div>
+                  </UserInfo>
+                </GalleryItem>
+                ))
+              }
+            </Gallery>
+            <MoreInfoBtn to={'/profiles'}>
+              더보기 <img src="/src/assets/images/arrow-chevron.svg" alt="화살표" />
+            </MoreInfoBtn>
+          </TextSection>
+        </div>
       </SecondContent>
       <ThirdContent>
-        <span className="title">
-          언제나 어디서나
-          <br /> 관심사로 연결되는 새로운 세상
-          <br />
-          <br />
-          <br />
-          <span className="text">문토에서 취향이 통하는 친구를 만나요.</span>
-        </span>
-        <div
-          style={{
-            width: "15rem",
-            height: "18rem",
-            border: "1px solid #f4f4f4",
-            backgroundColor: "white",
-            borderRadius: "5em"
-          }}
-        ></div>
+        <div className="inner">
+          <img src="/src/assets/images/guide-desktop.webp" alt="이미지"/>
+          <div className="title-wrap">
+            <p className="tit">언제나 어디서나
+            <br /> 관심사로 연결되는 새로운 세상</p>
+            <p className="text">취미메이트에서 취향이 통하는 친구를 만나요.</p>
+            <p className="btn-wrap">
+              <MoreInfoBtn to={'/chat'} className="left">
+                채팅하기 <img src="/src/assets/images/arrow-chevron.svg" alt="화살표" />
+              </MoreInfoBtn>
+            </p>
+          </div>
+        </div>
       </ThirdContent>
-      <FourthContent>
-        <TextSection>
-          <span className="small-title">프로필</span>
-          <span className="title">함께 할 멤버들의 취향 미리보기</span>
-          <SecondGallery>
-            <div className="photo"></div>
-            <div className="photo"></div>
-            <div className="photo"></div>
-            <div className="photo"></div>
-            <div className="text">
-              저는 취미가 무엇인데요 자기소개이고요 여행도 가고싶고 치킨도
-              먹고싶다
-            </div>
-            <div className="text">
-              저는 취미가 무엇인데요 자기소개이고요 여행도 가고싶고 치킨도
-              먹고싶다
-            </div>
-            <div className="text">
-              저는 취미가 무엇인데요 자기소개이고요 여행도 가고싶고 치킨도
-              먹고싶다
-            </div>
-            <div className="text">
-              저는 취미가 무엇인데요 자기소개이고요 여행도 가고싶고 치킨도
-              먹고싶다
-            </div>
-          </SecondGallery>
-          <MoreInfoBtn>더보기 &gt;</MoreInfoBtn>
-        </TextSection>
-      </FourthContent>
     </Wrapper>
   );
 }
@@ -139,164 +120,210 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 const FirstContent = styled.div`
-  gap: 10rem;
-  height: 28rem;
   background-color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+    .inner{
+      max-width:900px;
+      width:100%;
+      margin:0 auto;
+      padding: 5rem 0;
+      display: flex;
+      flex-direction: row;
+      gap: 8rem;
+      justify-content: center;
+      align-items: center;
+    }
+  img{
+    max-width:300px;
+  }
 `;
 const SecondContent = styled.div`
-  height: 35rem;
   background-color: #f4f4f4;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`;
+  .inner{
+    max-width:900px;
+    width:100%;
+    margin: 0 auto;
+    padding: 5rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+`; 
 const Gallery = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
+  grid-template-columns: 50% 50%;
+  margin-left: -5px;
+  margin-right: -5px;
+  margin-top:2em;
 `;
 const GalleryItem = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 20em;
-  height: 3em;
   background-color: white;
-  padding: 2em 1em;
+  padding: 1em;
   border-radius: 2em;
-  gap: 1em;
+  display: inline-flex;
+  align-items: center;
+  gap:1em;
+  margin: 0 5px;
+  margin-bottom: 10px;
 `;
 const Photo = styled.div`
-  width: 7em;
-  height: 5em;
-  background-color: #ff9999;
-  border-radius: 1em;
+  flex: 1 0 30%;
+  max-width: 30%;
+  .photo-inner{
+    width:7em;
+    height:7em;
+    background-color: #ff9999;
+    border-radius: 1em;
+    overflow:hidden;
+  }
+  img{
+    max-width: 100%;
+  }
 `;
 const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  text-align: left;
+  flex: 1 0 70%;
+  max-width: 70%;
   .hobby {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
-    margin-bottom: 1em;
+    margin-top:1em;
     div {
       font-size: 0.8em;
-      margin-right: 1em;
-      background-color: #feebea;
+      margin-right: 5px;
+      margin-top: 5px;
       border-radius: 1em;
-      padding: 0.3em;
-      color: #f43630;
+      padding: 0.5em 0.7em;
     }
   }
-  .hobby div:first-child {
+  .hobby div:nth-child(odd) {
     background-color: #f4f4f4;
     color: #999696;
   }
+  .hobby div:nth-child(even) {
+    background-color: #feebea;
+    color: #f43630;
+  }
   .userName {
+    width: 90%;
     font-size: 0.8em;
     font-weight: 700;
     margin-bottom: 0.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .userInfo {
+    width: 90%;
     font-size: 0.8em;
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 `;
 const TextSection = styled.div`
   display: flex;
   flex-direction: column;
-  width: 13rem;
   gap: 2em;
+  width:100%;
   .small-title {
     font-size: 1em;
-    font-weight: 700;
+    font-weight: 600;
     color: #f43630;
   }
   .title {
-    font-size: 1.7em;
+    font-size: 2.3rem;
     font-weight: 700;
+    line-height: 2.6rem;
   }
   .text {
-    font-size: 0.8em;
+    font-size: 1rem;
     color: #5d5d5d;
-    line-height: 1.2em;
+    line-height: 1.4em;
   }
 `;
-const ImgSection = styled.div`
-  width: 15rem;
-  height: 20rem;
-  border: 1px solid #f43630;
-  background-color: white;
-  border-radius: 5em;
-`;
-const Banner = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 20rem;
-  justify-content: center;
-  align-items: center;
-  background-color: #d9d9d9;
-`;
+
 const ThirdContent = styled.div`
-  gap: 10rem;
-  height: 25rem;
   background-color: #e6e1e1;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  .title {
-    font-size: 1.5em;
+  .inner{
+    max-width:900px;
+    width:100%;
+    margin: 0 auto;
+    display: flex;
+    gap: 8rem;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem 0;
+  }
+  .title-wrap{
+  .tit {
+    font-size: 2.3rem;
     font-weight: 700;
+    line-height: 2.6rem;
   }
   .text {
-    font-size: 0.8em;
-    font-weight: 400;
+    font-size: 1rem;
+    color: #5d5d5d;
+    line-height: 1.4em;
+    margin-top: 2em;
   }
+  .btn-wrap{
+    margin-top:2em;
+  }
+  }
+  img{
+    max-width:250px;
+  }
+
 `;
-const FourthContent = styled.div`
-  height: 30rem;
-  padding: 3em;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background-color: #ffffff;
-`;
+
+
 const SecondGallery = styled.div`
-  display: grid;
-  grid-template-rows: repeat(2, auto);
-  grid-template-columns: repeat(4, 1fr);
-  justify-content: center;
-  align-items: center;
-  column-gap: 2em;
-  row-gap: 0.7em;
+  width:100%;
+  display:flex;
+  justify-content: flex-start;
+  gap:2em;
   color: #8b8b8b;
+
   .photo {
+    overflow:hidden;
     width: 12em;
     height: 12em;
-    background-color: #ff9999;
     border-radius: 1em;
+    img{
+      width:100%;
+    }
+  }
+  .text{
+    text-align:left;
+    margin-top:15px;
   }
 `;
-const MoreInfoBtn = styled.button`
+const MoreInfoBtn = styled(Link)`
+  display:block;
+  text-decoration: none;
   width: 10em;
   height: 3em;
+  text-align: center;
+  line-height: 3em;
   background-color: white;
+  color:#373535;
   border: 1px solid #f4f4f4;
   border-radius: 5em;
-  font-weight: 700;
+  font-weight: 500;
+  margin: 0 auto;
+  cursor: pointer;
+  &.left{
+    margin-left: 0;
+  }
 `;
