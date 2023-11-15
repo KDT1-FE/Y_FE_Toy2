@@ -55,7 +55,7 @@ const ModalStyle: ReactModal.Styles = {
   },
   content: {
     width: "50%",
-    height: "60%",
+    height: "80%",
 
     zIndex: "100",
     position: "absolute",
