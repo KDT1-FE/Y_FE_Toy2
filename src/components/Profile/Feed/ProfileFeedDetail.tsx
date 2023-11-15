@@ -448,7 +448,8 @@ function ProfileFeedDetail() {
         <div>{userData?.name}</div>
         <div className="timeStamp">
           {feedData && feedid ? feedData[feedid]?.timeStamp : ""}
-          <button onClick={handleDeleteFeed}>삭제</button>
+          {userid === loginId ?<button onClick={handleDeleteFeed}>삭제</button> : null}
+          
         </div>
       </WriterInfoWrap>
       <ContentsWrap>
