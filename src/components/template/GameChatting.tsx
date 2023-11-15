@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import InfoImg from '../../assets/icons/info.png';
-import AaImg from '../../assets/icons/Aa.png';
 import sendImg from '../../assets/icons/send.png';
 import { useEffect, useState } from 'react';
 import { chatSocket } from '../../api/socket';
@@ -9,7 +8,7 @@ import {
   createSeparatedTime,
   modifyDate,
 } from './useChattingSort';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import {
   privateChatDetail,
@@ -39,10 +38,32 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [usersInRoomData, setUsersInRoom] = useRecoilState(usersInRoom);
   const accessToken: any = getCookie('accessToken');
 
+  function getUserIdFromCookie() {
+    // 쿠키 문자열을 세미콜론으로 분할하여 개별 쿠키를 배열로 변환
+    const cookies = document.cookie.split(';');
 
-  const myUserId = localStorage.getItem('id');
+    // 각 쿠키를 순회하며 'userId' 쿠키 찾기
+    for (let cookie of cookies) {
+      // 쿠키 문자열에서 공백 제거
+      const trimmedCookie = cookie.trim();
 
-  const myUserData: any = useRecoilValue(myUserDataState);
+      // 'userId' 쿠키 이름으로 시작하는지 확인
+      if (trimmedCookie.startsWith('userId=')) {
+        // '=' 문자를 기준으로 쿠키 이름과 값을 분리
+        const value = trimmedCookie.split('=')[1];
+
+        // userId 값 반환
+        return value;
+      }
+    }
+
+    // 'userId' 쿠키가 없는 경우 undefined 반환
+    return undefined;
+  }
+
+  const userId = getUserIdFromCookie();
+
+  // const myUserData: any = useRecoilValue(myUserDataState);
   const [currentMessageObject, setCurrentMessageObject] =
     useRecoilState(myMessageState);
 
@@ -137,8 +158,6 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
     setPostData('');
   };
 
-  console.log(myUserId);
-
   return (
     <Chat>
       <ChatHeader>
@@ -150,10 +169,10 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
         {fetchChat.map((element, index) => (
           <div key={index}>
             <p>{element.date}</p>
-            <ChatWrap mine={element.userId === myUserId}>
-              <Chats mine={element.userId === myUserId}>
+            <ChatWrap mine={element.userId === userId}>
+              <Chats mine={element.userId === userId}>
                 <p>{element.text}</p>
-                <ChatTime mine={element.userId === myUserId}>
+                <ChatTime mine={element.userId === userId}>
                   {element.time}
                 </ChatTime>
               </Chats>
@@ -166,10 +185,10 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
           <div key={index}>
             {element.date !== lastDate && <p>{element.date}</p>}
 
-            <ChatWrap mine={element.userId === myUserId} id="messageWrap">
-              <Chats mine={element.userId === myUserId}>
+            <ChatWrap mine={element.userId === userId} id="messageWrap">
+              <Chats mine={element.userId === userId}>
                 <p>{element.text}</p>
-                <ChatTime mine={element.userId === myUserId}>
+                <ChatTime mine={element.userId === userId}>
                   {element.time}
                 </ChatTime>
               </Chats>

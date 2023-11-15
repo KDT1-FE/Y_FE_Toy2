@@ -16,6 +16,7 @@ import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
 import CheckNums from '../../util/checkNums';
 import { gameSocket } from '../../api/socket';
 import AnswerForm from '../../components/template/AnswerForm';
+import { ResponsiveValue } from '@chakra-ui/react';
 
 const GameRoom: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,6 +40,7 @@ const GameRoom: React.FC = () => {
 
   const lastMessage = messages[messages.length - 1];
   const myId = localStorage.getItem('id');
+
   useEffect(() => {
     if (lastMessage.text !== '') {
       setUserMessage(lastMessage);
@@ -169,9 +171,8 @@ const GameRoom: React.FC = () => {
       </RoomMain>
 
       <UserList>
-        <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
+        <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
       </UserList>
-
     </Game>
   );
 };
