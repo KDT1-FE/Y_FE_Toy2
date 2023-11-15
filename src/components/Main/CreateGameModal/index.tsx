@@ -154,6 +154,7 @@ interface UserType {
 }
 
 export interface Socket {
+  off(arg0: string): unknown;
   on(event: string, callback: any): void;
   emit(event: string, data: any): void;
 }
