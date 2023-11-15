@@ -8,7 +8,6 @@ import { useRouter, usePathname } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
 import { formatCreatedAt } from '../chats/useFormatCreatedAt';
-import { instance } from '@/lib/api';
 import { getCookie } from '@/lib/cookie';
 
 interface Message {
@@ -40,11 +39,11 @@ export default function ChatingPage() {
 
   useEffect(() => {
     getUsers();
-  }, [getUserToggle]);
+    console.log(1);
+  }, []);
 
   useEffect(() => {
     const FetchMessagesInterval: any = setInterval(() => {
-      console.log(1);
       socket.emit('fetch-messages');
     }, 2000);
     try {
@@ -59,8 +58,6 @@ export default function ChatingPage() {
 
       socket.on('messages-to-client', (messageObject) => {
         setLoading(false);
-
-        console.log(messageObject);
         setMessages(messageObject.messages.reverse());
         clearInterval(FetchMessagesInterval);
       });
@@ -71,12 +68,12 @@ export default function ChatingPage() {
 
       socket.on('join', (data) => {
         console.log(data, 'join');
-        setGetUserToggle(!getUserToggle);
+        setUsers(data.users);
       });
 
       socket.on('leave', (data) => {
         console.log(data, 'leave');
-        setGetUserToggle(!getUserToggle);
+        setUsers(data.users);
       });
       return () => {
         socket.disconnect();
@@ -93,33 +90,31 @@ export default function ChatingPage() {
     },
   });
 
-  // const getUsers = async () => {
-  //   const response = await fetch(`https://fastcampus-chat.net/chat/only?chatId=${chatId}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${accessToken}`,
-  //       serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-  //     },
-  //   });
-  //   const data = await response.json();
-  //   console.log(data);
-
-  //   setChatName(data.chat.name);
-  //   setUsers(data.chat.users);
-  // };
-
   const getUsers = async () => {
-    try {
-      let res = await instance.get<unknown, any>(`https://fastcampus-chat.net/chat/only?chatId=${chatId}`);
-      const data = await res;
-      console.log(data);
+    const response = await fetch(`https://fastcampus-chat.net/chat/only?chatId=${chatId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+      },
+    });
+    const data = await response.json();
+    console.log(data);
 
-      setChatName(data.chat.name);
-      setUsers(data.chat.users);
-    } catch (error) {
-      console.log(error);
+    // 유저 블락
+    if (data.message) router.back();
+    let userBlock = true;
+    for (let i = 0; i < data.chat.users.length; i++) {
+      if (userId == data.chat.users[i].id) {
+        userBlock = false;
+      }
     }
+    if (userBlock) router.back();
+
+    // 채팅방 이름, 유저 목록 가져오기
+    setChatName(data.chat.name);
+    setUsers(data.chat.users);
   };
 
   const findUserName = (userId: string): string | undefined => {
@@ -142,7 +137,7 @@ export default function ChatingPage() {
 
   return (
     <main>
-      <ChatingNavigation chatName={chatName} />
+      <ChatingNavigation chatName={chatName} usersLength={users.length} />
       <ChatingModal users={users} chatId={chatId} />
       {loading && <Loading />}
 

@@ -9,6 +9,7 @@ import { ChatingModalToggle } from '@/store/atoms';
 
 interface ChatingNaviagtionProps {
   chatName: string;
+  usersLength: number;
 }
 
 //props type
@@ -20,7 +21,10 @@ export default function ChatingNavigation(props: ChatingNaviagtionProps) {
   return (
     <NavigationWrapper>
       <BackIcon onClick={() => router.back()} />
-      <ChatTitle>{props.chatName}</ChatTitle>
+      <ChatTitle>
+        {props.chatName}
+        <ChatUsersLength>{props.usersLength}</ChatUsersLength>
+      </ChatTitle>
 
       <MenuIcon
         onClick={() => {
@@ -50,6 +54,12 @@ const NavigationWrapper = styled.div`
 const ChatTitle = styled.div`
   font-size: 30px;
   font-weight: 700;
+`;
+
+const ChatUsersLength = styled.span`
+  margin-left: 10px;
+  font-size: 30px;
+  color: #aaa;
 `;
 
 const BackIcon = styled(Back)`
