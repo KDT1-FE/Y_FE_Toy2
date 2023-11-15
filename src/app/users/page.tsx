@@ -8,6 +8,8 @@ import Navigation from '@/components/Navigation';
 import { io } from 'socket.io-client';
 import React from 'react';
 import { getCookie } from '@/lib/cookie';
+import { useRecoilState } from 'recoil';
+import { ConnectUserIdList } from '@/components/Users/UserListStore';
 
 interface User {
   id: string;
@@ -17,7 +19,7 @@ interface User {
   chats: string[];
 }
 
-interface ConnectUserIdList {
+interface ConnectUserIdListIF {
   users: string[];
 }
 
@@ -52,10 +54,10 @@ const Users = () => {
   }, []);
 
   /** 접속 상태 */
-  const connectUserIdListRef = useRef<ConnectUserIdList>({
+  const connectUserIdListRef = useRef<ConnectUserIdListIF>({
     users: [],
   });
-  const [connectUserIdList, setConnectUserIdList] = useState<ConnectUserIdList>({ users: [] });
+  const [connectUserIdList, setConnectUserIdList] = useRecoilState(ConnectUserIdList);
   const accessToken = getCookie('accessToken');
 
   const socket = io(`https://fastcampus-chat.net/server`, {
@@ -92,7 +94,7 @@ const Users = () => {
           {loading && <Loading />}
           {searched.length !== 0
             ? searched.map((user: User) => {
-                return <UserItem key={user.id} user={user} connectUserIdList={connectUserIdList} />;
+                return <UserItem key={user.id} user={user} />;
               })
             : !loading && (
                 <NoUserWrap>

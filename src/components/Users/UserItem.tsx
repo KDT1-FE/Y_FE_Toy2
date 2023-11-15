@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import UserProfileModal from './UserProfileModal';
 import { BiSolidCircle } from 'react-icons/bi';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { ConnectUserIdList } from './UserListStore';
 
 interface User {
   id: string;
@@ -13,19 +15,11 @@ interface User {
   chats: string[];
 }
 
-interface ConnectUserIdList {
-  users: string[];
-}
-
-interface UserItemProps {
-  user: User;
-  connectUserIdList: ConnectUserIdList;
-}
-
-const UserItem = ({ user, connectUserIdList }: UserItemProps) => {
+const UserItem = ({ user }: { user: User }) => {
   const { name, picture, id } = user;
   const [showModal, setShowModal] = useState(false);
   const clickModal = () => setShowModal(!showModal);
+  const connectUserIdList = useRecoilValue(ConnectUserIdList);
 
   return (
     <>
@@ -43,7 +37,7 @@ const UserItem = ({ user, connectUserIdList }: UserItemProps) => {
           </UserState>
         </UserInfo>
       </User>
-      {showModal && <UserProfileModal clickModal={clickModal} user={user} connectUserIdList={connectUserIdList} />}
+      {showModal && <UserProfileModal clickModal={clickModal} user={user} />}
     </>
   );
 };

@@ -5,6 +5,8 @@ import { MdClose } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
 import { BiSolidCircle } from 'react-icons/bi';
 import { getCookie } from '@/lib/cookie';
+import { useRecoilValue } from 'recoil';
+import { ConnectUserIdList } from './UserListStore';
 
 // types 폴더 나중에 만들어서 type 빼놓기
 interface User {
@@ -15,20 +17,16 @@ interface User {
   chats: string[];
 }
 
-interface ConnectUserIdList {
-  users: string[];
-}
-
 interface UserProfileModalProps {
   clickModal: () => void;
   user: User;
-  connectUserIdList: ConnectUserIdList;
 }
 
-const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileModalProps) => {
+const UserProfileModal = ({ clickModal, user }: UserProfileModalProps) => {
   const router = useRouter();
 
   const { id, name, picture } = user;
+  const connectUserIdList = useRecoilValue(ConnectUserIdList);
 
   const accessToken = getCookie('accessToken');
   const userId = localStorage.getItem('userId');
