@@ -32,7 +32,6 @@ export const useInviteData = () => {
       const userId = messages.responseChat.users;
       const authId = await getAuthUser();
       const invitedUserId = userId.filter((id) => authId == id);
-      console.log('초대되었지롱', invitedUserId);
       toastIdRef.current = toast({
         description: `${chatName} 방에 초대되었습니다.내 채팅방에서 확인해보세요!`,
       });

@@ -20,7 +20,6 @@ export const useJoinLeaveChannels = (chatId: string) => {
       SOCKET.LEAVE,
       async (messages: { users: string[]; joiners: string[] }) => {
         const newMemberList = await getMemberData(messages.users);
-        console.log('LEAVE', messages);
         setUserList(newMemberList);
       },
     );
@@ -28,7 +27,6 @@ export const useJoinLeaveChannels = (chatId: string) => {
       SOCKET.JOIN,
       async (messages: { users: string[]; joiners: string[] }) => {
         const newMemberList = await getMemberData(messages.users);
-        console.log('JOIN', messages);
         setUserList(newMemberList);
       },
     );

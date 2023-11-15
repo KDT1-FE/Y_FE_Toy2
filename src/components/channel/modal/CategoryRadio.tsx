@@ -9,7 +9,6 @@ const CategoryRadio = (props: ReturnType<typeof getRadioProps>) => {
 
   const input = getInputProps({
     onChange: (e: ChangeEvent<HTMLInputElement>) => {
-      console.log(e.target.value, channel.category);
       setChannel({ ...channel, category: e.target.value });
     },
   });
