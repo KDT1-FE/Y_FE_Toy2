@@ -20,6 +20,7 @@ import { getUserData, patchUserData } from '../../api';
 import { disconnectLoginSocket } from '../../api/socket';
 import { useNavigate } from 'react-router-dom';
 import { getCookie, removeCookies } from '../../util/util';
+import swal from 'sweetalert';
 
 const UserProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -75,7 +76,7 @@ const UserProfile = () => {
       await patchUserData(name, picture);
       setMyname(name);
       setMyImg(picture);
-      alert('수정에 성공했습니다.');
+      swal({ title: '수정에 성공했습니다.', icon: 'success' });
       navigate('/lobby');
       onClose();
     } catch (error) {
@@ -87,11 +88,11 @@ const UserProfile = () => {
     try {
       await disconnectLoginSocket();
       removeCookies();
-      alert('로그아웃에 성공했습니다');
+      swal({ title: '로그아웃에 성공했습니다.', icon: 'success' });
       navigate('/');
     } catch (error) {
       console.log(error);
-      alert('로그아웃 중 오류가 발생했습니다');
+      swal({ title: '로그아웃 중 오류가 발생했습니다.', icon: 'error' });
     }
   };
 

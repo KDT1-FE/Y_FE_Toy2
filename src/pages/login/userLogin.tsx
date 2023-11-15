@@ -22,6 +22,7 @@ import { onlineUserState } from '../../states/atom';
 import { loginSocket } from '../../api/socket';
 import { postLogin } from '../../api/index';
 import { setCookies, getCookie, removeCookies } from '../../util/util';
+import swal from 'sweetalert';
 
 function UserLogin() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ function UserLogin() {
       const { accessToken, refreshToken } = res.data;
       setCookies(accessToken, refreshToken, id);
 
-      alert('로그인에 성공했습니다.');
+      swal({ title: '로그인에 성공했습니다.', icon: 'success' });
       navigate('/lobby');
     } catch (e: any) {
       let errorMessage = '';

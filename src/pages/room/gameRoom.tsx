@@ -115,6 +115,7 @@ const GameRoom: React.FC = () => {
         alert('축하합니다! 정답입니다!');
         console.log('정답');
         alert('끝');
+
         console.log('끝');
         // gameSocket.emit('end_game', { roomId: roomId });
       } else if (data.winner !== myId) {
@@ -122,10 +123,11 @@ const GameRoom: React.FC = () => {
         console.log('누군가 정답 맞춤');
         alert('끝');
         console.log('끝');
+
       }
-      gameSocket.emit('end_game', { roomId: roomId });
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
+    gameSocket.emit('end_game', { roomId: roomId });
 
     return () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);

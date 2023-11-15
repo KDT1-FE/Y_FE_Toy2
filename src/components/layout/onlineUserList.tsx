@@ -14,6 +14,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { createGameRooms, getAllMyChat } from '../../api';
 import { randomNameFunc, getCookie } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 interface ResponseValue {
   chat: Chat;
@@ -56,7 +57,7 @@ const OnlineUserList = () => {
   });
   const chathandler = async (element: User) => {
     if (userId === element.id) {
-      alert('본인입니다.');
+      swal({ title: '본인입니다.', icon: 'info' });
     } else {
       let allMyChatData = await getAllMyChat();
       allMyChatData = allMyChatData.chats;
@@ -84,7 +85,7 @@ const OnlineUserList = () => {
   const gamehandler = async (element: User) => {
     const random = randomNameFunc();
     if (userId === element.id) {
-      alert('본인입니다.');
+      swal({ title: '본인입니다.', icon: 'info' });
     } else {
       const chat = await createGameRooms(random, [element.id], false);
       const chatLength = allChatState.chats.length;
