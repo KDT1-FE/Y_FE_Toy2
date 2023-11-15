@@ -1,4 +1,4 @@
-import Jwtinterceptors from './Jwtinterceptors';
+import Jwtinterceptor from './Jwtinterceptor';
 
 interface ICreateChatRequestBody {
   name: string; // chat 이름
@@ -6,7 +6,7 @@ interface ICreateChatRequestBody {
   isPrivate?: boolean; // 공개 비공개
 }
 
-const { instance } = Jwtinterceptors();
+const { instance } = Jwtinterceptor();
 
 const chatListAPI = {
   // 모든 채팅 조회

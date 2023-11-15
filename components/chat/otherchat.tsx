@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import { User, Message } from '@/@types/types';
 import styles from './Chat.module.scss';
-import Jwtinterceptors from '../../apis/Jwtinterceptors';
+import Jwtinterceptor from '../../apis/Jwtinterceptor';
 
 interface GetUserNameResponseBody {
   user: User;
@@ -18,7 +18,7 @@ function OtherMessage({ msg }: { msg: Message }) {
   const [userName, setUserName] = useState('');
   const [userPicture, setUserPicture] = useState('');
 
-  const { instance } = Jwtinterceptors();
+  const { instance } = Jwtinterceptor();
 
   useEffect(() => {
     const getUserName = async () => {

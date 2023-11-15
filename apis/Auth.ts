@@ -3,20 +3,19 @@ import { userIdState } from '@/recoil/atoms/userIdState';
 import { setStorage } from '@/utils/loginStorage';
 import { useRouter } from 'next/router';
 import { useSetRecoilState } from 'recoil';
-import Jwtinterceptors from './Jwtinterceptors';
+import Jwtinterceptor from './JwtInterceptor';
 
 const Auth = () => {
-  const { instance } = Jwtinterceptors();
+  const { instance } = Jwtinterceptor();
   const router = useRouter();
   const setUserId = useSetRecoilState(userIdState);
 
   // 로그인 (로그인유지)
   const login = async (userLogin: UserLogin) => {
     try {
-      const response = await instance.post('/login', userLogin);
-      setStorage('accessToken', response.data.accessToken);
-      setStorage('refreshToken', response.data.refreshToken);
-      setStorage('isLogin', 'true');
+      const { data } = await instance.post('/login', userLogin);
+      setStorage('accessToken', data.accessToken);
+      setStorage('refreshToken', data.refreshToken);
       setUserId(userLogin.id);
       router.push('/');
     } catch (error) {

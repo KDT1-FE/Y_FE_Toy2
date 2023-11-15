@@ -24,7 +24,7 @@ export default function Login() {
         <Image
           src="/images/Talkhaja.svg"
           alt="talkhaja_logo"
-          width={200}
+          width={250}
           height={80}
         />
         <h2>로그인</h2>
@@ -45,6 +45,7 @@ export default function Login() {
               로그인
             </button>
             <hr className={styles.horizontalLine} />
+            <p className={styles.forgotPassword}>비밀번호를 잊으셨나요?</p>
             <div className={styles.signUp_link}>
               <Link href="/signup" className={styles.link}>
                 회원가입

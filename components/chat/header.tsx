@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { HiArrowLongLeft } from 'react-icons/hi2';
 import { IoMdMenu } from 'react-icons/io';
 import { ChatUser } from '@/@types/types';
+import Jwtinterceptor from '@/apis/JwtInterceptor';
 import styles from './Chat.module.scss';
-import Jwtinterceptors from '../../apis/Jwtinterceptors';
 
 interface Props {
   chatId: string;
@@ -15,7 +15,7 @@ interface Props {
 export default function ChatroomHeader({ chatId, name, users }: Props) {
   const router = useRouter();
 
-  const { instance } = Jwtinterceptors();
+  const { instance } = Jwtinterceptor();
 
   const accessToken: string = localStorage.getItem('accessToken');
 
