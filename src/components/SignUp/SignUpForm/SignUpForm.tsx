@@ -5,6 +5,7 @@ import FormInputBtn from "../../FormInputBtn/FormInputBtn";
 import Loader from "../../Loader/Loader";
 import axios from "axios";
 import { apiHeader } from "../../../utils/apiHeader";
+import { useNavigate } from "react-router-dom";
 
 const initialErrorData = {
   id: "",
@@ -25,6 +26,7 @@ function SignUpForm() {
   const [errorData, setErrorData] = useState(initialErrorData);
   const [formData, setFormData] = useState(initialFormData);
   const [passedValidation, setPassedValidation] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setPassedValidation(
@@ -64,6 +66,7 @@ function SignUpForm() {
             .then((response) => {
               if (response.data.message === "User created") {
                 alert("회원가입 성공");
+                navigate("/login");
               } else {
                 alert("회원가입 실패");
                 console.error(response.data.message);
