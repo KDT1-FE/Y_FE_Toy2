@@ -2,8 +2,8 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import CreateChannelModal from '../../components/channel/modal/CreateChannelModal';
 import { Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react';
 import ChannelSearchInput from '../../components/channel/ChannelSearchInput';
-import AllUserBar from '../../components/allUserBar';
 import ChannelSelector from '../../components/channel/ChannelSelector';
+import AllUserBar from '../../components/AllUserBar';
 
 const ChannelPage = () => {
   const location = useLocation();
