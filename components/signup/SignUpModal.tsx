@@ -26,24 +26,23 @@ interface UserRequestBody extends RequestBody {
 interface SignUpModalProps {
   handleModal: () => void;
   formData: RequestBody;
-  defaultImgUrl: string | null;
 }
 
 export default function SignUpModal({
   handleModal,
   formData,
-  defaultImgUrl,
 }: SignUpModalProps) {
   const router = useRouter();
   const userFormData: RequestBody = formData;
   const [pictureName, setPictureName] = useState('default.jpg');
-  const [selectedImg, setSelectedImg] = useState<string | null>(defaultImgUrl);
+  const DEFAULT_IMAGE_URL =
+    'https://firebasestorage.googleapis.com/v0/b/talk-eaae8.appspot.com/o/images%2Fdefault.jpg?alt=media&token=6ca482c2-bcb0-48cc-b673-76ad2b4ce943';
+  const [selectedImg, setSelectedImg] = useState(DEFAULT_IMAGE_URL);
   const imageRef = useRef<HTMLInputElement>(null);
   const imageStyle = {
     borderRadius: '50%',
   };
 
-  console.log(defaultImgUrl);
   const handleInputClick = () => {
     if (imageRef.current) {
       imageRef.current.click();
@@ -51,7 +50,7 @@ export default function SignUpModal({
   };
 
   const handleImgResetClick = () => {
-    setSelectedImg(defaultImgUrl);
+    setSelectedImg(DEFAULT_IMAGE_URL);
     setPictureName('default.jpg');
   };
 
@@ -80,12 +79,9 @@ export default function SignUpModal({
         const storage = getStorage(app);
         const imagesRef = ref(storage, `images/${pictureName}`);
 
-        if (selectedImg !== defaultImgUrl) {
-          await uploadString(imagesRef, selectedImg, 'data_url');
-          const url = await getDownloadURL(imagesRef);
-          return url;
-        }
-        return defaultImgUrl;
+        await uploadString(imagesRef, selectedImg, 'data_url');
+        const url = await getDownloadURL(imagesRef);
+        return url;
       }
     } catch (error) {
       console.log(error);
