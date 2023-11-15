@@ -25,29 +25,21 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 
 	return (
 		<>
-			<div className="relative flex items-center pt-3">
-				<Link href={'/open'}>
-					<Image
-						width={25}
-						height={25}
-						src="/icon_back.svg"
-						alt="뒤로 가기"
-						className="mr-3"
-					/>
-				</Link>
+			<div className="relative flex items-center pt-3 px-3">
 				<Input
 					onChange={getUserInput}
 					onKeyPress={handleKeyPress}
 					label="검색 Input"
 					crossOrigin={undefined}
 					value={userInput}
+					className="px-3"
 				/>
 				<Image
 					width={20}
 					height={20}
 					src="/icon_cancel.svg"
 					alt="검색 취소하기"
-					className="absolute right-2"
+					className="absolute right-5"
 					onClick={() => {
 						setUserInput('');
 						setSearchedChats(allOpenChat);
@@ -55,7 +47,7 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 				/>
 			</div>
 			{searchedChats.length ? (
-				<>
+				<div className="w-full px-3">
 					<strong className="mt-5">오픈 채팅방</strong>
 
 					{searchedChats.map((chat) => (
@@ -71,7 +63,7 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 							</li>
 						</Link>
 					))}
-				</>
+				</div>
 			) : (
 				<h1 className="m-auto">검색 결과가 없습니다.</h1>
 			)}

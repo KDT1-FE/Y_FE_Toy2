@@ -2,6 +2,7 @@ import React from 'react';
 import { fetchAllOpenChat } from './search.utils';
 import SearchOpenChat from '../../Components/Search/SearchOpenChat';
 import { cookies } from 'next/headers';
+import Header from '@/Components/Common/Header';
 
 const Search = async () => {
 	const cookieStore = cookies();
@@ -10,6 +11,7 @@ const Search = async () => {
 
 	return (
 		<>
+			<Header />
 			<SearchOpenChat allOpenChat={allOpenChat} />
 		</>
 	);
