@@ -95,6 +95,7 @@ const Example = () => {
       socket.off("leave");
       socket.off("new-chat");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   // 메세지 데이터

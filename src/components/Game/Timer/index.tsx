@@ -31,6 +31,7 @@ const Timer = ({ current, setCurrent }: Props) => {
       setSeconds(5);
       setCurrent("투표중");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds]);
 
   return (

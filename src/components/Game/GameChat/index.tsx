@@ -65,7 +65,7 @@ const GameChat: React.FC<GameChatProps> = ({
   // console.log("GameChat/ gameData:", gameData);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
-  const [_, setUsers] = useState<string[]>([]);
+  const [, setUsers] = useState<string[]>([]);
   // console.log("users: ", users);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>("");

@@ -74,14 +74,6 @@ const Game = () => {
     }
   }, [num, users]);
 
-  // useEffect(() => {
-  //   console.log(current);
-  // }, [current]);
-  useEffect(() => {
-    console.log(current);
-    console.log(speaking);
-  }, [speaking, users]);
-
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
       setStatus(gameData.data[0].status);
@@ -89,7 +81,6 @@ const Game = () => {
     } else {
       setUsers([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameData.data]);
 
   // 게임 나가기 api 선언 (호출 X)
