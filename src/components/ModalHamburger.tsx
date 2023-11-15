@@ -61,7 +61,6 @@ const ModalExample = ({ roomId, setChatRoom }: ModalHamburgerProps) => {
       </HamButton>
       {modalIsOpen && (
         <ButtonWrap>
-          <button>대화상대 초대하기</button>
           <button onClick={() => leaveChatRoom(roomId)}>채팅방 나가기</button>
         </ButtonWrap>
       )}

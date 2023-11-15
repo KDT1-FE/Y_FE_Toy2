@@ -5,6 +5,7 @@ import ModalPlus from "../components/ModalPlus";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 import Header from "../components/Header";
+import NoneChat from "../components/Chat/NoneChat";
 
 export interface User {
   id: string;
@@ -157,13 +158,16 @@ function Chat() {
             />
           </CatePlus>
         </ChatCategory>
-
-        <ChatRoom
-          roomId={roomId}
-          roomName={roomName}
-          selectedUsers={selectedUsers}
-          setChatRoom={setChatRoom}
-        />
+        {chatRoom.length !== 0 ? (
+          <ChatRoom
+            roomId={roomId}
+            roomName={roomName}
+            selectedUsers={selectedUsers}
+            setChatRoom={setChatRoom}
+          />
+        ) : (
+          <NoneChat></NoneChat>
+        )}
       </ChatWrapper>
     </>
   );

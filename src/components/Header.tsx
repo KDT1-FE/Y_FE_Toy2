@@ -89,9 +89,9 @@ const Header = () => {
                 <UserImg src={currentUser?.picture} />{" "}
                 <UserName to={""}>{currentUser?.name}</UserName>님
                 <UserSubMenu>
-                  <StyledLink to={`/profiles/:${currentUser?.id}`}>
+                  <StyledSubLink to={`/profiles/:${currentUser?.id}`}>
                     내 프로필 가기
-                  </StyledLink>
+                  </StyledSubLink>
                   <Logout />
                 </UserSubMenu>
               </UserProfile>
@@ -151,6 +151,13 @@ const StyledLink = styled(Link)`
     color: #f43630;
   }
 `;
+const StyledSubLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  &:hover {
+    color: #f43630;
+  }
+`;
 const UserBar = styled.div`
   display: flex;
   flex-direction: row;
@@ -202,17 +209,15 @@ const UserSubMenu = styled.div`
   gap: 0.2em;
   opacity: 0;
   pointer-events: auto;
-  z-index: 0;
+  z-index: 999;
   button {
     padding: 0;
     background-color: transparent;
     appearance: none;
     border: none;
-    font-size: inherit;
-    font-weight: inherit;
+    color: black;
     &:hover {
       color: #f43630;
-      font-weight: 700;
     }
   }
 `;
