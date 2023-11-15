@@ -8,7 +8,7 @@ import Room from '@/components/lobby/Room';
 import CreateModal from '@/components/lobby/CreateModal';
 import fastRequest from '@/api/fastRequest';
 
-const Lobby = (): JSX.Element => {
+const Lobby = ({ userId }): JSX.Element => {
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [page, setPage] = useState(1);
   const [rooms, setRooms] = useState([]);

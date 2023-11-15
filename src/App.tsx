@@ -8,13 +8,16 @@ import Hanging from './pages/game/Hanging';
 import Result from './pages/game/Result';
 import Role from './pages/game/Role';
 import Vote from './pages/game/Vote';
+import { useAppSelector } from './hooks/redux';
 
 function App() {
+  const userId = useAppSelector((state) => state.userId);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Signin />} />
-        <Route path="/lobby" element={<Lobby />} />
+        <Route path="/lobby" element={<Lobby userId={userId} />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/chat/:id" element={<Chat />} />
         <Route path="/hanging/:id" element={<Hanging />} />

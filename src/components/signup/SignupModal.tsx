@@ -127,6 +127,7 @@ const SignupModal = ({ handleModal }) => {
             {ghosts.slice(offset, offset + limit).map((ghost) => (
               <div key={ghost.id} className={styles.singupModal__radio_item}>
                 <input
+                  required
                   type="radio"
                   id={ghost.id}
                   name="contact"
