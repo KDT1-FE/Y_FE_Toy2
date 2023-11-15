@@ -127,6 +127,13 @@ const UsersWrapper = styled.div`
   height: 80%;
 
   overflow: scroll;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
+
   padding-left: 30px;
   padding-top: 30px;
 `;
