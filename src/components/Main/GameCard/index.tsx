@@ -26,16 +26,6 @@ interface Game {
   id: string;
 }
 
-interface ChatRoom {
-  name: string;
-  users: string[];
-  isPrivate?: boolean;
-  num?: number;
-  bg?: string;
-  status?: string;
-  id: string;
-}
-
 interface Socket {
   on(event: string, callback: any): void;
   emit(event: string, data: any): void;
