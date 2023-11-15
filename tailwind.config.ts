@@ -34,6 +34,7 @@ const config: Config = withMT({
 			backgroundImage: {
 				'trash-can': "url('../public/icon_trash.svg')",
 				'camera-icon': "url('../public/icon_camera.svg')",
+				'mountain-icon': "url('../public/icon_mountain.svg')",
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic':
 					'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
