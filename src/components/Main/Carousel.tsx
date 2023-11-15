@@ -9,7 +9,8 @@ function Carousel() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500
+    speed: 500,
+    arrows: false,
   }
 
   return (
@@ -36,19 +37,7 @@ function Carousel() {
                 관심사 기반 커뮤니티
               </span>
             </p>
-            <img src="/src/assets/images/mainban-img2.png" alt="배너" />
-          </div>
-        </Slides>
-        <Slides>
-          <div className='slide-inner'>
-            <p className="slide-tit">
-              취향으로<br />
-              만나는 우리
-              <span className='slide-des'>
-                관심사 기반 커뮤니티
-              </span>
-            </p>
-            <img src="/src/assets/images/mainban-img3.png" alt="배너" />
+            <img src="/src/assets/images/mainban-img5.png" alt="배너" />
           </div>
         </Slides>
       </Slider>

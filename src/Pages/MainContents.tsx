@@ -98,37 +98,16 @@ function MainContents() {
       <ThirdContent>
         <div className="inner">
           <img src="/src/assets/images/guide-desktop.webp" alt="이미지"/>
-          <span className="title">
-            언제나 어디서나
-            <br /> 관심사로 연결되는 새로운 세상
-            <br />
-            <br />
-            <br />
-            <span className="text">문토에서 취향이 통하는 친구를 만나요.</span>
-          </span>
+          <div className="title-wrap">
+            <p className="tit">언제나 어디서나
+            <br /> 관심사로 연결되는 새로운 세상</p>
+            <p className="text">문토에서 취향이 통하는 친구를 만나요.</p>
+            <p className="btn-wrap">
+              <MoreInfoBtn>채팅하러가기 &gt;</MoreInfoBtn>
+            </p>
+          </div>
         </div>
       </ThirdContent>
-      <FourthContent>
-        <div className="inner">
-          <TextSection>
-            <span className="small-title">프로필</span>
-            <span className="title">함께 할 멤버들의 취향 미리보기</span>
-            <SecondGallery>
-            {
-                profile && profile.map((item) => (
-                  <div className="photo-wrap">
-                  <div className="photo">
-                    <img src={item.profileImgUrl} alt="프로필" />
-                  </div>
-                  <div className="text">{item.introText}</div>
-                  </div>
-                ))
-            }
-            </SecondGallery>
-            <MoreInfoBtn>더보기 &gt;</MoreInfoBtn>
-          </TextSection>
-        </div>
-      </FourthContent>
     </Wrapper>
   );
 }
@@ -262,32 +241,28 @@ const ThirdContent = styled.div`
     align-items: center;
     padding: 5rem 0;
   }
-  .title {
-    font-size: 1.5em;
+  .title-wrap{
+
+  .tit {
+    font-size: 2.3rem;
     font-weight: 700;
   }
   .text {
     font-size: 0.8em;
-    font-weight: 400;
+    color: #5d5d5d;
+    line-height: 1.2em;
+    margin-top:30px;
+  }
+  .btn-wrap{
+    margin-top:30px;
+  }
   }
   img{
     max-width:250px;
   }
+
 `;
-const FourthContent = styled.div`
-  background-color: #ffffff;
-  .inner{
-    padding: 5rem 0;
-    max-width:900px;
-    width:100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-`;
+
 
 const SecondGallery = styled.div`
   width:100%;
