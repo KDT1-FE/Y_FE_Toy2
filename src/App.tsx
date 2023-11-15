@@ -7,7 +7,7 @@ import PageNotFound from "./components/PageNotFound";
 import { darkTheme, lightTheme } from "./style/theme";
 import { useEffect, useState } from "react";
 import { DarkModeProvider } from "./hooks/useDarkMode";
-import Profile from "./components/Profile/Main/Profile";
+import ProfileDefault from "./Pages/Profile/ProfileDefaultPage";
 import MainContents from "./pages/MainContents";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
       { path: "", element: <MainContents /> },
       {
         path: "profiles",
-        element: <Profile />
+        element: <ProfileDefault />
       },
       {
         path: "profiles/:userid",
