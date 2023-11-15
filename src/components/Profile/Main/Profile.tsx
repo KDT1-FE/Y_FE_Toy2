@@ -137,7 +137,7 @@ const ModalAddFeedWrap = styled.div`
   display: flex;
   justify-content: center;
 
-  button { 
+  button {
     margin-right: 16px;
 
     &:last-of-type {
@@ -161,8 +161,6 @@ function Profile() {
 
   const [isProfileMatchingLogin, setIsProfileMatchingLogin] = useState(false);
   const [context, setContext] = useState("");
-
-  
 
   const loginId = sessionStorage.getItem("userId");
 
@@ -235,16 +233,16 @@ function Profile() {
               setDoc(cityRef, {
                 [`${Feed.feedId}`]: Feed
               }).then(() => {
-                fetchData()
-                setIsModalShow(false)
+                fetchData();
+                setIsModalShow(false);
               });
             } else {
               const cityRef = doc(db, "Feeds", userData.id);
               updateDoc(cityRef, {
                 [`${Feed.feedId}`]: Feed
               }).then(() => {
-                fetchData()
-                setIsModalShow(false)
+                fetchData();
+                setIsModalShow(false);
               });
             }
           }
@@ -276,7 +274,7 @@ function Profile() {
               onChange={handleModalPreview}
             />
             <span>본문</span>
-            
+
             <textarea
               value={context}
               placeholder="내용"

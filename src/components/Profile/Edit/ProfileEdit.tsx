@@ -187,7 +187,6 @@ function Profile() {
     userData?.profileImgUrl
   );
 
-  
   const { getData, postData, patchData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [isState, setIsState] = useState(false);
@@ -195,21 +194,17 @@ function Profile() {
     if (isState) {
       const 함수명 = async () => {
         try {
-          // const res = await getData("https://fastcampus-chat.net/users");
           const res = await patchData("https://fastcampus-chat.net/user", {
             name: name,
-            picture: backgroundImageUrl
+            picture: profileImageUrl
           });
-
-
         } catch (error) {
-          alert('에러')
+          alert("에러");
         }
       };
       함수명();
     }
   }, [accessToken, isState]);
-  ///////////////////////////////
 
   const handleBackgroundImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -247,7 +242,7 @@ function Profile() {
       return;
     } else {
       alert("잘못된 접근입니다.");
-      navigate(`/profiles/${userid}`)
+      navigate(`/profiles/${userid}`);
     }
   }, [userid]);
 
@@ -352,7 +347,7 @@ function Profile() {
       const userRef = doc(db, "Users", userData.id);
       setIsState(true);
       setDoc(userRef, updateUser, { merge: true }).then(() => {
-        navigate( `/profiles/${userid}`)
+        navigate(`/profiles/${userid}`);
       });
     }
   };
@@ -420,7 +415,7 @@ function Profile() {
     {
       hobbyName: "만화",
       isClick: false
-    },
+    }
   ]);
   const [activityArray, setActivityArray] = useState([
     {
@@ -502,8 +497,8 @@ function Profile() {
     {
       activityName: "풋살",
       isClick: false
-    },
-  ])
+    }
+  ]);
   const handleHobbySelect = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setHobbyArray(
