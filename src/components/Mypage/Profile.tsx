@@ -9,6 +9,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { UserProfile, UserProfileModal } from '@/store/atoms';
 
 import styled from 'styled-components';
+import { deleteCookie } from '@/lib/cookie';
 
 interface User {
   id: string;
@@ -27,13 +28,13 @@ const Profile = () => {
   const [profile, setProfile] = useRecoilState<User>(UserProfile);
   const currentModalOpen = useRecoilValue(UserProfileModal);
 
-  const uesrId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+  const uesrId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
   const router = useRouter();
 
   const getUser = async (): Promise<void> => {
     try {
-      const userId = sessionStorage.getItem('userId');
+      const userId = localStorage.getItem('userId');
       const res = await instance.get<unknown, IUser>(`user?userId=${userId}`);
       if (res) {
         const { user } = res;
@@ -54,11 +55,8 @@ const Profile = () => {
   }, [currentModalOpen]);
 
   const onLogout = () => {
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('refreshToken');
-    sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('expiresAt');
-
+    localStorage.clear();
+    deleteCookie();
     router.push('/login');
   };
 

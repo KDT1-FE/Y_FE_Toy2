@@ -1,7 +1,5 @@
 'use client';
 
-// dev merge
-
 import React, { ChangeEvent, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -29,24 +27,31 @@ const RegisterForm = () => {
     isNameValid: false,
     isPwValid: false,
   });
-  const [duplicated, setDuplicated] = useState<boolean>(false); // 아이디 중복 여부 응답값
-  const [duplicatedState, setDuplicatedState] = useState<boolean>(false); // 버튼 클릭 여부
-  const [duplicatedId, setDuplicatedId] = useState<string>(''); // 아이디 중복 확인 후 수정시 재확인
+  const [duplicated, setDuplicated] = useState<boolean>(false);
+  const [duplicatedState, setDuplicatedState] = useState<boolean>(false);
+  const [duplicatedId, setDuplicatedId] = useState<string>('');
   const [image, setImage] = useState<string>('');
   const imageRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
   const onChangeProfile = () => {
+    const limitSize = 1024 ** 2;
+
     if (imageRef.current) {
       const profile = imageRef.current.files?.[0];
+
       if (profile) {
-        const reader = new FileReader();
-        reader.readAsDataURL(profile);
-        reader.onloadend = () => {
-          const imageData = reader.result as string;
-          setFormData({ ...formData, picture: imageData });
-          setImage(imageData);
-        };
+        if (profile.size <= limitSize) {
+          const reader = new FileReader();
+          reader.readAsDataURL(profile);
+          reader.onloadend = () => {
+            const imageData = reader.result as string;
+            setFormData({ ...formData, picture: imageData });
+            setImage(imageData);
+          };
+        } else {
+          alert('프로필 이미지는 1MB 이하만 가능합니다.');
+        }
       }
     }
   };
@@ -104,7 +109,11 @@ const RegisterForm = () => {
       <h1>회원가입</h1>
       <StyledDiv>
         <span>프로필 설정</span>
-        <span>미설정시 아래와 같은 예시 이미지로 등록됩니다.</span>
+        {image === '' ? (
+          <span>미설정시 아래와 같은 예시 이미지로 등록됩니다.</span>
+        ) : (
+          <span style={{ color: '#00956e', opacity: 0.75 }}>사용 가능한 이미지입니다.</span>
+        )}
       </StyledDiv>
       <StyledForm onSubmit={onSubmit}>
         <StyledProfile>

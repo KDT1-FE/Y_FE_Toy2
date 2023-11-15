@@ -3,14 +3,15 @@
 import Navigation from '@/components/Navigation';
 import ChatPage from '@/components/chats/ChatPage';
 import { useEffect, useState } from 'react';
+import { getCookie } from '@/lib/cookie';
 
 const AllChats = () => {
   const [isRightWay, setIsRightWay] = useState<boolean>(false);
 
   useEffect(() => {
-    const accessToken = sessionStorage.getItem('accessToken');
+    const isUserAccess = getCookie('accessToken');
 
-    if (accessToken) {
+    if (isUserAccess) {
       setIsRightWay(true);
     } else {
       setIsRightWay(false);

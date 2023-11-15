@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
 import { useRouter } from 'next/navigation';
 import InviteImg from '../../../public/assets/InviteImg.svg';
+import { getCookie } from '@/lib/cookie';
 
 interface User {
   username: string;
@@ -22,7 +23,7 @@ export default function ChatingModal(props: ChatingModalProps) {
   const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChatingModalToggle);
   const router = useRouter();
 
-  const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+  const accessToken = getCookie('accessToken');
 
   const leaveChating = async () => {
     await fetch('https://fastcampus-chat.net/chat/leave', {

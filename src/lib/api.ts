@@ -1,37 +1,36 @@
 import axios from 'axios';
-import { setToken } from './token';
-import { refreshToken } from './token';
+import { getCookie, setLoginCookie } from './cookie';
+import { refreshCookie } from './cookie';
 
 export const instance = axios.create({
-    baseURL: 'https://fastcampus-chat.net/',
+  baseURL: 'https://fastcampus-chat.net/',
+  headers: {
+    'Content-Type': 'application/json',
+    serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+  },
 });
 
 instance.interceptors.request.use((config) => {
-    const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+  const accessToken = getCookie('accessToken');
 
-    if (accessToken) {
-        config.headers['Content-Type'] = 'application/json';
-        config.headers['Authorization'] = `Bearer ${accessToken}`;
-        config.headers['serverId'] = `${process.env.NEXT_PUBLIC_SERVER_KEY}`;
-    } else {
-        config.headers['Content-Type'] = 'application/json';
-        config.headers['serverId'] = `${process.env.NEXT_PUBLIC_SERVER_KEY}`;
-    }
+  if (accessToken) {
+    config.headers['Authorization'] = `Bearer ${accessToken}`;
+  }
 
-    return config;
+  return config;
 });
 
 instance.interceptors.response.use((res) => {
-    if (200 <= res.status && res.status < 300) {
-        if (res.data.message === 'User created') {
-            return res.data;
-        } else {
-            setToken(res.data);
-            return res.data;
-        }
+  if (200 <= res.status && res.status < 300) {
+    if (res.data.message === 'User created') {
+      return res.data;
+    } else {
+      setLoginCookie(res.data);
+      return res.data;
     }
-    if (res.status === 401) {
-        refreshToken();
-    }
-    return Promise.reject(res.data);
+  }
+  if (res.status === 401) {
+    refreshCookie();
+  }
+  return Promise.reject(res.data);
 });

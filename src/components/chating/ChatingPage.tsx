@@ -9,6 +9,7 @@ import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
 import { formatCreatedAt } from '../chats/useFormatCreatedAt';
 import { instance } from '@/lib/api';
+import { getCookie } from '@/lib/cookie';
 
 interface Message {
   id: string;
@@ -34,7 +35,7 @@ export default function ChatingPage() {
 
   const pathname = usePathname();
   const chatId = pathname.split('/')[2];
-  const accessToken = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
+  const accessToken = getCookie('accessToken');
   const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
   useEffect(() => {
