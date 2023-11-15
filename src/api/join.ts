@@ -10,7 +10,7 @@ export const checkId = async (id: string) => {
 
 export const join = async (joinInfo: JoinInfo) => {
   const response = await instance.post<{ message: string }>(
-    'https://fastcampus-chat.net/signup',
+    '/signup',
     joinInfo,
   );
   return response.data;
