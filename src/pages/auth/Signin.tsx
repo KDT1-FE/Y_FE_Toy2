@@ -23,7 +23,6 @@ const Signin = () => {
     event.preventDefault();
 
     const result = await login(id, password);
-    console.log(result);
 
     if (result.error) {
       setErrors(result.error);

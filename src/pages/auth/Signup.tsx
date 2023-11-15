@@ -35,7 +35,7 @@ const Signup = () => {
     if (Object.keys(newErrors).length === 0) {
       const validId = await idCheck(user.id);
       console.log(validId);
-      if (!invalidId) {
+      if (!invalidId && character) {
         await signup(id, password, name, character);
         navigate('/signin');
       } else {

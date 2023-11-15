@@ -16,7 +16,6 @@ export const signup = async (id, password, name, character, ) => {
     });
 
     const json = await response.json();
-    console.log(json);
     return json;
 
   } catch (error) {
