@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import toast from 'react-hot-toast';
+import { isAxiosError } from 'axios';
 import { UserInfo, userInfoConverter } from '../libs/firestoreConverter';
 import { db, storage } from '../firebaseSDK';
-import { FbUser } from '../types/User';
+import { FbUser, User } from '../types/User';
 import dataUrlToFile from '../utils/dataUrltoFile';
 import checkImageValidation from '../utils/fileValidation';
-import { publicApi } from '../libs/axios';
+import { privateApi, publicApi } from '../libs/axios';
 
 const useMutationSignUp = (type: string) => {
   const [isLoaded, setIsLoaded] = useState(true);
@@ -30,7 +32,6 @@ const useMutationSignUp = (type: string) => {
           (snapshot) => snapshot.ref,
         );
         url = await getDownloadURL(uploadRef);
-
         const res = await publicApi.post('signup', {
           id: userData.id,
           password: userData.password,
@@ -38,6 +39,7 @@ const useMutationSignUp = (type: string) => {
           picture: url,
         });
         const { message } = res.data;
+        toast.success(message);
       } else {
         // 업로드한 파일이 없을 때
         const res = await publicApi.post('signup', {
@@ -46,6 +48,7 @@ const useMutationSignUp = (type: string) => {
           name: userData.name,
         });
         const { message } = res.data;
+        toast.success(message);
       }
 
       const userInfo: UserInfo = {
@@ -59,7 +62,8 @@ const useMutationSignUp = (type: string) => {
       };
       await setDoc(docRef, userInfo);
     } catch (error) {
-      // TODO
+      if (isAxiosError(error)) toast.error('회원가입중에 에러가 발생했습니다.');
+      else if (error instanceof Error) toast.error(error.message);
     } finally {
       // 업로드 및 가입이 완료됨을 알림
       setIsLoaded(true);

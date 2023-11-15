@@ -1,5 +1,6 @@
-import { Box, styled } from '@mui/material';
+import { Box, Grid, styled } from '@mui/material';
 import { motion } from 'framer-motion';
+import React from 'react';
 
 export const OpenchatContainer = styled('main')<{ isOpenModal: boolean }>(
   ({ isOpenModal }) => ({
@@ -19,24 +20,33 @@ export const OpenchatAppbar = styled('div')({
   zIndex: 2,
 });
 
-export const OpenchatBox = styled(Box)(({ theme }) => ({
-  paddingTop: '58px',
-  margin: 0,
-  [theme.breakpoints.down('sm')]: {
-    margin: '0 -16px',
-  },
-}));
+export const OpenchatBox = styled(Box)<{ issticky?: string }>(
+  ({ theme, issticky }) => ({
+    position: issticky === 'sticky' ? 'sticky' : 'static',
+    top: 0,
+    paddingTop: '58px',
+    margin: 0,
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 -16px',
+    },
+  }),
+);
 
 export const OpenchatRoom = styled(Box)(({ theme }) => ({
   border: '1px solid rgba(0, 0, 0, 0.1)',
   borderRadius: '10px',
   backgroundColor: [theme.palette.common.white],
-  padding: '1rem',
+  padding: '0.75rem',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px',
+    margin: '0 -6px',
+    borderRadius: 0,
+  },
   '& .openchat__room-avatar': {
-    width: '3.75rem',
+    width: '3.3rem',
     '& img': { verticalAlign: 'top' },
   },
   '& .openchat__room-info': {
@@ -45,13 +55,22 @@ export const OpenchatRoom = styled(Box)(({ theme }) => ({
     width: '100%',
   },
   '& .openchat__room-desc': {
-    flex: 4,
-    margin: '0 0.8rem',
+    flex: '7 1 70%',
+    margin: '0 0.5rem',
     [theme.breakpoints.down('sm')]: {
       margin: '0 6px',
     },
+    '& .overflow-ellipsis': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      maxWidth: '240px',
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '200px',
+      },
+    },
   },
-  '& .openchat__room-btn': { flex: 1 },
+  '& .openchat__room-btn': { flex: '1 1 10%' },
 }));
 
 export const OpenchatCreateChatBtn = styled(motion.div)(({ theme }) => ({
@@ -115,8 +134,8 @@ export const OpenchatCreateChatModal = styled(motion.div)(({ theme }) => ({
 export const OpenchatAvatarWrap = styled('div')({
   position: 'relative',
   margin: 'auto',
-  width: '3.75rem',
-  height: '3.75rem',
+  width: '3.3rem',
+  height: '3.3rem',
   overflow: 'hidden',
   userSelect: 'none',
   '&::after': {
@@ -143,5 +162,149 @@ export const OpenchatAvatarWrap = styled('div')({
   '& .default-bg': {
     width: '100%',
     height: '100%',
+  },
+});
+
+export const OpenchatFriendWrap = styled('div')<{ isSelected?: string }>(
+  ({ theme, isSelected }) => ({
+    display: 'flex',
+    padding: '10px',
+    alignItems: 'center',
+    transition: 'background-color 0.3s',
+    backgroundColor: isSelected === 'true' ? '#d7d7d7' : '#fff',
+    '& .openchat__friend-img': {
+      flex: '0 1 48px',
+      width: '48px',
+      height: '48px',
+      overflow: 'hidden',
+      borderRadius: '100%',
+      boxSizing: 'border-box',
+      border: '1px solid #ddd',
+      '& img': {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        verticalAlign: 'middle',
+      },
+    },
+    '& .openchat__friend-text': {
+      flex: '1 1 50%',
+      margin: '0 10px',
+      '& .overflow-ellipsis': {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        maxWidth: '150px',
+        [theme.breakpoints.down('sm')]: {
+          maxWidth: '250px',
+        },
+      },
+    },
+    '& .openchat__friend-send': {
+      flex: '0 1 20px',
+      cursor: 'pointer',
+      color: '#1D3557',
+      alignSelf: 'center',
+      transition: 'color 0.3s',
+      '&:hover': {
+        color: '#A8DADC',
+      },
+    },
+  }),
+);
+
+export const OpenchatRoomAppbar = React.memo(
+  styled(Box)(({ theme }) => ({
+    position: 'sticky',
+    top: 0,
+    backgroundColor: theme.palette.background.paper,
+    height: '62px',
+    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+    padding: '5px 10px',
+    boxSizing: 'border-box',
+    zIndex: 1,
+    '& .openchat__room-appbar-wrap': {
+      display: 'flex',
+      alignItems: 'center',
+    },
+  })),
+);
+
+export const OpenchatMessageWrap = React.memo(
+  styled(Box)(({ theme }) => ({
+    padding: '0 0 62px',
+    minHeight: '100vh',
+    boxSizing: 'border-box',
+  })),
+);
+
+export const OpenchatMessageItemWrap = styled(Box)<{ isme: string }>(
+  ({ theme, isme }) => ({
+    padding: '1rem 0',
+    alignSelf: isme === 'true' ? 'flex-end' : 'flex-start',
+    display: 'flex',
+    gap: 10,
+    '& .openchat__msg-wrapper': {
+      display: 'flex',
+      alignItems: 'flex-end',
+      flexDirection: isme === 'true' ? 'row-reverse' : 'row',
+      gap: '8px',
+    },
+    '& .openchat__msg-box': {
+      flex: '1 1 auto',
+      maxWidth: '360px',
+      backgroundColor:
+        isme === 'true'
+          ? theme.palette.primary.main
+          : theme.palette.secondary.light,
+      color:
+        isme === 'true'
+          ? theme.palette.background.paper
+          : theme.palette.common.black,
+      padding: '1rem',
+      borderRadius: '10px',
+    },
+    '& .openchat__time-box': {
+      flex: '0 0 4rem',
+      textAlign: isme === 'true' ? 'right' : 'left',
+    },
+  }),
+);
+
+export const OpenchatSenderWrap = styled(Grid)(({ theme }) => ({
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  '& .openchat__sender-input': {
+    flex: '1 1 80%',
+    display: 'block',
+    padding: '10px',
+    border: 0,
+  },
+}));
+
+export const OpenchatNavUserItemLi = styled(motion.li)({
+  width: '100%',
+});
+
+export const OpenchatInviteModalWrap = styled(Box)({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'rgba(0,0,0,0.1)',
+  zIndex: 3,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  '& .openchat__invite-box': {
+    position: 'relative',
+    width: '100%',
+    height: '100vh',
+    maxWidth: '480px',
+    maxHeight: '660px',
+    backgroundColor: 'white',
   },
 });

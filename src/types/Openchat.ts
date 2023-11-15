@@ -20,15 +20,15 @@ export interface Chats {
 export interface Chat {
   id: string;
   name: string;
-  users: User[]; // 속한 유저 정보
+  users: ChatUser[]; // 속한 유저 정보
   isPrivate: boolean;
   latestMessage: Message | null;
   updatedAt: Date;
 }
 
-interface User {
+export interface ChatUser {
   id: string;
-  name: string;
+  username: string;
   picture: string;
 }
 
@@ -36,7 +36,7 @@ interface Message {
   id: string;
   text: string;
   userId: string;
-  createAt: Date;
+  createdAt: Date;
 }
 
 export type ChatInfoWithId = ChatInfo & {

@@ -2,6 +2,7 @@
 import React, { useCallback, useState } from 'react';
 import { useFormik } from 'formik';
 import { isAxiosError } from 'axios';
+import toast from 'react-hot-toast';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
 import { db, storage } from '../firebaseSDK';
@@ -9,27 +10,8 @@ import { newChatValidationSchema } from '../utils/validateSchema';
 import { privateApi } from '../libs/axios';
 import dataUrlToFile from '../utils/dataUrltoFile';
 import { ChatInfoConverter } from '../libs/firestoreChatConverter';
+import { Chat } from '../types/Openchat';
 
-interface Chat {
-  id: string;
-  name: string;
-  users: User[]; // 자신을 포함한 참가자들 정보
-  isPrivate: boolean;
-  latestMessage: Message | null;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-interface Message {
-  id: string;
-  text: string;
-  userId: string;
-  createAt: Date;
-}
 type ChatNewInfo = Omit<Chat, 'latestMessage'>;
 
 interface OpenchatCreateProps {
@@ -93,12 +75,13 @@ function useMutationNewOpenchat({
           image: '',
         });
       }
+      toast.success('새로운 채팅방이 생성되었습니다.');
     } catch (error) {
       // axios 에러가 발생하면 응답 객체 보여주기 (TODO: 추후 toast로 수정 필요)
       if (isAxiosError(error)) {
-        console.log(error.response);
+        toast.error(error.response?.data);
       } else if (error instanceof Error) {
-        console.log(error.message);
+        toast.error(error.message);
       }
     } finally {
       // 오픈 채팅의 성공/실패 후 다시 false로 바꾸기
