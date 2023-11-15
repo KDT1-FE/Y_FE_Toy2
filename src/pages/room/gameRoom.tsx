@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { chattingIdState } from '../../states/atom';
 // import InviteGameRoom from '../../components/template/inviteGameRoom';
 import styled from 'styled-components';
@@ -11,10 +11,7 @@ import GameChatting from '../../components/template/GameChatting';
 // import CheckUser from '../../components/template/CheckUser';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
-
-import { useRecoilValue } from 'recoil';
-import { roomIdState } from '../../states/atom';
-import { usersInRoom } from '../../states/atom';
+import { roomIdState, usersInRoom } from '../../states/atom';
 
 const GameRoom = () => {
   const { id } = useParams();

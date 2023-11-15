@@ -43,8 +43,7 @@ function UserLogin() {
       const res = await postLogin(id, password);
       setIsLogin(true);
       const { accessToken, refreshToken } = res.data;
-      setCookies(accessToken, refreshToken);
-      localStorage.setItem('id', id);
+      setCookies(accessToken, refreshToken, id);
 
       alert('로그인에 성공했습니다.');
 

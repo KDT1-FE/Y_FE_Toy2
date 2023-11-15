@@ -19,7 +19,7 @@ import {
 import { getUserData, patchUserData } from '../../api';
 import { disconnectLoginSocket } from '../../api/socket';
 import { useNavigate } from 'react-router-dom';
-import { removeCookies } from '../../util/util';
+import { getCookie, removeCookies } from '../../util/util';
 
 const UserProfile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,7 +31,7 @@ const UserProfile = () => {
   const [myName, setMyname] = useState('');
   const [myImg, setMyImg] = useState('');
 
-  const userId = localStorage.getItem('id');
+  const userId = getCookie('userId');
 
   const navigate = useNavigate();
 
@@ -86,7 +86,6 @@ const UserProfile = () => {
   const handleUserLogout = async () => {
     try {
       await disconnectLoginSocket();
-      localStorage.removeItem('id');
       removeCookies();
       alert('로그아웃에 성공했습니다');
       navigate('/');
