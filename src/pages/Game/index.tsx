@@ -108,7 +108,11 @@ const Game = () => {
 
   useEffect(() => {
     if (current === "게임종료") {
-      window.location.reload();
+      const timeoutId = setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [current]);
 
