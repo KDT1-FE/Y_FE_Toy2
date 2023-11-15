@@ -25,7 +25,7 @@ interface ChattingDetailProps {
 }
 
 interface ChatsProps {
-  mine: boolean; // 이 부분이 추가되었습니다.
+  $mine: boolean; // 이 부분이 추가되었습니다.
 }
 
 const GameChatting = ({ chatId }: ChattingDetailProps) => {
@@ -62,7 +62,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   }
 
   const userId = getUserIdFromCookie();
-
+  console.log(userId);
   // const myUserData: any = useRecoilValue(myUserDataState);
   const [currentMessageObject, setCurrentMessageObject] =
     useRecoilState(myMessageState);
@@ -169,10 +169,10 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
         {fetchChat.map((element, index) => (
           <div key={index}>
             <p>{element.date}</p>
-            <ChatWrap mine={element.userId === userId}>
-              <Chats mine={element.userId === userId}>
+            <ChatWrap $mine={element.userId === userId}>
+              <Chats $mine={element.userId === userId}>
                 <p>{element.text}</p>
-                <ChatTime mine={element.userId === userId}>
+                <ChatTime $mine={element.userId === userId}>
                   {element.time}
                 </ChatTime>
               </Chats>
@@ -185,10 +185,10 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
           <div key={index}>
             {element.date !== lastDate && <p>{element.date}</p>}
 
-            <ChatWrap mine={element.userId === userId} id="messageWrap">
-              <Chats mine={element.userId === userId}>
+            <ChatWrap $mine={element.userId === userId} id="messageWrap">
+              <Chats $mine={element.userId === userId}>
                 <p>{element.text}</p>
-                <ChatTime mine={element.userId === userId}>
+                <ChatTime $mine={element.userId === userId}>
                   {element.time}
                 </ChatTime>
               </Chats>
@@ -279,7 +279,7 @@ const Chatting = styled.div`
 
 const ChatWrap = styled.div<ChatsProps>`
   width: 100%;
-  text-align: ${(props) => (props.mine ? 'right' : 'left')};
+  text-align: ${(props) => (props.$mine ? 'right' : 'left')};
   position: relative;
 `;
 
@@ -290,17 +290,17 @@ const Chats = styled.div<ChatsProps>`
   color: white;
   font-size: 14px;
 
-  background-color: ${(props) => (props.mine ? '#4FD1C5' : '#EDF2F7')};
-  color: ${(props) => (props.mine ? '#fff' : '#2D3748')};
+  background-color: ${(props) => (props.$mine ? '#4FD1C5' : '#EDF2F7')};
+  color: ${(props) => (props.$mine ? '#fff' : '#2D3748')};
   margin-bottom: 10px;
   display: inline-block;
-  text-align: ${(props) => (props.mine ? 'right' : 'left')};
+  text-align: ${(props) => (props.$mine ? 'right' : 'left')};
 `;
 
 const ChatTime = styled.div<ChatsProps>`
   font-size: 10px;
   color: ${(props) =>
-    props.mine ? 'rgba(255, 255, 255, 0.7)' : 'rgba(45,55,72, 0.7)'};
+    props.$mine ? 'rgba(255, 255, 255, 0.7)' : 'rgba(45,55,72, 0.7)'};
   //시간 부분도 똑같이 구현 못 함...
 `;
 
