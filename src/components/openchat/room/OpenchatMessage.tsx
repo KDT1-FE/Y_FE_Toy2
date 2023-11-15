@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { MessageType } from '../../types/MessageType';
-import { formatDateTime } from '../../utils/formatDate';
-import { OpenchatMessageItemWrap } from '../../styles/OpenchatStyle';
-import { User } from '../../types/User';
-import OpenchatAvatar from './OpenchatAvatar';
+import { MessageType } from '../../../types/MessageType';
+import { formatDateTime } from '../../../utils/formatDate';
+import { OpenchatMessageItemWrap } from '../../../styles/OpenchatStyle';
+import { User } from '../../../types/User';
+import OpenchatAvatar from '../common/OpenchatAvatar';
 
 interface OpenchatMessageProps {
   isMe: boolean;

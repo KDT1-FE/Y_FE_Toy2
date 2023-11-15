@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Skeleton } from '@mui/material';
-import { OpenchatRoom } from '../../styles/OpenchatStyle';
+import { OpenchatRoom } from '../../../styles/OpenchatStyle';
 
 function OpenchatItemSkeleton() {
   return (

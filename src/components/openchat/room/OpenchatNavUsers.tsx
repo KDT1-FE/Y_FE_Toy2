@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Cycle, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import OpenchatNavUserItem from './OpenchatNavUserItem';
-import { User } from '../../types/User';
+import { User } from '../../../types/User';
 import OpenchatNavInvite from './OpenchatNavInvite';
 
 // const variants = {
@@ -15,16 +15,16 @@ import OpenchatNavInvite from './OpenchatNavInvite';
 
 interface OpenchatNavUsersProps {
   users: User[];
-  toggleModalOpen: (state: string | null) => void;
+  handleOpen: () => void;
 }
 
-function OpenchatNavUsers({ users, toggleModalOpen }: OpenchatNavUsersProps) {
+function OpenchatNavUsers({ users, handleOpen }: OpenchatNavUsersProps) {
   return (
     <motion.ul>
       {users.map((user) => (
         <OpenchatNavUserItem key={user.id} user={user} />
       ))}
-      <OpenchatNavInvite toggleModalOpen={toggleModalOpen} />
+      <OpenchatNavInvite handleOpen={handleOpen} />
     </motion.ul>
   );
 }

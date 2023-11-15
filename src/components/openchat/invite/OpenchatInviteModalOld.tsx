@@ -5,8 +5,8 @@ import { PersonAdd } from '@mui/icons-material';
 import {
   OpenchatCreateChatModal,
   OpenchatCreateChatWrap,
-} from '../../styles/OpenchatStyle';
-import { User } from '../../types/User';
+} from '../../../styles/OpenchatStyle';
+import { User } from '../../../types/User';
 import OpenchatInviteFriends from './OpenchatInviteFriends';
 
 interface OpenchatInviteModalProps {

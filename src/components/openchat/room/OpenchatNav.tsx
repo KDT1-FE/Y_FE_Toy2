@@ -1,24 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Cycle, motion } from 'framer-motion';
 import { Box, Button, Typography } from '@mui/material';
-import { User } from '../../types/User';
-import { Chat } from '../../types/Openchat';
+import { User } from '../../../types/User';
+import { Chat } from '../../../types/Openchat';
 import OpenchatNavUsers from './OpenchatNavUsers';
 import styles from './OpenchatNav.module.css';
+import useMutationOpenchatPatchs from '../../../hooks/useMutationOpenchatPatchs';
 
 interface OpenchatNavProps {
   data?: Chat;
   users: User[];
-  allUsers: User[];
-  toggleModalOpen: (state: string | null) => void;
+  handleOpen: () => void;
 }
 
-function OpenchatNav({
-  data,
-  users,
-  allUsers,
-  toggleModalOpen,
-}: OpenchatNavProps) {
+function OpenchatNav({ data, users, handleOpen }: OpenchatNavProps) {
+  const { leave } = useMutationOpenchatPatchs();
+  const onClickLeave = () => {
+    if (data) leave(data.id);
+  };
+
   return (
     <motion.nav
       initial={{ x: '100%' }}
@@ -36,10 +36,10 @@ function OpenchatNav({
           <Typography variant="h6" p={2}>
             대화상대
           </Typography>
-          <OpenchatNavUsers users={users} toggleModalOpen={toggleModalOpen} />
+          <OpenchatNavUsers users={users} handleOpen={handleOpen} />
         </Box>
         <div>
-          <Button variant="outlined" fullWidth>
+          <Button variant="outlined" fullWidth onClick={onClickLeave}>
             채팅 나가기
           </Button>
         </div>

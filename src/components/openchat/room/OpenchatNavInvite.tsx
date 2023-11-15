@@ -1,20 +1,18 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import {
   OpenchatFriendWrap,
   OpenchatNavUserItemLi,
-} from '../../styles/OpenchatStyle';
+} from '../../../styles/OpenchatStyle';
 
 interface OpenchatNavInviteProps {
-  toggleModalOpen: (state: string | null) => void;
+  handleOpen: () => void;
 }
 
-function OpenchatNavInvite({ toggleModalOpen }: OpenchatNavInviteProps) {
+function OpenchatNavInvite({ handleOpen }: OpenchatNavInviteProps) {
   return (
-    <OpenchatNavUserItemLi onClick={() => toggleModalOpen('true')}>
+    <OpenchatNavUserItemLi onClick={handleOpen}>
       <OpenchatFriendWrap sx={{ width: '100%' }}>
         <div className="openchat__friend-img">
           <Box

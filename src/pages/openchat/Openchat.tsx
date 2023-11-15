@@ -1,24 +1,14 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState, useMemo } from 'react';
-import {
-  Box,
-  Button,
-  Chip,
-  Container,
-  Grid,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { MapsUgc } from '@mui/icons-material';
 import {
-  OpenchatAppbar,
   OpenchatBox,
   OpenchatContainer,
   OpenchatCreateChatBtn,
 } from '../../styles/OpenchatStyle';
 
-import OpenchatCategory from '../../components/openchat/OpenchatCategory';
-import OpenchatCreate from '../../components/openchat/OpenchatCreate';
+import OpenchatCategory from '../../components/openchat/list/OpenchatCategory';
+import OpenchatCreate from '../../components/openchat/new/OpenchatCreate';
 import { privateApi } from '../../libs/axios';
 import { UserSimple } from '../../types/User';
 import useQueryOpenchats from '../../hooks/useQueryOpenchats';
@@ -27,8 +17,9 @@ import {
   filterFriendsNotMe,
 } from '../../utils/filterOpenChats';
 import { animal, hobby, sports } from '../../types/Openchat';
-import OpenchatMy from '../../components/openchat/OpenchatMy';
-import OpenchatFriends from '../../components/openchat/OpenchatFriends';
+import OpenchatMy from '../../components/openchat/list/OpenchatMy';
+import OpenchatFriends from '../../components/openchat/list/OpenchatFriends';
+import OpenchatTopAppbar from '../../components/openchat/list/OpenchatTopAppbar';
 
 function Openchat() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -74,47 +65,8 @@ function Openchat() {
 
   return (
     <OpenchatContainer isOpenModal={Boolean(selectedId)}>
-      <OpenchatAppbar id="openchat-appbar">
-        <div className="scroll-box">
-          <Stack direction="row" spacing={1}>
-            <Chip
-              label="내 오픈채팅방"
-              component="a"
-              href="#my-chat"
-              clickable
-            />
-            <Chip
-              label="추천"
-              component="a"
-              href="#my-tag"
-              clickable
-              variant="outlined"
-            />
-            <Chip
-              label="#취미/문화"
-              component="a"
-              href="#hobby"
-              clickable
-              variant="outlined"
-            />
-            <Chip
-              label="#운동/스포츠"
-              component="a"
-              href="#sports"
-              clickable
-              variant="outlined"
-            />
-            <Chip
-              label="#동물/식물"
-              component="a"
-              href="#animal"
-              clickable
-              variant="outlined"
-            />
-          </Stack>
-        </div>
-      </OpenchatAppbar>
-      <Container>
+      <OpenchatTopAppbar />
+      <Container sx={{ paddingBottom: '100px' }}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }} pt={3}>
           <OpenchatCreateChatBtn
             layoutId="newchat-modal"

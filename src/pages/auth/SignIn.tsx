@@ -11,6 +11,7 @@ import {
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import toast from 'react-hot-toast';
 import { privateApi, publicApi } from '../../libs/axios';
 import { accessTokenState, userState } from '../../atoms';
 
@@ -57,7 +58,7 @@ function SignIn() {
           // axios에서 발생한 error
           if (error.code === 'ERR_BAD_REQUEST') {
             // eslint-disable-next-line no-console
-            console.log('아이디 혹은 비밀번호를 잘못 입력하셨습니다.');
+            toast.error('아이디 혹은 비밀번호를 잘못 입력하셨습니다.');
           }
         }
       }

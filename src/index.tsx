@@ -19,7 +19,6 @@ root.render(
         <App />
       </BrowserRouter>
     </RecoilRoot>
-    ,
   </ThemeProvider>,
   // </React.StrictMode>,
 );

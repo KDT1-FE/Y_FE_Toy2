@@ -14,10 +14,12 @@ import { privateApi } from '../libs/axios';
 import { db } from '../firebaseSDK';
 import { ChatInfo, ChatInfoConverter } from '../libs/firestoreChatConverter';
 import { Chat, Chats } from '../types/Openchat';
-import filterOpenChats from '../utils/filterOpenChats';
+import filterOpenChats, {
+  filterOpenChatsNotMychat,
+} from '../utils/filterOpenChats';
 import { userInfoConverter } from '../libs/firestoreConverter';
 import { userState } from '../atoms';
-import { UserInfoWithId, UserSimple } from '../types/User';
+import { User, UserInfoWithId, UserSimple } from '../types/User';
 
 export type ChatInfoWithId = ChatInfo & {
   id: string;
@@ -62,8 +64,9 @@ function useQueryOpenchats() {
     const openchatRef = collection(db, 'user').withConverter(userInfoConverter);
     const q = query(openchatRef, where('hashtags', 'array-contains-any', arr));
     const querySn = await getDocs(q);
-    querySn.forEach((doc) => {
-      data.push({ id: doc.id, ...doc.data() });
+    querySn.forEach(async (doc) => {
+      const userData = doc.data();
+      data.push({ id: doc.id, ...userData });
     });
     return data;
   };
@@ -71,6 +74,12 @@ function useQueryOpenchats() {
   const myOpenChat = useMemo(
     () => filterOpenChats(openchats, chats),
     [openchats, chats],
+  );
+
+  const myChatIds = chats?.map((chat) => chat.id);
+  const openchatsNotme = useMemo(
+    () => filterOpenChatsNotMychat(openchats ?? [], myChatIds ?? []),
+    [openchats, myChatIds],
   );
 
   const getOpenchatsAndMychat = useCallback(async () => {
@@ -84,6 +93,7 @@ function useQueryOpenchats() {
       ]);
       // 친구 조회
       const friends = await getFriends(data[1]);
+
       // 받아온 정보들 저장
       setChats(data[0].data.chats);
       setMyHashtags(data[1]);
@@ -100,7 +110,7 @@ function useQueryOpenchats() {
 
   return {
     isQuering,
-    openchats,
+    openchats: openchatsNotme,
     myOpenChat,
     friends,
     hashtags: myHashtags,

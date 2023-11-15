@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { User } from '../../types/User';
+import { User } from '../../../types/User';
 import OpenchatInviteFriendItem from './OpenchatInviteFriendItem';
 
 interface OpenchatInviteFriendsProps {

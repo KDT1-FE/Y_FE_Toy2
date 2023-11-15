@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Tooltip, Typography } from '@mui/material';
 import { AddCircleOutline, RemoveCircleOutline } from '@mui/icons-material';
-import { OpenchatFriendWrap } from '../../styles/OpenchatStyle';
-import { User } from '../../types/User';
+import { OpenchatFriendWrap } from '../../../styles/OpenchatStyle';
+import { User } from '../../../types/User';
 
 interface OpenchatInviteFriendItemProps {
   user: User;
@@ -20,6 +20,7 @@ function OpenchatInviteFriendItem({
   return (
     <OpenchatFriendWrap
       sx={{
+        padding: '10px',
         backgroundColor: isSeleted ? '#d7d7d7' : '#fff',
         transition: 'background-color 0.3s',
       }}
