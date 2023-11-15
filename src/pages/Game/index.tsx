@@ -143,7 +143,9 @@ const Game = () => {
         </GridItem>
         <GridItem>
           <Card h="100%" justifyContent="center">
-            <Center fontWeight="bold">{gameData.data[0].name}</Center>
+            <Center fontWeight="bold">
+              {gameData.data[0].bg} {gameData.data[0].name}
+            </Center>
           </Card>
         </GridItem>
         <GridItem>
