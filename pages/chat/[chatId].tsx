@@ -11,8 +11,8 @@ import { JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
+// import chatSocket from '@/apis/socket';
 import { CLIENT_URL } from '../../apis/constant';
-import styles from './Chat.module.scss';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
 
@@ -26,9 +26,13 @@ export default function Chat() {
   const [showAlert, setShowAlert] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const userId = useRecoilValue(userIdState);
+  const [showEntryNotice, setShowEntryNotice] = useState(false);
+  const [showExitNotice, setShowExitNotice] = useState(false);
 
-  console.log(userId);
+  const [joiners, setJoiners] = useState<string[]>([]);
+  const [leavers, setLeavers] = useState<string[]>([]);
+
+  const userId = useRecoilValue(userIdState);
 
   const accessToken = getStorage('accessToken');
 
@@ -42,29 +46,35 @@ export default function Chat() {
   }, [chatId, accessToken]);
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('Connected to chat server');
-      setIsConnected(true);
-    });
+    if (socket) {
+      socket.on('connect', () => {
+        console.log('Connected from server');
+        setTimeout(() => {
+          socket.emit('fetch-messages');
+        }, 500);
+      });
+      socket.emit('fetch-messages');
 
-    socket.on('messages-to-client', (messageArray: Message[]) => {
-      setMessages(messageArray.messages);
-    });
+      socket.on('messages-to-client', (messageArray: Message[]) => {
+        setMessages(messageArray.messages);
+      });
 
-    socket.on('message-to-client', (messageObject: Message) => {
-      setMessages(prevMessages => [...prevMessages, messageObject]);
-    });
+      socket.on('message-to-client', (messageObject: Message) => {
+        setMessages(prevMessages => [...prevMessages, messageObject]);
+      });
 
-    socket.emit('fetch-messages');
+      socket.emit('fetch-messages');
 
-    socket.on('join', (messageObject: JoinersData) => {
-      console.log(messageObject, '123123123');
-    });
+      socket.on('join', (messageObject: JoinersData) => {
+        console.log(messageObject, '채팅방 입장');
+        setJoiners(prevJoiners => [...prevJoiners, ...messageObject.joiners]);
+      });
 
-    socket.on('leave', (messageObject: LeaverData) => {
-      console.log(messageObject, '123123123');
-    });
-
+      socket.on('leave', (messageObject: LeaverData) => {
+        console.log(messageObject, '채팅방 퇴장');
+        setLeavers(prevLeavers => [...prevLeavers, messageObject.leaver]);
+      });
+    }
     return () => {
       socket.off('connect');
       socket.off('messages-to-client');
@@ -74,17 +84,47 @@ export default function Chat() {
       socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
+  }, [socket]); // 이제 chatId와 accessToken이 변경될 때
+
+  useEffect(() => {
+    if (joiners.length > 0) {
+      setShowEntryNotice(true); // Show entry notice
+
+      const entryTimer = setTimeout(() => {
+        setShowEntryNotice(false); // Hide entry notice after 3 seconds
+        setJoiners([]);
+      }, 3000);
+
+      return () => clearTimeout(entryTimer);
+    }
+  }, [joiners]);
+
+  useEffect(() => {
+    if (leavers.length > 0) {
+      setShowExitNotice(true); // Show exit notice
+
+      const exitTimer = setTimeout(() => {
+        setShowExitNotice(false); // Hide exit notice after 3 seconds
+        setLeavers([]);
+      }, 3000);
+
+      return () => clearTimeout(exitTimer);
+    }
+  }, [leavers]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({
+        behavior: 'smooth',
+      });
     }
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    setTimeout(() => {
+      scrollToBottom();
+    }, 500);
+  }, [messages, showEntryNotice, showExitNotice]);
 
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
@@ -104,8 +144,8 @@ export default function Chat() {
   return (
     <>
       <ChatroomHeader name={name} chatId={chatId} />
-      <div className={styles.container}>
-        <div className={styles.container}>
+      <div className={styles2.container}>
+        <div className={styles2.container}>
           <div>
             {messages.map(msg =>
               msg.userId === userId ? (
@@ -114,9 +154,13 @@ export default function Chat() {
                 <OtherChat key={msg.id} msg={msg} />
               ),
             )}
-            <EntryNotice />
-            <ExitNotice />
           </div>
+          {joiners.length > 0 && showEntryNotice && (
+            <EntryNotice joiners={joiners} />
+          )}
+          {leavers.length > 0 && showExitNotice && (
+            <ExitNotice leaver={leavers[0]} />
+          )}
           <div ref={messagesEndRef} />
           {showAlert && <ChatAlert />}
         </div>

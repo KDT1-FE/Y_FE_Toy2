@@ -5,7 +5,6 @@ import { IoMdMenu } from 'react-icons/io';
 import styles from './Chat.module.scss';
 import Jwtinterceptors from '../../apis/Jwtinterceptors';
 
-
 interface Props {
   chatId: string;
   name: string;
@@ -60,18 +59,17 @@ export default function ChatroomHeader({ chatId, name }: Props) {
       </div>
       <h3 className={styles.chatTitle}>{name}</h3>
       <div className={styles.right} onClick={toggleMenu}>
-      <IoMdMenu />
+        <IoMdMenu />
         {/* Dropdown 메뉴 */}
         {isMenuOpen && (
           <div className={styles.dropdownMenu}>
             <ul>
               <div>
-                <p>OO 오픈 채팅방</p>
+                <p>현재 인원 수</p>
                 <h6>OO명</h6>
               </div>
               <div>
                 <li>참여자 1</li>
-                <li>참여자 2</li>
               </div>
             </ul>
             <button

@@ -4,14 +4,16 @@
 /*---------- 전체 container 스타일 ----------*/
 .container {
   @include container;
-  position: relative;
-  margin-top: 80px;
+
+  margin-top: 6rem;
+  margin-bottom: 8rem;
+
+  height: 100%;
 }
 
 /*---------- header 영역 스타일 ----------*/
 .header {
   @include flex-between-row;
-  flex-wrap: wrap;
 
   position: fixed;
   top: 0;
@@ -23,6 +25,19 @@
 
   border-bottom: 0.1rem solid #ff347893;
   background-color: white;
+
+  // 채팅방 이름
+  .chatTitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    @media (min-width: 800px) {
+      font-size: 2rem;
+    }
+    @media (max-width: 799px) {
+      font-size: $font-size-lg;
+    }
+  }
 
   // 뒤로가기 버튼, 메뉴(속성) 버튼
   .left,
@@ -85,17 +100,22 @@
     justify-content: center;
     align-items: center;
     color: white;
-    background-color: $brand-pink;
+    background-color: $light-pink;
     border: none;
     outline: none;
     border-radius: 0.5rem;
+
+    cursor: pointer;
+    &:hover {
+      background-color: $brand-pink;
+      transition: 0.3s;
+    }
   }
 }
 
 /*---------- footer 영역 스타일 ----------*/
 .footer {
   @include flex-center-row;
-  flex-wrap: wrap;
 
   background-color: #ebe9e9;
 
@@ -213,14 +233,22 @@
       margin-bottom: 0.4rem;
     }
 
-    .content { /* 채팅 메시지 최대 너비 설정 */
-      max-width: 580px;
+    .content {
+      /* 채팅 메시지 최대 너비 설정 */
+
+      @media (min-width: 800px) {
+        max-width: 60rem;
+        font-size: $font-size-lg;
+      }
+
+      @media (max-width: 799px) {
+        max-width: 16rem;
+        font-size: $font-size-base;
+      }
       background-color: #ff347879;
 
       padding: 1rem;
       border-radius: 1.8rem;
-
-      font-size: $font-size-base;
 
       word-wrap: break-word;
       white-space: pre-wrap;
@@ -277,9 +305,7 @@
   @include flex-center-row;
 
   padding: 1rem 0;
-
   width: 100%;
-
   overflow: hidden;
 
   .box {

@@ -1,4 +1,6 @@
 @import '@/styles/index.scss';
+@import '../../styles/_variables';
+
 
 .list_container {
   @include container;
@@ -8,6 +10,15 @@
   @include container;
   display: flex;
   padding: 1rem;
+  margin : 2rem auto;
+  
+  button {
+    @include fill-btn;
+    margin : 0;
+    padding : 1rem 1.5rem;
+    font-size: 1rem;
+
+  }
 }
 
 .user_profile {
@@ -28,11 +39,17 @@
 
 .chatNameWrap {
   display: flex;
+
+  span {
+    color: #aaa;
+    margin-left: 1.7rem;
+  }
 }
 
 .chatName {
   font-size: $font-size-lg;
   margin-bottom: 1rem;
+  font-weight: bolder;
 }
 
 .chatLastestMesaage {
@@ -40,4 +57,40 @@
 }
 
 .chat_updated {
+  position: relative;
+}
+
+.time-now {
+  @include time-diff($brand-pink);
+}
+
+.time-minutes {
+  @include time-diff($success);
+}
+
+.time-hours {
+  @include time-diff($blue);
+}
+
+.time-days {
+  @include time-diff(#aaa);
+}
+
+.chatPlusBtn { 
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  bottom: 12rem;
+  right: 3rem;
+  background-color: $light-pink;
+  color : white;
+  border: 0;
+  font-size: 3rem;
+  border-radius: 50%;
+  &:hover {
+    background-color: $brand-pink;
+    transition: 0.3s;
+  }
+
+
 }

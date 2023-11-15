@@ -21,10 +21,10 @@ export default function HostDetailsModal({
   hostDetails,
   isModalOpen,
 }: HostDetailsModalProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(ref, () => {
-    onClose();
-  });
+  // const ref = useRef<HTMLDivElement>(null);
+  // useOnClickOutside(ref, () => {
+  //   onClose();
+  // });
 
   const router = useRouter();
   const createHostChat = async () => {
