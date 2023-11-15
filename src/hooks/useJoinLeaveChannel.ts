@@ -20,8 +20,6 @@ export const useJoinLeaveChannels = (chatId: string) => {
     socket.emit(SOCKET.USERS);
     socket.on(SOCKET.USER_TO_CLIENT, (messages: { users: string[] }) => {
       if (!messages) return;
-      //setOnlineUsersIds(messages.users);
-      console.log('USER_TO_CLIENT', messages); // 현재방의 실시간유저, 방 랜더링 안되니까 당연히 안바뀜
     });
 
     serverSocket.emit(SOCKET.USERS_SERVER);
@@ -30,7 +28,6 @@ export const useJoinLeaveChannels = (chatId: string) => {
       (messages: { users: string[] }) => {
         if (!messages) return;
         setOnlineUsersIds(messages.users);
-        console.log('users-server-to-client', messages);
       },
     );
 
@@ -41,8 +38,16 @@ export const useJoinLeaveChannels = (chatId: string) => {
         setUserList(newMemberList);
       },
     );
+    socket.on(
+      SOCKET.JOIN,
+      async (messages: { users: string[]; joiners: string[] }) => {
+        const newMemberList = await getMemberData(messages.users);
+        setUserList(newMemberList);
+      },
+    );
 
     return () => {
+      socket.off(SOCKET.JOIN);
       socket.off(SOCKET.LEAVE);
       serverSocket.off(SOCKET.USERS_SERVER_TO_CLIENT);
     };

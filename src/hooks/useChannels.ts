@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Channel } from '../@types/channel';
 import { createChannel, getChannels } from '../api/channel';
-import { ALL_CHANNELS } from '../constants/channel';
+import { ALL_CHANNELS, MY_CHANNELS } from '../constants/channel';
 
 export const useChannels = () => {
   return useQuery<Channel[]>({
@@ -19,6 +19,7 @@ export const useCreateChannel = () => {
     mutationFn: createChannel,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ALL_CHANNELS });
+      queryClient.invalidateQueries({ queryKey: MY_CHANNELS });
     },
   });
 };

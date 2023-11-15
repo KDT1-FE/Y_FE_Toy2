@@ -16,12 +16,11 @@ interface InviteResponseData {
 }
 
 export const useInviteData = () => {
-  const [inviteAlertData, setInviteAlertData] = useState<InviteResponseData>();
   const toast = useToast();
   const toastIdRef = useRef<ToastId>();
 
   const fetchInviteChannelName = (name: string) => {
-    const { title, category } = splitChannelName(name);
+    const { title } = splitChannelName(name);
     return title;
   };
 
@@ -30,8 +29,9 @@ export const useInviteData = () => {
       if (!messages) return;
       const chatName = fetchInviteChannelName(messages.responseChat.name);
       console.log('chatName', chatName);
+      getMyChannels();
       toastIdRef.current = toast({
-        description: `${chatName} 방에 초대되었습니다. 내 채팅방 목록에서 확인해보세요!`,
+        description: `${chatName} 방에 초대되었습니다.내 채팅방에서 확인해보세요!`,
       });
     });
     return () => {

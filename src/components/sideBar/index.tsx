@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
@@ -10,9 +10,11 @@ import {
 import { EditIcon, ChatIcon } from '@chakra-ui/icons';
 import MyChannelItem from './MyChannelItem';
 import { useMyChannels } from '../../hooks/useMyChannels';
+import { useInviteData } from '../../hooks/useInviteData';
 
 const SideBar = () => {
   const { data: channels } = useMyChannels();
+  useInviteData();
 
   return (
     <Box w="18rem" h="100vh" bg="gray.50" color="black" p="20px" boxShadow="xl">
