@@ -187,6 +187,7 @@ export default ModalExample;
 const ChatTestWrap = styled.div`
   width: 100%;
   background-color: #fff;
+  color: black;
 `;
 
 const SmallImg = styled.img`
@@ -205,12 +206,14 @@ const TopTitle = styled.h1`
   font-size: 24px;
   font-weight: bold;
   margin: 30px 0 50px 0;
+  color: black;
 `;
 
 const SubTitle = styled.h5`
   font-size: 18px;
   font-weight: bold;
   margin: 10px 0 8px 0;
+  color: black;
 `;
 
 const InputArea = styled.input`
@@ -246,6 +249,7 @@ const MemberBox = styled.div`
   border: 1px solid lightgray;
   margin-top: 20px;
   overflow-y: scroll;
+  color: black;
 `;
 
 const BoxContent = styled.div`
