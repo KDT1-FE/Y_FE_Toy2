@@ -89,6 +89,7 @@ const Game = () => {
     } else {
       setUsers([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameData.data]);
 
   // 게임 나가기 api 선언 (호출 X)
