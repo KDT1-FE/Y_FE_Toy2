@@ -49,7 +49,8 @@ const LoginForm = () => {
         }
       }
     } catch (e) {
-      console.error(e);
+      setLoginFail(FAIL_MESSAGE);
+      setFormData({ ...formData, id: formData.id, password: formData.password });
     }
   };
 
