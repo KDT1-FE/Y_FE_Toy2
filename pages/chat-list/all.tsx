@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useRecoilValue } from 'recoil';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import formatTime from '@/utils/timeFormat';
-import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import ChatListModal from '@/components/ChatList/ChatListModal';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
@@ -45,9 +44,6 @@ export default function AllChatList() {
     e.preventDefault();
   };
 
-  const today = new Date();
-  const isToday = today.toISOString().split('T')[0];
-
   const handleModal = () => {
     setIsModal(!isModal);
   };
@@ -64,8 +60,8 @@ export default function AllChatList() {
       {allChatList.map(chat => {
         const { timeDiffText, className } = formatTime(chat.updatedAt);
         const isincluded = chat.users.some(checkIncluded);
-        const dateString = todayDate(chat.updatedAt);
-        const formattedTime = formattingTime(chat.updatedAt);
+        // const dateString = todayDate(chat.updatedAt);
+        // const formattedTime = formattingTime(chat.updatedAt);
         return (
           <li key={chat.id}>
             <Link
@@ -97,9 +93,9 @@ export default function AllChatList() {
                   <div className={styles.chat_updated}>
                     <span className={styles[className]}>{timeDiffText}</span>
                   </div>
-                  <div className={styles.chat_updated}>
+                  {/* <div className={styles.chat_updated}>
                     {isToday === dateString ? formattedTime : `${dateString}`}
-                  </div>
+                  </div> */}
                   {!isincluded && (
                     <button
                       type="button"
