@@ -2,10 +2,11 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import ChatList from '../../components/chats/ChatList';
 import ChatInput from '../../components/chats/ChatInput';
 import ChannelMemberSideBar from '../../components/channelMemberSideBar';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 const Chats = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   if (!id) return <></>;
   return (
     <Flex>
@@ -16,8 +17,15 @@ const Chats = () => {
           w="full"
           h="44px"
         >
-          <Text fontSize="1rem" fontWeight={600}>
-            채팅방
+          <Text
+            fontSize="1rem"
+            fontWeight={600}
+            cursor="pointer"
+            onClick={() => {
+              navigate('/');
+            }}
+          >
+            전체 채팅방 보러가기
           </Text>
         </Flex>
         <Box>
