@@ -1,29 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Chat } from '@/@types/types';
+import { sortChatList, filterPrivateChat } from '@/utils/chatList';
+import MyChatListItem from '@/components/ChatList/MyChatListItem';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 import MyChatListItem from '@/components/ChatList/MyChatListItem';
 import Header from '@/components/Header/Header';
 
-
 export default function MyChatList() {
   const [myHostChatList, setMyHostChatList] = useState<Chat[]>([]);
   const [myChatList, setMyChatList] = useState<Chat[]>([]);
   const getMyChat = async () => {
-    const chatMyList = await chatListAPI.getMyChatList();
-    setMyChatList(chatMyList.data.chats);
-    setMyHostChatList(
-      chatMyList.data.chats.filter((chat: Chat) => chat.isPrivate),
-    );
-    setMyChatList(
-      chatMyList.data.chats.filter((chat: Chat) => !chat.isPrivate),
-    );
+    const myChats = (await chatListAPI.getMyChatList()).data.chats;
+    const sortedMyChatList = sortChatList(myChats);
+
+    setMyHostChatList(filterPrivateChat(sortedMyChatList, true));
+    setMyChatList(filterPrivateChat(sortedMyChatList, false));
   };
   useEffect(() => {
     getMyChat();
+    const timer = setInterval(() => {
+      getMyChat();
+    }, 30000);
+
+    return () => clearInterval(timer);
   }, []);
-
-
 
   return (
     <div className={styles.allContainer}>
@@ -49,3 +50,4 @@ export default function MyChatList() {
     </div>
     
   )};
+
