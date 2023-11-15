@@ -147,7 +147,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
           <div key={index}>
             {element.date !== lastDate && <p>{element.date}</p>}
 
-            <ChatWrap mine={element.userId === myUserId}>
+            <ChatWrap mine={element.userId === myUserId} id="messageWrap">
               <Chats mine={element.userId === myUserId}>
                 <p>{element.text}</p>
                 <ChatTime mine={element.userId === myUserId}>
@@ -166,7 +166,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
             value={postData}
             onChange={handleInputChange}
           />
-          <SendBtn type="submit">
+          <SendBtn>
             <Sending src={sendImg} alt="send" />
           </SendBtn>
         </form>
@@ -211,20 +211,6 @@ const ChatHeaderWarn = styled.div`
 const SendChat = styled.div`
   position: relative;
 `;
-
-// const ChatInput = styled.form`
-//   width: 100%;
-//   height: 50px;
-//   background-color: #f7fafc;
-//   border-radius: 0 0 15px 15px;
-//   border-top: 1px solid #e2e8f0;
-//   padding: 0 60px;
-//   color: #2d3748;
-
-//   &:focus {
-//     outline: none;
-//   }
-// `;
 
 const Chatting = styled.div`
   width: 450px;
@@ -288,6 +274,7 @@ const SendInput = styled.input`
   border-radius: 0 0 10px 10px;
 
   &:focus {
+    border-color: #c2c5ca;
     outline: none;
   }
 `;
