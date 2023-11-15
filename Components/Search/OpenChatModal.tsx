@@ -21,10 +21,8 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 			},
 			body: JSON.stringify({ chatId: process.env.NEXT_PUBLIC_CHAT_ID }),
 		});
-		// http://localhost:3000/chat/id 로 이동하기
-		/// 이동 후 id에서 채팅 데이터 다시 fetch 하기
-		// 에러 처리 필요
-		router.push(`chat/${modalChat.id}?isPrivate=false`);
+
+		router.push(`/chat/${modalChat.id}?isPrivate=false`);
 	};
 
 	return (
@@ -67,12 +65,7 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 				<div className="h-4/6 ml-5 text-white">
 					<OpenChatText openChat={modalChat} textSize={TEXT_SIZE} />
 				</div>
-				<button
-					className="h-1/6 bg-yellow-500 font-medium"
-					onClick={() => {
-						router.push(`/chat/${modalChat.id}?isPrivate=false`);
-					}}
-				>
+				<button className="h-1/6 bg-yellow-500 font-medium" onClick={joinChat}>
 					오픈 채팅방 참여하기
 				</button>
 
