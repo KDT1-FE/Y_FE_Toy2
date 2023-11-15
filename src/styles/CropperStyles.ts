@@ -27,7 +27,7 @@ const CropperContainer = styled('div')(({ theme }) => ({
   '.fake-upload-btn': {
     display: 'flex',
     alignItems: 'center',
-    width: '100px',
+    width: '120px',
     padding: '1rem 0.8rem',
     margin: '0 auto 1rem',
     backgroundColor: theme.palette.secondary.main,

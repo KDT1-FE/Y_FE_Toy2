@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { AuthContainer } from '../../styles/AuthStyles';
 
 function AuthLayout() {
@@ -88,6 +89,7 @@ function AuthLayout() {
           </Box>
         </Grid>
       </Grid>
+      <Toaster />
     </Box>
   );
 }

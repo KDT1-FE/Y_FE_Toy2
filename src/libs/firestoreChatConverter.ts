@@ -5,9 +5,9 @@ import {
   SnapshotOptions,
 } from 'firebase/firestore';
 
-interface User {
+interface ChatUser {
   id: string;
-  name: string;
+  username: string;
   picture: string;
 }
 
@@ -15,7 +15,7 @@ interface User {
 export class ChatInfo {
   constructor(
     public name: string,
-    public users: User[],
+    public users: ChatUser[],
     public isPrivate: boolean,
     public updatedAt: Date,
     public hashtags: string[],

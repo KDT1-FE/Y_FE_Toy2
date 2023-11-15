@@ -15,12 +15,12 @@ import { AnimatePresence } from 'framer-motion';
 import {
   OpenchatCreateChatModal,
   OpenchatCreateChatWrap,
-} from '../../styles/OpenchatStyle';
-import Cropper from '../common/Cropper';
-import { tags } from '../auth/SignUpForm4';
-import IOSSwitch from '../../styles/IOSSwitch';
-import { UserSimple } from '../../types/User';
-import useMutationNewOpenchat from '../../hooks/useMutationNewOpenchat';
+} from '../../../styles/OpenchatStyle';
+import Cropper from '../../common/Cropper';
+import { tags } from '../../auth/SignUpForm4';
+import IOSSwitch from '../../../styles/IOSSwitch';
+import { UserSimple } from '../../../types/User';
+import useMutationNewOpenchat from '../../../hooks/useMutationNewOpenchat';
 
 interface OpenchatCreateProps {
   selectedId: string | null;
