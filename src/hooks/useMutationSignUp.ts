@@ -39,6 +39,7 @@ const useMutationSignUp = (type: string) => {
           picture: url,
         });
         const { message } = res.data;
+        toast.success(message);
       } else {
         // 업로드한 파일이 없을 때
         const res = await publicApi.post('signup', {
@@ -47,10 +48,7 @@ const useMutationSignUp = (type: string) => {
           name: userData.name,
         });
         const { message } = res.data;
-        const {
-          data: { user: newUserData },
-        } = await privateApi.get<{ user: User }>(`user?userId=${userData.id}`);
-        url = newUserData.picture;
+        toast.success(message);
       }
 
       const userInfo: UserInfo = {

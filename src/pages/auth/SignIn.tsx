@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -12,8 +12,12 @@ import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import toast from 'react-hot-toast';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { privateApi, publicApi } from '../../libs/axios';
 import { accessTokenState, userState } from '../../atoms';
+import { db } from '../../firebaseSDK';
+import { UserSimple } from '../../types/User';
+import { userInfoConverter } from '../../libs/firestoreConverter';
 
 interface ResponseValue {
   accessToken: string; // 사용자 접근 토큰
@@ -47,8 +51,21 @@ function SignIn() {
 
           return newConig;
         });
-        const res2 = await privateApi.get('auth/me');
+        const res2 = await privateApi.get<{ auth: boolean; user: UserSimple }>(
+          'auth/me',
+        );
         const { user } = res2.data;
+
+        const userSn = await getDoc(
+          doc(db, 'user', user.id).withConverter(userInfoConverter),
+        );
+        if (userSn.exists()) {
+          const userData = userSn.data();
+          const { image } = userData;
+          if (image === '') {
+            await updateDoc(doc(db, 'user', user.id), { image: user.picture });
+          }
+        }
 
         localStorage.setItem('user', JSON.stringify(user));
         setAccessTokenState(res.data.accessToken);
