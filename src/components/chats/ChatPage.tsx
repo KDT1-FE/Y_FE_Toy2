@@ -30,8 +30,8 @@ const MyChats = ({ userType }: { userType: string }) => {
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       if (chat.users.every((user) => user.id !== userId)) {
-        // router.push(`/chating/${chat.id}`);
-        setChatModalOpen(true);
+        router.push(`/chating/${chat.id}`);
+        // setChatModalOpen(true);
         console.log('새로 입장 성공');
       } else {
         router.push(`/chating/${chat.id}`);
