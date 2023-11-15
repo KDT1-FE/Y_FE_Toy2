@@ -39,7 +39,7 @@ const LoginForm = () => {
 			router.replace('/users');
 		} else {
 			Swal.fire({
-				text: '등록된 유저가 없습니다.',
+				text: '로그인 정보를 확인해주세요 ‼',
 				showCancelButton: false,
 				confirmButtonText: '확인',
 				confirmButtonColor: '#3085d6',
