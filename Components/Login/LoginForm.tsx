@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { Input } from '@material-tailwind/react';
 import Image from 'next/image';
+import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
 
 type IFormInput = {
 	id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -17,6 +18,7 @@ type IFormInput = {
 };
 
 const LoginForm = () => {
+	const loadingControl = useAsyncLoading();
 	const router = useRouter();
 
 	const {
@@ -27,12 +29,10 @@ const LoginForm = () => {
 
 	// 로그인 버튼 클릭 시
 	const onSubmit: SubmitHandler<IFormInput> = async ({ id, password }) => {
-		console.log('id: ', id, 'password:', password);
+		loadingControl(true);
 		const data = await fetchLogin(id, password);
 		console.log(data);
 		const { accessToken, refreshToken } = await fetchLogin(id, password);
-		console.log('accessToken:', accessToken);
-		console.log('refreshToken:', refreshToken);
 		// 현재 시간
 		const time = new Date();
 		// 1일 뒤
@@ -51,6 +51,7 @@ const LoginForm = () => {
 				confirmButtonColor: '#3085d6',
 			});
 		}
+		loadingControl(false);
 	};
 
 	return (
