@@ -28,6 +28,7 @@ const config: Config = withMT({
 				secondary: '#FFD4E9',
 				text: '#FF59A9',
 				fill: '#EFEFEF',
+				bgfill: '#7E7E7E',
 			},
 			backgroundImage: {
 				'trash-can': "url('../public/icon_trash.svg')",
