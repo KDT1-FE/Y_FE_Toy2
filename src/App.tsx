@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { GlobalStyle } from "./style/GlobalStyle";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
@@ -79,21 +78,17 @@ const App: React.FC = () => {
   const { theme, toggleTheme } = useDarkMode();
 
   return (
-    <Wrapper>
+    <>
       <AuthProvider>
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
           <GlobalStyle theme={theme === lightTheme ? lightTheme : darkTheme} />
           <RouterProvider router={router} />
         </ThemeContext.Provider>
       </AuthProvider>
-    </Wrapper>
+    </>
   );
 };
 
 export default App;
 
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-rows: 1fr auto;
-  grid-template-rows: auto 1fr auto 2fr;
-`;
+
