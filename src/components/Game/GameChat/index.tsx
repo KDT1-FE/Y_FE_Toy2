@@ -62,7 +62,7 @@ const GameChat: React.FC<GameChatProps> = ({
     text: "",
   });
 
-  console.log("GameChat/ gameData:", gameData);
+  // console.log("GameChat/ gameData:", gameData);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
   const [users, setUsers] = useState<string[]>([]);
@@ -105,19 +105,18 @@ const GameChat: React.FC<GameChatProps> = ({
         copy.text = arr[0];
         setNum((prev) => prev + 1);
         setSpeaking(player[num + 1]);
-        setMessage(copy);
+        setMessages((prevMessages: Message[]) => [
+          ...prevMessages,
+          { id: messageObject.userId, text: arr[0] },
+        ]);
       } else {
         // 메시지 데이터, 작성 유저 상태 저장
-        const copy = { ...message };
-        copy.id = messageObject.userId;
-        copy.text = messageObject.text;
-        setMessage(copy);
+        setMessages((prevMessages: Message[]) => [
+          ...prevMessages,
+          { id: messageObject.userId, text: messageObject.text },
+        ]);
       }
       // 메시지 데이터, 작성 유저 상태 저장
-      setMessages((prevMessages: Message[]) => [
-        ...prevMessages,
-        { id: messageObject.userId, text: messageObject.text },
-      ]);
     });
     return () => {
       socket.off("message-to-client");

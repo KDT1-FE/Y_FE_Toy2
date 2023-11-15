@@ -1,8 +1,17 @@
 import { useState, useEffect } from "react";
 
-const Timer = () => {
+interface Props {
+  current: string;
+  setCurrent: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const Timer = ({ current, setCurrent }: Props) => {
   const [isRunning, setIsRunning] = useState(false);
   const [seconds, setSeconds] = useState(5);
+
+  useEffect(() => {
+    if (current === "자유발언") setIsRunning(true);
+  }, [current]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -20,17 +29,13 @@ const Timer = () => {
     if (seconds === 0) {
       setIsRunning(false);
       setSeconds(5);
+      setCurrent("투표중");
     }
   }, [seconds]);
 
-  const handleToggle = () => {
-    setIsRunning((prevIsRunning) => !prevIsRunning);
-  };
-
   return (
-    <div>
+    <div style={{ border: "1px solid red" }}>
       <h1>{seconds}초</h1>
-      <button onClick={handleToggle}>시작</button>
     </div>
   );
 };

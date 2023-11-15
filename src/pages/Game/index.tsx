@@ -64,8 +64,14 @@ const Game = () => {
   // console.log(category, keyword);
 
   useEffect(() => {
+    setSpeaking(users[0]);
+  }, [users]);
+
+  useEffect(() => {
     console.log(num, users.length);
-    if (num === 3) setCurrent("자유발언");
+    if (num !== 0 && num === users.length) {
+      setCurrent("자유발언");
+    }
   }, [num, users]);
 
   // useEffect(() => {
@@ -117,7 +123,7 @@ const Game = () => {
 
   return (
     <>
-      <Timer />
+      <Timer current={current} setCurrent={setCurrent} />
       <Grid
         templateColumns="200px 1fr 200px"
         templateRows="60px 1fr"
