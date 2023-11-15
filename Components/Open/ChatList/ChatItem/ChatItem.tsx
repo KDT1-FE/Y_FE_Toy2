@@ -6,15 +6,11 @@ import OpenPeopleSvg from '@/public/OpenPeopleSvg.svg';
 import { ChatItemProps } from '../ChatList.type';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import moment from 'moment-timezone';
+import { koreanTime } from '@/utils/changeKoreanTime';
 
 const ChatItem = ({ chat }: ChatItemProps) => {
 	const firstUserImage = chat.users[0].picture;
 	const pathName = usePathname();
-
-	const koreanTime = (dateString: Date) => {
-		return moment(dateString).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss');
-	};
 
 	const checkIsPrivate = () => {
 		if (pathName === '/private') {
@@ -22,8 +18,6 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 		}
 		return false;
 	};
-
-	console.log(chat);
 
 	return (
 		<Link
