@@ -1,13 +1,13 @@
 import { getCookie } from '@/Components/Login/Cookie';
 import React, { useEffect, useRef } from 'react';
 import { Chat, Message } from '@/types';
-// import Chats from '@/Components/Chat/Chats';
+import Chats from '@/Components/Chat/Chats';
 
 const RenderChats = ({
 	messages,
 	chatUsers,
-}: // useModal,
-{
+	useModal,
+}: {
 	messages: Message[];
 	chatUsers: Chat;
 	useModal: boolean;
@@ -52,13 +52,13 @@ const RenderChats = ({
 									</div>
 								) : null}
 
-								{/* <Chats
+								<Chats
 									key={message.id}
 									message={message}
 									user={myUser}
 									myId={myId}
 									useModal={useModal}
-								/> */}
+								/>
 							</li>
 						);
 					}
