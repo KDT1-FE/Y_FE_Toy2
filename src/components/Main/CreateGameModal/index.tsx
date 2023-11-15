@@ -1,6 +1,6 @@
 import { Button, Input } from "@chakra-ui/react";
 import { EmojiButton } from "@joeattardi/emoji-button";
-import { serverTimestamp } from "firebase/firestore";
+import { FieldValue, serverTimestamp } from "firebase/firestore";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -133,6 +133,18 @@ interface ChatRoom {
   num: number;
   bg?: string;
   status?: string;
+}
+
+interface newChat {
+  users: (string | null)[];
+  id: any;
+  host: string | null;
+  createdAt: FieldValue;
+  bg: string;
+  status: string;
+  name: string;
+  isPrivate?: boolean | undefined;
+  num: number;
 }
 
 interface UserType {
@@ -288,7 +300,9 @@ const CreateGameModal = ({ setModal, socket }: Props) => {
       fireFetch.usePostData("game", createGame.result.id, newData);
 
       // 초대된 유저 목록 생성
-      const inviteUser: (string | ChatRoom | string[])[] = [...roomData.users];
+      const inviteUser: (string | ChatRoom | string | newChat)[] = [
+        ...roomData.users,
+      ];
 
       inviteUser.push(newData);
       inviteUser.push("*&^");
