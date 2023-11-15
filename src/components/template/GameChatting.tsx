@@ -9,11 +9,11 @@ import {
   createSeparatedTime,
   modifyDate,
 } from './useChattingSort';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
+
 import {
   privateChatDetail,
   privateChatNew,
-  myUserDataState,
   onlineUserStateInGameRoom,
   myMessageState,
   roomIdState,
@@ -24,6 +24,11 @@ import { getCookie } from '../../util/util';
 interface ChattingDetailProps {
   chatId: string;
 }
+
+interface ChatsProps {
+  mine: boolean; // 이 부분이 추가되었습니다.
+}
+
 const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [postData, setPostData] = useState('');
   const [socket, setSocket] = useState<any>(null);
@@ -34,9 +39,13 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [usersInRoomData, setUsersInRoom] = useRecoilState(usersInRoom);
   const accessToken: any = getCookie('accessToken');
 
+
+  const myUserId = localStorage.getItem('id');
+
   const myUserData: any = useRecoilValue(myUserDataState);
   const [currentMessageObject, setCurrentMessageObject] =
     useRecoilState(myMessageState);
+
   useEffect(() => {
     try {
       const newSocket = chatSocket(accessToken, chatId);
@@ -128,70 +137,73 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
     setPostData('');
   };
 
+  console.log(myUserId);
+
   return (
     <Chat>
       <ChatHeader>
         <ChatHeaderIcon src={InfoImg} alt="ChatInfo" />
         <ChatHeaderWarn>게임이 시작되었습니다.</ChatHeaderWarn>
       </ChatHeader>
-      {/* 채팅 부분 */}
-      {fetchChat.map((element, index) => (
-        <div key={index}>
-          <p>{element.date}</p>
-          <div id="messageWrap">
-            <div
-              id="message"
-              className={element.userId === myUserData.id ? 'mine' : ''}>
-              <p style={{ color: 'red' }}>{element.text}</p>
-            </div>
-            <p>{element.time}</p>
+      <Chatting>
+        {/* 이전 채팅 불러오기 */}
+        {fetchChat.map((element, index) => (
+          <div key={index}>
+            <p>{element.date}</p>
+            <ChatWrap mine={element.userId === myUserId}>
+              <Chats mine={element.userId === myUserId}>
+                <p>{element.text}</p>
+                <ChatTime mine={element.userId === myUserId}>
+                  {element.time}
+                </ChatTime>
+              </Chats>
+            </ChatWrap>
           </div>
-        </div>
-      ))}
+        ))}
 
-      {newChat.map((element, index) => (
-        <div key={index}>
-          {element.date !== lastDate && <p>{element.date}</p>}
+        {/* 현재 채팅 */}
+        {newChat.map((element, index) => (
+          <div key={index}>
+            {element.date !== lastDate && <p>{element.date}</p>}
 
-          <div id="messageWrap">
-            <div
-              id="message"
-              className={element.userId === myUserData.id ? 'mine' : ''}>
-              {/* {"mine이면 파란색, ''이면 빨간색"} */}
-
-              <p>{element.text}</p>
-            </div>
-            <p>{element.time}</p>
+            <ChatWrap mine={element.userId === myUserId} id="messageWrap">
+              <Chats mine={element.userId === myUserId}>
+                <p>{element.text}</p>
+                <ChatTime mine={element.userId === myUserId}>
+                  {element.time}
+                </ChatTime>
+              </Chats>
+            </ChatWrap>
           </div>
-        </div>
-      ))}
+        ))}
+      </Chatting>
       <SendChat>
         <form onSubmit={messageSubmit}>
-          <input
+          <SendInput
             type="text"
             placeholder="Aa"
             value={postData}
             onChange={handleInputChange}
           />
+          <SendBtn>
+            <Sending src={sendImg} alt="send" />
+          </SendBtn>
         </form>
-        <Aa src={AaImg} alt="Aa" />
-        <Sending src={sendImg} alt="send" />
       </SendChat>
     </Chat>
   );
 };
 
 const Chat = styled.div`
-  width: 370px;
-  height: 450px;
+  width: 450px;
+  height: 563px;
   background-color: #fff;
   border-radius: 15px;
   text-align: center;
   box-shadow: 0px 3px 5px 0px #e2e8f0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  /* 챗부분 넣으면 자식들 height를 퍼센트로.. */
+  box-sizing: border-box;
 `;
 
 const ChatHeader = styled.div`
@@ -219,25 +231,74 @@ const SendChat = styled.div`
   position: relative;
 `;
 
-const ChatInput = styled.form`
+const Chatting = styled.div`
+  width: 450px;
+  height: 463px;
+  margin: 0 auto;
+  background-color: #fff;
+  overflow-y: scroll;
+  padding: 20px;
+
+  /* ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b1bfd8;
+  } */
+  //스크롤바 일단 보류...
+`;
+
+const ChatWrap = styled.div<ChatsProps>`
   width: 100%;
+  text-align: ${(props) => (props.mine ? 'right' : 'left')};
+  position: relative;
+`;
+
+const Chats = styled.div<ChatsProps>`
+  max-width: 260px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  color: white;
+  font-size: 14px;
+
+  background-color: ${(props) => (props.mine ? '#4FD1C5' : '#EDF2F7')};
+  color: ${(props) => (props.mine ? '#fff' : '#2D3748')};
+  margin-bottom: 10px;
+  display: inline-block;
+  text-align: ${(props) => (props.mine ? 'right' : 'left')};
+`;
+
+const ChatTime = styled.div<ChatsProps>`
+  font-size: 10px;
+  color: ${(props) =>
+    props.mine ? 'rgba(255, 255, 255, 0.7)' : 'rgba(45,55,72, 0.7)'};
+  //시간 부분도 똑같이 구현 못 함...
+`;
+
+const SendInput = styled.input`
+  padding-left: 25px;
+  width: 450px;
   height: 50px;
-  background-color: #f7fafc;
-  border-radius: 0 0 15px 15px;
-  border-top: 1px solid #e2e8f0;
-  padding: 0 60px;
-  color: #2d3748;
+  border: 1px solid #e2e8f0;
+  border-radius: 0 0 10px 10px;
 
   &:focus {
+    border-color: #c2c5ca;
     outline: none;
   }
 `;
 
-const Aa = styled.img`
-  position: absolute;
-  top: 20px;
-  left: 20px;
-`;
+const SendBtn = styled.button``;
 
 const Sending = styled.img`
   position: absolute;

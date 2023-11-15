@@ -10,7 +10,6 @@ import {
   usersInRoom,
 } from '../../states/atom';
 import styled from 'styled-components';
-import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
@@ -168,14 +167,17 @@ const GameRoom: React.FC = () => {
 
         <GameChatting chatId={roomId} />
       </RoomMain>
-      <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
-      <UserList>{/* <CheckUser /> */}</UserList>
+
+      <UserList>
+        <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
+      </UserList>
+
     </Game>
   );
 };
 
 const Game = styled.div`
-  width: 1200px;
+  width: 1400px;
   display: flex;
   flex-direction: column;
 `;
@@ -226,6 +228,6 @@ const RoomMain = styled.div`
 `;
 
 const UserList = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
 `;
 export default GameRoom;
