@@ -82,13 +82,8 @@ function ChatRoom({
           });
         });
         setTimeout(() => {
-          newSocket.on("messages-to-client", (responseData) => {
-            // 현재 메시지 상태에 없는 메시지만 추가합니다.
-            const newMessages = responseData.messages.filter(
-              (newMsg: { id: string }) =>
-                !messages.find((msg) => msg.id === newMsg.id)
-            );
-            setMessages((prevMessages) => [...prevMessages, ...newMessages]);
+          newSocket.on("messages-to-client", (responseDta) => {
+            setMessages(responseDta.messages);
           });
           setTimeout(() => {
             newSocket.emit("fetch-messages");
@@ -148,7 +143,7 @@ function ChatRoom({
     <ChatRoomWrap>
       <div className="chatroom__tit">
         <div className="tit-bx">
-          <RoomName roomId={roomId}/>
+          <RoomName roomId={roomId} />
           <UserCount roomId={roomId} />
         </div>
         <div className="util-bx">
