@@ -7,6 +7,8 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../../recoil/atoms/userState";
 import ChatBubble from "../../common/ChatBubble";
 import SystemChat from "../../common/SystemChat";
 import Vote from "../Vote";
@@ -28,12 +30,7 @@ interface UserResponse {
 }
 
 const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
-  console.log("GameChat/ gameData:", gameData);
-
-  // const [message, setMessage] = useState<Message>({
-  //   id: "",
-  //   text: "",
-  // });
+  const user = useRecoilValue(userState);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
   const [users, setUsers] = useState<string[]>([]);
@@ -87,15 +84,6 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setMessages, socket]);
 
-  // // 메시지 값 변화시(소켓 통신 시) 콘솔에 메시지 데이터 출력
-  // useEffect(() => {
-  //   if (message.id !== "") {
-  //     console.log(message);
-  //     setMessages([...messages, message]);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [message.text, message.id]);
-
   const submitMessage = () => {
     if (messageRef.current && messageRef.current.value) {
       const messageValue = messageRef.current.value;
@@ -112,11 +100,17 @@ const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
 
   return (
     <Card p={3} h="100%" mb="20px">
-      <CardBody>
+      <CardBody maxHeight="640px" overflowY="scroll">
         {messages.map((message: Message, index: number) =>
-          // 시스템 메시지인 경우 SystemMessage 컴포넌트 사용
           message.id === "system" ? (
             <SystemChat key={index} text={message.text} />
+          ) : message.id === user.id ? (
+            <ChatBubble
+              key={index}
+              userId={message.id}
+              text={message.text}
+              isMyMessage
+            />
           ) : (
             <ChatBubble key={index} userId={message.id} text={message.text} />
           ),
