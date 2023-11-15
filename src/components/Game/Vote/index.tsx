@@ -12,7 +12,6 @@ import {
   RadioGroup,
   Stack,
 } from "@chakra-ui/react";
-// import useFireFetch from "../../../hooks/useFireFetch";
 import { db } from "../../../firebase/firebase";
 import { arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import calculateVote from "./CalculateVote";
@@ -33,6 +32,7 @@ interface VoteProps {
 
 const Vote: React.FC<VoteProps> = ({
   onClose,
+  onVoteResult,
   gameData,
 }): React.ReactElement => {
   const [selectedUser, setSelectedUser] = useState<string>("");
@@ -78,7 +78,8 @@ const Vote: React.FC<VoteProps> = ({
         console.log("submit/ Updated Data:", updatedData);
 
         const voteResult = calculateVote(updatedData);
-        console.log("Vote result: " + voteResult);
+        onVoteResult(voteResult);
+        console.log("submit/ Vote result: " + voteResult);
 
         onClose(selectedUser);
       } catch (error) {
