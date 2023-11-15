@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ChatHeader from '../../components/ChatHeader';
 import styles from '@styles/pages/chat.module.scss';
 import ChatItem from '../../components/ChatItem';
-import { Chat, ChatUser } from '../../types/ChatType';
 import { Socket, io } from 'socket.io-client';
 
 const accessToken =
@@ -18,10 +17,13 @@ const ChatPage: React.FC = () => {
   const [inputText, setInputText] = useState<string>('');
   const [socket, setSocket] = useState<Socket | null>(null);
 
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     // 소켓 연결 설정
     const newSocket: Socket = io(
-      'https://fastcampus-chat.net/chat?chatId=' + chatId,
+      // 'https://fastcampus-chat.net/chat?chatId=' + chatId,
+      `https://fastcampus-chat.net/chat?chatId=${chatId}`,
       {
         extraHeaders: {
           Authorization: `Bearer ${accessToken}`,
@@ -29,14 +31,20 @@ const ChatPage: React.FC = () => {
         },
       },
     );
-
     setSocket(newSocket);
-
     // 컴포넌트 언마운트 시 소켓 연결 해제
     return () => {
       newSocket.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('message-to-client', (messageObject) => {
+        console.log(messageObject);
+      });
+    }
+  }, [socket]);
 
   const handleStartGame = (): void => {
     // 게임 시작 로직 추가
@@ -49,7 +57,7 @@ const ChatPage: React.FC = () => {
       return;
     }
     const tempUser: ChatUser = {
-      imageUrl: '/moon.svg',
+      imageUrl: '/ghost1.svg',
       nickname: '마피아',
     };
 
@@ -57,16 +65,21 @@ const ChatPage: React.FC = () => {
       id: chats.length + 1, // 새로운 채팅의 id를 기존 채팅 수에 1을 더함
       user: tempUser,
       text: inputText,
+      myMsg: true,
     };
 
     // 소켓을 통해 서버로 메세지 전송
     if (socket) {
       socket.emit('message-to-server', newChat.text);
     }
-
-    setChats([...chats, newChat]);
     setInputText(''); // 입력값 초기화
+    setChats([...chats, newChat]);
   };
+
+  useEffect(() => {
+    console.log('Updated Chats:', chats);
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chats]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
@@ -79,13 +92,26 @@ const ChatPage: React.FC = () => {
         totalPlayers={totalPlayers}
         onStartGame={handleStartGame}
       />
-      {chats.map((chatItem) => (
-        <ChatItem key={chatItem.id} user={chatItem.user} text={chatItem.text} />
-      ))}
+      <div className={styles.chatItems}>
+        {chats.map((chatItem) => (
+          <ChatItem
+            key={chatItem.id}
+            user={chatItem.user}
+            text={chatItem.text}
+          />
+        ))}
 
-      <form onSubmit={handleSumbit}>
-        <input type="text" value={inputText} onChange={handleChange}></input>
-        <button>전송</button>
+        <div ref={messageEndRef}></div>
+      </div>
+
+      <form className={styles.form} onSubmit={handleSumbit}>
+        <input
+          className={styles.input}
+          placeholder="텍스트를 입력해주세요"
+          type="text"
+          value={inputText}
+          onChange={handleChange}></input>
+        <button className={styles.button}>전송</button>
       </form>
     </div>
   );
@@ -97,11 +123,25 @@ const chatItemData: Chat[] = [
   {
     id: 1,
     user: { imageUrl: '/ghost1.svg', nickname: 'user1' },
-    text: '너도 마피아를 하러왔구나이!!',
+    text: '너도 마피아를 하러왔구나!!',
+    myMsg: false,
   },
   {
     id: 2,
-    user: { imageUrl: '/moon.svg', nickname: 'user2' },
+    user: { imageUrl: '/ghost1.svg', nickname: 'user2' },
     text: '너도 마피아를 하러왔구나?',
+    myMsg: false,
   },
 ];
+
+export interface ChatUser {
+  imageUrl: string;
+  nickname: string;
+}
+
+export interface Chat {
+  id: number;
+  user: ChatUser;
+  text: string;
+  myMsg: boolean;
+}

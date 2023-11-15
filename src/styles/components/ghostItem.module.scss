@@ -9,10 +9,25 @@
   width: 40%;
 
   &__image {
+    position: relative;
     $size: 8rem;
     width: $size;
     height: $size;
     margin-right: 2rem;
+
+    .checked {
+      $size: 4rem;
+      height: $size;
+      width: $size;
+      position: absolute;
+      left: -20%;
+
+      &.active {
+        background-image: url('@assets/images/vote_check.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    }
 
     img {
       background-color: $gray;

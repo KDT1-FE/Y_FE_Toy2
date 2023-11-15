@@ -1,14 +1,15 @@
 import React from 'react';
 import { Chat } from '../types/ChatType';
+import styles from '@styles/components/chatItem.module.scss';
 
 const ChatItem: React.FC<Chat> = ({ user, text }) => {
   return (
-    <div>
-      <div style={{ display: 'flex' }}>
-        <img style={{ width: '50px', height: '50px' }} src={user.imageUrl} />
-        <p>{user.nickname}</p>
+    <div className={styles.chatItemContainer}>
+      <div className={styles.chatItem}>
+        <img className={styles.chatItemImage} src={user.imageUrl} />
+        <p className={styles.chatItemNickname}>{user.nickname}</p>
       </div>
-      <p>{text}</p>
+      <span className={styles.chatItemText}>{text}</span>
     </div>
   );
 };

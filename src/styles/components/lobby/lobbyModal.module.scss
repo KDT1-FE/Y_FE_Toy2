@@ -1,0 +1,142 @@
+@use '@/styles/abstracts' as *;
+@use '@/styles/base' as *;
+
+.modalBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  font-family: $font-logo;
+  @include animate(
+    blowUpModal,
+    0.3s,
+    cubic-bezier(0.165, 0.84, 0.44, 1),
+    forwards
+  );
+
+  .modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 45%;
+    padding: 4rem;
+
+    @include flex-center-col;
+    justify-content: space-between;
+    color: $white;
+    color: white;
+    border-radius: 20px;
+    background-image: linear-gradient(
+      to right,
+      #000000 0%,
+      #53346d 51%,
+      #000000 100%
+    );
+    background-size: 200% auto;
+
+    &__title {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    &__name {
+      width: 60%;
+      height: 4rem;
+      border-radius: 1rem;
+      padding: 0 2rem;
+      font-size: 2rem;
+      cursor: pointer;
+
+      &:hover {
+        border: 2px solid rgba($white, 0.4);
+        transform: scale(1.02);
+      }
+    }
+
+    &__limit {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      width: 65%;
+      height: 4rem;
+      font-size: 2rem;
+
+      &__select {
+        height: 3.5rem;
+        flex: 1 0;
+        border-radius: 1rem;
+        font-weight: bold;
+        text-align: center;
+        appearance: none;
+        cursor: pointer;
+
+        &:hover {
+          border: 2px solid rgba($white, 0.4);
+          transform: scale(1.02);
+        }
+      }
+    }
+
+    &__submit {
+      width: 33%;
+      font-size: 2.5rem;
+      border-radius: 2rem;
+      padding: 1rem 0;
+      color: $white;
+      cursor: pointer;
+
+      background-color: #835da3;
+      border: none;
+      box-shadow: 0 0 20px #eee;
+      border-radius: 10px;
+      background-image: linear-gradient(
+        to right,
+        #000000 0%,
+        #6d23aa 51%,
+        #000000 100%
+      );
+      background-size: 200% auto;
+      transition: 0.5s;
+
+      &:hover {
+        scale: 1.05;
+        background-color: #31114c;
+        background-position: right center;
+        color: #fff;
+      }
+    }
+
+    &__exit {
+      position: absolute;
+      top: 4.5rem;
+      right: 4.5rem;
+      width: 3rem;
+      height: 3rem;
+      color: $white;
+      font-size: 2rem;
+      font-weight: bold;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.4);
+      }
+    }
+  }
+}
+
+@include keyframes(blowUpModal) {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
