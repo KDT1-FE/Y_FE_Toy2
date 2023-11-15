@@ -1,15 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import ChatRoom from "../components/Chat/ChatRoom";
 import ModalPlus from "../components/ModalPlus";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
-import io, { Socket } from "socket.io-client";
 
 export interface User {
   id: string;
   name: string;
   picture: string;
+}
+
+export interface lastMes {
+  createdAt : string,
+  id: string,
+  text: string,
+  userId: string,
 }
 
 export interface ChatI {
@@ -18,7 +24,7 @@ export interface ChatI {
   users: User[];
   isPrivate: boolean;
   updatedAt: string;
-  latestMessage: string;
+  latestMessage: lastMes;
 }
 
 function Chat() {
@@ -31,10 +37,17 @@ function Chat() {
 
   useEffect(() => {
     if (accessToken) {
-      const fetchData = async () => {
+      const fetchData = async () => { 
         try {
           const data = await getData("https://fastcampus-chat.net/chat");
           const chatData = data.chats;
+          // 최신 방이 위로 오도록
+          chatData.sort((a: ChatI, b: ChatI) => {
+            const timeA = new Date(a.updatedAt).getTime();
+            const timeB = new Date(b.updatedAt).getTime();
+            return timeB - timeA;
+          });
+
           const myRoom = chatData.map((room: ChatI) => {
             // 시간 계산
             const updatedAt = room.updatedAt;
@@ -42,6 +55,8 @@ function Chat() {
             const currentDate: Date = new Date();
             const timeDifference = currentDate.getTime() - givenDate.getTime();
             const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+            const hoursDifference = Math.floor(minutesDifference / 60);
+            const daysDifference = Math.floor(hoursDifference / 24);
 
             let updatedAtString: string;
 
@@ -49,19 +64,17 @@ function Chat() {
               updatedAtString = "방금 전";
             } else if (minutesDifference < 60) {
               updatedAtString = `${minutesDifference}분 전`;
-            } else {
-              const hoursDifference = Math.floor(minutesDifference / 60);
+            } else if (hoursDifference < 24) {
               updatedAtString = `${hoursDifference}시간 전`;
+            } else {
+              updatedAtString = `${daysDifference}일 전`;
             }
-
-            // const latestMessage = room.latestMessage || "메시지가 없습니다.";
             return {
               ...room,
-              updatedAt: updatedAtString
-              // latestMessage: latestMessage
+              updatedAt: updatedAtString,
             };
           });
-
+        
           setChatRoom(myRoom);
         } catch (error) {
           console.error(error);
@@ -69,7 +82,8 @@ function Chat() {
       };
       fetchData();
     }
-  }, [accessToken]);
+  }, [accessToken, roomId]);
+  // TODO : 여기에 의존성배열로 chatRoom 을 넣어줘야하는데 그러면 너무 렌더링이 많아져서 또 채팅방 내역을 잘 못 불러옴
 
   const handleClick = (roomId: string) => {
     setRoomId(roomId);
@@ -81,17 +95,18 @@ function Chat() {
       <ChatWrapper>
         <ChatCategory>
           {chatRoom.map((room) => (
-            <CateLink key={room.id}>
-              <div
-                className="catelink__wrap"
-                onClick={() => handleClick(room.id)}
-              >
-                <div className="catelink__name">
-                  <p className="tit">{room.name}</p>
+              <CateLink key={room.id}>
+                <div
+                  className="catelink__wrap"
+                  onClick={() => handleClick(room.id)}
+                >
+                  <div className="catelink__name">
+                    <p className="tit">{room.name}</p>
+                    <p className="content">{room.latestMessage?.text || "메시지가 없습니다."}</p>
+                  </div>
+                  <div className="catelink__time">{room.updatedAt}</div>
                 </div>
-                <div className="catelink__time">{room.updatedAt}</div>
-              </div>
-            </CateLink>
+              </CateLink>
           ))}
           <CatePlus>
             <ModalPlus
@@ -130,6 +145,7 @@ const ChatCategory = styled.ul`
 `;
 
 const CateLink = styled.li`
+  position: relative;
   padding: 10px;
   border-bottom: 1px solid #e8e8e8;
   cursor: pointer;
@@ -141,7 +157,7 @@ const CateLink = styled.li`
     &__name {
       font-size: 16px;
       .tit {
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         color: black;
         white-space: nowrap;
         overflow: hidden;
@@ -153,6 +169,7 @@ const CateLink = styled.li`
         overflow: hidden;
         text-overflow: ellipsis;
         color: #999696;
+        margin-bottom: 10px;
       }
     }
     &__time {
