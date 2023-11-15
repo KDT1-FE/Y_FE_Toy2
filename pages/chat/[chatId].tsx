@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef,useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
@@ -27,25 +27,22 @@ export default function Chat() {
   const userId = '';
 
   const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTpkanduc2d1ciIsImlhdCI6MTcwMDAzNzY5MSwiZXhwIjoxNzAxMjQ3MjkxfQ.ZAwzyaa80LCv5pN-fmf0ZzRQj2kO3sa5Uc4So4Mj68A';
 
-    const socket = useMemo(() => {
-      return io(`${CLIENT_URL}?chatId=${chatId}`, {
-        extraHeaders: {
-          Authorization: `Bearer ${accessToken}`,
-          serverId: process.env.NEXT_PUBLIC_API_KEY,
-        },
-      });
-    }, [chatId, accessToken]);
+  const socket = useMemo(() => {
+    return io(`${CLIENT_URL}?chatId=${chatId}`, {
+      extraHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+        serverId: process.env.NEXT_PUBLIC_API_KEY,
+      },
+    });
+  }, [chatId, accessToken]);
 
   useEffect(() => {
-    
     socket.on('connect', () => {
       console.log('Connected to chat server');
       setIsConnected(true);
-      
     });
-
 
     socket.on('messages-to-client', (messageArray: Message[]) => {
       setMessages(messageArray.messages);
@@ -109,11 +106,13 @@ export default function Chat() {
           <EntryNotice />
           <ExitNotice />
           <div>
-          {messages.map(msg => (
-              msg.userId === userId ? 
-              <MyChat key={msg.id} msg={msg} />
-              : <OtherChat key={msg.id} msg={msg}/>
-            ))}
+            {messages.map(msg =>
+              msg.userId === userId ? (
+                <MyChat key={msg.id} msg={msg} />
+              ) : (
+                <OtherChat key={msg.id} msg={msg} />
+              ),
+            )}
           </div>
           <div ref={messagesEndRef} />
           {showAlert && <ChatAlert />}
