@@ -20,13 +20,17 @@ export const OpenchatAppbar = styled('div')({
   zIndex: 2,
 });
 
-export const OpenchatBox = styled(Box)(({ theme }) => ({
-  paddingTop: '58px',
-  margin: 0,
-  [theme.breakpoints.down('sm')]: {
-    margin: '0 -16px',
-  },
-}));
+export const OpenchatBox = styled(Box)<{ issticky?: string }>(
+  ({ theme, issticky }) => ({
+    position: issticky === 'sticky' ? 'sticky' : 'static',
+    top: 0,
+    paddingTop: '58px',
+    margin: 0,
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 -16px',
+    },
+  }),
+);
 
 export const OpenchatRoom = styled(Box)(({ theme }) => ({
   border: '1px solid rgba(0, 0, 0, 0.1)',
@@ -161,49 +165,53 @@ export const OpenchatAvatarWrap = styled('div')({
   },
 });
 
-export const OpenchatFriendWrap = styled('div')(({ theme }) => ({
-  display: 'flex',
-  padding: '10px 0',
-  alignItems: 'center',
-  '& .openchat__friend-img': {
-    flex: '0 1 48px',
-    width: '48px',
-    height: '48px',
-    overflow: 'hidden',
-    borderRadius: '100%',
-    boxSizing: 'border-box',
-    border: '1px solid #ddd',
-    '& img': {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      verticalAlign: 'middle',
-    },
-  },
-  '& .openchat__friend-text': {
-    flex: '1 1 50%',
-    margin: '0 10px',
-    '& .overflow-ellipsis': {
+export const OpenchatFriendWrap = styled('div')<{ isSelected?: string }>(
+  ({ theme, isSelected }) => ({
+    display: 'flex',
+    padding: '10px',
+    alignItems: 'center',
+    transition: 'background-color 0.3s',
+    backgroundColor: isSelected === 'true' ? '#d7d7d7' : '#fff',
+    '& .openchat__friend-img': {
+      flex: '0 1 48px',
+      width: '48px',
+      height: '48px',
       overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-      maxWidth: '150px',
-      [theme.breakpoints.down('sm')]: {
-        maxWidth: '250px',
+      borderRadius: '100%',
+      boxSizing: 'border-box',
+      border: '1px solid #ddd',
+      '& img': {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        verticalAlign: 'middle',
       },
     },
-  },
-  '& .openchat__friend-send': {
-    flex: '0 1 20px',
-    cursor: 'pointer',
-    color: '#1D3557',
-    alignSelf: 'center',
-    transition: 'color 0.3s',
-    '&:hover': {
-      color: '#A8DADC',
+    '& .openchat__friend-text': {
+      flex: '1 1 50%',
+      margin: '0 10px',
+      '& .overflow-ellipsis': {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        maxWidth: '150px',
+        [theme.breakpoints.down('sm')]: {
+          maxWidth: '250px',
+        },
+      },
     },
-  },
-}));
+    '& .openchat__friend-send': {
+      flex: '0 1 20px',
+      cursor: 'pointer',
+      color: '#1D3557',
+      alignSelf: 'center',
+      transition: 'color 0.3s',
+      '&:hover': {
+        color: '#A8DADC',
+      },
+    },
+  }),
+);
 
 export const OpenchatRoomAppbar = React.memo(
   styled(Box)(({ theme }) => ({

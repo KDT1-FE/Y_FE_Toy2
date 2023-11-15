@@ -18,13 +18,7 @@ function OpenchatInviteFriendItem({
   const isSeleted = selectedIds.includes(user.id);
 
   return (
-    <OpenchatFriendWrap
-      sx={{
-        padding: '10px',
-        backgroundColor: isSeleted ? '#d7d7d7' : '#fff',
-        transition: 'background-color 0.3s',
-      }}
-    >
+    <OpenchatFriendWrap isSelected={`${isSeleted}`}>
       <div className="openchat__friend-img">
         <img src={user.picture} alt={user.name} />
       </div>

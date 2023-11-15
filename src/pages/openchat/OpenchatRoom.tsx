@@ -1,11 +1,5 @@
 /* eslint-disable no-console */
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowBack } from '@mui/icons-material';
@@ -59,54 +53,6 @@ function OpenchatRoom() {
     setSearchResults(results);
   };
 
-  const tempMsg = useMemo(
-    () => [
-      {
-        id: 'be47c972-3b35-473c-9c71-2c667b093cf1',
-        text: '이방은 토이프로젝트 스터디 공부방입니다!',
-        userId: 'cinderella',
-        createdAt: '2023-11-13T09:02:51.974Z',
-      },
-      {
-        id: '30063ebf-d20d-4fd3-9461-869261928924',
-        text: '안녕하세요!',
-        userId: 'user1',
-        createdAt: '2023-11-13T15:26:37.515Z',
-      },
-      {
-        id: 'ac2475c0-8254-48ca-9c5d-cca651f0cee4',
-        text: '테스트중입니다.',
-        userId: 'user1',
-        createdAt: '2023-11-13T16:41:47.814Z',
-      },
-      {
-        id: 'ac2475c0-8254-48ca-9c5d-cca651f0cee4',
-        text: '안녕하세요 반가워요!',
-        userId: 'cinderella',
-        createdAt: '2023-11-13T16:42:47.814Z',
-      },
-      {
-        id: 'ac2475c0-8254-48ca-9c5d-cca651f0cee4',
-        text: 'abcdefghijklmnopqrstuvwxyz',
-        userId: 'cinderella',
-        createdAt: '2023-11-13T16:42:54.814Z',
-      },
-      {
-        id: '30063ebf-d20d-4fd3-9461-869261928924',
-        text: '문자 테스트중 1',
-        userId: 'user1',
-        createdAt: '2023-11-13T16:43:37.515Z',
-      },
-      {
-        id: 'ac2475c0-8254-48ca-9c5d-cca651f0cee4',
-        text: '문자 테스트중 2',
-        userId: 'user1',
-        createdAt: '2023-11-13T16:44:47.814Z',
-      },
-    ],
-    [],
-  );
-
   const scrollToBottom = () => {
     messageWrapRef.current?.scrollIntoView({
       behavior: 'smooth',
@@ -122,6 +68,12 @@ function OpenchatRoom() {
         setMessages(messagesObject.messages);
         scrollToBottom();
       });
+      // socket.on('disconnect', () => {
+      //   toast('socket disconnected');
+      // });
+      // socket.on('connect', () => {
+      //   toast('socket connected');
+      // });
     }
 
     return () => {
