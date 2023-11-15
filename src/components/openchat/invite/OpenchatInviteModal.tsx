@@ -64,7 +64,7 @@ function OpenchatInviteModal2({
       <S.ModalWrapper>
         <S.ModalHeader>
           <S.EmptyBox />
-          <S.Title>대화 상대 초대</S.Title>
+          <S.ModalTitle>대화 상대 초대</S.ModalTitle>
           <S.CancelBtn onClick={handleClose}>
             <Clear />
           </S.CancelBtn>

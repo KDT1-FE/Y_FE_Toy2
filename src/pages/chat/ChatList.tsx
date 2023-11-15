@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from '@mui/material';
 import { Clear, MapsUgcRounded } from '@mui/icons-material';
 import { useRecoilValue } from 'recoil';
@@ -22,8 +22,11 @@ function ChatList() {
     picture: '',
   });
   const [userList, setUserList] = useState([]);
-  const userAllList = useUserAll(accessToken);
   const userInfo = useGetUserInfo(accessToken);
+  const userAllList = useUserAll(accessToken).filter(
+    (user: UserType) => user.id !== userInfo?.id,
+  );
+
   const chatList = useChatAll(accessToken);
   const handleCreateOrJoinChat = useCreateOrJoinChat(
     accessToken,
@@ -31,10 +34,6 @@ function ChatList() {
     selectedUser,
     userInfo,
   );
-
-  const getUserList = useCallback(() => {
-    setUserList(userAllList);
-  }, [userAllList]);
 
   const handleModal = (): void => {
     setOpen(!open);
@@ -49,8 +48,8 @@ function ChatList() {
   };
 
   useEffect(() => {
-    getUserList();
-  }, [getUserList]);
+    setUserList(userAllList);
+  }, [userAllList.length]);
 
   return (
     <S.Wrapper>

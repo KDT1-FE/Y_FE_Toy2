@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import toast from 'react-hot-toast';
 
 const useCreateChat = (
   accessToken: string | null,
@@ -6,22 +7,32 @@ const useCreateChat = (
   selectedUserId: string,
 ) => {
   const createChat = useCallback(async () => {
-    const response = await fetch('https://fastcampus-chat.net/chat', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        serverId: '9b9a6496',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        name: chatName,
-        users: [selectedUserId],
-        isPrivate: false,
-      }),
-    });
+    try {
+      const response = await fetch('https://fastcampus-chat.net/chat', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          serverId: '9b9a6496',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          name: chatName,
+          users: [selectedUserId],
+          isPrivate: false,
+        }),
+      });
 
-    const data = response.json();
-    return data;
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message);
+
+      return {};
+    }
   }, [accessToken, chatName, selectedUserId]);
 
   return createChat;
