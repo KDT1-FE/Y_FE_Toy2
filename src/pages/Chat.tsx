@@ -119,10 +119,9 @@ function Chat() {
         "https://fastcampus-chat.net/chat",
         makeRoomBody
       );
+      setChatRoom((prev) => [...prev, response]);
     };
     fetchData();
-
-    // setChatRoom([...chatRoom, newRoom]); // 기존 채팅방 목록에 새로운 채팅방 추가
   };
 
   return (
