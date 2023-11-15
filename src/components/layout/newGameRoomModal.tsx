@@ -20,6 +20,7 @@ import {
   usersInRoom,
   allRoomNumberState,
 } from '../../states/atom';
+import swal from 'sweetalert';
 
 interface ModalProps {
   isOpen: boolean;
@@ -51,9 +52,9 @@ const NewGameRoomModal: React.FC<ModalProps> = ({
     }
 
     if (check === undefined) {
-      alert('중복된 방이 있습니다.');
+      swal({ title: '중복된 방이 있습니다.', icon: 'warning' });
     } else {
-      alert('방 생성 성공.');
+      swal({ title: '방 생성 성공', icon: 'success' });
       console.log(allRooms);
       const chatLength = allChatState.chats.length;
       setRoomId(chatLength + 1);
