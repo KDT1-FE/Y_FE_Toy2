@@ -6,6 +6,7 @@ import { ChatingModalToggle } from '@/store/atoms';
 import { useRouter } from 'next/navigation';
 import InviteImg from '../../../public/assets/InviteImg.svg';
 import { getCookie } from '@/lib/cookie';
+import { Socket } from 'socket.io-client';
 
 interface User {
   username: string;
@@ -16,6 +17,7 @@ interface User {
 interface ChatingModalProps {
   users: User[];
   chatId: string;
+  socket: Socket;
 }
 
 //type
@@ -24,6 +26,16 @@ export default function ChatingModal(props: ChatingModalProps) {
   const router = useRouter();
 
   const accessToken = getCookie('accessToken');
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+
+  const findUserName = (userId: string): string | undefined => {
+    for (let i = 0; i < props.users.length; i++) {
+      if (userId == props.users[i].id) {
+        return props.users[i].username;
+      }
+    }
+    return undefined;
+  };
 
   const leaveChating = async () => {
     await fetch('https://fastcampus-chat.net/chat/leave', {
@@ -37,6 +49,10 @@ export default function ChatingModal(props: ChatingModalProps) {
         chatId: props.chatId,
       }),
     });
+    if (userId) {
+      const userName = findUserName(userId);
+      props.socket.emit('message-to-server', `notice09out:${userName}님이 채팅방을 나갔습니다.`);
+    }
     router.back();
   };
 

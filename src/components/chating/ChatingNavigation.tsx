@@ -39,7 +39,7 @@ const NavigationWrapper = styled.div`
   width: 100%;
   height: 83px;
 
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(0, 0, 0, 0.02);
 
   position: absolute;
   top: 0;

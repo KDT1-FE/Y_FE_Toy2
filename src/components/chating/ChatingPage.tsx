@@ -100,7 +100,7 @@ export default function ChatingPage() {
       },
     });
     const data = await response.json();
-    console.log(data);
+    console.log(data, 1);
 
     // 유저 블락
     if (data.message) router.back();
@@ -113,7 +113,17 @@ export default function ChatingPage() {
     if (userBlock) router.back();
 
     // 채팅방 이름, 유저 목록 가져오기
-    setChatName(data.chat.name);
+    if (data.chat.users.length == 1 && data.chat.isPrivate) {
+      setChatName('상대방이 나간 채팅방입니다.');
+    } else if (data.chat.users.length == 2 && data.chat.isPrivate) {
+      for (let i = 0; i < data.chat.users.length; i++) {
+        if (userId != data.chat.users[i].id) {
+          setChatName(data.chat.users[i].username);
+        }
+      }
+    } else {
+      setChatName(data.chat.name);
+    }
     setUsers(data.chat.users);
   };
 
@@ -138,13 +148,17 @@ export default function ChatingPage() {
   return (
     <main>
       <ChatingNavigation chatName={chatName} usersLength={users.length} />
-      <ChatingModal users={users} chatId={chatId} />
+      <ChatingModal users={users} chatId={chatId} socket={socket} />
       {loading && <Loading />}
 
       <MessagesContainer>
         {messages
           ? messages.map((message: Message, i: number) =>
-              userId == message.userId || userId == message.userId ? (
+              message.text.split(':')[0] == 'notice09out' ? (
+                <NoticeMessageWrapper>
+                  <NoticeText>{message.text.split(':')[1]}</NoticeText>
+                </NoticeMessageWrapper>
+              ) : userId == message.userId || userId == message.userId ? (
                 <MyMessageWrapper key={message.id}>
                   <MyMessageText>{message.text}</MyMessageText>
                   <MyMessageTime>{formatCreatedAt(message.createdAt)}</MyMessageTime>
@@ -310,4 +324,21 @@ const Loading = styled.div`
       transform: rotate(360deg);
     }
   }
+`;
+
+const NoticeMessageWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+`;
+
+const NoticeText = styled.div`
+  padding: 10px 15px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  background-color: #888;
+  color: #eee;
 `;
