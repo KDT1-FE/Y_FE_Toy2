@@ -10,6 +10,7 @@ import ChatListModal from '@/components/ChatList/ChatListModal';
 import { sortChatList } from '@/utils/chatList';
 import useConnectServerSocket from '@/hooks/useConnectServerSocket';
 import Header from '@/components/Header/Header';
+import CreateChatButton from '@/components/ChatList/CreateChatButton';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -69,14 +70,8 @@ export default function AllChatList() {
   return (
     <div className={styles.allContainer}>
       <Header pageName="All" />
+      <CreateChatButton setIsModal={setIsModal} />
       <ul>
-        <button
-          className={styles.chatPlusBtn}
-          type="button"
-          onClick={() => setIsModal(true)}
-        >
-          +
-        </button>
         {isModal && <ChatListModal handleModal={handleModal} />}
         {allChatList.map(chat => {
           const { timeDiffText, className } = formatTime(chat.updatedAt);
