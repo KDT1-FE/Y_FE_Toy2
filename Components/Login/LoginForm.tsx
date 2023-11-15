@@ -4,7 +4,7 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { fetchLogin } from '../../app/login/login.utils';
 import { setCookie } from '@/Components/Login/Cookie';
-import { Button } from '@material-tailwind/react';
+import { Button, Typography } from '@material-tailwind/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
@@ -12,6 +12,7 @@ import { Input } from '@material-tailwind/react';
 import Image from 'next/image';
 import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
 import { IFormInput } from './Login.types';
+import icon_cat from '@/public/icon_cat.svg';
 
 const LoginForm = () => {
 	const loadingControl = useAsyncLoading();
@@ -49,12 +50,18 @@ const LoginForm = () => {
 	};
 
 	return (
-		<div className="flex flex-col h-full items-center justify-center">
+		<div className="flex flex-col h-full relative items-center justify-center">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col items-center justify-center w-2/3"
 			>
-				<Image src="/logo.png" alt="Picture of me" width={250} height={250} />
+				<Image
+					src={icon_cat}
+					alt="Picture of me"
+					width={100}
+					height={100}
+					className="w-48 mb-12"
+				/>
 				{/* 영어와 숫자만 */}
 				<Input
 					placeholder="id"
@@ -81,13 +88,16 @@ const LoginForm = () => {
 					{...register('password')}
 					crossOrigin={'anonymous'}
 				/>
-				<Button type="submit" className=" bg-pink-200 w-full mt-10">
+				<Button type="submit" className="bg-text w-full mt-10">
 					로그인
 				</Button>
 				<Link href="/join" passHref>
-					<div className="text-gray-700  text-[10px] mt-4 mb-14">회원가입</div>
+					<div className="text-md text-black mt-3">새로운 집사 되기!</div>
 				</Link>
 			</form>
+			<Typography variant="h3" className="absolute bottom-8">
+				CatTalk
+			</Typography>
 		</div>
 	);
 };

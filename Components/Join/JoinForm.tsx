@@ -116,7 +116,7 @@ const JoinForm = () => {
 						{/* 이름 */}
 						<div className="flex h-[90] w-full flex-col mt-5">
 							<Input
-								color="brown"
+								color="pink"
 								placeholder="20자 이하의 이름을 입력해주세요."
 								variant="static"
 								label="name"
@@ -127,7 +127,7 @@ const JoinForm = () => {
 								crossOrigin={'anonymous'}
 							/>
 
-							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+							<div className="text-text text-xs mt-2  h-[10px]">
 								{errors?.name?.type === 'required' && (
 									<div>name를 입력해주세요.</div>
 								)}
@@ -140,7 +140,7 @@ const JoinForm = () => {
 						{/* id */}
 						<div className="flex  w-full  h-[90] flex-col  mt-5">
 							<Input
-								color="brown"
+								color="pink"
 								variant="static"
 								label="id"
 								placeholder=" "
@@ -151,7 +151,7 @@ const JoinForm = () => {
 								crossOrigin={'anonymous'}
 							/>
 
-							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+							<div className="text-text text-xs mt-2  h-[10px]">
 								{errors?.id?.type === 'pattern' && (
 									<div>영어와 숫자만 작성 가능합니다.</div>
 								)}
@@ -163,7 +163,7 @@ const JoinForm = () => {
 						{/* 비밀번호 */}
 						<div className="flex w-full  h-[90] flex-col  mt-5">
 							<Input
-								color="brown"
+								color="pink"
 								variant="static"
 								label="password"
 								type="password"
@@ -173,7 +173,7 @@ const JoinForm = () => {
 								})}
 								crossOrigin={'anonymous'}
 							/>
-							<div className="text-red-500 text-[10px] mt-2  h-[10px]">
+							<div className="text-text text-xs mt-2  h-[10px]">
 								{errors?.password?.type === 'minLength' && (
 									<div>입력은 최소 5자 이상이어야 합니다.</div>
 								)}
@@ -183,7 +183,10 @@ const JoinForm = () => {
 							</div>
 						</div>
 					</div>
-					<Button type="submit" className="w-full bg-main mt-10 text-subtext">
+					<Button
+						type="submit"
+						className="w-full mt-10 text-subtext bg-text text-white"
+					>
 						회원가입
 					</Button>
 					<Button
