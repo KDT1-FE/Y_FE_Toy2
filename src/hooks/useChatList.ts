@@ -15,10 +15,12 @@ const useChatList = (chatId: string) => {
   useEffect(() => {
     const socket = getSocket(chatId);
     socket.emit(SOCKET.FETCH_MESSAGES);
+    console.log(socket);
+    console.log(chatId);
     socket.on(
       SOCKET.MESSAGES_TO_CLIENT,
       async ({ messages }: { messages: ChatData[] }) => {
-        setIsLoading(true);
+        console.log('이전 대화 목록 불러오기');
         if (messages) setChats(messages);
         setIsLoading(false);
       },
@@ -48,6 +50,7 @@ const useChatList = (chatId: string) => {
       socket.off(SOCKET.MESSAGE_TO_CLIENT);
       socket.off(SOCKET.JOIN);
       socket.off(SOCKET.LEAVE);
+      socket.disconnect();
     };
   }, []);
   return { chats, isLoading };
