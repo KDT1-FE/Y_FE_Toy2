@@ -80,7 +80,7 @@ const Game = () => {
   // 게임 소켓 서버 연결
   const socket = connect(gameId as string);
   // 메인 소켓 서버 연결 (메인페이지 상태 변경 통신)
-  const socketMain = connect("b5275c5d-6561-413b-b828-5c66646a940f");
+  const socketMain = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -185,6 +185,7 @@ const Game = () => {
           <GameStart
             gameId={gameId}
             socket={socket}
+            socketMain={socketMain}
             status={status}
             users={users}
             host={gameData.data[0].host}
