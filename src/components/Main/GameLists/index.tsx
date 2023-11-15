@@ -2,23 +2,21 @@ import {
   Box,
   Button,
   Card,
-  CardBody,
-  CardFooter,
   Container,
   Grid,
-  Heading,
   Image,
   Input,
   InputGroup,
   InputRightElement,
-  Stack,
-  Tag,
   Text,
 } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiBell } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import useFetch from "../../../hooks/useFetch";
+import useFireFetch from "../../../hooks/useFireFetch";
+import { DocumentData } from "firebase/firestore";
+import GameCard from "../GameCard";
 
 interface ResponseValue {
   accessToken: string; // 사용자 접근 토큰
@@ -40,10 +38,38 @@ interface FetchResultUserList {
   result: User[];
 }
 
+interface Chat {
+  id: string;
+  name: string;
+  users: User[]; // 속한 유저 정보
+  isPrivate: boolean;
+  latestMessage: Message | null;
+  updatedAt: Date;
+}
+
+interface Message {
+  id: string;
+  text: string;
+  userId: string;
+  createAt: Date;
+}
+
+interface GameRoom {
+  name: string;
+  users: string[];
+  isPrivate?: boolean;
+  num?: number;
+  bg?: string;
+  status?: string;
+  id: string;
+}
+
+type ChatResponseValue = { chats: Chat[] };
+
 const GameLists = () => {
   const [token, setToken] = useState<ResponseValue>();
-  // const [userInfo, serUserInfo] = useState();
-
+  const [gameLists, setGameLists] = useState<(GameRoom | DocumentData)[]>([]);
+  const fireFetch = useFireFetch();
   const { result: userInfo }: FetchResultUser = useFetch({
     url: `https://fastcampus-chat.net/user?userId=${token?.id}`,
     method: "GET",
@@ -54,6 +80,36 @@ const GameLists = () => {
     method: "GET",
     start: !!token,
   });
+  //파이어베이스 게임
+  const { data: firebaseGameListsData } = fireFetch.useGetAll("game", "desc");
+
+  //DB에 있는
+  const { result: dbGame } = useFetch({
+    url: "https://fastcampus-chat.net/chat/all",
+    method: "GET",
+    start: true,
+  });
+
+  const mergeGameListsData = (
+    firebaseGame: DocumentData[],
+    { chats }: ChatResponseValue,
+  ) => {
+    const list: (DocumentData | GameRoom)[] = [];
+    firebaseGame.forEach((game) => {
+      const findData = chats.find((chat) => chat.id === game.id);
+      if (findData) {
+        list.push({ ...findData, ...game });
+      }
+    });
+
+    setGameLists(list);
+  };
+
+  useEffect(() => {
+    if (firebaseGameListsData && dbGame) {
+      mergeGameListsData(firebaseGameListsData, dbGame);
+    }
+  }, [firebaseGameListsData, dbGame]);
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token") as string);
@@ -91,198 +147,9 @@ const GameLists = () => {
         </Box>
         <Box overflowY="auto" maxHeight="350px">
           <Grid templateColumns="repeat(2, 1fr)" gap={3}>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "100%", sm: "150px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-              />
-              <Stack w="100%" marginLeft="2">
-                <CardBody>
-                  <Box display="flex" justifyContent="space-between">
-                    <Heading size="md">아무나오세요</Heading>
-                    <Tag>게임중</Tag>
-                  </Box>
-                </CardBody>
-
-                <CardFooter display="flex" justifyContent="space-between">
-                  <Text>5/6</Text>
-                  <Button
-                    size="sm"
-                    bg="blackAlpha.800"
-                    color="white"
-                    _hover={{ bg: "blackAlpha.900" }}
-                  >
-                    입장하기
-                  </Button>
-                </CardFooter>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "100%", sm: "150px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-              />
-              <Stack w="100%" marginLeft="2">
-                <CardBody>
-                  <Box display="flex" justifyContent="space-between">
-                    <Heading size="md">아무나오세요</Heading>
-                    <Tag>게임중</Tag>
-                  </Box>
-                </CardBody>
-
-                <CardFooter display="flex" justifyContent="space-between">
-                  <Text>5/6</Text>
-                  <Button
-                    size="sm"
-                    bg="blackAlpha.800"
-                    color="white"
-                    _hover={{ bg: "blackAlpha.900" }}
-                  >
-                    입장하기
-                  </Button>
-                </CardFooter>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "100%", sm: "150px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-              />
-              <Stack w="100%" marginLeft="2">
-                <CardBody>
-                  <Box display="flex" justifyContent="space-between">
-                    <Heading size="md">아무나오세요</Heading>
-                    <Tag>게임중</Tag>
-                  </Box>
-                </CardBody>
-
-                <CardFooter display="flex" justifyContent="space-between">
-                  <Text>5/6</Text>
-                  <Button
-                    size="sm"
-                    bg="blackAlpha.800"
-                    color="white"
-                    _hover={{ bg: "blackAlpha.900" }}
-                  >
-                    입장하기
-                  </Button>
-                </CardFooter>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "100%", sm: "150px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-              />
-              <Stack w="100%" marginLeft="2">
-                <CardBody>
-                  <Box display="flex" justifyContent="space-between">
-                    <Heading size="md">아무나오세요</Heading>
-                    <Tag>게임중</Tag>
-                  </Box>
-                </CardBody>
-
-                <CardFooter display="flex" justifyContent="space-between">
-                  <Text>5/6</Text>
-                  <Button
-                    size="sm"
-                    bg="blackAlpha.800"
-                    color="white"
-                    _hover={{ bg: "blackAlpha.900" }}
-                  >
-                    입장하기
-                  </Button>
-                </CardFooter>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "100%", sm: "150px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-              />
-              <Stack w="100%" marginLeft="2">
-                <CardBody>
-                  <Box display="flex" justifyContent="space-between">
-                    <Heading size="md">아무나오세요</Heading>
-                    <Tag>게임중</Tag>
-                  </Box>
-                </CardBody>
-
-                <CardFooter display="flex" justifyContent="space-between">
-                  <Text>5/6</Text>
-                  <Button
-                    size="sm"
-                    bg="blackAlpha.800"
-                    color="white"
-                    _hover={{ bg: "blackAlpha.900" }}
-                  >
-                    입장하기
-                  </Button>
-                </CardFooter>
-              </Stack>
-            </Card>
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-            >
-              <Image
-                objectFit="cover"
-                maxW={{ base: "100%", sm: "150px" }}
-                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                alt="Caffe Latte"
-              />
-              <Stack w="100%" marginLeft="2">
-                <CardBody>
-                  <Box display="flex" justifyContent="space-between">
-                    <Heading size="md">아무나오세요</Heading>
-                    <Tag>게임중</Tag>
-                  </Box>
-                </CardBody>
-
-                <CardFooter display="flex" justifyContent="space-between">
-                  <Text>5/6</Text>
-                  <Button
-                    size="sm"
-                    bg="blackAlpha.800"
-                    color="white"
-                    _hover={{ bg: "blackAlpha.900" }}
-                  >
-                    입장하기
-                  </Button>
-                </CardFooter>
-              </Stack>
-            </Card>
+            {gameLists.map((game) => (
+              <GameCard key={game.id} game={game} />
+            ))}
           </Grid>
         </Box>
         <Box bg="white" borderRadius="5">
@@ -346,7 +213,7 @@ const GameLists = () => {
             {loading ? (
               <p>loading...</p>
             ) : (
-              userList?.map((user) => (
+              userList?.map((user, index) => (
                 <Box
                   display="flex"
                   alignItems="center"
@@ -355,6 +222,7 @@ const GameLists = () => {
                   paddingX="3"
                   paddingY="1"
                   borderRadius="5"
+                  key={index}
                 >
                   <Image
                     boxSize="35px"
