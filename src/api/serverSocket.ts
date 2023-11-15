@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 
 const serverSocket = io(`${process.env.REACT_APP_API_URL}/server`, {
   extraHeaders: {
-    Authorization: `Bearer ${process.env.REACT_APP_USER_TOKEN}`,
+    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     serverId: `${process.env.REACT_APP_SERVER_ID}`,
   },
 });

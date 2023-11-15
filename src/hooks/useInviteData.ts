@@ -4,14 +4,13 @@ import { getMyChannels } from '../api/channel';
 import { ToastId, useToast } from '@chakra-ui/react';
 import { splitChannelName } from '../utils';
 import { SOCKET } from '../constants/socket';
-import { getAuthUser } from '../api/user';
 import { Channel } from '../@types/channel';
 
 interface InviteResponseData {
   responseChat: {
     id: string;
     name: string;
-    users: string[]; // 참여자들 id
+    users: string[];
     isPrivate: boolean;
     updatedAt: Date;
   };
@@ -36,7 +35,6 @@ export const useInviteData = () => {
       });
 
       const newMyChannelList = await getMyChannels();
-      console.log('newMyChannelList', newMyChannelList);
       setMyChannelList(newMyChannelList);
     });
 

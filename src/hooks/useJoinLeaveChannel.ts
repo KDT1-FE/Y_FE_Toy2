@@ -18,7 +18,7 @@ export const useJoinLeaveChannels = (chatId: string) => {
 
     socket.on(
       SOCKET.LEAVE,
-      async (messages: { users: string[]; joiners: string[] }) => {
+      async (messages: { users: string[]; leavers: string }) => {
         const newMemberList = await getMemberData(messages.users);
         setUserList(newMemberList);
       },
