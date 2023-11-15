@@ -82,6 +82,12 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast, socket }) => {
 
   const user = useRecoilValue(userState);
 
+  const getChat = useFetch({
+    url: `https://fastcampus-chat.net/chat/only?chatId=${roomData.id}`,
+    method: "GET",
+    start: false,
+  });
+
   const join = useFetch({
     url: "https://fastcampus-chat.net/chat/participate",
     method: "PATCH",
@@ -90,6 +96,15 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast, socket }) => {
     },
     start: false,
   });
+
+  const handleAccept = () => {
+    getChat.refresh();
+    socket.emit("message-to-server", `${user.id}:${roomData.id}:!#%&(`);
+    const users = [...roomData.users, user.id];
+    fireFetch.updateData("game", roomData.id, { users: users });
+    join.refresh();
+    navigate(`/game?gameId=${roomData.id}`);
+  };
 
   return (
     <Toast>
@@ -121,13 +136,7 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast, socket }) => {
           borderColor="#eee"
           color="#eee"
           colorScheme="whiteAlpha"
-          onClick={() => {
-            socket.emit("message-to-server", `${user.id}:${roomData.id}:!#%&(`);
-            const users = [...roomData.users, user.id];
-            fireFetch.updateData("game", roomData.id, { users: users });
-            join.refresh();
-            navigate(`/game?gameId=${roomData.id}`);
-          }}
+          onClick={handleAccept}
         >
           수락
         </Button>

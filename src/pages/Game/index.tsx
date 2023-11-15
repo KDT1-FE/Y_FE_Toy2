@@ -6,6 +6,7 @@ import GameStart from "../../components/Game/GameStart";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../recoil/atoms/userState";
 import connect from "../../socket/socket";
+import Timer from "../../components/Game/Timer";
 import useFetch from "../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 
@@ -39,6 +40,13 @@ const Game = () => {
   const searchParams = new URLSearchParams(queryString);
   const gameId = searchParams.get("gameId");
 
+  // 게임 진행 상황 상태
+  const [current, setCurrent] = useState("개별발언");
+  // 현재 발언자 상태
+  const [speaking, setSpeaking] = useState("qwer1234");
+  // 개별 발언 종료 확인을 위한 상태
+  const [num, setNum] = useState(0);
+
   const fireFetch = useFireFetch();
   const gameData = fireFetch.useGetSome("game", "id", gameId as string);
   const [status, setStatus] = useState("");
@@ -53,8 +61,18 @@ const Game = () => {
   const [keyword, setKeyword] = useState("");
   const [liar, setLiar] = useState("");
 
-  const [current, setCurrent] = useState("");
-  const [speaking, setSpeaking] = useState("");
+  // console.log(category, keyword);
+
+  useEffect(() => {
+    setSpeaking(users[0]);
+  }, [users]);
+
+  useEffect(() => {
+    console.log(num, users.length);
+    if (num !== 0 && num === users.length) {
+      setCurrent("자유발언");
+    }
+  }, [num, users]);
 
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
@@ -97,6 +115,7 @@ const Game = () => {
 
   return (
     <>
+      <Timer current={current} setCurrent={setCurrent} />
       <Grid
         templateColumns="200px 1fr 200px"
         templateRows="60px 1fr"
@@ -159,6 +178,12 @@ const Game = () => {
           <GameChat
             socket={socket}
             gameData={gameData.data[0]}
+            current={current}
+            speaking={speaking}
+            num={num}
+            player={users}
+            setNum={setNum}
+            setSpeaking={setSpeaking}
             onGameInfoReceived={handleGameInfoReceived}
           />
         </GridItem>

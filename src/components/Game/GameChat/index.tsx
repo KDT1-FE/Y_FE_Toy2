@@ -23,6 +23,12 @@ interface Message {
 interface GameChatProps {
   socket: Socket;
   gameData: any;
+  current: string;
+  speaking: string;
+  num: number;
+  player: string[];
+  setNum: React.Dispatch<React.SetStateAction<number>>;
+  setSpeaking: React.Dispatch<React.SetStateAction<string>>;
   onGameInfoReceived: (gameInfo: {
     category: string;
     keyword: string;
@@ -41,14 +47,26 @@ interface UserResponse {
 const GameChat: React.FC<GameChatProps> = ({
   socket,
   gameData,
+  current,
+  speaking,
+  player,
+  num,
+  setNum,
+  setSpeaking,
   onGameInfoReceived,
 }) => {
-  console.log("GameChat/ gameData:", gameData);
   const user = useRecoilValue(userState);
+
+  const [message] = useState<Message>({
+    id: "",
+    text: "",
+  });
+
+  // console.log("GameChat/ gameData:", gameData);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
-  const [users, setUsers] = useState<string[]>([]);
-  console.log("users: ", users);
+  const [, setUsers] = useState<string[]>([]);
+  // console.log("users: ", users);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>("");
   const [voteResult, setVoteResult] = useState<string | null>(null);
@@ -80,12 +98,25 @@ const GameChat: React.FC<GameChatProps> = ({
         const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
         onGameInfoReceived(gameInfo);
         return;
+      } else if (messageObject.text.endsWith("~!@%^&")) {
+        const arr = messageObject.text.split(":");
+        const copy = { ...message };
+        copy.id = messageObject.userId;
+        copy.text = arr[0];
+        setNum((prev) => prev + 1);
+        setSpeaking(player[num + 1]);
+        setMessages((prevMessages: Message[]) => [
+          ...prevMessages,
+          { id: messageObject.userId, text: arr[0] },
+        ]);
+      } else {
+        // 메시지 데이터, 작성 유저 상태 저장
+        setMessages((prevMessages: Message[]) => [
+          ...prevMessages,
+          { id: messageObject.userId, text: messageObject.text },
+        ]);
       }
       // 메시지 데이터, 작성 유저 상태 저장
-      setMessages((prevMessages: Message[]) => [
-        ...prevMessages,
-        { id: messageObject.userId, text: messageObject.text },
-      ]);
     });
     return () => {
       socket.off("message-to-client");
@@ -124,7 +155,11 @@ const GameChat: React.FC<GameChatProps> = ({
   const submitMessage = () => {
     if (messageRef.current && messageRef.current.value) {
       const messageValue = messageRef.current.value;
-      socket.emit("message-to-server", messageValue);
+      if (current === "개별발언") {
+        socket.emit("message-to-server", messageValue + ":" + "~!@%^&");
+      } else {
+        socket.emit("message-to-server", messageValue);
+      }
       messageRef.current.value = "";
     }
   };
@@ -168,6 +203,12 @@ const GameChat: React.FC<GameChatProps> = ({
           type="text"
           placeholder="채팅내용"
           ref={messageRef}
+          disabled={
+            (current === "개별발언" && speaking === user.id) ||
+            current === "자유발언"
+              ? false
+              : true
+          }
           onKeyPress={handleKeyPress}
         />
         <InputRightElement width="4.5rem">
