@@ -69,9 +69,15 @@ const GameChat: React.FC<GameChatProps> = ({
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject: any) => {
+      // 게임 시작 메시지
       if (messageObject.text.split("~")[1] === "!@##") {
         const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
-        console.log("parseData:", gameInfo);
+        onGameInfoReceived(gameInfo);
+        return;
+      }
+      // 게임 종료 메시지
+      if (messageObject.text.split("~")[1] === "##@!") {
+        const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
         onGameInfoReceived(gameInfo);
         return;
       }

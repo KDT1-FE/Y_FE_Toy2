@@ -49,6 +49,7 @@ const GameStart: React.FC<GameStartProps> = ({
   // const [keyword, setKeyword] = useState("");
   // const [liar, setLiar] = useState("");
   const [showStartModal, setShowStartModal] = useState(false);
+  // const [shuffledUsers, setshuffledUsers] = useState<string[]>([]);
 
   useEffect(() => {
     if (showStartModal) {
@@ -84,7 +85,7 @@ const GameStart: React.FC<GameStartProps> = ({
     const ranLiar = users[getRandNum(users.length)];
 
     // 유저 순서 랜덤으로 섞기
-    const shuffledUsers: string[] = users
+    const newUsers: string[] = users
       .map(
         (userId: string): UserWithSort => ({
           value: userId, // 실제 유저 ID
@@ -99,9 +100,11 @@ const GameStart: React.FC<GameStartProps> = ({
       category: selectedCategory.category,
       keyword: ranKeyword,
       liar: ranLiar,
-      users: shuffledUsers,
-      status: status,
+      users: newUsers,
+      status: "게임중",
     });
+
+    // setshuffledUsers(newUsers);
 
     // 모든 클라이언트에게 게임 정보를 포함하는 이벤트 전송
     socket.emit("message-to-server", gameInfo + "~!@##");
@@ -116,11 +119,16 @@ const GameStart: React.FC<GameStartProps> = ({
   const hadleEnd = () => {
     updateStatus("대기중");
 
-    window.localStorage.setItem("category", "");
-    window.localStorage.setItem("keyword", "");
-    window.localStorage.setItem("liar", "false");
-    // setCategory(null);
-    // setKeyword("");
+    const gameInfo = JSON.stringify({
+      category: "",
+      keyword: "",
+      liar: "",
+      users: users,
+      status: "대기중",
+    });
+
+    socket.emit("message-to-server", gameInfo + "~##@!");
+
     setShowStartModal(false);
   };
 

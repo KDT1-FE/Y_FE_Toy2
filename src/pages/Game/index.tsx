@@ -16,6 +16,7 @@ interface GameInfo {
   keyword: string;
   liar: string;
   users: string[];
+  status: string;
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ userId }) => {
@@ -63,24 +64,6 @@ const Game = () => {
     }
   }, [gameData.data]);
 
-  useEffect(() => {
-    if (status === "게임중") {
-      // 저장된 유저 순서 로컬 스토리지에서 가져오기
-      const shuffledUsers = JSON.parse(
-        window.localStorage.getItem("shuffledUsers") || "[]",
-      );
-      setUsers(shuffledUsers);
-
-      const currentCategory = window.localStorage.getItem("category") ?? "";
-      const currentKeyword = window.localStorage.getItem("keyword") ?? "";
-      const currentLiar = window.localStorage.getItem("liar") ?? "";
-
-      setCategory(currentCategory);
-      setKeyword(currentKeyword);
-      setLiar(currentLiar);
-    }
-  }, [status]);
-
   // status 업데이트 함수
   const updateStatus = (newStatus: string) => {
     setStatus(newStatus);
@@ -94,7 +77,7 @@ const Game = () => {
     setKeyword(gameInfo.keyword);
     setLiar(gameInfo.liar);
     setUsers(gameInfo.users);
-    setStatus("게임중");
+    setStatus(gameInfo.status);
   };
 
   if (gameData.data.length === 0) {
