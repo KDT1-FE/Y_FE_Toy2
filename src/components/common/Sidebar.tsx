@@ -93,10 +93,7 @@ function Sidebar() {
               <Person /> 프로필
             </Link>
           </SidebarNavListItem>
-          <SidebarNavListItem
-            onClick={handleLogout}
-            isActive={pathname.startsWith('/')}
-          >
+          <SidebarNavListItem onClick={handleLogout}>
             <Link to="/">
               <Logout /> 로그아웃
             </Link>

@@ -10,7 +10,7 @@ const useChatAll = (accessToken: string | null) => {
         method: 'GET',
         headers: {
           'content-type': 'application/json',
-          serverId: '9b9a6496',
+          serverId: `${process.env.REACT_APP_SERVER_ID}`,
           Authorization: `Bearer ${accessToken}`,
         },
       });
