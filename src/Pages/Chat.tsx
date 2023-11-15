@@ -4,6 +4,7 @@ import ChatRoom from "../components/Chat/ChatRoom";
 import ModalPlus from "../components/ModalPlus";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
+import Header from "../components/Header";
 
 export interface User {
   id: string;
@@ -107,6 +108,7 @@ function Chat() {
 
   return (
     <>
+      <Header />
       <ChatWrapper>
         <ChatCategory>
           {chatRoom.map((room) => (
@@ -150,6 +152,9 @@ const ChatWrapper = styled.div`
   border-top: 1px solid #e8e8e8;
   border-left: 1px solid #e8e8e8;
   height: 100%;
+  max-width: 850px;
+  width: 100%;
+  margin: 0 auto;
 `;
 
 const ChatCategory = styled.ul`
