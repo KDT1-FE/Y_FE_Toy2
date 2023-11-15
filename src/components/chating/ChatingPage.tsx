@@ -39,7 +39,6 @@ export default function ChatingPage() {
 
   useEffect(() => {
     getUsers();
-    console.log(1);
   }, []);
 
   useEffect(() => {
@@ -60,6 +59,17 @@ export default function ChatingPage() {
         setLoading(false);
         setMessages(messageObject.messages.reverse());
         clearInterval(FetchMessagesInterval);
+        // 유저 입장 억지로..
+        if (users.length > 2 && userId) {
+          let isEnter = true;
+          for (let i = 0; i < messageObject.messages.length; i++) {
+            if (messageObject.messages[i].userId == userId) {
+              isEnter = true;
+            }
+          }
+          const userName = findUserName(userId);
+          if (isEnter) socket.emit('message-to-server', `notice09:${userName}님이 채팅방에 입장하였습니다.`);
+        }
       });
 
       socket.on('message-to-client', (messageObject) => {
