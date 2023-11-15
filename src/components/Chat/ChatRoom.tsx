@@ -47,14 +47,10 @@ function ChatRoom({
   const [searchText, setSearchText] = useState<string>("");
 
   const handleClick = async () => {
-    try {
-      if (socket && text.trim()) {
-        socket.emit("message-to-server", text);
-        setText("");
-        setInputValue("");
-      }
-    } catch (error) {
-      console.log(error);
+    if (socket && text.trim()) {
+      socket.emit("message-to-server", text);
+      setText("");
+      setInputValue("");
     }
   };
 
@@ -65,7 +61,6 @@ function ChatRoom({
 
   useEffect(() => {
     if (accessToken) {
-      console.log("방이 바뀜", roomId);
       const newSocket = io(
         `https://fastcampus-chat.net/chat?chatId=${roomId}`,
         {
@@ -75,22 +70,6 @@ function ChatRoom({
           }
         }
       );
-
-      // newSocket.on("message-to-client", (newMessage) => {
-      //   setMessages((prevMessages) => {
-      //     const isDuplicate = prevMessages.some(
-      //       (message) => message.id === newMessage.id
-      //     );
-      //     return isDuplicate ? prevMessages : [...prevMessages, newMessage];
-      //   });
-      // });
-
-      // newSocket.on("messages-to-client", (responseData) => {
-      //   setMessages(responseData.messages);
-      // });
-      // newSocket.emit("fetch-messages");
-      // setSocket(newSocket);
-
       setTimeout(() => {
         newSocket.on("message-to-client", (newMessage) => {
           setMessages((prevMessages) => {
@@ -102,7 +81,12 @@ function ChatRoom({
         });
         setTimeout(() => {
           newSocket.on("messages-to-client", (responseData) => {
-            setMessages(responseData.messages);
+            // 현재 메시지 상태에 없는 메시지만 추가합니다.
+            const newMessages = responseData.messages.filter(
+              (newMsg: { id: string }) =>
+                !messages.find((msg) => msg.id === newMsg.id)
+            );
+            setMessages((prevMessages) => [...prevMessages, ...newMessages]);
           });
           setTimeout(() => {
             newSocket.emit("fetch-messages");
@@ -110,13 +94,15 @@ function ChatRoom({
         }, 100);
       }, 100);
 
+      setSocket(newSocket);
+
       return () => {
         newSocket.off("message-to-client");
         newSocket.off("messages-to-client");
         newSocket.disconnect();
       };
     }
-  }, [accessToken, roomId]);
+  }, [accessToken, roomId, messages]);
 
   useLayoutEffect(() => {
     if (messagesEndRef.current) {
@@ -217,14 +203,31 @@ function ChatRoom({
         </div>
       </div>
       <div className="chatroom__send">
-        <input type="text" value={inputValue} onChange={handleChange} />
-        <button onClick={handleClick}>
-          <img
-            src="/src/assets/images/up-arrow-ico.png"
-            alt="화살표"
-            width="20"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleClick();
+          }}
+        >
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleClick();
+              }
+            }}
           />
-        </button>
+          <button type="submit">
+            <img
+              src="/src/assets/images/up-arrow-ico.png"
+              alt="화살표"
+              width="20"
+            />
+          </button>
+        </form>
       </div>
     </ChatRoomWrap>
   );
@@ -406,26 +409,32 @@ const ChatRoomWrap = styled.div`
       padding: 20px;
       display: flex;
       gap: 10px;
+      align-items: center;
+      form {
+        display: flex;
+        flex-grow: 1;
+        gap: 10px;
+      }
       input {
+        flex-grow: 1;
         background-color: #ececec;
         border: none;
         outline: none;
         border-radius: 20px;
-        width: 100%;
-        height: 40px;
         padding: 0 20px;
         color: #999696;
       }
       button {
-        flex: 1 0 40px;
+        padding: 0;
+        flex-shrink: 0;
+        background-color: #bab6b5;
         border: none;
         border-radius: 50%;
         width: 40px;
         height: 40px;
-        display: inline-flex;
+        display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #bab6b5;
       }
     }
   }
