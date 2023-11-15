@@ -58,7 +58,7 @@ const ChatDivder = ({ myChatList }: ChatListProps) => {
 						{MultiChat.length ? (
 							<ChatList myChatList={MultiChat} accessToken={accessToken} />
 						) : (
-							<h1 className="mx-auto my-2">오픈 채팅방이 없습니다.</h1>
+							<h1 className="mx-auto my-2">단체 채팅방이 없습니다.</h1>
 						)}
 					</TabPanel>
 				</TabsBody>
