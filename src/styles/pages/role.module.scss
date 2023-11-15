@@ -1,0 +1,41 @@
+@use '@/styles/abstracts' as *;
+@use '@/styles/base' as *;
+
+.role {
+  height: 100vh;
+  background-image: url('@assets/images/bg_role.svg');
+  @include flex-center-col;
+  font-family: $font-logo;
+  gap: 2rem;
+
+  &__message {
+    font-size: 2.5rem;
+    color: $white;
+  }
+
+  &__container {
+    @include flex-center-col;
+    gap: 2rem;
+    width: 70%;
+    height: 70%;
+    background-color: rgba(#452b66, 0.8);
+    border-radius: 5rem;
+
+    &__result {
+      @include flex-center-row;
+      width: 30rem;
+      height: 30rem;
+      border-radius: 2rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &__resultMsg {
+      font-size: 4rem;
+      color: $white;
+    }
+  }
+}

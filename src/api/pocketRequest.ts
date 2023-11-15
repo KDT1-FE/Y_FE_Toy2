@@ -1,16 +1,25 @@
 const responseBody = (res: Response) => res.json();
 
 const pocketRequest = {
-  get: async (collection: string) => {
+  get: async (collection: string, chatId?: string) => {
     return await fetch(
-      `${import.meta.env.VITE_POCKET_API}/${collection}/records`,
+      `${import.meta.env.VITE_POCKET_API}/${collection}/records${
+        chatId ? `/${chatId}` : ''
+      }`,
       { cache: 'no-store' },
     ).then(responseBody);
   },
 
-  post: async (collection: string, data: object) => {
+  post: async (collection: string, data: object, id?: string) => {
+    console.log(
+      `${import.meta.env.VITE_POCKET_API}/${collection}/records${
+        id ? `/${id}` : ''
+      }`,
+    );
     return await fetch(
-      `${import.meta.env.VITE_POCKET_API}/${collection}/records`,
+      `${import.meta.env.VITE_POCKET_API}/${collection}/records${
+        id ? `/${id}` : ''
+      }`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
