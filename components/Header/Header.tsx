@@ -6,7 +6,7 @@ export default function Header() {
   const [shrink, setShrink] = useState(false);
 
   const handleScroll = () => {
-    if (window.scrollY > 50) { // 스크롤 위치에 따라 값을 조정하세요
+    if (window.scrollY > 50) {
       setShrink(true);
     } else {
       setShrink(false);
