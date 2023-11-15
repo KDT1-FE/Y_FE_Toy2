@@ -11,10 +11,8 @@ import { ConnectUserIdList } from './UserListStore';
 // types 폴더 나중에 만들어서 type 빼놓기
 interface User {
   id: string;
-  password: string;
   name: string;
   picture: string;
-  chats: string[];
 }
 
 interface UserProfileModalProps {

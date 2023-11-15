@@ -13,10 +13,8 @@ import { ConnectUserIdList } from '@/components/Users/UserListStore';
 
 interface User {
   id: string;
-  password: string;
   name: string;
   picture: string;
-  chats: string[];
 }
 
 interface ConnectUserIdListIF {

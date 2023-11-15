@@ -9,10 +9,8 @@ import { ConnectUserIdList } from './UserListStore';
 
 interface User {
   id: string;
-  password: string;
   name: string;
   picture: string;
-  chats: string[];
 }
 
 const UserItem = ({ user }: { user: User }) => {
