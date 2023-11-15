@@ -3,8 +3,12 @@ import React from 'react';
 import refresh from '@assets/images/refresh.png';
 import styles from '@styles/components/lobby/pagination.module.scss';
 
-const Pagenation = ({ total, limit, page, setPage }: Props) => {
+const Pagenation = ({ total, limit, page, setPage, getAllChat }: Props) => {
   const numPages = Math.ceil(total / limit);
+  const handleRefresh = async () => {
+    await getAllChat();
+    setPage(1);
+  };
 
   return (
     <nav className={styles.pagination}>
@@ -21,8 +25,8 @@ const Pagenation = ({ total, limit, page, setPage }: Props) => {
         disabled={page === numPages}>
         ▶
       </button>
-      <button className={styles.pagination__btn} onClick={() => setPage(1)}>
-        <img src={refresh} alt="새로고침" />
+      <button className={styles.pagination__btn}>
+        <img src={refresh} alt="새로고침" onClick={handleRefresh} />
       </button>
     </nav>
   );
@@ -35,4 +39,5 @@ interface Props {
   limit: number;
   page: number;
   setPage: (page: number) => void;
+  getAllChat: () => void;
 }
