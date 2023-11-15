@@ -958,19 +958,6 @@ interface ResponseData {
   leaver: string; // 나간 사용자 id
 }
 ```
-### new-chat
-- 새로운 대화방이 생긴 경우 (not private) 서버(팀에서 사용하는 serverId)의 참여자들에게 이를 전달합니다.
-
-응답 데이터
-```ts
-interface ResponseData {
-  id: string;
-  name: string;
-  users: string[]; // 참여자들 id
-  isPrivate: boolean;
-  updatedAt: Date;
-}
-```
 
 ### users-to-client
 - 접속 상태인 유저 목록을 불러옵니다.
@@ -1024,8 +1011,22 @@ interface ResponseData {
 ```
 
 ### invite
-- 새로운 채팅방 생성시 모든 채팅방 유저에게 채팅방 정보를 전송합니다.
+- 새로운 채팅방 생성시 해당 채팅방 유저에게 채팅방 정보를 전송합니다.
 - 기존 채팅방에 유저 초대시 초대된 유저에게 채팅방 정보를 전송합니다.
+
+응답 데이터
+```ts
+interface ResponseData {
+  id: string;
+  name: string;
+  users: string[]; // 참여자들 id
+  isPrivate: boolean;
+  updatedAt: Date;
+}
+```
+
+### new-chat
+- 새로운 대화방이 생긴 경우 (not private) 서버(팀에서 사용하는 serverId)의 참여자들에게 이를 전달합니다.
 
 응답 데이터
 ```ts
