@@ -75,7 +75,6 @@ export default function Chat() {
         setLeavers(prevLeavers => [...prevLeavers, messageObject.leaver]);
       });
     }
-
     return () => {
       socket.off('connect');
       socket.off('messages-to-client');
