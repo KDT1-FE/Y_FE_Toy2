@@ -48,6 +48,21 @@ export function filterOpenChatsNotMychat<T extends MyObject>(
 }
 
 /**
+ * 모든 채팅중에 오픈채팅을 찾습니다.
+ * @param chats 모든 채팅을 전달합니다.
+ * @param openchatIds 오픈채팅 id를 전달합니다.
+ * @returns 모든 오픈채팅을 찾습니다.
+ */
+export function filterAllOpenchats<T extends MyObject>(
+  chats: T[],
+  openchatIds: string[],
+): T[] {
+  const uniqueIds = new Set(openchatIds);
+  const filteredObjects = chats.filter((obj) => uniqueIds.has(obj.id));
+  return filteredObjects;
+}
+
+/**
  * 친구들 목록중 나는 제외해주는 필터 함수 입니다.
  * @param arr 친구 목록
  * @returns 나를 제외한 친구목록을 반환
