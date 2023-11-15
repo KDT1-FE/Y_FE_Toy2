@@ -13,15 +13,16 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { inviteChannel } from '../../../api/channel';
-import ChannelModalUserList from '../../channel/modal/ChannelModalUserList';
 import { User2 } from '../../../@types/user';
+import UserInviteList from './UserInviteList';
 
 interface Props {
   setUserList: React.Dispatch<React.SetStateAction<User2[]>>;
+  userList: User2[];
   chatId: string;
 }
 
-const UserInviteModal = ({ setUserList, chatId }: Props) => {
+const UserInviteModal = ({ setUserList, userList, chatId }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [users, setUsers] = useState<string[]>([]);
   const btnRef = useRef(null);
@@ -56,7 +57,7 @@ const UserInviteModal = ({ setUserList, chatId }: Props) => {
             <ModalCloseButton />
 
             <ModalBody>
-              <ChannelModalUserList setUsers={setUsers} />
+              <UserInviteList setUsers={setUsers} userList={userList} />
             </ModalBody>
 
             <ModalFooter justifyContent="center">

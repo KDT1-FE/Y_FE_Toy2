@@ -1,4 +1,5 @@
 export const ALL_CHANNELS = ['channels'];
+export const MY_CHANNELS = ['my-channels'];
 
 export const CATEGORIES = [
   { name: '전체', value: '' },

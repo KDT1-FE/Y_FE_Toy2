@@ -10,4 +10,7 @@ export const SOCKET = {
   JOIN: 'join',
   USERS: 'users',
   USER_TO_CLIENT: 'users-to-client',
+  USERS_SERVER: 'users-server',
+  USERS_SERVER_TO_CLIENT: 'users-server-to-client',
+  INVITE: 'invite',
 } as const;
