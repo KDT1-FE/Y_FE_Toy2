@@ -1,8 +1,8 @@
 'use client';
 
-import { Host } from '@/pages/host-list/hostList.types';
-import styles from './hostListItem.module.scss';
-import Button from './Button';
+import styles from '@/components/HostList/HostListItem.module.scss';
+import Button from '@/components/HostList/Button';
+import { Host } from '@/components/HostList/hostList.types';
 
 interface HostListItemProps {
   host: Host;

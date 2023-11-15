@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import HostListItem from '@/components/host-list/HostListItem';
+import HostListItem from '@/components/HostList/HostListItem';
 import classNames from 'classnames/bind';
 import {
   addHostsToFirestore,
@@ -8,10 +8,10 @@ import {
   locations,
 } from '@/utils/hostsStorage';
 
-import Search from '@/components/host-list/Search';
-import HostDetailsModal from '@/components/host-list/HostDetailsModal';
-import styles from './hostList.module.scss';
-import { Host } from './hostList.types';
+import Search from '@/components/HostList/Search';
+import HostDetailsModal from '@/components/HostList/HostDetailsModal';
+import styles from '@/components/HostList/hostList.module.scss';
+import { Host } from '@/components/HostList/hostList.types';
 
 export default function HostListPage() {
   const [hosts, setHosts] = useState<Host[]>([]);
@@ -108,7 +108,7 @@ export default function HostListPage() {
     <section className={styles.container}>
       <h2 className={styles.title}>HOT PLACE ✨ 인기 지역 숙소 모음</h2>
       <header className={headerClass}>
-        <dir className={styles.inner}>
+        <div className={styles.inner}>
           <Search value={searchQuery} onSearch={handleSearch} />
           <ul className={styles.hash}>
             {locationsToShow.map(location => (
@@ -122,7 +122,7 @@ export default function HostListPage() {
               </li>
             ))}
           </ul>
-        </dir>
+        </div>
       </header>
       <div>
         {locationsToShow.map(location => (

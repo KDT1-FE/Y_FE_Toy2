@@ -1,14 +1,14 @@
 import React, { useRef } from 'react';
 
 import { BsXCircle } from 'react-icons/bs';
-import Button from '@/components/host-list/Button';
-import Modal from '@/components/common/Modal';
+import Button from '@/components/HostList/Button';
+import Modal from '@/components/Common/Modal';
 import useOnClickOutside from '@/hooks/useOnClickOustside';
-import { Host } from '@/pages/host-list/hostList.types';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
-import styles from './HostDetailsModal.module.scss';
+import styles from '@/components/HostList/HostDetailsModal.module.scss';
+import { Host } from '@/components/HostList/hostList.types';
 
 interface HostDetailsModalProps {
   onClose: () => void;
@@ -81,14 +81,14 @@ export default function HostDetailsModal({
             src={hostDetails.picture}
             alt={hostDetails.name}
           />
-          <p className={styles['flex-row']}>
+          <div className={styles['flex-row']}>
             <h4 className={styles.title}>{hostDetails.name}</h4>
             <Button
               className="fill-btn"
               text="문의하기"
               onClick={createHostChat}
             />
-          </p>
+          </div>
           <p className={styles.text}>
             <b>주소 :</b> {hostDetails.location} {hostDetails.address}
           </p>
