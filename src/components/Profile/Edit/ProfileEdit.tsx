@@ -201,9 +201,9 @@ function Profile() {
             picture: backgroundImageUrl
           });
 
-          console.log(res);
+
         } catch (error) {
-          console.log(error);
+          alert('에러')
         }
       };
       함수명();
@@ -244,7 +244,7 @@ function Profile() {
   };
   useEffect(() => {
     if (userid == loginId) {
-      console.log("맞음");
+      return;
     } else {
       alert("잘못된 접근입니다.");
       navigate(`/profiles/${userid}`)

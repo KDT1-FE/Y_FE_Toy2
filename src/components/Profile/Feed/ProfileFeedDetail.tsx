@@ -388,17 +388,16 @@ function ProfileFeedDetail() {
         const deleteFeedid = feedid ? feedid : "1";
 
         if (currentFeedData && currentFeedData[deleteFeedid]) {
-          console.log(currentFeedData[deleteFeedid]);
+          
 
-          // 삭제할 피드의 인덱스
+          
           const deleteIndex = parseInt(deleteFeedid, 10);
 
-          // Feed 삭제
           updateDoc(feedRef, {
             [deleteFeedid]: deleteField()
           });
 
-          // 뒤에 있는 피드들을 앞으로 당기기
+          
           for (
             let i = deleteIndex + 1;
             i <= Object.keys(currentFeedData).length;
@@ -407,19 +406,19 @@ function ProfileFeedDetail() {
             const nextIndex = i - 1;
             const currentFeed = currentFeedData[i];
 
-            // 다음 인덱스의 피드가 존재하면 앞으로 당기기
+            
             if (currentFeed !== undefined) {
               updateDoc(feedRef, {
                 [nextIndex]: currentFeed,
                 [i]: deleteField()
               });
 
-              // 다음 인덱스의 피드의 feedId 수정
+              
               updateDoc(feedRef, {
                 [`${nextIndex}.feedId`]: nextIndex
               });
             } else {
-              // 다음 인덱스의 피드가 존재하지 않으면 삭제
+              
               updateDoc(feedRef, {
                 [nextIndex]: deleteField()
               });

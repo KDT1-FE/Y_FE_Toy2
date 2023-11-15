@@ -137,7 +137,7 @@ const ModalAddFeedWrap = styled.div`
   display: flex;
   justify-content: center;
 
-  button {
+  button { 
     margin-right: 16px;
 
     &:last-of-type {
@@ -162,7 +162,7 @@ function Profile() {
   const [isProfileMatchingLogin, setIsProfileMatchingLogin] = useState(false);
   const [context, setContext] = useState("");
 
-  console.log(feedData);
+  
 
   const loginId = sessionStorage.getItem("userId");
 

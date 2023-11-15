@@ -94,7 +94,6 @@ export default function ProfileFeedComment(props: {
 
   const handleSaveClick = () => {
     props.handleEditComment(`${props.index}`, editedText);
-    console.log(props.index);
     setIsEditing(false);
   };
 

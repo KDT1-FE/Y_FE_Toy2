@@ -59,7 +59,7 @@ function ProfileFeed(props: {
 }) {
   const navigate = useNavigate();
   const handleClick = (feedId: number) => {
-    // 클릭한 피드의 ID를 이용하여 페이지 이동
+    
     navigate(`/profiles/asdqwe123/${feedId}`);
   };
   return (

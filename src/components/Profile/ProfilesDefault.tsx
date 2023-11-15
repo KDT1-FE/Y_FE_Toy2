@@ -137,7 +137,7 @@ function ProfilesDefault(): JSX.Element {
         });
         setProfiles(profileData);
       } catch (error) {
-        console.error("Error fetching profiles:", error);
+        alert('패치오류')
       }
     };
 

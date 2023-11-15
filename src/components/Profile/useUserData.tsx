@@ -56,9 +56,7 @@ export default function useUserData() {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setFeedData(docSnap.data());
-      } else {
-        console.log("없음");
-      }
+      } 
     }
   }
 
