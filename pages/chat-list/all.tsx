@@ -44,13 +44,13 @@ export default function AllChatList() {
   return (
     <div className={styles.allContainer}>
       <Header pageName="All" />
-      <CreateChatButton setIsModal={setIsModal} />
-      {isModal && <ChatListModal handleModal={handleModal} />}
       <ul>
         {allChatList.map(chat => (
           <AllChatListItem key={chat.id} chat={chat} />
         ))}
       </ul>
+      <CreateChatButton setIsModal={setIsModal} />
+      {isModal && <ChatListModal handleModal={handleModal} />}
     </div>
   );
 }
