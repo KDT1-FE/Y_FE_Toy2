@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { Chat, Message, chatUsersObject } from '@/types';
+import { Chat, Message, chatUsersObject, User } from '@/types';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import ChatHeader from '@/Components/Chat/ChatHeader';
 import RenderChats from '@/Components/Chat/RenderChats';
@@ -18,18 +18,10 @@ const ChatRoom = ({
 	privateValue: string;
 	accessToken: string;
 }) => {
-	const initChatusers = {
-		id: '',
-		name: '',
-		users: [], // 속한 유저 정보
-		isPrivate: JSON.parse(privateValue),
-		latestMessage: null,
-		updatedAt: new Date(),
-	};
-
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [newMessage, setNewMessage] = useState('');
-	const [chatUsers, setChatUsers] = useState<Chat>(initChatusers);
+	const [chatUsers, setChatUsers] = useState<User[]>([]);
+	const [chatName, setChatName] = useState('');
 
 	// 채팅 참여자 fetch, socket 이벤트 등록 (1회 동작)
 	useEffect(() => {
@@ -49,7 +41,8 @@ const ChatRoom = ({
 			const chatUsersObject: chatUsersObject = await res.json();
 			const chatUsers: Chat = chatUsersObject.chat;
 
-			setChatUsers(chatUsers);
+			setChatName(chatUsers.name);
+			setChatUsers(chatUsers.users);
 		};
 
 		fetchChatUsers();
@@ -63,6 +56,32 @@ const ChatRoom = ({
 				setMessages((prevMessages) => [...prevMessages, messageObject]);
 			});
 
+			socket.on('join', (responseData) => {
+				// console.log('join 이벤트 리슨');
+				// console.log('responseData: ', responseData);
+				// console.log('responseData.users: ', responseData.users);
+				// console.log('responseData.joiner: ', responseData.joiners);
+
+				setChatUsers([...chatUsers, ...responseData.users]);
+				socket.emit(
+					'message-to-server',
+					`${responseData.users[0]} 님이 입장하셨습니다.`,
+				);
+			});
+
+			socket.on('leave', (responseData) => {
+				// console.log('leave 이벤트 리슨');
+				// console.log('responseData: ', responseData);
+				// console.log('responseData.users: ', responseData.users);
+				// console.log('responseData.leaver: ', responseData.leaver);
+
+				setChatUsers([...chatUsers, ...responseData.users]);
+				socket.emit(
+					'message-to-server',
+					`${responseData.leaver} 님이 퇴장하셨습니다.`,
+				);
+			});
+
 			socket.emit('fetch-messages');
 		});
 
@@ -73,8 +92,10 @@ const ChatRoom = ({
 		return () => {
 			socket.off('message-to-client');
 			socket.off('messages-to-client');
+			socket.off('join');
+			socket.off('leave');
 		};
-	}, [accessToken, chatId, socket]);
+	}, [accessToken, chatId, chatUsers, socket]);
 
 	// 서버로 메시지 전송
 	const sendMessage = () => {
@@ -96,13 +117,12 @@ const ChatRoom = ({
 			<ChatHeader
 				socket={socket}
 				chatId={chatId}
-				chatName={chatUsers.name}
-				chatUsers={chatUsers.users.length}
+				chatName={chatName}
+				chatUsers={chatUsers.length}
 			/>
-
 			{privateValue === 'true' ? (
 				<>
-					{chatUsers.users.length === 2 || chatUsers.users.length === 1 ? (
+					{chatUsers.length === 2 || chatUsers.length === 1 ? (
 						<>
 							<p>1대1 채팅방 입니다.</p>
 							<RenderChats
