@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Chat } from '@/@types/types';
-import Image from 'next/image';
-import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 import MyChatListItem from '@/components/ChatList/MyChatListItem';
@@ -25,11 +22,6 @@ export default function MyChatList() {
     getMyChat();
   }, []);
 
-  const today = new Date();
-  const isToday = today.toISOString().split('T')[0];
-
-
-          
 
 
   return (
