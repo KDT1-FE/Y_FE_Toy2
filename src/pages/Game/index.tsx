@@ -39,7 +39,6 @@ const Game = () => {
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);
   const gameId = searchParams.get("gameId");
-
   // 게임 진행 상황 상태
   const [current, setCurrent] = useState("");
   // 현재 발언자 상태
@@ -51,7 +50,6 @@ const Game = () => {
   const gameData = fireFetch.useGetSome("game", "id", gameId as string);
   const [status, setStatus] = useState("");
   const [users, setUsers] = useState<string[]>([]);
-
   // 게임 소켓 서버 연결
   const socket = connect(gameId as string);
   // 메인 소켓 서버 연결 (메인페이지 상태 변경 통신)
@@ -125,6 +123,7 @@ const Game = () => {
         <GridItem>
           <Button
             w="200px"
+            h="100%"
             mr="20px"
             onClick={() => {
               const newUsers = users.filter((value) => value !== user.id);
@@ -144,21 +143,7 @@ const Game = () => {
         </GridItem>
         <GridItem>
           <Card h="100%" justifyContent="center">
-            <Center fontWeight="bold">
-              {status === "게임중" ? (
-                <>
-                  <p>주제는 {category} 입니다. &nbsp;</p>
-
-                  {liar === user.id ? (
-                    <p>당신은 Liar 입니다. </p>
-                  ) : (
-                    <p>키워드는 {keyword} 입니다.</p>
-                  )}
-                </>
-              ) : (
-                <p>게임을 시작해주세요.</p>
-              )}
-            </Center>
+            <Center fontWeight="bold">{gameData.data[0].name}</Center>
           </Card>
         </GridItem>
         <GridItem>
@@ -175,16 +160,35 @@ const Game = () => {
           })}
         </GridItem>
         <GridItem>
+          <Card h="40px" justifyContent="center" mb="20px">
+            <Center fontWeight="bold">
+              {status === "게임중" ? (
+                <>
+                  <p>주제는 {category} 입니다. &nbsp;</p>
+
+                  {liar === user.id ? (
+                    <p>당신은 Liar 입니다. </p>
+                  ) : (
+                    <p>키워드는 {keyword} 입니다.</p>
+                  )}
+                </>
+              ) : (
+                <p>게임을 시작해주세요.</p>
+              )}
+            </Center>
+          </Card>
           <GameChat
             socket={socket}
             gameData={gameData.data[0]}
             current={current}
+            setCurrent={setCurrent}
             speaking={speaking}
             num={num}
             player={users}
             setNum={setNum}
             setSpeaking={setSpeaking}
             onGameInfoReceived={handleGameInfoReceived}
+            liar={liar}
           />
         </GridItem>
         <GridItem>

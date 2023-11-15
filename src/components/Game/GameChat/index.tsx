@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   CardBody,
+  Center,
   Input,
   InputGroup,
   InputRightElement,
@@ -24,9 +25,11 @@ interface GameChatProps {
   socket: Socket;
   gameData: any;
   current: string;
+  setCurrent: React.Dispatch<React.SetStateAction<string>>;
   speaking: string;
   num: number;
   player: string[];
+  liar: string;
   setNum: React.Dispatch<React.SetStateAction<number>>;
   setSpeaking: React.Dispatch<React.SetStateAction<string>>;
   onGameInfoReceived: (gameInfo: {
@@ -51,22 +54,23 @@ const GameChat: React.FC<GameChatProps> = ({
   speaking,
   player,
   num,
+  liar,
   setNum,
   setSpeaking,
   onGameInfoReceived,
+  setCurrent,
 }) => {
   const user = useRecoilValue(userState);
-
+  console.log("Chat/ liar:" + liar);
   const [message] = useState<Message>({
     id: "",
     text: "",
   });
-
+  console.log("current,", current);
   // console.log("GameChat/ gameData:", gameData);
   const [messages, setMessages]: any = useState([]);
   const messageRef = useRef<HTMLInputElement | null>(null);
   const [, setUsers] = useState<string[]>([]);
-  // console.log("users: ", users);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>("");
   const [voteResult, setVoteResult] = useState<string | null>(null);
@@ -82,6 +86,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
   const handleVoteResult = (result: string | null) => {
     setVoteResult(result);
+    setCurrent("게임종료");
     console.log("Chat/ voteResult", voteResult);
   };
 
@@ -180,9 +185,13 @@ const GameChat: React.FC<GameChatProps> = ({
             <ChatBubble key={index} userId={message.id} text={message.text} />
           ),
         )}
-        <Button size="md" onClick={handleOpenVoteModal}>
-          투표하기
-        </Button>
+        {current === "투표중" && (
+          <Center>
+            <Button size="md" onClick={handleOpenVoteModal}>
+              👉 투표하기 👈
+            </Button>
+          </Center>
+        )}
         {showVoteModal && (
           <Vote
             gameData={gameData}
@@ -194,7 +203,22 @@ const GameChat: React.FC<GameChatProps> = ({
         {selectedUser && (
           <SystemChat text={`${selectedUser}님을 라이어로 지목했습니다.`} />
         )}
-        {voteResult && <SystemChat text={`투표 결과: ${voteResult}`} />}
+        {voteResult && (
+          <>
+            <SystemChat
+              text={`${voteResult}님이 최종 라이어로 지목되었습니다.`}
+            />
+            {liar === voteResult ? (
+              <SystemChat
+                text={`🎉 라이어는 ${liar}님이었습니다. 라이어를 찾아냈습니다! 🎉`}
+              />
+            ) : (
+              <SystemChat
+                text={`라이어는 ${liar}님이었습니다. 라이어를 찾아내지 못했습니다.🥲`}
+              />
+            )}
+          </>
+        )}
       </CardBody>
       <InputGroup size="md">
         <Input
