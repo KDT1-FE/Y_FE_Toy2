@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Message } from "../../pages/ChatRoom";
 import { useState, useEffect } from "react";
+import { Message } from "../Chat/ChatRoom";
 
 function SearchInput({
   searchText,

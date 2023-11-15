@@ -37,6 +37,7 @@ function Chat() {
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
   const [loginUser, setLoginUser] = useState<User | null>(null);
+  const [isShowRoom, setIsShowRoom] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -136,7 +137,10 @@ function Chat() {
             >
               <div
                 className="catelink__wrap"
-                onClick={() => handleClick(room.id)}
+                onClick={() => {
+                  handleClick(room.id);
+                  setIsShowRoom(true);
+                }}
               >
                 <div className="catelink__name">
                   <p className="tit">{room.name}</p>
@@ -157,16 +161,19 @@ function Chat() {
             />
           </CatePlus>
         </ChatCategory>
-        {chatRoom.length !== 0 ? (
-          <ChatRoom
-            roomId={roomId}
-            roomName={roomName}
-            selectedUsers={selectedUsers}
-            setChatRoom={setChatRoom}
-          />
-        ) : (
-          <NoneChat></NoneChat>
-        )}
+        {isShowRoom ? (
+          chatRoom.length !== 0 ? (
+            <ChatRoom
+              roomId={roomId}
+              roomName={roomName}
+              selectedUsers={selectedUsers}
+              setChatRoom={setChatRoom}
+              setIsShowRoom={setIsShowRoom}
+            />
+          ) : (
+            <NoneChat></NoneChat>
+          )
+        ) : null}
       </ChatWrapper>
     </>
   );

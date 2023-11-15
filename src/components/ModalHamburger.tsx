@@ -5,7 +5,11 @@ import useApi from "../hooks/useApi";
 import { ChatI } from "../pages/Chat";
 import { getTime } from "../utils/getTime";
 
-const ModalExample = ({ roomId, setChatRoom }: ModalHamburgerProps) => {
+const ModalExample = ({
+  roomId,
+  setChatRoom,
+  setIsShowRoom
+}: ModalHamburgerProps) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { patchData, getData } = useApi();
   const openModal = () => {
@@ -56,7 +60,12 @@ const ModalExample = ({ roomId, setChatRoom }: ModalHamburgerProps) => {
 
   return (
     <ModalWrap ref={menuRef}>
-      <HamButton onClick={() => openModal()}>
+      <HamButton
+        onClick={() => {
+          openModal();
+          setIsShowRoom(false);
+        }}
+      >
         <img src="/src/assets/images/menu-ico.png" alt="메뉴" width="30" />
       </HamButton>
       {modalIsOpen && (
@@ -73,6 +82,7 @@ export default ModalExample;
 interface ModalHamburgerProps {
   roomId: string;
   setChatRoom: React.Dispatch<React.SetStateAction<ChatI[]>>;
+  setIsShowRoom: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ModalWrap = styled.div`
