@@ -7,13 +7,7 @@ import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
 import ExitNotice from '@/components/chat/exitNotice';
 import ChatAlert from '@/components/chat/chatAlert';
-import {
-  Chat,
-  ChatUser,
-  JoinersData,
-  LeaverData,
-  Message,
-} from '@/@types/types';
+import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
@@ -35,9 +29,6 @@ export default function Chatting() {
   const [showEntryNotice, setShowEntryNotice] = useState(false);
   const [showExitNotice, setShowExitNotice] = useState(false);
 
-  const [joiner, setJoiner] = useState<string>('');
-  const [leaver, setLeaver] = useState<string>('');
-
   const [chatData, setChatData] = useState<Chat | null>();
   const [enterName, setEnterName] = useState<string>('');
   const [exitName, setExitName] = useState<string>('');
@@ -50,7 +41,7 @@ export default function Chatting() {
     return io(`${CLIENT_URL}?chatId=${chatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
-        serverId: process.env.NEXT_PUBLIC_API_KEY,
+        serverId: process.env.NEXT_PUBLIC_API_KEY!,
       },
     });
   }, [chatId, accessToken]);
@@ -75,15 +66,19 @@ export default function Chatting() {
 
       socket.emit('fetch-messages');
 
-      socket.on('join', (messageObject: JoinersData) => {
+      socket.on('join', async (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');
-        setJoiner(messageObject.joiners[0]?.id.split(':')[1]);
+        const response = await chatAPI.getUserInfo(
+          messageObject.joiners[0]?.id.split(':')[1],
+        );
+        console.log(response);
+        setEnterName(response.data.user.name);
       });
 
-      socket.on('leave', (messageObject: LeaverData) => {
+      socket.on('leave', async (messageObject: LeaverData) => {
         console.log(messageObject, '채팅방 퇴장');
-        setLeaver(messageObject.leaver);
-        console.log('123', leaver);
+        const response = await chatAPI.getUserInfo(messageObject.leaver);
+        setExitName(response.data.user.name);
       });
     }
     return () => {
@@ -110,58 +105,36 @@ export default function Chatting() {
       }
     };
 
-    fetchChatData();
+    if (chatId) {
+      fetchChatData();
+    }
   }, [chatId]);
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const response = await chatAPI.getUserInfo(joiner);
-        setEnterName(response.data.user.name);
-      } catch (error) {
-        console.error('Error fetching user name:', error);
-      }
-    };
-    fetchUserId();
-  }, [joiner]);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const response = await chatAPI.getUserInfo(leaver);
-        setExitName(response.data.user.name);
-      } catch (error) {
-        console.error('Error fetching user name:', error);
-      }
-    };
-    fetchUserId();
-  }, [leaver]);
-
-  useEffect(() => {
-    if (joiner !== '') {
+    if (enterName) {
       setShowEntryNotice(true); // Show entry notice
 
       const entryTimer = setTimeout(() => {
         setShowEntryNotice(false); // Hide entry notice after 3 seconds
-        // setJoiner('');
+        setEnterName('');
       }, 10000);
 
       return () => clearTimeout(entryTimer);
     }
-  }, [joiner]);
+  }, [enterName]);
 
   useEffect(() => {
-    if (leaver !== '') {
+    if (exitName) {
       setShowExitNotice(true); // Show exit notice
 
       const exitTimer = setTimeout(() => {
         setShowExitNotice(false); // Hide exit notice after 3 seconds
-        // setLeaver('');
-      }, 10000);
+        setExitName('');
+      }, 3000);
 
       return () => clearTimeout(exitTimer);
     }
-  }, [leaver]);
+  }, [exitName]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
