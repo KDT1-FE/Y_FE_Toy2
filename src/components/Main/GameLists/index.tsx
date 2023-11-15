@@ -181,6 +181,7 @@ const GameLists = () => {
 
         setGameLists(copy);
       } else if (messageObject.text.endsWith("@#$%")) {
+        console.log("대기중");
       } else {
         // 메시지 데이터, 작성 유저 상태 저장
         const message = {
@@ -213,6 +214,7 @@ const GameLists = () => {
       socket.off("join");
       socket.off("leave");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   //팝업 변화 감지
