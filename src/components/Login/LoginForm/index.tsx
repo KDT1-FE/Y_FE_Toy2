@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
 import {
   Alert,
+  AlertDescription,
   AlertIcon,
   AlertTitle,
-  AlertDescription,
-  Input,
-  Button,
   Box,
+  Button,
   Flex,
+  Input,
 } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 
 const SignUpButton = styled.button`
