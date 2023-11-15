@@ -25,6 +25,7 @@ interface ChatRoomProps {
   roomName: string;
   selectedUsers: User[];
   setChatRoom: React.Dispatch<React.SetStateAction<ChatI[]>>;
+  setIsShowRoom: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface Message {
@@ -34,12 +35,7 @@ export interface Message {
   createdAt: Date;
 }
 
-function ChatRoom({
-  roomId,
-  roomName,
-  selectedUsers,
-  setChatRoom
-}: ChatRoomProps) {
+function ChatRoom({ roomId, setChatRoom, setIsShowRoom }: ChatRoomProps) {
   const [text, setText] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { accessToken } = useContext(AuthContext);
@@ -152,7 +148,11 @@ function ChatRoom({
             setSearchText={setSearchText}
             messages={messages}
           />
-          <ModalHamburger roomId={roomId} setChatRoom={setChatRoom} />
+          <ModalHamburger
+            roomId={roomId}
+            setChatRoom={setChatRoom}
+            setIsShowRoom={setIsShowRoom}
+          />
         </div>
       </div>
       <div className="chatroom__body">

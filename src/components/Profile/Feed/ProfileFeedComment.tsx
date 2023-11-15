@@ -8,7 +8,9 @@ const Container = styled.div`
   justify-content: space-between;
   gap: 128px;
   margin-bottom: 32px;
-
+  .commentContainer {
+    display: flex;
+  }
   .commentContentWrap {
     display: flex;
     flex-direction: column;
@@ -24,10 +26,10 @@ const Container = styled.div`
       font-weight: 600;
       cursor: pointer;
     }
-    .text span{
+    .text span {
       color: #383535;
     }
-    .timeStamp span{
+    .timeStamp span {
       color: #999696;
       font-size: 16px;
     }
@@ -71,7 +73,17 @@ interface feed {
 interface feedData {
   [key: string]: feed;
 }
-
+interface userData {
+  id: string;
+  name: string;
+  profileImgUrl: string;
+  backgroundImgUrl: string;
+  introText: string;
+  hobby: string[];
+}
+interface allUserData {
+  [key: string]: userData;
+}
 export default function ProfileFeedComment(props: {
   feedData: feedData | null;
   comment: {
@@ -82,12 +94,13 @@ export default function ProfileFeedComment(props: {
   };
   index: number | null;
   loginId: string | null;
+  allUserData: allUserData;
   handleEditComment: (commentId: string, newText: string) => void;
   handleDeleteComment: (commentId: string) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(props.comment.text);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -108,15 +121,33 @@ export default function ProfileFeedComment(props: {
   return (
     <Container>
       <div className="commentContainer">
+        <div
+          className="userProfile"
+          style={{
+            backgroundImage: `url(${
+              props.allUserData[props.comment.id].profileImgUrl
+            })`
+          }}
+        ></div>
         {isEditing ? (
           <input type="text" value={editedText} onChange={handleTextChange} />
         ) : (
           <div className="commentContentWrap">
-            <div className="name"><span onClick={()=>{
-              navigate(`/profiles/${props.comment.id}`)
-            }}>{props.comment.name}</span></div>
-            <div className="text"><span>{props.comment.text}</span></div>
-            <div className="timeStamp"><span>{props.comment.timeStamp}</span></div>
+            <div className="name">
+              <span
+                onClick={() => {
+                  navigate(`/profiles/${props.comment.id}`);
+                }}
+              >
+                {props.comment.name}
+              </span>
+            </div>
+            <div className="text">
+              <span>{props.comment.text}</span>
+            </div>
+            <div className="timeStamp">
+              <span>{props.comment.timeStamp}</span>
+            </div>
           </div>
         )}
       </div>

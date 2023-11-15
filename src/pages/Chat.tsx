@@ -37,6 +37,7 @@ function Chat() {
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
   const [loginUser, setLoginUser] = useState<User | null>(null);
+  const [isShowRoom, setIsShowRoom] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -97,14 +98,12 @@ function Chat() {
       };
 
       fetchData();
-      console.log(chatRoom);
     }
   }, [accessToken, roomId]);
   // TODO : 여기에 의존성배열로 chatRoom 을 넣어줘야하는데 그러면 너무 렌더링이 많아져서 또 채팅방 내역을 잘 못 불러옴
 
   const handleClick = (roomId: string) => {
     setRoomId(roomId);
-    console.log("클릭된 방 아이디", roomId);
   };
 
   // 새로운 채팅방 추가 함수
@@ -136,7 +135,10 @@ function Chat() {
             >
               <div
                 className="catelink__wrap"
-                onClick={() => handleClick(room.id)}
+                onClick={() => {
+                  handleClick(room.id);
+                  setIsShowRoom(true);
+                }}
               >
                 <div className="catelink__name">
                   <p className="tit">{room.name}</p>
@@ -157,16 +159,19 @@ function Chat() {
             />
           </CatePlus>
         </ChatCategory>
-        {chatRoom.length !== 0 ? (
-          <ChatRoom
-            roomId={roomId}
-            roomName={roomName}
-            selectedUsers={selectedUsers}
-            setChatRoom={setChatRoom}
-          />
-        ) : (
-          <NoneChat></NoneChat>
-        )}
+        {isShowRoom ? (
+          chatRoom.length !== 0 ? (
+            <ChatRoom
+              roomId={roomId}
+              roomName={roomName}
+              selectedUsers={selectedUsers}
+              setChatRoom={setChatRoom}
+              setIsShowRoom={setIsShowRoom}
+            />
+          ) : (
+            <NoneChat></NoneChat>
+          )
+        ) : null}
       </ChatWrapper>
     </>
   );
