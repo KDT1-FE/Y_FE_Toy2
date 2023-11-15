@@ -1,0 +1,15 @@
+@import '@/styles/index.scss';
+
+.container {
+    max-width: $max-width;
+    z-index: 10;
+    padding: 2rem  2rem 0 2rem;
+    position: fixed;
+    width: 100%;
+    left: 50%; 
+    transform: translateX(-50%);
+    margin: 0 2rem;
+    top: 0;
+    background-color: white;
+}
+
