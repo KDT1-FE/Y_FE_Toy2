@@ -22,7 +22,7 @@ const MyChats = ({ userType }: { userType: string }) => {
   const filterChats = useRecoilValue(searchChatsState);
 
   const router = useRouter();
-  const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
   // 채팅방 들어갈 때 새 유저면 채팅방에 새로 참여시키고 기존 유저는 그냥 들어가기
   const enterChatRoom = (chat: Chat) => {

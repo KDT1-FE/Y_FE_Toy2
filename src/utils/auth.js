@@ -1,9 +1,9 @@
 function getLoggedInUserInfo() {
-    const userId = sessionStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
 
-    if (userId) {
-        return { id: userId, name: 'Test User', picture: 'test.jpg' };
-    }
+  if (userId) {
+    return { id: userId, name: 'Test User', picture: 'test.jpg' };
+  }
 
-    return null;
+  return null;
 }

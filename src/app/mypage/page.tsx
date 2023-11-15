@@ -5,14 +5,15 @@ import ProfileEdit from '@/components/Mypage/ProfileEdit';
 import Navigation from '@/components/Navigation';
 import Profile from '@/components/Mypage/Profile';
 import styled from 'styled-components';
+import { getCookie } from '@/lib/cookie';
 
 const page = () => {
   const [isRightWay, setIsRightWay] = useState<boolean>(false);
 
   useEffect(() => {
-    const accessToken = sessionStorage.getItem('accessToken');
+    const isUserAccess = getCookie('accessToken');
 
-    if (accessToken) {
+    if (isUserAccess) {
       setIsRightWay(true);
     } else {
       setIsRightWay(false);

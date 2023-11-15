@@ -11,6 +11,11 @@ interface RequestBody {
   password: string;
 }
 
+interface ResponseBody {
+  accessToken: string;
+  refreshToken: string;
+}
+
 const LoginForm = () => {
   const [formData, setFormData] = useState<RequestBody>({
     id: '',
@@ -29,15 +34,19 @@ const LoginForm = () => {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoginFail('');
+
     try {
-      const res = await instance.post('login', formData);
-      const isLoggedIn = Object.keys(res).includes('accessToken');
-      if (isLoggedIn) {
-        sessionStorage.setItem('userId', formData.id);
-        router.push('/');
-      } else {
-        setLoginFail(FAIL_MESSAGE);
-        setFormData({ ...formData, id: formData.id, password: formData.password });
+      const res: ResponseBody = await instance.post('login', formData);
+      if (res) {
+        const isLoggedIn = Object.keys(res).includes('accessToken');
+
+        if (isLoggedIn) {
+          localStorage.setItem('userId', formData.id);
+          router.push('/');
+        } else {
+          setLoginFail(FAIL_MESSAGE);
+          setFormData({ ...formData, id: formData.id, password: formData.password });
+        }
       }
     } catch (e) {
       console.error(e);
