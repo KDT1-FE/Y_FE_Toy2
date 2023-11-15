@@ -42,7 +42,7 @@ function OpenchatMyItem({ openchat }: OpenchatMyItemProps) {
               color="GrayText"
               className="openchat__room-lastdate"
             >
-              {formatDate(new Date(openchat.latestMessage?.createdAt ?? ''))}
+              {/* {formatDate(new Date(openchat.latestMessage?.createdAt ?? ''))} */}
             </Typography>
           </div>
         </OpenchatRoom>

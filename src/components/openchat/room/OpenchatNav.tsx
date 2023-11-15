@@ -5,6 +5,7 @@ import { User } from '../../../types/User';
 import { Chat } from '../../../types/Openchat';
 import OpenchatNavUsers from './OpenchatNavUsers';
 import styles from './OpenchatNav.module.css';
+import useMutationOpenchatPatchs from '../../../hooks/useMutationOpenchatPatchs';
 
 interface OpenchatNavProps {
   data?: Chat;
@@ -13,6 +14,11 @@ interface OpenchatNavProps {
 }
 
 function OpenchatNav({ data, users, handleOpen }: OpenchatNavProps) {
+  const { leave } = useMutationOpenchatPatchs();
+  const onClickLeave = () => {
+    if (data) leave(data.id);
+  };
+
   return (
     <motion.nav
       initial={{ x: '100%' }}
@@ -33,7 +39,7 @@ function OpenchatNav({ data, users, handleOpen }: OpenchatNavProps) {
           <OpenchatNavUsers users={users} handleOpen={handleOpen} />
         </Box>
         <div>
-          <Button variant="outlined" fullWidth>
+          <Button variant="outlined" fullWidth onClick={onClickLeave}>
             채팅 나가기
           </Button>
         </div>

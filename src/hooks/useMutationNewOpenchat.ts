@@ -75,6 +75,7 @@ function useMutationNewOpenchat({
           image: '',
         });
       }
+      toast.success('새로운 채팅방이 생성되었습니다.');
     } catch (error) {
       // axios 에러가 발생하면 응답 객체 보여주기 (TODO: 추후 toast로 수정 필요)
       if (isAxiosError(error)) {

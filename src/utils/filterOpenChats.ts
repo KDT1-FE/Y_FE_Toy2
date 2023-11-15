@@ -33,6 +33,21 @@ function filterOpenChats<T extends MyObject, U extends MyObject>(
 }
 
 /**
+ * 오픈 채팅중에 내가 참여하지 않은 채팀만 찾는 함수 입니다.
+ * @param arr1 firestore에서 받아온 오픈채팅 데이터
+ * @param arr2 api로 받아온 내가 참여한 오픈채팅 데이터
+ * @returns 내 오픈채팅 데이터를 반환
+ */
+export function filterOpenChatsNotMychat<T extends MyObject>(
+  arr1: T[],
+  arr2: string[],
+): T[] {
+  const uniqueIds = new Set(arr2);
+  const filteredObjects = arr1.filter((obj) => !uniqueIds.has(obj.id));
+  return filteredObjects;
+}
+
+/**
  * 친구들 목록중 나는 제외해주는 필터 함수 입니다.
  * @param arr 친구 목록
  * @returns 나를 제외한 친구목록을 반환
