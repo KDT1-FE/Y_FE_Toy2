@@ -4,10 +4,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import PageNotFound from "./components/PageNotFound";
 import { Theme, darkTheme, lightTheme } from "./style/theme";
-import Profile from "./components/Profile/Profile";
 import MainContents from "./Pages/MainContents";
+
 import ProfilePage from "./Pages/Profile/ProfilePage";
 import ProfileEditPage from "./Pages/Profile/ProfileEditPage";
+import ProfileFeedDetailPage from "./Pages/Profile/ProfileFeedDetailPage";
+import ProfileDefaultPage from "./Pages/Profile/ProfileDefaultPage";
+
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
 import Chat from "./Pages/Chat";
@@ -34,13 +37,16 @@ const router = createBrowserRouter([
       { path: "", element: <MainContents /> },
       {
         path: "profiles",
-        element: <Profile />
+        element: <ProfileDefaultPage />
       },
       {
         path: "profiles/:userid",
         element: <ProfilePage />
       },
       { path: "profiles/:userid/edit", element: <ProfileEditPage /> },
+
+      { path: "profiles/:userid/:feedid", element: <ProfileFeedDetailPage /> },
+
       {
         path: "chat",
         element: <Chat />
