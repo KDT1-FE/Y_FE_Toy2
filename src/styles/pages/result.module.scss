@@ -1,0 +1,70 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.result {
+  flex: 1 1 auto;
+  height: 100vh;
+  background-color: black;
+  color: white;
+  text-align: center;
+  font-family: $font-logo;
+  overflow: hidden;
+
+  @include flex-center-row();
+
+  &__contents {
+    width: 100%;
+    height: 100%;
+    animation: slideUp 20s linear;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__credits {
+    font-size: 6rem;
+    font-weight: 700;
+    letter-spacing: 0.4rem;
+    margin: 3rem;
+  }
+
+  &__players {
+    font-size: 2.5rem;
+    font-weight: 600;
+    padding: 0.7rem;
+  }
+
+  &__victory_team {
+    font-size: 8rem;
+    font-weight: 700;
+    margin: 5rem;
+  }
+
+  &__result_text {
+    font-size: 2rem;
+  }
+
+  &__goback {
+    font-size: 2.5rem;
+    font-weight: 500;
+    font-family: $font-main;
+    position: absolute;
+    bottom: 10rem;
+    right: 15rem;
+
+    & a {
+      color: white;
+      letter-spacing: 0.2rem;
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(70%);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
