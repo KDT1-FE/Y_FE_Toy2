@@ -80,7 +80,7 @@ export default function Rating({ peoples }: PropsType) {
               userRate = `${i + 1}.`;
           }
           return (
-            <RateBox>
+            <RateBox key={i}>
               <Typography
                 variant="h1"
                 sx={{
