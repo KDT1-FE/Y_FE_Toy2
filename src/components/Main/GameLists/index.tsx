@@ -5,11 +5,14 @@ import {
   Container,
   Grid,
   Image,
+  Input,
+  InputGroup,
+  InputRightElement,
   Text,
 } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiBell } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import { DocumentData } from "firebase/firestore";
@@ -19,9 +22,18 @@ import { useRecoilValue } from "recoil";
 import UserConfigModal from "../../../components/Main/UserConfigModal";
 import { useAuth } from "../../../hooks/useAuth";
 import { authState } from "../../../recoil/atoms/authState";
-import { io } from "socket.io-client";
-import GameListChat from "../GameListsChat";
 import CreateGameModal from "../CreateGameModal";
+import connect from "../../../socket/socket";
+import useInput from "../../../hooks/useInput";
+import ChatBubble from "../../common/ChatBubble";
+import MyChatBubble from "../../common/MyChatBubble";
+
+interface Message {
+  userId: string;
+  text: string;
+  createdAt: Date;
+  id: string;
+}
 
 interface ResponseValue {
   accessToken: string; // 사용자 접근 토큰
@@ -79,23 +91,35 @@ const GameLists = () => {
   const [token, setToken] = useState<ResponseValue>();
   const [gameLists, setGameLists] = useState<(GameRoom | DocumentData)[]>([]);
   const [modal, setModal] = useState(false);
+  const { value, onChange } = useInput("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
   const fireFetch = useFireFetch();
-
-  const socket = io(
-    `https://fastcampus-chat.net/chat?chatId=9984747e-389a-4aef-9a8f-968dc86a44e4`,
-    {
-      extraHeaders: {
-        Authorization: `Bearer ${token?.accessToken}`,
-        serverId: "6603aca7",
-      },
-    },
-  );
+  // 소켓 연결
+  const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
-      console.log(messageObject);
+      setMessages((prev) => [...prev, messageObject]);
     });
+    return () => {
+      socket.off("message-to-client");
+    };
   }, [socket]);
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleMessage();
+    }
+  };
+  const handleMessage = () => {
+    if (!value) {
+      return alert("전송할 메시지를 입력해주세요:)");
+    }
+    // 메시지 전송하는 부분 구현
+    socket.emit("message-to-server", value);
+    inputRef?.current?.focus();
+  };
 
   const { result: userInfo }: FetchResultUser = useFetch({
     url: `https://fastcampus-chat.net/user?userId=${token?.id}`,
@@ -192,7 +216,36 @@ const GameLists = () => {
               ))}
             </Grid>
           </Box>
-          <GameListChat />
+          <Box bg="white" borderRadius="5">
+            <Box overflowY="auto" maxHeight="200px" height="200px">
+              {messages.map((message: Message, index) => (
+                <MyChatBubble
+                  key={index}
+                  userId={message?.userId}
+                  text={message?.text}
+                />
+              ))}
+            </Box>
+            <InputGroup size="md">
+              <Input
+                pr="5rem"
+                placeholder="Enter password"
+                onChange={onChange}
+                onKeyDown={onKeyDown}
+                value={value}
+              />
+              <InputRightElement width="5.5rem">
+                <Button
+                  h="1.75rem"
+                  size="sm"
+                  textTransform="uppercase"
+                  onClick={handleMessage}
+                >
+                  enter
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </Box>
         </Box>
         <Box flex="2" display="flex" flexDirection="column" rowGap="5">
           <Card height="160px" padding="5" rowGap="5">

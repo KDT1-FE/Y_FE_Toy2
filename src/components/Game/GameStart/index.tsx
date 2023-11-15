@@ -126,6 +126,7 @@ const GameStart: React.FC<GameStartProps> = ({
       {status === "대기중" ? (
         <Button
           w="200px"
+          h="100%"
           mr="20px"
           onClick={handleStart}
           isDisabled={host !== user.id}
@@ -135,6 +136,7 @@ const GameStart: React.FC<GameStartProps> = ({
       ) : (
         <Button
           w="200px"
+          h="100%"
           mr="20px"
           onClick={hadleEnd}
           isDisabled={host !== user.id}
