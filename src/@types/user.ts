@@ -10,3 +10,8 @@ export interface User2 {
   username?: string;
   picture: string;
 }
+
+export interface AuthResponseValue {
+  auth: boolean;
+  user?: User;
+}

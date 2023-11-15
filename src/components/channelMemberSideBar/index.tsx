@@ -10,7 +10,7 @@ const ChannelMemberSideBar = () => {
   const { id } = useParams();
   const chatId = id!;
 
-  const { userList, onlineUserIds, setUserList } = useJoinLeaveChannels(chatId);
+  const { userList, setUserList } = useJoinLeaveChannels(chatId);
 
   return (
     <Box

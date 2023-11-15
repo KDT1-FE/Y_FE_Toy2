@@ -22,7 +22,15 @@ const SideBar = () => {
   useJoinLeaveChannels(chatId);
 
   return (
-    <Box w="18rem" h="100vh" bg="gray.50" color="black" p="20px" boxShadow="xl">
+    <Box
+      w="18rem"
+      position="sticky"
+      h="100vh"
+      bg="gray.50"
+      color="black"
+      p="20px"
+      boxShadow="xl"
+    >
       <Heading my="2rem">로고자리</Heading>
       <Box color="#828C98">
         <ChakraLink as={ReactRouterLink} to="/" fontSize={'lg'}>
