@@ -102,6 +102,15 @@ const GameRoom: React.FC = () => {
     };
   }, [roomId]);
 
+  const gameEnd = () => {
+    gameSocket.on('game_ended', (message) => {
+      alert(message);
+    });
+    return () => {
+      gameSocket.off('game_ended');
+    };
+  };
+
   useEffect(() => {
     if (userMessage) {
       if (userMessage.userId === myId) {
@@ -109,16 +118,19 @@ const GameRoom: React.FC = () => {
       }
     }
     const handleCorrectAnswer = (data: { winner: string }) => {
+      console.log(data.winner, myId);
       if (data.winner === myId) {
         alert('축하합니다! 정답입니다!');
-      } else {
+      } else if (data.winner !== myId) {
         alert('누군가 정답을 맞췄습니다!');
       }
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
+    gameSocket.emit('end_game', { roomId: roomId });
 
     return () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);
+      gameSocket.off('end_game', { roomId: roomId });
     };
   }, [roomId, gameSocket, userMessage]);
 
@@ -146,6 +158,7 @@ const GameRoom: React.FC = () => {
               onChange={handleSetAnswerChange}
             />
             <button onClick={submitSetAnswer}>Submit Answer</button>
+            <button onClick={gameEnd}>Game</button>
           </div>
           {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>

@@ -58,8 +58,19 @@ export const chatSocket = (accessToken: any, chatId: string) => {
   return chattingSocket;
 };
 
-export const drawSocket = io('http://localhost:3001');
-export const gameSocket = io('http://localhost:3001');
+export const drawSocket = io(
+  'https://young-wave-37170-0a19781643d5.herokuapp.com/',
+  {
+    withCredentials: true,
+  },
+);
+
+export const gameSocket = io(
+  'https://young-wave-37170-0a19781643d5.herokuapp.com/',
+  {
+    withCredentials: true,
+  },
+);
 
 export const disconnectLoginSocket = () => {
   if (serverSocket) {
