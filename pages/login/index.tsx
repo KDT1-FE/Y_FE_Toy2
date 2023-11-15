@@ -32,7 +32,7 @@ export default function Login() {
     <div className={styles.login_container}>
       <div className={styles.login_box}>
         <Image
-          src="/images/logo.png"
+          src="/images/Talkhaja.svg"
           alt="talkhaja_logo"
           width={200}
           height={80}

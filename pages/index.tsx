@@ -1,11 +1,12 @@
 // import styles from '@/styles/Home.module.scss';
 
+import Header from '@/components/Header/Header';
 import HostList from './host-list';
 
 export default function Home() {
   return (
     <>
-      <h1>Talkhaja</h1>
+      <Header />
       <HostList />
     </>
   );

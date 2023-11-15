@@ -124,7 +124,7 @@ export default function SignUp() {
       <div className={styles.signUp_container}>
         <div className={styles.signUp_box}>
           <Image
-            src="/images/logo.png"
+            src="/images/Talkhaja.svg"
             alt="talkhaja_logo"
             width={200}
             height={80}

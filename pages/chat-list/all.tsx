@@ -6,21 +6,29 @@ import Image from 'next/image';
 import { useRecoilValue } from 'recoil';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import formatTime from '@/utils/timeFormat';
-import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import ChatListModal from '@/components/ChatList/ChatListModal';
+import { sortChatList } from '@/utils/chatList';
+import useConnectServerSocket from '@/hooks/useConnectServerSocket';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
+import Header from '@/components/Header/Header';
 
 export default function AllChatList() {
   const router = useRouter();
   const [isModal, setIsModal] = useState(false);
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
   const getAllChat = async () => {
-    const chatAllList = await chatListAPI.getAllChatList();
-    setAllChatList(chatAllList.data.chats);
+    const allChats: Chat[] = (await chatListAPI.getAllChatList()).data.chats;
+    const sortedAllChatList = sortChatList(allChats);
+    setAllChatList(sortedAllChatList);
   };
   useEffect(() => {
     getAllChat();
+    const timer = setInterval(() => {
+      getAllChat();
+    }, 30000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const participateChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,14 +53,23 @@ export default function AllChatList() {
     e.preventDefault();
   };
 
-  const today = new Date();
-  const isToday = today.toISOString().split('T')[0];
-
   const handleModal = () => {
     setIsModal(!isModal);
   };
+  const serverSocket = useConnectServerSocket();
+  useEffect(() => {
+    serverSocket.on('new-chat', ({ responseChat }) => {
+      setAllChatList(preState => [responseChat, ...preState]);
+    });
+    return () => {
+      serverSocket.off('new-chat');
+    };
+  }, []);
+
   return (
-    <ul>
+    <div className={styles.allContainer}>
+      <Header pageName="All"/>
+      <ul>
       <button
         className={styles.chatPlusBtn}
         type="button"
@@ -64,8 +81,8 @@ export default function AllChatList() {
       {allChatList.map(chat => {
         const { timeDiffText, className } = formatTime(chat.updatedAt);
         const isincluded = chat.users.some(checkIncluded);
-        const dateString = todayDate(chat.updatedAt);
-        const formattedTime = formattingTime(chat.updatedAt);
+        // const dateString = todayDate(chat.updatedAt);
+        // const formattedTime = formattingTime(chat.updatedAt);
         return (
           <li key={chat.id}>
             <Link
@@ -97,9 +114,9 @@ export default function AllChatList() {
                   <div className={styles.chat_updated}>
                     <span className={styles[className]}>{timeDiffText}</span>
                   </div>
-                  <div className={styles.chat_updated}>
+                  {/* <div className={styles.chat_updated}>
                     {isToday === dateString ? formattedTime : `${dateString}`}
-                  </div>
+                  </div> */}
                   {!isincluded && (
                     <button
                       type="button"
@@ -117,5 +134,8 @@ export default function AllChatList() {
         );
       })}
     </ul>
+
+    </div>
+    
   );
 }
