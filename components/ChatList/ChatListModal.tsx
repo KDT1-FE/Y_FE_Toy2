@@ -24,6 +24,12 @@ export default function ChatListModal({
   
     const createChat = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      if(newChatName.length > 10) {
+        alert('10글자 이내로 이름을 작성해주세요!');
+        setNewChatName('');
+        return;
+        
+      }
       chatListAPI.createChat({ name: newChatName, users: [] }).then(res => {
         router.push(`/chat/${res.data.id}`);
         handleModal();
@@ -36,12 +42,14 @@ export default function ChatListModal({
         <Modal>
         <div className={style.ChatListModalBox}>
         <BsXCircle  className={style['close-icon']} onClick={handleModal}/>
+        <p> 채팅방 이름 </p>
         <form onSubmit={createChat}>
           <input
             type="text"
             name="chat_name"
+            value={newChatName}
             onChange={e => setNewChatName(e.target.value)}
-            placeholder="채팅방 이름을 입력해 주세요"
+            placeholder="10글자 이내에 작성해주세요."
           />
           <button type="submit">완료</button>
         </form>
