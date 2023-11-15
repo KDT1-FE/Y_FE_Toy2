@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Avatar,
   AvatarBadge,
@@ -10,13 +10,12 @@ import {
 } from '@chakra-ui/react';
 import { useUserData } from '../../hooks/useUserData';
 
-const allUserBar = () => {
+const AllUserBar = () => {
   const userData = useUserData();
 
   return (
-    <Box flex="1">
+    <Box>
       <Flex>
-        <Box flex="3"></Box>
         <Stack direction="row" h="100vh">
           <Divider mt="12" orientation="vertical" borderColor={'gray.400'} />
         </Stack>
@@ -49,4 +48,4 @@ const allUserBar = () => {
   );
 };
 
-export default allUserBar;
+export default AllUserBar;

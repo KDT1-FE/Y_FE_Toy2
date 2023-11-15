@@ -16,7 +16,7 @@ import {
 import CategoryInput from './CategoryInput';
 import { ChangeEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { channelState } from '../../../recoil/channel.atom';
+import { modalChannelState } from '../../../recoil/channel.atom';
 import {
   checkChannelName,
   createChannelNameWithCategory,
@@ -27,7 +27,7 @@ import { useCreateChannel } from '../../../hooks/useChannels';
 const CreateChannelModal = () => {
   const mutation = useCreateChannel();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [channel, setChannel] = useRecoilState(channelState);
+  const [channel, setChannel] = useRecoilState(modalChannelState);
   const [users, setUsers] = useState<string[]>([]);
   const [isPrivate, setPrivate] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');

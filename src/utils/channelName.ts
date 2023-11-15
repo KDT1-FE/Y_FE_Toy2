@@ -30,9 +30,30 @@ export const createChannelNameWithCategory = (
   return channelName.trim();
 };
 
-export const filterChannels = (title: string, channels: Channel[]) => {
-  if (title === '') return channels;
-  return channels.filter((channel) =>
-    channel.name.split('#')[0].includes(title),
-  );
+export const filterChannels = (
+  title: string,
+  selectedCategory: string,
+  channels: Channel[],
+) => {
+  let filteredChannels =
+    title !== ''
+      ? channels.filter((channel) => channel.name.split('#')[0].includes(title))
+      : channels;
+
+  if (selectedCategory !== '' && selectedCategory !== '전체') {
+    filteredChannels = filteredChannels.filter((channel) => {
+      const channelCategory = channel.name.split('#')[1];
+      return channelCategory === selectedCategory;
+    });
+  }
+
+  return filteredChannels;
+  // if (selectedCategory !== '' && selectedCategory !== '전체') {
+  //   filteredChannels = filteredChannels.filter((channel) => {
+  //     const channelCategory = channel.name.split('#')[1];
+  //     return channelCategory === selectedCategory;
+  //   });
+  // }
+
+  // return filteredChannels;
 };
