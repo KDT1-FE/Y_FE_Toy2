@@ -7,7 +7,6 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
 import ChatBubble from "../../common/ChatBubble";
 import SystemChat from "../../common/SystemChat";
 import Vote from "../Vote";
@@ -18,7 +17,7 @@ interface Message {
 }
 
 interface GameChatProps {
-  gameId: string;
+  socket: any;
   gameData: any;
 }
 
@@ -28,15 +27,8 @@ interface UserResponse {
   leaver?: string;
 }
 
-const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
-  const token = JSON.parse(localStorage.getItem("token") as string);
-
-  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
-    extraHeaders: {
-      Authorization: `Bearer ${token.accessToken}`,
-      serverId: import.meta.env.VITE_APP_SERVER_ID,
-    },
-  });
+const GameChat: React.FC<GameChatProps> = ({ socket, gameData }) => {
+  console.log("GameChat/ gameData:", gameData);
 
   const [message, setMessage] = useState<Message>({
     id: "",
@@ -64,7 +56,7 @@ const GameChat: React.FC<GameChatProps> = ({ gameId, gameData }) => {
   };
 
   useEffect(() => {
-    socket.on("message-to-client", (messageObject) => {
+    socket.on("message-to-client", (messageObject: any) => {
       // 메시지 데이터, 작성 유저 상태 저장
       const copy = { ...message };
       copy.id = messageObject.userId;

@@ -1,8 +1,11 @@
 import { Button, Card, Center, Grid, GridItem, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import GameChat from "../../components/Game/GameChat";
-import Keyword from "../../components/Game/Keyword";
 import useFireFetch from "../../hooks/useFireFetch";
+import GameStart from "../../components/Game/GameStart";
+import { io } from "socket.io-client";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../recoil/atoms/userState";
 
 interface ProfileCardProps {
   userId: string;
@@ -25,6 +28,8 @@ interface Categories {
 [];
 
 const Game = () => {
+  const user = useRecoilValue(userState);
+
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);
   const gameId = searchParams.get("gameId");
@@ -32,23 +37,76 @@ const Game = () => {
   const fireFetch = useFireFetch();
   const gameData = fireFetch.useGetSome("game", "id", gameId as string);
   const [status, setStatus] = useState("");
+  const [users, setUsers] = useState([]);
 
   const [category, setCategory] = useState<Categories | null>(null);
   const [keyword, setKeyword] = useState("");
+  const [liar, setLiar] = useState("");
+
+  console.log(category, keyword);
+
+  const token = JSON.parse(localStorage.getItem("token") as string);
+
+  // const socket = connect(gameId as string);
+  const socket = io(`https://fastcampus-chat.net/chat?chatId=${gameId}`, {
+    extraHeaders: {
+      Authorization: `Bearer ${token.accessToken}`,
+      serverId: import.meta.env.VITE_APP_SERVER_ID,
+    },
+  });
 
   useEffect(() => {
     if (gameData.data && gameData.data.length > 0) {
       setStatus(gameData.data[0].status);
+      setUsers(gameData.data?.[0]?.users);
+    } else {
+      setUsers([]);
     }
   }, [gameData.data]);
 
   useEffect(() => {
+    // 메시지 수신 리스너 설정
+    socket.on("messeage-to-client", (data) => {
+      console.log(data);
+      const [jsonString, delimiter] = data.text.split("~");
+
+      if (delimiter === "!@") {
+        console.log(delimiter);
+        try {
+          // JSON 문자열 객체로 변환
+          const gameInfo = JSON.parse(jsonString);
+          console.log("parseData:", gameInfo);
+          setCategory(gameInfo.category);
+          setKeyword(gameInfo.keyword);
+          setLiar(gameInfo.liar);
+          setUsers(gameInfo.users);
+
+          // 필요한 작업 수행...
+        } catch (error) {
+          console.error("JSON Parsing Error: ", error);
+          throw error;
+        }
+      }
+    });
+    // onOpen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]);
+
+  useEffect(() => {
     if (status === "게임중") {
+      // 저장된 유저 순서 로컬 스토리지에서 가져오기
+      const shuffledUsers = JSON.parse(
+        window.localStorage.getItem("shuffledUsers") || "[]",
+      );
+      setUsers(shuffledUsers);
+
       const currentCategory = window.localStorage.getItem("category") ?? "";
       const currentKeyword = window.localStorage.getItem("keyword") ?? "";
+      const currentLiar = window.localStorage.getItem("liar") ?? "";
 
       setCategory({ category: currentCategory, keyword: [currentKeyword] });
       setKeyword(currentKeyword);
+      setLiar(currentLiar);
     }
   }, [status]);
 
@@ -59,9 +117,6 @@ const Game = () => {
       fireFetch.updateData("game", gameId, { status: newStatus });
     }
   };
-
-  console.log(gameData.data);
-  console.log(category, keyword);
 
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;
@@ -94,7 +149,7 @@ const Game = () => {
                     &nbsp;
                   </p>
 
-                  {window.localStorage.getItem("liar") === "true" ? (
+                  {liar === user.id ? (
                     <p>당신은 Liar 입니다. </p>
                   ) : (
                     <p>
@@ -109,22 +164,28 @@ const Game = () => {
           </Card>
         </GridItem>
         <GridItem>
-          <Button w="200px" mr="20px">
-            <Keyword status={status} updateStatus={updateStatus} />
-          </Button>
+          <GameStart
+            socket={socket}
+            status={status}
+            users={users}
+            host={gameData.data[0].host}
+            updateStatus={updateStatus}
+          />
         </GridItem>
         <GridItem>
-          <ProfileCard userId={gameData.data[0].users[0]}></ProfileCard>
-          <ProfileCard userId={gameData.data[0].users[1]}></ProfileCard>
-          <ProfileCard userId={gameData.data[0].users[2]}></ProfileCard>
+          {users?.slice(0, 3).map((user, index) => {
+            return <ProfileCard key={index} userId={user}></ProfileCard>;
+          })}
         </GridItem>
         <GridItem>
-          <GameChat gameId={gameId} gameData={gameData.data[0]} />
+          <GameChat socket={socket} gameData={gameData.data[0]} />
         </GridItem>
         <GridItem>
-          <ProfileCard userId={gameData.data[0].users[3]}></ProfileCard>
-          <ProfileCard userId={gameData.data[0].users[4]}></ProfileCard>
-          <ProfileCard userId={gameData.data[0].users[5]}></ProfileCard>
+          <GridItem>
+            {users?.slice(3, 6).map((user, index) => {
+              return <ProfileCard key={index} userId={user}></ProfileCard>;
+            })}
+          </GridItem>
         </GridItem>
       </Grid>
     </>

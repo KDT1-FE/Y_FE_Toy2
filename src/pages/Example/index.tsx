@@ -8,7 +8,7 @@ import useFetch from "../../hooks/useFetch";
 import useFireFetch from "../../hooks/useFireFetch";
 import useInput from "../../hooks/useInput";
 import { userState } from "../../recoil/atoms/userState";
-import connect from "../../socket/socket";
+import connect from "../../socket/socket.ts";
 
 interface MessageInfo {
   id: string;
