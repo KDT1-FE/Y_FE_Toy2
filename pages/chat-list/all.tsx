@@ -7,6 +7,8 @@ import { useRecoilValue } from 'recoil';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import formatTime from '@/utils/timeFormat';
 import ChatListModal from '@/components/ChatList/ChatListModal';
+import { sortChatList } from '@/utils/chatList';
+import useConnectServerSocket from '@/hooks/useConnectServerSocket';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -15,11 +17,17 @@ export default function AllChatList() {
   const [isModal, setIsModal] = useState(false);
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
   const getAllChat = async () => {
-    const chatAllList = await chatListAPI.getAllChatList();
-    setAllChatList(chatAllList.data.chats);
+    const allChats: Chat[] = (await chatListAPI.getAllChatList()).data.chats;
+    const sortedAllChatList = sortChatList(allChats);
+    setAllChatList(sortedAllChatList);
   };
   useEffect(() => {
     getAllChat();
+    const timer = setInterval(() => {
+      getAllChat();
+    }, 30000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const participateChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -47,6 +55,16 @@ export default function AllChatList() {
   const handleModal = () => {
     setIsModal(!isModal);
   };
+  const serverSocket = useConnectServerSocket();
+  useEffect(() => {
+    serverSocket.on('new-chat', ({ responseChat }) => {
+      setAllChatList(preState => [responseChat, ...preState]);
+    });
+    return () => {
+      serverSocket.off('new-chat');
+    };
+  }, []);
+
   return (
     <ul>
       <button
