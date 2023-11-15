@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ChatRoom from "../components/Chat/ChatRoom";
 import ModalPlus from "../components/ModalPlus";
@@ -34,6 +34,8 @@ function Chat() {
   const { getData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
+  // const [cateLinkRefs, setCateLinkRefs] = useState<React.RefObject<HTMLLIElement>[]>([]);
+
 
   useEffect(() => {
     if (accessToken) {
@@ -76,6 +78,22 @@ function Chat() {
           });
         
           setChatRoom(myRoom);
+
+          // const updatedRefs = myRoom.map((room: ChatI) => {
+          //   const newRef = React.createRef<HTMLLIElement>();
+          //   return room.id === roomId ? newRef : null;
+          // });
+          // setCateLinkRefs(updatedRefs);
+
+          // updatedRefs.forEach((ref) => {
+          //   if (ref && ref.current) {
+          //     ref.current.classList.add('highlighted');
+          //     setTimeout(() => {
+          //       ref.current?.classList.remove('highlighted');
+          //     }, 3000);
+          //   }
+          // });
+
         } catch (error) {
           console.error(error);
         }
@@ -142,6 +160,8 @@ const ChatCategory = styled.ul`
   flex: 1 0 30%;
   max-width: 30%;
   border-right: 1px solid #e8e8e8;
+  height: 540px;
+  overflow-y: scroll;
 `;
 
 const CateLink = styled.li`
