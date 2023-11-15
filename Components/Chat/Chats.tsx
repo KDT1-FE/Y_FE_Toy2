@@ -41,7 +41,7 @@ const Chats = ({
 					)}
 				</>
 			)}
-			{/* <p>{user.username}</p> */}
+			<p>{user.username}</p>
 			<p>{message.text}</p>
 		</>
 	);

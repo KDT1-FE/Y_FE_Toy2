@@ -1,9 +1,10 @@
 export type User = {
 	id: string;
-	password: string;
+	password?: string;
 	name: string;
+	username?: string;
 	picture: string;
-	chats: string[]; // chat id만 속합니다.
+	chats?: string[]; // chat id만 속합니다.
 };
 
 export type Message = {
@@ -24,4 +25,8 @@ export type Chat = {
 
 export type AllOpenChatJSON = {
 	chats: Chat[];
+};
+
+export type chatUsersObject = {
+	chat: Chat;
 };
