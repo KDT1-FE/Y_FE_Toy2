@@ -1,5 +1,8 @@
 
 # 참교6조 CHWIMIMATE
+<div align="center">
+<img src="https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2023%2F06%2Fma-dong-seoks-favorite-quotes-from-himself-18-ft.jpeg?fit=max&cbr=1&q=90&w=750&h=500" alt='마동석'>
+</div>
 
 <p align="center">
   <a href="#">
@@ -1188,7 +1191,7 @@ interface ResponseData {
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/furaha707" target="_blank">
-        <img src="#" alt="이예인 프로필" />
+        <img src="https://avatars.githubusercontent.com/u/95595106?v=4" alt="이예인 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
@@ -1203,7 +1206,7 @@ interface ResponseData {
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/tkyoun0421" target="_blank">
-        <img src="" alt="윤태관 프로필" />
+        <img src="https://avatars.githubusercontent.com/u/98436988?v=4" alt="윤태관 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
