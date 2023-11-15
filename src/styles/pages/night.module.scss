@@ -1,0 +1,32 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.night {
+  position: relative;
+  height: 100vh;
+  background-color: $bg-black;
+
+  &__text {
+    @include flex-center-row;
+    width: 100%;
+    height: 70%;
+    margin: auto;
+    font-size: 5.5rem;
+    z-index: 1;
+    color: $white;
+    font-family: $font-logo;
+  }
+
+  &__img {
+    position: absolute;
+    $size: 20rem;
+    height: $size;
+    width: $size;
+    right: 10%;
+    top: 20%;
+    background-image: url('@assets/images/night_moon.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    transform: rotate(0.03turn);
+  }
+}
