@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Link as ReactRouterLink, useParams } from 'react-router-dom';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
   Text,
@@ -11,15 +10,10 @@ import { EditIcon, ChatIcon } from '@chakra-ui/icons';
 import MyChannelItem from './MyChannelItem';
 import { useMyChannels } from '../../hooks/useMyChannels';
 import { useInviteData } from '../../hooks/useInviteData';
-import useJoinLeaveChannels from '../../hooks/useJoinLeaveChannel';
 
 const SideBar = () => {
   const { data: channels } = useMyChannels();
-  const { id } = useParams();
-  const chatId = id!;
-
   useInviteData();
-  useJoinLeaveChannels(chatId);
 
   return (
     <Box
