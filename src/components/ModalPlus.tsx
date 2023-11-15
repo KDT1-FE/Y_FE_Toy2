@@ -24,11 +24,12 @@ export interface ChatI {
 interface ModalExampleProps {
   setRoomName: (name: string) => void;
   setSelectedUsers: (users: User[]) => void;
+  loginUser: User | null;
 }
 
 const ModalExample: React.FC<
   ModalExampleProps & { addNewChatRoom: (name: string, users: User[]) => void }
-> = ({ setSelectedUsers, addNewChatRoom }) => {
+> = ({ setSelectedUsers, addNewChatRoom, setRoomName, loginUser }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
@@ -64,7 +65,6 @@ const ModalExample: React.FC<
   // 현재 온라인인 유저 실시간 출력
   useEffect(() => {
     if (!socket && accessToken) {
-      console.log("Creating new socket connection");
       const newSocket = io(`https://fastcampus-chat.net/server`, {
         extraHeaders: {
           Authorization: `Bearer ${accessToken}`,
@@ -109,25 +109,23 @@ const ModalExample: React.FC<
   };
 
   const handleCheckboxChange = (userId: string) => {
-    const isAlreadySelected = localSelectedUsers.some(
-      (user) => user.id === userId
-    );
-    if (isAlreadySelected) {
+    const isSelected = localSelectedUsers.some((user) => user.id === userId);
+
+    if (isSelected) {
       setLocalSelectedUsers(
         localSelectedUsers.filter((user) => user.id !== userId)
       );
     } else {
-      const userToAdd = users.find((user) => user.id === userId);
-      if (userToAdd) {
-        setLocalSelectedUsers([...localSelectedUsers, userToAdd]);
-      }
+      // 선택된 아이디만 추가
+      setLocalSelectedUsers([...localSelectedUsers, { id: userId }]);
     }
   };
 
-  const submitModal = () => {
-    setSelectedUsers(localSelectedUsers);
-    addNewChatRoom(roomNameInput, localSelectedUsers);
-    closeModal();
+  const submitModal = async () => {
+    await setRoomName(roomNameInput);
+    await setSelectedUsers([...localSelectedUsers, loginUser]);
+    await addNewChatRoom(roomNameInput, localSelectedUsers);
+    await closeModal();
   };
 
   return (

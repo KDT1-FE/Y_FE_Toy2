@@ -13,10 +13,10 @@ export interface User {
 }
 
 export interface lastMes {
-  createdAt : string,
-  id: string,
-  text: string,
-  userId: string,
+  createdAt: string;
+  id: string;
+  text: string;
+  userId: string;
 }
 
 export interface ChatI {
@@ -32,16 +32,18 @@ function Chat() {
   const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
   const [roomName, setRoomName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
-  const { getData } = useApi();
+  const { getData, postData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
+  const [loginUser, setLoginUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (accessToken) {
-      const fetchData = async () => { 
+      const fetchData = async () => {
         try {
           const data = await getData("https://fastcampus-chat.net/chat");
           const chatData = data.chats;
+
           // 최신 방이 위로 오도록
           chatData.sort((a: ChatI, b: ChatI) => {
             const timeA = new Date(a.updatedAt).getTime();
@@ -49,40 +51,52 @@ function Chat() {
             return timeB - timeA;
           });
 
-          const myRoom = chatData.map((room: ChatI) => {
-            // 시간 계산
-            const updatedAt = room.updatedAt;
-            const givenDate: Date = new Date(updatedAt);
-            const currentDate: Date = new Date();
-            const timeDifference = currentDate.getTime() - givenDate.getTime();
-            const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-            const hoursDifference = Math.floor(minutesDifference / 60);
-            const daysDifference = Math.floor(hoursDifference / 24);
+          const myRoom = await Promise.all(
+            chatData.map(async (room: ChatI) => {
+              // 시간 계산
+              const updatedAt = room.updatedAt;
+              const givenDate: Date = new Date(updatedAt);
+              const currentDate: Date = new Date();
+              const timeDifference =
+                currentDate.getTime() - givenDate.getTime();
+              const minutesDifference = Math.floor(
+                timeDifference / (1000 * 60)
+              );
+              const hoursDifference = Math.floor(minutesDifference / 60);
+              const daysDifference = Math.floor(hoursDifference / 24);
 
-            let updatedAtString: string;
+              let updatedAtString: string;
 
-            if (minutesDifference < 1) {
-              updatedAtString = "방금 전";
-            } else if (minutesDifference < 60) {
-              updatedAtString = `${minutesDifference}분 전`;
-            } else if (hoursDifference < 24) {
-              updatedAtString = `${hoursDifference}시간 전`;
-            } else {
-              updatedAtString = `${daysDifference}일 전`;
-            }
-            return {
-              ...room,
-              updatedAt: updatedAtString,
-            };
-          });
-        
+              if (minutesDifference < 1) {
+                updatedAtString = "방금 전";
+              } else if (minutesDifference < 60) {
+                updatedAtString = `${minutesDifference}분 전`;
+              } else if (hoursDifference < 24) {
+                updatedAtString = `${hoursDifference}시간 전`;
+              } else {
+                updatedAtString = `${daysDifference}일 전`;
+              }
+
+              return {
+                ...room,
+                updatedAt: updatedAtString
+              };
+            })
+          );
+          const res = await getData(
+            `https://fastcampus-chat.net/user?userId=${sessionStorage.getItem(
+              "userId"
+            )}`
+          );
+          setLoginUser(res.user);
           setChatRoom(myRoom);
-
         } catch (error) {
           console.error(error);
         }
       };
+
       fetchData();
+      console.log(chatRoom);
     }
   }, [accessToken, roomId]);
   // TODO : 여기에 의존성배열로 chatRoom 을 넣어줘야하는데 그러면 너무 렌더링이 많아져서 또 채팅방 내역을 잘 못 불러옴
@@ -93,17 +107,21 @@ function Chat() {
   };
 
   // 새로운 채팅방 추가 함수
-  const addNewChatRoom = (newRoomName: string, newSelectedUsers: User[]) => {
-    const newRoom: ChatI = {
-      id: Math.random().toString(), // 임시 ID, 서버에서 생성되는 ID로 변경 가능
-      name: newRoomName,
-      users: newSelectedUsers,
-      isPrivate: false,
-      updatedAt: new Date().toISOString(),
-      latestMessage: ""
+  const addNewChatRoom = (newRoomName: string, selectedUsers: User[]) => {
+    const fetchData = async () => {
+      const userIds = selectedUsers.map((user) => user.id);
+      const makeRoomBody = {
+        name: newRoomName,
+        users: [loginUser?.id, ...userIds]
+      };
+      const response = await postData(
+        "https://fastcampus-chat.net/chat",
+        makeRoomBody
+      );
     };
+    fetchData();
 
-    setChatRoom((prevRooms) => [...prevRooms, newRoom]); // 기존 채팅방 목록에 새로운 채팅방 추가
+    // setChatRoom([...chatRoom, newRoom]); // 기존 채팅방 목록에 새로운 채팅방 추가
   };
 
   return (
@@ -112,24 +130,30 @@ function Chat() {
       <ChatWrapper>
         <ChatCategory>
           {chatRoom.map((room) => (
-              <CateLink key={room.id} className={room.id === roomId ? 'highlight' : ''}>
-                <div
-                  className="catelink__wrap"
-                  onClick={() => handleClick(room.id)}
-                >
-                  <div className="catelink__name">
-                    <p className="tit">{room.name}</p>
-                    <p className="content">{room.latestMessage?.text || "메시지가 없습니다."}</p>
-                  </div>
-                  <div className="catelink__time">{room.updatedAt}</div>
+            <CateLink
+              key={room.id}
+              className={room.id === roomId ? "highlight" : ""}
+            >
+              <div
+                className="catelink__wrap"
+                onClick={() => handleClick(room.id)}
+              >
+                <div className="catelink__name">
+                  <p className="tit">{room.name}</p>
+                  <p className="content">
+                    {room.latestMessage?.text || "메시지가 없습니다."}
+                  </p>
                 </div>
-              </CateLink>
+                <div className="catelink__time">{room.updatedAt}</div>
+              </div>
+            </CateLink>
           ))}
           <CatePlus>
             <ModalPlus
               setRoomName={setRoomName}
               setSelectedUsers={setSelectedUsers}
               addNewChatRoom={addNewChatRoom} // 함수를 ModalPlus에 전달
+              loginUser={loginUser}
             />
           </CatePlus>
         </ChatCategory>
@@ -172,10 +196,10 @@ const CateLink = styled.li`
   padding: 10px;
   border-bottom: 1px solid #e8e8e8;
   cursor: pointer;
-  &.highlight{
-    .catelink{
-      &__name{
-        .tit{
+  &.highlight {
+    .catelink {
+      &__name {
+        .tit {
           color: #ff9999;
         }
       }

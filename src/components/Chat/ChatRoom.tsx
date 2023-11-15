@@ -70,26 +70,30 @@ function ChatRoom({
           }
         }
       );
-
-      newSocket.on("message-to-client", (newMessage) => {
-        setMessages((prevMessages) => {
-          const isDuplicate = prevMessages.some(
-            (message) => message.id === newMessage.id
-          );
-          return isDuplicate ? prevMessages : [...prevMessages, newMessage];
+      setTimeout(() => {
+        newSocket.on("message-to-client", (newMessage) => {
+          setMessages((prevMessages) => {
+            const isDuplicate = prevMessages.some(
+              (message) => message.id === newMessage.id
+            );
+            return isDuplicate ? prevMessages : [...prevMessages, newMessage];
+          });
         });
-      });
+        setTimeout(() => {
+          newSocket.on("messages-to-client", (responseData) => {
+            // 현재 메시지 상태에 없는 메시지만 추가합니다.
+            const newMessages = responseData.messages.filter(
+              (newMsg: { id: string }) =>
+                !messages.find((msg) => msg.id === newMsg.id)
+            );
+            setMessages((prevMessages) => [...prevMessages, ...newMessages]);
+          });
+          setTimeout(() => {
+            newSocket.emit("fetch-messages");
+          }, 100);
+        }, 100);
+      }, 100);
 
-      newSocket.on("messages-to-client", (responseData) => {
-        // 현재 메시지 상태에 없는 메시지만 추가합니다.
-        const newMessages = responseData.messages.filter(
-          (newMsg: { id: string }) =>
-            !messages.find((msg) => msg.id === newMsg.id)
-        );
-        setMessages((prevMessages) => [...prevMessages, ...newMessages]);
-      });
-
-      newSocket.emit("fetch-messages");
       setSocket(newSocket);
 
       return () => {
@@ -98,7 +102,7 @@ function ChatRoom({
         newSocket.disconnect();
       };
     }
-  }, [accessToken, roomId, messages]);
+  }, [accessToken, roomId]);
 
   useLayoutEffect(() => {
     if (messagesEndRef.current) {
@@ -192,7 +196,6 @@ function ChatRoom({
               ))}
             </div>
           ))}
-          <div className="alert">테일러스위프트 님이 퇴장했습니다</div>
           <div>
             <div ref={messagesEndRef} />
           </div>
@@ -209,20 +212,14 @@ function ChatRoom({
             type="text"
             value={inputValue}
             onChange={handleChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleClick();
-              }
-            }}
+            // onKeyDown={(e) => {
+            //   if (e.key === "Enter") {
+            //     e.preventDefault();
+            //     handleClick();
+            //   }
+            // }}
           />
-          <button type="submit">
-            <img
-              src="/src/assets/images/up-arrow-ico.png"
-              alt="화살표"
-              width="20"
-            />
-          </button>
+          <input type="submit" value={"전송"}></input>
         </form>
       </div>
     </ChatRoomWrap>
