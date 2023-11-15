@@ -8,7 +8,7 @@ import ChatRoom from '@/Components/Chat/ChatRoom';
 const Chat = ({ params }: { params: { id: string } }) => {
 	const chatId = params.id;
 	const query = useSearchParams();
-	const privateValue = query.get('isPrivate') as string;
+	const privateValue = query?.get('isPrivate') as string;
 	const accessToken = getCookie('accessToken');
 
 	const socket = io(`https://fastcampus-chat.net/chat?chatId=${chatId}`, {
