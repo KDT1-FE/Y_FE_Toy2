@@ -1,11 +1,11 @@
 import { Button } from "@chakra-ui/react";
-import { useRecoilValue } from "recoil";
-import { authState } from "../../../recoil/atoms/authState";
-import { useAuth } from "../../../hooks/useAuth";
-import { userState } from "../../../recoil/atoms/userState";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import UserConfigModal from "../../../components/Main/UserConfigModal";
+import { useAuth } from "../../../hooks/useAuth";
+import { authState } from "../../../recoil/atoms/authState";
+import { userState } from "../../../recoil/atoms/userState";
 
 const AdminMain = () => {
   console.log("AdminMain 렌더링"); // 컴포넌트 렌더링 확인
