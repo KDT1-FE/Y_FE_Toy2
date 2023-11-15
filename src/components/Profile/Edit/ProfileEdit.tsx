@@ -193,14 +193,10 @@ function Profile() {
   useEffect(() => {
     if (isState) {
       const 함수명 = async () => {
-        try {
-          const res = await patchData("https://fastcampus-chat.net/user", {
-            name: name,
-            picture: profileImageUrl
-          });
-        } catch (error) {
-          alert("에러");
-        }
+        const res = await patchData("https://fastcampus-chat.net/user", {
+          name: name,
+          picture: backgroundImageUrl
+        });
       };
       함수명();
     }
@@ -373,7 +369,7 @@ function Profile() {
       isClick: false
     },
     {
-      hobbyName: "노레",
+      hobbyName: "노래",
       isClick: false
     },
     {

@@ -1,11 +1,7 @@
 import styled from "styled-components";
+import { LoginData } from "../LoginForm/LoginForm";
 
-function LoginInput({
-  id,
-  label,
-  setLoginData,
-  inputProps,
-}: LoginInputProps) {
+function LoginInput({ id, label, setLoginData, inputProps }: LoginInputProps) {
   return (
     <LoginInputContainer>
       <InputLabel htmlFor={id}>{label}</InputLabel>
