@@ -123,9 +123,9 @@ const GameStart: React.FC<GameStartProps> = ({
     fireFetch.updateData("game", gameId as string, { votedFor: [] });
     fireFetch.updateData("game", gameId as string, { status: "대기중" });
 
-    socketMain.emit("message-to-server", gameId + ":" + "~!a%2@##");
-
     setCurrent("게임종료");
+
+    socketMain.emit("message-to-server", gameId + ":" + "~!a%2@##");
     // setShowStartModal(false);
   };
 
