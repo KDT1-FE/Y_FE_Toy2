@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
@@ -17,14 +17,12 @@ import CheckNums from '../../util/checkNums';
 import { gameSocket } from '../../api/socket';
 import AnswerForm from '../../components/template/AnswerForm';
 import { ResponsiveValue } from '@chakra-ui/react';
+import { getCookie } from '../../util/util';
 
 const GameRoom: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [roomId, setRoomId] = useRecoilState(chattingIdState);
-  const [buttonVisible, setButtonVisible] = useState(true);
-  const [submitVisible, setSubmitVisible] = useState(false);
-  const [whoIsCaptain, SetWhoIsCaptain] = useState('');
-
+  const [isFinished, setIsFinished] = useState(false); // 게임 끝 확인 알람
   const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
   const [answer, setAnswer] = useState<string>(''); // 답 지정하기
   const [messages, setMessages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
@@ -39,7 +37,8 @@ const GameRoom: React.FC = () => {
   });
 
   const lastMessage = messages[messages.length - 1];
-  const myId = localStorage.getItem('id');
+  const myId = getCookie('userId');
+  const isFinishedRef = useRef(false);
 
   useEffect(() => {
     if (lastMessage.text !== '') {
@@ -80,7 +79,8 @@ const GameRoom: React.FC = () => {
 
   const startGame = () => {
     gameSocket.emit('start_game', { roomId, myId });
-    // setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
+    setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
+    setIsFinished(false);
   };
 
   const handleSetAnswerChange = (
@@ -108,8 +108,8 @@ const GameRoom: React.FC = () => {
 
   useEffect(() => {
     gameSocket.on('game_ended', (message) => {
-      // alert(message);
-      console.log(message);
+      alert(message);
+      // console.log(message);
     });
     return () => {
       gameSocket.off('game_ended');
@@ -131,7 +131,10 @@ const GameRoom: React.FC = () => {
         // alert('누군가 정답을 맞췄습니다!');
         console.log('누군가 정답 맞춤');
       }
-      gameSocket.emit('end_game', { roomId: roomId });
+      if (!isFinishedRef.current) {
+        isFinishedRef.current = true;
+        gameSocket.emit('end_game', { roomId: roomId });
+      }
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
 
