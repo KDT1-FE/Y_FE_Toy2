@@ -57,7 +57,7 @@ const ModalExample = ({ roomId, setChatRoom }: ModalHamburgerProps) => {
   return (
     <ModalWrap ref={menuRef}>
       <HamButton onClick={() => openModal()}>
-        <img src="/src/assets/images/menu-ico.png" alt="메뉴" width="30" />
+        <img src="/src/assets/images/menu-ico.png" alt="메뉴" width="26" />
       </HamButton>
       {modalIsOpen && (
         <ButtonWrap>

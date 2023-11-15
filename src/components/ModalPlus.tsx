@@ -138,7 +138,6 @@ const ModalExample: React.FC<
 
   return (
     <ChatTestWrap>
-      <h1>모든 유저 정보</h1>
       <PlusButton onClick={openModal}>
         <img src="./src/assets/images/plus-ico.png" alt="플러스" />
       </PlusButton>
@@ -186,7 +185,6 @@ export default ModalExample;
 
 const ChatTestWrap = styled.div`
   width: 100%;
-  background-color: #fff;
 `;
 
 const SmallImg = styled.img`

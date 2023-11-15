@@ -67,7 +67,7 @@ function MainContents() {
             <span className="title">나와 비슷한<br /> 관심사를 가진 멤버들</span>
             <Gallery>
               {
-                profile && profile.map((item) => (
+                profile && profile.slice(0, 6).map((item) => (
                   <GalleryItem>
                   <Photo>
                     <div className="photo-inner">

@@ -129,26 +129,28 @@ function Chat() {
     <>
       <Header />
       <ChatWrapper>
-        <ChatCategory>
-          {chatRoom.map((room) => (
-            <CateLink
-              key={room.id}
-              className={room.id === roomId ? "highlight" : ""}
-            >
-              <div
-                className="catelink__wrap"
-                onClick={() => handleClick(room.id)}
+        <ChatInner>
+          <ChatCategory>
+            {chatRoom.map((room) => (
+              <CateLink
+                key={room.id}
+                className={room.id === roomId ? "highlight" : ""}
               >
-                <div className="catelink__name">
-                  <p className="tit">{room.name}</p>
-                  <p className="content">
-                    {room.latestMessage?.text || "메시지가 없습니다."}
-                  </p>
+                <div
+                  className="catelink__wrap"
+                  onClick={() => handleClick(room.id)}
+                >
+                  <div className="catelink__name">
+                    <p className="tit">{room.name}</p>
+                    <p className="content">
+                      {room.latestMessage?.text || "메시지가 없습니다."}
+                    </p>
+                  </div>
+                  <div className="catelink__time">{room.updatedAt}</div>
                 </div>
-                <div className="catelink__time">{room.updatedAt}</div>
-              </div>
-            </CateLink>
-          ))}
+              </CateLink>
+            ))}
+          </ChatCategory>
           <CatePlus>
             <ModalPlus
               setRoomName={setRoomName}
@@ -157,7 +159,7 @@ function Chat() {
               loginUser={loginUser}
             />
           </CatePlus>
-        </ChatCategory>
+        </ChatInner>
         {chatRoom.length !== 0 ? (
           <ChatRoom
             roomId={roomId}
@@ -185,14 +187,20 @@ const ChatWrapper = styled.div`
   margin: 0 auto;
 `;
 
+const ChatInner = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 const ChatCategory = styled.ul`
   display: flex;
   flex-direction: column;
-  flex: 1 0 30%;
-  max-width: 30%;
+  /* flex: 1 0 30%;
+  max-width: 30%; */
   border-right: 1px solid #e8e8e8;
   height: 540px;
   overflow-y: scroll;
+  position:relative;
 `;
 
 const CateLink = styled.li`
@@ -201,13 +209,7 @@ const CateLink = styled.li`
   border-bottom: 1px solid #e8e8e8;
   cursor: pointer;
   &.highlight {
-    .catelink {
-      &__name {
-        .tit {
-          color: #ff9999;
-        }
-      }
-    }
+    background-color: #feebea;
   }
   .catelink {
     &__wrap {
@@ -245,11 +247,12 @@ const CateLink = styled.li`
 
 const CatePlus = styled.div`
   text-align: center;
-  padding: 20px 0;
+  padding: 10px 0;
+  border-right: 1px solid #e8e8e8;
   button {
     border: none;
     outline: none;
-    background-color: white;
+    background-color: #f5f5f5;
   }
   button:hover {
     cursor: pointer;
