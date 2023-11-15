@@ -13,6 +13,7 @@ import {
 
 import {
   getAllGameRooms,
+  leaveGameRoom,
   // getOnlyGameRoom,
   participateGameRoom,
   getAllMyChat,
@@ -144,8 +145,9 @@ const CheckGameRoom = () => {
             type: errorType,
           });
         } else if (error.response.data.message === 'Already participated') {
+          setErrorMessage('이미 들어가 있어요.');
+          await leaveGameRoom(chatId);
           setUsersInRoom(numberOfPeople);
-          navigate(`/room/:${chatId}`);
         }
       } finally {
         // const res = await getOnlyGameRoom(chatId);
