@@ -17,7 +17,6 @@ export const getAllUsers = async () => {
   try {
     const response = await instance.get<User[]>('users');
     const users = response.data;
-    console.log(users);
     const totalUsers = users.length;
 
     const userNames = users.map((user) => user.name);
@@ -42,7 +41,7 @@ export const getUsers = async () => {
 
 export const getAuthUser = async () => {
   try {
-    const response = await instance.get<AuthResponseValue>('/users');
+    const response = await instance.get<AuthResponseValue>('/auth/me');
     const authUserId = response.data.user?.id;
 
     return authUserId;
