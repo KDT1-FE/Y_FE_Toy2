@@ -40,6 +40,7 @@ export const useInviteData = () => {
 
     return () => {
       serverSocket.off(SOCKET.INVITE);
+      serverSocket.disconnect();
     };
   }, [myChannelList]);
   return { myChannelList };

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { postRefreshToken } from './refreshToken';
 
 const instance = axios.create({
@@ -23,23 +23,24 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response.status === 401) {
-      const response = await postRefreshToken();
-
-      if (response) {
-        window.localStorage.setItem('accessToken', response.accessToken);
-        window.localStorage.setItem('refreshToken', response.refreshToken);
-        error.config.headers[
-          'Authorization'
-        ] = `Bearer ${response.accessToken}`;
-        const originalResponse = await axios.request(error.config);
-        return originalResponse;
-      } else {
-        window.localStorage.removeItem(response.refreshToken);
-        window.location.href = '/login';
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401) {
+        const response = await postRefreshToken();
+        if (response) {
+          window.localStorage.setItem('accessToken', response.accessToken);
+          window.localStorage.setItem('refreshToken', response.refreshToken);
+          if (!error.config) return;
+          error.config.headers[
+            'Authorization'
+          ] = `Bearer ${response.accessToken}`;
+          const originalResponse = await axios.request(error.config);
+          return originalResponse;
+        } else {
+          window.localStorage.removeItem(response.refreshToken);
+          window.location.href = '/login';
+        }
       }
     }
-
     return Promise.reject(error);
   },
 );

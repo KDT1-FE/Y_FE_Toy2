@@ -18,7 +18,6 @@ const useChatList = (chatId: string) => {
     socket.on(
       SOCKET.MESSAGES_TO_CLIENT,
       async ({ messages }: { messages: ChatData[] }) => {
-        setIsLoading(true);
         if (messages) setChats(messages);
         setIsLoading(false);
       },
@@ -48,6 +47,7 @@ const useChatList = (chatId: string) => {
       socket.off(SOCKET.MESSAGE_TO_CLIENT);
       socket.off(SOCKET.JOIN);
       socket.off(SOCKET.LEAVE);
+      socket.disconnect();
     };
   }, []);
   return { chats, isLoading };
