@@ -60,6 +60,7 @@ const Login = () => {
             })}
             placeholder={LOGIN.REQUIRED_ID}
             errors={errors.id}
+            InputId="id"
           />
           <LoginInputBox
             register={register('password', {
@@ -67,6 +68,7 @@ const Login = () => {
             })}
             placeholder={LOGIN.REQUIRED_PW}
             errors={errors.password}
+            InputId="password"
           />
           <Box display="flex" flexDir="column">
             <Button
