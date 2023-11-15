@@ -29,6 +29,7 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
   const router = useRouter();
 
   const { id, name, picture } = user;
+
   const accessToken = getCookie('accessToken');
   const userId = localStorage.getItem('userId');
 
@@ -100,7 +101,6 @@ const UserModalBox = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-
   width: 100%;
   height: 100%;
 
@@ -109,6 +109,8 @@ const UserModalBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  z-index: 10000;
 `;
 
 const ModalContent = styled.div`

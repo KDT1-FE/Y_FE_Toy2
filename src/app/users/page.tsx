@@ -124,11 +124,11 @@ const HeaderText = styled.h1`
 `;
 
 const UserList = styled.div`
-  margin-top: 2rem;
-
-  height: 80%;
+  margin-top: 1rem;
 
   padding: 1rem;
+
+  height: 80%;
 
   overflow-y: auto;
   &::-webkit-scrollbar {
@@ -161,8 +161,11 @@ const SearchUserBox = styled.div`
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadow.search};
 
-  width: 100%;
   height: 3.5rem;
+
+  width: 96%;
+
+  margin: 0 auto;
 
   display: flex;
   gap: 3%;
@@ -178,6 +181,7 @@ const SearchButton = styled.div`
 
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
+  box-shadow: ${({ theme }) => theme.shadow.search};
 `;
 
 const SearchUserInput = styled.input`
