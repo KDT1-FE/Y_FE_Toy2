@@ -28,10 +28,9 @@ export interface User {
 }
 
 export interface EnterChatRoomModalProps {
-  onEnterClick: () => void;
-  onCancleClick: () => void;
   isOpen: boolean;
-  chat: Chat;
+  // onEnterClick: () => void;
+  // onCancleClick: () => void;
 }
 // 서버에 있는 모든 채팅방 정보 조회
 export const allChatsState = atom<Chat[]>({

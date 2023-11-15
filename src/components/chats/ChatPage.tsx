@@ -30,10 +30,8 @@ const MyChats = ({ userType }: { userType: string }) => {
   const enterChatRoom = (chat: Chat) => {
     if (chat.id && chat.users) {
       if (chat.users.every((user) => user.id !== userId)) {
-        // setChatModalOpen(true);
-        partChats(chat.id);
-        setChatModalOpen(false);
-        router.push(`/chating/${chat.id}`);
+        // router.push(`/chating/${chat.id}`);
+        setChatModalOpen(true);
         console.log('새로 입장 성공');
       } else {
         router.push(`/chating/${chat.id}`);
@@ -41,7 +39,6 @@ const MyChats = ({ userType }: { userType: string }) => {
       }
     }
   };
-
   // react-query로 조건부 fetch
   const { data, isLoading } = useQuery<Chat[]>({
     queryKey: ['getChatsKey'],
@@ -58,14 +55,6 @@ const MyChats = ({ userType }: { userType: string }) => {
     setChatModalOpen(!chatModalOpen);
   };
 
-  // const onEnterChatRoom = (chat: Chat) => {
-  //   if (chat.id && chat.users) {
-  //     partChats(chat.id);
-  //     setChatModalOpen(false);
-  //     router.push(`/chating/${chat.id}`);
-  //   }
-  // };
-
   return (
     <Wrapper>
       <ChatHeader>
@@ -77,7 +66,7 @@ const MyChats = ({ userType }: { userType: string }) => {
       <SearchMyChat userType={userType} />
       <ChatContainer>
         <ChatList>
-          {/* <EnterChatRoomModal isOpen={chatModalOpen} onEnterClick={enterChatRoom} onCancleClick={onModalHandler} />  */}
+          <EnterChatRoomModal isOpen={chatModalOpen} />
           {isLoading && <Loading />}
           {userId && data ? (
             filterInputValue ? (
@@ -154,7 +143,7 @@ const ChatContainer = styled.div`
   text-align: center;
   margin: 2rem;
   background-color: transparent;
-  height: calc(50rem - 14rem);
+  height: calc(50rem - 11rem);
 `;
 
 const ChatList = styled.div`

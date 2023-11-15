@@ -1,18 +1,19 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { EnterChatRoomModalProps } from './chatsStore';
+import { textModalData } from './ModalTextData';
 
-const EnterChatRoomModal = ({ isOpen, onEnterClick, onCancleClick }: EnterChatRoomModalProps) => {
+const EnterChatRoomModal = ({ isOpen }: EnterChatRoomModalProps) => {
   return (
     <Wrapper style={{ display: isOpen ? 'block' : 'none' }}>
       <ModalContainer>
         <ModalMainText>
-          <span>채팅방에 입장하시겠습니까?</span>
+          <span>{textModalData.enter}</span>
         </ModalMainText>
         <ModalBtnContainer>
-          <EnterBtn onClick={onEnterClick}>입장하기</EnterBtn>
-          <CancelBtn onClick={onCancleClick}>취소</CancelBtn>
+          <EnterBtn>{textModalData.enterBtn}</EnterBtn>
+          <CancelBtn>{textModalData.cancelBtn}</CancelBtn>
         </ModalBtnContainer>
       </ModalContainer>
     </Wrapper>
