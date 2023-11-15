@@ -75,7 +75,7 @@ const ProfileModal = ({
 				const req = await fetchImage({
 					file: userInput.picture,
 					id: userInput.id,
-					password: userInput.password,
+					password: '',
 					name: userInput.name,
 				});
 				photoUrl = req.data.picture;
