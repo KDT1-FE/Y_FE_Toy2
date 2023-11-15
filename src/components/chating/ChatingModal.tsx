@@ -40,8 +40,6 @@ export default function ChatingModal(props: ChatingModalProps) {
     router.back();
   };
 
-  console.log(props, 'props');
-
   return (
     <>
       <ModalWrapper
@@ -54,7 +52,7 @@ export default function ChatingModal(props: ChatingModalProps) {
         {props.users ? (
           <UsersWrapper>
             {props.users.map((user: User) => (
-              <UserWrapper>
+              <UserWrapper key={user.id}>
                 <UserImg src={user.picture} />
                 <UserName>{user.username}</UserName>
               </UserWrapper>
@@ -82,7 +80,7 @@ export default function ChatingModal(props: ChatingModalProps) {
           visibility: `${modalToggle ? 'visible' : 'hidden'}`,
           opacity: `${modalToggle ? '1' : '0'}`,
         }}
-        onClick={() => setModalToggle(!modalToggle)}
+        onClick={() => setModalToggle(false)}
       ></ModalBackground>
     </>
   );

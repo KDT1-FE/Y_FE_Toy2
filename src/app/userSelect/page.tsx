@@ -23,8 +23,8 @@ function UserSelect() {
 
   const router = useRouter();
   const [newChatId, setNewChatId] = useState<string | null>(null);
-  const userId = localStorage.getItem('userId');
   const accessToken = getCookie('accessToken');
+  const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
 
   const handleChatClick = async () => {
     try {
@@ -77,7 +77,7 @@ function UserSelect() {
   const getUsers = async () => {
     try {
       let res = await instance.get<unknown, User[]>('/users');
-      res = res.filter((user) => user.id !== localStorage.getItem('userId'));
+      res = res.filter((user) => user.id !== sessionStorage.getItem('userId'));
       setUsers(res);
       setLoading(false);
     } catch (error) {
