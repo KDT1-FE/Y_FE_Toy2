@@ -59,14 +59,14 @@ export const chatSocket = (accessToken: any, chatId: string) => {
 };
 
 export const drawSocket = io(
-  'https://young-wave-37170-0a19781643d5.herokuapp.com/',
+  'https://fastmind-server-5dc01fedb722.herokuapp.com/',
   {
     withCredentials: true,
   },
 );
 
 export const gameSocket = io(
-  'https://young-wave-37170-0a19781643d5.herokuapp.com/',
+  'https://fastmind-server-5dc01fedb722.herokuapp.com/',
   {
     withCredentials: true,
   },
