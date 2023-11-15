@@ -8,9 +8,11 @@ const pocketRequest = {
     ).then(responseBody);
   },
 
-  post: async (collection: string, data: object) => {
+  post: async (collection: string, data: object, id?: string) => {
     return await fetch(
-      `${import.meta.env.VITE_POCKET_API}/${collection}/records`,
+      `${import.meta.env.VITE_POCKET_API}/${collection}/records${
+        id ? `/${id}` : ''
+      }`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

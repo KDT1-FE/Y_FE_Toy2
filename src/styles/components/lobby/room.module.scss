@@ -1,0 +1,51 @@
+@use '@/styles/abstracts' as *;
+@use '@/styles/base' as *;
+
+.room {
+  place-self: center;
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  height: 10rem;
+  border-radius: 4rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-family: $font-logo;
+  box-shadow: 0 0 2px #eee;
+
+  &:hover {
+    border: 2px solid rgba($white, 0.2);
+    transform: scale(1.02);
+  }
+
+  &__name {
+    flex: 1;
+    display: inline-block;
+    border-radius: 4rem 0 0 4rem;
+    background-color: $white;
+    padding: 0 2rem;
+    white-space: nowrap;
+
+    font-size: 1.5rem;
+    font-weight: bolder;
+    line-height: 10rem;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  &__headcount {
+    @include flex-center-row;
+    width: 10rem;
+    border-radius: 0 4rem 4rem 0;
+    height: 100%;
+    background-image: linear-gradient(
+      to right,
+      #15001a 0%,
+      #210339 51%,
+      #15001a 100%
+    );
+    color: $white;
+    font-size: 1.5rem;
+    letter-spacing: 0.3rem;
+  }
+}
