@@ -186,6 +186,12 @@ const JoinForm = () => {
 					<Button type="submit" className="w-full bg-main mt-10 text-subtext">
 						회원가입
 					</Button>
+					<Button
+						className="bg-pink-200 w-full mt-3"
+						onClick={() => router.push('/login')}
+					>
+						로그인
+					</Button>
 				</form>
 			</div>
 		</div>

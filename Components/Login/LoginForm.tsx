@@ -84,7 +84,7 @@ const LoginForm = () => {
 				<Button type="submit" className=" bg-pink-200 w-full mt-10">
 					로그인
 				</Button>
-				<Link href="/join">
+				<Link href="/join" passHref>
 					<div className="text-gray-700  text-[10px] mt-4 mb-14">회원가입</div>
 				</Link>
 			</form>
