@@ -1,15 +1,4 @@
 @import '@/styles/index.scss';
-
-.uploadDb,
-.uploadApi {
-  position: fixed;
-  bottom: 20vh;
-  right: 0;
-  padding: 10px;
-}
-.uploadApi {
-  bottom: 28vh;
-}
 .container {
   @include container;
   height: 100%;
