@@ -109,6 +109,9 @@ const ModalExample: React.FC<
   };
 
   const handleCheckboxChange = (userId: string) => {
+    const selectedUser = users.find((user) => user.id === userId);
+    if (!selectedUser) return;
+
     const isSelected = localSelectedUsers.some((user) => user.id === userId);
 
     if (isSelected) {
@@ -116,14 +119,19 @@ const ModalExample: React.FC<
         localSelectedUsers.filter((user) => user.id !== userId)
       );
     } else {
-      // 선택된 아이디만 추가
-      setLocalSelectedUsers([...localSelectedUsers, { id: userId }]);
+      setLocalSelectedUsers([...localSelectedUsers, selectedUser]);
     }
   };
 
   const submitModal = async () => {
     await setRoomName(roomNameInput);
-    await setSelectedUsers([...localSelectedUsers, loginUser]);
+
+    if (loginUser) {
+      await setSelectedUsers([...localSelectedUsers, loginUser]);
+    } else {
+      await setSelectedUsers([...localSelectedUsers]);
+    }
+
     await addNewChatRoom(roomNameInput, localSelectedUsers);
     await closeModal();
   };

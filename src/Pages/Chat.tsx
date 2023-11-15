@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import ChatRoom from "../components/Chat/ChatRoom";
 import ModalPlus from "../components/ModalPlus";
@@ -152,7 +152,7 @@ function Chat() {
             <ModalPlus
               setRoomName={setRoomName}
               setSelectedUsers={setSelectedUsers}
-              addNewChatRoom={addNewChatRoom} // 함수를 ModalPlus에 전달
+              addNewChatRoom={addNewChatRoom}
               loginUser={loginUser}
             />
           </CatePlus>

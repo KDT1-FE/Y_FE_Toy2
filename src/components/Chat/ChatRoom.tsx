@@ -11,6 +11,7 @@ import io, { Socket } from "socket.io-client";
 import { AuthContext } from "../../hooks/useAuth";
 import { ChatI } from "../../pages/Chat";
 import SearchInput from "../SearchInput/SearchInput";
+import UserCount from "./UserCount";
 
 export interface User {
   id: string;
@@ -147,10 +148,7 @@ function ChatRoom({
       <div className="chatroom__tit">
         <div className="tit-bx">
           <p className="tit">{roomName}</p>
-          <p className="count">
-            <img src="/src/assets/images/user-ico.png" width="14"></img>
-            <span className="num">{selectedUsers.length}</span>
-          </p>
+          <UserCount roomId={roomId} />
         </div>
         <div className="util-bx">
           <SearchInput
