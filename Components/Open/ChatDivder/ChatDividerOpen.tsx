@@ -35,44 +35,37 @@ const OpenChatDivider = ({ myChatList }: ChatListProps) => {
 
 	const { PublicChat } = filterChat(chatList.chats);
 	return (
-		<>
-			<Tabs
-				value="open"
-				className="overflow-y-scroll w-full flex flex-col items-center"
-			>
-				<div className="w-[95%] shadow-md">
-					<TabsHeader className="w-56 bg-white">
-						{data.map((item) => (
-							<Tab
-								key={item.value}
-								value={item.value}
-								activeClassName="text-blue-500"
-							>
-								<div className="w-full flex items-center gap-2">
-									<Image
-										src={icon_people}
-										alt="candice"
-										width={10}
-										height={10}
-										className="rounded-full w-4 h-4 object-contain"
-									/>
-									<p>{item.label}</p>
-								</div>
-							</Tab>
-						))}
-					</TabsHeader>
-				</div>
-				<TabsBody>
-					<TabPanel value="open" className="min-h-[calc(80vh)]">
-						{PublicChat.length ? (
-							<ChatList myChatList={PublicChat} accessToken={accessToken} />
-						) : (
-							<h1 className="mx-auto my-2">오픈채팅방이 없습니다.</h1>
-						)}
-					</TabPanel>
-				</TabsBody>
-			</Tabs>
-		</>
+		<Tabs value="open" className="h-full px-3">
+			<TabsHeader>
+				{data.map((item) => (
+					<Tab
+						key={item.value}
+						value={item.value}
+						activeClassName="text-blue-500"
+					>
+						<div className="w-full flex items-center gap-2">
+							<Image
+								src={icon_people}
+								alt="candice"
+								width={10}
+								height={10}
+								className="rounded-full w-4 h-4 object-contain"
+							/>
+							<p>{item.label}</p>
+						</div>
+					</Tab>
+				))}
+			</TabsHeader>
+			<TabsBody className="h-full">
+				<TabPanel value="open" className="h-full overflow-y-scroll ">
+					{PublicChat.length ? (
+						<ChatList myChatList={PublicChat} accessToken={accessToken} />
+					) : (
+						<h1 className="mx-auto my-2">오픈채팅방이 없습니다.</h1>
+					)}
+				</TabPanel>
+			</TabsBody>
+		</Tabs>
 	);
 };
 

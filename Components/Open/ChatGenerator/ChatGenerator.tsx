@@ -16,8 +16,10 @@ import { Inputs } from './ChatGenerator.type';
 import { useFetchPostNewChat } from '@/hooks/Open/useFetchPostNewChat';
 import { useCurrentSearchParams } from '@/hooks/Open/useCurrentSearchParmas';
 import { getCookie } from '@/Components/Login/Cookie';
+import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
 
 const ChatGenerator = () => {
+	const loadingControl = useAsyncLoading();
 	const accessToken = getCookie('accessToken');
 	const mutation = useFetchPostNewChat(accessToken);
 	const params = useCurrentSearchParams('type');
@@ -38,6 +40,7 @@ const ChatGenerator = () => {
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
+		loadingControl(true);
 		mutation.mutate({
 			name: data.name,
 			users: data.users,

@@ -48,7 +48,7 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 				/>
 			</div>
 			{searchedChats.length ? (
-				<div className="w-full px-3">
+				<div className="w-full px-3 h-fit mb-14 overflow-y-scroll">
 					{searchedChats.map((chat) => (
 						<Link
 							href={{
@@ -57,7 +57,7 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 							}}
 							key={chat.id}
 						>
-							<div className="w-full flex justify-between hover:bg-gray-300 rounded-t-md py-3 border-b-[0.5px] border-bgfill cursor-pointer">
+							<div className="w-full flex justify-between hover:bg-gray-300 rounded-t-md py-3 border-b-[0.5px] border-bgfill border-opacity-20 cursor-pointer">
 								<ShowAllOpenChat key={chat.id} chat={chat} />
 							</div>
 						</Link>

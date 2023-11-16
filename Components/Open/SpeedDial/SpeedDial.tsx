@@ -23,10 +23,10 @@ const SpeedDialWithTextInside = () => {
 	};
 
 	return (
-		<div className="absolute z-50 bottom-3 right-3">
+		<div className="absolute shadow-xl rounded-full w-fit h-fit z-50 bottom-3 right-3">
 			<SpeedDial>
 				<SpeedDialHandler>
-					<div className="flex flex-col justify-center items-center text-center text-sm rounded-full shadow-2xl hover:scale-105 transition-all duration-500 ease-in-out  w-16 h-16 bg-primary cursor-pointer">
+					<div className="flex flex-col justify-center items-center text-center text-sm rounded-full  hover:scale-105 transition-all duration-500 ease-in-out  w-16 h-16 bg-primary cursor-pointer">
 						채팅
 						<br />
 						만들기
@@ -34,7 +34,7 @@ const SpeedDialWithTextInside = () => {
 				</SpeedDialHandler>
 				<SpeedDialContent>
 					<SpeedDialAction
-						className="h-16 w-16"
+						className="h-16 w-16 shadow-md"
 						onClick={() => handleOpenModal('open')}
 					>
 						<Link href={`?${new URLSearchParams({ type: 'open' })}`}>
@@ -44,7 +44,7 @@ const SpeedDialWithTextInside = () => {
 						</Link>
 					</SpeedDialAction>
 					<SpeedDialAction
-						className="h-16 w-16"
+						className="h-16 w-16 shadow-md"
 						onClick={() => handleOpenModal('private')}
 					>
 						<Link href={`?${new URLSearchParams({ type: 'private' })}`}>

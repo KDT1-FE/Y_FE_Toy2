@@ -15,7 +15,7 @@ const Header = () => {
 
 	return (
 		<header
-			className={`flex relative w-full px-3 text-bgfill ${
+			className={`flex relative w-full px-3 h-14 text-bgfill ${
 				headerInfo === search ? 'justify-center' : 'justify-between'
 			} align-center py-3  bg-bglight`}
 		>

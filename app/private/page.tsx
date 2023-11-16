@@ -15,13 +15,15 @@ const Chatting = async () => {
 	const result = await fetchAllChat(accessToken);
 
 	return (
-		<div className="relative flex flex-col h-[calc(100vh-3.5rem)] w-full bg-white">
+		<>
 			<Header />
-			<ChatDivder myChatList={result} />
-			<ChatGenerator />
-			<SpeedDialWithTextInside />
+			<div className="relative h-[calc(100vh-112px)] pt-3">
+				<ChatDivder myChatList={result} />
+				<ChatGenerator />
+				<SpeedDialWithTextInside />
+			</div>
 			<Footer />
-		</div>
+		</>
 	);
 };
 
