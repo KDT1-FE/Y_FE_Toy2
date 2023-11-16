@@ -49,13 +49,13 @@ const LobbyListTop: React.FC = () => {
 
   const fastParticipate = async () => {
     try {
-      console.log(allChatState);
       const allChat = allChatState.chats;
 
-      const lengthChats = allChat.filter(
+      const lengthChats = allChat?.filter(
         (chat: Chats) => chat.users.length < 4,
       );
-      const nonMyIdChats = lengthChats.filter((chat: Chats) =>
+
+      const nonMyIdChats = lengthChats?.filter((chat: Chats) =>
         chat.users.every((user) => user.id !== userId),
       );
 

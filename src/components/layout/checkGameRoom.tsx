@@ -37,8 +37,6 @@ import {
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
 import { useSetRecoilState } from 'recoil';
-import { Chat } from '../../interfaces/interface';
-import { sortCreatedAt } from '../../util/util';
 import Spiner from '../template/Spiner';
 
 const CheckGameRoom = () => {
@@ -75,25 +73,24 @@ const CheckGameRoom = () => {
 
       setTotalItemsCount(allRoomsData.chats.length);
 
-      const createAtData: Chat[] = sortCreatedAt(allRoomsData);
-
       // 방번호 넣기
-      const plusIndex = createAtData.map((chat, index) => ({
-        ...chat,
-        index: index + 1,
-      }));
+      const plusIndex = {
+        ...allRoomsData,
+        chats: allRoomsData.chats.map((room: any, index: any) => ({
+          ...room,
+          index: index + 1,
+        })),
+      };
 
       setRoomIdAllRooms(plusIndex);
 
       // 배열을 역순으로 만들기 (최신순)
-      let reversedRooms = [...plusIndex].reverse();
+      let reversedRooms = [...plusIndex.chats].reverse();
 
       if (allChatState === 'possible') {
         // 풀방 확인
-
         reversedRooms = reversedRooms.filter((item) => item.users.length < 4);
-
-        setTotalItemsCount(plusIndex.length);
+        setTotalItemsCount(reversedRooms.length);
       }
 
       // 서버에서 받아온 전체 데이터를 현재 페이지에 맞게 자름

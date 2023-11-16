@@ -221,7 +221,6 @@ const GameRoom: React.FC = () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);
     };
   }, [roomId, gameSocket, userMessage]);
-
   return (
     <Game>
       <AnswerModal
