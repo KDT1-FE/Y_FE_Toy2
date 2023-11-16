@@ -296,27 +296,6 @@ const ThirdContent = styled.div`
   }
 `;
 
-const SecondGallery = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  gap: 2em;
-  color: #8b8b8b;
-
-  .photo {
-    overflow: hidden;
-    width: 12em;
-    height: 12em;
-    border-radius: 1em;
-    img {
-      width: 100%;
-    }
-  }
-  .text {
-    text-align: left;
-    margin-top: 15px;
-  }
-`;
 const MoreInfoBtn = styled(Link)`
   display: block;
   text-decoration: none;
