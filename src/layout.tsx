@@ -5,7 +5,7 @@ import SideBar from './components/sideBar';
 const Layout = () => {
   return (
     <Center>
-      <Container maxW="1440px" p={0} m={0}>
+      <Container maxW="1920px" p={0} m={0}>
         <Grid gridTemplateColumns={'18rem 1fr'}>
           <GridItem>
             <SideBar />

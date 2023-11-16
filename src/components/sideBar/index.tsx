@@ -7,6 +7,7 @@ import {
   VStack,
   Center,
   Link as ChakraLink,
+  Flex,
 } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import MyChannelItem from './MyChannelItem';
@@ -37,43 +38,41 @@ const SideBar = () => {
   };
 
   return (
-    <Box
-      w="18rem"
-      position="fixed"
-      h="100vh"
-      bg="gray.50"
-      color="black"
-      p="20px"
-      boxShadow="xl"
-      top="50%"
-      left="15%"
-      transform="translate(-50%, -50%)"
-    >
-      <Heading my="2rem" size={'2xl'} color={'blue.400'}>
-        smartalk
-      </Heading>
-      <Box color="#828C98" justifyContent="center">
-        <ChakraLink
-          as={ReactRouterLink}
-          to="/"
-          fontSize={'lg'}
-          _hover={{ color: '#191919', fontWeight: 'bold' }}
-          transition={'all .2s ease-in-out'}
-          textDecorationLine="none"
-        >
-          <ChatIcon mr={2} />
-          전체 채팅방 조회
-        </ChakraLink>
-      </Box>
-      <Divider my="2rem" />
-      <Box>
-        <Heading size="md" mb="2rem">
-          나의 채팅방
-        </Heading>
-        <Box h="50vh" overflowY="auto">
-          <>{channelBox()}</>
+    <Box position="fixed" color="black">
+      <Flex>
+        <Box flex="1" w="280px" h="100vh" bg="gray.50" p="6">
+          <Heading my="2rem" size={'2xl'} color={'blue.400'}>
+            smartalk
+          </Heading>
+          <Box color="#828C98" justifyContent="center">
+            <ChakraLink as={ReactRouterLink} to="/" fontSize={'lg'}>
+              <ChatIcon mr={2} />
+              전체 채팅방 조회
+            </ChakraLink>
+          </Box>
+          <Divider my={50} />
+          <Box>
+            <Heading size="md" mb="2rem">
+              나의 채팅방
+            </Heading>
+            <Box h="50vh" overflowY={'auto'} overflowX={'hidden'}>
+              {myChannelList || channels ? (
+                (myChannelList || channels)?.map((channel) => (
+                  <Flex key={channel.id}>
+                    <MyChannelItem
+                      channelId={channel.id}
+                      myChannelName={channel.name}
+                      isPrivate={channel.isPrivate}
+                    />
+                  </Flex>
+                ))
+              ) : (
+                <Box>내가 속한 채팅방이 없습니다.</Box>
+              )}
+            </Box>
+          </Box>
         </Box>
-      </Box>
+      </Flex>
     </Box>
   );
 };

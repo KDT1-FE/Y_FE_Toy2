@@ -12,7 +12,7 @@ const ChatList = ({ chatId }: { chatId: string }) => {
   return (
     <Box
       id="scrollableBox"
-      maxWidth={750}
+      maxWidth="100%"
       m="0 auto"
       mt="5"
       h="85vh"

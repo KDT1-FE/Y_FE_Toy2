@@ -1,9 +1,14 @@
-import { Box, useRadio } from '@chakra-ui/react';
+import { Box, UseRadioProps, useRadio } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 import { useRecoilState } from 'recoil';
 import { categoryChannelState } from '../../recoil/channel.atom';
 
-const ChannelRadio = (props: any) => {
+interface ChannelRadioProps extends UseRadioProps {
+  customColor: string;
+  children: React.ReactNode;
+}
+
+const ChannelRadio = (props: ChannelRadioProps) => {
   const { getInputProps, getRadioProps } = useRadio(props);
   const [category, setCategory] = useRecoilState(categoryChannelState);
 

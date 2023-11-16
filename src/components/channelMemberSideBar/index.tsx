@@ -15,8 +15,7 @@ const ChannelMemberSideBar = () => {
 
   return (
     <Box
-      position="relative"
-      w="18rem"
+      position="fixed"
       h="100vh"
       bg="gray.50"
       p="20px"
