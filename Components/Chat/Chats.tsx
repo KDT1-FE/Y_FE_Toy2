@@ -35,14 +35,12 @@ const Chats = ({
 		<>
 			{user.id === myId ? (
 				<li key={message.id} className="flex m-2 place-self-end">
-					<p className="text-black">
+					<p className="text-xs self-end text-time mr-[5px]">
 						{changeTime(message.createdAt.toString())}
 					</p>
-					<div className="flex flex-col ml-2">
-						<p className="px-5 py-2 text-sm bg-gray-500 text-white rounded-xl">
-							{message.text}
-						</p>
-					</div>
+					<p className="px-5 py-2 text-sm bg-gray-500 text-white rounded-xl">
+						{message.text}
+					</p>
 				</li>
 			) : (
 				<li key={message.id} className="flex m-2 place-self-start">
@@ -52,14 +50,17 @@ const Chats = ({
 						height={50}
 						alt="User Picture"
 						onClick={useModal ? openProfile : undefined}
+						className="shadow-gray-100 shadow-md rounded-xl"
 					/>
 					<div className="flex flex-col ml-2">
 						<p className="text-xs">{user.username}</p>
-						<p className="mt-1 px-5 py-2 text-sm text-white bg-pink-200 rounded-xl ">
+						<p className="mt-1 px-5 py-2 text-sm text-white bg-pink-200 rounded-xl">
 							{message.text}
 						</p>
 					</div>
-					<p>{changeTime(message.createdAt.toString())}</p>
+					<p className="text-xs self-end ml-[5px] text-time">
+						{changeTime(message.createdAt.toString())}
+					</p>
 				</li>
 			)}
 		</>

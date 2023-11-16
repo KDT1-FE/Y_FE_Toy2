@@ -54,7 +54,7 @@ const ChatHeader = ({
 						onClick={handleLeaveChat}
 						className="ml-2 mr-1"
 					/>
-					<span className="text-xs">{chatUsers}</span>
+					<span className="text-[10px] text-users">{chatUsers}</span>
 				</div>
 			</div>
 			<Image
