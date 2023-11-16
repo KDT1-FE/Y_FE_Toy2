@@ -60,7 +60,7 @@ function Footer() {
           </span>
         </div>
       </LeftWrapper>
-      <RightWrapper>
+      <RightWrapper theme={theme}>
         <div className="first-row">토이프로젝트2 참교6조</div>팀장 : 박용희 ・
         팀원 : 이예인 윤태관 이진욱 김미정
         <br /> 대표웹사이트 :{" "}
@@ -123,9 +123,10 @@ const RightWrapper = styled.div`
   }
   a {
     text-decoration: none;
-    color: black;
+    color: ${({ theme }) => (theme === darkTheme ? "white" : "#373636")};
     &:hover {
       text-decoration: underline;
+      color: #f43530;
     }
   }
 `;
