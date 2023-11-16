@@ -15,6 +15,9 @@ import { OnlyResponse, Chat } from '../../interfaces/interface';
 import { useParams } from 'react-router-dom';
 import { sortCreatedAt } from '../template/useChattingSort';
 import { AxiosResponse } from 'axios';
+import { getOnlyGameRoom, getUserData } from '../../api';
+import { OnlyResponse } from '../../interfaces/interface';
+import { useParams } from 'react-router-dom';
 
 interface ChattingDetailProps {
   chatId: string;
