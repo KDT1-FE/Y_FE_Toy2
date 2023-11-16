@@ -14,19 +14,17 @@ const useCreateOrJoinChat = (
   const createChat = useCreateChat(accessToken, chatName, selectedUser.id);
 
   const handleCreateOrJoinChat = async () => {
-    if (chatList.length !== 0) {
-      const findChat: ChatType = chatList.find(
-        (chat: ChatType) => chat.name === chatName,
-      )!;
+    const findChat: ChatType = chatList.find(
+      (chat: ChatType) => chat.name === chatName,
+    )!;
 
-      if (findChat) {
-        navigate(`/chat/${findChat.id}`);
-        return;
-      }
-
-      const data: ChatType = await createChat();
-      navigate(`/chat/${data.id}`);
+    if (findChat) {
+      navigate(`/chat/${findChat.id}`);
+      return;
     }
+
+    const data: ChatType = await createChat();
+    navigate(`/chat/${data.id}`);
   };
 
   return handleCreateOrJoinChat;
