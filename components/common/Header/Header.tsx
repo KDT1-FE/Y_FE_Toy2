@@ -5,10 +5,9 @@ import style from './Header.module.scss';
 export default function Header({ pageName }) {
   const [shrink, setShrink] = useState(false);
 
-  if(pageName === 'All') {
+  if (pageName === 'All') {
     pageName = '오픈채팅방';
-  }
-  else if(pageName === 'My') {
+  } else if (pageName === 'My') {
     pageName = '나의 채팅방';
   }
 
