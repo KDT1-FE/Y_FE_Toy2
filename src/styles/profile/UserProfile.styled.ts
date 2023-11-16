@@ -33,6 +33,8 @@ export const EditButton = styled.button`
   border: 1px solid #e1e1e1;
   border-radius: 30px;
 
+  cursor: pointer;
+
   &:hover {
     background-color: #e3e3e3;
   }

@@ -5,7 +5,15 @@ const List = styled.div`
   width: 100%;
   height: 80%;
   padding: 10px;
-  overflow: auto;
+
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #1d3557;
+    border-radius: 25px;
+  }
 `;
 
 export default List;

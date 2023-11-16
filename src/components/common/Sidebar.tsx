@@ -35,11 +35,15 @@ function Sidebar() {
         <Typography
           variant="h1"
           sx={{
-            fontSize: '2rem',
+            fontSize: { lg: '2rem', md: '1.75rem' },
             color: 'white',
             mt: 2,
             mb: 4,
             fontFamily: 'Bungee',
+            width: '100%',
+            display: 'flex',
+            justifyContent: { lg: 'flex-start', md: 'center' },
+            // alignItems: 'center',
           }}
         >
           <Link to="/">Langchat</Link>

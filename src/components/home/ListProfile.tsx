@@ -4,9 +4,9 @@ import { UserData } from '../../utils/utils';
 import Hashtag from './Hashtag';
 import closeIcon from '../../assets/close-icon.png';
 import * as S from '../../styles/home/ListProfile.styled';
-import { accessTokenState } from '../../atoms';
+import { accessTokenState, userState } from '../../atoms';
 import { UserType } from '../../types/ChatType';
-import useGetUserInfo from '../../hooks/useGetUserInfo';
+import useGetUserInfo, { UserInfo } from '../../hooks/useGetUserInfo';
 import useChatAll from '../../hooks/useChatAll';
 import useCreateOrJoinChat from '../../hooks/useCreateOrJoinChat';
 
@@ -23,7 +23,7 @@ function UserProfile({
     name: userData.name || '',
     picture: userData.image || '',
   };
-  const userInfo = useGetUserInfo(accessToken);
+  const userInfo = JSON.parse(useRecoilValue(userState));
   const chatList = useChatAll(accessToken);
   const handleCreateOrJoinChat = useCreateOrJoinChat(
     accessToken,
@@ -73,7 +73,7 @@ function UserProfile({
         <S.Right>
           <S.UserInfo>
             <S.UserName>{name}</S.UserName>
-            <S.SendMessage onClick={handleCreateOrJoinChat}>
+            <S.SendMessage variant="contained" onClick={handleCreateOrJoinChat}>
               메시지 보내기
             </S.SendMessage>
           </S.UserInfo>
