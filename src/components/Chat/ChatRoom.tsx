@@ -14,6 +14,7 @@ import SearchInput from "../SearchInput/SearchInput";
 import UserCount from "./UserCount";
 import RoomName from "./RoomName";
 import { darkTheme } from "../../style/theme";
+import UpArrowIcon from "../../assets/images/up-arrow-ico.png";
 
 export interface User {
   id: string;
@@ -213,7 +214,7 @@ function ChatRoom({ roomId, setChatRoom, setIsShowRoom }: ChatRoomProps) {
             // }}
           />
           <button type="submit">
-            <img src="src/assets/images/up-arrow-ico.png" width="20" />
+            <img src={UpArrowIcon} width="20" />
           </button>
         </form>
       </div>
@@ -418,6 +419,7 @@ const ChatRoomWrap = styled.div`
         border-radius: 50%;
         width: 40px;
         height: 40px;
+        cursor: pointer;
       }
     }
   }
