@@ -29,7 +29,7 @@ function UserSelect() {
   const [newChatId, setNewChatId] = useState<string | null>(null);
   const accessToken = getCookie('accessToken');
 //   const accessToken = sessionStorage.getItem('accessToken');
-  const userId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 //   const userId = getCookie('userId');
 
     const [isPrivate, setIsPrivate] = useState(true); 
