@@ -224,7 +224,6 @@ const GameRoom: React.FC = () => {
         )}
 
         <GameChatting chatId={roomId} />
-
       </RoomMain>
       <CheckUsersInGameRoom chatId={roomId} />
       <Fade in={showAlert.active}>
@@ -307,7 +306,6 @@ const UserList = styled.div`
   margin-bottom: 30px;
 `;
 
-
 const Button = styled.button`
   background-color: #38b2ac;
   color: white;
@@ -327,6 +325,7 @@ const Button = styled.button`
   &:hover {
     background-color: #4fd1c5;
   }
+`;
 
 const DrawingBlock = styled.div`
   position: absolute;
