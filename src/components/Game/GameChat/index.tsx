@@ -32,7 +32,6 @@ interface GameChatProps {
   liar: string;
   setNum: React.Dispatch<React.SetStateAction<number>>;
   setSpeaking: React.Dispatch<React.SetStateAction<string>>;
-  setPlayer: React.Dispatch<React.SetStateAction<string[]>>;
   onGameInfoReceived: (gameInfo: {
     category: string;
     keyword: string;
@@ -57,7 +56,6 @@ const GameChat: React.FC<GameChatProps> = ({
   num,
   liar,
   setNum,
-  setPlayer,
   setSpeaking,
   onGameInfoReceived,
   setCurrent,
@@ -73,6 +71,7 @@ const GameChat: React.FC<GameChatProps> = ({
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>("");
   const [voteResult, setVoteResult] = useState<string | null>(null);
+  const [gameKeyword, setGameKeyword] = useState<string | null>(null);
 
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -97,12 +96,14 @@ const GameChat: React.FC<GameChatProps> = ({
       if (messageObject.text.split("~")[1] === "!@##") {
         const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
         onGameInfoReceived(gameInfo);
+        setGameKeyword(gameInfo.keyword);
         return;
       }
       // 게임 종료 메시지
       if (messageObject.text.split("~")[1] === "##@!") {
         const gameInfo = JSON.parse(messageObject.text.split("~")[0]);
         onGameInfoReceived(gameInfo);
+        setGameKeyword("");
         return;
       } else if (messageObject.text.endsWith("~!@%^&")) {
         const arr = messageObject.text.split(":");
@@ -159,8 +160,6 @@ const GameChat: React.FC<GameChatProps> = ({
         const systemMessage = `${joinId} 님이 입장했습니다.`;
         setMessages([...messages, { id: "system", text: systemMessage }]);
         setUsers(responseData.users);
-        setPlayer([...player, joinId]);
-        console.log(player);
       }
     });
 
@@ -169,10 +168,6 @@ const GameChat: React.FC<GameChatProps> = ({
       const systemMessage = `${responseData.leaver} 님이 퇴장했습니다.`;
       setMessages([...messages, { id: "system", text: systemMessage }]);
       setUsers(responseData.users);
-      const copy = [...player];
-      const newPlayer = copy.filter((player) => player !== responseData.leaver);
-      console.log(player);
-      setPlayer(newPlayer);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -196,8 +191,29 @@ const GameChat: React.FC<GameChatProps> = ({
     }
   };
 
+  //결과 안내 후 초기화
+  useEffect(() => {
+    if (selectedUser) {
+      const timeoutId = setTimeout(() => {
+        setSelectedUser(null);
+      }, 10000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [selectedUser]);
+
+  useEffect(() => {
+    if (voteResult) {
+      const timeoutId = setTimeout(() => {
+        setVoteResult(null);
+      }, 10000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [voteResult]);
+
   return (
-    <Card p={3} h="100%" mb="20px">
+    <Card p={3} h="500px" mb="20px">
       <CardBody maxHeight="640px" overflowY="scroll">
         {messages.map((message: Message, index: number) =>
           message.id === "system" ? (
@@ -209,6 +225,27 @@ const GameChat: React.FC<GameChatProps> = ({
           ),
         )}
         <div ref={messageEndRef}></div>
+        {selectedUser && (
+          <SystemChat text={`${selectedUser}님을 라이어로 지목했습니다.`} />
+        )}
+        {voteResult && (
+          <>
+            <SystemChat
+              text={`${voteResult}님이 최종 라이어로 지목되었습니다.`}
+            />
+            {liar === voteResult ? (
+              <SystemChat
+                text={`키워드는 ${gameKeyword} 였습니다.
+                🎉 라이어는 ${liar}님이었습니다. 라이어를 찾아냈습니다! 🎉`}
+              />
+            ) : (
+              <SystemChat
+                text={`키워드는 ${gameKeyword}였습니다.
+                 라이어는 ${liar}님이었습니다. 라이어를 찾아내지 못했습니다.😜`}
+              />
+            )}
+          </>
+        )}
         {current === "투표중" && (
           <Center>
             <Button size="md" onClick={handleOpenVoteModal}>
@@ -223,25 +260,6 @@ const GameChat: React.FC<GameChatProps> = ({
             onVoteResult={handleVoteResult}
             socket={socket}
           />
-        )}
-        {selectedUser && (
-          <SystemChat text={`${selectedUser}님을 라이어로 지목했습니다.`} />
-        )}
-        {voteResult && (
-          <>
-            <SystemChat
-              text={`${voteResult}님이 최종 라이어로 지목되었습니다.`}
-            />
-            {liar === voteResult ? (
-              <SystemChat
-                text={`🎉 라이어는 ${liar}님이었습니다. 라이어를 찾아냈습니다! 🎉`}
-              />
-            ) : (
-              <SystemChat
-                text={`라이어는 ${liar}님이었습니다. 라이어를 찾아내지 못했습니다.🥲`}
-              />
-            )}
-          </>
         )}
       </CardBody>
       <InputGroup size="md">
