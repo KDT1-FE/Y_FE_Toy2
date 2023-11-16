@@ -1,7 +1,0 @@
-/* style.css */
-@font-face {
-	font-family: 'primaryFont';
-	src: url('../font.ttf') format('truetype'); /* Update the path as per your directory structure */
-	font-weight: normal;
-	font-style: normal;
-}

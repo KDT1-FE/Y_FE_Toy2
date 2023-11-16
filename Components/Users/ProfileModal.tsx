@@ -102,7 +102,7 @@ const ProfileModal = ({
 				await editUser(accessToken, userInput.name);
 			}
 		} catch (e) {
-			console.error(e);
+			throw new Error();
 		} finally {
 			setIsEdit(false);
 			setLoading(false);

@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="public/icon_cat.svg"  width="150" height="150"/><br/>
-  <a href="/">
+  <a href="https://cat-talk-seven.vercel.app/login">
     <img src="https://img.shields.io/badge/Cat Talk-pink?style=for-the-badge&logoColor=white" alt="Cat Talk"/>
   </a>
   <a href="https://github.com/MOVIEJOJO7/cat-talk">
@@ -1206,19 +1206,19 @@ interface ResponseData {
 
 ### 로그인, 회원가입
 
-<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/08a39e06-34d9-47a7-9292-c2dccb19e158"  width="250" />
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/08a39e06-34d9-47a7-9292-c2dccb19e158"  width="300" />
 
 ### 유저 목록 조회, 검색, 채팅
 
-<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/65bb7482-bc1e-414c-a145-d8e469a3f3f2"  width="250" />
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/65bb7482-bc1e-414c-a145-d8e469a3f3f2"  width="300" />
 
 ### 채팅방 검색 및 채팅
 
-<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/70c44318-4dd2-4a52-8b25-dcc17de62081"  width="250" />
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/70c44318-4dd2-4a52-8b25-dcc17de62081"  width="300" />
 
 ### 드래그 & 드롭
 
-<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/5a6b5b54-dfe3-40ec-b8c5-28c6c3607a92"  width="250" />
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/5a6b5b54-dfe3-40ec-b8c5-28c6c3607a92"  width="300" />
 
 
 <br/>
