@@ -5,7 +5,7 @@
 </div>
 
 <p align="center">
-  <a href="#">
+  <a href="https://toy-project2.vercel.app/">
     <img src="https://img.shields.io/badge/참교6조 CHWIMIMATE-gray?style=for-the-badge&logoColor=white" alt="CHIWIMIMATE" />
   </a>
   <a href="https://github.com/YongYong21/ToyProject2">
