@@ -22,7 +22,7 @@
 | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
 | <img src="https://avatars.githubusercontent.com/u/121215024?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/59966217?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/121606131?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/95364951?s=60&v=4" width="100" style="max-width: 100%;" /> |
 |                                [@Yamyam-code](https://github.com/Yamyam-code)                                 |                                    [@skyeome](https://github.com/skyeome)                                    |                                  [@JiHongkyu](https://github.com/JiHongkyu)                                   |                                  [@lilviolie](https://github.com/lilviolie)                                  |
-|                        <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                        <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |
+|                        <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                 <ul><li>레이아웃</li><li>로그인/회원가입 기능</li><li>오픈채팅기능</li></ul>                 |          <ul><li>초기셋팅</li><li>웹소켓 연결/실시간 채팅 로직 구현</li><li>1대1채팅 기능</li></ul>           |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |
 
 ## 기술 스택 및 라이브러리
 
@@ -76,7 +76,43 @@
 
 ### 주요 구현사항 설명
 
-![메시지 페이지](public/images/chat-page.png)
+**메시지 보내기 보달**
+
+- 모든 유저 리스트 표시
+- 자음, 모음으로 유저 이름 검색
+- 유저 선택 시 보내기 버튼 활성화
+- 메시지 보내면 기존 채팅방 유무 확인 후 채팅방 생성 or 채팅방 이동
+
+![모달창](https://github.com/TOY2-12/LangChat/assets/121606131/bd9bbc3e-11fc-4a2f-a422-9c54fa2188f8)
+
+**채팅리스트**
+
+- 로그인 유저가 포함된 채팅 리스트 표시
+- 상대방의 프로필 사진과 이름 표시
+- 해당 채팅방의 마지막 메시지와 경과 시간 표시
+- 로딩 시 채팅 리스트 Skeleton UI 적용
+
+![채팅리스트](https://github.com/TOY2-12/LangChat/assets/121606131/2e22fea0-0354-4658-9eb0-53e2cc006ff5)
+
+**모든 채팅 가져오기**
+
+- 채팅방 클릭 시 해당 채팅방의 대화 내용 모두 가져오기
+
+![모든 채팅가져오기](https://github.com/TOY2-12/LangChat/assets/121606131/f903e45f-73e2-4481-a489-2644902b1aeb)
+
+**1대1채팅**
+
+- 로그인한 유저와 대화상대방의 메시지 레이아웃 구분
+- 같은 시간에 보낸 메시지는 마지막 메시지에 한 번만 표시
+- 웹 소켓 연결 및 실시간 통신 로직 구현
+
+![채팅방](https://github.com/TOY2-12/LangChat/assets/121606131/ecf2b3b3-5615-4eed-9118-6164fc91bbf0)
+
+**로그아웃**
+
+- 로그아웃 시 `localStorage` 값과 `accessTokenState` 값 초기화 후 로그인 페이지로 이동
+
+![로그아웃](https://github.com/TOY2-12/LangChat/assets/121606131/fa0d3670-a19e-49d4-a757-ee49f3d84e80)
 
 </div>
 </details>
@@ -86,9 +122,45 @@
 <summary style="font-size: 1.125rem">김성겸 : 인증관련, 오픈채팅 페이지</summary>
 <div markdown="1">
 
-### 주요 구현사항 설명
+### 유저 인증 / 회원가입
 
-![오픈채팅 페이지](public/images/openchat-page.png)
+**회원가입**
+
+- 아이디 - 중복 아이디 체크 기능
+- 비밀번호 - 5글자 이하인지 유효성 검사
+- 프로필 사진을 정사작형으로 잘라주는 에디터 추가
+- 관심사 선택
+- 언어, 수준 선택
+
+![회원가입 페이지](public/images/signup-page.png)
+
+**로그인**
+
+- 로그인시 오류 발생하면 에러 메시지를 toast로 보여주는 기능
+- 이미 로그인 되어있으면 로그인 페이지로 갈수 없습니다.
+
+![로그인 페이지](public/images/login-page.png)
+
+### 오픈 채팅
+
+- 오픈채팅방 생성 기능
+- 로딩시 skeleton UI 적용
+- 추천친구/대화방 보여주는 기능
+- 채팅방 참여, 나가기, 초대 기능
+
+<br />
+  
+**오픈채팅방 생성**  
+![오픈채팅 생성](public/images/openchat-new.gif)
+
+**오픈채팅방 초대**  
+![오픈채팅 초대](public/images/openchat-invite.gif)
+
+**실시간 오픈채팅**  
+![실시간 오픈채팅](public/images/openchat-chatting.gif)
+
+**오픈채팅 나가기**  
+![실시간 오픈채팅](public/images/openchat-leave.gif)
 
 </div>
 </details>
