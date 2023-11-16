@@ -3,7 +3,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
-  ModalCloseButton,
   Button,
   Input,
   FormLabel,
@@ -31,6 +30,7 @@ const AnswerModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
     if (onSubmit) {
       onSubmit(answer);
     }
+    setAnswer('');
     onClose();
   };
 
