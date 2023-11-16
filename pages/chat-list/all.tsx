@@ -34,10 +34,7 @@ export default function AllChatList() {
   const participateChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (e.target instanceof HTMLButtonElement) {
       await chatListAPI.participateChat(e.target.id);
-      router.push({
-        pathname: `/chat/${e.target.id}`,
-        query: { name: e.target.name },
-      });
+      router.push(`/chat/${e.target.id}`);
     }
   };
 
@@ -86,10 +83,7 @@ export default function AllChatList() {
           return (
             <li key={chat.id}>
               <Link
-                href={{
-                  pathname: `/chat/${chat.id}`,
-                  query: { name: chat.name },
-                }}
+                href={`/chat/${chat.id}`}
                 className={styles.container}
                 onClick={isincluded ? undefined : routerChat}
               >

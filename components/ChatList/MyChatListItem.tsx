@@ -17,13 +17,7 @@ export default function MyChatListItem({ chat }: Props) {
   const formattedTime = formattingTime(chat.updatedAt);
   return (
     <li key={chat.id}>
-      <Link
-        href={{
-          pathname: `/chat/${chat.id}`,
-          query: { name: chat.name },
-        }}
-        className={styles.container}
-      >
+      <Link href={`/chat/${chat.id}`} className={styles.container}>
         <Image
           alt={`${chat.users[0].username}의 프로필 사진`}
           src={chat.users[0].picture}
