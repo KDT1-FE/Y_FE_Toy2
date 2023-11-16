@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import styles from '@styles/components/gameHeader.module.scss';
 import { useNavigate } from 'react-router-dom';
 
-const GameHeader = ({ title, timer, next, pocketId }: GameHeaderProps) => {
+const GameHeader = ({
+  title,
+  timer,
+  next,
+  pocketId,
+  chatId,
+}: GameHeaderProps) => {
   const [time, setTime] = useState<number>(timer);
   const navigate = useNavigate();
 
@@ -12,7 +18,7 @@ const GameHeader = ({ title, timer, next, pocketId }: GameHeaderProps) => {
 
       if (time === 0) {
         clearInterval(intervalId);
-        navigate(`/${next}?pocketId=${pocketId}`);
+        navigate(`/${next}?pocketId=${pocketId}&chatId=${chatId}`);
       }
     }, 1000);
 
@@ -35,4 +41,5 @@ type GameHeaderProps = {
   timer: number;
   next?: string;
   pocketId: string | null;
+  chatId?: string | null;
 };

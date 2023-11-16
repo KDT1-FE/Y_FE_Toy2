@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@styles/pages/hanging.module.scss';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getGameData } from '@/api/vote';
 import { Ghost } from './Vote';
 
@@ -8,6 +8,8 @@ const Hanging = () => {
   const [user, setUser] = useState<User>({ role: '', name: '' });
   const [searchParams] = useSearchParams();
   const pocketId = searchParams.get('pocketId');
+  const chatId = searchParams.get('chatId');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,8 +23,11 @@ const Hanging = () => {
 
         if (usersWithMaxCount.length === 1) {
           setUser(usersWithMaxCount[0]);
+          setTimeout(() => {
+            navigate(`/result?result=${usersWithMaxCount[0].role}`);
+          }, 3000);
         } else {
-          console.log('retry');
+          navigate(`/reset?pocketId=${pocketId}&chatId=${chatId}`);
         }
       } catch (error) {
         console.error(error);
@@ -30,7 +35,6 @@ const Hanging = () => {
     };
 
     fetchData();
-    console.log(user);
   }, []);
 
   return (
