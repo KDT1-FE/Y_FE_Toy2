@@ -112,6 +112,7 @@ const GameRoom: React.FC = () => {
   const startGame = async () => {
     gameSocket.emit('start_game', { roomId, myId });
     setIsQuizMasterAlertShown(false);
+    setAnswerModalOpen(true);
   };
 
   const submitSetAnswer = (modalInputValue: string) => {
@@ -120,12 +121,11 @@ const GameRoom: React.FC = () => {
       myId,
       notifyAll: true,
     });
-    setAnswer(''); // 입력 필드 초기화 (필요한 경우)
-    setAnswerModalOpen(false);
+    setAnswer('');
   };
 
-  const handleAnswerModal = () => {
-    setAnswerModalOpen(true);
+  const handleCloseModal = () => {
+    setAnswerModalOpen(false);
   };
 
   useEffect(() => {
@@ -174,7 +174,11 @@ const GameRoom: React.FC = () => {
 
   return (
     <Game>
-      <AnswerModal isOpen={answerModalOpen} onSubmit={submitSetAnswer} />
+      <AnswerModal
+        isOpen={answerModalOpen}
+        onSubmit={submitSetAnswer}
+        onClose={handleCloseModal}
+      />
       <RoomHeader>
         <RoomInfo>
           <RoomInformation>방 번호</RoomInformation>
@@ -185,12 +189,7 @@ const GameRoom: React.FC = () => {
         </RoomInfo>
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
-          <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-          <Button
-            onClick={() => {
-              startGame();
-              handleAnswerModal();
-            }}>
+          <Button onClick={startGame}>
             <Img
               width="18px"
               height="18px"
@@ -201,6 +200,7 @@ const GameRoom: React.FC = () => {
             />
             게임 시작
           </Button>
+          <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
 
           {/* {check && btnVisible && (
             
@@ -217,15 +217,16 @@ const GameRoom: React.FC = () => {
           <GameChatting chatId={roomId} />
         </UserList>
       </RoomMain>
-
       <CheckUsersInGameRoom chatId={roomId} />
-
       <Fade in={showAlert.active}>
         <Alert
           bg={'#4FD1C5'}
           color={'white'}
-          marginTop={5}
-          marginBottom={3}
+          position="fixed" // 고정된 위치에 표시
+          top="20px" // 상단에서 20px 떨어진 위치
+          left="50%" // 왼쪽에서 50% 떨어진 위치
+          transform="translateX(-50%)" // X축 기준 중앙 정렬
+          zIndex="1000" // 다른 요소들 위에 오도록 z-index 설정
           status="success"
           width={400}
           height={70}
