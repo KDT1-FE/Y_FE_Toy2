@@ -34,10 +34,6 @@ const NewGameRoomModal: React.FC<ModalProps> = ({
   onClose,
 }) => {
   const [name, setName] = useState('');
-  const [allRooms, setAllRooms] = useRecoilState(allRoomState);
-  const allChatState = useRecoilValue(allRoomNumberState);
-  const setRoomId = useSetRecoilState(roomIdState);
-  const setUsersInRoom = useSetRecoilState(usersInRoom);
 
   const navigate = useNavigate();
 
@@ -55,10 +51,6 @@ const NewGameRoomModal: React.FC<ModalProps> = ({
       swal({ title: '중복된 방이 있습니다.', icon: 'warning' });
     } else {
       swal({ title: '방 생성 성공', icon: 'success' });
-      console.log(allRooms);
-      const chatLength = allChatState.chats.length;
-      setRoomId(chatLength + 1);
-      setUsersInRoom(1);
       navigate(`/room/:${check.id}`);
     }
   };

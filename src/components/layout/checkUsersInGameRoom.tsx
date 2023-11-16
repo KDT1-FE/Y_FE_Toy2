@@ -4,21 +4,17 @@ import {
   onlineUserStateInGameRoom,
   userRoomState,
   userState,
+  nowProfiles,
 } from '../../states/atom';
 import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../../constant';
 import { getCookie } from '../../util/util';
 import styled from 'styled-components';
-<<<<<<< HEAD
 import { getOnlyGameRoom, getUserData, getAllGameRooms } from '../../api';
 import { OnlyResponse, Chat } from '../../interfaces/interface';
 import { useParams } from 'react-router-dom';
 import { sortCreatedAt } from '../template/useChattingSort';
 import { AxiosResponse } from 'axios';
-=======
-import { getOnlyGameRoom, getUserData } from '../../api';
-import { OnlyResponse } from '../../interfaces/interface';
->>>>>>> dev
 
 interface ChattingDetailProps {
   chatId: string;
@@ -125,12 +121,12 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       }
 
       setProfiles(profilesArray);
+      setNow(profiles.length);
     };
 
     fetchUserProfiles();
   }, [UsersInGameRoom]);
   console.log(profiles);
-  setNow(profiles.length);
 
   const MAX_USERS = 4;
 

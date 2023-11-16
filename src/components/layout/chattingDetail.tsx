@@ -297,7 +297,10 @@ const ChattingDetail = ({ userData }: UserProps) => {
                 </PerfectScrollbar>
               </ScrollWrap>
 
-              <Flex borderTop={'1px solid'} borderColor={'gray.200'}>
+              <Flex
+                borderTop={'1px solid'}
+                borderColor={'gray.200'}
+                backgroundColor={'gray.100'}>
                 <form onSubmit={messageSubmit}>
                   <input
                     type="text"
