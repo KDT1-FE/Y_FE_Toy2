@@ -5,7 +5,7 @@
 </div>
 
 <p align="center">
-  <a href="#">
+  <a href="https://toy-project2.vercel.app/">
     <img src="https://img.shields.io/badge/참교6조 CHWIMIMATE-gray?style=for-the-badge&logoColor=white" alt="CHIWIMIMATE" />
   </a>
   <a href="https://github.com/YongYong21/ToyProject2">
@@ -1134,42 +1134,52 @@ interface ResponseData {
 
 <br/>
 
-### 3. 파일 구조(수정필요)
+## 🧑🏻‍💻 파일 구조
 
 ```
+CHWIMIMATE
 ├── src/
-│   ├── assets/         # 폰트, 이미지, 아이콘
+│   ├── assets/        
 |   |    ├── fonts/
-|   |    ├── icons/
 |   |    └── images/
 |   |   
-│   ├── components/      # 리액트 컴포넌트
-│   │    ├── Home/
-│   │    ├── Timer/
-│   │    ├── Wiki/
-│   │    ├── Gallery/
-|   |    |   .
-|   |    |   .
-|   |    |   .
+│   ├── components/     
+│   │    ├── Chat/
+│   │    ├── FormInputBtn/
+│   │    ├── Loader/
+│   │    ├── Login/
+│   │    ├── Main/
+│   │    ├── Profile/
+│   │    ├── SearchInput/
+│   │    ├── SignUp/
+|   |    ├── ModalPlus.tsx
+|   |    ├── ModalHamburger.tsx
+|   |    ├── PageNotFount.tsx
+|   |    ├── Logout.tsx
+|   |    ├── Layout.tsx
 │   │    ├── Header.tsx
 │   │    └── Footer.tsx
-│   │ 
-|   ├── hooks/           # 커스텀 hook
-│   ├── pages/           # 라우터
-│   ├── styles/          # css styles
-│   ├── types/           # typescripts interface
-│   ├── utils/           # db, storagae
-│   │ 
+│   │
+|   ├── firebase/ 
+|   ├── hooks/          
+│   ├── pages/          
+│   ├── style/                
+│   ├── utils/          
 │   ├── App.tsx
 │   └── index.tsx
 │
-├── public/
 ├── node_modules/
+├── .eslintrc.cjs
+├── .gitignore
+├── .prettierrc
+├── index.html
+├── package-lock.json
 ├── package.json
-├── tsconfig.json
-├── .eslintrc.json
 ├── README.md
-└── ...
+├── tsconfig.json
+├── tsconfig.node.json
+├── vercel.json
+└── vite.config.ts
 ```
 
 <br/>
