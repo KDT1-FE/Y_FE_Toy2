@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import toast from 'react-hot-toast';
+import { userState } from '../../atoms';
 import * as S from '../../styles/profile/EditProfile.styled';
 import { UserData, addImage, updateData } from '../../utils/utils';
 
@@ -22,6 +24,8 @@ function EditProfile({
   const [newTags, setNewTags] = useState(hashtags);
   const [newIntro, setNewIntro] = useState(intro);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newUserState, setNewUserState] = useRecoilState(userState);
+  let USERDATA = JSON.parse(newUserState);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -33,7 +37,7 @@ function EditProfile({
 
     setIsSubmitting((prevState) => !prevState);
 
-    let imageURL;
+    let imageURL: string | undefined;
     if (imgFile) {
       imageURL = await addImage(imgFile as File);
     }
@@ -46,6 +50,14 @@ function EditProfile({
       hashtags: newTags,
       intro: newIntro,
     });
+
+    USERDATA = {
+      ...USERDATA,
+      name: newName || name,
+      picture: imageURL || image,
+    };
+
+    setNewUserState(JSON.stringify(USERDATA));
 
     setIsSubmitting((prevState) => !prevState);
     onChangeState();
