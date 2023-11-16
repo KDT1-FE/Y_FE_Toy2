@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import useUserData from "../useUserData";
 import { useCallback, useEffect, useState } from "react";
-import { theme } from "../../../style/theme";
+
 import {
   doc,
   getDoc,
