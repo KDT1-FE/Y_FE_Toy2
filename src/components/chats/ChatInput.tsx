@@ -26,7 +26,7 @@ const ChatInput = ({ chatId }: { chatId: string }) => {
   };
 
   return (
-    <InputGroup size="lg" zIndex="1" maxWidth={750} m="0 auto">
+    <InputGroup size="lg" zIndex="1" maxWidth="full" m="0 auto">
       <Input
         pr="4.5rem"
         overflowY="scroll"

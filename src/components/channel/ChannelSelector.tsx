@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, useRadioGroup } from '@chakra-ui/react';
+import { Box, Flex, Grid, HStack, useRadioGroup } from '@chakra-ui/react';
 import { CATEGORIES, CATEGORY_COLOR_SCHEMES } from '../../constants/channel';
 import ChannelRadio from './ChannelRadio';
 import ScrollContainer from 'react-indiana-drag-scroll';
@@ -15,13 +15,13 @@ const ChannelSelector = () => {
 
   return (
     <>
-      <Flex>
+      <Grid>
         <Box
           display="flex"
           justifyContent="center"
           alignContent="center"
           bg="#F4F4F4"
-          w="full"
+          width="100%"
           mt="4"
           mb="4"
           color="black"
@@ -29,10 +29,10 @@ const ChannelSelector = () => {
           borderRadius="4"
           boxShadow="md"
           p="4"
-          overflow="auto"
+          overflow="hidden"
         >
           <ScrollContainer className="scroll-container">
-            <HStack {...group} align="center" spacing={4} mb="1">
+            <HStack {...group} align="center" spacing={4} mb="1" flex="1">
               {options.map((option) => {
                 const radio = getRadioProps({ value: option.value });
                 return (
@@ -48,7 +48,7 @@ const ChannelSelector = () => {
             </HStack>
           </ScrollContainer>
         </Box>
-      </Flex>
+      </Grid>
     </>
   );
 };
