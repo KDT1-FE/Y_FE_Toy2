@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const serverSocket = io('wss://fastcampus-chat.net/server', {
+const serverSocket = io(`${process.env.REACT_APP_API_URL}/server`, {
   extraHeaders: {
     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     serverId: `${process.env.REACT_APP_SERVER_ID}`,
