@@ -174,76 +174,77 @@ export default function HostListPage() {
   const displayHosts = searchQuery ? filteredHosts : hostData;
 
   return (
-    <section className={styles.container} id="host-list">
-      <h2 className={styles.title}>HOT PLACE ✨ 인기 지역 숙소 모음</h2>
-      <header className={headerClass}>
-        <div className={styles.inner}>
-          <Search
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            onSearch={handleSearch}
-          />
-          <ul className={styles.hash}>
-            {showAllButton && (
-              <li>
-                <button type="button" onClick={handleShowAll}>
-                  #전체
-                </button>
-              </li>
-            )}
-            {locationsToShow.map(location => (
-              <li key={location}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    scrollToLocation(location);
-                  }}
-                >{`#${location}`}</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </header>
-      <div>
-        {locationsToShow.map(location => (
-          <div key={location} id={location}>
-            {(!searchQuery ||
-              displayHosts.some(host => host.location === location)) && (
-              <h3 className={styles.location}>{location} 숙소</h3>
-            )}
-            <ul className={styles.itemList}>
-              {searchQuery
-                ? displayHosts
-                    .filter(host => host.location === location)
-                    .map(host => (
-                      <HostListItem
-                        key={host.id}
-                        host={host}
-                        openModal={() => handleOpenModal(host)}
-                      />
-                    ))
-                : hostData
-                    .filter(host => host.location === location)
-                    .map(host => (
-                      <HostListItem
-                        key={host.id}
-                        host={host}
-                        openModal={() => handleOpenModal(host)}
-                      />
-                    ))}
+    <>
+      <section className={styles.container} id="host-list">
+        <h2 className={styles.title}>HOT PLACE ✨ 인기 지역 숙소 모음</h2>
+        <header className={headerClass}>
+          <div className={styles.inner}>
+            <Search
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onSearch={handleSearch}
+            />
+            <ul className={styles.hash}>
+              {showAllButton && (
+                <li>
+                  <button type="button" onClick={handleShowAll}>
+                    #전체
+                  </button>
+                </li>
+              )}
+              {locationsToShow.map(location => (
+                <li key={location}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      scrollToLocation(location);
+                    }}
+                  >{`#${location}`}</button>
+                </li>
+              ))}
             </ul>
           </div>
-        ))}
-      </div>
+        </header>
+        <div>
+          {locationsToShow.map(location => (
+            <div key={location} id={location}>
+              {(!searchQuery ||
+                displayHosts.some(host => host.location === location)) && (
+                <h3 className={styles.location}>{location} 숙소</h3>
+              )}
+              <ul className={styles.itemList}>
+                {searchQuery
+                  ? displayHosts
+                      .filter(host => host.location === location)
+                      .map(host => (
+                        <HostListItem
+                          key={host.id}
+                          host={host}
+                          openModal={() => handleOpenModal(host)}
+                        />
+                      ))
+                  : hostData
+                      .filter(host => host.location === location)
+                      .map(host => (
+                        <HostListItem
+                          key={host.id}
+                          host={host}
+                          openModal={() => handleOpenModal(host)}
+                        />
+                      ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
-      {noResultsMessage && <p>검색 결과가 없습니다.</p>}
-
+        {noResultsMessage && <p>검색 결과가 없습니다.</p>}
+      </section>
       {isModalOpen && (
         <HostDetailsModal
           hostDetails={selectedHostDetails!}
           onClose={handleCloseModal}
         />
       )}
-    </section>
+    </>
   );
 }
