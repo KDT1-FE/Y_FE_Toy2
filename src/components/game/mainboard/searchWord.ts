@@ -1,27 +1,24 @@
 import axios from 'axios';
 
+type ItemsType = {
+  title: string;
+  link: string;
+  description: string;
+  thumbnail: string;
+}[];
+
 const search = async (word: string): Promise<boolean> => {
   try {
     const response = await axios.get(
-      'http://ec2-54-180-142-109.ap-northeast-2.compute.amazonaws.com:8080/openapi.naver.com:443/v1/search/encyc.json',
-      {
-        params: {
-          query: word,
-        },
-        headers: {
-          'X-Naver-Client-Id': `${process.env.REACT_APP_NAVER_API_KEY}`,
-          'X-Naver-Client-Secret': `${process.env.REACT_APP_NAVER_SECRET}`,
-        },
-      },
+      `https://immgvxh4o9.execute-api.ap-northeast-2.amazonaws.com/default/searchWord?query=${word}`,
     );
-
-    const responseData = response.data.items;
-    console.log(response);
-
-    if (responseData && responseData.length === 0) {
-      return false;
+    if (response) {
+      const data = JSON.parse(response.data.body);
+      if (data.items.length > 0) {
+        return true;
+      }
     }
-    return true;
+    return false;
   } catch (error) {
     console.log(error);
     throw error;
