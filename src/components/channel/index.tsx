@@ -3,22 +3,18 @@ import { useChannels } from '../../hooks/useChannels';
 import ChannelCard from './ChannelCard';
 import LoadingSkeleton, { skeletons } from './LoadingSkeleton';
 import { useRecoilValue } from 'recoil';
-import {
-  categoryChannelState,
-  modalChannelState,
-} from '../../recoil/channel.atom';
+import { categoryChannelState } from '../../recoil/channel.atom';
 import { useDeferredValue } from 'react';
 import { filterChannels } from '../../utils';
 
 const ChannelList = () => {
   const { data: channels, isLoading, isFetching } = useChannels();
-  const channel = useRecoilValue(modalChannelState);
-  const selectedCategory = useRecoilValue(categoryChannelState);
+  const channel = useRecoilValue(categoryChannelState);
 
   const deferredTitle = useDeferredValue(channel.title);
 
   const filteredChannels = channels
-    ? filterChannels(deferredTitle, selectedCategory.category, channels)
+    ? filterChannels(deferredTitle, channel.category, channels)
     : [];
 
   if (isLoading || isFetching)
