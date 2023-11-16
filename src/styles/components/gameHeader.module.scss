@@ -2,7 +2,7 @@
 @use '../base' as *;
 
 .header {
-  padding: 1rem;
+  padding: 3rem 1rem;
   display: flex;
   justify-content: space-between;
   background-color: $bg-purple-80;
@@ -12,6 +12,7 @@
 
   p {
     min-width: 6em;
+    margin: 0;
   }
 
   span {

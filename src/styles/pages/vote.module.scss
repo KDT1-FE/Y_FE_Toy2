@@ -4,22 +4,4 @@
 .vote {
   background-color: $bg-black;
   height: 100vh;
-
-  &__button {
-    font-size: $font-lg;
-    width: 100%;
-    text-align: end;
-    button {
-      margin-right: 5rem;
-      background-color: transparent;
-      border: none;
-      color: $white;
-
-      &:hover {
-        cursor: pointer;
-        transform: scale(0.95);
-        text-decoration: underline;
-      }
-    }
-  }
 }

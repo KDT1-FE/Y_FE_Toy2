@@ -1,24 +1,28 @@
-
 import React, { useEffect, useState } from 'react';
 import styles from '@styles/pages/result.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 // 플레이한 모든 유저의 정보: 닉네임(이름)과 역할
 
 // 게임 결과
 
-const Result = ({ result }) => {
+const Result = () => {
   const [show, setShow] = useState(false);
   const [victory, setVictory] = useState(true);
-
-  if (result === 'mafia') {
-    setVictory(true);
-  }
+  const [searchParams] = useSearchParams();
+  const result = searchParams.get('result');
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
     }, 3000);
+
+    if (result === 'mafia') {
+      setVictory(false);
+    }
+    if (result === 'citizen') {
+      setVictory(true);
+    }
 
     return () => clearTimeout(timer);
   }, []);
@@ -63,4 +67,4 @@ const Result = ({ result }) => {
   );
 };
 
-export default Result
+export default Result;

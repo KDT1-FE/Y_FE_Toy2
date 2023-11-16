@@ -8,6 +8,7 @@ import Hanging from './pages/game/Hanging';
 import Result from './pages/game/Result';
 import Role from './pages/game/Role';
 import Vote from './pages/game/Vote';
+import Reset from './pages/game/Reset';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/result" element={<Result />} />
         <Route path="/role" element={<Role />} />
         <Route path="/vote" element={<Vote />} />
+        <Route path="/reset" element={<Reset />} />
       </Routes>
     </BrowserRouter>
   );
