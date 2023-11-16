@@ -3,7 +3,7 @@
 .allContainer {
   @include container;
   margin-top: 8rem;
-  padding: 2rem;
+  margin-bottom: 5.6rem;
 }
 
 .list_container {
@@ -106,21 +106,4 @@
 }
 .time-days {
   @include time-diff($gray);
-}
-
-.chatPlusBtn {
-  position: fixed;
-  width: 50px;
-  height: 50px;
-  bottom: 12rem;
-  right: 3rem;
-  background-color: $light-pink;
-  color: white;
-  border: 0;
-  font-size: 3rem;
-  border-radius: 50%;
-  &:hover {
-    background-color: $brand-pink;
-    transition: 0.3s;
-  }
 }
