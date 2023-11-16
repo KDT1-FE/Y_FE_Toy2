@@ -19,12 +19,27 @@ const Chats = ({
 		router.push(`/profile/${user.id}?isMyProfile=false`);
 	};
 
+	const changeTime = (messageData: string) => {
+		const createdAt = new Date(messageData);
+
+		// 시간 포맷팅
+		const formattedTime = `${createdAt
+			.getHours()
+			.toString()
+			.padStart(2, '0')}:${createdAt.getMinutes().toString().padStart(2, '0')}`;
+
+		return formattedTime;
+	};
+
 	return (
 		<>
 			{user.id === myId ? (
-				<li key={message.id} className="flex m-2 place-self-end text-white">
+				<li key={message.id} className="flex m-2 place-self-end">
+					<p className="text-black">
+						{changeTime(message.createdAt.toString())}
+					</p>
 					<div className="flex flex-col ml-2">
-						<p className="px-5 py-2 text-sm bg-gray-500 rounded-xl">
+						<p className="px-5 py-2 text-sm bg-gray-500 text-white rounded-xl">
 							{message.text}
 						</p>
 					</div>
@@ -44,6 +59,7 @@ const Chats = ({
 							{message.text}
 						</p>
 					</div>
+					<p>{changeTime(message.createdAt.toString())}</p>
 				</li>
 			)}
 		</>

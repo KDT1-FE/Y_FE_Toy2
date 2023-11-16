@@ -15,15 +15,17 @@ const Users = async () => {
 	const allUsersExceptMe = allUsers.filter((user) => user.id !== myUser.id);
 
 	return (
-		<section className="w-full h-full bg-white px-3">
+		<section className="w-full h-full bg-white">
 			<Header />
-			<MyProfile user={myUser} />
-			<div className="w-full mt-8 mb-5 pt-2 border-t border-gray-400 ">
-				<h4 className="text-gray-400 font-bold">
-					친구{allUsersExceptMe?.length}명
-				</h4>
+			<div className="px-4">
+				<MyProfile user={myUser} />
 			</div>
-			<FriendProfilesCheckOnline allUsersExceptMe={allUsersExceptMe} />
+			<div className="w-full my-5 pt-2 border-t border-gray-400 px-4 ">
+				<h4>친구{allUsersExceptMe?.length}명</h4>
+			</div>
+			<div className="px-4">
+				<FriendProfilesCheckOnline allUsersExceptMe={allUsersExceptMe} />
+			</div>
 			<Footer />
 		</section>
 	);

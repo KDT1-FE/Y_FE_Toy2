@@ -24,7 +24,7 @@ const ChatRoom = ({
 	const [chatUsers, setChatUsers] = useState<User[]>([]);
 	const [chatName, setChatName] = useState('');
 
-	// 채팅 참여자 fetch, socket 이벤트 등록 (1회 동작)
+	// 채팅 참여 유저 블러오기
 	useEffect(() => {
 		const fetchChatUsers = async () => {
 			const res = await fetch(
@@ -47,16 +47,41 @@ const ChatRoom = ({
 		};
 
 		fetchChatUsers();
+	}, [accessToken, chatId]);
 
-		socket.on('connect', () => {
-			socket.on('messages-to-client', (responseData) => {
-				setMessages(responseData.messages);
+	// 'fetch-messages' 이벤트 등록
+	useEffect(() => {
+		if (socket?.connected) {
+			socket.emit('fetch-messages');
+
+			socket.on('messages-to-client', (messagesObject) => {
+				setMessages(messagesObject.messages);
 			});
+		}
 
-			socket.on('message-to-client', (messageObject) => {
-				setMessages((prevMessages) => [...prevMessages, messageObject]);
+		return () => {
+			socket?.off('messages-to-client');
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [socket.connected]);
+
+	// message-to-client 이벤트 등록
+	useEffect(() => {
+		if (socket?.connected) {
+			socket.on('message-to-client', (responseData) => {
+				setMessages((prevMessages) => [...prevMessages, responseData]);
 			});
+		}
 
+		return () => {
+			socket?.off('message-to-client');
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [socket.connected]);
+
+	// join 이벤트 등록
+	useEffect(() => {
+		if (socket?.connected) {
 			socket.on('join', (responseData) => {
 				setChatUsers([...chatUsers, ...responseData.users]);
 				socket.emit(
@@ -64,7 +89,17 @@ const ChatRoom = ({
 					`${responseData.users[0]} 님이 입장하셨습니다.`,
 				);
 			});
+		}
 
+		return () => {
+			socket.off('join');
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [chatUsers, socket.connected]);
+
+	// leave 이벤트 등록
+	useEffect(() => {
+		if (socket?.connected) {
 			socket.on('leave', (responseData) => {
 				setChatUsers([...chatUsers, ...responseData.users]);
 				socket.emit(
@@ -72,26 +107,18 @@ const ChatRoom = ({
 					`${responseData.leaver} 님이 퇴장하셨습니다.`,
 				);
 			});
-
-			socket.emit('fetch-messages');
-		});
-
-		socket.on('connect_error', (error) => {
-			throw error;
-		});
+		}
 
 		return () => {
-			socket.off('message-to-client');
-			socket.off('messages-to-client');
-			socket.off('join');
 			socket.off('leave');
 		};
-	}, [accessToken, chatId, chatUsers, socket]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [chatUsers, socket.connected]);
 
 	// 서버로 메시지 전송
 	const sendMessage = () => {
 		if (newMessage.trim() !== '') {
-			socket.emit('message-to-server', newMessage);
+			socket?.emit('message-to-server', newMessage);
 			setNewMessage('');
 		}
 	};
