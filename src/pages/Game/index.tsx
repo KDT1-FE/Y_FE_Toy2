@@ -88,6 +88,7 @@ const Game = () => {
 
   useEffect(() => {
     setSpeaking(users[0]);
+    console.log(users);
   }, [users]);
 
   useEffect(() => {
@@ -103,16 +104,6 @@ const Game = () => {
       setUsers(gameData.data?.[0]?.users);
     }
   }, [gameData.data]);
-
-  useEffect(() => {
-    if (current === "게임종료") {
-      const timeoutId = setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [current]);
 
   // 게임 나가기 api 선언 (호출 X)
   const leave = useFetch({
@@ -131,7 +122,7 @@ const Game = () => {
     fireFetch.updateData("game", gameId as string, {
       users: newUsers,
     });
-    navigate("/gameLists");
+    navigate("/main");
   };
 
   const handleGameInfoReceived = (gameInfo: GameInfo) => {
