@@ -13,6 +13,7 @@ import { ChatI } from "../../pages/Chat";
 import SearchInput from "../SearchInput/SearchInput";
 import UserCount from "./UserCount";
 import RoomName from "./RoomName";
+import { darkTheme } from "../../style/theme";
 
 export interface User {
   id: string;
@@ -213,7 +214,7 @@ function ChatRoom({ roomId, setChatRoom, setIsShowRoom }: ChatRoomProps) {
             //   }
             // }}
           />
-          <input type="submit" value={"전송"}></input>
+          <input type="submit" value={"전송"} />
         </form>
       </div>
     </ChatRoomWrap>
@@ -232,6 +233,7 @@ const ChatRoomWrap = styled.div`
       justify-content: space-between;
       align-items: center;
       background-color: #f5f5f5;
+      color: black;
       padding: 10px 20px;
       .tit-bx {
         display: flex;
@@ -293,6 +295,7 @@ const ChatRoomWrap = styled.div`
           padding: 15px;
           border-radius: 10px;
           background-color: #eeeeee;
+          color: #383535;
         }
       }
       .message {
@@ -404,7 +407,9 @@ const ChatRoomWrap = styled.div`
       }
       input {
         flex-grow: 1;
-        background-color: #ececec;
+        height: 3em;
+        background-color: ${({ theme }) =>
+          theme === darkTheme ? "#ececec" : "#FEEBE9"};
         border: none;
         outline: none;
         border-radius: 20px;
@@ -414,11 +419,12 @@ const ChatRoomWrap = styled.div`
       button {
         padding: 0;
         flex-shrink: 0;
-        background-color: #bab6b5;
+        background-color: ${({ theme }) =>
+          theme === darkTheme ? "#ececec" : "#FEEBE9"};
         border: none;
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 5em;
+        height: 20px;
         display: flex;
         justify-content: center;
         align-items: center;

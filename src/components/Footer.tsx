@@ -1,51 +1,73 @@
+import { useContext } from "react";
 import styled from "styled-components";
+import { ThemeContext } from "../App";
+import { darkTheme } from "../style/theme";
 
 function Footer() {
+  const { theme } = useContext(ThemeContext);
   return (
     <FooterWrapper>
       <LeftWrapper>
         <div className="first-row">GitHub & Blog</div>
         <div className="second-row">
-          <IconImg src="/src/assets/images/github.svg" />
+          <IconImg
+            src={
+              theme === darkTheme
+                ? "/src/assets/images/github-dark.svg"
+                : "/src/assets/images/github.svg"
+            }
+            alt="GitHub icon"
+            theme={theme}
+          />
           <span>
-            <a href="">박용희</a>
+            <a href="https://github.com/YongYong21">박용희</a>
           </span>
           <span>
-            <a href="">이예인</a>
+            <a href="https://github.com/furaha707">이예인</a>
           </span>
           <span>
-            <a href="">윤태관</a>
+            <a href="https://github.com/tkyoun0421">윤태관</a>
           </span>
           <span>
-            <a href="">이진욱</a>
+            <a href="https://github.com/KittelLee">이진욱</a>
           </span>
           <span>
-            <a href="">김미정</a>
+            <a href="https://github.com/mysdpy30s">김미정</a>
           </span>
         </div>
         <div className="third-row">
-          <IconImg src="/src/assets/images/microblog.svg" />
+          <IconImg
+            src={
+              theme === darkTheme
+                ? "/src/assets/images/blog-dark.svg"
+                : "/src/assets/images/blog.svg"
+            }
+            alt="Blog icon"
+            theme={theme}
+          />
           <span>
-            <a href="">박용희</a>
+            <a href="https://velog.io/@yongyong_21">박용희</a>
           </span>
           <span>
-            <a href="">이예인</a>
+            <a href="https://furaha.tistory.com">이예인</a>
+          </span>
+          <span>윤태관</span>
+          <span>
+            <a href="https://projectlog.tistory.com">이진욱</a>
           </span>
           <span>
-            <a href="">윤태관</a>
-          </span>
-          <span>
-            <a href="">이진욱</a>
-          </span>
-          <span>
-            <a href="">김미정</a>
+            <a href="https://mysdpy30s.tistory.com">김미정</a>
           </span>
         </div>
       </LeftWrapper>
       <RightWrapper>
         <div className="first-row">토이프로젝트2 참교6조</div>팀장 : 박용희 ・
         팀원 : 이예인 윤태관 이진욱 김미정
-        <br /> 대표웹사이트 : github.com/YongYong21/ToyProject2 <br />
+        <br /> 대표웹사이트 :{" "}
+        <a href="https://github.com/YongYong21/ToyProject2">
+          github.com/YongYong21/ToyProject2
+        </a>
+        <br />
         주소 : 서울 영등포구 영등포로67가길 9 1층 <br />
         운영기간 : 2023.11.6 ~ 2023.11.16
       </RightWrapper>
@@ -79,7 +101,6 @@ const LeftWrapper = styled.div`
     font-size: 1.1em;
     span {
       padding: 0.2em;
-
       a {
         text-decoration: none;
         color: inherit;
@@ -99,6 +120,13 @@ const RightWrapper = styled.div`
     font-weight: 500;
     font-size: 1.2em;
     margin-bottom: 1.5em;
+  }
+  a {
+    text-decoration: none;
+    color: black;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 const IconImg = styled.img`

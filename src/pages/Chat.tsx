@@ -6,6 +6,7 @@ import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 import Header from "../components/Header";
 import NoneChat from "../components/Chat/NoneChat";
+import { darkTheme } from "../style/theme";
 
 export interface User {
   id: string;
@@ -187,6 +188,7 @@ const ChatWrapper = styled.div`
   max-width: 850px;
   width: 100%;
   margin: 0 auto;
+  background-color: ${({ theme }) => (theme === darkTheme ? "black" : "white")};
 `;
 
 const ChatCategory = styled.ul`
