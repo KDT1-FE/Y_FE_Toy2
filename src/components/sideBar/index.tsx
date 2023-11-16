@@ -4,6 +4,7 @@ import {
   Box,
   Divider,
   Heading,
+  VStack,
   Center,
   Link as ChakraLink,
 } from '@chakra-ui/react';
@@ -13,6 +14,7 @@ import { useMyChannels } from '../../hooks/useMyChannels';
 import { useInviteData } from '../../hooks/useInviteData';
 
 const SideBar = () => {
+  const [myChannels, setmyChannels] = useState([]);
   const { data: channels, isLoading } = useMyChannels();
   const { myChannelList } = useInviteData();
 
@@ -69,7 +71,7 @@ const SideBar = () => {
           나의 채팅방
         </Heading>
         <Box h="50vh" overflowY="auto">
-          {channelBox()}
+          <>{channelBox()}</>
         </Box>
       </Box>
     </Box>
