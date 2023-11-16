@@ -15,13 +15,17 @@ const Room = ({ chatId, name, users }: Props) => {
 
   const joinRoom = async () => {
     try {
+      const gameInfo = await pocketRequest.get('game');
+      const pocketInfo = gameInfo.items.filter(
+        (el: Game) => el.chatId === chatId,
+      )[0];
+
+      if (pocketInfo.vote.length >= 4) return;
+
       const fastResponse = await fastRequest.joinChat(
         { chatId: chatId },
         localStorage.getItem('access_token') as string,
       );
-
-      const gameInfo = await pocketRequest.get('game');
-      const pocketInfo = gameInfo.items.filter((el) => el.chatId === chatId)[0];
 
       const pocketResponse = await pocketRequest.patch('game', pocketInfo.id, {
         vote: [
@@ -67,12 +71,27 @@ interface Props {
   users: User[];
 }
 
-interface UserInfo {
-  user: User;
-}
+// interface UserInfo {
+//   user: User;
+// }
 
 interface User {
   id: string;
   name: string;
   picture: string;
+}
+
+interface Game {
+  id: string;
+  chatId: string;
+  mafia: number;
+  vote: Vote[];
+}
+
+interface Vote {
+  count: number;
+  id: string;
+  name: string;
+  picture: string;
+  role: string;
 }
