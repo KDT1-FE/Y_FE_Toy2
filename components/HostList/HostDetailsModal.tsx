@@ -76,7 +76,7 @@ export default function HostDetailsModal({
   return (
     <>
       <div className={styles.dim} />
-      <Modal onClose={onClose}>
+      <Modal>
         <div className={styles.ModalBox} ref={ref}>
           <BsXCircle className={styles['close-icon']} onClick={onClose} />
 

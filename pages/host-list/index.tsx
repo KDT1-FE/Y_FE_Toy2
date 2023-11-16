@@ -20,10 +20,12 @@ export default function HostListPage() {
     null,
   );
   const [filteredHosts, setFilteredHosts] = useState<Host[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string | null>('');
   const [locationsToShow, setLocationsToShow] = useState<string[]>(locations);
   const [noResultsMessage, setNoResultsMessage] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [showAllButton, setShowAllButton] = useState(true);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -88,12 +90,17 @@ export default function HostListPage() {
 
     if (filtered.length === 0) {
       setNoResultsMessage(true);
+      setShowAllButton(false);
+
       setTimeout(() => {
         setNoResultsMessage(false);
         setSearchQuery('');
         setFilteredHosts(hosts);
         setLocationsToShow([...locations]);
+        setShowAllButton(true);
       }, 2000);
+    } else {
+      setShowAllButton(true);
     }
   };
 
@@ -114,15 +121,32 @@ export default function HostListPage() {
       window.scrollBy({ top: yOffset, behavior: 'smooth' });
     }
   };
+  const handleShowAll = () => {
+    setFilteredHosts(hosts);
+    setLocationsToShow([...locations]);
+    setSearchQuery('');
+    scrollToLocation('host-list');
+  };
   const displayHosts = searchQuery ? filteredHosts : hosts;
 
   return (
-    <section className={styles.container}>
+    <section className={styles.container} id="host-list">
       <h2 className={styles.title}>HOT PLACE ✨ 인기 지역 숙소 모음</h2>
       <header className={headerClass}>
         <div className={styles.inner}>
-          <Search value={searchQuery} onSearch={handleSearch} />
+          <Search
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onSearch={handleSearch}
+          />
           <ul className={styles.hash}>
+            {showAllButton && (
+              <li>
+                <button type="button" onClick={handleShowAll}>
+                  #전체
+                </button>
+              </li>
+            )}
             {locationsToShow.map(location => (
               <li key={location}>
                 <button
