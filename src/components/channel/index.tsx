@@ -1,12 +1,25 @@
 import { Box, Grid, GridItem, HStack } from '@chakra-ui/react';
 import { useChannels } from '../../hooks/useChannels';
-import useFilteredChannels from '../../hooks/useFilteredChannels';
 import ChannelCard from './ChannelCard';
 import LoadingSkeleton, { skeletons } from './LoadingSkeleton';
+import { useRecoilValue } from 'recoil';
+import {
+  categoryChannelState,
+  modalChannelState,
+} from '../../recoil/channel.atom';
+import { useDeferredValue } from 'react';
+import { filterChannels } from '../../utils';
 
 const ChannelList = () => {
   const { data: channels, isLoading, isFetching } = useChannels();
-  const filteredChannels = channels ? useFilteredChannels(channels) : [];
+  const channel = useRecoilValue(modalChannelState);
+  const selectedCategory = useRecoilValue(categoryChannelState);
+
+  const deferredTitle = useDeferredValue(channel.title);
+
+  const filteredChannels = channels
+    ? filterChannels(deferredTitle, selectedCategory.category, channels)
+    : [];
 
   if (isLoading || isFetching)
     return (
