@@ -6,7 +6,14 @@ import Image from 'next/image';
 import chatAPI from '@/apis/chatAPI';
 import styles from './Chat.module.scss';
 
-function OtherMessage({ msg }: { msg: Message }) {
+function OtherMessage({
+  msg,
+  prevUserId,
+}: {
+  msg: Message;
+  prevUserId: string | null;
+}) {
+
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];
   const dateString = todayDate(msg.createdAt);
@@ -14,6 +21,8 @@ function OtherMessage({ msg }: { msg: Message }) {
 
   const [userName, setUserName] = useState('');
   const [userPicture, setUserPicture] = useState('');
+
+  const isSameUser = msg.userId === prevUserId;
 
   useEffect(() => {
     const getUserName = async () => {
@@ -30,8 +39,8 @@ function OtherMessage({ msg }: { msg: Message }) {
   }, [msg.id]);
   return (
     <div className={styles.otherFlex}>
-      {userPicture && (
-        <>
+      <div>
+        {!isSameUser && userPicture && (
           <div className={styles.userInfo}>
             <Image
               width={35}
@@ -43,16 +52,16 @@ function OtherMessage({ msg }: { msg: Message }) {
 
             <span className={styles.username}>{userName}</span>
           </div>
-          <div className={styles.otherMessage}>
-            <div className={styles.content}>{msg.text}</div>
-            <span>
-              {isToday === dateString
-                ? `${formattedTime}`
-                : `${dateString} ${formattedTime}`}
-            </span>
-          </div>
-        </>
-      )}
+        )}
+        <div className={styles.otherMessage}>
+          <div className={styles.content}>{msg.text}</div>
+          <span>
+            {isToday === dateString
+              ? `${formattedTime}`
+              : `${dateString} ${formattedTime}`}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

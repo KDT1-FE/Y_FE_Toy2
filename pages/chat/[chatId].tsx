@@ -210,13 +210,15 @@ export default function Chatting() {
           ) : (
             <>
               <div>
-                {messages.map(msg =>
-                  msg.userId === userId ? (
+                {messages.map((msg, index) => {
+                  const prevUserId =
+                    index > 0 ? messages[index - 1].userId : null;
+                  return msg.userId === userId ? (
                     <MyChat key={msg.id} msg={msg} />
                   ) : (
-                    <OtherChat key={msg.id} msg={msg} />
-                  ),
-                )}
+                    <OtherChat key={msg.id} msg={msg} prevUserId={prevUserId} />
+                );
+              })}
               </div>
               {showEntryNotice && <EntryNotice joiner={enterName} />}
               {showExitNotice && <ExitNotice leaver={exitName} />}
