@@ -1,6 +1,6 @@
 import React, { useEffect, useState, AxiosResponse } from 'react';
 import { useRecoilState } from 'recoil';
-import { onlineUserStateInGameRoom } from '../../states/atom';
+import { nowProfiles, onlineUserStateInGameRoom } from '../../states/atom';
 import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../../constant';
 import { getCookie } from '../../util/util';
@@ -27,6 +27,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     onlineUserStateInGameRoom,
   );
   const [profiles, setProfiles] = useState<ResponseValue[]>([]);
+  const [now, setNow] = useRecoilState(nowProfiles);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -112,6 +113,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     fetchUserProfiles();
   }, [UsersInGameRoom]);
   console.log(profiles);
+  setNow(profiles.length);
 
   const MAX_USERS = 4;
 
