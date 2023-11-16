@@ -1,10 +1,10 @@
 import { useRecoilValue } from 'recoil';
-import { usersInRoom } from '../states/atom';
+import { nowProfiles } from '../states/atom';
 
 const CheckNums = (): boolean => {
-  const nowUsers = useRecoilValue(usersInRoom);
+  const nowUsers = useRecoilValue(nowProfiles);
 
-  return nowUsers === 2;
+  return nowUsers === 4;
 };
 
 export default CheckNums;

@@ -90,3 +90,8 @@ export const submitState = atom<any>({
   key: 'submitState',
   default: false,
 });
+
+export const nowProfiles = atom<number>({
+  key: 'nowProfiles',
+  default: 0,
+});
