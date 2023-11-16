@@ -158,90 +158,46 @@ const Game = () => {
         <Timer current={current} setCurrent={setCurrent} />
       )}
 
-      <Grid
-        templateColumns="200px 1fr 200px"
-        templateRows="50px 1fr"
-        gap="20px"
-        mt="50px"
-      >
-        <GridItem>
-          <Button
-            w="200px"
-            h="100%"
-            mr="20px"
-            colorScheme="facebook"
-            onClick={leaveGame}
-          >
-            뒤로가기
-          </Button>
-        </GridItem>
-        <GridItem>
-          <Card h="100%" justifyContent="center">
-            <Center fontWeight="bold">
-              {gameData.data[0].bg} {gameData.data[0].name}
-            </Center>
-          </Card>
-        </GridItem>
-        <GridItem>
-          <GameStart
-            gameId={gameId}
-            socket={socket}
-            socketMain={socketMain}
-            status={status}
-            users={users}
-            host={gameData.data[0].host}
-            current={current}
-            setCurrent={setCurrent}
-          />
-        </GridItem>
-        <GridItem>
-          {users?.slice(0, 3).map((user, index) => {
-            return (
-              <ProfileCard
-                key={index}
-                userId={user}
-                speaking={speaking}
-                status={status}
-              ></ProfileCard>
-            );
-          })}
-        </GridItem>
-        <GridItem>
-          <Card h="40px" justifyContent="center" mb="20px">
-            <Center fontWeight="bold">
-              {status === "게임중" ? (
-                <>
-                  <p>주제는 {category} 입니다. &nbsp;</p>
-
-                  {liar === user.id ? (
-                    <p>당신은 Liar 입니다. </p>
-                  ) : (
-                    <p>키워드는 {keyword} 입니다.</p>
-                  )}
-                </>
-              ) : (
-                <p>게임을 시작해주세요.</p>
-              )}
-            </Center>
-          </Card>
-          <GameChat
-            socket={socket}
-            gameData={gameData.data[0]}
-            current={current}
-            setCurrent={setCurrent}
-            speaking={speaking}
-            num={num}
-            player={users}
-            setPlayer={setUsers}
-            setNum={setNum}
-            setSpeaking={setSpeaking}
-            onGameInfoReceived={handleGameInfoReceived}
-            liar={liar}
-          />
-        </GridItem>
-        <GridItem>
+      <Center>
+        <Grid
+          templateColumns="200px minmax(500px,1000px) 200px"
+          templateRows="50px 1fr"
+          gap="20px"
+          mt="50px"
+          maxW="1600px"
+        >
           <GridItem>
-            {users?.slice(3, 6).map((user, index) => {
+            <Button
+              w="200px"
+              h="100%"
+              mr="20px"
+              colorScheme="facebook"
+              onClick={leaveGame}
+            >
+              뒤로가기
+            </Button>
+          </GridItem>
+          <GridItem>
+            <Card h="100%" justifyContent="center">
+              <Center fontWeight="bold">
+                {gameData.data[0].bg} {gameData.data[0].name}
+              </Center>
+            </Card>
+          </GridItem>
+          <GridItem>
+            <GameStart
+              gameId={gameId}
+              socket={socket}
+              socketMain={socketMain}
+              status={status}
+              users={users}
+              host={gameData.data[0].host}
+              current={current}
+              setCurrent={setCurrent}
+            />
+          </GridItem>
+          <GridItem>
+            {users?.slice(0, 3).map((user, index) => {
               return (
                 <ProfileCard
                   key={index}
@@ -252,8 +208,55 @@ const Game = () => {
               );
             })}
           </GridItem>
-        </GridItem>
-      </Grid>
+          <GridItem>
+            <Card h="40px" justifyContent="center" mb="20px">
+              <Center fontWeight="bold">
+                {status === "게임중" ? (
+                  <>
+                    <p>주제는 {category} 입니다. &nbsp;</p>
+
+                    {liar === user.id ? (
+                      <p>당신은 Liar 입니다. </p>
+                    ) : (
+                      <p>키워드는 {keyword} 입니다.</p>
+                    )}
+                  </>
+                ) : (
+                  <p>게임을 시작해주세요.</p>
+                )}
+              </Center>
+            </Card>
+            <GameChat
+              socket={socket}
+              gameData={gameData.data[0]}
+              current={current}
+              setCurrent={setCurrent}
+              speaking={speaking}
+              num={num}
+              player={users}
+              setPlayer={setUsers}
+              setNum={setNum}
+              setSpeaking={setSpeaking}
+              onGameInfoReceived={handleGameInfoReceived}
+              liar={liar}
+            />
+          </GridItem>
+          <GridItem>
+            <GridItem>
+              {users?.slice(3, 6).map((user, index) => {
+                return (
+                  <ProfileCard
+                    key={index}
+                    userId={user}
+                    speaking={speaking}
+                    status={status}
+                  ></ProfileCard>
+                );
+              })}
+            </GridItem>
+          </GridItem>
+        </Grid>
+      </Center>
     </Flex>
   );
 };

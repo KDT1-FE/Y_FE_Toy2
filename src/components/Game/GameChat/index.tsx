@@ -221,7 +221,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
   return (
     <Card p={3} h="500px" mb="20px">
-      <CardBody maxHeight="640px" overflowY="scroll">
+      <CardBody maxHeight="640px" overflowY="scroll" overflowX="hidden">
         {messages.map((message: Message, index: number) =>
           message.id === "system" ? (
             <SystemChat key={index} text={message.text} />
