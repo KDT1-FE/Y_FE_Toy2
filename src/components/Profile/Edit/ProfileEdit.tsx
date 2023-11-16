@@ -125,6 +125,7 @@ const ProfileEditInputWrap = styled.div`
     box-sizing: border-box;
 
     color: #999696;
+    border-color: #BFBFBF;
 
     font-family: "Pretendard";
     font-size: 16px;
