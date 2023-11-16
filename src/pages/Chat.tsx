@@ -6,6 +6,7 @@ import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 import Header from "../components/Header";
 import NoneChat from "../components/Chat/NoneChat";
+import { darkTheme } from "../style/theme";
 
 export interface User {
   id: string;
@@ -31,8 +32,6 @@ export interface ChatI {
 
 function Chat() {
   const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
-  const [roomName, setRoomName] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const { getData, postData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
@@ -157,12 +156,7 @@ function Chat() {
             ))}
           </ChatCategory>
           <CatePlus>
-            <ModalPlus
-              setRoomName={setRoomName}
-              setSelectedUsers={setSelectedUsers}
-              addNewChatRoom={addNewChatRoom}
-              loginUser={loginUser}
-            />
+            <ModalPlus addNewChatRoom={addNewChatRoom} loginUser={loginUser} />
           </CatePlus>
         </ChatInner>
         {isShowRoom ? (
@@ -190,6 +184,7 @@ const ChatWrapper = styled.div`
   max-width: 850px;
   width: 100%;
   margin: 0 auto;
+  background-color: ${({ theme }) => (theme === darkTheme ? "black" : "white")};
 `;
 
 const ChatInner = styled.div`
@@ -259,7 +254,7 @@ const CatePlus = styled.div`
   button {
     border: none;
     outline: none;
-    background-color: #f5f5f5;
+    background-color: #fff;
   }
   button:hover {
     cursor: pointer;

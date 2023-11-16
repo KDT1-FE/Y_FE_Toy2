@@ -213,7 +213,7 @@ function ChatRoom({ roomId, setChatRoom, setIsShowRoom }: ChatRoomProps) {
             // }}
           />
           <button type="submit">
-            <img src="src/assets/images/up-arrow-ico.png" width="20"/>
+            <img src="src/assets/images/up-arrow-ico.png" width="20" />
           </button>
         </form>
       </div>
@@ -235,18 +235,20 @@ const ChatRoomWrap = styled.div`
       background-color: #f5f5f5;
       box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
       padding: 10px 20px;
+
+      color: black;
       .tit-bx {
         display: flex;
         align-items: center;
         img {
-          display:block;
+          display: block;
           filter: brightness(0.8);
           margin-left: 10px;
         }
         .num {
           font-weight: 400;
           color: #cecece;
-          margin-left:3px;
+          margin-left: 3px;
         }
       }
       .util-bx {
@@ -255,14 +257,14 @@ const ChatRoomWrap = styled.div`
         gap: 5px;
         form {
           position: relative;
-          input[type="submit"]{
+          input[type="submit"] {
             position: absolute;
-            right:5px;
+            right: 5px;
           }
-          input[type="text"]{
-            padding-left:10px;
-            padding-right:30px;
-            border-radius:20px;
+          input[type="text"] {
+            padding-left: 10px;
+            padding-right: 30px;
+            border-radius: 20px;
           }
         }
       }
@@ -282,7 +284,7 @@ const ChatRoomWrap = styled.div`
           padding: 10px 20px;
           border-radius: 20px;
           background-color: #eeeeee;
-          color: #999696;
+          color: #383535;
         }
       }
       .message {
@@ -403,18 +405,19 @@ const ChatRoomWrap = styled.div`
         border-radius: 20px;
         padding: 0 20px;
         color: #999696;
-        height:40px;
+        height: 40px;
       }
       button {
-        background-color: #BAB6B5;
-        display:inline-flex;
+        background-color: ${({ theme }) =>
+          theme === darkTheme ? "#ececec" : "#FEEBE9"};
+        display: inline-flex;
         justify-content: center;
         align-items: center;
-        outline:none;
-        border:none;
-        border-radius:50%;
-        width:40px;
-        height:40px;
+        outline: none;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
       }
     }
   }

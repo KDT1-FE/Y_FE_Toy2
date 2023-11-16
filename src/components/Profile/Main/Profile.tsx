@@ -7,7 +7,7 @@ import { useState, useEffect, useContext } from "react";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import Modal from "react-modal";
 
-import { theme, darkTheme } from "../../../style/theme";
+import { theme } from "../../../style/theme";
 import StyledButton from "../../../style/ButtonStyle";
 import useUserData from "../useUserData";
 import { ThemeContext } from "../../../App";
@@ -71,12 +71,13 @@ const TitleText = styled.div`
   line-height: 1.3;
 
   margin-bottom: 20px;
+
+  color: black;
 `;
 const ModalAddFeedContainer = styled.div`
   display: flex;
   gap: 16px;
 
-  padding: 64px;
   input {
     width: 100%;
     color: black;
@@ -93,22 +94,22 @@ const ModalAddFeedPreview = styled.div`
 `;
 const ModalAddFeedLeftContainer = styled.div`
   flex: 1 0 140px;
-  width:140px;
-  height:175px;
+  width: 140px;
+  height: 175px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
 const ModalAddFeedRightContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width:100%;
+  width: 100%;
   span {
-    color: ${({ theme }) => (theme === darkTheme ? "black" : "white")};
+    color: black;
     font-size: 24px;
     display: block;
     font-size: 18px;
     margin-bottom: 15px;
-    margin-top:20px;
+    margin-top: 20px;
   }
 
   textarea {
@@ -124,7 +125,7 @@ const ModalAddFeedRightContainer = styled.div`
     box-sizing: border-box;
 
     color: #999696;
-    border-color: #BFBFBF;
+    border-color: #bfbfbf;
 
     font-family: "Pretendard";
     font-size: 16px;
@@ -278,11 +279,11 @@ function Profile() {
             />
             <span>본문</span>
             <div className="textarea-wrap">
-            <textarea
-              value={context}
-              placeholder="내용"
-              onChange={handleChangeContext}
-            ></textarea>
+              <textarea
+                value={context}
+                placeholder="내용"
+                onChange={handleChangeContext}
+              ></textarea>
             </div>
             <ModalAddFeedWrap>
               <StyledButton

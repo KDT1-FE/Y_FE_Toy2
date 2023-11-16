@@ -23,14 +23,12 @@ export interface ChatI {
 }
 
 interface ModalExampleProps {
-  setRoomName: (name: string) => void;
-  setSelectedUsers: (users: User[]) => void;
   loginUser: User | null;
 }
 
 const ModalExample: React.FC<
   ModalExampleProps & { addNewChatRoom: (name: string, users: User[]) => void }
-> = ({ setSelectedUsers, addNewChatRoom, setRoomName, loginUser }) => {
+> = ({ addNewChatRoom, loginUser }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
@@ -38,7 +36,7 @@ const ModalExample: React.FC<
   const { accessToken } = useContext(AuthContext);
   const [roomNameInput, setRoomNameInput] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [localSelectedUsers, setLocalSelectedUsers] = useState<User[]>([]); //보류
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,28 +110,22 @@ const ModalExample: React.FC<
   const handleCheckboxChange = (userId: string) => {
     const selectedUser = users.find((user) => user.id === userId);
     if (!selectedUser) return;
-
-    const isSelected = localSelectedUsers.some((user) => user.id === userId);
-
-    if (isSelected) {
-      setLocalSelectedUsers(
-        localSelectedUsers.filter((user) => user.id !== userId)
-      );
-    } else {
-      setLocalSelectedUsers([...localSelectedUsers, selectedUser]);
-    }
+    setSelectedUsers([selectedUser]);
   };
 
-  const submitModal = async () => {
-    await setRoomName(roomNameInput);
+  useEffect(() => {
+    if (!selectedUsers) {
+      return;
+    }
+    setSelectedUsers(selectedUsers);
+  }, [selectedUsers]);
 
+  const submitModal = async () => {
     if (loginUser) {
-      await setSelectedUsers([...localSelectedUsers, loginUser]);
-    } else {
-      await setSelectedUsers([...localSelectedUsers]);
+      await setSelectedUsers([...selectedUsers, loginUser]);
     }
 
-    await addNewChatRoom(roomNameInput, localSelectedUsers);
+    await addNewChatRoom(roomNameInput, selectedUsers);
     await closeModal();
   };
 
@@ -186,11 +178,13 @@ export default ModalExample;
 
 const ChatTestWrap = styled.div`
   width: 100%;
+  color: black;
 `;
 
 const SmallImg = styled.img`
   width: 30px;
   height: 30px;
+  color: black;
 `;
 
 const PlusButton = styled.button`
@@ -204,7 +198,8 @@ const TopTitle = styled.h1`
   font-size: 24px;
   font-weight: bold;
   margin: 30px 0 50px 0;
-  text-align:center;
+  text-align: center;
+  color: black;
 `;
 
 const SubTitle = styled.h5`
@@ -219,13 +214,13 @@ const InputArea = styled.input`
     font-size: 16px;
     color: #999696;
   }
-  width:90%;
+  width: 90%;
   border: 1px solid lightgray;
   border-radius: 6px;
   font-size: 20px;
   padding: 5px 20px;
   margin-bottom: 6px;
-  color: #999696;
+  color: black;
 `;
 
 const InputBtn = styled.button`
@@ -241,7 +236,7 @@ const InputBtn = styled.button`
   width: 100%;
   background-color: #fff;
   color: #999696;
-  text-align:left;
+  text-align: left;
 `;
 
 const MemberBox = styled.div`
@@ -290,8 +285,8 @@ const customStyles: Styles = {
     transform: "translate(-50%, -50%)",
     backgroundColor: "white",
     justifyContent: "center",
-    overflow: "auto",
-    borderRadius: "20px"
+    borderRadius: "20px",
+    overflow: "hidden"
   }
 };
 
