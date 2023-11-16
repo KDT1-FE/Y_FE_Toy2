@@ -31,6 +31,14 @@ const MyChats = ({ userType }: { userType: string }) => {
   const router = useRouter();
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
+  // react-query로 조건부 fetch
+  const { data, isLoading } = useQuery<Chat[]>({
+    queryKey: ['getChatsKey'],
+    queryFn: userType === 'my' ? getMyChats : getAllChats,
+    refetchOnWindowFocus: false,
+    refetchInterval: 1000,
+  });
+
   const navigateToUserSelection = () => {
     router.push('userSelect');
   };
@@ -42,45 +50,6 @@ const MyChats = ({ userType }: { userType: string }) => {
         setSelectedChat(chat);
         setChatModalOpen(true);
         console.log('새로 입장 성공');
-
-        // 채팅방 입장 공지
-        const accessToken = getCookie('accessToken');
-
-        const response = await fetch(`https://fastcampus-chat.net/user?userId=${userId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-            serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-          },
-        });
-        const data = await response.json();
-        const userName = data.name;
-
-        const socket = await io(`wss://fastcampus-chat.net/chat?chatId=${chat.id}`, {
-          extraHeaders: {
-            Authorization: `Bearer ${accessToken}`,
-            serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-          },
-        });
-
-        try {
-          socket.on('connect', () => {
-            console.log('Socket connected');
-          });
-
-          socket.emit('message-to-server', `notice09:${userName}님이 채팅방에 입장하였습니다. `);
-
-          socket.on('disconnect', () => {
-            console.log('disconnect');
-          });
-
-          return () => {
-            socket.disconnect();
-          };
-        } catch (error) {
-          console.log(error);
-        }
       } else {
         router.push(`/chatting/${chat.id}`);
         console.log('기존 유저 들어가기 성공');
@@ -88,28 +57,58 @@ const MyChats = ({ userType }: { userType: string }) => {
     }
   };
 
-  const onEnterHandler = () => {
+  // 입장하기 버튼 눌렀을 때 채팅에 참여시키는 함수
+  const onEnterHandler = async () => {
     if (selectedChat && selectedChat.id) {
       partChats(selectedChat.id);
       setChatModalOpen(false);
-      router.push(`/chatting/${selectedChat.id}`);
-      console.log('새로 입장 성공');
+      // 채팅방 입장 공지
+      const accessToken = getCookie('accessToken');
+
+      const response = await fetch(`https://fastcampus-chat.net/user?userId=${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+        },
+      });
+      const data = await response.json();
+      const userName = data.user.name;
+
+      const socket = await io(`wss://fastcampus-chat.net/chat?chatId=${selectedChat.id}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+          serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+        },
+      });
+
+      try {
+        socket.on('connect', () => {
+          console.log('Socket connected');
+          setInterval(() => {
+            socket.disconnect();
+            router.push(`/chatting/${selectedChat.id}`);
+            console.log('새로 입장 성공');
+          }, 3000);
+        });
+
+        socket.emit('message-to-server', `notice09:${userName}님이 채팅방에 입장하였습니다. `);
+
+        socket.on('disconnect', () => {
+          console.log('disconnect');
+        });
+
+        setInterval;
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       alert('입장 실패');
     }
   };
-  // react-query로 조건부 fetch
-  const { data, isLoading } = useQuery<Chat[]>({
-    queryKey: ['getChatsKey'],
-    queryFn: userType === 'my' ? getMyChats : getAllChats,
-    refetchOnWindowFocus: false,
-    refetchInterval: 1000,
-  });
 
-  const onAddHandler = () => {
-    setAddChatOpen(!addChatOpen);
-  };
-
+  // 입장하기 모달 여닫는 함수
   const onModalHandler = () => {
     setChatModalOpen(!chatModalOpen);
   };
@@ -146,7 +145,7 @@ const MyChats = ({ userType }: { userType: string }) => {
               ))
             ) : (
               <NoUserWrap>
-                <NoUserText>해당 사용자가 존재하지 않습니다.</NoUserText>
+                <NoUserText>해당 채팅방이 존재하지 않습니다.</NoUserText>
               </NoUserWrap>
             )
           ) : (
