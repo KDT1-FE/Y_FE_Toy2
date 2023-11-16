@@ -18,6 +18,10 @@ import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
 import chatAPI from '../../apis/chatAPI';
 
+interface MessageArray {
+  messages: Message[];
+}
+
 export default function Chatting() {
   const router = useRouter();
   const { chatId } = router.query;
@@ -67,7 +71,7 @@ export default function Chatting() {
     return io(`${CLIENT_URL}?chatId=${chatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
-        serverId: process.env.NEXT_PUBLIC_API_KEY,
+        serverId: process.env.NEXT_PUBLIC_API_KEY!,
       },
     });
   }, [chatId, accessToken]);
@@ -82,7 +86,7 @@ export default function Chatting() {
       });
       socket.emit('fetch-messages');
 
-      socket.on('messages-to-client', (messageArray: Message[]) => {
+      socket.on('messages-to-client', (messageArray: MessageArray) => {
         setMessages(messageArray.messages);
       });
 
