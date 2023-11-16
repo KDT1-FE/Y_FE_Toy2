@@ -64,7 +64,7 @@ const ChattingDetail = ({ userData }: UserProps) => {
         setSocket(newSocket);
 
         newSocket.on('messages-to-client', (messageData) => {
-          // console.log('Fetched messages:', messageData.messages);
+          console.log('Fetched messages:', messageData.messages);
 
           if (messageData.messages.length > 0) {
             // createdAt을 기준으로 시간순서 정렬
