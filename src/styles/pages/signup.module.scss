@@ -10,16 +10,19 @@
   width: 100vw;
   position: relative;
 
+
+  &__profile_container {
+    @include flex-center-col();
+    padding-top: 8rem;
+
+  }
+
   &__profile {
     background-image: url('/src/assets/images/profile.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-color: transparent;
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -29,18 +32,12 @@
 
   & p {
     color: gray;
-    position: absolute;
-    transform: translateX(-50%);
-    top: 29%;
-    left: 50%;
+    margin: .5rem;
     font-size: 1.5rem;
   }
 
   &__container {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 2rem auto;
     width: 50%;
     height: 40%;
     border-radius: 20px;
@@ -61,6 +58,7 @@
       border: none;
       border-radius: 20px;
       padding: 1rem;
+      font-size: 0.6rem;     
       width: 50%;
       margin: 1rem 0;
       background-color: rgb(177, 175, 175);
@@ -82,7 +80,7 @@
     background-color: #835da3;
     border: none;
     color: white;
-    margin-top: 2rem;
+    margin-top: 3rem;
     box-shadow: 0 0 20px #eee;
     padding: 0.4rem;
     width: 30%;
@@ -108,12 +106,11 @@
     }
   }
   .signin__link a {
+
+    @include flex-center-row();
+    padding-top: 2rem;
     color: gray;
     text-decoration: none;
-    position: absolute;
-    bottom: 30%;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: 1.5rem;
 
     &:hover {

@@ -1,0 +1,20 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+.reset {
+  @include flex-center-row;
+  height: 100vh;
+  background-image: url('@assets/images/reset_alive.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  p {
+    margin: 0;
+    font-family: $font-logo;
+    font-size: 5.5rem;
+    color: #4985e0;
+    span {
+      color: $white;
+      font-size: 5.5rem;
+    }
+  }
+}

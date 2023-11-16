@@ -3,12 +3,62 @@ import styles from '@styles/pages/signin.module.scss';
 import { login } from '@api/login';
 import { useForm } from '@hooks/useForm';
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { useAppDispatch } from '@/hooks/redux';
 import { getUserId } from '@/store/userSlice';
-
-// 로그인 성공 시에 로그인 유저 id 를 전역 상태로 뿌려주기
+import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
 const Signin = () => {
+  
+  // const refreshToken = localStorage.getItem("refresh_token");
+  // const accessToken = localStorage.getItem("access_token");
+
+  // const axiosInstance = axios.create();
+  // console.log(axiosInstance.defaults.headers.common)
+
+  
+  // const refreshAccessToken = async () => {
+  //   const response = await axios.post('https://fastcampus-chat.net/refresh', {
+  //     refreshToken, // You may need to obtain this from your current token
+  //   });
+
+  //   const newAccessToken = response.data.accessToken;
+
+  //   axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+
+  //   console.log(newAccessToken);
+  //   return newAccessToken;
+  // }
+
+
+  // axiosInstance.interceptors.request.use(
+  //   async (config) => {
+  //     console.log(config.headers)
+  //     const tokenExpirationThreshold = 60;
+  //     const user = jwtDecode(accessToken); 
+  //     console.log(user.exp)
+  
+  //     if (user && user.exp - Math.floor(Date.now() / 1000) < tokenExpirationThreshold) {
+
+  //       const newAccessToken = await refreshAccessToken();
+  
+  //       config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+  //       console.log(config.headers.Authorization)
+  //     }
+  
+  //     return config;
+  //   },
+  //   (error) => {
+  //     return Promise.reject(error);
+  //   }
+  // );
+  
+  // // export default axiosInstance;
+
+
+
+  // // console.log(decoded);
+
   const [id, onChangeId] = useForm();
   const [password, onChangePassword] = useForm();
   const [errors, setErrors] = useState('');
@@ -16,22 +66,18 @@ const Signin = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const userId = useAppSelector((state) => state.userId);
-  console.log(userId);
+  // console.log(userId);
 
   const signin = async (event) => {
     event.preventDefault();
 
     const result = await login(id, password);
-    console.log(result);
-
+    const { accessToken, refreshToken } = result;
     if (result.error) {
       setErrors(result.error);
     } else {
-      const { accessToken, refreshToken } = result;
       localStorage.setItem('access_token', accessToken);
       localStorage.setItem('refresh_token', refreshToken);
-
       dispatch(getUserId(id));
       navigate('/lobby');
     }

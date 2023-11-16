@@ -12,7 +12,7 @@
   & h1 {
     font-size: 8rem;
     position: absolute;
-    top: 6%;
+    top: 5%;
     left: 50%;
     transform: translateX(-50%);
     transition: 2s;
@@ -20,6 +20,7 @@
     -webkit-text-fill-color: transparent;
     background-image: linear-gradient(to right, #310552 0%, #ffffff 100%);
     background-size: 200% auto;
+    font-family: $font-logo;
 
     &:hover {
       background-position: right center;
@@ -49,7 +50,8 @@
     & input {
       border: none;
       border-radius: 20px;
-      padding: 1.3rem;
+      padding: 1rem;
+      font-size: 0.6rem;
       width: 50%;
       margin: 0.3rem 0;
       background-color: rgb(177, 175, 175);

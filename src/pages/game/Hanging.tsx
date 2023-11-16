@@ -1,60 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@styles/pages/hanging.module.scss';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getGameData } from '@/api/vote';
+import { Ghost } from './Vote';
 
 const Hanging = () => {
-  const { role, name } = user;
-  const [message, setMessage] = useState<string[]>([]);
+  const [user, setUser] = useState<User>({ role: '', name: '' });
+  const [searchParams] = useSearchParams();
+  const pocketId = searchParams.get('pocketId');
+  const chatId = searchParams.get('chatId');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    switch (role) {
-      case 'mafia':
-        setMessage([
-          '잔혹한 마피아',
-          '한명이라도 더 죽였어야 했는데!! \n 으익!! 분하다!',
-        ]);
-        break;
-      case 'citizen':
-        setMessage([
-          '무고한 시민',
-          '살려줘!! \n 난 아니야... 아니라고 했잖아!!...',
-        ]);
-        break;
-      case 'doctor':
-        setMessage(['의로운 의사', '나를 살릴걸!! 나를 살릴거얼!!']);
-        break;
-      default:
-    }
+    const fetchData = async () => {
+      try {
+        const gameData = await getGameData(pocketId as string);
+        const users = gameData.vote;
+        const maxCount = Math.max(...users.map((user: Ghost) => user.count));
+        const usersWithMaxCount = users.filter(
+          (user: Ghost) => user.count === maxCount,
+        );
+
+        if (usersWithMaxCount.length === 1) {
+          setUser(usersWithMaxCount[0]);
+          setTimeout(() => {
+            navigate(`/result?result=${usersWithMaxCount[0].role}`);
+          }, 3000);
+        } else {
+          navigate(`/reset?pocketId=${pocketId}&chatId=${chatId}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
     <div className={styles.hanging}>
       <p
         className={
-          role === 'mafia'
+          user.role === 'mafia'
             ? `${styles.hanging__result} ${styles.mafia}`
             : `${styles.hanging__result}`
         }>
-        {name} 님은 <br />
-        <span>{message[0]}</span>
+        {user.name} 님은 <br />
+        <span>
+          {user.role === 'mafia' ? messageArray[0][0] : messageArray[1][0]}
+        </span>
         입니다!!
       </p>
-      <p className={styles.hanging__message}>{message[1]}</p>
+      <p className={styles.hanging__message}>
+        {user.role === 'mafia' ? messageArray[0][1] : messageArray[1][1]}
+      </p>
       <div className={styles.hanging__tree}></div>
       <div className={styles.hanging__leaves}></div>
-      {role === 'mafia' && <div className={styles.hanging__dancing}></div>}
+      {user.role === 'mafia' && <div className={styles.hanging__dancing}></div>}
     </div>
   );
 };
 
 export default Hanging;
 
-// type Role = 'citizen' | 'doctor' | 'mafia';
-
-// dummy data
-const user = {
-  id: 'user1',
-  role: 'doctor',
-  name: '첫 번째 유령',
-  picture:
-    'https://i.pinimg.com/564x/a7/99/96/a79996fd63dbb958d65384bbf49a59df.jpg',
+type User = {
+  role: string;
+  name: string;
 };
+
+const messageArray = [
+  ['잔혹한 마피아', '한명이라도 더 죽였어야 했는데!! \n 으익!! 분하다!'],
+  ['무고한 시민', '살려줘!! \n 난 아니야... 아니라고 했잖아!!...'],
+];

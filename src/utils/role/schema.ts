@@ -13,6 +13,7 @@ const roleSchema: Schema = {
 export default roleSchema;
 
 interface Schema {
+  [key: string]: Role;
   mafia: Role;
   citizen: Role;
 }

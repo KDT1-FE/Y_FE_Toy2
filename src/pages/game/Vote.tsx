@@ -7,6 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 const Vote = () => {
   const [searchParams] = useSearchParams();
   const pocketId = searchParams.get('pocketId');
+  const chatId = searchParams.get('chatId');
 
   return (
     <div className={styles.vote}>
@@ -15,6 +16,7 @@ const Vote = () => {
         title={'누가 마피아 유령일까...'}
         next="night"
         pocketId={pocketId}
+        chatId={chatId}
       />
       <GhostList pocketId={pocketId} />
     </div>
