@@ -1,10 +1,7 @@
 // import styles from '@/styles/Home.module.scss';
 
 import Header from '@/components/Header/Header';
-import { getCookie } from 'cookies-next';
 import { GetServerSideProps } from 'next';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import HostList from './host-list';
 
 export default function Home() {

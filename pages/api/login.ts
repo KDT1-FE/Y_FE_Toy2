@@ -7,14 +7,21 @@ interface LoginResponseValue {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const loginData = req.body;
-  const { data } = await instance.post<LoginResponseValue>('/login', loginData);
+  try {
+    const loginData = req.body;
+    const { data } = await instance.post<LoginResponseValue>(
+      '/login',
+      loginData,
+    );
 
-  const { accessToken, refreshToken } = data;
+    const { accessToken, refreshToken } = data;
 
-  res.setHeader('Set-Cookie', [
-    `accessToken=${accessToken}; Path=/;`,
-    `refreshToken=${refreshToken}; Path=/;`,
-  ]);
-  res.status(200).json(data);
+    res.setHeader('Set-Cookie', [
+      `accessToken=${accessToken}; Path=/;`,
+      `refreshToken=${refreshToken}; Path=/;`,
+    ]);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).json({ error: '잘못된 아이디 또는 패스워드입니다.' });
+  }
 };

@@ -1,11 +1,9 @@
+import axios from 'axios';
+import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import axios from 'axios';
 import { useRouter } from 'next/router';
-import { getCookie } from 'cookies-next';
-import { GetServerSideProps } from 'next';
-import { useEffect } from 'react';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './login.module.scss';
 
 export default function Login() {
@@ -16,10 +14,22 @@ export default function Login() {
   } = useForm();
   const router = useRouter();
   const handleLoginClick: SubmitHandler<FieldValues> = async data => {
-    const id = data.loginId as string;
-    const password = data.password as string;
-    await axios.post('/api/login', { id, password });
-    router.push('/');
+    const id = data.id.trim() as string;
+    const password = data.password.trim() as string;
+    if (id && password) {
+      try {
+        await axios.post('/api/login', { id, password });
+        router.push('/');
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 400) {
+            alert('잘못된 아이디 또는 비밀번호입니다.');
+          }
+        }
+      }
+    } else {
+      alert('아이디 또는 비밀번호를 입력하세요.');
+    }
   };
 
   return (
@@ -37,7 +47,7 @@ export default function Login() {
           onSubmit={handleSubmit(handleLoginClick)}
         >
           <div className={styles.input_box}>
-            <input type="text" placeholder="아이디" {...register('loginId')} />
+            <input type="text" placeholder="아이디" {...register('id')} />
             <input
               type="password"
               placeholder="비밀번호"
