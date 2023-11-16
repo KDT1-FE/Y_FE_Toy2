@@ -11,8 +11,8 @@ import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { BsCameraFill, BsFillTrash3Fill } from 'react-icons/bs';
 import styles from './SignUpModal.module.scss';
-import Loading from './Loading';
-import { Modal } from '../Common';
+import Loading from '../SignupLoading/SignupLoading';
+import { Modal } from '../../Common';
 
 interface RequestBody {
   id: string;

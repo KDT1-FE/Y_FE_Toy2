@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import HostListItem from '@/components/HostList/HostListItem';
 import {
   getHostsByLocation,
   locations,
   getFirebaseData,
   fetchAllUsers,
 } from '@/utils/hostsStorage';
-
-import Search from '@/components/HostList/Search';
-import HostDetailsModal from '@/components/HostList/HostDetailsModal';
+import { FirebaseData, Host } from '@/components/HostList/HostList.types';
 import styles from '@/components/HostList/hostList.module.scss';
-import { FirebaseData, Host } from '@/components/HostList/hostList.types';
+import Search from './Search/Search';
+import HostListItem from './HostListItem/HostListItem';
+import HostDetailsModal from './HostDetailsModal/HostDetailsModal';
 
-export default function HostListPage() {
+export default function HostList() {
   const [hostData, setHostData] = useState<Host[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedHostDetails, setSelectedHostDetails] = useState<Host | null>(

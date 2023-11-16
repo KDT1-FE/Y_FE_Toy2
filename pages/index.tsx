@@ -1,7 +1,5 @@
-// import styles from '@/styles/Home.module.scss';
-
 import Header from '@/components/Common/Header/Header';
-import HostList from './host-list';
+import HostList from '../components/HostList/HostList';
 
 export default function Home() {
   return (

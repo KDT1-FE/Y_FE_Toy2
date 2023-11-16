@@ -1,5 +1,4 @@
 import instance from '@/apis/axios';
-import SignUpModal from '@/components/Signup/SignUpModal';
 import app from '@/utils/firebaseConfig';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import Image from 'next/image';
@@ -9,6 +8,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useSetRecoilState } from 'recoil';
 import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import { SignUpModal } from '@/components/Signup';
 import styles from './signUp.module.scss';
 
 interface RequestBody {

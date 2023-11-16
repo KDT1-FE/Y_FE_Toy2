@@ -1,7 +1,7 @@
-import styles from '@/components/HostList/HostListItem.module.scss';
-import Button from '@/components/HostList/Button';
 import Image from 'next/image';
-import { Host } from '@/components/HostList/hostList.types';
+import { Host } from '@/components/HostList/HostList.types';
+import styles from './HostListItem.module.scss';
+import Button from './Button/Button';
 
 interface HostListItemProps {
   host: Host;

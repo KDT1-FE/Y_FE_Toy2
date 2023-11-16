@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import React from 'react';
-import style from './Loading.module.scss';
+import styles from './SignupLoading.module.scss';
 
-export default function Loading() {
+export default function SignupLoading() {
   return (
-    <div className={style.container}>
+    <div className={styles.container}>
       <h3>회원가입 중입니다.</h3>
       <Image
         width={45}

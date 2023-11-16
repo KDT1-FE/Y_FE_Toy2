@@ -1,13 +1,13 @@
 import { useRef } from 'react';
 import { BsXCircle } from 'react-icons/bs';
-import Button from '@/components/HostList/Button';
+import Button from '@/components/HostList/HostListItem/Button/Button';
 import useOnClickOutside from '@/hooks/useOnClickOustside';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
-import styles from '@/components/HostList/HostDetailsModal.module.scss';
-import { Host } from '@/components/HostList/hostList.types';
-import { Modal } from '../Common';
+import { Host } from '@/components/HostList/HostList.types';
+import styles from './HostDetailsModal.module.scss';
+import { Modal } from '../../Common';
 
 interface HostDetailsModalProps {
   onClose: () => void;
