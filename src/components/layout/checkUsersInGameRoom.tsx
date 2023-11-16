@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, AxiosResponse } from 'react';
 import { useRecoilState } from 'recoil';
-import { onlineUserStateInGameRoom } from '../../states/atom';
+import {
+  onlineUserStateInGameRoom,
+  userRoomState,
+  userState,
+} from '../../states/atom';
 import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../../constant';
 import { getCookie } from '../../util/util';
 import styled from 'styled-components';
-import { getUserData } from '../../api';
+import { getOnlyGameRoom, getUserData, getAllGameRooms } from '../../api';
+import { OnlyResponse, Chat } from '../../interfaces/interface';
+import { useParams } from 'react-router-dom';
+import { sortCreatedAt } from '../template/useChattingSort';
 
 interface ChattingDetailProps {
   chatId: string;
@@ -21,10 +28,45 @@ interface User {
 }
 const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
   const accessToken: any = getCookie('accessToken');
+  const [roomNumber, setRoomNumber] = useRecoilState(userRoomState);
+  const [roomUser, setRoomUser] = useRecoilState(userState);
   const [UsersInGameRoom, setUsersInGameRoom] = useRecoilState<string[]>(
     onlineUserStateInGameRoom,
   );
   const [profiles, setProfiles] = useState<ResponseValue[]>([]);
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    const setUsers = async () => {
+      try {
+        if (id) {
+          const response: AxiosResponse<OnlyResponse> | null =
+            await getOnlyGameRoom(id.substring(1));
+          console.log('첫 응답', response.data);
+
+          if (response && response.data) {
+            const foundChats = response.data;
+            const chatData: any = foundChats.chat;
+
+            const users: User[] | null = chatData.users;
+            const usersNumber: any = chatData.users.length;
+            setRoomUser(usersNumber);
+            const profilesArray: ResponseValue[] = [];
+            if (users) {
+              for (const user of users) {
+                const res = await getUserData(user.id);
+                profilesArray.push(res);
+              }
+              setProfiles(profilesArray);
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setUsers();
+  }, []);
 
   useEffect(() => {
     try {
@@ -36,20 +78,22 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       });
 
       socket.on('connect', () => {
+        console.log('에밋');
         socket?.emit('users');
       });
 
       socket.on('users-to-client', (data) => {
+        console.log('불러오기 발동');
         setUsersInGameRoom(data.users);
       });
 
       socket.on('leave', (data) => {
-        console.log(data);
+        console.log('나가기 발동');
         setUsersInGameRoom(data.users);
       });
 
       socket.on('join', (data) => {
-        console.log(data);
+        console.log('조인 발동');
         setUsersInGameRoom(data.users);
       });
 
@@ -77,7 +121,8 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     };
 
     fetchUserProfiles();
-  }, [UsersInGameRoom, setProfiles]);
+  }, [UsersInGameRoom]);
+  console.log(profiles);
 
   const MAX_USERS = 4;
 

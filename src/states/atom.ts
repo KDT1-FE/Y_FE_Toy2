@@ -90,3 +90,13 @@ export const openNewChatState = atom<boolean>({
   key: 'openNewChatState',
   default: false,
 });
+
+export const userRoomState = atom<number>({
+  key: 'userRoomState',
+  default: 0,
+});
+
+export const userState = atom<number>({
+  key: 'userState',
+  default: 0,
+});

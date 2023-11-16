@@ -7,7 +7,9 @@ import {
   chattingIdState,
   myMessageState,
   roomIdState,
+  userRoomState,
   usersInRoom,
+  userState,
 } from '../../states/atom';
 import styled from 'styled-components';
 import GameChatting from '../../components/template/GameChatting';
@@ -27,22 +29,36 @@ import { ResponsiveValue } from '@chakra-ui/react';
 import CheckNums from '../../util/checkNums';
 import { gameSocket } from '../../api/socket';
 import { getCookie } from '../../util/util';
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Box,
+  Fade,
+} from '@chakra-ui/react';
 
 const GameRoom: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const [chat, setChat] = useRecoilState(chattingIdState);
-  const [roomNumber, setRoomNumber] = useState<number | null>(null);
-  const [roomUser, setRoomUser] = useState<number | null>(null);
-  const [roomId, setRoomId] = useRecoilState(chattingIdState);
+  const [showAlert, setShowAlert] = useState({
+    active: false,
+    message: '',
+  });
 
   useEffect(() => {
-    if (id) {
-      setChat(id.substring(1));
+    if (showAlert.active) {
+      const timer = setTimeout(() => {
+        setShowAlert({ active: false, message: '' });
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [id, setChat, roomUser]);
-  // controlGameRoomReload(chat);
-  // controlBack();
+  }, [showAlert.active]);
 
+  const { id } = useParams<{ id: string }>();
+  const [chat, setChat] = useRecoilState(chattingIdState);
+  const userNumber = useRecoilValue(userState);
+  const [roomNumber, setRoomNumber] = useState<number | null>(null);
+
+  const [roomId, setRoomId] = useRecoilState(chattingIdState);
   const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
   const [answer, setAnswer] = useState<string>(''); // 답 지정하기
   const [messages, setMessages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
@@ -58,6 +74,11 @@ const GameRoom: React.FC = () => {
 
   const lastMessage = messages[messages.length - 1];
   const myId = getCookie('userId');
+  const [userRoomUser, setUserRoomUser] = useState(0);
+
+  useEffect(() => {
+    setUserRoomUser(userNumber);
+  }, [roomNumber]);
 
   useEffect(() => {
     if (lastMessage.text !== '') {
@@ -68,10 +89,8 @@ const GameRoom: React.FC = () => {
   useEffect(() => {
     if (id) {
       setRoomId(id.substring(1));
-      if (chat) {
-        fetchRoomNumber();
-        fetchRoomUser();
-      }
+
+      fetchRoomNumber();
     }
   }, [id, setRoomId]);
 
@@ -105,23 +124,6 @@ const GameRoom: React.FC = () => {
     }
   };
 
-  const fetchRoomUser = async () => {
-    try {
-      const response: AxiosResponse<OnlyResponse> | null =
-        await getOnlyGameRoom(chat);
-      console.log(response.data);
-
-      if (response && response.data) {
-        const foundChats = response.data;
-        const chatData: any = foundChats.chat;
-        const users: number | null = chatData.users.length;
-        setRoomUser(users);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // 게임로직 소켓
   useEffect(() => {
     gameSocket.connect();
@@ -133,10 +135,15 @@ const GameRoom: React.FC = () => {
       if (true) {
         if (myId === quizMasterId) {
           // alert('당신은 출제자 입니다!');
-          console.log('당신은 출제자 입니다');
+          setShowAlert({
+            active: true,
+            message: '당신은 출제자 입니다!',
+          });
         } else {
-          // alert('새로운 출제자가 선정되었습니다!');
-          console.log('새로운 출제자가 선정되었습니다');
+          setShowAlert({
+            active: true,
+            message: '새로운 출제자가 선정되었습니다!',
+          });
         }
         setIsQuizMasterAlertShown(true);
       }
@@ -166,8 +173,10 @@ const GameRoom: React.FC = () => {
   useEffect(() => {
     gameSocket.on('alert_all', (message: string) => {
       if (message) {
-        // alert('문제 출제 끝');
-        console.log('문제 출제 끝');
+        setShowAlert({
+          active: true,
+          message: '문제가 출제되었습니다!',
+        });
       }
     });
     return () => {
@@ -184,25 +193,21 @@ const GameRoom: React.FC = () => {
     const handleCorrectAnswer = (data: { winner: string }) => {
       console.log(data.winner, myId);
       if (data.winner === myId) {
-        alert('축하합니다! 정답입니다!');
-        console.log('정답');
-        alert('끝');
-
-        console.log('끝');
-        // gameSocket.emit('end_game', { roomId: roomId });
+        setShowAlert({
+          active: true,
+          message: '축하합니다! 정답입니다! 게임이 종료되었습니다.',
+        });
       } else if (data.winner !== myId) {
-        alert('누군가 정답을 맞췄습니다!');
-        console.log('누군가 정답 맞춤');
-        alert('끝');
-        console.log('끝');
+        setShowAlert({
+          active: true,
+          message: '유저가 정답을 맞췄습니다! 게임이 종료되었습니다.',
+        });
       }
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
-    gameSocket.emit('end_game', { roomId: roomId });
 
     return () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);
-      gameSocket.off('end_game');
     };
   }, [roomId, gameSocket, userMessage]);
 
@@ -213,7 +218,7 @@ const GameRoom: React.FC = () => {
           <RoomInformation>방 번호</RoomInformation>
           <RoomInformation>{roomNumber}</RoomInformation>
           <RoomInformation>인원 수 </RoomInformation>
-          <RoomInformation>{roomUser} / 4</RoomInformation>
+          <RoomInformation>{userRoomUser} / 4</RoomInformation>
           {/* 인원수 추가 */}
         </RoomInfo>
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
@@ -238,9 +243,25 @@ const GameRoom: React.FC = () => {
         <GameChatting chatId={roomId} />
       </RoomMain>
 
-      <UserList>
-        <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
-      </UserList>
+      <CheckUsersInGameRoom chatId={roomId} />
+
+      <Fade in={showAlert.active}>
+        <Alert
+          bg={'#4FD1C5'}
+          color={'white'}
+          marginTop={5}
+          marginBottom={3}
+          status="success"
+          width={400}
+          height={70}
+          borderRadius={10}>
+          <AlertIcon color={'white'} />
+          <Box>
+            <AlertTitle mr={2}>GameRoom</AlertTitle>
+            <AlertDescription>{showAlert.message}</AlertDescription>
+          </Box>
+        </Alert>
+      </Fade>
     </Game>
   );
 };

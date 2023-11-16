@@ -1,3 +1,4 @@
+//interface.ts
 export interface JoinData {
   id: string;
   password: string;
