@@ -11,7 +11,7 @@
 
 ### 배포 주소
 
-🌐 배포링크 : [https://langchat-464b7.web.app/](https://langchat-464b7.web.app/)
+🌐 배포링크 : [https://langchat-464b7--pr65-t1-61-feature-game-tf29m3fe.web.app/](https://langchat-464b7--pr65-t1-61-feature-game-tf29m3fe.web.app/)
 
 ### 팀원 소개
 
@@ -22,7 +22,8 @@
 | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
 | <img src="https://avatars.githubusercontent.com/u/121215024?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/59966217?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/121606131?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/95364951?s=60&v=4" width="100" style="max-width: 100%;" /> |
 |                                [@Yamyam-code](https://github.com/Yamyam-code)                                 |                                    [@skyeome](https://github.com/skyeome)                                    |                                  [@JiHongkyu](https://github.com/JiHongkyu)                                   |                                  [@lilviolie](https://github.com/lilviolie)                                  |
-|       <ul><li>유저 랭킹 리스팅</li><li>네이버 API 기반 단어 유효성 검사</li><li>끝말잇기 로직</li></ul>       |                 <ul><li>레이아웃</li><li>로그인/회원가입 기능</li><li>오픈채팅기능</li></ul>                 |          <ul><li>초기셋팅</li><li>웹소켓 연결/실시간 채팅 로직 구현</li><li>1대1채팅 기능</li></ul>           |                       <ul><li>홈페이지 구현</li><li>프로필 구현</li></ul>                        |
+|    <ul><li>유저 랭킹 리스팅</li><li>네이버 API 기반<br/> 단어 유효성 검사</li><li>끝말잇기 로직</li></ul>     |                 <ul><li>레이아웃</li><li>로그인/회원가입 기능</li><li>오픈채팅기능</li></ul>                 |        <ul><li>초기셋팅</li><li>웹소켓 연결/실시간<br/> 채팅 로직 구현</li><li>1대1채팅 기능</li></ul>        |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |
+
 
 ## 기술 스택 및 라이브러리
 
@@ -191,6 +192,7 @@
 ![submit](https://github.com/TOY2-12/LangChat/assets/121215024/9c3cf96c-e4a8-4903-8f83-bb1009db5975)
 
 - 네이버 API의 사전 검색 및 정규식을 활용하여 단어 유효성 검사
+- 배포서버 API CROS 이슈 API GATEWAY 사용하여 해결
 - 남은 시간 게이지바로 표시
 - 효과음 사용
 </div>
@@ -198,6 +200,7 @@
 
 ## ➡️ 유저 흐름(flow) 이미지
 
+<img width="600" alt="LangChat UserFlow" src="https://github.com/TOY2-12/LangChat/assets/121215024/92e6561f-3183-4507-b75b-1001d3ca54f0">
 <!-- 유저 플로우 생성 -->
 
 ## 📂 폴더 구조
