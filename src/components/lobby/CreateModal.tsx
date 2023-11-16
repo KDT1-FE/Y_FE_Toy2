@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import pocketRequest from '@/api/pocketRequest';
+import checkMafia from '@/utils/role/checkMafia';
 import fastRequest from '@/api/fastRequest';
 import { useAppSelector } from '@/hooks/redux';
 
@@ -23,11 +24,11 @@ const CreateModal = ({ toggleModal }: Props): JSX.Element => {
 
       const { name, picture } = userInfo;
       console.log('userinfo', userInfo, userId, name, picture);
-      const mafiaIndex = Math.floor(Math.random() * 4);
+      const mafiaArray = checkMafia(4);
 
       const pocketResponse = await pocketRequest.post('game', {
         chatId: fastResponse.id,
-        mafia: mafiaIndex,
+        mafia: mafiaArray,
         vote: [
           {
             id: userId,
@@ -50,13 +51,14 @@ const CreateModal = ({ toggleModal }: Props): JSX.Element => {
     }
   };
 
-  const handleCreate = async () => {
+  const handleCreate = async (event: React.FormEvent) => {
+    event.preventDefault();
     await createRoom();
   };
 
   return (
     <div className={styles.modalBackground}>
-      <form className={styles.modal}>
+      <form className={styles.modal} onSubmit={handleCreate}>
         <h2 className={styles.modal__title}>방 만들기</h2>
 
         <input
@@ -84,10 +86,7 @@ const CreateModal = ({ toggleModal }: Props): JSX.Element => {
           </select>
         </label>
 
-        <button
-          className={styles.modal__submit}
-          type="button"
-          onClick={handleCreate}>
+        <button className={styles.modal__submit} type="submit">
           확 인
         </button>
 
