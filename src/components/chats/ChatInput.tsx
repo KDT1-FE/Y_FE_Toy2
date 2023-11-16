@@ -16,6 +16,7 @@ const ChatInput = ({ chatId }: { chatId: string }) => {
     socket.emit(SOCKET.MESSAGE_TO_SERVER, value, (error: Error) => {
       if (error) alert('알 수 없는 오류입니다');
     });
+    if (socket.connected) socket.disconnect();
     setValue('');
   };
 
