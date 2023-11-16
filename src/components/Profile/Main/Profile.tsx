@@ -52,8 +52,8 @@ const ModalStyle: ReactModal.Styles = {
     left: "0"
   },
   content: {
-    width: "50%",
-    height: "80%",
+    width: "40%",
+    height: "500px",
 
     zIndex: "100",
     position: "absolute",
@@ -71,15 +71,14 @@ const ModalStyle: ReactModal.Styles = {
 const TitleText = styled.div`
   text-align: center;
 
-  font-size: 48px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.3;
 
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 `;
 const ModalAddFeedContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   gap: 16px;
 
   input {
@@ -97,23 +96,28 @@ const ModalAddFeedPreview = styled.div`
   background-repeat: no-repeat;
 `;
 const ModalAddFeedLeftContainer = styled.div`
-  width: 70%;
-  height: 500px;
+  flex: 1 0 140px;
+  width:140px;
+  height:175px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
 const ModalAddFeedRightContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 500px;
+  width:100%;
   span {
-    font-size: 24px;
+    display: block;
+    font-size: 18px;
+    margin-bottom: 15px;
+    margin-top:20px;
   }
 
   textarea {
     width: 100%;
-    height: 50%;
+    height: 220px;
 
-    padding: 24px 29px;
+    padding: 20px;
 
     resize: none;
 
@@ -121,7 +125,8 @@ const ModalAddFeedRightContainer = styled.div`
 
     box-sizing: border-box;
 
-    color: #000;
+    color: #999696;
+    border-color: #BFBFBF;
 
     font-family: "Pretendard";
     font-size: 16px;
@@ -134,6 +139,7 @@ const ModalAddFeedRightContainer = styled.div`
 const ModalAddFeedWrap = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 
   button { 
     margin-right: 16px;
@@ -274,12 +280,13 @@ function Profile() {
               onChange={handleModalPreview}
             />
             <span>본문</span>
-            
+            <div className="textarea-wrap">
             <textarea
               value={context}
               placeholder="내용"
               onChange={handleChangeContext}
             ></textarea>
+            </div>
             <ModalAddFeedWrap>
               <StyledButton
                 backgroundColor="red"
