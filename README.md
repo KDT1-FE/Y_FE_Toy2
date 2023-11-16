@@ -1206,19 +1206,19 @@ interface ResponseData {
 
 ### 로그인, 회원가입
 
-<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/08a39e06-34d9-47a7-9292-c2dccb19e158"  width="200" />
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/08a39e06-34d9-47a7-9292-c2dccb19e158"  width="250" />
 
 ### 유저 목록 조회, 검색, 채팅
 
-<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/65bb7482-bc1e-414c-a145-d8e469a3f3f2"  width="200" />
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/65bb7482-bc1e-414c-a145-d8e469a3f3f2"  width="250" />
 
 ### 채팅방 검색 및 채팅
 
-<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/70c44318-4dd2-4a52-8b25-dcc17de62081"  width="200" />
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/70c44318-4dd2-4a52-8b25-dcc17de62081"  width="250" />
 
 ### 드래그 & 드롭
 
-<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/5a6b5b54-dfe3-40ec-b8c5-28c6c3607a92"  width="200" />
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/5a6b5b54-dfe3-40ec-b8c5-28c6c3607a92"  width="250" />
 
 
 <br/>
@@ -1303,8 +1303,7 @@ $ npm run dev
     </td>
     <td align="center">
       <a href="https://github.com/minsoo-web" target="_blank">
-        김민수 멘토님<br /> 
-        멘토링
+        김민수 멘토님
       </a>
     </td>
   </tr>
