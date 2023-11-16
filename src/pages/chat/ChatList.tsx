@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Button, Modal, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Modal } from '@mui/material';
 import { Clear, MapsUgcRounded } from '@mui/icons-material';
 import { useRecoilValue } from 'recoil';
 import Hangul from 'hangul-js';
@@ -22,8 +22,11 @@ function ChatList() {
     picture: '',
   });
   const [userList, setUserList] = useState([]);
-  const userAllList = useUserAll(accessToken);
   const userInfo = useGetUserInfo(accessToken);
+  const userAllList = useUserAll(accessToken).filter(
+    (user: UserType) => user.id !== userInfo?.id,
+  );
+
   const chatList = useChatAll(accessToken);
   const handleCreateOrJoinChat = useCreateOrJoinChat(
     accessToken,
@@ -32,16 +35,8 @@ function ChatList() {
     userInfo,
   );
 
-  const getUserList = useCallback(() => {
-    setUserList(userAllList);
-  }, [userAllList]);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
+  const handleModal = (): void => {
+    setOpen(!open);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -53,15 +48,15 @@ function ChatList() {
   };
 
   useEffect(() => {
-    getUserList();
-  }, [getUserList]);
+    setUserList(userAllList);
+  }, [userAllList.length]);
 
   return (
     <S.Wrapper>
       <Chats chatList={chatList} />
 
       <S.NewMessageWrapper>
-        <Box sx={{ width: '60px', height: '60px' }}>
+        <S.NewMessageImgBox>
           <MapsUgcRounded
             sx={{
               width: '100%',
@@ -69,25 +64,27 @@ function ChatList() {
               color: 'primary.main',
             }}
           />
-        </Box>
-        <Typography sx={{ fontSize: '1.25rem' }}>내 메시지</Typography>
-        <Typography sx={{ fontSize: '0.825rem', color: '#737373' }}>
-          새로운 메시지를 보내보세요
-        </Typography>
-        <Button onClick={handleOpen} variant="contained" type="button">
+        </S.NewMessageImgBox>
+        <S.NewMessageTitle>내 메시지</S.NewMessageTitle>
+        <S.NewMessageBody>새로운 메시지를 보내보세요</S.NewMessageBody>
+        <S.NewMessageBtn
+          onClick={handleModal}
+          variant="contained"
+          type="button"
+        >
           메시지 보내기
-        </Button>
+        </S.NewMessageBtn>
         <Modal
           open={open}
-          onClose={handleClose}
+          onClose={handleModal}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
           <S.ModalWrapper>
             <S.ModalHeader>
               <S.EmptyBox />
-              <S.Title>새로운 메시지</S.Title>
-              <S.CancelBtn onClick={handleClose}>
+              <S.ModalTitle>새로운 메시지</S.ModalTitle>
+              <S.CancelBtn onClick={handleModal}>
                 <Clear />
               </S.CancelBtn>
             </S.ModalHeader>
@@ -111,9 +108,7 @@ function ChatList() {
                   />
                 ))
               ) : (
-                <Typography sx={{ p: 2, color: '#737373' }}>
-                  계정을 찾을 수 없습니다.
-                </Typography>
+                <S.UserNotFound>계정을 찾을 수 없습니다.</S.UserNotFound>
               )}
             </S.ModalUserList>
 

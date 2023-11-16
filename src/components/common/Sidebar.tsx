@@ -1,6 +1,13 @@
 import React from 'react';
 import { Avatar, Box, Divider, Typography } from '@mui/material';
-import { Home, Message, SportsEsports, Person, Tag } from '@mui/icons-material';
+import {
+  Home,
+  Message,
+  SportsEsports,
+  Person,
+  Tag,
+  Logout,
+} from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import {
@@ -10,11 +17,13 @@ import {
   StyledBadge,
 } from '../../styles/SidebarStyles';
 import { userState } from '../../atoms';
+import useLogout from '../../hooks/useLogout';
 
 function Sidebar() {
   const { pathname } = useLocation();
   const userData = useRecoilValue(userState);
   const user = JSON.parse(userData);
+  const handleLogout = useLogout();
 
   return (
     <SidebarContainer>
@@ -82,6 +91,11 @@ function Sidebar() {
           <SidebarNavListItem isActive={pathname.startsWith('/profile')}>
             <Link to="/profile">
               <Person /> 프로필
+            </Link>
+          </SidebarNavListItem>
+          <SidebarNavListItem onClick={handleLogout}>
+            <Link to="/">
+              <Logout /> 로그아웃
             </Link>
           </SidebarNavListItem>
         </ul>
