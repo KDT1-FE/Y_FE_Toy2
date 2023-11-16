@@ -3,7 +3,7 @@ import axios from 'axios';
 const search = async (word: string): Promise<boolean> => {
   try {
     const response = await axios.get(
-      'http://ec2-15-164-231-45.ap-northeast-2.compute.amazonaws.com:8080/https://openapi.naver.com/v1/search/encyc.json',
+      'http://ec2-54-180-142-109.ap-northeast-2.compute.amazonaws.com:8080//https://openapi.naver.com/v1/search/encyc.json',
       {
         params: {
           query: word,
