@@ -26,17 +26,16 @@ interface Props {
 
 const EnterChannelModal = ({ isOpen, onClose, selectedChannel }: Props) => {
   const { title, category } = splitChannelName(selectedChannel.name);
-
-  const { data: myChannelList } = useMyChannels();
+  const { data: myChannels } = useMyChannels();
 
   const handleEnterChannel = async () => {
     const chatId = selectedChannel.id;
-    const enteredChannelId = myChannelList?.some(
+    const enteredChannelId = myChannels?.some(
       (channel) => channel.id === chatId,
     );
     if (!enteredChannelId) {
       await participateChannel({ chatId });
-      console.log('enteredChannelId', enteredChannelId);
+      location.reload();
     }
   };
 

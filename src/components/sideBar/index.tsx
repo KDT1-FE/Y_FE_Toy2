@@ -2,10 +2,8 @@ import { useState } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
-  Text,
   Divider,
   Heading,
-  VStack,
   Center,
   Link as ChakraLink,
 } from '@chakra-ui/react';
@@ -22,7 +20,7 @@ const SideBar = () => {
     if (isLoading) {
       return <Center>내 채팅 목록을 불러오는 중입니다.</Center>;
     }
-    if (myChannelList?.length === 0 && channels?.length === 0) {
+    if (myChannelList?.length === 0 || channels?.length === 0) {
       return <Center>현재 참여중인 채팅방이 없습니다.</Center>;
     }
     return (myChannelList || channels)?.map((channel) => (
@@ -71,7 +69,7 @@ const SideBar = () => {
           나의 채팅방
         </Heading>
         <Box h="50vh" overflowY="auto">
-          <>{channelBox()}</>
+          {channelBox()}
         </Box>
       </Box>
     </Box>
