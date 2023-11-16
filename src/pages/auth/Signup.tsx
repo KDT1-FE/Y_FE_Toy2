@@ -35,9 +35,9 @@ const Signup = () => {
     if (Object.keys(newErrors).length === 0) {
       const validId = await idCheck(user.id);
       console.log(validId);
-      if (!invalidId) {
+      if (!validId && character) {
         await signup(id, password, name, character);
-        navigate('/signin');
+        navigate('/');
       } else {
         setInvalidId(true);
       }
@@ -57,7 +57,7 @@ const Signup = () => {
 
   return (
     <div className={styles.signup}>
-      <div>
+      <div className={styles.signup__profile_container}>
         <button
           onClick={() => setIsModalOpen(true)}
           style={setProfileStyle}
@@ -76,7 +76,7 @@ const Signup = () => {
             <span className={styles.signup__form_error}>{errors?.id}</span>
           )}
           {invalidId && (
-            <span className={styles.error}>이미 존재하는 아이디입니다.</span>
+            <span className={styles.signup__form_error}>이미 존재하는 아이디입니다.</span>
           )}
           <input
             type="text"
@@ -94,7 +94,7 @@ const Signup = () => {
             onChange={onChangePassword}
           />
           {errors?.password && (
-            <span className={styles.form_error}>{errors?.password}</span>
+            <span className={styles.signup__form_error}>{errors?.password}</span>
           )}
           <input
             type="password"
@@ -113,9 +113,8 @@ const Signup = () => {
         </form>
       </div>
       <div className={styles.signin__link}>
-        <Link to="/signin">로그인하러 가기</Link>
+        <Link to="/">로그인하러 가기</Link>
       </div>
-      {/* {isModalOpen ? <SignupModal /> : null} */}
       {isModalOpen ? <SignupModal handleModal={handleModal} /> : null}
     </div>
   );

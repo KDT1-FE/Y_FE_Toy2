@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import styles from '@styles/pages/result.module.scss';
 import { Link } from 'react-router-dom';
@@ -62,4 +63,4 @@ const Result = ({ result }) => {
   );
 };
 
-export default Result;
+export default Result

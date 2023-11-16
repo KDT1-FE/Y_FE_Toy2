@@ -3,12 +3,18 @@ import styles from '@styles/pages/signin.module.scss';
 import { login } from '@api/login';
 import { useForm } from '@hooks/useForm';
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { useAppDispatch } from '@/hooks/redux';
 import { getUserId } from '@/store/userSlice';
+// import { jwtDecode } from "jwt-decode";
 
-// 로그인 성공 시에 로그인 유저 id 를 전역 상태로 뿌려주기
 
 const Signin = () => {
+
+  // const token = localStorage.getItem("access_token")
+  // const decoded = jwtDecode(token);
+
+  // console.log(decoded);
+
   const [id, onChangeId] = useForm();
   const [password, onChangePassword] = useForm();
   const [errors, setErrors] = useState('');
@@ -16,22 +22,19 @@ const Signin = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const userId = useAppSelector((state) => state.userId);
-  console.log(userId);
+  // console.log(userId);
 
   const signin = async (event) => {
     event.preventDefault();
 
     const result = await login(id, password);
-    console.log(result);
-
+    const { accessToken, refreshToken } = result;
     if (result.error) {
       setErrors(result.error);
     } else {
-      const { accessToken, refreshToken } = result;
+      console.log(result)
       localStorage.setItem('access_token', accessToken);
       localStorage.setItem('refresh_token', refreshToken);
-
       dispatch(getUserId(id));
       navigate('/lobby');
     }
