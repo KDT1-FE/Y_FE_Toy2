@@ -7,8 +7,6 @@ import io from 'socket.io-client';
 import { useRouter, usePathname } from 'next/navigation';
 import ChatingNavigation from './ChatingNavigation';
 import ChatingModal from './ChatingModal';
-import { formatCreatedAt } from '../chats/useFormatCreatedAt';
-import { instance } from '@/lib/api';
 import { getCookie } from '@/lib/cookie';
 
 interface Message {
@@ -40,17 +38,16 @@ export default function ChatingPage() {
 
   useEffect(() => {
     getUsers();
-  }, [getUserToggle]);
+  }, []);
 
   useEffect(() => {
-    const FetchMessagesInterval: any = setInterval(() => {
-      console.log(1);
+    const FetchMessagesInterval = setInterval(() => {
       socket.emit('fetch-messages');
     }, 2000);
     try {
       socket.on('connect', () => {
         console.log('Socket connected');
-        FetchMessagesInterval();
+        FetchMessagesInterval;
       });
 
       socket.on('disconnect', () => {
@@ -59,8 +56,6 @@ export default function ChatingPage() {
 
       socket.on('messages-to-client', (messageObject) => {
         setLoading(false);
-
-        console.log(messageObject);
         setMessages(messageObject.messages.reverse());
         clearInterval(FetchMessagesInterval);
       });
@@ -71,12 +66,12 @@ export default function ChatingPage() {
 
       socket.on('join', (data) => {
         console.log(data, 'join');
-        setGetUserToggle(!getUserToggle);
+        setUsers(data.users);
       });
 
       socket.on('leave', (data) => {
         console.log(data, 'leave');
-        setGetUserToggle(!getUserToggle);
+        setUsers(data.users);
       });
       return () => {
         socket.disconnect();
@@ -93,33 +88,40 @@ export default function ChatingPage() {
     },
   });
 
-  // const getUsers = async () => {
-  //   const response = await fetch(`https://fastcampus-chat.net/chat/only?chatId=${chatId}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${accessToken}`,
-  //       serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-  //     },
-  //   });
-  //   const data = await response.json();
-  //   console.log(data);
-
-  //   setChatName(data.chat.name);
-  //   setUsers(data.chat.users);
-  // };
-
   const getUsers = async () => {
-    try {
-      let res = await instance.get<unknown, any>(`https://fastcampus-chat.net/chat/only?chatId=${chatId}`);
-      const data = await res;
-      console.log(data);
+    const response = await fetch(`https://fastcampus-chat.net/chat/only?chatId=${chatId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+      },
+    });
+    const data = await response.json();
 
-      setChatName(data.chat.name);
-      setUsers(data.chat.users);
-    } catch (error) {
-      console.log(error);
+    // 유저 블락
+    if (data.message) router.back();
+    let userBlock = true;
+    for (let i = 0; i < data.chat.users.length; i++) {
+      if (userId == data.chat.users[i].id) {
+        userBlock = false;
+      }
     }
+    if (userBlock) router.back();
+
+    // 채팅방 이름, 유저 목록 가져오기
+    if (data.chat.users.length == 1 && data.chat.isPrivate) {
+      setChatName('상대방이 나간 채팅방입니다.');
+    } else if (data.chat.users.length == 2 && data.chat.isPrivate) {
+      for (let i = 0; i < data.chat.users.length; i++) {
+        if (userId != data.chat.users[i].id) {
+          setChatName(data.chat.users[i].username);
+        }
+      }
+    } else {
+      setChatName(data.chat.name);
+    }
+    setUsers(data.chat.users);
   };
 
   const findUserName = (userId: string): string | undefined => {
@@ -140,48 +142,118 @@ export default function ChatingPage() {
     return undefined;
   };
 
+  // 날짜 변환
+
+  const formatCreatedAt = (createdAt: Date) => {
+    const date = new Date(createdAt);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const amOrPm = hours >= 12 ? '오후' : '오전';
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${amOrPm} ${formattedHours}시 ${formattedMinutes}분`;
+  };
+
+  const formatGetDay = (createdAt: Date) => {
+    const date = new Date(createdAt);
+    return date.getDate();
+  };
+
+  const formatGetFullDay = (createdAt: Date) => {
+    const date = new Date(createdAt);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate() + 1;
+    return `${year}년 ${month}월 ${day}일`;
+  };
+
   return (
     <main>
-      <ChatingNavigation chatName={chatName} />
-      <ChatingModal users={users} chatId={chatId} />
-      {loading && <Loading />}
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <ChatingNavigation chatName={chatName} usersLength={users.length} />
+          <ChatingModal users={users} chatId={chatId} socket={socket} />
 
-      <MessagesContainer>
-        {messages
-          ? messages.map((message: Message, i: number) =>
-              userId == message.userId || userId == message.userId ? (
-                <MyMessageWrapper key={message.id}>
-                  <MyMessageText>{message.text}</MyMessageText>
-                  <MyMessageTime>{formatCreatedAt(message.createdAt)}</MyMessageTime>
-                </MyMessageWrapper>
-              ) : messages[i].userId == messages[i + 1]?.userId || messages[i].userId == messages[i + 1]?.userId ? (
-                <YourMessageWrapper key={message.id}>
-                  <YourMessageTextWrapper>
-                    <YourMessageText>{message.text}</YourMessageText>
-                    <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
-                  </YourMessageTextWrapper>
-                </YourMessageWrapper>
-              ) : (
-                <YourMessageWrapper key={message.id}>
-                  <YourMessageNameWrapper>
-                    <YourMessagePicture
-                      src={
-                        findUserPicture(message.userId) ||
-                        'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
-                      }
-                    />
-                    <YourMessageName>{findUserName(message.userId) || message.userId}</YourMessageName>
-                  </YourMessageNameWrapper>
-                  <YourMessageTextWrapper>
-                    <YourMessageText>{message.text}</YourMessageText>
-                    <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
-                  </YourMessageTextWrapper>
-                </YourMessageWrapper>
-              ),
-            )
-          : ''}
-      </MessagesContainer>
-      <MessageContainer socket={socket} />
+          <MessagesContainer>
+            {messages
+              ? messages.map((message: Message, i: number) =>
+                  message.text.split(':')[0] == 'notice09' ? (
+                    <>
+                      <NoticeMessageWrapper>
+                        <NoticeText>{message.text.split(':')[1]}</NoticeText>
+                      </NoticeMessageWrapper>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  ) : userId == message.userId || userId == message.userId ? (
+                    <>
+                      <MyMessageWrapper key={message.id}>
+                        <MyMessageText>{message.text}</MyMessageText>
+                        <MyMessageTime>{formatCreatedAt(message.createdAt)}</MyMessageTime>
+                      </MyMessageWrapper>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  ) : messages[i].userId == messages[i + 1]?.userId || messages[i].userId == messages[i + 1]?.userId ? (
+                    <>
+                      <YourMessageWrapper key={message.id}>
+                        <YourMessageTextWrapper>
+                          <YourMessageText>{message.text}</YourMessageText>
+                          <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
+                        </YourMessageTextWrapper>
+                      </YourMessageWrapper>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <YourMessageWrapper key={message.id}>
+                        <YourMessageNameWrapper>
+                          <YourMessagePicture
+                            src={
+                              findUserPicture(message.userId) ||
+                              'https://gravatar.com/avatar/0211205be1e2bce90bbe53c5e0d8aaff?s=200&d=retro'
+                            }
+                          />
+                          <YourMessageName>{findUserName(message.userId) || message.userId}</YourMessageName>
+                        </YourMessageNameWrapper>
+                        <YourMessageTextWrapper>
+                          <YourMessageText>{message.text}</YourMessageText>
+                          <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
+                        </YourMessageTextWrapper>
+                      </YourMessageWrapper>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  ),
+                )
+              : ''}
+          </MessagesContainer>
+          <MessageContainer socket={socket} />
+        </>
+      )}
     </main>
   );
 }
@@ -315,4 +387,21 @@ const Loading = styled.div`
       transform: rotate(360deg);
     }
   }
+`;
+
+const NoticeMessageWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+`;
+
+const NoticeText = styled.div`
+  padding: 10px 15px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  background-color: #888;
+  color: #eee;
 `;
