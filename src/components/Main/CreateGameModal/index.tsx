@@ -170,7 +170,7 @@ const CreateGameModal = ({ setModal, socket }: Props) => {
   const navigate = useNavigate();
   const fireFetch = useFireFetch();
 
-  const [radioInput, setRadioInput] = useState([3, 4, 5, 6]);
+  const [radioInput] = useState([3, 4, 5, 6]);
 
   // 이모지 인스턴스 및 데이터 생성
   const [emoji, setEmoji] = useState("⭐");

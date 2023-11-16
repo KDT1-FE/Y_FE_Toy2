@@ -56,6 +56,10 @@ const GameCard = ({
 
   // 게임 입장 함수
   const joinGame = () => {
+    if (users.length === 0) {
+      alert("없는 방");
+      location.reload();
+    }
     fireFetch.get("game", "id", id).then((res: any) => {
       socket.emit("message-to-server", `${user.id}:${id}:!#%&(`);
       const users = [...res[0].users, user.id];
@@ -101,7 +105,9 @@ const GameCard = ({
             color="white"
             _hover={{ bg: "blackAlpha.900" }}
             onClick={joinGame}
-            isDisabled={status === "게임중" ? true : false}
+            isDisabled={
+              status === "게임중" || users.length === num ? true : false
+            }
           >
             입장하기
           </Button>
