@@ -88,6 +88,7 @@ const Game = () => {
 
   useEffect(() => {
     setSpeaking(users[0]);
+    console.log(users);
   }, [users]);
 
   useEffect(() => {

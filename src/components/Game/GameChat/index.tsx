@@ -160,7 +160,7 @@ const GameChat: React.FC<GameChatProps> = ({
         setMessages([...messages, { id: "system", text: systemMessage }]);
         setUsers(responseData.users);
         setPlayer([...player, joinId]);
-        console.log(player);
+        // console.log(player);
       }
     });
 
@@ -171,7 +171,6 @@ const GameChat: React.FC<GameChatProps> = ({
       setUsers(responseData.users);
       const copy = [...player];
       const newPlayer = copy.filter((player) => player !== responseData.leaver);
-      console.log(player);
       setPlayer(newPlayer);
     });
 
