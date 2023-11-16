@@ -1283,7 +1283,7 @@ CHWIMIMATE
 
 ### 채팅
 
-<img src="https://github.com/YongYong21/ToyProject2/blob/develop/src/assets/images/mate4.png" />
+<img src="https://github.com/YongYong21/ToyProject2/blob/main/src/assets/images/mate4.png" />
 
 <br/>
 
