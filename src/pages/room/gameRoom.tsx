@@ -145,7 +145,6 @@ const GameRoom: React.FC = () => {
           active: true,
           message: '축하합니다! 정답입니다! 게임이 종료되었습니다.',
         });
-        // gameSocket.emit('end_game', { roomId: roomId });
       } else if (data.winner !== myId) {
         setShowAlert({
           active: true,
@@ -154,11 +153,9 @@ const GameRoom: React.FC = () => {
       }
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
-    gameSocket.emit('end_game', { roomId: roomId });
 
     return () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);
-      gameSocket.off('end_game');
     };
   }, [roomId, gameSocket, userMessage]);
 
