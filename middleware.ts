@@ -1,8 +1,6 @@
-import { NextApiRequest } from 'next';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export const middleware = (request: NextApiRequest) => {
+export const middleware = () => {
 	// const cookieStore = cookies();
 	// const cookie = cookieStore.get('accessToken');
 	// if (cookie) {
