@@ -1,9 +1,14 @@
-![Talkhaja](https://github.com/Toy2-team10/Talkhaja/assets/65649035/3edb727a-e9b9-4821-bf14-b5582e28a0e9)
-### 패스트캠퍼스 프론트엔드 부트캠프 토이 프로젝트 2
-### 숙소 채팅 프로젝트 (?)
+<p align="center"> 
+  <img src="https://github.com/Toy2-team10/Talkhaja/assets/65649035/3edb727a-e9b9-4821-bf14-b5582e28a0e9" alt="Talkhaja logo"/>
+</p>
 
+### <p align="center">함께 나누어 더 즐거운 여행 수다, Talk하자!</p>
 
-## :clap: Contributors
+### <p align="center">Talkhaja에서 유저들과 함께 여러분들의 여정을 공유하고 즐기세요.</p>
+
+##
+
+## :clap: 10조 Contributors
 
 <table>
     <tr>
@@ -11,12 +16,14 @@
         <td align="center"><img alt="avatar" src="https://github.com/moana16.png" width="100"></td>
         <td align="center"><img alt="avatar" src="https://github.com/junkue20.png" width="100"></td>
         <td align="center"><img alt="avatar" src="https://github.com/Eojoonhyuk.png" width="100"></td>
+        <td align="center"><img alt="avatar" src="https://github.com/developer-jyyun.png" width="100"></td>
     </tr>
     <tr>
         <td align="center"><a href="https://github.com/jseo9732">서지수</a></td>
         <td align="center"><a href="https://github.com/moana16">김지민</a></td>
         <td align="center"><a href="https://github.com/junkue20">박준규</a></td>
         <td align="center"><a href="https://github.com/Eojoonhyuk">어준혁</a></td>
+        <td align="center"><a href="https://github.com/Eojoonhyuk">윤지영</a></td>
     </tr>
 </table>
 
@@ -53,19 +60,44 @@
 
 ```
 
-## :hammer: Stack
+## 🛢️ Stack
+
+### 🛠️ Tools
 
 <p align="left">
+  <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
+  <img src="https://img.shields.io/badge/vscode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
+  <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+</p>
+
+### 🤝 Collaboration
+
+<p align="left">
+  <img src="https://img.shields.io/badge/notion-ffffff?style=for-the-badge&logo=notion&logoColor=black">
+  <img src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=Jira&logoColor=white">
+  <img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-  <img src="https://img.shields.io/badge/Html-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Typescript-F7DF1E?style=for-the-badge&logo=typescript&logoColor=black"/>
+</p>
+
+### 🎨 Frontend Stacks
+
+<p align="left">
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black"/>
+  <img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"/>
+  <img src="https://img.shields.io/badge/sass-CC6699?style=for-the-badge&logo=sass&logoColor=white"/>
+  <br/>
   <img src="https://img.shields.io/badge/recoil-007AF4?style=for-the-badge&logo=recoil&logoColor=black"/>
-  <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black"/>
-  <img src="https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=fff&style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/Eslint-4B32C3?logo=eslint&logoColor=fff&style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/vercel-ffffff?style=for-the-badge&logo=vercel&logoColor=black"/>
   <img src="https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white">
+  <img src="https://img.shields.io/badge/Eslint-4B32C3?logo=eslint&logoColor=white&style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=black&style=for-the-badge"/>
+</p>
+
+### ⚙️ Backend Stacks
+
+<p align="left">
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black"/>
 </p>
 
 ## Git Branches
@@ -76,3 +108,161 @@
 
 ## 개인별 작업 내용
 
+<!-- -------------------------- 지수님 자리 -------------------------- -->
+<details>
+<summary>서지수</summary>
+
+## 작업 세부내용
+
+- ~~설정.
+- ~~시도.
+
+## ~~ 기능 구현
+
+- ~~ 할 수 있는 기능 추가.
+
+|                                     로그인 시 publicRouter 이동 방지                                     |                                   로그아웃 시 privateRouter 이동 방지                                   |
+| :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| ![privateRouter](https://github.com/wowba/Wikinity/assets/87873821/972183ef-3738-425c-9506-dc4d7b1d0ed6) | ![publicRouter](https://github.com/wowba/Wikinity/assets/87873821/47618172-79df-4404-bfd2-3adaf381df6e) |
+
+## 발생했었던 이슈
+
+~가 발생했는데, ~로 고쳤다!
+
+```javascript
+console.log('hello, world!');
+```
+
+## 후기
+
+후기후기-
+
+</details>
+
+<!-- -------------------------- 지민님 자리 -------------------------- -->
+
+<details>
+<summary>김지민</summary>
+
+## 작업 세부내용
+
+- ~~설정.
+- ~~시도.
+
+## ~~ 기능 구현
+
+- ~~ 할 수 있는 기능 추가.
+
+|                                     로그인 시 publicRouter 이동 방지                                     |                                   로그아웃 시 privateRouter 이동 방지                                   |
+| :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| ![privateRouter](https://github.com/wowba/Wikinity/assets/87873821/972183ef-3738-425c-9506-dc4d7b1d0ed6) | ![publicRouter](https://github.com/wowba/Wikinity/assets/87873821/47618172-79df-4404-bfd2-3adaf381df6e) |
+
+## 발생했었던 이슈
+
+~가 발생했는데, ~로 고쳤다!
+
+```javascript
+console.log('hello, world!');
+```
+
+## 후기
+
+후기후기-
+
+</details>
+
+<!-- -------------------------- 준규 자리 -------------------------- -->
+
+<details>
+<summary>박준규</summary>
+
+## 작업 세부내용
+
+- ~~설정.
+- ~~시도.
+
+## ~~ 기능 구현
+
+- ~~ 할 수 있는 기능 추가.
+
+|                                     로그인 시 publicRouter 이동 방지                                     |                                   로그아웃 시 privateRouter 이동 방지                                   |
+| :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| ![privateRouter](https://github.com/wowba/Wikinity/assets/87873821/972183ef-3738-425c-9506-dc4d7b1d0ed6) | ![publicRouter](https://github.com/wowba/Wikinity/assets/87873821/47618172-79df-4404-bfd2-3adaf381df6e) |
+
+## 발생했었던 이슈
+
+~가 발생했는데, ~로 고쳤다!
+
+```javascript
+console.log('hello, world!');
+```
+
+## 후기
+
+후기후기-
+
+</details>
+
+<!-- -------------------------- 준혁님 자리 -------------------------- -->
+
+<details>
+<summary>어준혁</summary>
+
+## 작업 세부내용
+
+- ~~설정.
+- ~~시도.
+
+## ~~ 기능 구현
+
+- ~~ 할 수 있는 기능 추가.
+
+|                                     로그인 시 publicRouter 이동 방지                                     |                                   로그아웃 시 privateRouter 이동 방지                                   |
+| :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| ![privateRouter](https://github.com/wowba/Wikinity/assets/87873821/972183ef-3738-425c-9506-dc4d7b1d0ed6) | ![publicRouter](https://github.com/wowba/Wikinity/assets/87873821/47618172-79df-4404-bfd2-3adaf381df6e) |
+
+## 발생했었던 이슈
+
+~가 발생했는데, ~로 고쳤다!
+
+```javascript
+console.log('hello, world!');
+```
+
+## 후기
+
+후기후기-
+
+</details>
+
+<!-- -------------------------- 지영님 자리 -------------------------- -->
+
+<details>
+<summary>윤지영</summary>
+
+## 작업 세부내용
+
+- ~~설정.
+- ~~시도.
+
+## ~~ 기능 구현
+
+- ~~ 할 수 있는 기능 추가.
+
+|                                     로그인 시 publicRouter 이동 방지                                     |                                   로그아웃 시 privateRouter 이동 방지                                   |
+| :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| ![privateRouter](https://github.com/wowba/Wikinity/assets/87873821/972183ef-3738-425c-9506-dc4d7b1d0ed6) | ![publicRouter](https://github.com/wowba/Wikinity/assets/87873821/47618172-79df-4404-bfd2-3adaf381df6e) |
+
+## 발생했었던 이슈
+
+~가 발생했는데, ~로 고쳤다!
+
+```javascript
+console.log('hello, world!');
+```
+
+## 후기
+
+후기후기-
+
+</details>
