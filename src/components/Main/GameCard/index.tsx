@@ -54,6 +54,12 @@ const GameCard = ({
     start: false,
   });
 
+  const getChat = useFetch({
+    url: `https://fastcampus-chat.net/chat/only?chatId=${id}`,
+    method: "GET",
+    start: false,
+  });
+
   // // 게임 정보 조회
   // const gameInfo = useFetch({
   //   url: `https://fastcampus-chat.net/chat/only?chatId=${id}`,
@@ -63,10 +69,14 @@ const GameCard = ({
 
   // 게임 입장 함수
   const joinGame = () => {
-    socket.emit("message-to-server", `${user.id}:${id}:!#%&(`);
-    join.refresh();
-    fireFetch.updateData("game", id, { users: [...users, user.id] });
-    navigate(`/game?gameId=${id}`);
+    getChat.refresh();
+    fireFetch.get("game", "id", id).then((res: any) => {
+      socket.emit("message-to-server", `${user.id}:${id}:!#%&(`);
+      const users = [...res[0].users, user.id];
+      fireFetch.updateData("game", id, { users: users });
+      join.refresh();
+      navigate(`/game?gameId=${id}`);
+    });
   };
 
   return (

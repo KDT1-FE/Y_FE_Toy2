@@ -80,7 +80,7 @@ const Game = () => {
   // 게임 소켓 서버 연결
   const socket = connect(gameId as string);
   // 메인 소켓 서버 연결 (메인페이지 상태 변경 통신)
-  const socketMain = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
+  const socketMain = connect("617bf718-cfa1-48d2-8007-b402907e540b");
 
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -101,8 +101,6 @@ const Game = () => {
     if (gameData.data && gameData.data.length > 0) {
       setStatus(gameData.data[0].status);
       setUsers(gameData.data?.[0]?.users);
-    } else {
-      setUsers([]);
     }
   }, [gameData.data]);
 
@@ -125,6 +123,16 @@ const Game = () => {
     },
     start: false,
   });
+
+  const leaveGame = () => {
+    leave.refresh();
+    const newUsers = users.filter((value) => value !== user.id);
+    socketMain.emit("message-to-server", `${user.id}:${gameId}:)*^$@`);
+    fireFetch.updateData("game", gameId as string, {
+      users: newUsers,
+    });
+    navigate("/gameLists");
+  };
 
   const handleGameInfoReceived = (gameInfo: GameInfo) => {
     setCategory(gameInfo.category);
@@ -164,23 +172,7 @@ const Game = () => {
         mt="50px"
       >
         <GridItem>
-          <Button
-            w="200px"
-            h="100%"
-            mr="20px"
-            onClick={() => {
-              const newUsers = users.filter((value) => value !== user.id);
-              socketMain.emit(
-                "message-to-server",
-                `${user.id}:${gameId}:)*^$@`,
-              );
-              fireFetch.updateData("game", gameId as string, {
-                users: newUsers,
-              });
-              leave.refresh();
-              navigate("/gameLists");
-            }}
-          >
+          <Button w="200px" h="100%" mr="20px" onClick={leaveGame}>
             뒤로가기
           </Button>
         </GridItem>
@@ -241,6 +233,7 @@ const Game = () => {
             speaking={speaking}
             num={num}
             player={users}
+            setPlayer={setUsers}
             setNum={setNum}
             setSpeaking={setSpeaking}
             onGameInfoReceived={handleGameInfoReceived}
