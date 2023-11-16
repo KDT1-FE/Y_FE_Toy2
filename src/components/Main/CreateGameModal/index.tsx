@@ -170,6 +170,8 @@ const CreateGameModal = ({ setModal, socket }: Props) => {
   const navigate = useNavigate();
   const fireFetch = useFireFetch();
 
+  const [radioInput, setRadioInput] = useState([3, 4, 5, 6]);
+
   // 이모지 인스턴스 및 데이터 생성
   const [emoji, setEmoji] = useState("⭐");
   const pickerRef = useRef(null);
@@ -344,72 +346,21 @@ const CreateGameModal = ({ setModal, socket }: Props) => {
 
             <Radio>
               <div className="p">인원 선택</div>
-              <div>
-                <input
-                  type="radio"
-                  id="1"
-                  name="drone"
-                  value="1"
-                  checked={roomData.num === 1}
-                  onChange={handleRadioChange}
-                />
-                <label htmlFor="1">1</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="2"
-                  name="drone"
-                  value="2"
-                  checked={roomData.num === 2}
-                  onChange={handleRadioChange}
-                />
-                <label htmlFor="2">2</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="3"
-                  name="drone"
-                  value="3"
-                  checked={roomData.num === 3}
-                  onChange={handleRadioChange}
-                />
-                <label htmlFor="3">3</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="4"
-                  name="drone"
-                  value="4"
-                  checked={roomData.num === 4}
-                  onChange={handleRadioChange}
-                />
-                <label htmlFor="4">4</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="5"
-                  name="drone"
-                  value="5"
-                  checked={roomData.num === 5}
-                  onChange={handleRadioChange}
-                />
-                <label htmlFor="5">5</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="6"
-                  name="drone"
-                  value="6"
-                  checked={roomData.num === 6}
-                  onChange={handleRadioChange}
-                />
-                <label htmlFor="6">6</label>
-              </div>
+              {radioInput.map((num: number) => {
+                return (
+                  <div key={num}>
+                    <input
+                      type="radio"
+                      id={num.toString()}
+                      name="drone"
+                      value={num.toString()}
+                      checked={roomData.num === num}
+                      onChange={handleRadioChange}
+                    />
+                    <label htmlFor={num.toString()}>{num}</label>
+                  </div>
+                );
+              })}
             </Radio>
             <Empty />
 
