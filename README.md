@@ -139,7 +139,94 @@ console.log('hello, world!');
 
 </details>
 
-<!-- -------------------------- 지민님 자리 -------------------------- -->
+## :thought_balloon: 채팅 주요 기능
+
+#### 소켓 연결
+
+#### 채팅 보내기, 채팅 받기
+
+#### 이전 채팅 가져오기
+
+#### 채팅 데이터 수정하기
+
+#### 채팅 나가기
+
+## :art: 디자인
+
+#### 헤더
+#### 채팅방 목록
+
+## :bomb: 트러블 슈팅
+
+:x: 오류
+
+Duplicate atom key "userIdState". This is a FATAL ERROR in production. But it is safe to ignore this warning if it occurred because of
+hot module replacement.
+
+분명 atom은 하나인데 자꾸 이런 오류가 떴습니다.
+찾아보니 Next.js에서 build를 하면 atom을 저장해두는데 이것 때문에 두개로 중복된다고 Next.js에서 판단한다는 유명한 오류였습니다.;;
+
+:heavy_check_mark: 해결
+
+RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
+.App.js 파일 상단에 추가하니 오류가 사라졌습니다!
+
+:x: 오류
+
+socket을 두번씩 생성되는 오류가 있었습니다. 이 때문에 소켓 connect가 제대로 이루어지지 않았습니다.
+
+:heavy_check_mark: 해결
+
+next.config.js 파일에서 reactStrictMode: false 를 해주었습니다.
+react에서는 reactStrictMode: true이면 render가 강제적으로 두번씩 된다고 합니다!
+또한 무한 소켓 연결을 막기 위해 useMemo를 사용하여 소켓을 생성해주었습니다
+
+:x: 오류
+
+socke을 connect 했음에도 불구하고 fetch-messages가 서버로 전송되지 않는 에러
+
+:heavy_check_mark: 해결
+
+setTimeout을 사용해 소켓에 요청이 들어갈때까지 요청을 보냈습니다.
+
+:x: 오류
+채팅방에서 text를 작성해 onChange 이벤트가 발생하면 상관없는 userId API를 호출하는 오류
+
+:heavy_check_mark: 해결
+userId API를 useEffect로 감싸서 의존성 배열에 instance,chatId를 줬었는데 chatId로만 의존성 배열을 변경하였습니다. 
+
+:x: 오류
+Image is missing required "src" property: 
+
+:heavy_check_mark: 해결
+소켓에서 받아오는 대화정보는 userId만 받아와서 해당 userID의 정보를 API요청으로 받아줄때
+유저 이미지를 useState('')값으로 초기화를 했더니 발생한 오류였읍니다.
+src 에userImage의 경로가 들어가긴 하지만 Nextjs에서 제공하는 Image태그는 src값을 절대 빈값으로 받지않아 발생는 오류였습니다. 따라서 response로 받아오는 이미지 url값이 있을때만 해당 Image 태그를 반환하게 수정하였더니 해결되었습니다
+
+
+
+
+
+
+
+
+
+## 후기
+
+react에서 소켓 연결은 처음이라 정말 많은 우여곡절이 있었다.:sweat_drops:  소켓 연결 시도하면서 너무 막막했지만 팀원들 덕분에 다같이 해결할 수 있었다 + 멘토님 :fire::fire:<br/>
+진짜 채팅 기능 구현 못할 것 같았는데 해냈다..도와주신 팀원분들 모두 감사합니다!:+1::+1:<br/>
+scss를 처음 사용해보았는데 생각보다 편리해서 좋았다 css를 상속할 수 있다는게 진짜 편리한 것 같다.<br/> 
+axios를 사용해서 API 연결했는데 처음에는 에러 코드가 너무 세분화 되어있지 않아서 불편했는데 덕분에 네트워크 탭을 마스터 한 것 같아서 뿌듯하다..이제는 어떠한 네트워크 오류가 발생해도 해결할 수 있을 듯한 느낌:+1: <br/>
+어찌보면 간단한 기능을 구현하는 거라고 생각했는데 생각보다 시간이 걸렸고 꽤나 어려움을 느꼈다.. 그리고 이번에도 Next.js를 제대로 활용하지 못한 느낌이라 아쉬웠다..
+소켓 연결에 시간을 많이 뺏겨 SSR을 제대로 공부하고 사용할 시간적 여유가 없었어서 아쉬웠다..!
+그래도 협업하는 법을 다시 한 번 알게되었고 또, 처음으로 zira를 사용해볼 수 있어서 좋았다!
+하지만 아무래도 공통 컴포넌트를 개인적으로 작업하는 건 한계가 있는 것 같아서 다음 프로젝트에서는 꼭 storybook을 사용해 봐야겠다!
+
+
+
+
+
+
 
 <details>
 <summary>김지민</summary>
