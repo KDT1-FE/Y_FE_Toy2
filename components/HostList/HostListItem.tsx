@@ -24,6 +24,8 @@ export default function HostListItem({
           className={styles['host-img']}
           src={findUser.picture}
           alt={findUser.name}
+          width={50}
+          height={50}
         />
         <div>
           <p className={styles.name}>{findUser.name}</p>
