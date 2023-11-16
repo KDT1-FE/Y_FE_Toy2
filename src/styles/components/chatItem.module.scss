@@ -8,12 +8,32 @@
 .chatItemContainer {
   padding: 1rem;
 }
+.selfChatItemContainer {
+  text-align: end;
 
+  .chatItem {
+    display: flex;
+    justify-content: end;
+
+    img {
+      order: 1;
+    }
+  }
+  .chatItemNickname {
+    margin-right: 2rem;
+  }
+  .chatItemText {
+    margin: -2rem 12rem 2rem 0;
+  }
+}
 .chatItem {
   display: flex;
-  margin: 1rem;
+  margin: 3rem;
 }
-
+.selfChatItem {
+  display: flex;
+  justify-content: end;
+}
 .chatItemNickname {
   font-size: 2rem;
   color: #d9d9d9;
@@ -25,7 +45,7 @@
   font-size: 2rem;
   padding: 1rem 3rem;
   color: black;
-  margin: -2rem 9rem 0 9rem;
+  margin: -2rem 0 2rem 12rem;
   vertical-align: middle;
   background-color: #d9d9d9;
   height: 6rem;

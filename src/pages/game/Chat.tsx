@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import ChatHeader from '../../components/ChatHeader';
 import styles from '@styles/pages/chat.module.scss';
 import ChatItem from '../../components/ChatItem';
@@ -9,12 +9,14 @@ import { useAppSelector } from '@/hooks/redux';
 const accessToken = localStorage.getItem('access_token');
 const serverId = import.meta.env.VITE_FAST_KEY;
 
-
 const ChatPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const chatId = searchParams.get('chatId');
+  const pocketId = searchParams.get('pocketId');
+  const navigate = useNavigate();
   const [currentPlayers, setCurrentPlayers] = useState<number>(6);
   const [totalPlayers, setTotalPlayers] = useState<number>(10);
+  // const [users, setUsers] = useState<string[]>([]);
 
   const userId = useAppSelector((state) => state.userId);
 
@@ -25,7 +27,6 @@ const ChatPage: React.FC = () => {
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // 소켓 연결 설정
     const newSocket: Socket = io(
       `https://fastcampus-chat.net/chat?chatId=${chatId}`,
       {
@@ -36,6 +37,18 @@ const ChatPage: React.FC = () => {
       },
     );
     setSocket(newSocket);
+
+    newSocket.on('join', (res) => {
+      console.log(res.users);
+      console.log(res.users.length);
+
+      if (res.users.length === 4) {
+        setTimeout(() => {
+          navigate(`/role?chatId=${chatId}&pocketId=${pocketId}`);
+        }, 3000);
+      }
+    });
+
     // 컴포넌트 언마운트 시 소켓 연결 해제
     return () => {
       newSocket.disconnect();
@@ -43,9 +56,19 @@ const ChatPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (socket)
+      socket.on('join', (res) => {
+        console.log(res.users);
+      });
+
+    return () => {
+      if (socket) socket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
     if (socket) {
       socket.on('message-to-client', (messageObject) => {
-        console.log(messageObject, 'mess');
         setChats((prev) => [...prev, messageObject]);
       });
     }
@@ -90,7 +113,7 @@ const ChatPage: React.FC = () => {
           {chats.map((chatItem) => (
             <ChatItem
               key={chatItem.id}
-              userId={chatItem.userId}
+              chatingUserId={chatItem.userId}
               text={chatItem.text}
             />
           ))}
