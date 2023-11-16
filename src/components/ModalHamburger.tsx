@@ -3,7 +3,6 @@ import styled from "styled-components";
 import "../style/Modal.css";
 import useApi from "../hooks/useApi";
 import { ChatI } from "../pages/Chat";
-import { getTime } from "../utils/getTime";
 import MenuIcon from "../assets/images/menu-ico.png";
 
 const ModalExample = ({
@@ -33,10 +32,8 @@ const ModalExample = ({
       const data = await getData("https://fastcampus-chat.net/chat");
       const chatData = data.chats;
 
-      const myRoom = getTime(chatData);
-
-      setChatRoom(myRoom);
-      console.log("success");
+      setChatRoom(chatData);
+      alert("채팅방 삭제가 되었습니다.");
     } catch (error) {
       console.log(error);
     }
