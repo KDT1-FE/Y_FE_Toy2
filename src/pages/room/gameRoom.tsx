@@ -20,6 +20,8 @@ import { ResponsiveValue } from '@chakra-ui/react';
 import { getCookie } from '../../util/util';
 
 const GameRoom: React.FC = () => {
+  const [isQuizMaster, setIsQuizMaster] = useState(false);
+
   const { id } = useParams<{ id: string }>();
   const [roomId, setRoomId] = useRecoilState(chattingIdState);
   const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
@@ -58,6 +60,7 @@ const GameRoom: React.FC = () => {
 
     gameSocket.on('quiz_master_set', (quizMasterId: string) => {
       console.log(myId, quizMasterId);
+      setIsQuizMaster(myId === quizMasterId);
       if (true) {
         if (myId === quizMasterId) {
           // alert('당신은 출제자 입니다!');
@@ -164,7 +167,14 @@ const GameRoom: React.FC = () => {
       </RoomHeader>
 
       <RoomMain>
-        <Drawing />
+        {isQuizMaster ? (
+          <Drawing />
+        ) : (
+          <div style={{ position: 'relative' }}>
+            <Drawing />
+            <DrawingBlock />
+          </div>
+        )}
 
         <GameChatting chatId={roomId} />
       </RoomMain>
@@ -231,4 +241,15 @@ const UserList = styled.div`
   margin-top: 30px;
   margin-bottom: 30px;
 `;
+
+const DrawingBlock = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.01);
+  border-radius: 15px;
+`;
+
 export default GameRoom;
