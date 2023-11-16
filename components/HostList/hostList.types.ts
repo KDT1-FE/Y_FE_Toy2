@@ -1,14 +1,14 @@
-export interface Host {
+export interface FirebaseData {
   id: string;
-  name: string;
-  picture: string;
   location: string;
   address: string;
-  description?: string;
-  service?: string;
+  description: string;
+  service: string;
 }
-export interface UserList {
+export interface ApiData {
   id: string;
   name: string;
   picture: string;
 }
+
+export interface Host extends FirebaseData, ApiData {}

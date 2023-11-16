@@ -6,30 +6,30 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
-import { Host, UserList } from '@/components/HostList/hostList.types';
+import { FirebaseData, ApiData } from '@/components/HostList/hostList.types';
 import userListAPI from '@/apis/userListAPI';
 import app from './firebaseConfig';
-// import { hostData } from './hostData';
 
 export const storage = getStorage(app);
 export const db = getFirestore(app);
-
-const locations = ['부산', '제주', '강릉', '여수', '양양'];
+export const hostsCollection = collection(db, 'hosts');
+export const locations = ['부산', '제주', '강릉', '여수', '양양'];
 
 // 지역별 데이터 필터링
-export const getHostsByLocation = async (location: string): Promise<Host[]> => {
+export const getHostsByLocation = async (
+  location: string,
+): Promise<FirebaseData[]> => {
   try {
-    const hostsCollection = collection(db, 'hosts');
     const locationQuery = query(
       hostsCollection,
       where('location', '==', location),
     );
     const snapshot = await getDocs(locationQuery);
 
-    const hosts: Host[] = [];
+    const hosts: FirebaseData[] = [];
 
     snapshot.forEach(hostDoc => {
-      hosts.push(hostDoc.data() as Host);
+      hosts.push(hostDoc.data() as FirebaseData);
     });
     return hosts;
   } catch (error) {
@@ -38,8 +38,20 @@ export const getHostsByLocation = async (location: string): Promise<Host[]> => {
   }
 };
 
+// firebase에서 hosts 데이터 가져오기
+export const getFirebaseData = async (): Promise<FirebaseData[]> => {
+  const querySnapshot = await getDocs(hostsCollection);
+
+  const firebaseHostData: FirebaseData[] = [];
+  querySnapshot.forEach(doc => {
+    const data = doc.data() as FirebaseData;
+    firebaseHostData.push(data);
+  });
+  return firebaseHostData;
+};
+
 // 전체 유저 조회
-export async function fetchHostUsers(): Promise<UserList[]> {
+export async function fetchAllUsers(): Promise<ApiData[]> {
   try {
     const response = await userListAPI.getAllUserList();
     return response.data;
@@ -48,5 +60,3 @@ export async function fetchHostUsers(): Promise<UserList[]> {
     throw error;
   }
 }
-
-export { locations };
