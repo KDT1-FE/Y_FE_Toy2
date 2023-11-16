@@ -100,3 +100,18 @@ export const userState = atom<number>({
   key: 'userState',
   default: 0,
 });
+
+export const btnState = atom<any>({
+  key: 'btnState',
+  default: true,
+});
+
+export const submitState = atom<any>({
+  key: 'submitState',
+  default: false,
+});
+
+export const nowProfiles = atom<number>({
+  key: 'nowProfiles',
+  default: 0,
+});

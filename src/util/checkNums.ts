@@ -1,12 +1,10 @@
 import { useRecoilValue } from 'recoil';
-import { onlineUserStateInGameRoom } from '../states/atom';
+import { nowProfiles } from '../states/atom';
 
 const CheckNums = (): boolean => {
-  const nowUsers = useRecoilValue(onlineUserStateInGameRoom);
-  console.log(nowUsers);
-  const len = nowUsers.length;
+  const nowUsers = useRecoilValue(nowProfiles);
 
-  return len === 2;
+  return nowUsers === 4;
 };
 
 export default CheckNums;

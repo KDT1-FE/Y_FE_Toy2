@@ -58,6 +58,7 @@ export const chatSocket = (accessToken: any, chatId: string) => {
   return chattingSocket;
 };
 
+
 export const drawSocket = io(
   'https://fastmindserver-7da746e63a7f.herokuapp.com/',
 );
@@ -65,6 +66,7 @@ export const drawSocket = io(
 export const gameSocket = io(
   'https://fastmindserver-7da746e63a7f.herokuapp.com/',
 );
+
 
 export const disconnectLoginSocket = () => {
   if (serverSocket) {

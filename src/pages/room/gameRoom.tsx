@@ -4,10 +4,12 @@ import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
+  btnState,
   chattingIdState,
   myMessageState,
   roomIdState,
   userRoomState,
+  submitState,
   usersInRoom,
   userState,
 } from '../../states/atom';
@@ -79,7 +81,10 @@ const GameRoom: React.FC = () => {
   useEffect(() => {
     setUserRoomUser(userNumber);
   }, [roomNumber]);
+  const check = CheckNums();
 
+  const [btnVisible, setBtnVisible] = useState(true);
+  const [submitVisible, setSubmitVisible] = useState(false);
   useEffect(() => {
     if (lastMessage.text !== '') {
       setUserMessage(lastMessage);
@@ -130,7 +135,7 @@ const GameRoom: React.FC = () => {
     gameSocket.emit('joinRoom', roomId);
 
     gameSocket.on('quiz_master_set', (quizMasterId: string) => {
-      console.log(myId, quizMasterId);
+      console.log('여기', myId, quizMasterId);
       if (true) {
         if (myId === quizMasterId) {
           // alert('당신은 출제자 입니다!');
@@ -138,13 +143,18 @@ const GameRoom: React.FC = () => {
             active: true,
             message: '당신은 출제자 입니다!',
           });
+
+          setSubmitVisible(true);
         } else {
           setShowAlert({
             active: true,
             message: '새로운 출제자가 선정되었습니다!',
           });
+
+          setSubmitVisible(false);
         }
         setIsQuizMasterAlertShown(true);
+        setBtnVisible(false);
       }
     });
 
@@ -156,6 +166,7 @@ const GameRoom: React.FC = () => {
   const startGame = () => {
     gameSocket.emit('start_game', { roomId, myId });
     setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
+    setBtnVisible(false);
   };
 
   const handleSetAnswerChange = (
@@ -176,6 +187,7 @@ const GameRoom: React.FC = () => {
           active: true,
           message: '문제가 출제되었습니다!',
         });
+        setSubmitVisible(false);
       }
     });
     return () => {
@@ -202,6 +214,7 @@ const GameRoom: React.FC = () => {
           message: '유저가 정답을 맞췄습니다! 게임이 종료되었습니다.',
         });
       }
+      setBtnVisible(true);
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
 
@@ -223,15 +236,19 @@ const GameRoom: React.FC = () => {
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
           <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-          <button onClick={startGame}>start game</button>
-          <div>
-            <input
-              type="text"
-              value={answer}
-              onChange={handleSetAnswerChange}
-            />
-            <button onClick={submitSetAnswer}>Submit Answer</button>
-          </div>
+          {check && btnVisible && (
+            <button onClick={startGame}>Start Game</button>
+          )}
+          {submitVisible && (
+            <div>
+              <input
+                type="text"
+                value={answer}
+                onChange={handleSetAnswerChange}
+              />
+              <button onClick={submitSetAnswer}>Submit Answer</button>
+            </div>
+          )}
           {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>
       </RoomHeader>
