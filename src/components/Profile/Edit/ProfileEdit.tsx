@@ -12,6 +12,7 @@ import { db } from "../../../firebase/firebase";
 import useApi from "../../../hooks/useApi";
 import { useContext } from "react";
 import { AuthContext } from "../../../hooks/useAuth";
+import axios from "axios";
 
 const ProfileEditContainer = styled.div`
   width: 100%;
@@ -125,6 +126,7 @@ const ProfileEditInputWrap = styled.div`
     box-sizing: border-box;
 
     color: #999696;
+    border-color: #BFBFBF;
 
     font-family: "Pretendard";
     font-size: 16px;
@@ -161,17 +163,31 @@ function Profile() {
   );
 
   const { patchData } = useApi();
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken, refreshToken, setAccessToken } = useContext(AuthContext);
   const [isState, setIsState] = useState(false);
+
+  const refreshAccessToken = async () => {
+    const REFRESH_TOKEN_API_URL = "https://fastcampus-chat.net/refresh";
+    try {
+      const response = await axios.post(REFRESH_TOKEN_API_URL, {
+        refreshToken
+      });
+      setAccessToken(response.data.accessToken);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (isState) {
-      const 함수명 = async () => {
+      const patchApi = async () => {
         await patchData("https://fastcampus-chat.net/user", {
           name: name,
-          picture: backgroundImageUrl
+          picture: profileImageUrl
         });
       };
-      함수명();
+      patchApi();
+      refreshAccessToken();
     }
   }, [accessToken, isState]);
 

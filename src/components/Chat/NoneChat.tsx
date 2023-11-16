@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import ChatNone from "../../assets/images/chat-none.png";
 
 function NoneChat() {
   return (
     <NoneWrap>
-      <img src="/src/assets/images/chat-none.png" alt="채팅초기이미지" />
+      <img src={ChatNone} alt="채팅초기이미지" />
       <p className="tit">채팅방이 없습니다</p>
       <p className="txt">
         채팅방에서 주고 받은 대화를
@@ -29,6 +30,7 @@ const NoneWrap = styled.div`
   .tit {
     font-size: 1.4rem;
     font-weight: bold;
+    text-align:center;
     color: #6d6d6d;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -37,6 +39,7 @@ const NoneWrap = styled.div`
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.3;
+    text-align:center;
     color: #d7d7d7;
     margin-bottom: 30px;
   }

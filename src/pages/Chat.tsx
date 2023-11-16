@@ -6,6 +6,7 @@ import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 import Header from "../components/Header";
 import NoneChat from "../components/Chat/NoneChat";
+import { darkTheme } from "../style/theme";
 
 export interface User {
   id: string;
@@ -31,13 +32,12 @@ export interface ChatI {
 
 function Chat() {
   const [chatRoom, setChatRoom] = useState<ChatI[]>([]);
-  const [roomName, setRoomName] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const { getData, postData } = useApi();
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
   const [loginUser, setLoginUser] = useState<User | null>(null);
   const [isShowRoom, setIsShowRoom] = useState(false);
+  const [rooms, setRooms] = useState<ChatI[]>([]);
 
   useEffect(() => {
     if (accessToken) {
@@ -45,53 +45,13 @@ function Chat() {
         try {
           const data = await getData("https://fastcampus-chat.net/chat");
           const chatData = data.chats;
-
-          // 최신 방이 위로 오도록
-          chatData.sort((a: ChatI, b: ChatI) => {
-            const timeA = new Date(a.updatedAt).getTime();
-            const timeB = new Date(b.updatedAt).getTime();
-            return timeB - timeA;
-          });
-
-          const myRoom = await Promise.all(
-            chatData.map(async (room: ChatI) => {
-              // 시간 계산
-              const updatedAt = room.updatedAt;
-              const givenDate: Date = new Date(updatedAt);
-              const currentDate: Date = new Date();
-              const timeDifference =
-                currentDate.getTime() - givenDate.getTime();
-              const minutesDifference = Math.floor(
-                timeDifference / (1000 * 60)
-              );
-              const hoursDifference = Math.floor(minutesDifference / 60);
-              const daysDifference = Math.floor(hoursDifference / 24);
-
-              let updatedAtString: string;
-
-              if (minutesDifference < 1) {
-                updatedAtString = "방금 전";
-              } else if (minutesDifference < 60) {
-                updatedAtString = `${minutesDifference}분 전`;
-              } else if (hoursDifference < 24) {
-                updatedAtString = `${hoursDifference}시간 전`;
-              } else {
-                updatedAtString = `${daysDifference}일 전`;
-              }
-
-              return {
-                ...room,
-                updatedAt: updatedAtString
-              };
-            })
-          );
+          setRooms(chatData);
           const res = await getData(
             `https://fastcampus-chat.net/user?userId=${sessionStorage.getItem(
               "userId"
             )}`
           );
           setLoginUser(res.user);
-          setChatRoom(myRoom);
         } catch (error) {
           console.error(error);
         }
@@ -101,7 +61,49 @@ function Chat() {
     }
   }, [accessToken, roomId]);
   // TODO : 여기에 의존성배열로 chatRoom 을 넣어줘야하는데 그러면 너무 렌더링이 많아져서 또 채팅방 내역을 잘 못 불러옴
+  useEffect(() => {
+    if (rooms) {
+      const sortRoom = async () => {
+        rooms.sort((a: ChatI, b: ChatI) => {
+          const timeA = new Date(a.updatedAt).getTime();
+          const timeB = new Date(b.updatedAt).getTime();
+          return timeB - timeA;
+        });
 
+        const myRoom = await Promise.all(
+          rooms.map(async (room: ChatI) => {
+            // 시간 계산
+            const updatedAt = room.updatedAt;
+            const givenDate: Date = new Date(updatedAt);
+            const currentDate: Date = new Date();
+            const timeDifference = currentDate.getTime() - givenDate.getTime();
+            const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+            const hoursDifference = Math.floor(minutesDifference / 60);
+            const daysDifference = Math.floor(hoursDifference / 24);
+
+            let updatedAtString: string;
+
+            if (minutesDifference < 1) {
+              updatedAtString = "방금 전";
+            } else if (minutesDifference < 60) {
+              updatedAtString = `${minutesDifference}분 전`;
+            } else if (hoursDifference < 24) {
+              updatedAtString = `${hoursDifference}시간 전`;
+            } else {
+              updatedAtString = `${daysDifference}일 전`;
+            }
+
+            return {
+              ...room,
+              updatedAt: updatedAtString
+            };
+          })
+        );
+        await setChatRoom(myRoom);
+      };
+      sortRoom();
+    }
+  }, [rooms]);
   const handleClick = (roomId: string) => {
     setRoomId(roomId);
   };
@@ -118,7 +120,8 @@ function Chat() {
         "https://fastcampus-chat.net/chat",
         makeRoomBody
       );
-      setChatRoom((prev) => [...prev, response]);
+
+      setRooms((prev) => [...prev, response]);
     };
     fetchData();
   };
@@ -127,44 +130,39 @@ function Chat() {
     <>
       <Header />
       <ChatWrapper>
-        <ChatCategory>
-          {chatRoom.map((room) => (
-            <CateLink
-              key={room.id}
-              className={room.id === roomId ? "highlight" : ""}
-            >
-              <div
-                className="catelink__wrap"
-                onClick={() => {
-                  handleClick(room.id);
-                  setIsShowRoom(true);
-                }}
+        <ChatInner>
+          <ChatCategory>
+            {chatRoom.map((room) => (
+              <CateLink
+                key={room.id}
+                className={room.id === roomId ? "highlight" : ""}
               >
-                <div className="catelink__name">
-                  <p className="tit">{room.name}</p>
-                  <p className="content">
-                    {room.latestMessage?.text || "메시지가 없습니다."}
-                  </p>
+                <div
+                  className="catelink__wrap"
+                  onClick={() => {
+                    handleClick(room.id);
+                    setIsShowRoom(true);
+                  }}
+                >
+                  <div className="catelink__name">
+                    <p className="tit">{room.name}</p>
+                    <p className="content">
+                      {room.latestMessage?.text || "메시지가 없습니다."}
+                    </p>
+                  </div>
+                  <div className="catelink__time">{room.updatedAt}</div>
                 </div>
-                <div className="catelink__time">{room.updatedAt}</div>
-              </div>
-            </CateLink>
-          ))}
+              </CateLink>
+            ))}
+          </ChatCategory>
           <CatePlus>
-            <ModalPlus
-              setRoomName={setRoomName}
-              setSelectedUsers={setSelectedUsers}
-              addNewChatRoom={addNewChatRoom}
-              loginUser={loginUser}
-            />
+            <ModalPlus addNewChatRoom={addNewChatRoom} loginUser={loginUser} />
           </CatePlus>
-        </ChatCategory>
+        </ChatInner>
         {isShowRoom ? (
           chatRoom.length !== 0 ? (
             <ChatRoom
               roomId={roomId}
-              roomName={roomName}
-              selectedUsers={selectedUsers}
               setChatRoom={setChatRoom}
               setIsShowRoom={setIsShowRoom}
             />
@@ -181,22 +179,30 @@ export default Chat;
 
 const ChatWrapper = styled.div`
   display: flex;
-  border-top: 1px solid #e8e8e8;
   border-left: 1px solid #e8e8e8;
   height: 100%;
   max-width: 850px;
   width: 100%;
   margin: 0 auto;
+  background-color: ${({ theme }) => (theme === darkTheme ? "black" : "white")};
+`;
+
+const ChatInner = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 30%;
+  max-width: 30%;
 `;
 
 const ChatCategory = styled.ul`
   display: flex;
   flex-direction: column;
-  flex: 1 0 30%;
-  max-width: 30%;
+  /* flex: 1 0 30%;
+  max-width: 30%; */
   border-right: 1px solid #e8e8e8;
   height: 540px;
   overflow-y: scroll;
+  position: relative;
 `;
 
 const CateLink = styled.li`
@@ -205,13 +211,7 @@ const CateLink = styled.li`
   border-bottom: 1px solid #e8e8e8;
   cursor: pointer;
   &.highlight {
-    .catelink {
-      &__name {
-        .tit {
-          color: #ff9999;
-        }
-      }
-    }
+    background-color: #feebea;
   }
   .catelink {
     &__wrap {
@@ -249,11 +249,12 @@ const CateLink = styled.li`
 
 const CatePlus = styled.div`
   text-align: center;
-  padding: 20px 0;
+  padding: 10px 0;
+  border-right: 1px solid #e8e8e8;
   button {
     border: none;
     outline: none;
-    background-color: white;
+    background-color: #fff;
   }
   button:hover {
     cursor: pointer;
