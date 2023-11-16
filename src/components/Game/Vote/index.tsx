@@ -49,7 +49,6 @@ const Vote: React.FC<VoteProps> = ({
 
         if (docSnap.exists()) {
           const updatedData = docSnap.data() as GameData;
-          console.log("updatedData :", updatedData);
           setFetchData(updatedData);
         }
       } catch (error) {
@@ -78,11 +77,8 @@ const Vote: React.FC<VoteProps> = ({
         const updatedDocSnap = await getDoc(docRef);
         const updatedData = updatedDocSnap.data() as GameData;
 
-        // console.log("submit/ Updated Data:", updatedData);
-
         const voteResult = calculateVote(updatedData);
         onVoteResult(voteResult);
-        console.log("submit/ Vote result: " + voteResult);
 
         socket.emit("message-to-server", voteResult + ":" + "%G@#C");
         onClose(selectedUser);

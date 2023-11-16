@@ -95,11 +95,9 @@ const Game = () => {
 
   useEffect(() => {
     setSpeaking(users[0]);
-    console.log(users);
   }, [users]);
 
   useEffect(() => {
-    console.log(num, users.length);
     if (num !== 0 && num === users.length) {
       setCurrent("자유발언");
     }
@@ -149,7 +147,6 @@ const Game = () => {
     }
     setSpeaking(users[0]);
   };
-  console.log(current, speaking);
 
   if (gameData.data.length === 0) {
     return <p>Loading...</p>;

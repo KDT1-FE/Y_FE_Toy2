@@ -111,10 +111,6 @@ const GameLists = () => {
 
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    console.log(messages);
-  }, [messages]);
-
   // 초대방 정보 데이터
   const [roomData, setRoomData] = useState({
     id: "",
@@ -204,24 +200,8 @@ const GameLists = () => {
           text: messageObject.text,
         };
 
-        console.log(message);
         setMessages((prev) => [...prev, message]);
       }
-    });
-
-    // 채팅 기록 확인
-    socket.on("messages-to-client", (messagesObject) => {
-      console.log(messagesObject);
-    });
-
-    // 유저 join확인
-    socket.on("join", (users) => {
-      console.log(users);
-    });
-
-    // 유저 leave확인
-    socket.on("leave", (users) => {
-      console.log(users);
     });
 
     return () => {
@@ -236,7 +216,6 @@ const GameLists = () => {
   useEffect(() => {
     if (toastUser[0] !== "" && user.id) {
       if (toastUser.includes(user.id)) {
-        console.log(roomData);
         setToast(true);
       }
     }
@@ -253,6 +232,7 @@ const GameLists = () => {
     method: "GET",
     start: !!user,
   });
+  
   //파이어베이스 게임
   const { data: firebaseGameListsData } = fireFetch.useGetAll("game", "desc");
 

@@ -20,7 +20,6 @@ const calculateVote = (gameData: GameData): string | null => {
   const voteCount: Record<string, number> = {};
   gameData.votedFor.forEach((vote) => {
     const liarId = vote.liar;
-    console.log("liarId:" + liarId);
     voteCount[liarId] = (voteCount[liarId] || 0) + 1;
   });
 
@@ -31,7 +30,6 @@ const calculateVote = (gameData: GameData): string | null => {
     if (voteCount[id] > maxCount) {
       maxCount = voteCount[id];
       maxId = id;
-      console.log("maxId", maxId, maxCount + "표");
     }
   }
 

@@ -89,7 +89,6 @@ const GameChat: React.FC<GameChatProps> = ({
   const handleVoteResult = (result: string | null) => {
     setVoteResult(result);
     setCurrent("게임종료");
-    console.log("Chat/ voteResult", voteResult);
   };
 
   useEffect(() => {
@@ -149,12 +148,6 @@ const GameChat: React.FC<GameChatProps> = ({
   useEffect(() => {
     // 유저 입장 메시지 수신
     socket.on("join", (responseData: UserResponse) => {
-      console.log(
-        "responseData:",
-        responseData,
-        "responseData.joiners:",
-        responseData.joiners,
-      );
       if (responseData.joiners) {
         const idParts = responseData.joiners[0].id.split(":");
         const joinId =
@@ -163,7 +156,6 @@ const GameChat: React.FC<GameChatProps> = ({
         setMessages([...messages, { id: "system", text: systemMessage }]);
         setUsers(responseData.users);
         setPlayer([...player, joinId]);
-        // console.log(player);
       }
     });
 

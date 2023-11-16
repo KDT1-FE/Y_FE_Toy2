@@ -89,7 +89,6 @@ const UserConfigModal = ({ isOpen, onClose }: UserConfigModalProps) => {
       setIsLoading(true);
     }
     if (userInfo && userInfo.auth) {
-      console.log("UserInfo:", userInfo);
       // 폼 값 설정 로직
       setValue("id", userInfo.user.id);
       setValue("name", userInfo.user.name);

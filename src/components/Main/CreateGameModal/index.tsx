@@ -269,7 +269,6 @@ const CreateGameModal = ({ setModal, socket }: Props) => {
   const handleMakeRoom = () => {
     if (roomData.name === "") {
       setInpuAction(true);
-      console.log(roomData);
     } else {
       // 게임 생성 POST 호출
       createGame.refresh();
