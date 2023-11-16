@@ -88,13 +88,11 @@ const CheckGameRoom = () => {
       // 배열을 역순으로 만들기 (최신순)
       let reversedRooms = [...plusIndex].reverse();
 
-      console.log(reversedRooms);
-
       if (allChatState === 'possible') {
         // 풀방 확인
-        console.log('확인');
+
         reversedRooms = reversedRooms.filter((item) => item.users.length < 4);
-        console.log(plusIndex);
+
         setTotalItemsCount(plusIndex.length);
       }
 
@@ -103,7 +101,6 @@ const CheckGameRoom = () => {
       const endIndex = startIndex + itemsPerPage;
       const paginatedRooms = reversedRooms.slice(startIndex, endIndex);
 
-      console.log(paginatedRooms);
       setAllRooms(paginatedRooms);
     } catch (error) {
       console.error('Error retrieving data:', error);

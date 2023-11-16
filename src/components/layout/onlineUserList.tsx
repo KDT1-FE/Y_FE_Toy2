@@ -49,12 +49,13 @@ const OnlineUserList = () => {
   const allOnlineUsers = onLine.users || [];
   const userId = getCookie('userId');
   const allChatState = useRecoilValue(allRoomNumberState);
-  const setRoomId = useSetRecoilState(roomIdState);
-  const setUsersInRoom = useSetRecoilState(usersInRoom);
+
+  console.log(onLine);
 
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
   });
+
   const chathandler = async (element: User) => {
     if (userId === element.id) {
       swal({ title: '본인입니다.', icon: 'info' });
@@ -93,8 +94,6 @@ const OnlineUserList = () => {
       const chat = await createGameRooms(random, [element.id], false);
       const chatLength = allChatState.chats.length;
       console.log(chat);
-      setRoomId(chatLength + 1);
-      setUsersInRoom(2);
       navigate(`/room/:${chat.id}`);
     }
   };
