@@ -3,150 +3,113 @@ import React from 'react';
 import styled from 'styled-components';
 import { Chat } from './chatsStore';
 import { formatCreatedAt } from '@/components/chats/useFormatCreatedAt';
-import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
+import { FaLock } from 'react-icons/fa6';
+import { eclipsText } from './ModalTextData';
 const MyChatItem = ({ name, latestMessage, users, onClick, isPrivate }: Chat) => {
   const chatsPicture =
     isPrivate && users && users.length > 2 // private 한 그룹 채팅인 경우
-      ? '/assets/chat-private-line.svg'
+      ? '/assets/groupPrivate.svg'
       : isPrivate && users && users.length === 2 // private이면서 1대1 채팅인 경우
-      ? users[1].picture
+      ? users[0].picture
       : !isPrivate && users && users.length > 2 // private 아니면서 그룹채팅인 경우
       ? '/assets/groupUsers.svg'
       : !isPrivate && users && users.length === 2
-      ? users[1].picture // private 하지 않으면서 1대1 인 경우
-      : '/assets/x.svg';
+      ? users[0].picture // private 하지 않으면서 1대1 인 경우
+      : '/assets/noUser.svg';
   const usersNumber = users && users.length > 0 ? users.length : '';
-  const chatsName = users && users.length === 1 ? '상대방이 채팅방을 나간 상태입니다.' : name;
+  const chatsName =
+    users && users.length === 1
+      ? '상대방이 채팅방을 나갔습니다.'
+      : users && users.length === 2
+      ? users[0].username
+      : name;
   return (
-    <Wrapper>
-      <ChatBox onClick={onClick}>
-        <ChatDescContainer>
-          <ChatInfo>
-            <ChatImage>
-              <img src={chatsPicture} alt="chats picutre" />
-            </ChatImage>
-            <ChatDesc>
-              <ChatPart>
-                <ChatName>
-                  {chatsName} <span>{usersNumber}</span>
-                </ChatName>
-              </ChatPart>
-              <LateMessage>
-                {latestMessage
-                  ? latestMessage.text.split(':')[0] == 'notice09'
-                    ? latestMessage.text.split(':')[1]
-                    : latestMessage.text
-                  : ''}{' '}
-              </LateMessage>
-            </ChatDesc>
-          </ChatInfo>
-          <MessageCount>
-            <ReceiveTime>{latestMessage ? formatCreatedAt(latestMessage.createdAt) : ''}</ReceiveTime>
-            <TypeCheckBox>{isPrivate ? <PrivateIcon /> : ''}</TypeCheckBox>
-          </MessageCount>
-        </ChatDescContainer>
-      </ChatBox>
-    </Wrapper>
+    <ChatBox onClick={onClick}>
+      <ChatImage src={chatsPicture} alt="chats picutre" />
+      <ChatInfo>
+        <ChatPart>
+          <ChatName>
+            {chatsName} <span>{usersNumber}</span>
+          </ChatName>
+        </ChatPart>
+        <LateMessage>{latestMessage
+  ? latestMessage.text.split(':')[0] == 'notice09'
+    ? latestMessage.text.split(':')[1]
+    : eclipsText(latestMessage.text, 20)
+  : ''}{' '} </LateMessage>
+      </ChatInfo>
+      <MessageCount>
+        <ReceiveTime>{latestMessage ? formatCreatedAt(latestMessage.createdAt) : ''}</ReceiveTime>
+        <TypeCheckBox>{isPrivate ? <FaLock size="20" className="lockIcon" /> : ''}</TypeCheckBox>
+      </MessageCount>
+    </ChatBox>
   );
 };
-
 export default MyChatItem;
-
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  @media screen and (max-width: 768px) {
-    height: 20vh;
-  }
-`;
-
 const ChatBox = styled.div`
-  margin-top: 2rem;
-  background: #ffffff;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+  margin-bottom: 2rem;
+  cursor: pointer;
+  background: #FFFFFF;
+  box-shadow: ${({ theme }) => theme.shadow.list};
   border-radius: 20px;
-  font-weight: bold;
   &:hover {
-    background: #00956e;
-    color: #ffffff;
-    font-weight: bold;
+    opacity: 70%;
+    transition: 0.4s;
   }
-`;
-
-const ChatDescContainer = styled.div`
   display: flex;
-  gap: 0.2rem;
-  justify-content: space-between;
+  flex-direction: row;
+  gap: 1.5rem;
+  padding: 2rem 2rem 1rem 2rem;
 `;
-
 const ChatInfo = styled.div`
   display: flex;
-`;
-const ChatImage = styled.div`
-  img {
-    width: 3rem;
-    height: 3rem;
-    margin: 2rem 0.5rem 2rem 2rem;
-    border-radius: 1rem;
-  }
-`;
-
-const ChatDesc = styled.div`
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  text-align: start;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
+  gap: 0.8rem;
+  flex: 1;
+  width: 70%;
 `;
-
-const ChatPart = styled.div`
-  display: flex;
+const ChatImage = styled.img`
+  width: 3rem;
+  height: 3rem;
+  border-radius: 70%;
 `;
-
+const ChatPart = styled.div``;
 const ChatName = styled.p`
-  font-size: 1.2rem;
+  flex: 1;
+  font-size: ${({ theme }) => theme.fontSize.xl};
   font-weight: bold;
   color: #000;
-  padding: 0;
   margin: 0;
-
   span {
-    font-size: 1.1rem;
+    font-size: ${({ theme }) => theme.fontSize.lg};
     font-weight: bold;
-    color: #626262;
+    color: ${({ theme }) => theme.color.darkGray};
+    margin-left: 0.5rem;
   }
 `;
-
 const LateMessage = styled.p`
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: #626262;
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: normal;
+  color: ${({ theme }) => theme.color.darkGray};
   padding: 0;
   margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
-
-const MessageCount = styled(ChatDesc)`
-  text-align: center;
-  margin-bottom: 1.2rem;
-  margin-right: 1.2rem;
+const MessageCount = styled.div`
+  max-height: 5rem;
+  min-height: 5rem;
 `;
-
 const ReceiveTime = styled.p`
-  font-size: 0.8rem;
+  margin: 0;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: #CDCDCD;
 `;
-
 const TypeCheckBox = styled.div`
-  border-radius: 0.6rem;
   text-align: center;
-  padding: 0.1rem 0.5rem;
-  color: #fff;
-`;
-
-const PrivateIcon = styled(AiFillLock)`
-  width: 1.5rem;
-  height: 1.5rem;
-  color: #00956e;
+  margin-top: 1rem;
+  .lockIcon {
+    color: ${({ theme }) => theme.color.mainGreen};
+  }
 `;
