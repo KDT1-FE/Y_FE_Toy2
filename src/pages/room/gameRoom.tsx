@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
@@ -41,6 +41,7 @@ import {
 } from '@chakra-ui/react';
 
 const GameRoom: React.FC = () => {
+  const [isQuizMaster, setIsQuizMaster] = useState(false);
   const [showAlert, setShowAlert] = useState({
     active: false,
     message: '',
@@ -135,7 +136,8 @@ const GameRoom: React.FC = () => {
     gameSocket.emit('joinRoom', roomId);
 
     gameSocket.on('quiz_master_set', (quizMasterId: string) => {
-      console.log('여기', myId, quizMasterId);
+      console.log(myId, quizMasterId);
+      setIsQuizMaster(myId === quizMasterId);
       if (true) {
         if (myId === quizMasterId) {
           // alert('당신은 출제자 입니다!');
@@ -254,7 +256,14 @@ const GameRoom: React.FC = () => {
       </RoomHeader>
 
       <RoomMain>
-        <Drawing />
+        {isQuizMaster ? (
+          <Drawing />
+        ) : (
+          <div style={{ position: 'relative' }}>
+            <Drawing />
+            <DrawingBlock />
+          </div>
+        )}
 
         <GameChatting chatId={roomId} />
       </RoomMain>
@@ -337,4 +346,15 @@ const UserList = styled.div`
   margin-top: 30px;
   margin-bottom: 30px;
 `;
+
+const DrawingBlock = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.01);
+  border-radius: 15px;
+`;
+
 export default GameRoom;
