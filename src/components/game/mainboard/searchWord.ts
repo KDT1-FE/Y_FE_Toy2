@@ -13,7 +13,8 @@ const search = async (word: string): Promise<boolean> => {
     });
 
     const responseData = response.data.items;
-    if (responseData.length === 0) {
+
+    if (responseData && responseData.length === 0) {
       return false;
     }
     return true;
