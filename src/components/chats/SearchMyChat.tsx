@@ -28,47 +28,37 @@ const SearchMyChat = ({ userType }: { userType: string }) => {
     }
   }, 300);
   return (
-    <Wrapper>
-      <SearchUserBox>
-        <SearchButton>
-          <MdSearch className="searchIcon" size="35" color="white" />
-        </SearchButton>
-        <SearchItem type="text" placeholder="검색" onChange={onInputChange} />
-      </SearchUserBox>
-    </Wrapper>
+    <SearchUserBox>
+      <SearchButton>
+        <MdSearch className="searchIcon" size="35" color="white" />
+      </SearchButton>
+      <SearchItem type="text" placeholder="검색" onChange={onInputChange} />
+    </SearchUserBox>
   );
 };
 
 export default SearchMyChat;
 
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
 const SearchUserBox = styled.div`
-  background-color: white;
+  background-color: #fff;
 
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadow.search};
 
-  width: 100%;
+  width: 96%;
   height: 3.5rem;
 
   display: flex;
   gap: 3%;
+
+  margin: 0 auto;
 `;
 
 const SearchItem = styled.input`
   border: none;
-  width: 32rem;
+  width: 70%;
   outline: none;
-  font-size: 1.2rem;
-
-  @media screen and (max-width: 768px) {
-    width: 60vw;
-  }
+  font-size: ${({ theme }) => theme.fontSize.lg};
 `;
 
 const SearchButton = styled.div`
@@ -81,4 +71,5 @@ const SearchButton = styled.div`
 
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
+  box-shadow: ${({ theme }) => theme.shadow.search};
 `;
