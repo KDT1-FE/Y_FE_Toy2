@@ -6,6 +6,7 @@ import {
   Divider,
   Heading,
   VStack,
+  Center,
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import { EditIcon, ChatIcon } from '@chakra-ui/icons';
@@ -16,8 +17,26 @@ import { useInviteData } from '../../hooks/useInviteData';
 const SideBar = () => {
   const [myChannels, setmyChannels] = useState([]);
 
-  const { data: channels } = useMyChannels();
+  const { data: channels, isLoading } = useMyChannels();
   const { myChannelList } = useInviteData();
+
+  const channelBox = () => {
+    if (isLoading) {
+      return <Center>내 채팅 목록을 불러오는 중입니다.</Center>;
+    }
+    if (myChannelList?.length === 0 || channels?.length === 0) {
+      return <Center>현재 참여중인 채팅방이 없습니다.</Center>;
+    }
+    return (myChannelList || channels)?.map((channel) => (
+      <Box key={channel.id}>
+        <MyChannelItem
+          channelId={channel.id}
+          myChannelName={channel.name}
+          isPrivate={channel.isPrivate}
+        />
+      </Box>
+    ));
+  };
 
   return (
     <Box
@@ -36,30 +55,25 @@ const SideBar = () => {
         smartalk
       </Heading>
       <Box color="#828C98" justifyContent="center">
-        <ChakraLink as={ReactRouterLink} to="/" fontSize={'lg'}>
+        <ChakraLink
+          as={ReactRouterLink}
+          to="/"
+          fontSize={'lg'}
+          _hover={{ color: '#191919', fontWeight: 'bold' }}
+          transition={'all .2s ease-in-out'}
+          textDecorationLine="none"
+        >
           <ChatIcon mr={2} />
           전체 채팅방 조회
         </ChakraLink>
       </Box>
-      <Divider my={50} />
+      <Divider my="2rem" />
       <Box>
         <Heading size="md" mb="2rem">
           나의 채팅방
         </Heading>
-        <Box h="50vh" overflowY="scroll">
-          {myChannelList || channels ? (
-            (myChannelList || channels)?.map((channel) => (
-              <Box key={channel.id}>
-                <MyChannelItem
-                  channelId={channel.id}
-                  myChannelName={channel.name}
-                  isPrivate={channel.isPrivate}
-                />
-              </Box>
-            ))
-          ) : (
-            <Box>내가 속한 채팅방이 없습니다.</Box>
-          )}
+        <Box h="50vh" overflowY="auto">
+          <>{channelBox()}</>
         </Box>
       </Box>
     </Box>
