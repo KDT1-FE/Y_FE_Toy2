@@ -10,6 +10,6 @@ const Title = styled.div`
   font-weight: 400;
   color: #a0aec0;
   cursor: default;
-  margin-top: 50px;
+  margin-top: 18px;
 `;
 export default Footer;
