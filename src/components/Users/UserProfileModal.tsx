@@ -6,11 +6,10 @@ import { useRouter } from 'next/navigation';
 import { BiSolidCircle } from 'react-icons/bi';
 import { getCookie } from '@/lib/cookie';
 import { useRecoilValue } from 'recoil';
-import { ConnectUserIdList } from './UserListStore'
+import { ConnectUserIdList } from './UserListStore';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Chat } from '@/components/chats/chatsStore';
 import { instance } from '@/lib/api';
-
 
 // types 폴더 나중에 만들어서 type 빼놓기
 interface User {
@@ -28,90 +27,88 @@ const UserProfileModal = ({ clickModal, user }: UserProfileModalProps) => {
   const router = useRouter();
 
   const { id, name, picture } = user;
-    const accessToken = sessionStorage.getItem('accessToken');
-    const userId = sessionStorage.getItem('userId');
-    const [myChats, setMyChats] = useState<Chat[]>([]);
-    const connectUserIdList = useRecoilValue(ConnectUserIdList);
+  const accessToken = getCookie('accessToken');
+  const userId = localStorage.getItem('userId');
+  const [myChats, setMyChats] = useState<Chat[]>([]);
+  const connectUserIdList = useRecoilValue(ConnectUserIdList);
 
-    const enterChatRoom = (chat: Chat) => {
-        if (chat.id && chat.users) {
-            const users = chat.users
-                .map((user) => `[name:${user.username}, id:${user.id}, picture:${user.picture}]`)
-                .join(',');
-            const latestMessageQuery = JSON.stringify(chat.latestMessage);
+  const enterChatRoom = (chat: Chat) => {
+    if (chat.id && chat.users) {
+      const users = chat.users
+        .map((user) => `[name:${user.username}, id:${user.id}, picture:${user.picture}]`)
+        .join(',');
+      const latestMessageQuery = JSON.stringify(chat.latestMessage);
 
-            router.push(
-                `/chating/${chat.id}?name=${chat.name}&isPrivate=${
-                    chat.isPrivate
-                }&users=${users}&latestMessage=${encodeURIComponent(latestMessageQuery)}&updatedAt=${chat.updatedAt}`,
-            );
+      router.push(
+        `/chating/${chat.id}?name=${chat.name}&isPrivate=${
+          chat.isPrivate
+        }&users=${users}&latestMessage=${encodeURIComponent(latestMessageQuery)}&updatedAt=${chat.updatedAt}`,
+      );
+    }
+  };
+
+  const getMyChats = async () => {
+    try {
+      const res = await instance.get<Chat[], any>(`chat`);
+      if (res) {
+        console.log(res.chats);
+        setMyChats(res.chats);
+      } else {
+        console.log('내 채팅 데이터 조회 실패');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getMyChats();
+  }, []);
+
+  const handleChatClick = async () => {
+    const chatName = `1:1 Chat with ${user.name}`;
+    // await getMyChats()
+    if (user.name) {
+      // await getMyChats();
+
+      const existingChat = myChats.find((chat) => chat.name === chatName);
+
+      console.log(myChats);
+      console.log(existingChat);
+      if (existingChat) {
+        console.log('이미 채팅방이 존재해요. 그 채팅방으로 이동하겠습니다.');
+        console.log(existingChat);
+        console.log(userId);
+        enterChatRoom(existingChat);
+      } else {
+        console.log('채팅방이 없음');
+        const response = await fetch('https://fastcampus-chat.net/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+            serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
+          },
+          body: JSON.stringify({
+            name: `1:1 Chat with ${user.name}`,
+            users: [user.id],
+            isPrivate: true,
+          }),
+        });
+
+        console.log(user.id, userId);
+
+        if (response.ok) {
+          // 생성된 채팅 방으로 이동
+          const data = await response.json();
+          const generatedChatId = `1on1_${user.id}_${userId}`;
+          router.push(`/chating/${data.id}`);
+        } else {
+          console.error('Failed to create chat room');
         }
-    };
-
-    const getMyChats = async () => {
-        try {
-            const res = await instance.get<Chat[], any>(`chat`);
-            if (res) {
-                console.log(res.chats)
-                setMyChats(res.chats);
-            } else {
-                console.log('내 채팅 데이터 조회 실패');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        getMyChats()
-     }, []);
-
-     const handleChatClick = async () => {
-        const chatName = `1:1 Chat with ${user.name}`;
-        // await getMyChats()
-        if (user.name) {
-            // await getMyChats();
-
-            const existingChat = myChats.find(chat => chat.name === chatName);
-            
-            console.log(myChats)
-            console.log(existingChat)
-            if (existingChat) {
-                console.log('이미 채팅방이 존재해요. 그 채팅방으로 이동하겠습니다.');
-                console.log(existingChat);
-                console.log(userId);                    
-                enterChatRoom(existingChat);
-            } else {
-                console.log('채팅방이 없음')
-                    const response = await fetch('https://fastcampus-chat.net/chat', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${accessToken}`,
-                            serverId: `${process.env.NEXT_PUBLIC_SERVER_KEY}`,
-                        },
-                        body: JSON.stringify({
-                            name: `1:1 Chat with ${user.name}`,
-                            users: [user.id],
-                            isPrivate: true,
-                        }),
-                    });
-    
-                    console.log(user.id, userId);
-    
-                    if (response.ok) {
-                        // 생성된 채팅 방으로 이동
-                        const data = await response.json();
-                        const generatedChatId = `1on1_${user.id}_${userId}`;
-                        router.push(`/chating/${data.id}`);
-                    } else {
-                        console.error('Failed to create chat room');
-                    }
-                }
-            }
-        }
-        
-    
+      }
+    }
+  };
 
   return (
     <UserModalBox onClick={clickModal}>
