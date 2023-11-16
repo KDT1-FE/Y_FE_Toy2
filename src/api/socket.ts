@@ -58,23 +58,15 @@ export const chatSocket = (accessToken: any, chatId: string) => {
   return chattingSocket;
 };
 
-// export const drawSocket = io(
-//   'https://fastmindserver-7da746e63a7f.herokuapp.com/',
-//   {
-//     withCredentials: true,
-//   },
-// );
 
-// export const gameSocket = io(
-//   'https://fastmindserver-7da746e63a7f.herokuapp.com/',
-//   {
-//     withCredentials: true,
-//   },
-// );
+export const drawSocket = io(
+  'https://fastmindserver-7da746e63a7f.herokuapp.com/',
+);
 
-export const drawSocket = io('http://localhost:3001/');
+export const gameSocket = io(
+  'https://fastmindserver-7da746e63a7f.herokuapp.com/',
+);
 
-export const gameSocket = io('http://localhost:3001/');
 
 export const disconnectLoginSocket = () => {
   if (serverSocket) {

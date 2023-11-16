@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import InfoImg from '../../assets/icons/info.png';
 import sendImg from '../../assets/icons/send.png';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { chatSocket } from '../../api/socket';
 import {
   sortCreatedAt,
@@ -158,18 +158,32 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
     setPostData('');
   };
 
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    const chatContainer = chatContainerRef.current;
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [fetchChat, newChat]);
+
   return (
     <Chat>
       <ChatHeader>
         <ChatHeaderIcon src={InfoImg} alt="ChatInfo" />
         <ChatHeaderWarn>게임이 시작되었습니다.</ChatHeaderWarn>
       </ChatHeader>
-      <Chatting>
+      <Chatting ref={chatContainerRef}>
         {/* 이전 채팅 불러오기 */}
         {fetchChat.map((element, index) => (
           <div key={index}>
             <p>{element.date}</p>
             <ChatWrap $mine={element.userId === userId}>
+              <ChatName>{element.userId}</ChatName>
               <Chats $mine={element.userId === userId}>
                 <p>{element.text}</p>
                 <ChatTime $mine={element.userId === userId}>
@@ -186,8 +200,10 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
             {element.date !== lastDate && <p>{element.date}</p>}
 
             <ChatWrap $mine={element.userId === userId} id="messageWrap">
+              <ChatName>{element.userId}</ChatName>
               <Chats $mine={element.userId === userId}>
                 <p>{element.text}</p>
+
                 <ChatTime $mine={element.userId === userId}>
                   {element.time}
                 </ChatTime>
@@ -257,24 +273,6 @@ const Chatting = styled.div`
   background-color: #fff;
   overflow-y: scroll;
   padding: 20px;
-
-  /* ::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
-    border-radius: 5px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #b1bfd8;
-  } */
-  //스크롤바 일단 보류...
 `;
 
 const ChatWrap = styled.div<ChatsProps>`
@@ -283,10 +281,15 @@ const ChatWrap = styled.div<ChatsProps>`
   position: relative;
 `;
 
+const ChatName = styled.div`
+  font-size: 16px;
+  margin: 0 5px;
+`;
+
 const Chats = styled.div<ChatsProps>`
   max-width: 260px;
   padding: 8px 12px;
-  border-radius: 18px;
+  border-radius: 10px;
   color: white;
   font-size: 14px;
 
@@ -301,7 +304,6 @@ const ChatTime = styled.div<ChatsProps>`
   font-size: 10px;
   color: ${(props) =>
     props.$mine ? 'rgba(255, 255, 255, 0.7)' : 'rgba(45,55,72, 0.7)'};
-  //시간 부분도 똑같이 구현 못 함...
 `;
 
 const SendInput = styled.input`
