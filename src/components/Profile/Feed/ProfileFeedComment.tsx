@@ -8,9 +8,10 @@ import { darkTheme } from "../../../style/theme";
 
 const Container = styled.div`
   width: 100%;
+
   display: flex;
   justify-content: space-between;
-  gap: 128px;
+
   margin-bottom: 32px;
   .commentContainer {
     display: flex;
@@ -33,9 +34,9 @@ const Container = styled.div`
     .text span {
       color: ${({ theme }) => (theme === darkTheme ? "#dedede" : "#3e3e3e")};
     }
-    .timeStamp span{
+    .timeStamp span {
       display: block;
-      margin-top:5px;
+      margin-top: 5px;
       color: #999696;
     }
   }
@@ -55,20 +56,21 @@ const Container = styled.div`
   }
   .buttonWrap {
     margin-top: 16px;
-    /* flex: 1 0 30%; */
+    display: flex;
+    align-items: flex-start;
 
     button {
       width: 48px;
       margin-right: 16px;
 
       border: none;
-      border-radius:5px;
+      border-radius: 5px;
       background-color: #f5f5f5;
 
       cursor: pointer;
-      &:nth-child(2){
+      &:nth-child(2) {
         position: relative;
-        &:before{
+        &:before {
           content: "";
           left: -8px;
           height: 0.8em;
@@ -161,7 +163,7 @@ export default function ProfileFeedComment(props: {
                   navigate(`/profiles/${props.comment.id}`);
                 }}
               >
-                {props.comment.name}
+                {props.allUserData[props.comment.id].name}
               </span>
             </div>
             <div className="text">
