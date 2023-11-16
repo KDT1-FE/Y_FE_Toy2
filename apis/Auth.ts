@@ -13,9 +13,10 @@ const Auth = () => {
   // 로그인 (로그인유지)
   const login = async (userLogin: UserLogin) => {
     try {
-      const { data } = await instance.post('/login', userLogin);
-      setStorage('accessToken', data.accessToken);
-      setStorage('refreshToken', data.refreshToken);
+      const response = await instance.post('/login', userLogin);
+      console.log(response);
+      setStorage('accessToken', response.data.accessToken);
+      setStorage('refreshToken', response.data.refreshToken);
       setUserId(userLogin.id);
       router.push('/');
     } catch (error) {

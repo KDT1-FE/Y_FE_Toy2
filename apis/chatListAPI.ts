@@ -1,4 +1,4 @@
-import Jwtinterceptor from './Jwtinterceptor';
+import Jwtinterceptor from './JwtInterceptor';
 
 interface ICreateChatRequestBody {
   name: string; // chat 이름

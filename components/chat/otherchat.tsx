@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import { User, Message } from '@/@types/types';
+import Jwtinterceptor from '@/apis/JwtInterceptor';
 import styles from './Chat.module.scss';
-import Jwtinterceptor from '../../apis/Jwtinterceptor';
 
 interface GetUserNameResponseBody {
   user: User;

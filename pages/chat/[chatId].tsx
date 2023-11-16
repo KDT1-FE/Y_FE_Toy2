@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-<<<<<<< HEAD
 import { io } from 'socket.io-client';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useRecoilValue } from 'recoil';
-=======
-import { io, Socket } from 'socket.io-client';
->>>>>>> 9236a22ec23caadc4645e802fb43415ea262e602
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
@@ -14,8 +10,8 @@ import ChatAlert from '@/components/chat/chatAlert';
 import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
-import { getStorage } from '@/utils/loginStorage';
 // import chatSocket from '@/apis/socket';
+import { getCookie } from 'cookies-next';
 import { CLIENT_URL } from '../../apis/constant';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
@@ -51,19 +47,13 @@ export default function Chatting() {
   const [showEntryNotice, setShowEntryNotice] = useState(false);
   const [showExitNotice, setShowExitNotice] = useState(false);
 
-<<<<<<< HEAD
   const [joiners, setJoiners] = useState<string[]>([]);
   const [leavers, setLeavers] = useState<string[]>([]);
 
   const userId = useRecoilValue(userIdState);
 
-  const accessToken = getStorage('accessToken');
+  const accessToken = getCookie('accessToken');
 
-=======
-  const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTpkanduc2d1ciIsImlhdCI6MTcwMDAzNzY5MSwiZXhwIjoxNzAxMjQ3MjkxfQ.ZAwzyaa80LCv5pN-fmf0ZzRQj2kO3sa5Uc4So4Mj68A';
-
->>>>>>> 9236a22ec23caadc4645e802fb43415ea262e602
   const socket = useMemo(() => {
     return io(`${CLIENT_URL}?chatId=${chatId}`, {
       extraHeaders: {
@@ -74,7 +64,6 @@ export default function Chatting() {
   }, [chatId, accessToken]);
 
   useEffect(() => {
-<<<<<<< HEAD
     if (socket) {
       socket.on('connect', () => {
         console.log('Connected from server');
@@ -91,16 +80,6 @@ export default function Chatting() {
       socket.on('message-to-client', (messageObject: Message) => {
         setMessages(prevMessages => [...prevMessages, messageObject]);
       });
-=======
-    socket.on('connect', () => {
-      console.log('Connected to chat server');
-      setIsConnected(true);
-    });
-
-    socket.on('messages-to-client', (messageArray: Message[]) => {
-      setMessages(messageArray.messages);
-    });
->>>>>>> 9236a22ec23caadc4645e802fb43415ea262e602
 
       socket.emit('fetch-messages');
 

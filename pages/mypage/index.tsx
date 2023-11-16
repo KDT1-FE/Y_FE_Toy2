@@ -10,8 +10,10 @@ import {
   uploadString,
 } from 'firebase/storage';
 import Jwtinterceptor from '@/apis/JwtInterceptor';
-import { logout } from '@/apis/etc';
 import { useRouter } from 'next/router';
+import logout from '@/apis/etc';
+import { getCookie } from 'cookies-next';
+import { GetServerSideProps } from 'next';
 import styles from './MyPage.module.scss';
 
 type UserResponseValue = {
@@ -27,8 +29,8 @@ interface PatchResponseValue {
   messgae: string;
 }
 
+const { instance } = Jwtinterceptor();
 export default function MyPage() {
-  const { instance } = Jwtinterceptor();
   const router = useRouter();
   const userId = useRecoilValue(userIdState);
   const imageRef = useRef<HTMLInputElement>(null);
@@ -142,7 +144,7 @@ export default function MyPage() {
     e.preventDefault();
     if (window.confirm('로그아웃 하시겠습니까?')) {
       logout();
-      router.push('/login');
+      // router.push('/login');
     }
   };
 
@@ -245,3 +247,25 @@ export default function MyPage() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const cookies = context.req.headers.cookie || ''; // 쿠키 문자열을 가져옴
+  const accessTokenCookie = cookies
+    .split(';')
+    .find(cookie => cookie.trim().startsWith('accessToken='));
+
+  if (!accessTokenCookie) {
+    // accessToken이 없으면 로그인 페이지로 리다이렉트
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  // accessToken이 있다면 홈 페이지로 이동
+  return {
+    props: {},
+  };
+};

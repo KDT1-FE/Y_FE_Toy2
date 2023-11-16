@@ -1,8 +1,8 @@
 import { ClientRefresh } from '@/@types/user';
-import { getStorage, setStorage } from '@/utils/loginStorage';
 import axios, { AxiosError } from 'axios';
+import { getCookie, setCookie } from 'cookies-next';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
-import { logout } from './etc';
+import logout from './etc';
 
 const Jwtinterceptor = () => {
   const instance = axios.create({
@@ -12,6 +12,8 @@ const Jwtinterceptor = () => {
       serverId: process.env.NEXT_PUBLIC_API_KEY,
     },
   });
+
+  // const router = useRouter();
 
   // 액세스토큰 유효성 검사
   const isAccessTokenValid = async (accessToken: string) => {
@@ -43,7 +45,7 @@ const Jwtinterceptor = () => {
   };
 
   instance.interceptors.request.use(async config => {
-    const accessToken = getStorage('accessToken');
+    const accessToken = getCookie('accessToken');
     if (!accessToken) {
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = null;
@@ -54,11 +56,11 @@ const Jwtinterceptor = () => {
       const tokenValid = await isAccessTokenValid(accessToken);
 
       if (!tokenValid) {
-        const refreshToken = getStorage('refeshToken');
+        const refreshToken = getCookie('refeshToken');
         if (refreshToken) {
           try {
             const newAccessToken = await refresh(refreshToken);
-            setStorage('accessToken', newAccessToken);
+            setCookie('accessToken', newAccessToken);
             // eslint-disable-next-line no-param-reassign
             config.headers.Authorization = `Bearer ${newAccessToken}`;
             return config;

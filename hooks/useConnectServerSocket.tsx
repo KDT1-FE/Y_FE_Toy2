@@ -1,10 +1,10 @@
 import { SERVER_URL } from '@/apis/constant';
-import { getStorage } from '@/utils/loginStorage';
+import { getCookie } from 'cookies-next';
 import { useEffect, useMemo } from 'react';
 import { io } from 'socket.io-client';
 
 export default function useConnectServerSocket() {
-  const accessToken = getStorage('accessToken');
+  const accessToken = getCookie('accessToken');
 
   const serverSocket = useMemo(() => {
     return io(`${SERVER_URL}`, {
