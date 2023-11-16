@@ -35,28 +35,29 @@ function OtherMessage({ msg }: { msg: Message }) {
   }, [msg.id]);
   return (
     <div className={styles.otherFlex}>
-      <div className={styles.userInfo}>
-        {userPicture !== '' ? (
-          <Image
-            alt={'채팅이미지'}
-            src={userPicture}
-            width={45}
-            height={45}
-            className={styles.profileImage}
-          />
-        ) : (
-          <p>프로필사진</p>
-        )}
-        <span className={styles.username}>{userName}</span>
-      </div>
-      <div className={styles.otherMessage}>
-        <div className={styles.content}>{msg.text}</div>
-        <span>
-          {isToday === dateString
-            ? `${formattedTime}`
-            : `${dateString} ${formattedTime}`}
-        </span>
-      </div>
+      {userPicture && (
+        <>
+          <div className={styles.userInfo}>
+            <Image
+              width={35}
+              height={35}
+              src={userPicture}
+              className={styles.profileImage}
+              alt="유저사진"
+            />
+
+            <span className={styles.username}>{userName}</span>
+          </div>
+          <div className={styles.otherMessage}>
+            <div className={styles.content}>{msg.text}</div>
+            <span>
+              {isToday === dateString
+                ? `${formattedTime}`
+                : `${dateString} ${formattedTime}`}
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 }
