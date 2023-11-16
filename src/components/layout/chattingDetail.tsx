@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
   privateChatDetail,
   privateChatNew,
-  myUserDataState,
   openChatDetailState,
 } from '../../states/atom';
 import { useState, useEffect } from 'react';
@@ -14,9 +13,6 @@ import {
   modifyDate,
 } from '../template/useChattingSort';
 import { getCookie } from '../../util/util';
-interface ChattingDetailProps {
-  chatId: string;
-}
 import {
   Modal,
   ModalContent,
@@ -30,10 +26,10 @@ import { Flex, Text } from '@chakra-ui/layout';
 import { Img } from '@chakra-ui/image';
 import { User } from './checkPrivateChat';
 import { IconButton } from '@chakra-ui/button';
-import { ChatIcon } from '@chakra-ui/icons';
-interface ResponseData {
-  messages: Message[];
-}
+import { Input } from '@chakra-ui/react';
+import { randomNameFunc } from '../../util/util';
+import { createGameRooms } from '../../api';
+import { useNavigate } from 'react-router-dom';
 
 interface Message {
   id: string;
@@ -58,6 +54,8 @@ const ChattingDetail = ({ userData }: UserProps) => {
 
   const accessToken: any = getCookie('accessToken');
   const myUserId: string | undefined = getCookie('userId');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (openChatDetail) {
@@ -133,6 +131,12 @@ const ChattingDetail = ({ userData }: UserProps) => {
     suppressScrollY: false,
   };
 
+  const gamehandler = async (element: User) => {
+    const random = randomNameFunc();
+    const chat = await createGameRooms(random, [element.id], false);
+    navigate(`/room/:${chat.id}`);
+  };
+
   return (
     <>
       {openChatDetail && (
@@ -173,17 +177,19 @@ const ChattingDetail = ({ userData }: UserProps) => {
                 flexDirection={'column'}
                 marginLeft={'10px'}
                 justifyContent={'center'}>
-                <Text
-                  fontSize={'16px'}
-                  lineHeight={'100%'}
-                  fontWeight={600}
-                  color={'gray.700'}>
-                  {userData[0].name}
-                </Text>
-                <span
-                  className={
-                    userData[0].isOnline ? 'online' : 'offline'
-                  }></span>
+                <Flex alignItems={'center'}>
+                  <Text
+                    fontSize={'16px'}
+                    lineHeight={'100%'}
+                    fontWeight={600}
+                    color={'gray.700'}>
+                    {userData[0].name}
+                  </Text>
+                  <OnlineSpan
+                    className={
+                      userData[0].isOnline ? 'online' : 'offline'
+                    }></OnlineSpan>
+                </Flex>
                 <Text
                   fontSize={'14px'}
                   color={'gray.400'}
@@ -205,6 +211,9 @@ const ChattingDetail = ({ userData }: UserProps) => {
               padding={'0px'}
               minWidth={'32px'}
               top={'14px'}
+              onClick={() => {
+                gamehandler(userData[0]);
+              }}
               icon={
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -300,15 +309,52 @@ const ChattingDetail = ({ userData }: UserProps) => {
               <Flex
                 borderTop={'1px solid'}
                 borderColor={'gray.200'}
-                backgroundColor={'gray.100'}>
-                <form onSubmit={messageSubmit}>
-                  <input
+                backgroundColor={'gray.100'}
+                position={'relative'}>
+                <FormCont onSubmit={messageSubmit}>
+                  <Input
+                    color={'gray.700'}
+                    borderRadius={'0'}
+                    border={'none'}
+                    placeholder={'Aa'}
+                    _placeholder={{ fontSize: 'sm' }}
+                    borderColor={'gray.200'}
+                    autoComplete="on"
                     type="text"
-                    placeholder="Aa"
                     value={postData}
                     onChange={handleInputChange}
+                    width="298px"
+                    height="50px"
+                    justifyContent={'center'}
                   />
-                </form>
+
+                  <IconButton
+                    aria-label="전송하기"
+                    background={'none'}
+                    width={'32px'}
+                    height={'32px'}
+                    position={'absolute'}
+                    right={'10px'}
+                    padding={'0px'}
+                    minWidth={'32px'}
+                    top={'9px'}
+                    zIndex={10}
+                    type="submit"
+                    icon={
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                        className="submit-button">
+                        <path
+                          fill="#A0AEC0"
+                          d="m80-120 400-720 400 720H80Zm136-80h224v-403L216-200Zm304 0h224L520-603v403Z"
+                        />
+                      </svg>
+                    }
+                  />
+                </FormCont>
               </Flex>
             </ModalBody>
           </ModalContent>
@@ -318,10 +364,33 @@ const ChattingDetail = ({ userData }: UserProps) => {
   );
 };
 
+const OnlineSpan = styled.span`
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-left: 5px;
+  margin-bottom: 1px;
+  border-radius: 100%;
+  &.online {
+    background-color: #48bb78;
+  }
+  &.offline {
+    background-color: #f56565;
+  }
+`;
+
+const FormCont = styled.form`
+  .submit-button {
+    transform: rotate(45deg);
+    margin-right: -7px;
+    margin-top: -5px;
+  }
+`;
+
 const ScrollWrap = styled.div`
   width: 100%;
-  height: 310px;
-  padding: 15px 0;
+  height: 305px;
+  padding: 15px 0 0 0;
 `;
 
 const MessageWrap = styled.div`

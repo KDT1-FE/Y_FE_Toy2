@@ -92,8 +92,6 @@ const OnlineUserList = () => {
       swal({ title: '본인입니다.', icon: 'info' });
     } else {
       const chat = await createGameRooms(random, [element.id], false);
-      const chatLength = allChatState.chats.length;
-      console.log(chat);
       navigate(`/room/:${chat.id}`);
     }
   };
