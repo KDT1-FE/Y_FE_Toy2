@@ -96,8 +96,6 @@ export default function Chatting() {
         // setIsLoading(false);
       });
 
-  
-
       socket.on('join', async (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');
         const joinUserInfo = await chatAPI.getUserInfo(
@@ -145,14 +143,13 @@ export default function Chatting() {
       socket.off('leave');
       socket.disconnect();
     };
-  }, [socket]); // 이제 chatId와 accessToken이 변경될 때
-
+  }, [socket]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    setShowEntryNotice(true); // Show entry notice
+    setShowEntryNotice(true);
 
     const entryTimer = setTimeout(() => {
-      setShowEntryNotice(false); // Hide entry notice after 3 seconds
+      setShowEntryNotice(false);
       setEnterName('');
     }, 3100);
     return () => clearTimeout(entryTimer);
@@ -161,10 +158,10 @@ export default function Chatting() {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (exitName) {
-      setShowExitNotice(true); // Show exit notice
+      setShowExitNotice(true);
 
       const exitTimer = setTimeout(() => {
-        setShowExitNotice(false); // Hide exit notice after 3 seconds
+        setShowExitNotice(false);
         setExitName('');
       }, 3000);
 
@@ -211,13 +208,15 @@ export default function Chatting() {
           ) : (
             <>
               <div>
-                {messages.map(msg =>
-                  msg.userId === userId ? (
+                {messages.map((msg, index) => {
+                  const prevUserId =
+                    index > 0 ? messages[index - 1].userId : null;
+                  return msg.userId === userId ? (
                     <MyChat key={msg.id} msg={msg} />
                   ) : (
-                    <OtherChat key={msg.id} msg={msg} />
-                  ),
-                )}
+                    <OtherChat key={msg.id} msg={msg} prevUserId={prevUserId} />
+                );
+              })}
               </div>
               {showEntryNotice && <EntryNotice joiner={enterName} />}
               {showExitNotice && <ExitNotice leaver={exitName} />}

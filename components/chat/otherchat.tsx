@@ -1,17 +1,18 @@
 // OtherMessage.js
 import React, { useEffect, useState } from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
-import { User, Message } from '@/@types/types';
+import { Message } from '@/@types/types';
 import Image from 'next/image';
-import styles from './Chat.module.scss';
-import Jwtinterceptors from '../../apis/Jwtinterceptors';
 import chatAPI from '@/apis/chatAPI';
+import styles from './Chat.module.scss';
 
-interface GetUserNameResponseBody {
-  user: User;
-}
-
-function OtherMessage({ msg }: { msg: Message }) {
+function OtherMessage({
+  msg,
+  prevUserId,
+}: {
+  msg: Message;
+  prevUserId: string | null;
+}) {
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];
   const dateString = todayDate(msg.createdAt);
@@ -19,6 +20,8 @@ function OtherMessage({ msg }: { msg: Message }) {
 
   const [userName, setUserName] = useState('');
   const [userPicture, setUserPicture] = useState('');
+
+  const isSameUser = msg.userId === prevUserId;
 
   useEffect(() => {
     const getUserName = async () => {
@@ -35,8 +38,8 @@ function OtherMessage({ msg }: { msg: Message }) {
   }, [msg.id]);
   return (
     <div className={styles.otherFlex}>
-      {userPicture && (
-        <>
+      <div>
+        {!isSameUser && userPicture && (
           <div className={styles.userInfo}>
             <Image
               width={35}
@@ -48,16 +51,16 @@ function OtherMessage({ msg }: { msg: Message }) {
 
             <span className={styles.username}>{userName}</span>
           </div>
-          <div className={styles.otherMessage}>
-            <div className={styles.content}>{msg.text}</div>
-            <span>
-              {isToday === dateString
-                ? `${formattedTime}`
-                : `${dateString} ${formattedTime}`}
-            </span>
-          </div>
-        </>
-      )}
+        )}
+        <div className={styles.otherMessage}>
+          <div className={styles.content}>{msg.text}</div>
+          <span>
+            {isToday === dateString
+              ? `${formattedTime}`
+              : `${dateString} ${formattedTime}`}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
