@@ -64,7 +64,7 @@ function Chat() {
   // TODO : 여기에 의존성배열로 chatRoom 을 넣어줘야하는데 그러면 너무 렌더링이 많아져서 또 채팅방 내역을 잘 못 불러옴
   useEffect(() => {
     if (rooms) {
-      const test = async () => {
+      const sortRoom = async () => {
         rooms.sort((a: ChatI, b: ChatI) => {
           const timeA = new Date(a.updatedAt).getTime();
           const timeB = new Date(b.updatedAt).getTime();
@@ -102,7 +102,7 @@ function Chat() {
         );
         await setChatRoom(myRoom);
       };
-      test();
+      sortRoom();
     }
   }, [rooms]);
   const handleClick = (roomId: string) => {
