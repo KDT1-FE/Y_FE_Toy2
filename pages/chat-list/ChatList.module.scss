@@ -81,10 +81,6 @@
   font-size: $font-size-base;
 }
 
-// .chat_updated {
-//   position: relative;
-// }
-
 .time-now {
   @include time-diff($brand-pink);
 }

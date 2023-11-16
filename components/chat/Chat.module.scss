@@ -86,8 +86,8 @@
     border-bottom: 0.1rem solid $brand-pink;
   }
   .userDiv {
-    max-height: 20rem; /* 목록의 최대 높이 */
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤을 생성 */
+    max-height: 20rem; 
+    overflow-y: auto; 
   }
 
   .counter {

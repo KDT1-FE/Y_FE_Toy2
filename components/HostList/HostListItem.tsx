@@ -3,6 +3,7 @@
 import styles from '@/components/HostList/HostListItem.module.scss';
 import Button from '@/components/HostList/Button';
 import { Host, UserList } from '@/components/HostList/hostList.types';
+import Image from 'next/image';
 
 interface HostListItemProps {
   host: Host;
@@ -19,7 +20,7 @@ export default function HostListItem({
   if (findUser) {
     return (
       <li className={styles.item} key={host.id}>
-        <img
+        <Image
           className={styles['host-img']}
           src={findUser.picture}
           alt={findUser.name}

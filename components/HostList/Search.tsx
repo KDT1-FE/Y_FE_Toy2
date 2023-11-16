@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { BsSearch } from 'react-icons/bs';
-import styles from './Search.module.scss'; // Import your appropriate styles file
+import styles from './Search.module.scss';
 
 interface SearchProps {
   value: string;
