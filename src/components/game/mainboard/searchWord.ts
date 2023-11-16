@@ -3,7 +3,7 @@ import axios from 'axios';
 const search = async (word: string): Promise<boolean> => {
   try {
     const response = await axios.get(
-      'http://ec2-54-180-142-109.ap-northeast-2.compute.amazonaws.com:8080//https://openapi.naver.com/v1/search/encyc.json',
+      'http://ec2-54-180-142-109.ap-northeast-2.compute.amazonaws.com:8080/openapi.naver.com:443/v1/search/encyc.json',
       {
         params: {
           query: word,
@@ -16,6 +16,7 @@ const search = async (word: string): Promise<boolean> => {
     );
 
     const responseData = response.data.items;
+    console.log(response);
 
     if (responseData && responseData.length === 0) {
       return false;
