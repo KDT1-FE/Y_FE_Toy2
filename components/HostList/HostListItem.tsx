@@ -15,8 +15,8 @@ export default function HostListItem({ host, openModal }: HostListItemProps) {
           className={styles['host-img']}
           src={host.picture}
           alt={host.name}
-          width={50}
-          height={50}
+          width={70}
+          height={70}
         />
         <div>
           <p className={styles.name}>{host.name}</p>

@@ -24,8 +24,6 @@ export default function HostDetailsModal({
     onClose();
   });
 
-  const findUser = userData.find(user => user.id === hostDetails.id);
-
   const router = useRouter();
   const createHostChat = async () => {
     // 내가 참여 중인 채팅 목록
@@ -46,10 +44,10 @@ export default function HostDetailsModal({
     });
 
     // 숙소와 채팅방이 존재하지 않으면 채팅방 생성
-    if (!isExist && findUser) {
+    if (!isExist) {
       chatListAPI
         .createChat({
-          name: findUser.name,
+          name: hostDetails.name,
           users: [hostDetails.id],
           isPrivate: true,
         })
