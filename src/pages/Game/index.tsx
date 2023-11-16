@@ -8,15 +8,16 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import GameChat from "../../components/Game/GameChat";
-import useFireFetch from "../../hooks/useFireFetch";
-import GameStart from "../../components/Game/GameStart";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { userState } from "../../recoil/atoms/userState";
-import connect from "../../socket/socket";
+import GameChat from "../../components/Game/GameChat";
+import GameStart from "../../components/Game/GameStart";
 import Timer from "../../components/Game/Timer";
 import useFetch from "../../hooks/useFetch";
-import { useNavigate } from "react-router-dom";
+import useFireFetch from "../../hooks/useFireFetch";
+import { authState } from "../../recoil/atoms/authState";
+import { userState } from "../../recoil/atoms/userState";
+import connect from "../../socket/socket";
 
 interface ProfileCardProps {
   userId: string;
@@ -59,8 +60,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 };
 
 const Game = () => {
-  const user = useRecoilValue(userState);
   const navigate = useNavigate();
+  const { isAuthenticated } = useRecoilValue(authState);
+
+  if (!isAuthenticated) {
+    navigate("/");
+  }
+
+  const user = useRecoilValue(userState);
 
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);

@@ -83,6 +83,13 @@ interface MessageInfo {
 type ChatResponseValue = { chats: Chat[] };
 
 const GameLists = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useRecoilValue(authState);
+
+  if (!isAuthenticated) {
+    navigate("/");
+  }
+
   useFetch({
     url: "https://fastcampus-chat.net/chat/participate",
     method: "PATCH",
@@ -92,9 +99,7 @@ const GameLists = () => {
     start: true,
   });
   const fireFetch = useFireFetch();
-  const navigate = useNavigate();
 
-  const { isAuthenticated } = useRecoilValue(authState);
   const user = useRecoilValue(userState);
   const { logout } = useAuth();
 
