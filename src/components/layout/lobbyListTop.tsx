@@ -79,7 +79,11 @@ const LobbyListTop: React.FC = () => {
           backgroundColor={'white'}
           borderColor={'gray.200'}
           fontSize={16}
-          onChange={(e) => setSortSelect(e.target.value)}>
+          onChange={(e) => {
+            setSortSelect(e.target.value);
+            console.log('작동');
+          }}
+          value={select}>
           <option value="all">모든 게임방 보기</option>
           <option value="possible">참여 가능한 게임방 보기</option>
         </Select>

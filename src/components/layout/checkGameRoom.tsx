@@ -78,24 +78,23 @@ const CheckGameRoom = () => {
       const createAtData: Chat[] = sortCreatedAt(allRoomsData);
 
       // 방번호 넣기
-      const plusIndex = {
-        ...createAtData,
-        chats: createAtData.map((chat, index) => ({
-          ...chat,
-          index: index + 1,
-        })),
-      };
+      const plusIndex = createAtData.map((chat, index) => ({
+        ...chat,
+        index: index + 1,
+      }));
 
       setRoomIdAllRooms(plusIndex);
 
       // 배열을 역순으로 만들기 (최신순)
-      let reversedRooms = [...plusIndex.chats].reverse();
+      let reversedRooms = [...plusIndex].reverse();
+
+      console.log(reversedRooms);
 
       if (allChatState === 'possible') {
         // 풀방 확인
-        const plusIndex = reversedRooms.filter(
-          (item: Chat) => item.users.length < 4,
-        );
+        console.log('확인');
+        reversedRooms = reversedRooms.filter((item) => item.users.length < 4);
+        console.log(plusIndex);
         setTotalItemsCount(plusIndex.length);
       }
 

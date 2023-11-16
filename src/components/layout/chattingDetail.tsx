@@ -52,10 +52,12 @@ const ChattingDetail = ({ userData }: UserProps) => {
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
   const [lastDate, setLastDate] = useState('');
+
   const [openChatDetail, setOpenChatDetail] =
     useRecoilState(openChatDetailState);
-  const myUserData: any = useRecoilValue(myUserDataState);
+
   const accessToken: any = getCookie('accessToken');
+  const myUserId: string | undefined = getCookie('userId');
 
   useEffect(() => {
     if (openChatDetail) {
@@ -195,9 +197,26 @@ const ChattingDetail = ({ userData }: UserProps) => {
 
             <IconButton
               aria-label="게임 같이하기"
-              icon={<ChatIcon color={'white'} />}
-              bgColor={'teal.300'}
-              _hover={{ background: 'teal.200' }}
+              background={'none'}
+              width={'32px'}
+              height={'32px'}
+              position={'absolute'}
+              right={'45px'}
+              padding={'0px'}
+              minWidth={'32px'}
+              top={'14px'}
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 -960 960 960"
+                  width="24">
+                  <path
+                    fill="#4A5568"
+                    d="M160-240q-33 0-56.5-23.5T80-320v-320q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v320q0 33-23.5 56.5T800-240H160Zm0-80h640v-320H160v320Zm120-40h80v-80h80v-80h-80v-80h-80v80h-80v80h80v80Zm300 0q25 0 42.5-17.5T640-420q0-25-17.5-42.5T580-480q-25 0-42.5 17.5T520-420q0 25 17.5 42.5T580-360Zm120-120q25 0 42.5-17.5T760-540q0-25-17.5-42.5T700-600q-25 0-42.5 17.5T640-540q0 25 17.5 42.5T700-480ZM160-320v-320 320Z"
+                  />
+                </svg>
+              }
             />
 
             <ModalCloseButton
@@ -209,51 +228,76 @@ const ChattingDetail = ({ userData }: UserProps) => {
               p={0}
               width="100%"
               height="370px"
+              overflow={'hidden'}
               display={'flex'}
               flexDirection={'column'}>
-              <PerfectScrollbar options={options}>
-                {fetchChat &&
-                  fetchChat.map((element, index) => (
-                    <MessageWrap key={index}>
-                      <Text
-                        align={'center'}
-                        fontSize={'12px'}
-                        color={'gray.400'}>
-                        {element.date}
-                      </Text>
-                      <Flex
-                        className={
-                          element.userId === myUserData.id ? 'mine' : ''
-                        }>
-                        <MessageCont id="message">
-                          <Text fontSize={'12px'} color={'gray.400'}>
-                            {element.text}
+              <ScrollWrap>
+                <PerfectScrollbar options={options}>
+                  {fetchChat &&
+                    fetchChat.map((element, index) => (
+                      <MessageWrap key={index}>
+                        {element.date && (
+                          <Text
+                            align={'center'}
+                            fontSize={'14px'}
+                            color={'gray.400'}
+                            paddingBottom={'5px'}>
+                            {element.date}
                           </Text>
-                        </MessageCont>
-                        <Text>{element.time}</Text>
-                      </Flex>
-                    </MessageWrap>
-                  ))}
+                        )}
 
-                {newChat &&
-                  newChat.map((element, index) => (
-                    <div key={index}>
-                      {element.date !== lastDate && <p>{element.date}</p>}
+                        <Flex
+                          className={element.userId === myUserId ? 'mine' : ''}
+                          alignItems={'end'}>
+                          <MessageCont id="message">
+                            <Text fontSize={'16px'} color={'gray.700'}>
+                              {element.text}
+                            </Text>
+                          </MessageCont>
+                          <Text
+                            padding={'0 5px 5px 5px'}
+                            fontSize={'12px'}
+                            color={'gray.400'}>
+                            {element.time}
+                          </Text>
+                        </Flex>
+                      </MessageWrap>
+                    ))}
 
-                      <div id="messageWrap">
-                        <div
-                          id="message"
-                          className={
-                            element.userId === myUserData.id ? 'mine' : ''
-                          }>
-                          <p>{element.text}</p>
-                        </div>
-                        <p>{element.time}</p>
-                      </div>
-                    </div>
-                  ))}
-              </PerfectScrollbar>
-              <Flex>
+                  {newChat &&
+                    newChat.map((element, index) => (
+                      <MessageWrap key={index}>
+                        {element.date && (
+                          <Text
+                            align={'center'}
+                            fontSize={'14px'}
+                            color={'gray.400'}
+                            paddingBottom={'5px'}>
+                            {element.date}
+                          </Text>
+                        )}
+
+                        <Flex
+                          className={element.userId === myUserId ? 'mine' : ''}
+                          alignItems={'end'}>
+                          <MessageCont id="message">
+                            <Text fontSize={'16px'} color={'gray.700'}>
+                              {element.text}
+                            </Text>
+                          </MessageCont>
+                          <Text
+                            padding={'0 5px 5px 5px'}
+                            fontSize={'12px'}
+                            color={'gray.400'}>
+                            {element.time}
+                          </Text>
+                        </Flex>
+                      </MessageWrap>
+                    ))}
+                </PerfectScrollbar>
+              </ScrollWrap>
+
+              <Flex borderTop={'1px solid'} borderColor={'gray.200'}>
                 <form onSubmit={messageSubmit}>
                   <input
                     type="text"
@@ -270,11 +314,36 @@ const ChattingDetail = ({ userData }: UserProps) => {
     </>
   );
 };
-const MessageWrap = styled.div``;
+
+const ScrollWrap = styled.div`
+  width: 100%;
+  height: 310px;
+  padding: 15px 0;
+`;
+
+const MessageWrap = styled.div`
+  width: 100%;
+
+  .mine {
+    flex-direction: row-reverse;
+    align-items: end;
+    #message {
+      background-color: #4fd1c5;
+      margin-left: 0;
+      margin-right: 15px;
+      p {
+        color: #fff;
+      }
+    }
+  }
+`;
 const MessageCont = styled.div`
-  background-color:#edf2f7;
-  border-radius:5px; 
-  margin
-  `;
+  background-color: #edf2f7;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 3px 10px;
+  max-width: 200px;
+  margin-left: 15px;
+`;
 
 export default ChattingDetail;

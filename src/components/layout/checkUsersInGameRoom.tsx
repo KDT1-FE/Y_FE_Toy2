@@ -1,4 +1,4 @@
-import React, { useEffect, useState, AxiosResponse } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import {
   onlineUserStateInGameRoom,
@@ -13,6 +13,7 @@ import { getOnlyGameRoom, getUserData, getAllGameRooms } from '../../api';
 import { OnlyResponse, Chat } from '../../interfaces/interface';
 import { useParams } from 'react-router-dom';
 import { sortCreatedAt } from '../template/useChattingSort';
+import { AxiosResponse } from 'axios';
 
 interface ChattingDetailProps {
   chatId: string;
