@@ -28,17 +28,19 @@ export default function Header({ pageName }) {
   }, []);
 
   return (
-    <div className={`${style.container} ${shrink ? style.shrink : ''}`}>
-      <div className={style.logoWrapper}>
-        <Image
-          src="/images/Talkhaja.svg"
-          alt="talkhaja_logo"
-          width={shrink ? 120 : 170} // Default size on the 'all' page
-          height={shrink ? 42 : 60}
-          style={{ transition: 'all 0.3s ease' }}
-        />
+    <div className={style.headerWrapContainer}>
+      <div className={`${style.container} ${shrink ? style.shrink : ''}`}>
+        <div className={style.logoWrapper}>
+          <Image
+            src="/images/Talkhaja.svg"
+            alt="talkhaja_logo"
+            width={shrink ? 120 : 170} // Default size on the 'all' page
+            height={shrink ? 42 : 60}
+            style={{ transition: 'all 0.3s ease' }}
+          />
+        </div>
+        <span className={style.pageName}>{pageName}</span>
       </div>
-      <span className={style.pageName}>{pageName}</span>
     </div>
   );
 }

@@ -1,15 +1,10 @@
 @import '@/styles/index.scss';
 
-.allContainer {
-  @include container;
+.list_container {
+  @include container; 
   margin-top: 8rem;
   margin-bottom: 5.6rem;
 }
-
-.list_container {
-  @include container; 
-}
-
 
 .titleContainer {
   @include container;

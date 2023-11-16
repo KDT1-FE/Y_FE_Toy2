@@ -1,23 +1,27 @@
 @import '@/styles/index.scss';
 
-.container {
-    max-width: $max-width;
-    display: flex;
-    z-index: 10;
-    padding: 2rem  2rem 0 2rem;
-    position: fixed;
+.headerWrapContainer {
     width: 100%;
-    left: 50%; 
-    transform: translateX(-50%);
-    margin: 0 2rem;
+    background-color: white;
+    z-index: 10;
     top: 0;
     background-color: white;
+    position: fixed;
+    display: flex;
+    justify-content: center;
 
+}
+
+.container {
+    @include container;
+    width: 100%;
+    margin: 0 4rem;
+    padding : 2rem 2rem 0 2rem;
+    display: flex;
     span {
         font-size: 1.5rem;
         font-weight: bold;
     }
-
 }
 
 .pageName {

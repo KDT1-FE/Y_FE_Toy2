@@ -27,26 +27,28 @@ export default function MyChatList() {
   }, []);
 
   return (
-    <div className={styles.allContainer}>
+    <div className={styles.headerWrapContainer}>
       <Header pageName="My" />
-      <div className={styles.titleContainer}>
-        <p>숙소와 채팅</p>
-        <IoIosChatbubbles />
+      <div className={styles.list_container}>
+        <div className={styles.titleContainer}>
+          <p>숙소와 채팅</p>
+          <IoIosChatbubbles />
+        </div>
+        <ul>
+          {myHostChatList.map(chat => (
+            <MyChatListItem key={chat.id} chat={chat} />
+          ))}
+        </ul>
+        <div className={styles.titleContainer}>
+          <p>유저와 채팅</p>
+          <IoIosChatbubbles />
+        </div>
+        <ul>
+          {myChatList.map(chat => (
+            <MyChatListItem key={chat.id} chat={chat} />
+          ))}
+        </ul>
       </div>
-      <ul>
-        {myHostChatList.map(chat => (
-          <MyChatListItem key={chat.id} chat={chat} />
-        ))}
-      </ul>
-      <div className={styles.titleContainer}>
-        <p>유저와 채팅</p>
-        <IoIosChatbubbles/>
-      </div>
-      <ul>
-        {myChatList.map(chat => (
-          <MyChatListItem key={chat.id} chat={chat} />
-        ))}
-      </ul>
     </div>
   );
 }
