@@ -21,7 +21,7 @@ const Users = async () => {
 				<MyProfile user={myUser} />
 			</div>
 			<div className="w-full my-5 pt-2 border-t border-gray-400 px-4 ">
-				<h4>친구{allUsersExceptMe?.length}명</h4>
+				<h4>집사 {allUsersExceptMe?.length}명</h4>
 			</div>
 			<div className="px-4">
 				<FriendProfilesCheckOnline allUsersExceptMe={allUsersExceptMe} />
