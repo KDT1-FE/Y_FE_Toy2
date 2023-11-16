@@ -13,6 +13,7 @@ function OtherMessage({
   msg: Message;
   prevUserId: string | null;
 }) {
+
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];
   const dateString = todayDate(msg.createdAt);
