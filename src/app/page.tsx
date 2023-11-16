@@ -65,7 +65,6 @@ const Users = () => {
         connectUserIdListRef.current = usersIdList;
         setConnectUserIdList(usersIdList);
       }
-      console.log(usersIdList);
     });
   }, []);
   return (
