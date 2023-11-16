@@ -1168,6 +1168,10 @@ interface ResponseData {
 
 </details>
 
+## 🧑🏻‍💻 Stack
+
+![기술 스택](https://github.com/MOVIEJOJO7/cat-talk/assets/101972330/68bb2746-7f5f-40da-9cd6-3a57cb4c89fc)
+
 <br/>
 
 ## 🧑🏻‍💻 Contributor
@@ -1180,41 +1184,10 @@ interface ResponseData {
 
 <br/>
 
-## 🧑🏻‍💻 기술 스택
+## 🧑🏻‍💻 Stack
 
-### Enviroment & Config
+![Stack](https://github.com/MOVIEJOJO7/cat-talk/assets/101972330/68bb2746-7f5f-40da-9cd6-3a57cb4c89fc)
 
-<div style="display: flex;">
-  <img src="https://img.shields.io/badge/visual studio code-007ACC?style=for-the-badge&logo=visual studio&logoColor=white" />
-  <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white" />
-  <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white" />
-  <img src="https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white" />
-  <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" />
-</div>
-
-### Development & FrontEnd
-
-<div style="display: flex;">
-  <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" />
-  <img src="https://img.shields.io/badge/css3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
-  <img src="https://img.shields.io/badge/react (CRA)-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
-  <img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" />
-</div>
-    
-### Deploy
-
-<div style="display: flex;">
-  <img src="https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase" />
-  <img src="https://img.shields.io/badge/github actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white" />
-</div>
-
-### Communication
-
-<div style="display: flex;">
-  <img src="https://img.shields.io/badge/jirasoftware-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white" />
-  <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white" />
-  <img src="https://img.shields.io/badge/googlesheets-34A853?style=for-the-badge&logo=googlesheets&logoColor=white" />
-</div>
 
 <br/>
 
@@ -1236,9 +1209,9 @@ $ npm run dev
 
 |||
 |---|---|
-| ![유저플로우1](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/a6f2ca7b-877c-470a-93d1-e4ece03f7ffc) | ![유저플로우2](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/70658e8f-6f97-4bb6-8554-1b995ee01add) |
-| ![유저플로우3](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/f39218d5-2a8d-4d2d-a5ce-d53cbca550ae) | ![유저플로우4](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/ae4266f7-f450-4c73-aca1-14edbc413a9e) |
-| ![유저플로우5](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/15fc4e7b-458f-435e-8752-696943c17420) |
+| ![유저플로우1](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/cdee66fe-afdd-4bf1-94dc-dced5168065e) | ![유저플로우2](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/9ddde385-660d-4b8f-8f53-d3adea2a5769) |
+| ![유저플로우3](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/0cc08deb-85e3-43fe-95dc-3bad21be3da0) | ![유저플로우4](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/5b253557-ce1f-41a3-8e31-0d07c712f4d1) |
+| ![유저플로우5](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/718aa86d-dddd-4866-921f-cee666886457) |
 
 ### 디자인 프로토타입
 
