@@ -1,0 +1,54 @@
+@import '@/styles/index.scss';
+@import '../../../styles/_variables';
+
+.user-profile {
+  margin-right: 1rem;
+  border-radius: 100%;
+}
+
+.chat-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.chat-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-name-wrap {
+  display: flex;
+  .user-length {
+    color: $gray;
+    margin-left: 1.7rem;
+  }
+}
+
+.chat-name {
+  font-size: $font-size-lg;
+  margin-bottom: 1rem;
+  font-weight: bolder;
+}
+
+.chat-lastest-mesaage {
+  font-size: $font-size-base;
+}
+
+.time-now {
+  @include time-diff($brand-pink);
+}
+
+.time-minutes {
+  @include time-diff($success);
+}
+
+.time-hours {
+  @include time-diff($blue);
+}
+.time-hours-after {
+  @include time-diff($gray);
+}
+.time-days {
+  @include time-diff($gray);
+}

@@ -1,10 +1,9 @@
 import React from 'react';
+import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import styles from './Chat.module.scss';
 import { Message } from '../../@types/types';
-import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 
 function MyMessage({ msg }: { msg: Message }) {
-
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];
   const dateString = todayDate(msg.createdAt);
@@ -13,7 +12,7 @@ function MyMessage({ msg }: { msg: Message }) {
   return (
     <div className={styles.myFlex}>
       <div className={styles.myMessage}>
-      <span>
+        <span>
           {isToday === dateString
             ? `${formattedTime}`
             : `${dateString} ${formattedTime}`}

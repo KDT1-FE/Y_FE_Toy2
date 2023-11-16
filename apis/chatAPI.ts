@@ -9,7 +9,7 @@ const chatAPI = {
   },
   // 특정 유저 조회
   getUserInfo(userId: string) {
-    return instance.get(`/chat/user?userId=${userId}`);
+    return instance.get(`/user?userId=${userId}`);
   },
 };
 
