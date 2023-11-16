@@ -6,6 +6,7 @@ import {
   privateChatState,
   onlineUserState,
   openChatDetailState,
+  openNewChatState,
 } from '../../states/atom';
 import usePollingData from '../template/usePollingData';
 import ChattingDetail from './chattingDetail';
@@ -23,6 +24,7 @@ import { getCookie } from '../../util/util';
 import { Flex, Text } from '@chakra-ui/layout';
 import { Img } from '@chakra-ui/image';
 import { IconButton } from '@chakra-ui/button';
+import NewPrivateChat from './newPrivateChat';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -46,7 +48,7 @@ const CheckPrivateChat = ({ isOpen, onClose }: LoginModalProps) => {
   const [openChatDetail, setOpenChatDetail] =
     useRecoilState(openChatDetailState);
   const [inputValue, setInputValue] = useState('');
-
+  const [openNewChat, setOpenNewChat] = useRecoilState(openNewChatState);
   const [chatUserData, setchatUserData] = useState<User[]>([
     {
       chatId: '',
@@ -144,6 +146,12 @@ const CheckPrivateChat = ({ isOpen, onClose }: LoginModalProps) => {
     suppressScrollY: false,
   };
 
+  const handleOpenNewChat = () => {
+    setOpenNewChat(true);
+    setOpenChatDetail(false);
+    onClose();
+  };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -170,6 +178,31 @@ const CheckPrivateChat = ({ isOpen, onClose }: LoginModalProps) => {
             padding={'15px'}>
             1:1 대화
           </ModalHeader>
+
+          <IconButton
+            aria-label="1:1 채팅 생성"
+            background={'none'}
+            width={'32px'}
+            height={'32px'}
+            position={'absolute'}
+            right={'45px'}
+            padding={'0px'}
+            minWidth={'32px'}
+            top={'8px'}
+            onClick={handleOpenNewChat}
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="20"
+                viewBox="0 -960 960 960"
+                width="20">
+                <path
+                  fill="#4A5568"
+                  d="M440-400h80v-120h120v-80H520v-120h-80v120H320v80h120v120ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"
+                />
+              </svg>
+            }
+          />
 
           <ModalCloseButton
             color={'gray.700'}
@@ -239,6 +272,7 @@ const CheckPrivateChat = ({ isOpen, onClose }: LoginModalProps) => {
         </ModalContent>
       </Modal>
       <ChattingDetail userData={chatUserData} />
+      <NewPrivateChat />
     </>
   );
 };
