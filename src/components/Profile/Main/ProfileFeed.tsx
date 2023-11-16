@@ -3,41 +3,6 @@ import styled from "styled-components";
 import { BsPlusCircle } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 
-const ProfileFeedContainer = styled.div`
-  width: 1200px;
-  border-top: 1px solid #e1e1e1;
-  padding-top: 46px;
-`;
-const ProfileFeedImageWrap = styled.div`
-  width: 100%;
-
-  display: flex;
-  gap: 26px;
-  flex-wrap: wrap;
-`;
-const ProfileFeedImage = styled.div`
-  width: 280px;
-  height: 350px;
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  cursor: pointer;
-`;
-const ProfileFeedEditImage = styled.div`
-  width: 280px;
-  height: 350px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: #d9d9d9;
-
-  cursor: pointer;
-`;
-
 interface feed {
   id: string;
   feedId: number;
@@ -92,3 +57,37 @@ function ProfileFeed(props: {
 }
 
 export default ProfileFeed;
+const ProfileFeedContainer = styled.div`
+  width: 1200px;
+  border-top: 1px solid #e1e1e1;
+  padding-top: 46px;
+`;
+const ProfileFeedImageWrap = styled.div`
+  width: 100%;
+
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+`;
+const ProfileFeedImage = styled.div`
+  width: 280px;
+  height: 350px;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  cursor: pointer;
+`;
+const ProfileFeedEditImage = styled.div`
+  width: 280px;
+  height: 350px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #d9d9d9;
+
+  cursor: pointer;
+`;

@@ -3,6 +3,54 @@ import styled from "styled-components";
 import { BsPencilFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
+interface usertData {
+  id: string;
+  name: string;
+  profileImgUrl: string;
+  backgroundImgUrl: string;
+  introText: string;
+  hobby: string[];
+}
+
+function ProfileInfo(props: {
+  userData: usertData | null;
+  isProfileMatchingLogin: boolean | null;
+}) {
+  const navigate = useNavigate();
+  return (
+    <ProfileInfoWrap>
+      <ProfileInfoImgWrap>
+        <ProfileInfoImg
+          style={{ backgroundImage: `url(${props.userData?.profileImgUrl})` }}
+        >
+          {props.isProfileMatchingLogin ? (
+            <ProfileInfoEditBtn
+              onClick={() => {
+                navigate(`/profiles/${props.userData?.id}/edit`);
+              }}
+            >
+              <BsPencilFill color="#BEBEBE" />
+            </ProfileInfoEditBtn>
+          ) : null}
+        </ProfileInfoImg>
+      </ProfileInfoImgWrap>
+      <ProfileInfoContents>
+        <ProfileInfoUserNameWrap>
+          <span>{props.userData?.name}</span>
+        </ProfileInfoUserNameWrap>
+        <ProfileInfoUserIntroWrap>
+          <span>{props.userData?.introText}</span>
+        </ProfileInfoUserIntroWrap>
+        <ProfileInfoUserTagsWrap>
+          {props.userData?.hobby.map((tagData, index) => (
+            <Tag key={index}>{tagData}</Tag>
+          ))}
+        </ProfileInfoUserTagsWrap>
+      </ProfileInfoContents>
+    </ProfileInfoWrap>
+  );
+}
+export default ProfileInfo;
 const ProfileInfoWrap = styled.div`
   width: 1200px;
 
@@ -73,51 +121,3 @@ const Tag = styled.span`
 
   margin-right: 10px;
 `;
-interface usertData {
-  id: string;
-  name: string;
-  profileImgUrl: string;
-  backgroundImgUrl: string;
-  introText: string;
-  hobby: string[];
-}
-
-function ProfileInfo(props: {
-  userData: usertData | null;
-  isProfileMatchingLogin: boolean | null;
-}) {
-  const navigate = useNavigate();
-  return (
-    <ProfileInfoWrap>
-      <ProfileInfoImgWrap>
-        <ProfileInfoImg
-          style={{ backgroundImage: `url(${props.userData?.profileImgUrl})` }}
-        >
-          {props.isProfileMatchingLogin ? (
-            <ProfileInfoEditBtn
-              onClick={() => {
-                navigate(`/profiles/${props.userData?.id}/edit`)
-              }}
-            >
-              <BsPencilFill color="#BEBEBE" />
-            </ProfileInfoEditBtn>
-          ) : null}
-        </ProfileInfoImg>
-      </ProfileInfoImgWrap>
-      <ProfileInfoContents>
-        <ProfileInfoUserNameWrap>
-          <span>{props.userData?.name}</span>
-        </ProfileInfoUserNameWrap>
-        <ProfileInfoUserIntroWrap>
-          <span>{props.userData?.introText}</span>
-        </ProfileInfoUserIntroWrap>
-        <ProfileInfoUserTagsWrap>
-          {props.userData?.hobby.map((tagData, index) => (
-            <Tag key={index}>{tagData}</Tag>
-          ))}
-        </ProfileInfoUserTagsWrap>
-      </ProfileInfoContents>
-    </ProfileInfoWrap>
-  );
-}
-export default ProfileInfo;

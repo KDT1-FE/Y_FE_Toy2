@@ -14,156 +14,6 @@ import {
 import { db } from "../../../firebase/firebase";
 import ProfileFeedComment from "./ProfileFeedComment";
 
-const ProfileFeedDetailContainer = styled.div`
-  width: 850px;
-
-  padding: 64px 32px;
-  box-sizing: border-box;
-`;
-const WriterInfoWrap = styled.div`
-  display: flex;
-  align-items: center;
-
-  font-size: 20px;
-  font-weight: 600;
-
-  margin-bottom: 24px;
-
-  position: relative;
-  .name {
-    cursor: pointer;
-  }
-  .ProfileImg {
-    width: 100px;
-    height: 100px;
-
-    border-radius: 50%;
-
-    background-image: url("https://images.pexels.com/photos/3974145/pexels-photo-3974145.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    margin-right: 16px;
-  }
-
-  .timeStamp {
-    display: flex;
-    flex-direction: column;
-
-    font-size: 16px;
-    opacity: 0.5;
-    font-weight: 500;
-
-    position: absolute;
-    right: 0;
-  }
-
-  button {
-    position: absolute;
-    right: 0;
-
-    width: 80px;
-    height: 30px;
-
-    margin-top: 32px;
-
-    border: none;
-    border-radius: 12px;
-
-    cursor: pointer;
-
-    font-family: "Pretendard";
-
-    background-color: #0d6efd;
-    color: white;
-  }
-`;
-const ContentsWrap = styled.div`
-  .FeedImg {
-    width: 100%;
-    height: 610px;
-
-    margin-bottom: 16px;
-  }
-
-  .ContentText {
-    padding: 8px;
-  }
-`;
-const CommentWrap = styled.div`
-  width: 100%;
-
-  margin-top: 20px;
-  padding-top: 20px;
-
-  border-top: 1px solid #E4E4E4;
-`;
-const CommentInputWrap = styled.div`
-  display: flex;
-  align-items: center;
-
-  margin-bottom: 56px;
-  .loginUserProfileImage {
-    flex: 0 0 50px;
-    width: 50px;
-    height: 50px;
-
-    border-radius: 50%;
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    margin-right: 20px;
-  }
-  input {
-    width: 100%;
-    height: 50px;
-    border: none;
-    border-radius: 24px;
-
-    padding: 0px 16px;
-    margin-right: 20px;
-
-    font-family: "Pretendard";
-  }
-  input:focus {
-    outline: none;
-  }
-  button {
-    width: 90px;
-    height: 50px;
-
-    border: none;
-    border-radius: 20px;
-
-    cursor: pointer;
-
-    font-family: "Pretendard";
-
-    background-color: #FF4747;
-    color: white;
-  }
-`;
-const CommentListWrap = styled.div`
-  display: flex;
-
-  margin-bottom: 10px;
-  .userProfile {
-    flex: 0 0 50px;
-    width: 50px;
-    height: 50px;
-
-    border-radius: 50%;
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    margin-right: 24px;
-  }
-`;
 interface userData {
   id: string;
   name: string;
@@ -510,3 +360,157 @@ function ProfileFeedDetail() {
 }
 
 export default ProfileFeedDetail;
+
+const ProfileFeedDetailContainer = styled.div`
+  width: 850px;
+
+  padding: 64px 32px;
+  box-sizing: border-box;
+`;
+const WriterInfoWrap = styled.div`
+  display: flex;
+  align-items: center;
+
+  font-size: 20px;
+  font-weight: 600;
+
+  margin-bottom: 24px;
+
+  position: relative;
+  .name {
+    cursor: pointer;
+  }
+  .ProfileImg {
+    width: 100px;
+    height: 100px;
+
+    border-radius: 50%;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    margin-right: 16px;
+  }
+
+  .timeStamp {
+    display: flex;
+    flex-direction: column;
+
+    font-size: 16px;
+    opacity: 0.5;
+    font-weight: 500;
+
+    position: absolute;
+    right: 0;
+  }
+
+  button {
+    position: absolute;
+    right: 0;
+
+    width: 80px;
+    height: 30px;
+
+    margin-top: 32px;
+
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-family: "Pretendard";
+
+    background-color: #0d6efd;
+    color: white;
+  }
+`;
+const ContentsWrap = styled.div`
+  .FeedImg {
+    width: 100%;
+    height: 610px;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    margin-bottom: 16px;
+  }
+
+  .ContentText {
+    padding: 8px;
+  }
+`;
+const CommentWrap = styled.div`
+  width: 100%;
+
+  margin-top: 20px;
+  padding-top: 20px;
+
+  border-top: 1px solid #e4e4e4;
+`;
+const CommentInputWrap = styled.div`
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 56px;
+  .loginUserProfileImage {
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    margin-right: 20px;
+  }
+  input {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 24px;
+
+    padding: 0px 16px;
+    margin-right: 20px;
+
+    font-family: "Pretendard";
+  }
+  input:focus {
+    outline: none;
+  }
+  button {
+    width: 90px;
+    height: 50px;
+
+    border: none;
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    font-family: "Pretendard";
+
+    background-color: #ff4747;
+    color: white;
+  }
+`;
+const CommentListWrap = styled.div`
+  display: flex;
+
+  margin-bottom: 10px;
+  .userProfile {
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    margin-right: 24px;
+  }
+`;

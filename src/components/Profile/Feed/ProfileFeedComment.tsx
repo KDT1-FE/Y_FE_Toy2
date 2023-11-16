@@ -6,84 +6,6 @@ import styled from "styled-components";
 import { ThemeContext } from "../../../App";
 import { darkTheme } from "../../../style/theme";
 
-const Container = styled.div`
-  width: 100%;
-
-  display: flex;
-  justify-content: space-between;
-
-  margin-bottom: 32px;
-  .commentContainer {
-    display: flex;
-  }
-  .commentContentWrap {
-    display: flex;
-    flex-direction: column;
-    align-content: space-between;
-    gap: 8px;
-
-    padding-top: 16px;
-
-    font-size: 14px;
-
-    .name span {
-      color: ${({ theme }) => (theme === darkTheme ? "white" : "black")};
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .text span {
-      color: ${({ theme }) => (theme === darkTheme ? "#dedede" : "#3e3e3e")};
-    }
-    .timeStamp span {
-      display: block;
-      margin-top: 5px;
-      color: #999696;
-    }
-  }
-  input {
-    width: 500px;
-    height: 50px;
-    border: none;
-    border-radius: 24px;
-
-    padding: 0px 16px;
-    margin-right: 20px;
-
-    font-family: "Pretendard";
-  }
-  input:focus {
-    outline: none;
-  }
-  .buttonWrap {
-    margin-top: 16px;
-    display: flex;
-    align-items: flex-start;
-
-    button {
-      width: 48px;
-      margin-right: 16px;
-
-      border: none;
-      border-radius: 5px;
-      background-color: #f5f5f5;
-
-      cursor: pointer;
-      &:nth-child(2) {
-        position: relative;
-        &:before {
-          content: "";
-          left: -8px;
-          height: 0.8em;
-          top: 50%;
-          margin-top: -0.4em;
-          position: absolute;
-          border-left: 1px solid #b3b3b3;
-        }
-      }
-    }
-  }
-`;
-
 interface feed {
   id: string;
   feedId: number;
@@ -188,3 +110,81 @@ export default function ProfileFeedComment(props: {
     </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 32px;
+  .commentContainer {
+    display: flex;
+  }
+  .commentContentWrap {
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    gap: 8px;
+
+    padding-top: 16px;
+
+    font-size: 14px;
+
+    .name span {
+      color: ${({ theme }) => (theme === darkTheme ? "white" : "black")};
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .text span {
+      color: ${({ theme }) => (theme === darkTheme ? "#dedede" : "#3e3e3e")};
+    }
+    .timeStamp span {
+      display: block;
+      margin-top: 5px;
+      color: #999696;
+    }
+  }
+  input {
+    width: 500px;
+    height: 50px;
+    border: none;
+    border-radius: 24px;
+
+    padding: 0px 16px;
+    margin-right: 20px;
+
+    font-family: "Pretendard";
+  }
+  input:focus {
+    outline: none;
+  }
+  .buttonWrap {
+    margin-top: 16px;
+    display: flex;
+    align-items: flex-start;
+
+    button {
+      width: 48px;
+      margin-right: 16px;
+
+      border: none;
+      border-radius: 5px;
+      background-color: #f5f5f5;
+
+      cursor: pointer;
+      &:nth-child(2) {
+        position: relative;
+        &:before {
+          content: "";
+          left: -8px;
+          height: 0.8em;
+          top: 50%;
+          margin-top: -0.4em;
+          position: absolute;
+          border-left: 1px solid #b3b3b3;
+        }
+      }
+    }
+  }
+`;
