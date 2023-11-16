@@ -1,7 +1,7 @@
 
 # 참교6조 CHWIMIMATE
 <div align="center">
-<img src="https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2023%2F06%2Fma-dong-seoks-favorite-quotes-from-himself-18-ft.jpeg?fit=max&cbr=1&q=90&w=750&h=500" alt='마동석'>
+<img src="https://github.com/YongYong21/ToyProject2/blob/develop/src/assets/images/mate1.png" alt='메인페이지'>
 </div>
 
 <p align="center">
@@ -1186,7 +1186,17 @@ CHWIMIMATE
 
 ## 🧑🏻‍💻 화면 구성
 
+### 메인페이지+헤더
+<img src="https://github.com/YongYong21/ToyProject2/blob/develop/src/assets/images/mate1.png" />
 
+### 메인페이지+섹션
+<img src="https://github.com/YongYong21/ToyProject2/blob/develop/src/assets/images/mate2.png" />
+
+### 취미메이트 만들기&확인하기
+<img src="https://github.com/YongYong21/ToyProject2/blob/develop/src/assets/images/mate3.png" />
+
+### 채팅
+<img src="https://github.com/YongYong21/ToyProject2/blob/develop/src/assets/images/mate4.png" />
 
 <br/>
 
