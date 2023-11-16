@@ -30,7 +30,7 @@ const MyChats = ({ userType }: { userType: string }) => {
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
   const navigateToUserSelection = () => {
-    router.push('userSelect'); // 적절한 경로로 수정하세요.
+    router.push('userSelect');
 };
 
   // 채팅방 들어갈 때 새 유저면 채팅방에 새로 참여시키고 기존 유저는 그냥 들어가기
