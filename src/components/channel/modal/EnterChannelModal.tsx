@@ -15,6 +15,8 @@ import { Channel } from '../../../@types/channel';
 import { Link } from 'react-router-dom';
 import { splitChannelName } from '../../../utils';
 import { CATEGORY_COLOR_SCHEMES } from '../../../constants/channel';
+import { participateChannel } from '../../../api/channel';
+import { useMyChannels } from '../../../hooks/useMyChannels';
 
 interface Props {
   isOpen: boolean;
@@ -24,6 +26,18 @@ interface Props {
 
 const EnterChannelModal = ({ isOpen, onClose, selectedChannel }: Props) => {
   const { title, category } = splitChannelName(selectedChannel.name);
+  const { data: myChannels } = useMyChannels();
+
+  const handleEnterChannel = async () => {
+    const chatId = selectedChannel.id;
+    const enteredChannelId = myChannels?.some(
+      (channel) => channel.id === chatId,
+    );
+    if (!enteredChannelId) {
+      await participateChannel({ chatId });
+      location.reload();
+    }
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -45,7 +59,12 @@ const EnterChannelModal = ({ isOpen, onClose, selectedChannel }: Props) => {
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="blue">
-            <Link to={`/chats/${selectedChannel?.id}`}>참여하기</Link>
+            <Link
+              onClick={handleEnterChannel}
+              to={`/chats/${selectedChannel?.id}`}
+            >
+              참여하기
+            </Link>
           </Button>
         </ModalFooter>
       </ModalContent>

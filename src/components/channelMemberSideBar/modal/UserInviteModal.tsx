@@ -39,7 +39,13 @@ const UserInviteModal = ({ setUserList, userList, chatId }: Props) => {
 
   return (
     <>
-      <AddIcon boxSize="25px" color="#191919" ref={btnRef} onClick={onOpen} />
+      <AddIcon
+        boxSize="25px"
+        color="#191919"
+        cursor="pointer"
+        ref={btnRef}
+        onClick={onOpen}
+      />
 
       <Modal
         size="sm"

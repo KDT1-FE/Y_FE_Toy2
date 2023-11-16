@@ -75,3 +75,11 @@ export const getMemberData = async (users: string[]) => {
   }
   return userListData;
 };
+
+export const participateChannel = async (chatId: { chatId: string }) => {
+  const response = await instance.patch<InviteResponseValue>(
+    '/chat/participate',
+    chatId,
+  );
+  return response.data;
+};

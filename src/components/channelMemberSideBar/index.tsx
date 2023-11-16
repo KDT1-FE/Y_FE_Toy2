@@ -31,7 +31,7 @@ const ChannelMemberSideBar = () => {
       </Flex>
       <Divider mt="1rem" borderColor={'gray.500'} />
 
-      <VStack p="1rem" align="flex-start">
+      <VStack p="1rem" h="70vh" align="flex-start" overflowY="auto">
         {userList.map((user) => (
           <ChannelMemberItem
             key={user.id}

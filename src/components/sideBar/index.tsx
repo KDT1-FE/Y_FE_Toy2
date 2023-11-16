@@ -2,23 +2,40 @@ import { useState } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
-  Text,
   Divider,
   Heading,
   VStack,
+  Center,
   Link as ChakraLink,
   Flex,
 } from '@chakra-ui/react';
-import { EditIcon, ChatIcon } from '@chakra-ui/icons';
+import { ChatIcon } from '@chakra-ui/icons';
 import MyChannelItem from './MyChannelItem';
 import { useMyChannels } from '../../hooks/useMyChannels';
 import { useInviteData } from '../../hooks/useInviteData';
 
 const SideBar = () => {
   const [myChannels, setmyChannels] = useState([]);
-
-  const { data: channels } = useMyChannels();
+  const { data: channels, isLoading } = useMyChannels();
   const { myChannelList } = useInviteData();
+
+  const channelBox = () => {
+    if (isLoading) {
+      return <Center>내 채팅 목록을 불러오는 중입니다.</Center>;
+    }
+    if (myChannelList?.length === 0 || channels?.length === 0) {
+      return <Center>현재 참여중인 채팅방이 없습니다.</Center>;
+    }
+    return (myChannelList || channels)?.map((channel) => (
+      <Box key={channel.id}>
+        <MyChannelItem
+          channelId={channel.id}
+          myChannelName={channel.name}
+          isPrivate={channel.isPrivate}
+        />
+      </Box>
+    ));
+  };
 
   return (
     <Box position="fixed" color="black">

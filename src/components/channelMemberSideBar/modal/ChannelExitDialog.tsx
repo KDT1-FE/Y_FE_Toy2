@@ -43,6 +43,7 @@ const ChannelExitDialog = ({ chatId }: Prop) => {
         bottom="3rem"
         right="1rem"
         onClick={onOpen}
+        cursor="pointer"
       />
 
       <AlertDialog
