@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { formatTimeToKST, splitChannelName } from '../../utils';
 import { Channel } from '../../@types/channel';
-import { CATEGORY_COLOR_SCHEMES } from '../../constants/channel';
+import { CATEGORY_BADGE_COLOR_SCHEMES } from '../../constants/channel';
 import { LockIcon } from '@chakra-ui/icons';
 import EnterChannelModal from './modal/EnterChannelModal';
 
@@ -45,7 +45,7 @@ const ChannelCard = ({ channel }: Props) => {
             <Text as="h2" fontSize="lg" fontWeight="bold" isTruncated>
               {title}
             </Text>
-            <Badge colorScheme={CATEGORY_COLOR_SCHEMES[`${category}`]}>
+            <Badge colorScheme={CATEGORY_BADGE_COLOR_SCHEMES[`${category}`]}>
               {category}
             </Badge>
             {channel.isPrivate && <LockIcon boxSize="3" opacity="0.5" />}

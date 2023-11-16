@@ -5,6 +5,7 @@ import LoginInputBox from '../../components/login/loginInputBox';
 import { LOGIN } from '../../constants/login';
 import { login } from '../../api/login';
 import { LoginForm, LoginResToken } from '../../@types/login';
+import { getAuthUser } from '../../api/user';
 
 const Login = () => {
   const {
@@ -24,6 +25,10 @@ const Login = () => {
         localStorage.setItem('refreshToken', result.refreshToken);
         alert('로그인에 성공하셨습니다');
 
+        const userId = await getAuthUser();
+        if (userId) {
+          localStorage.setItem('userId', userId);
+        }
         navigate('/');
       } else {
         window.alert(

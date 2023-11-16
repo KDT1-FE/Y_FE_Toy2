@@ -6,7 +6,7 @@ import {
   SkeletonCircle,
 } from '@chakra-ui/react';
 
-export const skeletons = Array.from({ length: 4 });
+export const skeletons = Array.from({ length: 3 });
 
 const LoadingSkeleton = () => {
   return (
