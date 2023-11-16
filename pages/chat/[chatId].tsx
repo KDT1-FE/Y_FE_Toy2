@@ -91,16 +91,15 @@ export default function Chatting() {
       });
 
       socket.on('message-to-client', (messageObject: Message) => {
-        // setIsLoading(true);
         setMessages(prevMessages => [...prevMessages, messageObject]);
-        // setIsLoading(false);
       });
 
       socket.on('join', async (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');
         const joinUserInfo = await chatAPI.getUserInfo(
-          messageObject.joiners[0]?.id.split(':')[1],
+          messageObject.joiners[0],
         );
+
         let userData = joinUserInfo.data.user;
         setEnterName(userData.name);
 
@@ -143,16 +142,19 @@ export default function Chatting() {
       socket.off('leave');
       socket.disconnect();
     };
-  }, [socket]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    setShowEntryNotice(true);
+  }, [socket]); // 이제 chatId와 accessToken이 변경될 때
 
-    const entryTimer = setTimeout(() => {
-      setShowEntryNotice(false);
-      setEnterName('');
-    }, 3100);
-    return () => clearTimeout(entryTimer);
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (enterName) {
+      setShowEntryNotice(true);
+
+      const entryTimer = setTimeout(() => {
+        setShowEntryNotice(false);
+        setEnterName('');
+      }, 3000);
+      return () => clearTimeout(entryTimer);
+    }
   }, [enterName]);
 
   // eslint-disable-next-line consistent-return
@@ -220,10 +222,10 @@ export default function Chatting() {
               </div>
               {showEntryNotice && <EntryNotice joiner={enterName} />}
               {showExitNotice && <ExitNotice leaver={exitName} />}
-              <div ref={messagesEndRef} />
               {showAlert && <ChatAlert />}
             </>
           )}
+          <div ref={messagesEndRef} />
         </div>
       </div>
       {chatData ? (

@@ -28,15 +28,9 @@ export interface Message {
   createdAt: Date;
 }
 
-interface JoinUser {
-  id: string;
-  iat: number;
-  exp: number;
-}
-
 export interface JoinersData {
   users: string[]; // 참여자들 id
-  joiners: JoinUser[]; // 새로운 참여자 id
+  joiners: string[]; // 새로운 참여자 id
 }
 
 export interface LeaverData {
