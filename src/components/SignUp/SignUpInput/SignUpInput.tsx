@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import styled from "styled-components";
 import { postApi } from "../../../utils/postApi";
 
@@ -87,12 +87,6 @@ function SignUpInput({
         });
     }
   };
-
-  // useEffect(() => {
-  //   if (id === "id" && inputRef.current) {
-  //     inputRef.current.focus();
-  //   }
-  // }, []);
 
   return (
     <SignUpInputContainer>
