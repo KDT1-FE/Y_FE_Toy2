@@ -5,7 +5,8 @@
   @include container;
   display: flex;
   padding: 1rem;
-  margin: 2rem auto;
+  padding: 1.7rem;
+  border-radius: 2rem;
 
   button {
     @include fill-btn;

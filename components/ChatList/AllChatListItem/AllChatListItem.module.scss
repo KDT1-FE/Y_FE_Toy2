@@ -1,6 +1,16 @@
 @import '@/styles/index.scss';
 @import '../../../styles/_variables';
 
+.itemContainer {
+  margin: 0;
+  border-radius: 40rem;
+  :hover {
+    background-color: #ececec;
+    
+  }
+  
+}
+
 .user-profile {
   margin-right: 1rem;
   border-radius: 100%;
