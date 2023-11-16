@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiBell } from "react-icons/bi";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useFetch from "../../../hooks/useFetch";
 import useFireFetch from "../../../hooks/useFireFetch";
 import { DocumentData } from "firebase/firestore";
@@ -108,6 +108,8 @@ const GameLists = () => {
 
   // 메세지 데이터
   const [messages, setMessages] = useState<MessageInfo[]>([]);
+
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     console.log(messages);
@@ -291,18 +293,25 @@ const GameLists = () => {
     }
   }, [firebaseGameListsData, dbGame]);
 
-  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleMessage();
-    }
-  };
   const handleMessage = () => {
     if (!value) {
       return alert("전송할 메시지를 입력해주세요:)");
     }
-    // 메시지 전송하는 부분 구현
     socket.emit("message-to-server", value);
     inputRef?.current?.focus();
+    // clear();
+  };
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleMessage();
+    }
   };
 
   if (isAuthenticated) {
@@ -344,7 +353,7 @@ const GameLists = () => {
             </Grid>
           </Box>
           <Box bg="white" borderRadius="5">
-            <Box overflowY="auto" maxHeight="200px" height="200px">
+            <Card overflowY="auto" maxHeight="200px" height="200px" p={3}>
               {messages.map((message, index) => (
                 <MyChatBubble
                   key={index}
@@ -352,14 +361,15 @@ const GameLists = () => {
                   text={message?.text}
                 />
               ))}
-            </Box>
+              <div ref={messageEndRef}></div>
+            </Card>
             <InputGroup size="md">
               <Input
                 pr="5rem"
                 placeholder="내용을 입력하세요"
                 onChange={onChange}
-                onKeyDown={onKeyDown}
                 value={value}
+                onKeyPress={handleKeyPress}
               />
               <InputRightElement width="5.5rem">
                 <Button
@@ -387,7 +397,6 @@ const GameLists = () => {
                   objectFit="cover"
                   borderRadius="full"
                   src={userInfo?.user.picture}
-                  alt="Dan Abramov"
                 />
                 <Text>{userInfo?.user.name}</Text>
               </Box>
@@ -451,7 +460,6 @@ const GameLists = () => {
                       objectFit="cover"
                       borderRadius="full"
                       src={user.picture}
-                      alt="Dan Abramov"
                     />
                     <Text>{user.name}</Text>
                   </Box>
