@@ -12,6 +12,7 @@ import {
 import { getCookie } from '../../util/util';
 import { disconnectLoginSocket } from '../../api/socket';
 import { removeCookies } from '../../util/util';
+import swal from 'sweetalert';
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -27,11 +28,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         await disconnectLoginSocket();
         localStorage.removeItem('id');
         removeCookies();
-        alert('로그아웃에 성공했습니다');
+        swal({ title: '로그아웃에 성공했습니다', icon: 'success' });
+
         navigate('/');
       } catch (error) {
         console.log(error);
-        alert('로그아웃 중 오류가 발생했습니다');
+        swal({ title: '로그아웃 중 오류가 발생했습니다', icon: 'error' });
       } finally {
         onClose();
       }

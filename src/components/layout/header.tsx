@@ -78,8 +78,8 @@ const HeaderContainer = styled.div`
   width: 1400px;
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
-  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 `;
 
 const Title = styled.div`
@@ -87,6 +87,7 @@ const Title = styled.div`
   line-height: 28px;
   font-size: 32px;
   font-weight: 600;
+  margin-top: 5px;
 `;
 
 const LogoContainer = styled.div`

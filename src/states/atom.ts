@@ -59,6 +59,13 @@ export const uniqueUserState = atom<any>({
   default: [],
 });
 
+export const myMessageState = atom<
+  Array<{ text: string; userId: string; chatId: string }>
+>({
+  key: 'myMessageState',
+  default: [{ text: '', userId: '', chatId: '' }],
+});
+
 export const roomIdState = atom<any>({
   key: 'roomIdState',
   default: '',

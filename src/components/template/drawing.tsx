@@ -2,10 +2,9 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import drawImg from '../../assets/icons/draw.png';
-import eraseImg from '../../assets/icons/eraser.png';
-import trashImg from '../../assets/icons/trash.png';
 import { drawSocket } from '../../api/socket';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEraser, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Drawing = () => {
   const [isPainting, setIsPainting] = useState(false);
@@ -15,11 +14,11 @@ const Drawing = () => {
   const [color, setColor] = useState('black');
   const [lineWidth, setLineWidth] = useState(4);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null); // 캔버스 (도화지)
-  const contextRef = useRef<CanvasRenderingContext2D | null>(null); // 그림 (내용)
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [roomId, setRoomId] = useState('');
+  const [selectedColor, setSelectedColor] = useState<string>('#000000');
 
-  // useEffect 하나 쓰려고 if문 썼습니다
   useEffect(() => {
     const pathParts = window.location.pathname.split('/');
     const newRoomId = pathParts[2].startsWith(':')
@@ -28,16 +27,14 @@ const Drawing = () => {
     setRoomId(newRoomId);
     console.log(roomId);
 
-    const canvas = canvasRef.current; // 캔버스 Ref
+    const canvas = canvasRef.current;
     if (canvas && !contextRef.current) {
-      // 최초 마운트 시에만 실행
-      canvas.width = 800;
-      canvas.height = 450;
-      canvas.style.width = '800px';
-      canvas.style.height = '450px';
+      canvas.width = 940;
+      canvas.height = 563;
+      canvas.style.width = '940px';
+      canvas.style.height = '563px';
       canvas.style.backgroundColor = 'white';
 
-      // 그리기
       const ctx = canvas.getContext('2d');
       ctx!.scale(1, 1);
       ctx!.lineCap = 'round';
@@ -46,7 +43,7 @@ const Drawing = () => {
     }
 
     // 색상 변경
-    const ctx = contextRef.current; // context Ref
+    const ctx = contextRef.current;
     if (ctx) {
       ctx.strokeStyle = color;
     }
@@ -57,7 +54,7 @@ const Drawing = () => {
     }
   }, [color, lineWidth]);
 
-  /// 색상 변경 함수 (여기에 부분 지우개 배경색으로 넣음)
+  /// 색상 변경 함수
   const changeColor = (newColor: string) => {
     setColor(newColor);
   };
@@ -68,12 +65,10 @@ const Drawing = () => {
     const ctx = canvas?.getContext('2d');
 
     ctx!.fillStyle = 'white';
-    ctx!.fillRect(0, 0, 800, 450);
+    ctx!.fillRect(0, 0, 940, 563);
 
     drawSocket.emit('erase', { option: { roomId } });
   };
-
-  /// 굵기 변경 함수
 
   /// 마우스 이동 감지 + 그리는 역할
   const getDrawing = (
@@ -92,8 +87,6 @@ const Drawing = () => {
     return {
       x: (event.clientX - rect.left) * scaleX,
       y: (event.clientY - rect.top) * scaleY,
-      // offsetLeft는 그리는 영역 left끝에서 그림판이 얼마나 떨어졌냐.. top은 위에서 그림판이 얼마나 떨어졋냐
-      // event.pageX/Y는 마우스로 그리는 부분의 좌표.. X는 왼쪽에서 떨어진만큼 빼야하고 Y는 위에서 떨어진 만큼 빼야함.
     };
   };
 
@@ -102,18 +95,17 @@ const Drawing = () => {
     const paint = getDrawing(event);
 
     if (paint) {
-      setIsPainting(true); // 그리는 상태 true로 변경
-      setMousePosition(paint); // 마우스 포지션에 좌표값 저장
+      setIsPainting(true);
+      setMousePosition(paint);
     }
   };
 
   /// 그리기 (현재 좌표 -> 움직인 좌표로 이동)
   const paint = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (isPainting) {
-      // 그리는 상태가 true일 때
-      const newMousePosition = getDrawing(event); // 좌표를 변
+      const newMousePosition = getDrawing(event);
       if (mousePosition && newMousePosition) {
-        draw(mousePosition, newMousePosition); // 아래 mouseEvent 함수임
+        draw(mousePosition, newMousePosition);
         setMousePosition(newMousePosition);
       }
     }
@@ -149,7 +141,6 @@ const Drawing = () => {
     }
   };
 
-  //
   const getRangeInputStyle = () => {
     const gradient_value = 100 / 10;
     const backgroundSize = gradient_value * lineWidth;
@@ -191,7 +182,7 @@ const Drawing = () => {
         const ctx = contextRef.current;
         if (!ctx) return;
         ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, 800, 450);
+        ctx.fillRect(0, 0, 940, 563);
       };
 
       drawSocket.on('drawing', onDrawingEvent);
@@ -206,6 +197,11 @@ const Drawing = () => {
     }
   }, [roomId, drawSocket]);
 
+  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedColor(event.target.value);
+    changeColor(event.target.value);
+  };
+
   /// JSX
   return (
     <DrawingBox>
@@ -219,33 +215,40 @@ const Drawing = () => {
           className="canvas"
         />
         <DrawingTools>
-          <ToolImage src={drawImg} alt="Draw" />
+          <input
+            type="color"
+            value={selectedColor}
+            onChange={handleColorChange}
+          />
 
           <ColorButton
-            color="red"
-            onClick={() => changeColor('red')}></ColorButton>
+            color="#F87070"
+            onClick={() => changeColor('#F87070')}></ColorButton>
           <ColorButton
-            color="yellow"
-            onClick={() => changeColor('yellow')}></ColorButton>
+            color="#FFAB73"
+            onClick={() => changeColor('#FFAB73')}></ColorButton>
           <ColorButton
-            color="green"
-            onClick={() => changeColor('green')}></ColorButton>
+            color="#FFD580"
+            onClick={() => changeColor('#FFD580')}></ColorButton>
           <ColorButton
-            color="blue"
-            onClick={() => changeColor('blue')}></ColorButton>
+            color="#669966"
+            onClick={() => changeColor('#669966')}></ColorButton>
           <ColorButton
-            color="purple"
-            onClick={() => changeColor('purple')}></ColorButton>
+            color="#4a8ef5"
+            onClick={() => changeColor('#4a8ef5')}></ColorButton>
           <ColorButton
-            color="black"
-            onClick={() => changeColor('black')}></ColorButton>
-          <button onClick={() => changeColor('white')}>
-            <ToolImage src={eraseImg} alt="Erase" />
-          </button>
+            color="#9966CC"
+            onClick={() => changeColor('#9966CC')}></ColorButton>
+          <ColorButton
+            color="#363636"
+            onClick={() => changeColor('#363636')}></ColorButton>
+          <EraserIcon onClick={() => changeColor('white')}>
+            <FontAwesomeIcon icon={faEraser} />
+          </EraserIcon>
 
-          <button onClick={() => EraseAll()}>
-            <ToolImage src={trashImg} alt="EraseAll" />
-          </button>
+          <TrashIcon onClick={() => EraseAll()}>
+            <FontAwesomeIcon icon={faTrash} />
+          </TrashIcon>
 
           <RangeInput
             onChange={(e) => setLineWidth(Number(e.target.value))}
@@ -265,11 +268,13 @@ const Drawing = () => {
 const DrawingBox = styled.div``;
 
 const DrawingCanvas = styled.div`
-  width: 800px;
-  height: 450px;
+  width: 940px;
+  height: 563px;
   position: relative;
   .canvas {
-    border: 2px solid #4fd1c5;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #313860;
     margin: 0 auto;
     border-radius: 15px;
   }
@@ -281,9 +286,9 @@ const DrawingTools = styled.div`
   width: 100%;
   height: 60px;
   border-radius: 0 0 15px 15px;
-  background-color: #4fd1c5;
+  background-color: #313860;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   padding: 0 25px;
 `;
@@ -299,11 +304,6 @@ const ColorButton = styled.button`
   font-size: 12px;
 `;
 
-const ToolImage = styled.img`
-  width: 40px;
-  height: auto;
-`;
-
 const RangeInput = styled.input`
   background: linear-gradient(
     to right,
@@ -316,6 +316,16 @@ const RangeInput = styled.input`
   outline: none;
   transition: background 450ms ease-in;
   accent-color: #ffca1d;
+`;
+
+const EraserIcon = styled.button`
+  color: #fff;
+  font-size: 30px;
+`;
+
+const TrashIcon = styled.button`
+  color: #fff;
+  font-size: 30px;
 `;
 
 interface IReciveInfo {

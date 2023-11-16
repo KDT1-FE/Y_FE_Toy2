@@ -19,6 +19,7 @@ import {
   Fade,
 } from '@chakra-ui/react';
 import { ValidationInput, FormData } from '../../interfaces/interface';
+import swal from 'sweetalert';
 
 const UserJoin = () => {
   const navigate = useNavigate();
@@ -130,7 +131,7 @@ const UserJoin = () => {
     try {
       // 닉네임중복 핸들링 로직 필요
       await postJoin(formData);
-      alert('회원가입에 성공했습니다.');
+      swal({ title: '회원가입에 성공했습니다.', icon: 'success' });
       navigate('/');
     } catch (e: any) {
       let errorMessage = '';

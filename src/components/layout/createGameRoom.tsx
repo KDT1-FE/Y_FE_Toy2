@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createGameRooms } from '../../api';
 import { useRecoilState } from 'recoil';
 import { allRoomState } from '../../states/atom';
+import swal from 'sweetalert';
 
 const CreateGameRoom = () => {
   const [allRooms, setAllRooms] = useRecoilState(allRoomState);
@@ -12,7 +13,7 @@ const CreateGameRoom = () => {
 
   const onChange = (e: React.ChangeEvent<any>) => {
     const { value, name } = e.target;
-    console.log(value, name);
+    // console.log(value, name);
     setIsPrivate(value === 'Private');
   };
 
@@ -24,9 +25,10 @@ const CreateGameRoom = () => {
     e.preventDefault();
     const check = await createGameRooms(name, [], isPrivate);
     if (check === undefined) {
-      alert('중복된 방이 있습니다.');
+      swal({ title: '중복된 방이 있습니다.', icon: 'error' });
     } else {
-      alert('방 생성 성공.');
+      swal({ title: '방 생성 성공', icon: 'success' });
+
       setAllRooms([...allRooms, check]);
       navigate(`/room/:${check.id}`);
     }

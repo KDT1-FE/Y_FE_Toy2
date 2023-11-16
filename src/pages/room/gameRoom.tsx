@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { chattingIdState } from '../../states/atom';
-// import InviteGameRoom from '../../components/template/inviteGameRoom';
+import {
+  chattingIdState,
+  myMessageState,
+  roomIdState,
+  usersInRoom,
+} from '../../states/atom';
 import styled from 'styled-components';
-import inviteImg from '../../assets/icons/invite.png';
 import GameChatting from '../../components/template/GameChatting';
-// import CheckUser from '../../components/template/CheckUser';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
 import { sortCreatedAt } from '../../util/util';
@@ -20,24 +22,58 @@ import {
 } from '../../interfaces/interface';
 import { getAllGameRooms, getOnlyGameRoom } from '../../api';
 import { AxiosResponse } from 'axios';
+import AnswerForm from '../../components/template/AnswerForm';
+import { ResponsiveValue } from '@chakra-ui/react';
+import CheckNums from '../../util/checkNums';
+import { gameSocket } from '../../api/socket';
+import { getCookie } from '../../util/util';
 
-const GameRoom = () => {
-  const { id } = useParams();
+const GameRoom: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const [chat, setChat] = useRecoilState(chattingIdState);
   const [roomNumber, setRoomNumber] = useState<number | null>(null);
   const [roomUser, setRoomUser] = useState<number | null>(null);
+  const [roomId, setRoomId] = useRecoilState(chattingIdState);
 
   useEffect(() => {
     if (id) {
       setChat(id.substring(1));
+    }
+  }, [id, setChat, roomUser]);
+  // controlGameRoomReload(chat);
+  // controlBack();
+
+  const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
+  const [answer, setAnswer] = useState<string>(''); // 답 지정하기
+  const [messages, setMessages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
+  const [userMessage, setUserMessage] = useState<{
+    chatId: string;
+    text: string;
+    userId: string;
+  }>({
+    chatId: '',
+    text: '',
+    userId: '',
+  });
+
+  const lastMessage = messages[messages.length - 1];
+  const myId = getCookie('userId');
+
+  useEffect(() => {
+    if (lastMessage.text !== '') {
+      setUserMessage(lastMessage);
+    }
+  }, [lastMessage]);
+
+  useEffect(() => {
+    if (id) {
+      setRoomId(id.substring(1));
       if (chat) {
         fetchRoomNumber();
         fetchRoomUser();
       }
     }
-  }, [id, setChat, roomUser]);
-  // controlGameRoomReload(chat);
-  controlBack();
+  }, [id, setRoomId]);
 
   const fetchRoomNumber = async () => {
     try {
@@ -86,6 +122,90 @@ const GameRoom = () => {
     }
   };
 
+  // 게임로직 소켓
+  useEffect(() => {
+    gameSocket.connect();
+
+    gameSocket.emit('joinRoom', roomId);
+
+    gameSocket.on('quiz_master_set', (quizMasterId: string) => {
+      console.log(myId, quizMasterId);
+      if (true) {
+        if (myId === quizMasterId) {
+          // alert('당신은 출제자 입니다!');
+          console.log('당신은 출제자 입니다');
+        } else {
+          // alert('새로운 출제자가 선정되었습니다!');
+          console.log('새로운 출제자가 선정되었습니다');
+        }
+        setIsQuizMasterAlertShown(true);
+      }
+    });
+
+    return () => {
+      gameSocket.off('quiz_master_set');
+    };
+  }, [roomId]);
+
+  const startGame = () => {
+    gameSocket.emit('start_game', { roomId, myId });
+    setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
+  };
+
+  const handleSetAnswerChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setAnswer(event.target.value);
+  };
+
+  const submitSetAnswer = () => {
+    gameSocket.emit('set_answer', answer, { roomId, myId, notifyAll: true });
+
+    setAnswer(''); // 입력 필드 초기화
+  };
+  useEffect(() => {
+    gameSocket.on('alert_all', (message: string) => {
+      if (message) {
+        // alert('문제 출제 끝');
+        console.log('문제 출제 끝');
+      }
+    });
+    return () => {
+      gameSocket.off('alert_all');
+    };
+  }, [roomId]);
+
+  useEffect(() => {
+    if (userMessage) {
+      if (userMessage.userId === myId) {
+        gameSocket.emit('submit_answer', userMessage, { roomId, myId });
+      }
+    }
+    const handleCorrectAnswer = (data: { winner: string }) => {
+      console.log(data.winner, myId);
+      if (data.winner === myId) {
+        alert('축하합니다! 정답입니다!');
+        console.log('정답');
+        alert('끝');
+
+        console.log('끝');
+        // gameSocket.emit('end_game', { roomId: roomId });
+      } else if (data.winner !== myId) {
+        alert('누군가 정답을 맞췄습니다!');
+        console.log('누군가 정답 맞춤');
+        alert('끝');
+        console.log('끝');
+      }
+    };
+    gameSocket.on('correct_answer', handleCorrectAnswer);
+    gameSocket.emit('end_game', { roomId: roomId });
+
+    return () => {
+      gameSocket.off('correct_answer', handleCorrectAnswer);
+      gameSocket.off('end_game');
+    };
+  }, [roomId, gameSocket, userMessage]);
+
   return (
     <Game>
       <RoomHeader>
@@ -98,24 +218,35 @@ const GameRoom = () => {
         </RoomInfo>
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
-          <LeaveGameRoom chatId={chat}></LeaveGameRoom>
+          <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
+          <button onClick={startGame}>start game</button>
+          <div>
+            <input
+              type="text"
+              value={answer}
+              onChange={handleSetAnswerChange}
+            />
+            <button onClick={submitSetAnswer}>Submit Answer</button>
+          </div>
+          {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>
       </RoomHeader>
 
       <RoomMain>
         <Drawing />
 
-        <GameChatting chatId={chat} />
+        <GameChatting chatId={roomId} />
       </RoomMain>
 
-      <CheckUsersInGameRoom chatId={chat}></CheckUsersInGameRoom>
-      <UserList>{/* <CheckUser /> */}</UserList>
+      <UserList>
+        <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
+      </UserList>
     </Game>
   );
 };
 
 const Game = styled.div`
-  width: 1200px;
+  width: 1400px;
   display: flex;
   flex-direction: column;
 `;
@@ -166,7 +297,7 @@ const RoomMain = styled.div`
 `;
 
 const UserList = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `;
-
 export default GameRoom;

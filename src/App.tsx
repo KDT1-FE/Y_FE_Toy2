@@ -1,17 +1,16 @@
-import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import MainRouter from './router/MainRouter';
-import { RecoilRoot } from 'recoil';
+// import { useLoginSocket } from './hooks/useLoginSocket';
 
 function App() {
+  // useLoginSocket();
+
   return (
     <ChakraProvider>
-      <RecoilRoot>
-        <BrowserRouter>
-          <MainRouter />
-        </BrowserRouter>
-      </RecoilRoot>
+      <BrowserRouter>
+        <MainRouter />
+      </BrowserRouter>
     </ChakraProvider>
   );
 }

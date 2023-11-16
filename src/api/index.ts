@@ -2,6 +2,7 @@ import axios from 'axios';
 import { CONTENT_TYPE, SERVER_ID, SERVER_URL } from '../constant';
 import { JoinData } from '../interfaces/interface';
 import { getCookie, setAccessToken } from '../util/util';
+import swal from 'sweetalert';
 
 const client = axios.create({
   baseURL: SERVER_URL,
@@ -32,6 +33,7 @@ client.interceptors.response.use(
       const refreshToken = getCookie('refreshToken');
       if (refreshToken) {
         try {
+          console.log('응답 인터셉터 실행');
           const res = await postRefresh(refreshToken);
           setAccessToken(res.data.accessToken);
           return axios(error.config); // 원래 요청을 재시도
@@ -39,7 +41,16 @@ client.interceptors.response.use(
           console.error('토큰 재발급 시도 실패: ', refreshError);
         }
       } else {
-        alert('리프레시 토큰이 없어 토큰 재발급이 불가능합니다.');
+        swal(
+          '리프레시 토큰 에러',
+          '리프레시 토큰이 없어 토큰 재발급이 불가능합니다.',
+          'error',
+        );
+        swal({
+          title: '리프레시 토큰 에러',
+          text: '리프레시 토큰이 없어 토큰 재발급이 불가능합니다.',
+          icon: 'error',
+        });
       }
     } else {
       console.error('API 요청 실패: ', error);
@@ -80,7 +91,13 @@ export const getUserData = async (userId: string) => {
 };
 
 export const patchUserData = async (name: string, picture: string) => {
-  const res = await client.patch(`user`, { name: name, picture: picture });
+  const payload = {
+    ...(name !== undefined && { name }),
+    ...(picture !== undefined && { picture }),
+  };
+  if (name) payload.name = name;
+  if (picture) payload.picture = picture;
+  const res = await client.patch(`user`, payload);
   return res;
 };
 

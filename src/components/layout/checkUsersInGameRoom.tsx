@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { onlineUserStateInGameRoom } from '../../states/atom';
 import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../../constant';
-import { getUserData } from '../../api';
-import UserProfile from '../template/userProfile';
-import styled from 'styled-components';
 import { getCookie } from '../../util/util';
+import styled from 'styled-components';
+import { getUserData } from '../../api';
 
 interface ChattingDetailProps {
   chatId: string;
 }
-
 type ResponseValue = {
   user: User;
 };
@@ -21,35 +19,58 @@ interface User {
   name: string;
   picture: string;
 }
-
 const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
-  const UsersInGameRoom = useRecoilValue(onlineUserStateInGameRoom);
+  const accessToken: any = getCookie('accessToken');
+  const [UsersInGameRoom, setUsersInGameRoom] = useRecoilState<string[]>(
+    onlineUserStateInGameRoom,
+  );
   const [profiles, setProfiles] = useState<ResponseValue[]>([]);
+
+  useEffect(() => {
+    try {
+      const socket = io(`${SERVER_URL}chat?chatId=${chatId}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+          serverId: SERVER_ID,
+        },
+      });
+
+      socket.on('connect', () => {
+        socket?.emit('users');
+      });
+
+      socket.on('users-to-client', (data) => {
+        setUsersInGameRoom(data.users);
+      });
+
+      socket.on('leave', (data) => {
+        console.log(data);
+        setUsersInGameRoom(data.users);
+      });
+
+      socket.on('join', (data) => {
+        console.log(data);
+        setUsersInGameRoom(data.users);
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+    }
+  }, [accessToken, chatId]);
 
   useEffect(() => {
     const fetchUserProfiles = async () => {
       const profilesArray: ResponseValue[] = [];
-      // console.log(UsersInGameRoom);
       for (const userId of UsersInGameRoom) {
-        // console.log(userId);
-        // if (userId.substring(0, 8) === '090b4ff4') {
-        //   console.log(userId.substring(0, 9));
-        //   const id = userId.substring(9);
-        //   try {
-        //     const res = await getUserData(id);
-        //     profilesArray.push(res);
-        //   } catch (error) {
-        //     console.error('Error fetching user data:', error);
-        //   }
-        // } else {
         try {
           const res = await getUserData(userId);
-          console.log(res);
           profilesArray.push(res);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
-        // }
       }
 
       setProfiles(profilesArray);
@@ -57,25 +78,35 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
 
     fetchUserProfiles();
   }, [UsersInGameRoom, setProfiles]);
-  console.log(profiles);
+
+  const MAX_USERS = 4;
 
   return (
-    <UserList>
-      {profiles.map((element, index) => (
-        <div key={index}>
-          <UserBox>
-            <ImgBox>
-              <UserImage src={element.user.picture} alt="profileImg" />
-            </ImgBox>
+    <>
+      <UserList>
+        {Array.from({ length: MAX_USERS }).map((_, index) => {
+          const user = profiles[index];
+          return (
+            <div key={index}>
+              {user ? (
+                <UserBox>
+                  <ImgBox>
+                    <UserImage src={user.user.picture} alt="profileImg" />
+                  </ImgBox>
 
-            <TextBox>
-              <UserId>{element.user.id}</UserId>
-              <UserNick>{element.user.name}</UserNick>
-            </TextBox>
-          </UserBox>
-        </div>
-      ))}
-    </UserList>
+                  <TextBox>
+                    <UserId>{user.user.id}</UserId>
+                    <UserNick>{user.user.name}</UserNick>
+                  </TextBox>
+                </UserBox>
+              ) : (
+                <UserBoxEmpty />
+              )}
+            </div>
+          );
+        })}
+      </UserList>
+    </>
   );
 };
 
@@ -96,13 +127,17 @@ const UserNick = styled.div`
 `;
 
 const UserBox = styled.div`
-  width: 285px;
-  height: 110px;
+  width: 335px;
+  height: 120px;
   background-color: #fff;
   display: flex;
   align-items: center;
   border-radius: 10px;
   box-shadow: 0px 3px 5px 0px #e2e8f0;
+
+  &:first-child {
+    margin-left: 0;
+  }
 
   &[id='painter'] {
     background-image: linear-gradient(90deg, #313860 10%, #151928 90%);
@@ -115,6 +150,17 @@ const UserBox = styled.div`
       color: #cbd5e0;
     }
   }
+`;
+
+const UserBoxEmpty = styled.div`
+  width: 335px;
+  height: 120px;
+  background-color: #edf2f7;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0px 3px 5px 0px #edf2f7;
+  margin-left: 20px;
 `;
 
 const ImgBox = styled.div`

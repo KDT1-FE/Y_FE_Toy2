@@ -63,8 +63,8 @@ const ChattingDetail = ({ userData }: UserProps) => {
         const newSocket = chatSocket(accessToken, userData[0].chatId);
         setSocket(newSocket);
 
-        newSocket.on('messages-to-client', (messageData: ResponseData) => {
-          console.log('Fetched messages:', messageData.messages);
+        newSocket.on('messages-to-client', (messageData) => {
+          // console.log('Fetched messages:', messageData.messages);
 
           if (messageData.messages.length > 0) {
             // createdAt을 기준으로 시간순서 정렬
@@ -87,7 +87,7 @@ const ChattingDetail = ({ userData }: UserProps) => {
         });
 
         newSocket.on('message-to-client', (messageObject: Message) => {
-          console.log(messageObject);
+          //console.log(messageObject);
           setNewChat((newChat: Message[]) => {
             // 중복 날짜, 시간 null로 반환
             const modifyDateArray = modifyDate([
@@ -107,7 +107,7 @@ const ChattingDetail = ({ userData }: UserProps) => {
           newSocket.disconnect();
         };
       } catch (error) {
-        console.error('Error retrieving data:', error);
+        // console.error('Error retrieving data:', error);
       }
     }
   }, [userData[0].chatId, openChatDetail]);

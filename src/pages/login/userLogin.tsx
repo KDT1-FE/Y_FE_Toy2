@@ -19,12 +19,14 @@ import {
 } from '@chakra-ui/react';
 import { useRecoilState } from 'recoil';
 import { onlineUserState } from '../../states/atom';
-import { postLogin } from '../../api/index';
 import { loginSocket } from '../../api/socket';
-import { setCookies, removeCookies } from '../../util/util';
+import { postLogin } from '../../api/index';
+import { setCookies, getCookie, removeCookies } from '../../util/util';
+import swal from 'sweetalert';
 
 function UserLogin() {
   const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
   const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -40,17 +42,11 @@ function UserLogin() {
 
     try {
       const res = await postLogin(id, password);
+      setIsLogin(true);
       const { accessToken, refreshToken } = res.data;
       setCookies(accessToken, refreshToken, id);
 
-      alert('로그인에 성공했습니다.');
-
-      loginSocket(accessToken, (data: any) => {
-        console.log('Data received from socket:', data);
-        setOnlineUsers(data);
-        console.log(onlineUsers);
-      });
-
+      swal({ title: '로그인에 성공했습니다.', icon: 'success' });
       navigate('/lobby');
     } catch (e: any) {
       let errorMessage = '';
@@ -77,6 +73,16 @@ function UserLogin() {
       return () => clearTimeout(timer);
     }
   }, [showAlert.active]);
+
+  useEffect(() => {
+    const accessToken = getCookie('accessToken');
+    const refreshToken = getCookie('refreshToken');
+
+    if (accessToken || refreshToken) {
+      navigate('/lobby');
+      console.log('리디렉션됨');
+    }
+  }, []);
 
   return (
     <Flex
