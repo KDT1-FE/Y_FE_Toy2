@@ -91,16 +91,15 @@ export default function Chatting() {
       });
 
       socket.on('message-to-client', (messageObject: Message) => {
-        // setIsLoading(true);
         setMessages(prevMessages => [...prevMessages, messageObject]);
-        // setIsLoading(false);
       });
 
       socket.on('join', async (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');
         const joinUserInfo = await chatAPI.getUserInfo(
-          messageObject.joiners[0]?.id.split(':')[1],
+          messageObject.joiners[0],
         );
+
         let userData = joinUserInfo.data.user;
         setEnterName(userData.name);
 
@@ -148,10 +147,10 @@ export default function Chatting() {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (enterName) {
-      setShowEntryNotice(true); // Show entry notice
+      setShowEntryNotice(true);
 
       const entryTimer = setTimeout(() => {
-        setShowEntryNotice(false); // Hide entry notice after 3 seconds
+        setShowEntryNotice(false);
         setEnterName('');
       }, 3000);
       return () => clearTimeout(entryTimer);
@@ -161,10 +160,10 @@ export default function Chatting() {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (exitName) {
-      setShowExitNotice(true); // Show exit notice
+      setShowExitNotice(true);
 
       const exitTimer = setTimeout(() => {
-        setShowExitNotice(false); // Hide exit notice after 3 seconds
+        setShowExitNotice(false);
         setExitName('');
       }, 3000);
 

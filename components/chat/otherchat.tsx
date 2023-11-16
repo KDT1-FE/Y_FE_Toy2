@@ -1,15 +1,10 @@
 // OtherMessage.js
 import React, { useEffect, useState } from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
-import { User, Message } from '@/@types/types';
+import { Message } from '@/@types/types';
 import Image from 'next/image';
-import styles from './Chat.module.scss';
-import Jwtinterceptors from '../../apis/Jwtinterceptors';
 import chatAPI from '@/apis/chatAPI';
-
-interface GetUserNameResponseBody {
-  user: User;
-}
+import styles from './Chat.module.scss';
 
 function OtherMessage({ msg }: { msg: Message }) {
   const today = new Date();
