@@ -12,7 +12,12 @@ import GameChatting from '../../components/template/GameChatting';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
 import { sortCreatedAt } from '../../util/util';
-import { Chat, ChatResponse, OnlyResponse } from '../../interfaces/interface';
+import {
+  Chat,
+  ChatResponse,
+  OnlyResponse,
+  User,
+} from '../../interfaces/interface';
 import { getAllGameRooms, getOnlyGameRoom } from '../../api';
 import { AxiosResponse } from 'axios';
 
@@ -25,8 +30,10 @@ const GameRoom = () => {
   useEffect(() => {
     if (id) {
       setChat(id.substring(1));
-      fetchRoomNumber();
-      fetchRoomUser();
+      if (chat) {
+        fetchRoomNumber();
+        fetchRoomUser();
+      }
     }
   }, [id, setChat, roomUser]);
   // controlGameRoomReload(chat);
@@ -70,11 +77,9 @@ const GameRoom = () => {
 
       if (response && response.data) {
         const foundChats = response.data;
-        const Chat: Chat = foundChats.chat[0];
-        console.log(Chat.users.length);
-
-        console.log(roomUser);
-        setRoomUser(roomUser);
+        const chatData: any = foundChats.chat;
+        const users: number | null = chatData.users.length;
+        setRoomUser(users);
       }
     } catch (error) {
       console.log(error);
