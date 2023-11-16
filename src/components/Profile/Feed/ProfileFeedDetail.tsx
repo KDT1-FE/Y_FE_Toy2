@@ -15,7 +15,7 @@ import { db } from "../../../firebase/firebase";
 import ProfileFeedComment from "./ProfileFeedComment";
 
 const ProfileFeedDetailContainer = styled.div`
-  width: 1200px;
+  width: 850px;
 
   padding: 64px 32px;
   box-sizing: border-box;
@@ -25,7 +25,7 @@ const WriterInfoWrap = styled.div`
   align-items: center;
 
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
 
   margin-bottom: 24px;
 
@@ -52,7 +52,8 @@ const WriterInfoWrap = styled.div`
     flex-direction: column;
 
     font-size: 16px;
-    opacity: 0.8;
+    opacity: 0.5;
+    font-weight: 500;
 
     position: absolute;
     right: 0;
@@ -88,17 +89,15 @@ const ContentsWrap = styled.div`
 
   .ContentText {
     padding: 8px;
-
-    font-size: 24px;
   }
 `;
 const CommentWrap = styled.div`
   width: 100%;
 
-  margin-top: 24px;
-  padding-top: 56px;
+  margin-top: 20px;
+  padding-top: 20px;
 
-  border-top: 2px solid ${theme.grayColor};
+  border-top: 1px solid #E4E4E4;
 `;
 const CommentInputWrap = styled.div`
   display: flex;
@@ -106,6 +105,7 @@ const CommentInputWrap = styled.div`
 
   margin-bottom: 56px;
   .loginUserProfileImage {
+    flex: 0 0 50px;
     width: 50px;
     height: 50px;
 
@@ -115,16 +115,16 @@ const CommentInputWrap = styled.div`
     background-position: center;
     background-repeat: no-repeat;
 
-    margin-right: 24px;
+    margin-right: 20px;
   }
   input {
-    width: 50%;
+    width: 100%;
     height: 50px;
     border: none;
     border-radius: 24px;
 
     padding: 0px 16px;
-    margin-right: 32px;
+    margin-right: 20px;
 
     font-family: "Pretendard";
   }
@@ -132,25 +132,26 @@ const CommentInputWrap = styled.div`
     outline: none;
   }
   button {
-    width: 80px;
-    height: 40px;
+    width: 90px;
+    height: 50px;
 
     border: none;
-    border-radius: 12px;
+    border-radius: 20px;
 
     cursor: pointer;
 
     font-family: "Pretendard";
 
-    background-color: #0d6efd;
+    background-color: #FF4747;
     color: white;
   }
 `;
 const CommentListWrap = styled.div`
   display: flex;
 
-  margin-bottom: 32px;
+  margin-bottom: 10px;
   .userProfile {
+    flex: 0 0 50px;
     width: 50px;
     height: 50px;
 

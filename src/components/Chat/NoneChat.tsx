@@ -29,6 +29,7 @@ const NoneWrap = styled.div`
   .tit {
     font-size: 1.4rem;
     font-weight: bold;
+    text-align:center;
     color: #6d6d6d;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -37,6 +38,7 @@ const NoneWrap = styled.div`
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.3;
+    text-align:center;
     color: #d7d7d7;
     margin-bottom: 30px;
   }
