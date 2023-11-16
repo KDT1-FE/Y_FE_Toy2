@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import ChatNone from "../../assets/images/chat-none.png";
 
 function NoneChat() {
   return (
     <NoneWrap>
-      <img src="/src/assets/images/chat-none.png" alt="채팅초기이미지" />
+      <img src={ChatNone} alt="채팅초기이미지" />
       <p className="tit">채팅방이 없습니다</p>
       <p className="txt">
         채팅방에서 주고 받은 대화를
