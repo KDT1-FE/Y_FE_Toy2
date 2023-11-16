@@ -2,6 +2,10 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { ThemeContext } from "../App";
 import { darkTheme } from "../style/theme";
+import GitHubDarkImg from "../assets/images/github-dark.svg";
+import GitHubImg from "../assets/images/github.svg";
+import BlogDarkImg from "../assets/images/blog-dark.svg";
+import BlogImg from "../assets/images/blog.svg";
 
 function Footer() {
   const { theme } = useContext(ThemeContext);
@@ -11,11 +15,7 @@ function Footer() {
         <div className="first-row">GitHub & Blog</div>
         <div className="second-row">
           <IconImg
-            src={
-              theme === darkTheme
-                ? "/src/assets/images/github-dark.svg"
-                : "/src/assets/images/github.svg"
-            }
+            src={theme === darkTheme ? GitHubDarkImg : GitHubImg}
             alt="GitHub icon"
             theme={theme}
           />
@@ -37,11 +37,7 @@ function Footer() {
         </div>
         <div className="third-row">
           <IconImg
-            src={
-              theme === darkTheme
-                ? "/src/assets/images/blog-dark.svg"
-                : "/src/assets/images/blog.svg"
-            }
+            src={theme === darkTheme ? BlogDarkImg : BlogImg}
             alt="Blog icon"
             theme={theme}
           />

@@ -4,6 +4,9 @@ import { db } from "../firebase/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PcMannerScore from "../assets/images/pc_mannerscore.webp";
+import ArrowChevron from "../assets/images/arrow-chevron.svg";
+import GuideDesktop from "../assets/images/guide-desktop.webp";
 
 interface ProfileI {
   name: string;
@@ -59,7 +62,7 @@ function MainContents() {
               나와 취향이 통하는지 확인할 수 있어요.
             </span>
           </TextSection>
-          <img src="/src/assets/images/pc_mannerscore.webp" alt="이미지" />
+          <img src={PcMannerScore} alt="이미지" />
         </div>
       </FirstContent>
       <SecondContent>
@@ -92,15 +95,14 @@ function MainContents() {
                 ))}
             </Gallery>
             <MoreInfoBtn to={"/profiles"}>
-              더보기{" "}
-              <img src="/src/assets/images/arrow-chevron.svg" alt="화살표" />
+              더보기 <img src={ArrowChevron} alt="화살표" />
             </MoreInfoBtn>
           </TextSection>
         </div>
       </SecondContent>
       <ThirdContent>
         <div className="inner">
-          <img src="/src/assets/images/guide-desktop.webp" alt="이미지" />
+          <img src={GuideDesktop} alt="이미지" />
           <div className="title-wrap">
             <p className="tit">
               언제나 어디서나
@@ -109,8 +111,7 @@ function MainContents() {
             <p className="text">취미메이트에서 취향이 통하는 친구를 만나요.</p>
             <p className="btn-wrap">
               <MoreInfoBtn to={"/chat"} className="left">
-                채팅하기{" "}
-                <img src="/src/assets/images/arrow-chevron.svg" alt="화살표" />
+                채팅하기 <img src={ArrowChevron} alt="화살표" />
               </MoreInfoBtn>
             </p>
           </div>

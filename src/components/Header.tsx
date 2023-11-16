@@ -6,6 +6,8 @@ import Logout from "./Logout";
 import { ThemeContext } from "../App";
 import { lightTheme } from "../style/theme";
 import useApi from "../hooks/useApi";
+import SunIcon from "../assets/images/sun.svg";
+import MoonIcon from "../assets/images/moon.svg";
 
 interface MenuListItem {
   key: number;
@@ -106,9 +108,9 @@ const Header = () => {
         </UserInfo>
         <ToggleBtn onClick={toggleTheme}>
           {theme === lightTheme ? (
-            <img src="/src/assets/images/sun.svg" alt="light mode" />
+            <img src={SunIcon} alt="light mode" />
           ) : (
-            <img src="/src/assets/images/moon.svg" alt="dark mode" />
+            <img src={MoonIcon} alt="dark mode" />
           )}
         </ToggleBtn>
       </UserBar>

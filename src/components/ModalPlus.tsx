@@ -5,6 +5,7 @@ import "../style/Modal.css";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 import { Socket, io } from "socket.io-client";
+import PlusIcon from "../assets/images/plus-ico.png";
 
 export interface User {
   id: string;
@@ -140,7 +141,7 @@ const ModalExample: React.FC<
     <ChatTestWrap>
       <h1>모든 유저 정보</h1>
       <PlusButton onClick={openModal}>
-        <img src="./src/assets/images/plus-ico.png" alt="플러스" />
+        <img src={PlusIcon} alt="플러스" />
       </PlusButton>
       <Modal
         style={customStyles}

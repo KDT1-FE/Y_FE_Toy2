@@ -3,6 +3,7 @@ import { AuthContext } from "../../hooks/useAuth";
 import useApi from "../../hooks/useApi";
 import styled from "styled-components";
 import { ThemeContext } from "../../App";
+import UserIcon from "../../assets/images/user-ico.png";
 
 function UserCount({ roomId }: UserCountProps) {
   const { accessToken } = useContext(AuthContext);
@@ -30,16 +31,7 @@ function UserCount({ roomId }: UserCountProps) {
 
   return (
     <Wrapper>
-      <IconImg
-        // src={
-        //   theme === darkTheme
-        //     ? "/src/assets/images/user-ico-dark.svg"
-        //     : "/src/assets/images/user-ico.svg"
-        // }
-        src="/src/assets/images/user-ico.svg"
-        alt="user-icon"
-        theme={theme}
-      />
+      <IconImg src={UserIcon} alt="user-icon" theme={theme} />
       <span className="num">{userCount}</span>
     </Wrapper>
   );
