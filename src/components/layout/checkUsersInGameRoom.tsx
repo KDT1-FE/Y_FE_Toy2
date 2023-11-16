@@ -44,6 +44,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
         // } else {
         try {
           const res = await getUserData(userId);
+          console.log(res);
           profilesArray.push(res);
         } catch (error) {
           console.error('Error fetching user data:', error);

@@ -17,6 +17,7 @@ const Header: React.FC = () => {
   const [isMenuContainerClicked, setIsMenuContainerClicked] = useState(false);
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const locationPath: string = location.pathname;
 
   const checkLocation = () => {
     titleAction(navigate, id);
@@ -51,12 +52,14 @@ const Header: React.FC = () => {
     <HeaderContainer>
       <Title onClick={checkLocation}>FastMind</Title>
       <LogoContainer>
-        <StyledContainer
-          as="div"
-          $isClicked={isChatContainerClicked}
-          onClick={handleChatContainerClick}>
-          <ChatIcon width="19px" height="19px" color="#2D3748" />
-        </StyledContainer>
+        {locationPath === '/lobby' && (
+          <StyledContainer
+            as="div"
+            $isClicked={isChatContainerClicked}
+            onClick={handleChatContainerClick}>
+            <ChatIcon width="19px" height="19px" color="#2D3748" />
+          </StyledContainer>
+        )}
         <StyledContainer
           as="div"
           $isClicked={isMenuContainerClicked}
