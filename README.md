@@ -69,7 +69,6 @@ E.g, Y_FE_Toy2_GYOHEON
 - 백엔드 서버에 문제가 생겼을 경우, 바로 슬랙의 GyoHeon Lee에게 연락하세요!
 
 ## 필수 구현 사항
-
 - [ ] `useState` 또는 `useReducer`를 활용한 상태 관리 구현
 - [ ] `Sass`, `styled-component`, `emotion`, `Chakra UI`, `tailwind CSS` 등을 활용한 스타일 구현
 - [ ] `react` 상태를 통한 CRUD 구현
@@ -80,14 +79,12 @@ E.g, Y_FE_Toy2_GYOHEON
 - [ ] 소켓을 이용한 채팅 구현
 
 ## 선택 구현 사항
-
 - [ ] `Next.js`를 활용한 서버 사이드 렌더링 구현
 - [ ] `typescript`를 활용한 앱 구현
 - [ ] `storybook`을 활용한 디자인 시스템 구현
 - [ ] `jest`를 활용한 단위 테스트 구현
 
 ## 추가 사항
-
 - api들의 응답 데이터들을 일부러 파편화 해두었습니다!
 - api들 간의 데이터를 조합하여 이상적인 구조를 만들어보세요.
 
@@ -147,7 +144,6 @@ interface Message {
   createdAt: Date;
 }
 ```
-
 ## 회원
 
 ### 회원가입
@@ -286,7 +282,6 @@ curl https://fastcampus-chat.net/auth/me
 ```
 
 요청 데이터 타입 및 예시:
-
 - 없음
 
 응답 데이터 타입 및 예시:
@@ -538,7 +533,6 @@ interface User {
 ```
 
 ### 특정 채팅 조회
-
 - 특정 id의 채팅을 조회합니다.
 - isPrivate: true인 채팅방은 해당 채팅방 참가자만 볼 수 있습니다.
 
@@ -607,7 +601,6 @@ interface Message {
 ```
 
 ### 모든 채팅 조회
-
 - 현재 존재하는 모든 채팅을 조회합니다.
 - isPrivate: true인 채팅방은 보이지 않습니다.
 
@@ -698,13 +691,11 @@ interface Message {
 ```
 
 ### 나의 채팅 조회
-
 ```curl
 curl https://fastcampus-chat.net/chat
   \ -X 'GET'
   \ -H 'Authorization: Bearer <accessToken>'
 ```
-
 - 내가 속한 모든 채팅을 조회합니다.
 - isPrivate: true인 채팅방도 모두 보이게 됩니다.
 
@@ -797,7 +788,6 @@ curl https://fastcampus-chat.net/chat/participate
 ```
 
 요청 데이터 타입 및 예시:
-
 ```ts
 interface RequestBody {
   chatId: string;
@@ -858,7 +848,6 @@ curl https://fastcampus-chat.net/chat/leave
 ```
 
 요청 데이터 타입 및 예시:
-
 ```ts
 interface RequestBody {
   chatId: string;
@@ -872,7 +861,6 @@ interface RequestBody {
 ```
 
 응답 데이터 타입 및 예시:
-
 ```ts
 interface ResponseValue {
   message: string;
@@ -894,7 +882,6 @@ curl https://fastcampus-chat.net/chat/invite
 ```
 
 요청 데이터 타입 및 예시:
-
 ```ts
 interface RequestBody {
   chatId: string;
@@ -1133,12 +1120,10 @@ interface ResponseData {
 ```
 
 ### invite
-
 - 새로운 채팅방 생성시 해당 채팅방 유저에게 채팅방 정보를 전송합니다.
 - 기존 채팅방에 유저 초대시 초대된 유저에게 채팅방 정보를 전송합니다.
 
 응답 데이터
-
 ```ts
 interface ResponseData {
   id: string;
