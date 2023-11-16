@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import Signin from './pages/auth/Signin';
 import Signup from './pages/auth/Signup';
 import Lobby from './pages/lobby/Lobby';
@@ -12,7 +12,7 @@ import Reset from './pages/game/Reset';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Signin />} />
         <Route path="/lobby" element={<Lobby />} />
@@ -25,7 +25,7 @@ function App() {
         <Route path="/vote" element={<Vote />} />
         <Route path="/reset" element={<Reset />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
