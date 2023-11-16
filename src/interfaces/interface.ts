@@ -19,6 +19,10 @@ export interface ChatResponse {
   chats: Chat[];
 }
 
+export interface OnlyResponse {
+  chat: Chat[];
+}
+
 export interface Chat {
   id: string;
   name: string;

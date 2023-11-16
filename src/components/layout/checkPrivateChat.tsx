@@ -218,10 +218,7 @@ const CheckPrivateChat = ({ isOpen, onClose }: LoginModalProps) => {
                                   {element.users[0].username}
                                   <span
                                     className={
-                                      element.userId ===
-                                      element.users.some(
-                                        (user: any) => user.isOnline,
-                                      )
+                                      element.users[0].isOnline
                                         ? 'online'
                                         : 'offline'
                                     }></span>

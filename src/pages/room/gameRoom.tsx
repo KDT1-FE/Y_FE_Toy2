@@ -12,32 +12,29 @@ import GameChatting from '../../components/template/GameChatting';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
 import { sortCreatedAt } from '../../util/util';
-import { Chat, ChatResponse } from '../../interfaces/interface';
-import { getAllGameRooms } from '../../api';
+import { Chat, ChatResponse, OnlyResponse } from '../../interfaces/interface';
+import { getAllGameRooms, getOnlyGameRoom } from '../../api';
+import { AxiosResponse } from 'axios';
 
 const GameRoom = () => {
   const { id } = useParams();
   const [chat, setChat] = useRecoilState(chattingIdState);
   const [roomNumber, setRoomNumber] = useState<number | null>(null);
   const [roomUser, setRoomUser] = useState<number | null>(null);
-  const [allRooms, setAllRooms] = useState<ChatResponse | null>(null);
 
   useEffect(() => {
     if (id) {
       setChat(id.substring(1));
-    }
-    fetchRoomNumber();
-    if (allRooms && roomNumber && id) {
+      fetchRoomNumber();
       fetchRoomUser();
     }
-  }, [id, setChat]);
+  }, [id, setChat, roomUser]);
   // controlGameRoomReload(chat);
   controlBack();
 
   const fetchRoomNumber = async () => {
     try {
       const allRoomsData = await getAllGameRooms();
-      setAllRooms(allRoomsData);
       const createAtData: Chat[] = await sortCreatedAt(allRoomsData);
       // 방번호 넣기
       const plusIndex = {
@@ -48,10 +45,7 @@ const GameRoom = () => {
         })),
       };
 
-      const findIndex = async (
-        chatData: ChatResponse,
-        chatId: string,
-      ): Promise<number | null> => {
+      const findIndex = async (chatId: string): Promise<number | null> => {
         const foundChat = await plusIndex?.chats.find(
           (chat) => chat.id === chatId,
         );
@@ -61,7 +55,7 @@ const GameRoom = () => {
         return null;
       };
 
-      const roomData = await findIndex(plusIndex, chat);
+      const roomData = await findIndex(chat);
       setRoomNumber(roomData);
     } catch (error) {
       console.log(error);
@@ -70,21 +64,18 @@ const GameRoom = () => {
 
   const fetchRoomUser = async () => {
     try {
-      const findUser = async (
-        chatData: ChatResponse | null,
-        chatId: string,
-      ): Promise<number | null> => {
-        const foundChat = await allRooms?.chats.find(
-          (chat) => chat.id === chatId,
-        );
-        if (foundChat) {
-          return foundChat.users.length;
-        }
-        return null;
-      };
-      const roomUser = await findUser(allRooms, chat);
+      const response: AxiosResponse<OnlyResponse> | null =
+        await getOnlyGameRoom(chat);
+      console.log(response.data);
 
-      setRoomUser(roomUser);
+      if (response && response.data) {
+        const foundChats = response.data;
+        const Chat: Chat = foundChats.chat[0];
+        console.log(Chat.users.length);
+
+        console.log(roomUser);
+        setRoomUser(roomUser);
+      }
     } catch (error) {
       console.log(error);
     }

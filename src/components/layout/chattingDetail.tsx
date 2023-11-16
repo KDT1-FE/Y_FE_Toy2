@@ -212,22 +212,27 @@ const ChattingDetail = ({ userData }: UserProps) => {
               display={'flex'}
               flexDirection={'column'}>
               <PerfectScrollbar options={options}>
-                <h1>채팅디테일</h1>
                 {fetchChat &&
                   fetchChat.map((element, index) => (
-                    <div key={index}>
-                      <p>{element.date}</p>
-                      <div id="messageWrap">
-                        <div
-                          id="message"
-                          className={
-                            element.userId === myUserData.id ? 'mine' : ''
-                          }>
-                          <p>{element.text}</p>
-                        </div>
-                        <p>{element.time}</p>
-                      </div>
-                    </div>
+                    <MessageWrap key={index}>
+                      <Text
+                        align={'center'}
+                        fontSize={'12px'}
+                        color={'gray.400'}>
+                        {element.date}
+                      </Text>
+                      <Flex
+                        className={
+                          element.userId === myUserData.id ? 'mine' : ''
+                        }>
+                        <MessageCont id="message">
+                          <Text fontSize={'12px'} color={'gray.400'}>
+                            {element.text}
+                          </Text>
+                        </MessageCont>
+                        <Text>{element.time}</Text>
+                      </Flex>
+                    </MessageWrap>
                   ))}
 
                 {newChat &&
@@ -247,8 +252,8 @@ const ChattingDetail = ({ userData }: UserProps) => {
                       </div>
                     </div>
                   ))}
-
-                <h1>채팅입력</h1>
+              </PerfectScrollbar>
+              <Flex>
                 <form onSubmit={messageSubmit}>
                   <input
                     type="text"
@@ -257,7 +262,7 @@ const ChattingDetail = ({ userData }: UserProps) => {
                     onChange={handleInputChange}
                   />
                 </form>
-              </PerfectScrollbar>
+              </Flex>
             </ModalBody>
           </ModalContent>
         </Modal>
@@ -265,5 +270,11 @@ const ChattingDetail = ({ userData }: UserProps) => {
     </>
   );
 };
+const MessageWrap = styled.div``;
+const MessageCont = styled.div`
+  background-color:#edf2f7;
+  border-radius:5px; 
+  margin
+  `;
 
 export default ChattingDetail;
