@@ -1,30 +1,32 @@
-import React, { useRef } from 'react';
-
+import { useRef } from 'react';
 import { BsXCircle } from 'react-icons/bs';
-import Button from '@/components/host-list/Button';
-import Modal from '@/components/common/Modal';
+import Button from '@/components/HostList/Button';
 import useOnClickOutside from '@/hooks/useOnClickOustside';
-import { Host } from '@/pages/host-list/hostList.types';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
-import styles from './HostDetailsModal.module.scss';
+import styles from '@/components/HostList/HostDetailsModal.module.scss';
+import { Host, UserList } from '@/components/HostList/hostList.types';
+import Image from 'next/image';
+import Modal from '../common/Modal';
 
 interface HostDetailsModalProps {
   onClose: () => void;
   hostDetails: Host;
-  isModalOpen: boolean;
+  userData: UserList[];
 }
 
 export default function HostDetailsModal({
   onClose,
   hostDetails,
-  isModalOpen,
+  userData,
 }: HostDetailsModalProps) {
-  // const ref = useRef<HTMLDivElement>(null);
-  // useOnClickOutside(ref, () => {
-  //   onClose();
-  // });
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref, () => {
+    onClose();
+  });
+
+  const findUser = userData.find(user => user.id === hostDetails.id);
 
   const router = useRouter();
   const createHostChat = async () => {
@@ -36,20 +38,20 @@ export default function HostDetailsModal({
     );
 
     let chatId = '';
-    let chatName = '';
     // 숙소와의 채팅 존재 여부
     const isExist = hostChatList.some((chat: Chat) => {
       if (chat.users.some(user => user.id === hostDetails.id)) {
         chatId = chat.id;
-        chatName = chat.name;
         return true;
       }
       return false;
     });
-    if (!isExist) {
+
+    // 숙소와 채팅방이 존재하지 않으면 채팅방 생성
+    if (!isExist && findUser) {
       chatListAPI
         .createChat({
-          name: hostDetails.name,
+          name: findUser.name,
           users: [hostDetails.id],
           isPrivate: true,
         })
@@ -60,35 +62,36 @@ export default function HostDetailsModal({
           });
         });
     } else {
-      router.push({
-        pathname: `/chat/${chatId}`,
-        query: { name: chatName },
-      });
+      // 숙소와 채팅방이 존재하면 채팅방으로 이동
+      router.push(`/chat/${chatId}`);
     }
   };
+
   return (
     <>
       <div className={styles.dim} />
-      <Modal onClose={onClose}>
-        <div
-          className={`${styles.ModalBox} ${isModalOpen ? 'open' : ''}`}
-          ref={ref}
-        >
+      <Modal>
+        <div className={styles.ModalBox} ref={ref}>
           <BsXCircle className={styles['close-icon']} onClick={onClose} />
-
-          <img
-            className={styles['host-img']}
-            src={hostDetails.picture}
-            alt={hostDetails.name}
-          />
-          <p className={styles['flex-row']}>
-            <h4 className={styles.title}>{hostDetails.name}</h4>
-            <Button
-              className="fill-btn"
-              text="문의하기"
-              onClick={createHostChat}
-            />
-          </p>
+          {findUser && (
+            <>
+              <Image
+                className={styles['host-img']}
+                src={findUser.picture}
+                alt={findUser.name}
+                width={360}
+                height={360}
+              />
+              <div className={styles['flex-row']}>
+                <h4 className={styles.title}>{findUser.name}</h4>
+                <Button
+                  className="fill-btn"
+                  text="문의하기"
+                  onClick={createHostChat}
+                />
+              </div>
+            </>
+          )}
           <p className={styles.text}>
             <b>주소 :</b> {hostDetails.location} {hostDetails.address}
           </p>

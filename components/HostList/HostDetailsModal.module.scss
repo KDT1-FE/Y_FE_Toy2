@@ -1,6 +1,7 @@
 @import '@/styles/index.scss';
 .dim {
   @include dim;
+  z-index: 15;
 }
 
 .ModalBox {
@@ -10,16 +11,8 @@
   padding: 2rem;
   box-sizing: border-box;
   @include shadow-bottom;
-  // transition:
-  //   opacity 0.3s,
-  //   transform 0.3s;
-  // opacity: 0;
-  // visibility: hidden;
-  // &.open {
-  //   opacity: 1;
-  //   visibility: visible;
-  //   transform: translate(-50%, -50%) scale(1);
-  // }
+  z-index: 20;
+
   .close-icon {
     font-size: 2.4rem;
     position: absolute;
