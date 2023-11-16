@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import ChatHeader from '../../components/ChatHeader';
+import ChatHeader from '@/components/ChatHeader';
+import GameHeader from '@components/common/GameHeader';
 import styles from '@styles/pages/chat.module.scss';
 import ChatItem from '../../components/ChatItem';
 import { Socket, io } from 'socket.io-client';
@@ -14,10 +15,11 @@ const ChatPage: React.FC = () => {
   const chatId = searchParams.get('chatId');
   const pocketId = searchParams.get('pocketId');
   const navigate = useNavigate();
-  const [currentPlayers, setCurrentPlayers] = useState<number>(6);
-  const [totalPlayers, setTotalPlayers] = useState<number>(10);
-  // const [users, setUsers] = useState<string[]>([]);
 
+  const role = searchParams.get('role');
+
+  const [currentPlayers, setCurrentPlayers] = useState<number>(1);
+  const [totalPlayers, setTotalPlayers] = useState<number>(4);
   const userId = useAppSelector((state) => state.userId);
 
   const [chats, setChats] = useState<ResponseData[]>([]);
@@ -47,6 +49,7 @@ const ChatPage: React.FC = () => {
           navigate(`/role?chatId=${chatId}&pocketId=${pocketId}`);
         }, 3000);
       }
+      setCurrentPlayers(res.users.length);
     });
 
     // 컴포넌트 언마운트 시 소켓 연결 해제
@@ -103,11 +106,21 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className={styles.chat}>
-      <ChatHeader
-        currentPlayers={currentPlayers}
-        totalPlayers={totalPlayers}
-        onStartGame={handleStartGame}
-      />
+      {role ? (
+        <GameHeader
+          timer={210}
+          title={`당신의 직업은 "${role}" 입니다.`}
+          next="vote"
+          chatId={chatId}
+          pocketId={pocketId}
+        />
+      ) : (
+        <ChatHeader
+          currentPlayers={currentPlayers}
+          totalPlayers={totalPlayers}
+          onStartGame={handleStartGame}
+        />
+      )}
       <div className={styles.chatEx}>
         <div className={styles.chatItems}>
           {chats.map((chatItem) => (

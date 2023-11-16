@@ -8,6 +8,7 @@ const GameHeader = ({
   next,
   pocketId,
   chatId,
+  role,
 }: GameHeaderProps) => {
   const [time, setTime] = useState<number>(timer);
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const GameHeader = ({
 
       if (time === 0) {
         clearInterval(intervalId);
-        navigate(`/${next}?pocketId=${pocketId}&chatId=${chatId}`);
+        navigate(`/${next}?pocketId=${pocketId}&chatId=${chatId}&role=${role}`);
       }
     }, 1000);
 
@@ -42,4 +43,5 @@ type GameHeaderProps = {
   next?: string;
   pocketId: string | null;
   chatId?: string | null;
+  role?: string;
 };

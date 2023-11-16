@@ -55,10 +55,9 @@ const Role = () => {
   useEffect(() => {
     setMafia();
     setTimeout(() => setIsLoding(false), 3000);
-    setTimeout(
-      () => navigate(`/chat?chatId=${chatId}&pocketId=${pocketId}`),
-      6000,
-    );
+    setTimeout(() => {
+      navigate(`/chat?chatId=${chatId}&pocketId=${pocketId}&role=${role}`);
+    }, 6000);
   }, []);
 
   return (
