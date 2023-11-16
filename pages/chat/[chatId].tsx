@@ -71,7 +71,7 @@ export default function Chatting() {
     return io(`${CLIENT_URL}?chatId=${chatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
-        serverId: process.env.NEXT_PUBLIC_API_KEY!,
+        serverId: process.env.NEXT_PUBLIC_API_KEY,
       },
     });
   }, [chatId, accessToken]);
@@ -84,17 +84,13 @@ export default function Chatting() {
           socket.emit('fetch-messages');
         }, 500);
       });
-      socket.emit('fetch-messages');
-
-      socket.on('messages-to-client', (messageArray: MessageArray) => {
+      socket.on('messages-to-client', (messageArray: Message[]) => {
         setMessages(messageArray.messages);
       });
 
       socket.on('message-to-client', (messageObject: Message) => {
         setMessages(prevMessages => [...prevMessages, messageObject]);
       });
-
-      socket.emit('fetch-messages');
 
       socket.on('join', (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');

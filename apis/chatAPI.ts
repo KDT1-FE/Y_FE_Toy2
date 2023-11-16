@@ -5,11 +5,11 @@ const { instance } = Jwtinterceptors();
 const chatAPI = {
   // 특정 채팅방 정보조회
   getChatInfo(chatId: string) {
-    return instance.get(`/chat/only?chatId=${chatId}`);
+    return instance.get(`/only?chatId=${chatId}`);
   },
   // 특정 유저 조회
   getUserInfo(userId: string) {
-    return instance.get(`/chat/user?userId=${userId}`);
+    return instance.get(`/user?userId=${userId}`);
   },
 };
 
