@@ -34,11 +34,13 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 			<Image
 				src={modalChat.users[0]?.picture}
 				alt="user picture"
-				fill={true}
+				layout={'fill'}
+				objectFit={'cover'}
 				quality={100}
 				priority={true}
 				style={{ opacity: 0.5 }}
 			/>
+
 			<button
 				type="button"
 				className="absolute left-5 top-5 text-white text-lg"
@@ -58,7 +60,7 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 			</div>
 			<button
 				type="button"
-				className="w-full h-24 rounded-none bg-text text-2xl text-white opacity-100 hover:bg-opacity-75 transition duration-500 ease-linear font-thin absolute bottom-0"
+				className="w-full h-20 rounded-none bg-text text-2xl text-white opacity-100 hover:bg-opacity-75 transition duration-500 ease-linear font-thin absolute bottom-0"
 				onClick={joinChat}
 			>
 				오픈 채팅방 참여하기
