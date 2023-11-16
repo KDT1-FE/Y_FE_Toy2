@@ -106,15 +106,15 @@ const Game = () => {
     }
   }, [gameData.data]);
 
-  useEffect(() => {
-    if (current === "게임종료") {
-      const timeoutId = setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+  // useEffect(() => {
+  //   if (current === "게임종료") {
+  //     const timeoutId = setTimeout(() => {
+  //       window.location.reload();
+  //     }, 2000);
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [current]);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [current]);
 
   // 게임 나가기 api 선언 (호출 X)
   const leave = useFetch({
