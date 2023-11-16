@@ -1196,7 +1196,7 @@ interface ResponseData {
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/mysdpy30s" target="_blank">
-        <img src="#" alt="김미정 프로필" />
+        <img src="https://avatars.githubusercontent.com/u/137375435?v=4" alt="김미정 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
