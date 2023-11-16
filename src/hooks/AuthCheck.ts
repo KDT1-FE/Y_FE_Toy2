@@ -22,7 +22,7 @@ export const authCheck = (setter?: Dispatch<SetStateAction<boolean>>) => {
 
     if (setter && router && pathname) {
       if (isLoggedIn) {
-        if (pathname === '/login' || pathname === '/createAccount') {
+        if (pathname === '/login' || pathname === '/createaccount') {
           setter((prevState) => {
             if (prevState !== true) {
               setTimeout(() => {
