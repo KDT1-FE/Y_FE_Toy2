@@ -3,17 +3,17 @@ import styles from '@styles/components/ghostList.module.scss';
 import { Ghost } from '@/pages/game/Vote';
 import GhostItem from '@components/vote/GhostItem';
 import { getGameData, patchGameResult } from '@/api/vote';
-import { Link } from 'react-router-dom';
 
-const GhostList = ({ chatId }: { chatId: string | undefined }) => {
+const GhostList = ({ pocketId }: { pocketId: string | null }) => {
   const [isSelected, setIsSelected] = useState('');
+  const [disabled, setDisabled] = useState(false);
   const [data, setData] = useState({});
   const [ghosts, setGhosts] = useState<Ghost[]>([]);
 
   useEffect(() => {
     const setGame = async () => {
       try {
-        const gameData = await getGameData(chatId as string);
+        const gameData = await getGameData(pocketId as string);
         setGhosts(gameData.vote);
         setData(gameData);
       } catch (error) {
@@ -33,7 +33,8 @@ const GhostList = ({ chatId }: { chatId: string | undefined }) => {
     const updateGhost = selectMafia(isSelected);
     const restGhosts = ghosts.filter((ghost) => ghost.id !== isSelected);
     const newData = [...restGhosts, updateGhost];
-    await patchGameResult(chatId as string, { ...data, vote: newData });
+    await patchGameResult(pocketId as string, { ...data, vote: newData });
+    setDisabled(true);
   };
 
   return (
@@ -45,12 +46,13 @@ const GhostList = ({ chatId }: { chatId: string | undefined }) => {
             ghost={ghost}
             isSelected={isSelected === ghost.id ? true : false}
             handleIsSelected={setIsSelected}
+            disabled={disabled}
           />
         ))}
       </ul>
-      <Link to={'/night/chatId'} className={styles.ghosts__button}>
+      <div className={styles.ghosts__button}>
         <button onClick={handleClick}>투표 완료</button>
-      </Link>
+      </div>
     </div>
   );
 };

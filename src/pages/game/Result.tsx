@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 // 게임 결과
 
-const Result = ({ result }) => {
+const Result = ({ result }: { result?: string }) => {
   const [show, setShow] = useState(false);
   const [victory, setVictory] = useState(true);
 
