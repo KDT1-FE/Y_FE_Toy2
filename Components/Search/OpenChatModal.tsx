@@ -4,7 +4,7 @@ import { Chat } from '@/types';
 import { getCookie } from '@/Components/Login/Cookie';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Button, Typography } from '@material-tailwind/react';
+import { Typography } from '@material-tailwind/react';
 import icon_left from '@/public/icon_arrow_left.svg';
 import { timeForToday } from '@/app/search/search.utils';
 
@@ -56,12 +56,13 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 					</div>
 				</div>
 			</div>
-			<Button
-				className="w-full h-24 rounded-none bg-text text-2xl font-thin absolute bottom-0"
+			<button
+				type="button"
+				className="w-full h-24 rounded-none bg-text text-2xl text-white opacity-100 hover:bg-opacity-75 transition duration-500 ease-linear font-thin absolute bottom-0"
 				onClick={joinChat}
 			>
 				오픈 채팅방 참여하기
-			</Button>
+			</button>
 		</section>
 	);
 };
