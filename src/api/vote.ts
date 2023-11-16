@@ -7,7 +7,6 @@ const getGameData = async (id: string) => {
 
 const patchGameResult = async (id: string, data: object) => {
   const gameData = await pocketRequest.patch('game', id, data);
-  console.log(gameData);
   return gameData;
 };
 

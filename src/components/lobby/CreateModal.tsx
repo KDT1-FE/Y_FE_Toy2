@@ -1,10 +1,58 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import pocketRequest from '@/api/pocketRequest';
+import fastRequest from '@/api/fastRequest';
+import { useAppSelector } from '@/hooks/redux';
 
 import styles from '@styles/components/lobby/lobbyModal.module.scss';
 
 const CreateModal = ({ toggleModal }: Props): JSX.Element => {
   const [inputName, setInputName] = useState('');
   const [limit, setLimit] = useState(4);
+  const userId = useAppSelector((state) => state.userId);
+  const userInfo = useAppSelector((state) => state.userInfo.user);
+  const navigate = useNavigate();
+
+  const createRoom = async () => {
+    try {
+      const fastResponse = await fastRequest.createChat(
+        { name: inputName, users: [userId], isPrivate: false },
+        localStorage.getItem('access_token') as string,
+      );
+
+      const { name, picture } = userInfo;
+      console.log('userinfo', userInfo, userId, name, picture);
+      const mafiaIndex = Math.floor(Math.random() * 4);
+
+      const pocketResponse = await pocketRequest.post('game', {
+        chatId: fastResponse.id,
+        mafia: mafiaIndex,
+        vote: [
+          {
+            id: userId,
+            name: name,
+            count: 0,
+            role: 'citizen',
+            picture: picture,
+          },
+        ],
+      });
+
+      navigate(`/chat?chatId=${fastResponse.id}&pocketId=${pocketResponse.id}`);
+
+      console.log(
+        `fastResponse: ${fastResponse.id}`,
+        `pocketResponse: ${pocketResponse.id}`,
+      );
+    } catch (error) {
+      console.error('Creat Room Request Error');
+    }
+  };
+
+  const handleCreate = async () => {
+    await createRoom();
+  };
 
   return (
     <div className={styles.modalBackground}>
@@ -36,7 +84,10 @@ const CreateModal = ({ toggleModal }: Props): JSX.Element => {
           </select>
         </label>
 
-        <button className={styles.modal__submit} type="submit">
+        <button
+          className={styles.modal__submit}
+          type="button"
+          onClick={handleCreate}>
           확 인
         </button>
 

@@ -1,29 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '@styles/components/gameHeader.module.scss';
+import { useNavigate } from 'react-router-dom';
 
-const GameHeader = ({ started, title, timer }: GameHeaderProps) => {
-  const [isStart, setIsStart] = useState(started);
+const GameHeader = ({ title, timer, next, pocketId }: GameHeaderProps) => {
+  const [time, setTime] = useState<number>(timer);
+  const navigate = useNavigate();
 
-  if (!isStart) {
-    return (
-      <header className={styles.header}>
-        <p className={styles.header__title}>
-          {title} <button className={styles.header__button}>🚪</button>
-        </p>
-        <button
-          className={styles.header__button}
-          onClick={() => {
-            setIsStart(true);
-          }}>
-          게임시작
-        </button>
-      </header>
-    );
-  }
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTime((prev) => prev - 1);
+
+      if (time === 0) {
+        clearInterval(intervalId);
+        navigate(`/${next}?pocketId=w19vtn7w7ff3ocb${pocketId}`);
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [time]);
 
   return (
     <header className={styles.header}>
-      <span>남은시간 : {timer}초</span>
+      <span>남은시간 : {time}초</span>
       <p className={styles.header__title}>{title}</p>
       <p></p>
     </header>
@@ -33,7 +31,8 @@ const GameHeader = ({ started, title, timer }: GameHeaderProps) => {
 export default GameHeader;
 
 type GameHeaderProps = {
-  started: boolean;
   title: string;
-  timer?: number;
+  timer: number;
+  next?: string;
+  pocketId: string | null;
 };
