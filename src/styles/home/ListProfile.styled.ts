@@ -106,7 +106,7 @@ export const Language = styled.div`
 `;
 
 export const Label = styled.div`
-  width: 80px;
+  width: 90px;
 
   font-size: 19px;
   font-weight: 600;

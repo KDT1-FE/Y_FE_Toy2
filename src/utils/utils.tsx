@@ -23,7 +23,6 @@ export interface UserData {
   hashtags?: string[];
   intro?: string;
   id?: string;
-  online?: boolean;
 }
 
 interface UserCorrect {

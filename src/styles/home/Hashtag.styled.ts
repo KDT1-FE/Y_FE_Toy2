@@ -4,7 +4,7 @@ const Tag = styled.div`
   font-size: 15px;
   color: var(--color-primary);
 
-  height: 18px;
+  height: 34px;
   background-color: var(--color-secondary);
   border-radius: 17px;
   padding: 8px;

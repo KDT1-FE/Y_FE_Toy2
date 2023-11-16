@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import toast from 'react-hot-toast';
 import * as S from '../../styles/profile/EditProfile.styled';
 import { UserData, addImage, updateData } from '../../utils/utils';
 
@@ -20,9 +21,17 @@ function EditProfile({
   const [newLevel, setNewLevel] = useState(level);
   const [newTags, setNewTags] = useState(hashtags);
   const [newIntro, setNewIntro] = useState(intro);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (isSubmitting) {
+      toast.error('정보 수정 중입니다!');
+      return;
+    }
+
+    setIsSubmitting((prevState) => !prevState);
 
     let imageURL;
     if (imgFile) {
@@ -38,6 +47,7 @@ function EditProfile({
       intro: newIntro,
     });
 
+    setIsSubmitting((prevState) => !prevState);
     onChangeState();
   };
 
