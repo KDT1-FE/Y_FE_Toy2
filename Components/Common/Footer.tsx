@@ -95,7 +95,7 @@ const Footer = () => {
 			<Button
 				type="button"
 				onClick={handleLogout}
-				className="flex justify-center items-center bg-orange-900"
+				className="flex justify-center items-center bg-secondary text-chat"
 			>
 				로그아웃
 			</Button>

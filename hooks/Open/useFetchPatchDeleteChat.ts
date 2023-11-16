@@ -1,8 +1,10 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
+import useAsyncLoading from './useAsyncLoading';
 
 export const useFetchPatchDeleteChat = (token: string) => {
+	const loadingControl = useAsyncLoading();
 	const mutation = useMutation({
 		mutationFn: (data: { chatId: string }) =>
 			fetch('https://fastcampus-chat.net/chat/leave', {
@@ -15,6 +17,9 @@ export const useFetchPatchDeleteChat = (token: string) => {
 				},
 				body: JSON.stringify(data),
 			}),
+		onSuccess: async () => {
+			loadingControl(false);
+		},
 	});
 
 	return mutation;

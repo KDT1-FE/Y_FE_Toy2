@@ -12,6 +12,7 @@ import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { useFetchPatchDeleteChat } from '@/hooks/Open/useFetchPatchDeleteChat';
 import ChatDroppableDelete from './ChatDroppable/ChatDroppableDelete';
 import ChatDroppableList from './ChatDroppable/ChatDroppableList';
+import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
 
 const setNewListData = (
 	sourceColumn: SourceColumnProps,
@@ -35,6 +36,7 @@ const setNewListData = (
 };
 
 const ChatList = ({ myChatList, accessToken }: ChatListProps) => {
+	const loadingControl = useAsyncLoading();
 	const mutation = useFetchPatchDeleteChat(accessToken as string);
 
 	const idAddedfilteredChatList = myChatList.map(
@@ -110,7 +112,7 @@ const ChatList = ({ myChatList, accessToken }: ChatListProps) => {
 			setNewListData(sourceColumn, newTaskIds, listData, setListData);
 
 			const queryId = myChatList[deleteChatIndex].id;
-			console.log(queryId);
+			loadingControl(true);
 			mutation.mutate({
 				chatId: queryId,
 			});

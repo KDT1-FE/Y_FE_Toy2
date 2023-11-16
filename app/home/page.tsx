@@ -1,4 +1,4 @@
-import HomeButton from '@/Components/Button';
+import HomeButton from '@/Components/Common/Button';
 import React from 'react';
 
 const wrapper = 'w-full flex flex-col items-center';
