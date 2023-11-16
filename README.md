@@ -1204,29 +1204,6 @@ interface ResponseData {
 
 ## 🧑🏻‍💻 주요 기능 구현
 
-<div align="center" style="display: flex; flex-direction: column;">
-	<div style="display: flex;">
-		<div>
-			<h3>로그인, 회원가입</h3>
-			<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/08a39e06-34d9-47a7-9292-c2dccb19e158"  width="200" />
-		</div>
-		<div>
-			<h3>유저 목록 조회, 검색, 채팅</h3>
-			<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/65bb7482-bc1e-414c-a145-d8e469a3f3f2"  width="200" />
-		</div>
-	</div>
-	<div style="display: flex;">
-		<div>
-			<h3>채팅방 검색 및 채팅</h3>
-			<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/70c44318-4dd2-4a52-8b25-dcc17de62081"  width="200" />
-		</div>
-		<div>
-			<h3>드래그 & 드롭</h3>
-			<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/5a6b5b54-dfe3-40ec-b8c5-28c6c3607a92"  width="200" />
-		</div>
-	</div>
-</div>
-
 ### 로그인, 회원가입
 
 <img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/08a39e06-34d9-47a7-9292-c2dccb19e158"  width="200" />
