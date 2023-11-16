@@ -49,7 +49,12 @@ export const FriendProfile = ({ user }: { user: User | UserHasOnline }) => {
 						/>
 					</div>
 					{isUserOnline && (
-						<span className="absolute top-0 left-2/3">
+						<span
+							className="absolute top-2"
+							style={{
+								left: '55%',
+							}}
+						>
 							<div
 								className={`w-3.5 h-3.5 rounded-full bg-${
 									user.isOnline ? 'primary' : 'gray-500'
