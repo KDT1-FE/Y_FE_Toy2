@@ -168,7 +168,7 @@ function Profile() {
       const 함수명 = async () => {
         await patchData("https://fastcampus-chat.net/user", {
           name: name,
-          picture: backgroundImageUrl
+          picture: profileImageUrl
         });
       };
       함수명();
