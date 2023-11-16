@@ -1,20 +1,10 @@
 @import '@/styles/index.scss';
-
-.uploadDb,
-.uploadApi {
-  position: fixed;
-  bottom: 20vh;
-  right: 0;
-  padding: 10px;
-}
-.uploadApi {
-  bottom: 28vh;
-}
 .container {
   @include container;
   height: 100%;
   padding: 2rem;
   padding-bottom: 10rem;
+  margin-top: 5rem;
 
   .title {
     color: $black;

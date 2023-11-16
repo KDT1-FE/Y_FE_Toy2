@@ -17,3 +17,7 @@ export const todayDate = (time: Date) => {
   const dateString = messageDate.toISOString().split('T')[0];
   return dateString;
 };
+
+export const convertToMilliSecond = (date: Date) => {
+  return new Date(date).getTime();
+};

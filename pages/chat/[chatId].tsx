@@ -1,29 +1,56 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io } from 'socket.io-client';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
 import ExitNotice from '@/components/chat/exitNotice';
 import ChatAlert from '@/components/chat/chatAlert';
-import { JoinersData, LeaverData, Message } from '@/@types/types';
+import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
 // import chatSocket from '@/apis/socket';
+import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import { CLIENT_URL } from '../../apis/constant';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
+import chatAPI from '../../apis/chatAPI';
 
-export default function Chat() {
+export default function Chatting() {
   const router = useRouter();
-  const { chatId, name } = router.query;
+  const { chatId } = router.query;
 
-  const [, setIsConnected] = useState(false);
+  const [chatData, setChatData] = useState<Chat | null>();
+
+  useEffect(() => {
+    const fetchChatData = async () => {
+      try {
+        if (chatId && typeof chatId === 'string') {
+          const response = await chatAPI.getChatInfo(chatId);
+          const chatInfo: Chat = response.data.chat;
+          setChatData(chatInfo);
+        }
+      } catch (error) {
+        console.error('Error fetching chat data:', error);
+      }
+    };
+
+    fetchChatData();
+  }, [chatId]);
+
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const setShowNavigation = useSetRecoilState(showNavigationState);
+  useEffect(() => {
+    setShowNavigation(false);
+    return () => {
+      setShowNavigation(true);
+    };
+  }, []);
+
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const [showEntryNotice, setShowEntryNotice] = useState(false);
@@ -143,7 +170,13 @@ export default function Chat() {
 
   return (
     <>
-      <ChatroomHeader name={name} chatId={chatId} />
+      {chatData ? (
+        <ChatroomHeader
+          name={chatData.name}
+          chatId={chatData.id}
+          users={chatData.users}
+        />
+      ) : null}
       <div className={styles2.container}>
         <div className={styles2.container}>
           <div>
