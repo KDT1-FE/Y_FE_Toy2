@@ -1,20 +1,22 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io } from 'socket.io-client';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import MyChat from '@/components/Chat/mychat';
-import OtherChat from '@/components/Chat/otherchat';
-import EntryNotice from '@/components/Chat/entryNotice';
-import ExitNotice from '@/components/Chat/exitNotice';
-import ChatAlert from '@/components/Chat/chatAlert';
 import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
 import { showNavigationState } from '@/recoil/atoms/showNavigationState';
-import Loading from '@/components/Chat/Loading';
+import {
+  ChatAlert,
+  ChatLoading,
+  ChatroomHeader,
+  EntryNotice,
+  ExitNotice,
+  MyMessage,
+  OtherMessage,
+} from '@/components/Chat';
 import { CLIENT_URL } from '../../apis/constant';
-import styles2 from '../../components/chat/Chat.module.scss';
-import ChatroomHeader from '../../components/Chat/header';
+import styles from '../../components/chat/Chat.module.scss';
 import chatAPI from '../../apis/chatAPI';
 
 interface MessageArray {
@@ -144,31 +146,28 @@ export default function Chatting() {
     };
   }, [socket]);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (enterName) {
       setShowEntryNotice(true);
-
-      const entryTimer = setTimeout(() => {
-        setShowEntryNotice(false);
-        setEnterName('');
-      }, 3000);
-      return () => clearTimeout(entryTimer);
     }
+    const entryTimer = setTimeout(() => {
+      setShowEntryNotice(false);
+      setEnterName('');
+    }, 3000);
+
+    return () => clearTimeout(entryTimer);
   }, [enterName]);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (exitName) {
       setShowExitNotice(true);
-
-      const exitTimer = setTimeout(() => {
-        setShowExitNotice(false);
-        setExitName('');
-      }, 3000);
-
-      return () => clearTimeout(exitTimer);
     }
+    const exitTimer = setTimeout(() => {
+      setShowExitNotice(false);
+      setExitName('');
+    }, 3000);
+
+    return () => clearTimeout(exitTimer);
   }, [exitName]);
 
   const scrollToBottom = () => {
@@ -188,7 +187,7 @@ export default function Chatting() {
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!message.trim()) {
+    if (message.trim()) {
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
@@ -203,10 +202,10 @@ export default function Chatting() {
   return (
     <>
       {chatData && <ChatroomHeader chatData={chatData} />}
-      <div className={styles2.container}>
-        <div className={styles2.container}>
+      <div className={styles.container}>
+        <div className={styles.container}>
           {!chatData ? (
-            <Loading />
+            <ChatLoading />
           ) : (
             <>
               <div>
@@ -214,9 +213,13 @@ export default function Chatting() {
                   const prevUserId =
                     index > 0 ? messages[index - 1].userId : null;
                   return msg.userId === userId ? (
-                    <MyChat key={msg.id} msg={msg} />
+                    <MyMessage key={msg.id} msg={msg} />
                   ) : (
-                    <OtherChat key={msg.id} msg={msg} prevUserId={prevUserId} />
+                    <OtherMessage
+                      key={msg.id}
+                      msg={msg}
+                      prevUserId={prevUserId}
+                    />
                   );
                 })}
               </div>
@@ -229,16 +232,16 @@ export default function Chatting() {
         </div>
       </div>
       {chatData ? (
-        <form className={styles2.footer} onSubmit={handleSendMessage}>
+        <form className={styles.footer} onSubmit={handleSendMessage}>
           <input
             type="text"
             placeholder="대화를 시작해보세요!"
-            className={styles2.chatInput}
+            className={styles.chatInput}
             value={message}
             onChange={e => setMessage(e.target.value)}
           />
           <button
-            className={styles2.triangle_button}
+            className={styles.triangle_button}
             type="submit"
             aria-label="Submit"
           />

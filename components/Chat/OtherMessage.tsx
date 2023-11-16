@@ -1,4 +1,3 @@
-// OtherMessage.js
 import React, { useEffect, useState } from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import { Message } from '@/@types/types';
@@ -6,14 +5,13 @@ import Image from 'next/image';
 import chatAPI from '@/apis/chatAPI';
 import styles from './Chat.module.scss';
 
-function OtherMessage({
+export default function OtherMessage({
   msg,
   prevUserId,
 }: {
   msg: Message;
   prevUserId: string | null;
 }) {
-
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];
   const dateString = todayDate(msg.createdAt);
@@ -37,6 +35,7 @@ function OtherMessage({
 
     getUserName();
   }, [msg.id]);
+
   return (
     <div className={styles.otherFlex}>
       <div>
@@ -65,5 +64,3 @@ function OtherMessage({
     </div>
   );
 }
-
-export default OtherMessage;
