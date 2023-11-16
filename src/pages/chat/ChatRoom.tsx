@@ -34,12 +34,10 @@ function ChatRoom() {
     navigate('/chat');
   };
 
-  // 메시지 작성
   const onChangeMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
-  // 메시지 보내기
   const submitMessage = (): void => {
     if (message.trim()) {
       socket?.emit('message-to-server', message);

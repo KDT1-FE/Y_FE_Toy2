@@ -14,26 +14,33 @@ interface IMessageProps {
 
 function Message({ message, messages, userInfo, users }: IMessageProps) {
   const [prevMessage, setPrevMessage] = useState<MessageType | null>(null);
-  let isSentByCurrentUser = false;
+  const [nextMessage, setNextMessage] = useState<MessageType | null>(null);
   const formattedDate = dayjs(message.createdAt).locale('ko').format('A h:mm');
-  const trimmedName = message.userId.replace('9b9a6496:', '');
+  const NextMsgFormattedDate = dayjs(nextMessage?.createdAt)
+    .locale('ko')
+    .format('A h:mm');
   const sender = users.find((user) => user.id === message.userId);
+  let isSentByCurrentUser = false;
 
-  if (userInfo?.id === trimmedName) {
+  if (userInfo?.id === message.userId) {
     isSentByCurrentUser = true;
   }
 
   useEffect(() => {
-    const prevMessageIndex =
-      messages.findIndex((data) => data.id === message.id) - 1;
+    const MessageIndex = messages.findIndex((data) => data.id === message.id);
 
-    setPrevMessage(messages[prevMessageIndex]);
-  }, []);
+    setPrevMessage(messages[MessageIndex - 1]);
+    setNextMessage(messages[MessageIndex + 1]);
+  }, [messages]);
 
   return isSentByCurrentUser ? (
-    <S.MessageContainer sx={{ alignItems: 'flex-end' }}>
-      <S.MessageWrapper>
-        <S.Date>{formattedDate}</S.Date>
+    <S.MessageContainer style={{ alignItems: 'flex-end' }}>
+      <S.MessageWrapper style={{ justifyContent: 'flex-end' }}>
+        <S.Date>
+          {(NextMsgFormattedDate !== formattedDate ||
+            nextMessage?.userId !== message.userId) &&
+            formattedDate}
+        </S.Date>
         <S.TextBox sx={{ backgroundColor: 'primary.main' }}>
           <S.MessageText>{message?.text}</S.MessageText>
         </S.TextBox>
@@ -53,7 +60,11 @@ function Message({ message, messages, userInfo, users }: IMessageProps) {
         <S.TextBox sx={{ backgroundColor: 'secondary.main' }}>
           <S.MessageText>{message?.text}</S.MessageText>
         </S.TextBox>
-        <S.Date>{formattedDate}</S.Date>
+        <S.Date>
+          {(NextMsgFormattedDate !== formattedDate ||
+            nextMessage?.userId !== message.userId) &&
+            formattedDate}
+        </S.Date>
       </S.MessageWrapper>
     </S.MessageContainer>
   );

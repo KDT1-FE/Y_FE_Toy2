@@ -29,6 +29,7 @@
     "default-case": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "react/no-array-index-key": "off",
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "no-console": "off"
   }
 }
