@@ -9,10 +9,10 @@ import { useAppSelector } from '@/hooks/redux';
 const accessToken = localStorage.getItem('access_token');
 const serverId = import.meta.env.VITE_FAST_KEY;
 
-const [searchParams] = useSearchParams();
-const chatId = searchParams.get('chatId');
 
 const ChatPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const chatId = searchParams.get('chatId');
   const [currentPlayers, setCurrentPlayers] = useState<number>(6);
   const [totalPlayers, setTotalPlayers] = useState<number>(10);
 

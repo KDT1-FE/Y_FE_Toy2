@@ -5,15 +5,59 @@ import { useForm } from '@hooks/useForm';
 import { useState } from 'react';
 import { useAppDispatch } from '@/hooks/redux';
 import { getUserId } from '@/store/userSlice';
-// import { jwtDecode } from "jwt-decode";
-
+import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
 const Signin = () => {
+  
+  // const refreshToken = localStorage.getItem("refresh_token");
+  // const accessToken = localStorage.getItem("access_token");
 
-  // const token = localStorage.getItem("access_token")
-  // const decoded = jwtDecode(token);
+  // const axiosInstance = axios.create();
+  // console.log(axiosInstance.defaults.headers.common)
 
-  // console.log(decoded);
+  
+  // const refreshAccessToken = async () => {
+  //   const response = await axios.post('https://fastcampus-chat.net/refresh', {
+  //     refreshToken, // You may need to obtain this from your current token
+  //   });
+
+  //   const newAccessToken = response.data.accessToken;
+
+  //   axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+
+  //   console.log(newAccessToken);
+  //   return newAccessToken;
+  // }
+
+
+  // axiosInstance.interceptors.request.use(
+  //   async (config) => {
+  //     console.log(config.headers)
+  //     const tokenExpirationThreshold = 60;
+  //     const user = jwtDecode(accessToken); 
+  //     console.log(user.exp)
+  
+  //     if (user && user.exp - Math.floor(Date.now() / 1000) < tokenExpirationThreshold) {
+
+  //       const newAccessToken = await refreshAccessToken();
+  
+  //       config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+  //       console.log(config.headers.Authorization)
+  //     }
+  
+  //     return config;
+  //   },
+  //   (error) => {
+  //     return Promise.reject(error);
+  //   }
+  // );
+  
+  // // export default axiosInstance;
+
+
+
+  // // console.log(decoded);
 
   const [id, onChangeId] = useForm();
   const [password, onChangePassword] = useForm();
@@ -32,7 +76,6 @@ const Signin = () => {
     if (result.error) {
       setErrors(result.error);
     } else {
-      console.log(result)
       localStorage.setItem('access_token', accessToken);
       localStorage.setItem('refresh_token', refreshToken);
       dispatch(getUserId(id));
