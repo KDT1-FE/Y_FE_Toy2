@@ -3,7 +3,7 @@ import useOnClickOutside from '@/hooks/useOnClickOustside';
 import { BsXCircle } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import chatListAPI from '@/apis/chatListAPI';
-import Modal from '../../Common/Modal';
+import { Modal } from '@/components/Common';
 import style from './ChatListModal.module.scss';
 
 interface ChatListModalProps {

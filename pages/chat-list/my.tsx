@@ -28,7 +28,7 @@ export default function MyChatList() {
 
   return (
     <div className={styles.headerWrapContainer}>
-      <Header pageName="My" />
+      <Header pageName="나의 채팅" />
       <div className={styles.list_container}>
         <div className={styles.titleContainer}>
           <p>숙소와 채팅</p>

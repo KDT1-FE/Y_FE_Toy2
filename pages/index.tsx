@@ -6,7 +6,7 @@ import HostList from './host-list';
 export default function Home() {
   return (
     <>
-      <Header />
+      <Header pageName="" />
       <HostList />
     </>
   );

@@ -48,7 +48,7 @@ export default function AllChatList() {
 
   return (
     <div>
-      <Header pageName="All" />
+      <Header pageName="오픈채팅" />
       <ul className={styles.list_container}>
         {allChatList.map(chat => (
           <AllChatListItem key={chat.id} chat={chat} />

@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import style from './Header.module.scss';
 
-export default function Header({ pageName }) {
-  const [shrink, setShrink] = useState(false);
+interface Props {
+  pageName: string;
+}
 
-  if (pageName === 'All') {
-    pageName = '오픈채팅방';
-  } else if (pageName === 'My') {
-    pageName = '나의 채팅방';
-  }
+export default function Header({ pageName }: Props) {
+  const [shrink, setShrink] = useState(false);
 
   const handleScroll = () => {
     if (window.scrollY > 50) {
