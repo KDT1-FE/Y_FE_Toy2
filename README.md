@@ -25,7 +25,7 @@
 
 ### [필수 구현사항]
 
-✅ useState 또는 useReducer를 활용한 상태 관리 구현 <br />
+✅ useState 또는 useReducer를 활용한 상태 관리 구현 <br />  
 ✅ Sass, <b>styled-component</b>, emotion, Chakra UI, tailwind CSS 등을 활용한 스타일 구현 <br />
 ✅ react 상태를 통한 CRUD 구현 <br />
 ✅ 상태에 따라 달라지는 스타일 구현 <br />
