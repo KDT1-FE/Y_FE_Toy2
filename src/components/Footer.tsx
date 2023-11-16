@@ -83,6 +83,7 @@ const FooterWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1em 13em;
+  border-top: 1px solid #e8e8e8;
 `;
 const LeftWrapper = styled.div`
   display: flex;
@@ -106,7 +107,7 @@ const LeftWrapper = styled.div`
         color: inherit;
         &:hover {
           color: #f43530;
-          font-weight: 700;
+          font-weight: 500;
         }
       }
     }

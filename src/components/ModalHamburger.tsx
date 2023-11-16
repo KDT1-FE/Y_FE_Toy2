@@ -61,7 +61,7 @@ const ModalExample = ({
   return (
     <ModalWrap ref={menuRef}>
       <HamButton onClick={() => openModal()}>
-        <img src="/src/assets/images/menu-ico.png" alt="메뉴" width="30" />
+        <img src="/src/assets/images/menu-ico.png" alt="메뉴" width="26" />
       </HamButton>
       {modalIsOpen && (
         <ButtonWrap>
@@ -105,7 +105,8 @@ const HamButton = styled.button`
 
 const ButtonWrap = styled.div`
   position: absolute;
-  background-color: red;
+  top: 40px;
+  left: -70px;
   display: flex;
   flex-direction: column;
   border-top: 1px solid #e4e4e4;

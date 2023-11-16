@@ -71,25 +71,28 @@ function MainContents() {
               <br /> 관심사를 가진 멤버들
             </span>
             <Gallery>
-              {profile &&
-                profile.map((item) => (
-                  <GalleryItem>
-                    <Photo>
-                      <div className="photo-inner">
-                        <img src={item.profileImgUrl} alt="프로필" />
-                      </div>
-                    </Photo>
-                    <UserInfo>
-                      <div className="userName">{item.name}</div>
-                      <div className="userInfo">{item.introText}</div>
-                      <div className="hobby">
-                        {item.hobby.slice(0, 5).map((h, index) => (
-                          <div key={index}>{h}</div>
-                        ))}
-                      </div>
-                    </UserInfo>
-                  </GalleryItem>
-                ))}
+              {
+                profile && profile.slice(0, 6).map((item) => (
+                  <GalleryItem to={`/profiles/${item.id}`}>
+                  <Photo>
+                    <div className="photo-inner">
+                      <img src={item.profileImgUrl} alt="프로필" />
+                    </div>
+                  </Photo>
+                  <UserInfo>
+                    <div className="userName">{item.name}</div>
+                    <div className="userInfo">
+                      {item.introText}
+                    </div>
+                    <div className="hobby">
+                    {item.hobby.slice(0, 5).map((h, index) => (
+                      <div key={index}>{h}</div>
+                    ))}
+                    </div>
+                  </UserInfo>
+                </GalleryItem>
+                ))
+              }
             </Gallery>
             <MoreInfoBtn to={"/profiles"}>
               더보기{" "}
@@ -163,7 +166,7 @@ const Gallery = styled.div`
   margin-right: -5px;
   margin-top: 2em;
 `;
-const GalleryItem = styled.div`
+const GalleryItem = styled(Link)`
   background-color: white;
   padding: 1em;
   border-radius: 2em;
@@ -172,6 +175,8 @@ const GalleryItem = styled.div`
   gap: 1em;
   margin: 0 5px;
   margin-bottom: 10px;
+  text-decoration:none;
+  color: #373535;
 `;
 const Photo = styled.div`
   flex: 1 0 30%;
@@ -293,28 +298,6 @@ const ThirdContent = styled.div`
   }
   img {
     max-width: 250px;
-  }
-`;
-
-const SecondGallery = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  gap: 2em;
-  color: #8b8b8b;
-
-  .photo {
-    overflow: hidden;
-    width: 12em;
-    height: 12em;
-    border-radius: 1em;
-    img {
-      width: 100%;
-    }
-  }
-  .text {
-    text-align: left;
-    margin-top: 15px;
   }
 `;
 const MoreInfoBtn = styled(Link)`
