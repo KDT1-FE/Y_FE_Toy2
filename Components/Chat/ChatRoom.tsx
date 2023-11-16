@@ -7,6 +7,7 @@ import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import ChatHeader from '@/Components/Chat/ChatHeader';
 import RenderChats from '@/Components/Chat/RenderChats';
 import Image from 'next/image';
+import Swal from 'sweetalert2';
 
 const ChatRoom = ({
 	socket,
@@ -84,10 +85,7 @@ const ChatRoom = ({
 		if (socket?.connected) {
 			socket.on('join', (responseData) => {
 				setChatUsers([...chatUsers, ...responseData.users]);
-				socket.emit(
-					'message-to-server',
-					`${responseData.users[0]} 님이 입장하셨습니다.`,
-				);
+				Swal.fire(`${responseData.users[0]} 님이 입장하셨습니다.`);
 			});
 		}
 
@@ -102,10 +100,7 @@ const ChatRoom = ({
 		if (socket?.connected) {
 			socket.on('leave', (responseData) => {
 				setChatUsers([...chatUsers, ...responseData.users]);
-				socket.emit(
-					'message-to-server',
-					`${responseData.leaver} 님이 퇴장하셨습니다.`,
-				);
+				Swal.fire(`${responseData.leaver} 님이 퇴장하셨습니다.`);
 			});
 		}
 
@@ -131,7 +126,7 @@ const ChatRoom = ({
 	};
 
 	return (
-		<div className="h-screen">
+		<div className="h-screen overflow-y-scroll">
 			<ChatHeader
 				chatId={chatId}
 				chatName={chatName}
@@ -167,15 +162,15 @@ const ChatRoom = ({
 				</>
 			)}
 
-			<div className="w-full sm:w-[425px] h-14 flex justify-evenly items-center py-8 bg-gray-100 fixed bottom-0">
+			<div className="w-full sm:w-[425px] h-14 flex justify-evenly items-center py-8 bg-footer fixed bottom-0">
 				<input
 					type="text"
 					value={newMessage}
 					onChange={(e) => setNewMessage(e.target.value)}
 					onKeyPress={handleKeyPress}
-					className="w-4/5 px-4 py-3 rounded-2xl"
+					className="w-4/5 px-4 py-3 rounded-2xl focus:outline-none"
 				/>
-				<div className="flex justify-center items-center w-10 h-10 bg-pink-100 rounded-lg">
+				<div className="flex justify-center items-center w-10 h-10 bg-send rounded-lg">
 					<Image
 						src={'/icon_send.svg'}
 						width={25}
