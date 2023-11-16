@@ -4,36 +4,34 @@ import { ImBubble } from 'react-icons/im';
 import { MdClose } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
 import { BiSolidCircle } from 'react-icons/bi';
+import { getCookie } from '@/lib/cookie';
+import { useRecoilValue } from 'recoil';
+import { ConnectUserIdList } from './UserListStore'
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Chat } from '@/components/chats/chatsStore';
 import { instance } from '@/lib/api';
 
+
 // types 폴더 나중에 만들어서 type 빼놓기
 interface User {
-    id: string;
-    password: string;
-    name: string;
-    picture: string;
-    chats: string[];
-}
-
-interface ConnectUserIdList {
-    users: string[];
+  id: string;
+  name: string;
+  picture: string;
 }
 
 interface UserProfileModalProps {
-    clickModal: () => void;
-    user: User;
-    connectUserIdList: ConnectUserIdList;
+  clickModal: () => void;
+  user: User;
 }
 
-const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileModalProps) => {
-    const router = useRouter();
+const UserProfileModal = ({ clickModal, user }: UserProfileModalProps) => {
+  const router = useRouter();
 
-    const { id, name, picture } = user;
+  const { id, name, picture } = user;
     const accessToken = sessionStorage.getItem('accessToken');
     const userId = sessionStorage.getItem('userId');
     const [myChats, setMyChats] = useState<Chat[]>([]);
+    const connectUserIdList = useRecoilValue(ConnectUserIdList);
 
     const enterChatRoom = (chat: Chat) => {
         if (chat.id && chat.users) {
@@ -72,7 +70,7 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
         const chatName = `1:1 Chat with ${user.name}`;
         // await getMyChats()
         if (user.name) {
-            await getMyChats();
+            // await getMyChats();
 
             const existingChat = myChats.find(chat => chat.name === chatName);
             
@@ -105,7 +103,7 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
                         // 생성된 채팅 방으로 이동
                         const data = await response.json();
                         const generatedChatId = `1on1_${user.id}_${userId}`;
-                        router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
+                        router.push(`/chating/${data.id}`);
                     } else {
                         console.error('Failed to create chat room');
                     }
@@ -114,143 +112,142 @@ const UserProfileModal = ({ clickModal, user, connectUserIdList }: UserProfileMo
         }
         
     
-    return (
-        <UserModalBox onClick={clickModal}>
-            <ModalContent onClick={(e) => e.stopPropagation()}>
-                <CloseButton onClick={clickModal}>
-                    <MdClose size="40" className="closeIcon" />
-                </CloseButton>
-                <ModalMain>
-                    <UserImg src={picture} />
-                    <UserInfo>
-                        <UserName>{name}</UserName>
-                        <UserState>
-                        <BiSolidCircle
-                            size="13"
-                            color={(connectUserIdList?.users || []).includes(id) ? '#00956e' : '#950000'}
-                        />
-                            {connectUserIdList.users.includes(id) ? (
-                                <UserStateTextBlack>online</UserStateTextBlack>
-                            ) : (
-                                <UserStateText>offline</UserStateText>
-                            )}
-                        </UserState>
-                    </UserInfo>
-                    <ToChating onClick={handleChatClick}>
-                        <ImBubble size="30" className="chatIcon" />
-                        <ChatText>1:1 채팅하기</ChatText>
-                    </ToChating>
-                </ModalMain>
-            </ModalContent>
-        </UserModalBox>
-    );
-}
+
+  return (
+    <UserModalBox onClick={clickModal}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
+        <CloseButton onClick={clickModal}>
+          <MdClose size="40" className="closeIcon" />
+        </CloseButton>
+        <ModalMain>
+          <UserImg src={picture} />
+          <UserInfo>
+            <UserName>{name}</UserName>
+            <UserState>
+              <BiSolidCircle size="13" color={ConnectUserIdList.users.includes(id) ? '#00956e' : '#950000'} />
+              {connectUserIdList.users.includes(id) ? (
+                <UserStateTextBlack>online</UserStateTextBlack>
+              ) : (
+                <UserStateText>offline</UserStateText>
+              )}
+            </UserState>
+          </UserInfo>
+          <ToChating onClick={handleChatClick}>
+            <ImBubble size="30" className="chatIcon" />
+            <ChatText>1:1 채팅하기</ChatText>
+          </ToChating>
+        </ModalMain>
+      </ModalContent>
+    </UserModalBox>
+  );
+};
 
 export default UserProfileModal;
 
 const UserModalBox = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-    width: 100%;
-    height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
 
-    background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  z-index: 10000;
 `;
 
 const ModalContent = styled.div`
-    background-color: white;
+  background-color: white;
 
-    width: 600px;
-    height: 500px;
+  width: 600px;
+  height: 500px;
 
-    border-radius: 5%;
+  border-radius: 5%;
 
-    margin: 0 2rem;
+  margin: 0 2rem;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
 const CloseButton = styled.div`
-    margin: 1.5rem 2.5rem 0 auto;
+  margin: 1.5rem 2.5rem 0 auto;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    .closeIcon {
-        color: ${({ theme }) => theme.color.darkGray};
-    }
+  .closeIcon {
+    color: ${({ theme }) => theme.color.darkGray};
+  }
 
-    &:hover .closeIcon {
-        color: ${({ theme }) => theme.color.mainGreen};
-        transition: 0.4s;
-    }
+  &:hover .closeIcon {
+    color: ${({ theme }) => theme.color.mainGreen};
+    transition: 0.4s;
+  }
 `;
 
 const ModalMain = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
 `;
 
 const UserImg = styled.img`
-    width: 150px;
-    height: 150px;
+  width: 150px;
+  height: 150px;
 
-    border-radius: 70%;
+  border-radius: 70%;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    margin-top: 5px;
+  margin-top: 5px;
 `;
 
 const UserInfo = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const UserName = styled.h1`
-    font-size: ${({ theme }) => theme.fontSize.title};
-    margin: 0;
+  font-size: ${({ theme }) => theme.fontSize.title};
+  margin: 0;
 `;
 
 const ToChating = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    &:hover .chatIcon {
-        color: ${({ theme }) => theme.color.mainGreen};
-        transition: 0.4s;
-    }
+  &:hover .chatIcon {
+    color: ${({ theme }) => theme.color.mainGreen};
+    transition: 0.4s;
+  }
 `;
 
 const ChatText = styled.p`
-    font-weight: 500;
-    font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: 500;
+  font-size: ${({ theme }) => theme.fontSize.md};
 `;
 
 const UserState = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
 `;
 
 const UserStateText = styled.p`
-    color: ${({ theme }) => theme.color.darkGray};
-    font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.color.darkGray};
+  font-size: ${({ theme }) => theme.fontSize.sm};
 `;
 
 const UserStateTextBlack = styled.p`
-    color: black;
+  color: black;
 `;
