@@ -14,7 +14,12 @@ const AllUserBar = () => {
   const userData = useUserData();
 
   return (
-    <Box>
+    <Box
+      position="fixed"
+      top="50%"
+      left="85%"
+      transform="translate(-50%, -50%)"
+    >
       <Flex>
         <Stack direction="row" h="100vh">
           <Divider mt="12" orientation="vertical" borderColor={'gray.400'} />
@@ -32,9 +37,7 @@ const AllUserBar = () => {
                     size="sm"
                     name={userName}
                     src={userData.profilePictures[index]}
-                  >
-                    <AvatarBadge boxSize="1.25em" bg="green.500" />
-                  </Avatar>
+                  ></Avatar>
                   <Text fontSize="sm" color="black" ml="3" mt="1">
                     {userName}
                   </Text>
