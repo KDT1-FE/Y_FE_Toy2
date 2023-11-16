@@ -1,13 +1,29 @@
 @import '@/styles/index.scss';
-@import '../../styles/_variables';
 
 .allContainer {
   @include container;
   margin-top: 8rem;
+  padding: 2rem;
 }
 
 .list_container {
   @include container;
+}
+
+
+.titleContainer {
+  @include container;
+  @include flex-center-row;
+  justify-content: start;
+  color : $brand-pink;
+  font-size: 1.7rem;
+  p {
+    
+    font-weight: bold;
+    padding : 1rem;
+    margin: 0;
+  }
+
 }
 
 .container {
