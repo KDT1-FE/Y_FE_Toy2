@@ -356,7 +356,7 @@ const GameLists = () => {
             <InputGroup size="md">
               <Input
                 pr="5rem"
-                placeholder="Enter password"
+                placeholder="내용을 입력하세요"
                 onChange={onChange}
                 onKeyDown={onKeyDown}
                 value={value}
