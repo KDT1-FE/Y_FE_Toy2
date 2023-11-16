@@ -1168,10 +1168,6 @@ interface ResponseData {
 
 </details>
 
-## 🧑🏻‍💻 Stack
-
-![기술 스택](https://github.com/MOVIEJOJO7/cat-talk/assets/101972330/68bb2746-7f5f-40da-9cd6-3a57cb4c89fc)
-
 <br/>
 
 ## 🧑🏻‍💻 Contributor
@@ -1188,6 +1184,42 @@ interface ResponseData {
 
 ![Stack](https://github.com/MOVIEJOJO7/cat-talk/assets/101972330/68bb2746-7f5f-40da-9cd6-3a57cb4c89fc)
 
+<br/>
+
+## 🧑🏻‍💻 디자인
+
+### Userflow
+
+|||
+|---|---|
+| ![유저플로우1](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/cdee66fe-afdd-4bf1-94dc-dced5168065e) | ![유저플로우2](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/9ddde385-660d-4b8f-8f53-d3adea2a5769) |
+| ![유저플로우3](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/0cc08deb-85e3-43fe-95dc-3bad21be3da0) | ![유저플로우4](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/5b253557-ce1f-41a3-8e31-0d07c712f4d1) |
+| ![유저플로우5](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/718aa86d-dddd-4866-921f-cee666886457) |
+
+### 디자인 프로토타입
+
+<img width="1146" alt="image" src="https://github.com/MOVIEJOJO7/cat-talk/assets/102405617/41a2d804-95ea-4d5e-9ac5-0ad051ab0739 /">
+
+<br/>
+
+## 🧑🏻‍💻 주요 기능 구현
+
+### 로그인, 회원가입
+
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/08a39e06-34d9-47a7-9292-c2dccb19e158"  width="200" />
+
+### 유저 목록 조회, 검색, 채팅
+
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/65bb7482-bc1e-414c-a145-d8e469a3f3f2"  width="200" />
+
+### 채팅방 검색 및 채팅
+
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/70c44318-4dd2-4a52-8b25-dcc17de62081"  width="200" />
+
+### 드래그 & 드롭
+
+<img src="https://github.com/cs-yum/cs-yum-blog/assets/101972330/5a6b5b54-dfe3-40ec-b8c5-28c6c3607a92"  width="200" />
+
 
 <br/>
 
@@ -1203,57 +1235,13 @@ $ npm run dev
 
 <br/>
 
-## 🧑🏻‍💻 디자인
-
-### Userflow
-
-|||
-|---|---|
-| ![유저플로우1](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/cdee66fe-afdd-4bf1-94dc-dced5168065e) | ![유저플로우2](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/9ddde385-660d-4b8f-8f53-d3adea2a5769) |
-| ![유저플로우3](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/0cc08deb-85e3-43fe-95dc-3bad21be3da0) | ![유저플로우4](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/5b253557-ce1f-41a3-8e31-0d07c712f4d1) |
-| ![유저플로우5](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/718aa86d-dddd-4866-921f-cee666886457) |
-
-### 디자인 프로토타입
-
-<img width="1146" alt="image" src="https://github.com/MOVIEJOJO7/cat-talk/assets/102405617/41a2d804-95ea-4d5e-9ac5-0ad051ab0739">
-
-<br/>
-
-## 🧑🏻‍💻 주요 기능 구현
-
-### 회원 인증
-
-![회원 인증]()
-
-### 유저 목록 조회
-
-![조회]()
-
-### 일대일, 그룹, 오픈 채팅방 구분
-
-![구분]()
-
-### 유저 검색
-
-![검색1]()
-
-### 채팅방 검색
-
-![검색2]()
-
-### 채팅방 생성, 채팅 전송, 입장 알람, 나가기
-
-![채팅]()
-
-<br/>
-
 ## 🧑🏻‍💻 팀 소개
 
 <table>
   <tr>
     <td align="center" width="150px">
       <a href="https://github.com/TaePoong719" target="_blank">
-        <img src=" https://avatars.githubusercontent.com/u/98576512?v=4" alt="최우혁 프로필" />
+        <img src="https://avatars.githubusercontent.com/u/98576512?v=4" alt="최우혁 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
