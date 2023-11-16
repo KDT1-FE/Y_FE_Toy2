@@ -5,7 +5,7 @@ import Back from '../../../public/assets/back.svg';
 import Menu from '../../../public/assets/menu.svg';
 import { useRouter } from 'next/navigation';
 import { useRecoilState } from 'recoil';
-import { ChatingModalToggle } from '@/store/atoms';
+import { ChattingModalToggle } from '@/store/atoms';
 
 interface ChattingNaviagtionProps {
   chatName: string;
@@ -20,7 +20,7 @@ export default function ChatingNavigation(props: ChattingNaviagtionProps) {
 
   return (
     <NavigationWrapper>
-      <BackIcon onClick={() => router.back()} />
+      <BackIcon onClick={() => router.push('/')} />
       <ChatTitle>
         {props.chatName}
         <ChatUsersLength>{props.usersLength}</ChatUsersLength>

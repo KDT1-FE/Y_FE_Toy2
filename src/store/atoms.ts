@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
 export const ChattingModalToggle = atom({
-  key: 'ChatingModalToggle',
+  key: 'ChattingModalToggle',
   default: false,
 });
 

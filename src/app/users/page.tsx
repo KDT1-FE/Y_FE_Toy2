@@ -66,13 +66,28 @@ const Users = () => {
   });
 
   useEffect(() => {
-    socket.on('users-server-to-client', (usersIdList) => {
-      if (JSON.stringify(usersIdList.users) !== JSON.stringify(connectUserIdListRef.current.users)) {
-        connectUserIdListRef.current = usersIdList;
-        setConnectUserIdList(usersIdList);
-      }
-      console.log(usersIdList);
-    });
+    try {
+      socket.on('connect', () => {
+        console.log('Socket server connected');
+      });
+
+      socket.on('disconnect', () => {
+        console.log('server disconnect');
+      });
+
+      socket.on('users-server-to-client', (usersIdList) => {
+        if (JSON.stringify(usersIdList.users) !== JSON.stringify(connectUserIdListRef.current.users)) {
+          connectUserIdListRef.current = usersIdList;
+          setConnectUserIdList(usersIdList);
+        }
+        console.log(usersIdList);
+      });
+      return () => {
+        socket.disconnect();
+      };
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (

@@ -316,6 +316,7 @@ const YourMessageText = styled.div`
   margin-left: 40px;
 
   font-size: 16px;
+  word-break: break-all;
 
   border-radius: 15px;
 
@@ -341,6 +342,7 @@ const MyMessageWrapper = styled.div`
 
 const MyMessageText = styled.div`
   max-width: 75%;
+  height: auto;
   padding: 10px;
 
   margin-right: 10px;
@@ -364,7 +366,7 @@ const MyMessageTime = styled.div`
 
 const Loading = styled.div`
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -398,6 +400,8 @@ const NoticeMessageWrapper = styled.div`
 `;
 
 const NoticeText = styled.div`
+  height: auto;
+
   padding: 10px 15px;
   border-radius: 15px;
   text-align: center;

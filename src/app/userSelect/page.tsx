@@ -57,7 +57,7 @@ function UserSelect() {
         setNewChatId(generatedChatId);
 
         // 생성된 채팅 방으로 이동
-        router.push(`/chating/${data.id}?chatId=${generatedChatId}`);
+        router.push(`/chatting/${data.id}?chatId=${generatedChatId}`);
       } else {
         console.error('Failed to create chat room');
       }

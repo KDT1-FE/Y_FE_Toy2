@@ -50,7 +50,7 @@ export default function ChattingModal(props: ChattingModalProps) {
       }),
     });
     if (userId) {
-      const userName = findUserName(userId);
+      const userName = await findUserName(userId);
       props.socket.emit('message-to-server', `notice09:${userName}님이 채팅방을 나갔습니다.`);
     }
     router.back();
@@ -73,10 +73,10 @@ export default function ChattingModal(props: ChattingModalProps) {
                 <UserName>{user.username}</UserName>
               </UserWrapper>
             ))}
-            <UserInviteWrapper>
+            {/* <UserInviteWrapper>
               <UserInviteImg />
               <UserInviteName>초대하기</UserInviteName>
-            </UserInviteWrapper>
+            </UserInviteWrapper> */}
           </UsersWrapper>
         ) : (
           ''
