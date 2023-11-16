@@ -74,7 +74,7 @@
   @include time-diff($blue);
 }
 .time-hours-after {
-  @include time-diff($gray);
+  @include time-diff(#c3adde);
 }
 .time-days {
   @include time-diff($gray);
