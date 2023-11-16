@@ -81,7 +81,7 @@ export default function AllChatList() {
           // const dateString = todayDate(chat.updatedAt);
           // const formattedTime = formattingTime(chat.updatedAt);
           return (
-            <li key={chat.id}>
+            <li key={chat.id} className={styles.itemContainer}>
               <Link
                 href={`/chat/${chat.id}`}
                 className={styles.container}
