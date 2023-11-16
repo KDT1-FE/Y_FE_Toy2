@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
+
+import { ThemeContext } from "../../../App";
+import { darkTheme } from "../../../style/theme";
+
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -22,12 +26,12 @@ const Container = styled.div`
     font-size: 18px;
 
     .name span {
-      color: #000;
+      color: ${({ theme }) => (theme === darkTheme ? "white" : "black")};
       font-weight: 600;
       cursor: pointer;
     }
     .text span {
-      color: #383535;
+      color: ${({ theme }) => (theme === darkTheme ? "#dedede" : "#3e3e3e")};
     }
     .timeStamp span {
       color: #999696;
@@ -52,9 +56,11 @@ const Container = styled.div`
     margin-top: 16px;
 
     button {
+      width: 48px;
       margin-right: 16px;
 
       border: none;
+      border-radius: 8px;
 
       cursor: pointer;
     }
@@ -104,6 +110,7 @@ export default function ProfileFeedComment(props: {
   const handleEditClick = () => {
     setIsEditing(true);
   };
+  const { theme } = useContext(ThemeContext);
 
   const handleSaveClick = () => {
     props.handleEditComment(`${props.index}`, editedText);
@@ -119,7 +126,7 @@ export default function ProfileFeedComment(props: {
   };
 
   return (
-    <Container>
+    <Container theme={theme}>
       <div className="commentContainer">
         <div
           className="userProfile"

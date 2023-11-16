@@ -5,15 +5,11 @@ import { useCallback, useEffect, useState } from "react";
 import { theme } from "../../../style/theme";
 import {
   doc,
-  setDoc,
   getDoc,
-  addDoc,
   updateDoc,
-  Timestamp,
   getDocs,
   collection,
-  deleteField,
-  arrayRemove
+  deleteField
 } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import ProfileFeedComment from "./ProfileFeedComment";
