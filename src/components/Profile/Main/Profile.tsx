@@ -1,22 +1,17 @@
 import styled from "styled-components";
 import ProfileInfo from "./ProfileInfo";
 import ProfileFeed from "./ProfileFeed";
-import { doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
-import { useState, useEffect } from "react";
-import {
-  getStorage,
-  ref,
-  getMetadata,
-  getDownloadURL,
-  uploadBytes
-} from "firebase/storage";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import Modal from "react-modal";
-import InputStyle from "../../../style/InputStyle";
-import { theme } from "../../../style/theme";
+
+import { theme, darkTheme } from "../../../style/theme";
 import StyledButton from "../../../style/ButtonStyle";
 import useUserData from "../useUserData";
+import { ThemeContext } from "../../../App";
+
 const ProfileContainer = styled.div`
   width: 100%;
 
@@ -24,7 +19,7 @@ const ProfileContainer = styled.div`
 `;
 const ProfileHeaderImg = styled.div`
   width: 100%;
-  height: 492px;
+  height: 350px;
 
   position: relative;
 
@@ -39,8 +34,6 @@ const ProfileBodyContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  padding-top: 50px;
   padding-bottom: 190px;
 `;
 const ModalStyle: ReactModal.Styles = {
@@ -54,8 +47,8 @@ const ModalStyle: ReactModal.Styles = {
     left: "0"
   },
   content: {
-    width: "50%",
-    height: "80%",
+    width: "40%",
+    height: "500px",
 
     zIndex: "100",
     position: "absolute",
@@ -73,17 +66,17 @@ const ModalStyle: ReactModal.Styles = {
 const TitleText = styled.div`
   text-align: center;
 
-  font-size: 48px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.3;
 
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 `;
 const ModalAddFeedContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   gap: 16px;
 
+  padding: 64px;
   input {
     width: 100%;
     color: black;
@@ -99,23 +92,30 @@ const ModalAddFeedPreview = styled.div`
   background-repeat: no-repeat;
 `;
 const ModalAddFeedLeftContainer = styled.div`
-  width: 70%;
-  height: 500px;
+  flex: 1 0 140px;
+  width:140px;
+  height:175px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
 const ModalAddFeedRightContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 500px;
+  width:100%;
   span {
+    color: ${({ theme }) => (theme === darkTheme ? "black" : "white")};
     font-size: 24px;
+    display: block;
+    font-size: 18px;
+    margin-bottom: 15px;
+    margin-top:20px;
   }
 
   textarea {
     width: 100%;
-    height: 50%;
+    height: 220px;
 
-    padding: 24px 29px;
+    padding: 20px;
 
     resize: none;
 
@@ -123,7 +123,8 @@ const ModalAddFeedRightContainer = styled.div`
 
     box-sizing: border-box;
 
-    color: #000;
+    color: #999696;
+    border-color: #BFBFBF;
 
     font-family: "Pretendard";
     font-size: 16px;
@@ -136,8 +137,9 @@ const ModalAddFeedRightContainer = styled.div`
 const ModalAddFeedWrap = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 
-  button { 
+  button {
     margin-right: 16px;
 
     &:last-of-type {
@@ -150,7 +152,6 @@ const ModalAddFeedWrap = styled.div`
 `;
 
 function Profile() {
-  const navigate = useNavigate();
   const [modalPreview, setModalPreview] = useState(
     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286"
   );
@@ -162,12 +163,12 @@ function Profile() {
   const [isProfileMatchingLogin, setIsProfileMatchingLogin] = useState(false);
   const [context, setContext] = useState("");
 
-  
-
   const loginId = sessionStorage.getItem("userId");
 
   const [feedImageFile, setFeedImageFile] = useState<File | null>(null);
 
+  const { theme } = useContext(ThemeContext);
+  console.log(theme);
   useEffect(() => {
     if (userData) {
       if (loginId == userData.id) {
@@ -235,16 +236,16 @@ function Profile() {
               setDoc(cityRef, {
                 [`${Feed.feedId}`]: Feed
               }).then(() => {
-                fetchData()
-                setIsModalShow(false)
+                fetchData();
+                setIsModalShow(false);
               });
             } else {
               const cityRef = doc(db, "Feeds", userData.id);
               updateDoc(cityRef, {
                 [`${Feed.feedId}`]: Feed
               }).then(() => {
-                fetchData()
-                setIsModalShow(false)
+                fetchData();
+                setIsModalShow(false);
               });
             }
           }
@@ -261,14 +262,14 @@ function Profile() {
         style={ModalStyle}
         onRequestClose={() => setIsModalShow(false)}
       >
-        <TitleText>피드 등록</TitleText>
+        <TitleText theme={theme}>피드 등록</TitleText>
         <ModalAddFeedContainer>
           <ModalAddFeedLeftContainer>
             <ModalAddFeedPreview
               style={{ backgroundImage: `url(${modalPreview})` }}
             ></ModalAddFeedPreview>
           </ModalAddFeedLeftContainer>
-          <ModalAddFeedRightContainer>
+          <ModalAddFeedRightContainer theme={theme}>
             <span>파일</span>
             <input
               type="file"
@@ -276,12 +277,13 @@ function Profile() {
               onChange={handleModalPreview}
             />
             <span>본문</span>
-            
+            <div className="textarea-wrap">
             <textarea
               value={context}
               placeholder="내용"
               onChange={handleChangeContext}
             ></textarea>
+            </div>
             <ModalAddFeedWrap>
               <StyledButton
                 backgroundColor="red"

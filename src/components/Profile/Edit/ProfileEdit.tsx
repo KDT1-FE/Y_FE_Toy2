@@ -12,6 +12,7 @@ import { db } from "../../../firebase/firebase";
 import useApi from "../../../hooks/useApi";
 import { useContext } from "react";
 import { AuthContext } from "../../../hooks/useAuth";
+import axios from "axios";
 
 const ProfileEditContainer = styled.div`
   width: 100%;
@@ -125,6 +126,7 @@ const ProfileEditInputWrap = styled.div`
     box-sizing: border-box;
 
     color: #999696;
+    border-color: #BFBFBF;
 
     font-family: "Pretendard";
     font-size: 16px;
@@ -133,33 +135,6 @@ const ProfileEditInputWrap = styled.div`
 const ProfileEditButtonWrap = styled.div`
   text-align: center;
 `;
-const ModalStyle: ReactModal.Styles = {
-  overlay: {
-    backgroundColor: " rgba(0, 0, 0, 0.4)",
-    width: "100%",
-    height: "100vh",
-    zIndex: "10",
-    position: "fixed",
-    top: "0",
-    left: "0"
-  },
-  content: {
-    width: "50%",
-    height: "50%",
-
-    zIndex: "100",
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-
-    borderRadius: "10px",
-
-    backgroundColor: "white",
-    justifyContent: "center",
-    overflow: "auto"
-  }
-};
 const ProfileEditTagWrap = styled.div`
   margin-bottom: 46px;
   span {
@@ -187,18 +162,32 @@ function Profile() {
     userData?.profileImgUrl
   );
 
-  const { getData, postData, patchData } = useApi();
-  const { accessToken } = useContext(AuthContext);
+  const { patchData } = useApi();
+  const { accessToken, refreshToken, setAccessToken } = useContext(AuthContext);
   const [isState, setIsState] = useState(false);
+
+  const refreshAccessToken = async () => {
+    const REFRESH_TOKEN_API_URL = "https://fastcampus-chat.net/refresh";
+    try {
+      const response = await axios.post(REFRESH_TOKEN_API_URL, {
+        refreshToken
+      });
+      setAccessToken(response.data.accessToken);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (isState) {
-      const 함수명 = async () => {
-        const res = await patchData("https://fastcampus-chat.net/user", {
+      const patchApi = async () => {
+        await patchData("https://fastcampus-chat.net/user", {
           name: name,
-          picture: backgroundImageUrl
+          picture: profileImageUrl
         });
       };
-      함수명();
+      patchApi();
+      refreshAccessToken();
     }
   }, [accessToken, isState]);
 

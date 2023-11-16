@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 import { BsPlusCircle } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProfileFeedContainer = styled.div`
   width: 1200px;
-  border-top: 2px solid #e1e1e1;
+  border-top: 1px solid #e1e1e1;
   padding-top: 46px;
 `;
 const ProfileFeedImageWrap = styled.div`
@@ -19,7 +19,6 @@ const ProfileFeedImage = styled.div`
   width: 280px;
   height: 350px;
 
-  
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -57,10 +56,10 @@ function ProfileFeed(props: {
   setIsModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   isProfileMatchingLogin: boolean | null;
 }) {
+  const { userid } = useParams<string>();
   const navigate = useNavigate();
   const handleClick = (feedId: number) => {
-    
-    navigate(`/profiles/asdqwe123/${feedId}`);
+    navigate(`/profiles/${userid}/${feedId}`);
   };
   return (
     <ProfileFeedContainer>

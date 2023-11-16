@@ -2,25 +2,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import useUserData from "../useUserData";
 import { useCallback, useEffect, useState } from "react";
-import { theme } from "../../../style/theme"; 
+
 import {
   doc,
-  setDoc,
   getDoc,
-  addDoc,
   updateDoc,
-  Timestamp,
   getDocs,
   collection,
-  deleteField,
-  arrayRemove
+  deleteField
 } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import ProfileFeedComment from "./ProfileFeedComment";
 
-
 const ProfileFeedDetailContainer = styled.div`
-  width: 1200px;
+  width: 850px;
 
   padding: 64px 32px;
   box-sizing: border-box;
@@ -30,12 +25,14 @@ const WriterInfoWrap = styled.div`
   align-items: center;
 
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
 
   margin-bottom: 24px;
 
   position: relative;
-
+  .name {
+    cursor: pointer;
+  }
   .ProfileImg {
     width: 100px;
     height: 100px;
@@ -55,7 +52,8 @@ const WriterInfoWrap = styled.div`
     flex-direction: column;
 
     font-size: 16px;
-    opacity: 0.8;
+    opacity: 0.5;
+    font-weight: 500;
 
     position: absolute;
     right: 0;
@@ -91,17 +89,15 @@ const ContentsWrap = styled.div`
 
   .ContentText {
     padding: 8px;
-
-    font-size: 24px;
   }
 `;
 const CommentWrap = styled.div`
   width: 100%;
 
-  margin-top: 24px;
-  padding-top: 56px;
+  margin-top: 20px;
+  padding-top: 20px;
 
-  border-top: 2px solid ${theme.grayColor};
+  border-top: 1px solid #E4E4E4;
 `;
 const CommentInputWrap = styled.div`
   display: flex;
@@ -109,6 +105,7 @@ const CommentInputWrap = styled.div`
 
   margin-bottom: 56px;
   .loginUserProfileImage {
+    flex: 0 0 50px;
     width: 50px;
     height: 50px;
 
@@ -118,16 +115,16 @@ const CommentInputWrap = styled.div`
     background-position: center;
     background-repeat: no-repeat;
 
-    margin-right: 24px;
+    margin-right: 20px;
   }
   input {
-    width: 50%;
+    width: 100%;
     height: 50px;
     border: none;
     border-radius: 24px;
 
     padding: 0px 16px;
-    margin-right: 32px;
+    margin-right: 20px;
 
     font-family: "Pretendard";
   }
@@ -135,25 +132,26 @@ const CommentInputWrap = styled.div`
     outline: none;
   }
   button {
-    width: 80px;
-    height: 40px;
+    width: 90px;
+    height: 50px;
 
     border: none;
-    border-radius: 12px;
+    border-radius: 20px;
 
     cursor: pointer;
 
     font-family: "Pretendard";
 
-    background-color: #0d6efd;
+    background-color: #FF4747;
     color: white;
   }
 `;
 const CommentListWrap = styled.div`
   display: flex;
 
-  margin-bottom: 32px;
+  margin-bottom: 10px;
   .userProfile {
+    flex: 0 0 50px;
     width: 50px;
     height: 50px;
 
@@ -179,10 +177,12 @@ interface allUserData {
 }
 
 function ProfileFeedDetail() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { userid, feedid } = useParams<string>();
   const { userData, feedData, fetchData } = useUserData();
-  
+  if (feedData && feedid) {
+    console.log(feedData[feedid]);
+  }
   const [commentValue, setCommentValue] = useState("");
 
   const [commentList, setCommentList] = useState<{}>({});
@@ -193,10 +193,10 @@ function ProfileFeedDetail() {
 
   if (feedData && feedid) {
     if (!feedData || feedData[feedid] === undefined) {
-      navigate( "/404")
+      navigate("/404");
     }
   }
-  
+
   useEffect(() => {
     fetchData();
   }, [commentList]);
@@ -250,7 +250,7 @@ function ProfileFeedDetail() {
     const minutes = `0${currentDate.getMinutes()}`.slice(-2);
 
     const formattedDate = `${year}.${month}.${day} ${hours}:${minutes}`;
-    
+
     if (userData && feedData) {
       const feedInfo = feedData[feedid ? feedid : "1"];
 
@@ -370,7 +370,6 @@ function ProfileFeedDetail() {
           setCommentValue("");
 
           fetchData();
-          
         } else {
           alert("해당 피드 또는 댓글 목록이 존재하지 않습니다.");
         }
@@ -388,16 +387,12 @@ function ProfileFeedDetail() {
         const deleteFeedid = feedid ? feedid : "1";
 
         if (currentFeedData && currentFeedData[deleteFeedid]) {
-          
-
-          
           const deleteIndex = parseInt(deleteFeedid, 10);
 
           updateDoc(feedRef, {
             [deleteFeedid]: deleteField()
           });
 
-          
           for (
             let i = deleteIndex + 1;
             i <= Object.keys(currentFeedData).length;
@@ -406,19 +401,16 @@ function ProfileFeedDetail() {
             const nextIndex = i - 1;
             const currentFeed = currentFeedData[i];
 
-            
             if (currentFeed !== undefined) {
               updateDoc(feedRef, {
                 [nextIndex]: currentFeed,
                 [i]: deleteField()
               });
 
-              
               updateDoc(feedRef, {
                 [`${nextIndex}.feedId`]: nextIndex
               });
             } else {
-              
               updateDoc(feedRef, {
                 [nextIndex]: deleteField()
               });
@@ -426,7 +418,7 @@ function ProfileFeedDetail() {
           }
 
           await fetchData();
-          navigate(`/profiles/${userid}`)
+          navigate(`/profiles/${userid}`);
         } else {
           alert("해당 피드가 존재하지 않습니다.");
         }
@@ -444,11 +436,19 @@ function ProfileFeedDetail() {
           className="ProfileImg"
           style={{ backgroundImage: `url(${userData?.profileImgUrl})` }}
         ></div>
-        <div>{userData?.name}</div>
+        <div
+          className="name"
+          onClick={() => {
+            navigate(`/profiles/${userData?.id}`);
+          }}
+        >
+          {userData?.name}
+        </div>
         <div className="timeStamp">
           {feedData && feedid ? feedData[feedid]?.timeStamp : ""}
-          {userid === loginId ?<button onClick={handleDeleteFeed}>삭제</button> : null}
-          
+          {userid === loginId ? (
+            <button onClick={handleDeleteFeed}>삭제</button>
+          ) : null}
         </div>
       </WriterInfoWrap>
       <ContentsWrap>
@@ -490,14 +490,6 @@ function ProfileFeedDetail() {
             ? Object.values(feedData[feedid].commentList || {}).map(
                 (comment, index) => (
                   <CommentListWrap key={index}>
-                    <div
-                      className="userProfile"
-                      style={{
-                        backgroundImage: `url(${
-                          allUserData[feedData[feedid].id].profileImgUrl
-                        })`
-                      }}
-                    ></div>
                     <ProfileFeedComment
                       feedData={feedData}
                       comment={comment}
@@ -505,6 +497,7 @@ function ProfileFeedDetail() {
                       handleEditComment={handleEditComment}
                       handleDeleteComment={handleDeleteComment}
                       loginId={loginId}
+                      allUserData={allUserData}
                     ></ProfileFeedComment>
                   </CommentListWrap>
                 )

@@ -107,8 +107,7 @@ const SearchBtn = styled.input`
   cursor: pointer;
   width: 20px;
   background: url(${SearchImg}) white no-repeat;
-  background-size: cover;
-  background-position: 90% center;
+  background-size: contain;
   border: none;
   background-color: transparent;
   margin-left: 5px;

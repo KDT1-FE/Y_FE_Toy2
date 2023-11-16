@@ -1,45 +1,52 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
+
+import { ThemeContext } from "../../../App";
+import { darkTheme } from "../../../style/theme";
+
 const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 128px;
   margin-bottom: 32px;
-
+  .commentContainer {
+    display: flex;
+  }
   .commentContentWrap {
     display: flex;
     flex-direction: column;
     align-content: space-between;
-    gap: 24px;
+    gap: 8px;
 
     padding-top: 16px;
 
-    font-size: 18px;
+    font-size: 14px;
 
     .name span {
-      color: #000;
+      color: ${({ theme }) => (theme === darkTheme ? "white" : "black")};
       font-weight: 600;
       cursor: pointer;
     }
-    .text span{
-      color: #383535;
+    .text span {
+      color: ${({ theme }) => (theme === darkTheme ? "#dedede" : "#3e3e3e")};
     }
     .timeStamp span{
+      display: block;
+      margin-top:5px;
       color: #999696;
-      font-size: 16px;
     }
   }
   input {
-    width: 600px;
+    width: 500px;
     height: 50px;
     border: none;
     border-radius: 24px;
 
     padding: 0px 16px;
-    margin-right: 32px;
+    margin-right: 20px;
 
     font-family: "Pretendard";
   }
@@ -48,13 +55,29 @@ const Container = styled.div`
   }
   .buttonWrap {
     margin-top: 16px;
+    /* flex: 1 0 30%; */
 
     button {
+      width: 48px;
       margin-right: 16px;
 
       border: none;
+      border-radius:5px;
+      background-color: #f5f5f5;
 
       cursor: pointer;
+      &:nth-child(2){
+        position: relative;
+        &:before{
+          content: "";
+          left: -8px;
+          height: 0.8em;
+          top: 50%;
+          margin-top: -0.4em;
+          position: absolute;
+          border-left: 1px solid #b3b3b3;
+        }
+      }
     }
   }
 `;
@@ -71,7 +94,17 @@ interface feed {
 interface feedData {
   [key: string]: feed;
 }
-
+interface userData {
+  id: string;
+  name: string;
+  profileImgUrl: string;
+  backgroundImgUrl: string;
+  introText: string;
+  hobby: string[];
+}
+interface allUserData {
+  [key: string]: userData;
+}
 export default function ProfileFeedComment(props: {
   feedData: feedData | null;
   comment: {
@@ -82,15 +115,17 @@ export default function ProfileFeedComment(props: {
   };
   index: number | null;
   loginId: string | null;
+  allUserData: allUserData;
   handleEditComment: (commentId: string, newText: string) => void;
   handleDeleteComment: (commentId: string) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(props.comment.text);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleEditClick = () => {
     setIsEditing(true);
   };
+  const { theme } = useContext(ThemeContext);
 
   const handleSaveClick = () => {
     props.handleEditComment(`${props.index}`, editedText);
@@ -106,17 +141,35 @@ export default function ProfileFeedComment(props: {
   };
 
   return (
-    <Container>
+    <Container theme={theme}>
       <div className="commentContainer">
+        <div
+          className="userProfile"
+          style={{
+            backgroundImage: `url(${
+              props.allUserData[props.comment.id].profileImgUrl
+            })`
+          }}
+        ></div>
         {isEditing ? (
           <input type="text" value={editedText} onChange={handleTextChange} />
         ) : (
           <div className="commentContentWrap">
-            <div className="name"><span onClick={()=>{
-              navigate(`/profiles/${props.comment.id}`)
-            }}>{props.comment.name}</span></div>
-            <div className="text"><span>{props.comment.text}</span></div>
-            <div className="timeStamp"><span>{props.comment.timeStamp}</span></div>
+            <div className="name">
+              <span
+                onClick={() => {
+                  navigate(`/profiles/${props.comment.id}`);
+                }}
+              >
+                {props.comment.name}
+              </span>
+            </div>
+            <div className="text">
+              <span>{props.comment.text}</span>
+            </div>
+            <div className="timeStamp">
+              <span>{props.comment.timeStamp}</span>
+            </div>
           </div>
         )}
       </div>
