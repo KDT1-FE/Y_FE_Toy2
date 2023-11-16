@@ -1,10 +1,10 @@
 import { atom } from 'recoil';
 
-interface ConnectUserIdList {
+interface ConnectUserIdListIF {
   users: string[];
 }
 
-export const ConnectUserIdList = atom<ConnectUserIdList>({
+export const ConnectUserIdList = atom<ConnectUserIdListIF>({
   key: 'connectUserIdList',
   default: { users: [] },
 });
