@@ -51,14 +51,13 @@
 
   &__form {
     @include flex-center-col();
-    padding: 5% 0;
-    height: 80%;
+    height: 100%;
 
     & input {
       border: none;
       border-radius: 20px;
       padding: 1.5rem;
-      font-size: 1rem;     
+      font-size: 1.5rem; 
       width: 50%;
       margin: 1rem 0;
       background-color: rgb(177, 175, 175);
@@ -80,11 +79,11 @@
     background-color: #835da3;
     border: none;
     color: white;
-    margin-top: 3rem;
     box-shadow: 0 0 20px #eee;
     padding: 0.4rem;
+    margin-top: 3rem;
     width: 30%;
-    height: 15%;
+    height: 12%;
     border-radius: 10px;
     font-size: 20px;
     cursor: pointer;
