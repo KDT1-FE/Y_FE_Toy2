@@ -10,6 +10,7 @@ const pb = new PocketBase('https://full-oil.pockethost.io');
 const SignupModal = ({ handleModal }) => {
   const dispatch = useAppDispatch();
   const ghosts = useAppSelector((state) => state.ghosts);
+
   const [currentPage, setCurrentPage] = useState(1);
   const limit: number = 4;
   const offset = (currentPage - 1) * limit;
@@ -111,6 +112,7 @@ const SignupModal = ({ handleModal }) => {
       setCurrentPage(currentPage - 1);
     }
   };
+
 
   return (
     <div className={styles.singupModal}>
