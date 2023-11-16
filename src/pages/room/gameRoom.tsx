@@ -92,13 +92,17 @@ const GameRoom: React.FC = () => {
             active: true,
             message: '당신은 출제자 입니다!',
           });
+
           setSubmitVisible(true);
+
         } else {
           setShowAlert({
             active: true,
             message: '새로운 출제자가 선정되었습니다!',
           });
+
           setSubmitVisible(false);
+
         }
         setIsQuizMasterAlertShown(true);
         setBtnVisible(false);
@@ -135,6 +139,7 @@ const GameRoom: React.FC = () => {
           message: '문제가 출제되었습니다!',
         });
         setSubmitVisible(false);
+
       }
     });
     return () => {
@@ -210,6 +215,7 @@ const GameRoom: React.FC = () => {
       </RoomMain>
 
       <CheckUsersInGameRoom chatId={roomId} />
+
 
       <Fade in={showAlert.active}>
         <Alert

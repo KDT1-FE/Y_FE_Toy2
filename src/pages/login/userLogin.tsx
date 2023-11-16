@@ -46,7 +46,10 @@ function UserLogin() {
       const { accessToken, refreshToken } = res.data;
       setCookies(accessToken, refreshToken, id);
 
-      swal({ title: '로그인에 성공했습니다.', icon: 'success' });
+      swal({
+        title: '로그인에 성공했습니다.',
+        icon: 'success',
+      });
       navigate('/lobby');
     } catch (e: any) {
       let errorMessage = '';
