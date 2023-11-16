@@ -3,7 +3,7 @@ import CreateChannelModal from '../../components/channel/modal/CreateChannelModa
 import { Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react';
 import ChannelSearchInput from '../../components/channel/ChannelSearchInput';
 import ChannelSelector from '../../components/channel/ChannelSelector';
-import AllUserBar from '../../components/AllUserBar';
+import AllUserBar from '../../components/allUserBar';
 
 const ChannelPage = () => {
   const location = useLocation();
