@@ -88,16 +88,14 @@ interface MessageInfo {
 type ChatResponseValue = { chats: Chat[] };
 
 const GameLists = () => {
-  // 페이지 입장시 자동으로 해당 채팅방으로 입장
   useFetch({
     url: "https://fastcampus-chat.net/chat/participate",
     method: "PATCH",
     data: {
-      chatId: "9984747e-389a-4aef-9a8f-968dc86a44e4",
+      chatId: "617bf718-cfa1-48d2-8007-b402907e540b",
     },
     start: true,
   });
-
   const fireFetch = useFireFetch();
   const navigate = useNavigate();
 
@@ -106,7 +104,6 @@ const GameLists = () => {
   const { logout } = useAuth();
 
   const [isUserConfigModalOpen, setIsUserConfigModalOpen] = useState(false);
-  const [token, setToken] = useState<ResponseValue>();
   const [gameLists, setGameLists] = useState<(GameRoom | DocumentData)[]>([]);
 
   // 메세지 데이터
@@ -135,7 +132,7 @@ const GameLists = () => {
   const { value, onChange } = useInput("");
   const inputRef = useRef<HTMLInputElement>(null);
   // 소켓 연결
-  const socket = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
+  const socket = connect("617bf718-cfa1-48d2-8007-b402907e540b");
 
   useEffect(() => {
     socket.on("message-to-client", (messageObject) => {
@@ -245,14 +242,14 @@ const GameLists = () => {
   }, [toastUser]);
 
   const { result: userInfo }: FetchResultUser = useFetch({
-    url: `https://fastcampus-chat.net/user?userId=${token?.id}`,
+    url: `https://fastcampus-chat.net/user?userId=${user.id}`,
     method: "GET",
-    start: !!token,
+    start: !!user,
   });
   const { loading, result: userList }: FetchResultUserList = useFetch({
     url: "https://fastcampus-chat.net/users",
     method: "GET",
-    start: !!token,
+    start: !!user,
   });
   //파이어베이스 게임
   const { data: firebaseGameListsData } = fireFetch.useGetAll("game", "desc");
@@ -293,13 +290,6 @@ const GameLists = () => {
       mergeGameListsData(firebaseGameListsData, dbGame);
     }
   }, [firebaseGameListsData, dbGame]);
-
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token") as string);
-    if (token) {
-      setToken(token);
-    }
-  }, []);
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
