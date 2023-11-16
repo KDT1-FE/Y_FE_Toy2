@@ -16,7 +16,7 @@ function LoginForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loginData, setLoginData] = useState(initialLoginData);
   const [loading, setLoading] = useState(false);
-  const { accessToken, setAccessToken } = useContext(AuthContext);
+  const { setAccessToken } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -72,7 +72,7 @@ function LoginForm() {
 
 export default LoginForm;
 
-interface LoginData {
+export interface LoginData {
   id: string;
   password: string;
 }

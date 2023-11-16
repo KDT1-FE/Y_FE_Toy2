@@ -210,6 +210,7 @@ const SubTitle = styled.h5`
   font-size: 16px;
   font-weight: 500;
   margin: 10px 0 8px 0;
+  color: black;
 `;
 
 const InputArea = styled.input`
@@ -249,6 +250,7 @@ const MemberBox = styled.div`
   border: 1px solid lightgray;
   margin-top: 10px;
   overflow-y: scroll;
+  color: black;
 `;
 
 const BoxContent = styled.div`

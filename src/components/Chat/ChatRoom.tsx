@@ -13,6 +13,7 @@ import { ChatI } from "../../pages/Chat";
 import SearchInput from "../SearchInput/SearchInput";
 import UserCount from "./UserCount";
 import RoomName from "./RoomName";
+import { darkTheme } from "../../style/theme";
 
 export interface User {
   id: string;
@@ -22,9 +23,8 @@ export interface User {
 
 interface ChatRoomProps {
   roomId: string;
-  roomName: string;
-  selectedUsers: User[];
   setChatRoom: React.Dispatch<React.SetStateAction<ChatI[]>>;
+  setIsShowRoom: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface Message {
@@ -34,12 +34,7 @@ export interface Message {
   createdAt: Date;
 }
 
-function ChatRoom({
-  roomId,
-  roomName,
-  selectedUsers,
-  setChatRoom
-}: ChatRoomProps) {
+function ChatRoom({ roomId, setChatRoom, setIsShowRoom }: ChatRoomProps) {
   const [text, setText] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { accessToken } = useContext(AuthContext);
@@ -82,13 +77,8 @@ function ChatRoom({
           });
         });
         setTimeout(() => {
-          newSocket.on("messages-to-client", (responseData) => {
-            // 현재 메시지 상태에 없는 메시지만 추가합니다.
-            const newMessages = responseData.messages.filter(
-              (newMsg: { id: string }) =>
-                !messages.find((msg) => msg.id === newMsg.id)
-            );
-            setMessages((prevMessages) => [...prevMessages, ...newMessages]);
+          newSocket.on("messages-to-client", (responseDta) => {
+            setMessages(responseDta.messages);
           });
           setTimeout(() => {
             newSocket.emit("fetch-messages");
@@ -148,7 +138,7 @@ function ChatRoom({
     <ChatRoomWrap>
       <div className="chatroom__tit">
         <div className="tit-bx">
-          <RoomName roomId={roomId}/>
+          <RoomName roomId={roomId} />
           <UserCount roomId={roomId} />
         </div>
         <div className="util-bx">
@@ -157,7 +147,11 @@ function ChatRoom({
             setSearchText={setSearchText}
             messages={messages}
           />
-          <ModalHamburger roomId={roomId} setChatRoom={setChatRoom} />
+          <ModalHamburger
+            roomId={roomId}
+            setChatRoom={setChatRoom}
+            setIsShowRoom={setIsShowRoom}
+          />
         </div>
       </div>
       <div className="chatroom__body">
@@ -401,7 +395,9 @@ const ChatRoomWrap = styled.div`
       }
       input[type="text"] {
         flex-grow: 1;
-        background-color: #ececec;
+        height: 3em;
+        background-color: ${({ theme }) =>
+          theme === darkTheme ? "#ececec" : "#FEEBE9"};
         border: none;
         outline: none;
         border-radius: 20px;

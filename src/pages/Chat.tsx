@@ -37,6 +37,8 @@ function Chat() {
   const { accessToken } = useContext(AuthContext);
   const [roomId, setRoomId] = useState("");
   const [loginUser, setLoginUser] = useState<User | null>(null);
+  const [isShowRoom, setIsShowRoom] = useState(false);
+  const [rooms, setRooms] = useState<ChatI[]>([]);
 
   useEffect(() => {
     if (accessToken) {
@@ -44,67 +46,67 @@ function Chat() {
         try {
           const data = await getData("https://fastcampus-chat.net/chat");
           const chatData = data.chats;
-
-          // 최신 방이 위로 오도록
-          chatData.sort((a: ChatI, b: ChatI) => {
-            const timeA = new Date(a.updatedAt).getTime();
-            const timeB = new Date(b.updatedAt).getTime();
-            return timeB - timeA;
-          });
-
-          const myRoom = await Promise.all(
-            chatData.map(async (room: ChatI) => {
-              // 시간 계산
-              const updatedAt = room.updatedAt;
-              const givenDate: Date = new Date(updatedAt);
-              const currentDate: Date = new Date();
-              const timeDifference =
-                currentDate.getTime() - givenDate.getTime();
-              const minutesDifference = Math.floor(
-                timeDifference / (1000 * 60)
-              );
-              const hoursDifference = Math.floor(minutesDifference / 60);
-              const daysDifference = Math.floor(hoursDifference / 24);
-
-              let updatedAtString: string;
-
-              if (minutesDifference < 1) {
-                updatedAtString = "방금 전";
-              } else if (minutesDifference < 60) {
-                updatedAtString = `${minutesDifference}분 전`;
-              } else if (hoursDifference < 24) {
-                updatedAtString = `${hoursDifference}시간 전`;
-              } else {
-                updatedAtString = `${daysDifference}일 전`;
-              }
-
-              return {
-                ...room,
-                updatedAt: updatedAtString
-              };
-            })
-          );
+          setRooms(chatData);
           const res = await getData(
             `https://fastcampus-chat.net/user?userId=${sessionStorage.getItem(
               "userId"
             )}`
           );
           setLoginUser(res.user);
-          setChatRoom(myRoom);
         } catch (error) {
           console.error(error);
         }
       };
 
       fetchData();
-      console.log(chatRoom);
     }
   }, [accessToken, roomId]);
   // TODO : 여기에 의존성배열로 chatRoom 을 넣어줘야하는데 그러면 너무 렌더링이 많아져서 또 채팅방 내역을 잘 못 불러옴
+  useEffect(() => {
+    if (rooms) {
+      const test = async () => {
+        rooms.sort((a: ChatI, b: ChatI) => {
+          const timeA = new Date(a.updatedAt).getTime();
+          const timeB = new Date(b.updatedAt).getTime();
+          return timeB - timeA;
+        });
 
+        const myRoom = await Promise.all(
+          rooms.map(async (room: ChatI) => {
+            // 시간 계산
+            const updatedAt = room.updatedAt;
+            const givenDate: Date = new Date(updatedAt);
+            const currentDate: Date = new Date();
+            const timeDifference = currentDate.getTime() - givenDate.getTime();
+            const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+            const hoursDifference = Math.floor(minutesDifference / 60);
+            const daysDifference = Math.floor(hoursDifference / 24);
+
+            let updatedAtString: string;
+
+            if (minutesDifference < 1) {
+              updatedAtString = "방금 전";
+            } else if (minutesDifference < 60) {
+              updatedAtString = `${minutesDifference}분 전`;
+            } else if (hoursDifference < 24) {
+              updatedAtString = `${hoursDifference}시간 전`;
+            } else {
+              updatedAtString = `${daysDifference}일 전`;
+            }
+
+            return {
+              ...room,
+              updatedAt: updatedAtString
+            };
+          })
+        );
+        await setChatRoom(myRoom);
+      };
+      test();
+    }
+  }, [rooms]);
   const handleClick = (roomId: string) => {
     setRoomId(roomId);
-    console.log("클릭된 방 아이디", roomId);
   };
 
   // 새로운 채팅방 추가 함수
@@ -119,10 +121,10 @@ function Chat() {
         "https://fastcampus-chat.net/chat",
         makeRoomBody
       );
+
+      setRooms((prev) => [...prev, response]);
     };
     fetchData();
-
-    // setChatRoom([...chatRoom, newRoom]); // 기존 채팅방 목록에 새로운 채팅방 추가
   };
 
   return (
@@ -138,7 +140,10 @@ function Chat() {
               >
                 <div
                   className="catelink__wrap"
-                  onClick={() => handleClick(room.id)}
+                  onClick={() => {
+                    handleClick(room.id);
+                    setIsShowRoom(true);
+                  }}
                 >
                   <div className="catelink__name">
                     <p className="tit">{room.name}</p>
@@ -160,16 +165,17 @@ function Chat() {
             />
           </CatePlus>
         </ChatInner>
-        {chatRoom.length !== 0 ? (
-          <ChatRoom
-            roomId={roomId}
-            roomName={roomName}
-            selectedUsers={selectedUsers}
-            setChatRoom={setChatRoom}
-          />
-        ) : (
-          <NoneChat></NoneChat>
-        )}
+        {isShowRoom ? (
+          chatRoom.length !== 0 ? (
+            <ChatRoom
+              roomId={roomId}
+              setChatRoom={setChatRoom}
+              setIsShowRoom={setIsShowRoom}
+            />
+          ) : (
+            <NoneChat></NoneChat>
+          )
+        ) : null}
       </ChatWrapper>
     </>
   );
@@ -191,7 +197,7 @@ const ChatInner = styled.div`
   flex-direction: column;
   flex: 1 0 30%;
   max-width: 30%;
-`
+`;
 
 const ChatCategory = styled.ul`
   display: flex;
@@ -201,7 +207,7 @@ const ChatCategory = styled.ul`
   border-right: 1px solid #e8e8e8;
   height: 540px;
   overflow-y: scroll;
-  position:relative;
+  position: relative;
 `;
 
 const CateLink = styled.li`

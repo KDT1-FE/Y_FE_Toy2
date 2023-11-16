@@ -89,9 +89,10 @@ const Header = () => {
                 <UserImg src={currentUser?.picture} />{" "}
                 <UserName to={""}>{currentUser?.name}</UserName>님
                 <UserSubMenu>
-                  <StyledSubLink to={`/profiles/:${currentUser?.id}`}>
+                  <StyledSubLink to={`/profiles/${currentUser?.id}`}>
                     내 프로필 가기
                   </StyledSubLink>
+                  <br />
                   <Logout />
                 </UserSubMenu>
               </UserProfile>
@@ -212,16 +213,15 @@ const UserSubMenu = styled.div`
   background-color: white;
   border: 1px solid #f2f2f2;
   border-radius: 1em;
-  width: 8em;
-  height: 4em;
+  width: 6.1em;
+  height: 2.8em;
   top: 1.7em;
   left: 1.4em;
-  display: flex;
-  flex-direction: column;
+  padding: 1em 1em;
   justify-content: center;
   align-items: center;
-  gap: 0.2em;
-  opacity: 0;
+  line-height: 1.4em;
+  display: none;
   pointer-events: auto;
   z-index: 999;
   button {
@@ -243,7 +243,7 @@ const UserProfile = styled.div`
   position: relative;
   &:hover {
     & ${UserSubMenu} {
-      opacity: 1;
+      display: block;
     }
   }
 `;

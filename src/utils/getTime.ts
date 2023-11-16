@@ -20,11 +20,9 @@ export const getTime = (chatData: []) => {
       updatedAtString = `${hoursDifference}시간 전`;
     }
 
-    // const latestMessage = room.latestMessage || "메시지가 없습니다.";
     return {
       ...room,
       updatedAt: updatedAtString
-      // latestMessage: latestMessage
     };
   });
 
