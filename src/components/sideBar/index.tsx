@@ -2,21 +2,17 @@ import { useState } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
-  Text,
   Divider,
   Heading,
-  VStack,
   Center,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { EditIcon, ChatIcon } from '@chakra-ui/icons';
+import { ChatIcon } from '@chakra-ui/icons';
 import MyChannelItem from './MyChannelItem';
 import { useMyChannels } from '../../hooks/useMyChannels';
 import { useInviteData } from '../../hooks/useInviteData';
 
 const SideBar = () => {
-  const [myChannels, setmyChannels] = useState([]);
-
   const { data: channels, isLoading } = useMyChannels();
   const { myChannelList } = useInviteData();
 
@@ -73,7 +69,7 @@ const SideBar = () => {
           나의 채팅방
         </Heading>
         <Box h="50vh" overflowY="auto">
-          <>{channelBox()}</>
+          {channelBox()}
         </Box>
       </Box>
     </Box>
