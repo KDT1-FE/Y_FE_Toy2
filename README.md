@@ -22,7 +22,7 @@
 | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
 | <img src="https://avatars.githubusercontent.com/u/121215024?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/59966217?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/121606131?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/95364951?s=60&v=4" width="100" style="max-width: 100%;" /> |
 |                                [@Yamyam-code](https://github.com/Yamyam-code)                                 |                                    [@skyeome](https://github.com/skyeome)                                    |                                  [@JiHongkyu](https://github.com/JiHongkyu)                                   |                                  [@lilviolie](https://github.com/lilviolie)                                  |
-|                        <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                        <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |
+|                        <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                       <ul><li>레이아웃</li><li>로그인/회원가입 기능</li><li>오픈채팅기능</li></ul>                        |                        <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |
 
 ## 기술 스택 및 라이브러리
 
@@ -114,16 +114,16 @@
 
 <br />
   
-**오픈채팅방 생성**
+**오픈채팅방 생성**  
 ![오픈채팅 생성](public/images/openchat-new.gif)
 
-**오픈채팅방 초대**
+**오픈채팅방 초대**  
 ![오픈채팅 초대](public/images/openchat-invite.gif)
 
-**실시간 오픈채팅**
+**실시간 오픈채팅**  
 ![실시간 오픈채팅](public/images/openchat-chatting.gif)
 
-**오픈채팅 나가기**
+**오픈채팅 나가기**  
 ![실시간 오픈채팅](public/images/openchat-leave.gif)
 
 </div>
