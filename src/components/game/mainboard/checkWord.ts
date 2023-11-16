@@ -16,13 +16,6 @@ const handleSubmit = (
   const inputValue = inputElement?.value;
   const existCheck = words?.find((e) => e === inputValue);
   if (inputValue) {
-    if (words.length === 0) {
-      setWords([...words, inputValue]);
-      setCurrentRate((prev) => prev + 1);
-      inputElement.value = '';
-      timeLimit(start, setTime);
-      return true;
-    }
     if (
       words[words.length - 1].charAt(words[words.length - 1].length - 1) ===
       inputValue.charAt(0)
