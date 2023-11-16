@@ -34,11 +34,6 @@ interface Message {
   id: string;
 }
 
-interface ResponseValue {
-  accessToken: string; // 사용자 접근 토큰
-  refreshToken: string; // access token 발급용 토큰
-  id: string;
-}
 interface User {
   id: string;
   name: string;
