@@ -27,12 +27,16 @@ const Chat = ({ params }: { params: { id: string } }) => {
 	}, []);
 
 	return (
-		<ChatRoom
-			socket={socket}
-			chatId={chatId}
-			privateValue={privateValue}
-			accessToken={accessToken}
-		/>
+		<>
+			<div className="h-screen overflow-y-scroll">
+				<ChatRoom
+					socket={socket}
+					chatId={chatId}
+					privateValue={privateValue}
+					accessToken={accessToken}
+				/>
+			</div>
+		</>
 	);
 };
 

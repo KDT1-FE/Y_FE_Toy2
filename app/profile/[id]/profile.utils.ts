@@ -27,7 +27,6 @@ export const participateChat = async (token: string, chatId: string) => {
 	});
 
 	const data = await res.json();
-	console.log('participateChat', data);
 	return data;
 };
 
@@ -47,7 +46,6 @@ export const createPrivateChat = async (token: string, user: User) => {
 	});
 
 	const data = await res.json();
-	console.log('createPrivateChat', data);
 	return data;
 };
 

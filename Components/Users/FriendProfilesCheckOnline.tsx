@@ -30,20 +30,17 @@ export const FriendProfilesCheckOnline = ({
 		});
 		const socketInitializer = async () => {
 			socket.on('connect', () => {
-				console.log('connected', socket);
 				socket.emit('users-server');
 			});
 
 			socket.on('users-server-to-client', (obj) => {
 				setUserNameConnected(obj.users);
-				console.log('users-server-to-client', obj);
 			});
 		};
 
 		socketInitializer();
 
 		return () => {
-			console.log('disconnect user');
 			socket.disconnect();
 		};
 	}, [accessToken]);

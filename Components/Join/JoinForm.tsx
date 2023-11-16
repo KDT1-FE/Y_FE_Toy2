@@ -42,7 +42,6 @@ const JoinForm = () => {
 				props.name,
 				props.picture,
 			);
-			console.log(props);
 			if (message === 'User created') {
 				Swal.fire({
 					text: '회원가입이 완료되었습니다.',
@@ -52,7 +51,6 @@ const JoinForm = () => {
 				});
 				router.replace('/login');
 			} else {
-				console.log('이미 존재한 회원 입니다');
 				Swal.fire({
 					text: '이미 존재한 회원입니다.',
 					showCancelButton: false,
@@ -61,12 +59,6 @@ const JoinForm = () => {
 				});
 			}
 			loadingControl(false);
-		},
-		onMutate: () => {
-			console.log('onMutate');
-		},
-		onError: (error) => {
-			console.log(error);
 		},
 	});
 

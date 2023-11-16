@@ -27,6 +27,5 @@ export const fetchJoin = async (
 		body: JSON.stringify(requestData),
 	});
 	const data = await res.json();
-	console.log(data);
 	return data;
 };

@@ -14,7 +14,6 @@ export const fetchLogin = async (id: string, password: string) => {
 		id,
 		password,
 	};
-	console.log(process.env.NEXT_PUBLIC_SERVER_ID);
 	const res = await fetch('https://fastcampus-chat.net/login', {
 		method: 'POST',
 		headers: {
@@ -26,7 +25,6 @@ export const fetchLogin = async (id: string, password: string) => {
 	});
 	// 응답 데이터를 JSON 형식으로 파싱한 다음 data 변수 저장
 	const data: LoginResult = await res.json();
-	// const { accessToken, refreshToken } = await res.json();
-	// console.log('accessToken:', accessToken, 'refreshToken:', refreshToken);
+
 	return data;
 };
