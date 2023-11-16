@@ -103,6 +103,7 @@ const GameStart: React.FC<GameStartProps> = ({
           w="200px"
           h="100%"
           mr="20px"
+          colorScheme="facebook"
           onClick={handleStart}
           isDisabled={host !== user.id}
         >

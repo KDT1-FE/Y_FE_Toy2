@@ -42,7 +42,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       background={status === "게임중" && userId === speaking ? "#3182ce" : ""}
       color={status === "게임중" && userId === speaking ? "#fff" : "#000"}
       w="200px"
-      h="200px"
+      h="160px"
       justify="center"
       mb="20px"
     >
@@ -80,7 +80,7 @@ const Game = () => {
   // 게임 소켓 서버 연결
   const socket = connect(gameId as string);
   // 메인 소켓 서버 연결 (메인페이지 상태 변경 통신)
-  const socketMain = connect("617bf718-cfa1-48d2-8007-b402907e540b");
+  const socketMain = connect("9984747e-389a-4aef-9a8f-968dc86a44e4");
 
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -102,6 +102,8 @@ const Game = () => {
     if (gameData.data && gameData.data.length > 0) {
       setStatus(gameData.data[0].status);
       setUsers(gameData.data?.[0]?.users);
+    } else {
+      setUsers([]);
     }
   }, [gameData.data]);
 
@@ -151,19 +153,25 @@ const Game = () => {
   }
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" px="100px">
       {current === "자유발언" && (
         <Timer current={current} setCurrent={setCurrent} />
       )}
 
       <Grid
         templateColumns="200px 1fr 200px"
-        templateRows="60px 1fr"
+        templateRows="50px 1fr"
         gap="20px"
         mt="50px"
       >
         <GridItem>
-          <Button w="200px" h="100%" mr="20px" onClick={leaveGame}>
+          <Button
+            w="200px"
+            h="100%"
+            mr="20px"
+            colorScheme="facebook"
+            onClick={leaveGame}
+          >
             뒤로가기
           </Button>
         </GridItem>
