@@ -7,7 +7,7 @@
 }
 
 .list_container {
-  @include container;
+  @include container; 
 }
 
 
@@ -17,6 +17,7 @@
   justify-content: flex-start;
   color : $brand-pink;
   font-size: 1.7rem;
+  margin: 2rem auto;
   p {
     
     font-weight: bold;
@@ -26,11 +27,22 @@
 
 }
 
+.itemContainer {
+  margin: 0;
+  border-radius: 40rem;
+  :hover {
+    background-color: #ececec;
+    
+  }
+  
+}
+
 .container {
   @include container;
   display: flex;
-  padding: 1rem;
-  margin: 2rem auto;
+  width: 100%;
+  padding: 1.7rem;
+  border-radius: 2rem;
 
   button {
     @include fill-btn;
