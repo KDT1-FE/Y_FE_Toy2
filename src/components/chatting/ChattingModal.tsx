@@ -2,7 +2,7 @@
 
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { ChatingModalToggle } from '@/store/atoms';
+import { ChattingModalToggle } from '@/store/atoms';
 import { useRouter } from 'next/navigation';
 import InviteImg from '../../../public/assets/InviteImg.svg';
 import { getCookie } from '@/lib/cookie';
@@ -14,15 +14,15 @@ interface User {
   picture: string;
 }
 
-interface ChatingModalProps {
+interface ChattingModalProps {
   users: User[];
   chatId: string;
   socket: Socket;
 }
 
 //type
-export default function ChatingModal(props: ChatingModalProps) {
-  const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChatingModalToggle);
+export default function ChattingModal(props: ChattingModalProps) {
+  const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChattingModalToggle);
   const router = useRouter();
 
   const accessToken = getCookie('accessToken');
@@ -37,7 +37,7 @@ export default function ChatingModal(props: ChatingModalProps) {
     return undefined;
   };
 
-  const leaveChating = async () => {
+  const leaveChatting = async () => {
     await fetch('https://fastcampus-chat.net/chat/leave', {
       method: 'PATCH',
       headers: {
@@ -81,14 +81,14 @@ export default function ChatingModal(props: ChatingModalProps) {
         ) : (
           ''
         )}
-        <ChatingLeave
+        <ChattingLeave
           onClick={() => {
             setModalToggle(!modalToggle);
-            leaveChating();
+            leaveChatting();
           }}
         >
           채팅방 나가기
-        </ChatingLeave>
+        </ChattingLeave>
       </ModalWrapper>
 
       <ModalBackground
@@ -200,7 +200,7 @@ const UserInviteName = styled.div`
   cursor: pointer;
 `;
 
-const ChatingLeave = styled.div`
+const ChattingLeave = styled.div`
   font-size: 30px;
   color: #950000;
 

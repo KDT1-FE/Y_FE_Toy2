@@ -7,14 +7,14 @@ import { useRouter } from 'next/navigation';
 import { useRecoilState } from 'recoil';
 import { ChatingModalToggle } from '@/store/atoms';
 
-interface ChatingNaviagtionProps {
+interface ChattingNaviagtionProps {
   chatName: string;
   usersLength: number;
 }
 
 //props type
-export default function ChatingNavigation(props: ChatingNaviagtionProps) {
-  const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChatingModalToggle);
+export default function ChatingNavigation(props: ChattingNaviagtionProps) {
+  const [modalToggle, setModalToggle] = useRecoilState<boolean>(ChattingModalToggle);
 
   const router = useRouter();
 
