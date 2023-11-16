@@ -39,7 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 		return res.status(200).json({ data: userForm });
 	} catch (error) {
-		console.error(error);
+		throw new Error();
 		return res.status(500).json({ message: '서버 에러' });
 	}
 };
