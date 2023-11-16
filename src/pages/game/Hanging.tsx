@@ -9,6 +9,7 @@ const Hanging = () => {
   const [searchParams] = useSearchParams();
   const pocketId = searchParams.get('pocketId');
   const chatId = searchParams.get('chatId');
+  const role = searchParams.get('role');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const Hanging = () => {
             navigate(`/result?result=${usersWithMaxCount[0].role}`);
           }, 4000);
         } else {
-          navigate(`/reset?pocketId=${pocketId}&chatId=${chatId}`);
+          navigate(`/reset?pocketId=${pocketId}&chatId=${chatId}&role=${role}`);
         }
       } catch (error) {
         console.error(error);
