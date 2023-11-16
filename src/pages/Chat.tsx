@@ -6,7 +6,6 @@ import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 import Header from "../components/Header";
 import NoneChat from "../components/Chat/NoneChat";
-import { ThemeContext } from "../App";
 import { darkTheme } from "../style/theme";
 
 export interface User {

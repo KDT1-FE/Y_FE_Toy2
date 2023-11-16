@@ -46,7 +46,7 @@ function Footer() {
             theme={theme}
           />
           <span>
-            <a href="">박용희</a>
+            <a href="https://velog.io/@yongyong_21">박용희</a>
           </span>
           <span>
             <a href="https://furaha.tistory.com">이예인</a>
