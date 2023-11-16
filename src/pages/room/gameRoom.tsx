@@ -27,7 +27,9 @@ import {
   AlertDescription,
   Box,
   Fade,
+  Img,
 } from '@chakra-ui/react';
+import AnswerModal from '../../components/layout/anwerModal.tsx';
 
 const GameRoom: React.FC = () => {
   const [showAlert, setShowAlert] = useState({
@@ -63,8 +65,8 @@ const GameRoom: React.FC = () => {
   const myId = getCookie('userId');
   const check = CheckNums();
 
-  const [btnVisible, setBtnVisible] = useState(true);
-  const [submitVisible, setSubmitVisible] = useState(false);
+  const [answerModalOpen, setAnswerModalOpen] = useState(false);
+
   useEffect(() => {
     if (lastMessage.text !== '') {
       setUserMessage(lastMessage);
@@ -92,20 +94,13 @@ const GameRoom: React.FC = () => {
             active: true,
             message: '당신은 출제자 입니다!',
           });
-
-          setSubmitVisible(true);
-
         } else {
           setShowAlert({
             active: true,
             message: '새로운 출제자가 선정되었습니다!',
           });
-
-          setSubmitVisible(false);
-
         }
         setIsQuizMasterAlertShown(true);
-        setBtnVisible(false);
       }
     });
 
@@ -114,23 +109,25 @@ const GameRoom: React.FC = () => {
     };
   }, [roomId]);
 
-  const startGame = () => {
+  const startGame = async () => {
     gameSocket.emit('start_game', { roomId, myId });
-    setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
-    setBtnVisible(false);
+    setIsQuizMasterAlertShown(false);
   };
 
-  const handleSetAnswerChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setAnswer(event.target.value);
+  const submitSetAnswer = (modalInputValue: string) => {
+    gameSocket.emit('set_answer', modalInputValue, {
+      roomId,
+      myId,
+      notifyAll: true,
+    });
+    setAnswer(''); // 입력 필드 초기화 (필요한 경우)
+    setAnswerModalOpen(false);
   };
 
-  const submitSetAnswer = () => {
-    gameSocket.emit('set_answer', answer, { roomId, myId, notifyAll: true });
-
-    setAnswer(''); // 입력 필드 초기화
+  const handleAnswerModal = () => {
+    setAnswerModalOpen(true);
   };
+
   useEffect(() => {
     gameSocket.on('alert_all', (message: string) => {
       if (message) {
@@ -138,8 +135,6 @@ const GameRoom: React.FC = () => {
           active: true,
           message: '문제가 출제되었습니다!',
         });
-        setSubmitVisible(false);
-
       }
     });
     return () => {
@@ -166,7 +161,6 @@ const GameRoom: React.FC = () => {
           message: '유저가 정답을 맞췄습니다! 게임이 종료되었습니다.',
         });
       }
-      setBtnVisible(true);
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
 
@@ -177,9 +171,10 @@ const GameRoom: React.FC = () => {
 
   const roomNum = useRecoilValue(roomIdState);
   const users = useRecoilValue(usersInRoom);
-  // console.log('here', users, btnVisible);
+
   return (
     <Game>
+      <AnswerModal isOpen={answerModalOpen} onSubmit={submitSetAnswer} />
       <RoomHeader>
         <RoomInfo>
           <RoomInformation>방 번호</RoomInformation>
@@ -191,31 +186,39 @@ const GameRoom: React.FC = () => {
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
           <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-          {check && btnVisible && (
-            <button onClick={startGame}>Start Game</button>
-          )}
-          {submitVisible && (
-            <div>
-              <input
-                type="text"
-                value={answer}
-                onChange={handleSetAnswerChange}
-              />
-              <button onClick={submitSetAnswer}>Submit Answer</button>
-            </div>
-          )}
+          <Button
+            onClick={() => {
+              startGame();
+              handleAnswerModal();
+            }}>
+            <Img
+              width="18px"
+              height="18px"
+              src="/assets/start.svg"
+              alt="start"
+              color="white"
+              marginRight={1}
+            />
+            게임 시작
+          </Button>
+
+          {/* {check && btnVisible && (
+            
+    
+          )} */}
+
           {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>
       </RoomHeader>
 
       <RoomMain>
         <Drawing />
-
-        <GameChatting chatId={roomId} />
+        <UserList>
+          <GameChatting chatId={roomId} />
+        </UserList>
       </RoomMain>
 
       <CheckUsersInGameRoom chatId={roomId} />
-
 
       <Fade in={showAlert.active}>
         <Alert
@@ -293,4 +296,26 @@ const UserList = styled.div`
   margin-top: 30px;
   margin-bottom: 30px;
 `;
+
+const Button = styled.button`
+  background-color: #38b2ac;
+  color: white;
+  padding: 6px 25px;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: 0.2s;
+  margin-left: 10px;
+
+  div {
+    margin-left: 20px;
+  }
+
+  &:hover {
+    background-color: #4fd1c5;
+  }
+`;
+
 export default GameRoom;

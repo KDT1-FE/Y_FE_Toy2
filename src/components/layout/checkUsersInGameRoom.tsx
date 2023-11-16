@@ -7,6 +7,7 @@ import { getCookie } from '../../util/util';
 import styled from 'styled-components';
 import { getOnlyGameRoom, getUserData } from '../../api';
 import { OnlyResponse } from '../../interfaces/interface';
+import { useParams } from 'react-router-dom';
 
 interface ChattingDetailProps {
   chatId: string;
@@ -61,7 +62,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     const setUsers = async () => {
       try {
         const response: AxiosResponse<OnlyResponse> | null =
-          await getOnlyGameRoom(chatId);
+          await getOnlyGameRoom(id?.substring(1));
         console.log('첫 응답', response.data);
 
         if (response && response.data) {
