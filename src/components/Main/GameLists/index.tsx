@@ -232,7 +232,7 @@ const GameLists = () => {
     method: "GET",
     start: !!user,
   });
-  
+
   //파이어베이스 게임
   const { data: firebaseGameListsData } = fireFetch.useGetAll("game", "desc");
 
