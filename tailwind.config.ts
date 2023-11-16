@@ -31,6 +31,10 @@ const config: Config = withMT({
 				bgfill: '#7E7E7E',
 				chat: '#5B5B5B',
 				bglight: '#EFEFEF',
+				footer: '#FFB8DA',
+				send: '#FB72B4',
+				users: '#848484',
+				time: '#7E7E7E',
 			},
 			backgroundImage: {
 				'trash-can': "url('../public/icon_trash.svg')",
