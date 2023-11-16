@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { HiArrowLongLeft } from 'react-icons/hi2';
 import { IoMdMenu } from 'react-icons/io';
-import { Chat, ChatUser } from '@/@types/types';
-import chatAPI from '@/apis/chatAPI';
+import { Chat } from '@/@types/types';
 import Image from 'next/image';
 import styles from './Chat.module.scss';
 import Jwtinterceptors from '../../apis/Jwtinterceptors';
@@ -17,16 +16,12 @@ export default function ChatroomHeader({ chatData }: Props) {
 
   const { instance } = Jwtinterceptors();
 
-  const accessToken: string = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('accessToken');
 
-  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
+    setMenuOpen(!menuOpen);
   };
 
   const handleBackBtnClick = () => {
@@ -35,7 +30,7 @@ export default function ChatroomHeader({ chatData }: Props) {
 
   const handleOutBtnClick = async () => {
     try {
-      const response = await instance.patch(
+      await instance.patch(
         '/chat/leave',
         {
           chatId: chatData.id,
@@ -60,12 +55,12 @@ export default function ChatroomHeader({ chatData }: Props) {
       {chatData && (
         <>
           <h3 className={styles.chatTitle}>{chatData.name}</h3>
-          <div className={styles.right} onClick={toggleMenu}>
+          <button type="button" className={styles.right} onClick={toggleMenu}>
             <IoMdMenu />
-            {isMenuOpen && (
+            {menuOpen && (
               <div className={styles.dropdownMenu}>
                 <ul>
-                  <div>
+                  <div className={styles.counter}>
                     <p>현재 채팅인원 수</p>
                     <h6>{chatData.users.length}명</h6>
                   </div>
@@ -93,7 +88,7 @@ export default function ChatroomHeader({ chatData }: Props) {
                 </button>
               </div>
             )}
-          </div>
+          </button>
         </>
       )}
     </div>

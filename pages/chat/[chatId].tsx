@@ -52,7 +52,7 @@ export default function Chatting() {
       try {
         const response = await chatAPI.getChatInfo(chatId);
         const chatInfo: Chat = response.data.chat;
-        setChatData(chatInfo);
+        await setChatData(chatInfo);
       } catch (error) {
         console.error('Error fetching chat data:', error);
       }
@@ -88,18 +88,40 @@ export default function Chatting() {
         const joinUserInfo = await chatAPI.getUserInfo(
           messageObject.joiners[0]?.id.split(':')[1],
         );
-        setEnterName(joinUserInfo.data.user.name);
+        let userData = joinUserInfo.data.user;
+        setEnterName(userData.name);
+
+        // 이름 속성명 변경
+        userData = { ...userData, username: userData.name };
+        delete userData.name; // 기존의 이름 속성 삭제
+
+        setChatData((prevChatData): Chat => {
+          const updatedUsers = [...prevChatData!.users, userData];
+          return {
+            ...prevChatData,
+            users: updatedUsers,
+          };
+        });
       });
 
       socket.on('leave', async (messageObject: LeaverData) => {
         console.log(messageObject, '채팅방 퇴장');
-        const response = await chatAPI.getUserInfo(messageObject.leaver);
-        setExitName(response.data.user.name);
-        setChatData(prevState => {
-          user;
+        const exitUserInfo = await chatAPI.getUserInfo(messageObject.leaver);
+        const userData = exitUserInfo.data.user;
+        setExitName(userData.name);
+
+        setChatData((prevChatData): Chat => {
+          const updatedUsers = prevChatData!.users.filter(
+            user => user.id !== userData.id,
+          );
+          return {
+            ...prevChatData,
+            users: updatedUsers,
+          };
         });
       });
     }
+
     return () => {
       socket.off('connect');
       socket.off('messages-to-client');
@@ -118,7 +140,7 @@ export default function Chatting() {
       const entryTimer = setTimeout(() => {
         setShowEntryNotice(false); // Hide entry notice after 3 seconds
         setEnterName('');
-      }, 10000);
+      }, 3000);
 
       return () => clearTimeout(entryTimer);
     }
