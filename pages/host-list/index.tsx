@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import HostListItem from '@/components/HostList/HostListItem';
 import {
   getHostsByLocation,
   locations,
-  fetchHostUsers,
+  getFirebaseData,
+  fetchAllUsers,
 } from '@/utils/hostsStorage';
 
 import Search from '@/components/HostList/Search';
 import HostDetailsModal from '@/components/HostList/HostDetailsModal';
 import styles from '@/components/HostList/hostList.module.scss';
-import { Host, UserList } from '@/components/HostList/hostList.types';
+import { Host, HostUser } from '@/components/HostList/hostList.types';
 
 export default function HostListPage() {
-  const [hosts, setHosts] = useState<Host[]>([]);
-  const [userData, setUserData] = useState<UserList[]>([]);
-
+  const [hostData, setHostData] = useState<HostUser[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedHostDetails, setSelectedHostDetails] = useState<Host | null>(
-    null,
-  );
-  const [filteredHosts, setFilteredHosts] = useState<Host[]>([]);
+  const [selectedHostDetails, setSelectedHostDetails] =
+    useState<HostUser | null>(null);
+  const [filteredHosts, setFilteredHosts] = useState<HostUser[]>([]);
   const [searchQuery, setSearchQuery] = useState<string | null>('');
-  const [locationsToShow, setLocationsToShow] = useState<string[]>(locations);
+  const [locationsToShow, setLocationsToShow] = useState<string[]>([]);
+
   const [noResultsMessage, setNoResultsMessage] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [showAllButton, setShowAllButton] = useState(true);
@@ -29,29 +28,45 @@ export default function HostListPage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetchHostUsers();
-        setUserData(response);
+        const [userDataResponse, hostDataResponse] = await Promise.all([
+          fetchAllUsers(),
+          getFirebaseData(),
+        ]);
+
+        // 데이터 합치기
+        const combinedData: HostUser[] = hostDataResponse.map((host: Host) => {
+          const hostUserData = userDataResponse.find(
+            user => user.id === host.id,
+          );
+          return {
+            ...host,
+            name: hostUserData ? hostUserData.name : '',
+            picture: hostUserData ? hostUserData.picture : '',
+          };
+        });
+        setHostData(combinedData);
       } catch (error) {
-        console.error('사용자 데이터를 불러오는 중 오류 발생:', error);
+        console.error('데이터 불러오기 오류:', error);
       }
     };
-
     fetchUserData();
   }, []);
 
   useEffect(() => {
-    const fetchHosts = async () => {
+    const fetchLocationsToShow = async () => {
       try {
-        const fetchedHosts = await Promise.all(
-          locations.map(getHostsByLocation),
+        const locationPromises = locations.map(getHostsByLocation);
+        const locationData = await Promise.all(locationPromises);
+        const uniqueLocations = Array.from(
+          new Set(locationData.flat().map(host => host.location)),
         );
-        setHosts(fetchedHosts.flat());
+        setLocationsToShow(uniqueLocations);
       } catch (error) {
-        console.error('호스트 정보 불러오기 오류:', error);
+        console.error('호스트 위치 데이터 가져오기 오류:', error);
+        // 에러 처리 또는 사용자에게 알림을 표시하는 등의 추가 작업 수행
       }
     };
-
-    fetchHosts();
+    fetchLocationsToShow();
   }, []);
 
   useEffect(() => {
@@ -68,54 +83,71 @@ export default function HostListPage() {
   const headerClass = `${styles.header} ${
     isScrolling ? styles.scrollHeader : ''
   }`;
-
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    const filtered = query
-      ? hosts.filter(host =>
-          Object.values(host).some(
-            value =>
-              typeof value === 'string' &&
-              value.toLowerCase().includes(query.toLowerCase()),
-          ),
-        )
-      : hosts;
-    setFilteredHosts(filtered);
+    // 검색 쿼리가 변경되지 않았다면 캐시된 결과를 사용
+    if (query === '') {
+      setFilteredHosts(hostData);
+      setLocationsToShow([...locations]);
+      setShowAllButton(true);
+      return;
+    }
+    // 검색 필터링
+    const newFiltered = hostData.filter(host =>
+      Object.values(host).some(value => {
+        if (typeof value === 'string') {
+          // 호스트 데이터 속성 값이 문자열인 경우
+          return value.toLowerCase().includes(query.toLowerCase());
+        }
+        if (Array.isArray(value)) {
+          // 호스트 데이터 속성 값이 배열인 경우
+          return value.some(
+            item =>
+              typeof item === 'string' &&
+              item.toLowerCase().includes(query.toLowerCase()),
+          );
+        }
+        // 다른 데이터 유형에 대한 처리 추가
+        return false;
+      }),
+    );
 
-    // 검색 결과에 따라 locationsToShow를 업데이트
-    const newLocationsToShow = query
-      ? Array.from(new Set(filtered.map(host => host.location)))
-      : locations; // Array.from을 사용하여 Set을 배열로 변환
+    setFilteredHosts(newFiltered);
+
+    const newLocationsToShow = Array.from(
+      new Set(newFiltered.map(host => host.location)),
+    );
     setLocationsToShow(newLocationsToShow);
 
-    if (filtered.length === 0) {
+    if (newFiltered.length === 0) {
       setNoResultsMessage(true);
       setShowAllButton(false);
 
       setTimeout(() => {
         setNoResultsMessage(false);
         setSearchQuery('');
-        setFilteredHosts(hosts);
+        setFilteredHosts(hostData);
         setLocationsToShow([...locations]);
         setShowAllButton(true);
-      }, 2000);
+      }, 1000);
     } else {
       setShowAllButton(true);
     }
   };
 
-  const handleClearSearch = () => {
-    setFilteredHosts(hosts);
+  const handleClearSearch = useCallback(() => {
+    setFilteredHosts(hostData);
     setLocationsToShow([...locations]);
     setSearchQuery('');
-  };
+  }, [hostData]);
+
   useEffect(() => {
     if (!searchQuery) {
       handleClearSearch();
     }
-  }, [searchQuery]);
+  }, [searchQuery, handleClearSearch]);
 
-  const handleOpenModal = (host: Host) => {
+  const handleOpenModal = (host: HostUser) => {
     setSelectedHostDetails(host);
     setIsModalOpen(true);
   };
@@ -136,7 +168,7 @@ export default function HostListPage() {
     handleClearSearch();
     scrollToLocation('host-list');
   };
-  const displayHosts = searchQuery ? filteredHosts : hosts;
+  const displayHosts = searchQuery ? filteredHosts : hostData;
 
   return (
     <section className={styles.container} id="host-list">
@@ -184,17 +216,15 @@ export default function HostListPage() {
                       <HostListItem
                         key={host.id}
                         host={host}
-                        userData={userData}
                         openModal={() => handleOpenModal(host)}
                       />
                     ))
-                : hosts
+                : hostData
                     .filter(host => host.location === location)
                     .map(host => (
                       <HostListItem
                         key={host.id}
                         host={host}
-                        userData={userData}
                         openModal={() => handleOpenModal(host)}
                       />
                     ))}
@@ -202,14 +232,13 @@ export default function HostListPage() {
           </div>
         ))}
       </div>
+
       {noResultsMessage && <p>검색 결과가 없습니다.</p>}
 
       {isModalOpen && (
         <HostDetailsModal
           hostDetails={selectedHostDetails!}
           onClose={handleCloseModal}
-          isModalOpen={isModalOpen}
-          userData={userData}
         />
       )}
     </section>

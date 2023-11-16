@@ -2,26 +2,22 @@ import React, { useRef } from 'react';
 
 import { BsXCircle } from 'react-icons/bs';
 import Button from '@/components/HostList/Button';
-import Modal from '@/components/Common/Modal';
+import Modal from '@/components/common/Modal';
 import useOnClickOutside from '@/hooks/useOnClickOustside';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
 import styles from '@/components/HostList/HostDetailsModal.module.scss';
-import { Host, UserList } from '@/components/HostList/hostList.types';
+import { HostUser } from '@/components/HostList/hostList.types';
 
 interface HostDetailsModalProps {
   onClose: () => void;
-  hostDetails: Host;
-  isModalOpen: boolean;
-  userData: UserList[];
+  hostDetails: HostUser;
 }
 
 export default function HostDetailsModal({
   onClose,
   hostDetails,
-  isModalOpen,
-  userData,
 }: HostDetailsModalProps) {
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => {
@@ -69,10 +65,6 @@ export default function HostDetailsModal({
     }
   };
 
-  const findUser = userData.find(
-    user => user.id === hostDetails.id,
-  ) as UserList;
-
   return (
     <>
       <div className={styles.dim} />
@@ -82,11 +74,11 @@ export default function HostDetailsModal({
 
           <img
             className={styles['host-img']}
-            src={findUser?.picture}
-            alt={findUser?.name}
+            src={hostDetails?.picture}
+            alt={hostDetails?.name}
           />
           <div className={styles['flex-row']}>
-            <h4 className={styles.title}>{findUser?.name}</h4>
+            <h4 className={styles.title}>{hostDetails?.name}</h4>
             <Button
               className="fill-btn"
               text="문의하기"

@@ -9,17 +9,15 @@ import {
 import { Host, UserList } from '@/components/HostList/hostList.types';
 import userListAPI from '@/apis/userListAPI';
 import app from './firebaseConfig';
-// import { hostData } from './hostData';
 
 export const storage = getStorage(app);
 export const db = getFirestore(app);
-
-const locations = ['부산', '제주', '강릉', '여수', '양양'];
+export const hostsCollection = collection(db, 'hosts');
+export const locations = ['부산', '제주', '강릉', '여수', '양양'];
 
 // 지역별 데이터 필터링
 export const getHostsByLocation = async (location: string): Promise<Host[]> => {
   try {
-    const hostsCollection = collection(db, 'hosts');
     const locationQuery = query(
       hostsCollection,
       where('location', '==', location),
@@ -38,8 +36,20 @@ export const getHostsByLocation = async (location: string): Promise<Host[]> => {
   }
 };
 
+// firebase에서 hosts 데이터 가져오기
+export const getFirebaseData = async (): Promise<Host[]> => {
+  const querySnapshot = await getDocs(hostsCollection);
+
+  const firebaseHostData: Host[] = [];
+  querySnapshot.forEach(doc => {
+    const data = doc.data() as Host;
+    firebaseHostData.push(data);
+  });
+  return firebaseHostData;
+};
+
 // 전체 유저 조회
-export async function fetchHostUsers(): Promise<UserList[]> {
+export async function fetchAllUsers(): Promise<UserList[]> {
   try {
     const response = await userListAPI.getAllUserList();
     return response.data;
@@ -48,5 +58,3 @@ export async function fetchHostUsers(): Promise<UserList[]> {
     throw error;
   }
 }
-
-export { locations };
