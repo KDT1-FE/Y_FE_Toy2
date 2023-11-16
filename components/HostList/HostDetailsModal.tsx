@@ -56,10 +56,7 @@ export default function HostDetailsModal({
           isPrivate: true,
         })
         .then(res => {
-          router.push({
-            pathname: `/chat/${res.data.id}`,
-            query: { name: res.data.name },
-          });
+          router.push(`/chat/${res.data.id}`);
         });
     } else {
       // 숙소와 채팅방이 존재하면 채팅방으로 이동

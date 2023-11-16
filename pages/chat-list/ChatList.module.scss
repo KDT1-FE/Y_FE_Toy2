@@ -1,5 +1,4 @@
 @import '@/styles/index.scss';
-@import '../../styles/_variables';
 
 .allContainer {
   @include container;
@@ -8,14 +7,42 @@
 }
 
 .list_container {
+  @include container; 
+}
+
+
+.titleContainer {
   @include container;
+  @include flex-center-row;
+  justify-content: flex-start;
+  color : $brand-pink;
+  font-size: 1.7rem;
+  margin: 2rem auto;
+  p {
+    
+    font-weight: bold;
+    padding : 1rem;
+    margin: 0;
+  }
+
+}
+
+.itemContainer {
+  margin: 0;
+  border-radius: 40rem;
+  :hover {
+    background-color: #ececec;
+    
+  }
+  
 }
 
 .container {
   @include container;
   display: flex;
-  padding: 1rem;
-  margin: 2rem auto;
+  width: 100%;
+  padding: 1.7rem;
+  border-radius: 2rem;
 
   button {
     @include fill-btn;
