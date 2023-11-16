@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
@@ -32,6 +32,7 @@ import {
 import AnswerModal from '../../components/layout/anwerModal.tsx';
 
 const GameRoom: React.FC = () => {
+  const [isQuizMaster, setIsQuizMaster] = useState(false);
   const [showAlert, setShowAlert] = useState({
     active: false,
     message: '',
@@ -86,7 +87,8 @@ const GameRoom: React.FC = () => {
     gameSocket.emit('joinRoom', roomId);
 
     gameSocket.on('quiz_master_set', (quizMasterId: string) => {
-      console.log('여기', myId, quizMasterId);
+      console.log(myId, quizMasterId);
+      setIsQuizMaster(myId === quizMasterId);
       if (true) {
         if (myId === quizMasterId) {
           // alert('당신은 출제자 입니다!');
@@ -212,10 +214,17 @@ const GameRoom: React.FC = () => {
       </RoomHeader>
 
       <RoomMain>
-        <Drawing />
-        <UserList>
-          <GameChatting chatId={roomId} />
-        </UserList>
+        {isQuizMaster ? (
+          <Drawing />
+        ) : (
+          <div style={{ position: 'relative' }}>
+            <Drawing />
+            <DrawingBlock />
+          </div>
+        )}
+
+        <GameChatting chatId={roomId} />
+
       </RoomMain>
       <CheckUsersInGameRoom chatId={roomId} />
       <Fade in={showAlert.active}>
@@ -298,6 +307,7 @@ const UserList = styled.div`
   margin-bottom: 30px;
 `;
 
+
 const Button = styled.button`
   background-color: #38b2ac;
   color: white;
@@ -317,6 +327,15 @@ const Button = styled.button`
   &:hover {
     background-color: #4fd1c5;
   }
+
+const DrawingBlock = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.01);
+  border-radius: 15px;
 `;
 
 export default GameRoom;
