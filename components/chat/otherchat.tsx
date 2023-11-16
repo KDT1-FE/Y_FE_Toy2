@@ -5,6 +5,7 @@ import { User, Message } from '@/@types/types';
 import Image from 'next/image';
 import styles from './Chat.module.scss';
 import Jwtinterceptors from '../../apis/Jwtinterceptors';
+import chatAPI from '@/apis/chatAPI';
 
 interface GetUserNameResponseBody {
   user: User;
@@ -19,14 +20,10 @@ function OtherMessage({ msg }: { msg: Message }) {
   const [userName, setUserName] = useState('');
   const [userPicture, setUserPicture] = useState('');
 
-  const { instance } = Jwtinterceptors();
-
   useEffect(() => {
     const getUserName = async () => {
       try {
-        const response = await instance.get<GetUserNameResponseBody>(
-          `/user?userId=${msg.userId}`,
-        );
+        const response = await chatAPI.getUserInfo(msg.userId);
         setUserName(response.data.user.name);
         setUserPicture(response.data.user.picture);
       } catch (error) {
@@ -35,8 +32,7 @@ function OtherMessage({ msg }: { msg: Message }) {
     };
 
     getUserName();
-  }, [instance, msg.userId]); // 의존성 배열에는 getUserName 함수가 사용하는 모든 변수를 포함시켜야 합니다.
-
+  }, [msg.id]);
   return (
     <div className={styles.otherFlex}>
       {userPicture && (

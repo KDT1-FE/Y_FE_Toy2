@@ -17,6 +17,10 @@ import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
 import chatAPI from '../../apis/chatAPI';
 
+interface MessageArray {
+  messages: Message[];
+}
+
 export default function Chatting() {
   const router = useRouter();
   const { chatId } = router.query;
@@ -82,9 +86,7 @@ export default function Chatting() {
           socket.emit('fetch-messages');
         }, 500);
       });
-      socket.emit('fetch-messages');
-
-      socket.on('messages-to-client', messageArray => {
+      socket.on('messages-to-client', (messageArray: MessageArray) => {
         setMessages(messageArray.messages);
       });
 
@@ -94,7 +96,7 @@ export default function Chatting() {
         // setIsLoading(false);
       });
 
-      socket.emit('fetch-messages');
+  
 
       socket.on('join', async (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');

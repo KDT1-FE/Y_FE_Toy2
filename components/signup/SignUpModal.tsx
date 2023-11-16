@@ -10,9 +10,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { BsCameraFill, BsFillTrash3Fill } from 'react-icons/bs';
-import Modal from '../Common/Modal';
 import styles from './SignUpModal.module.scss';
 import Loading from './Loading';
+import Modal from '../common/Modal';
 
 interface RequestBody {
   id: string;
@@ -117,12 +117,12 @@ export default function SignUpModal({
       setIsLoading(false); // 로딩 종료
     }
   };
-  
- 
-    return (
-      <div className={styles.dim}>
-        {isLoading ? <Loading /> : 
-        
+
+  return (
+    <div className={styles.dim}>
+      {isLoading ? (
+        <Loading />
+      ) : (
         <Modal>
           <div className={styles.signUpModalBox}>
             <h2>프로필 사진 설정</h2>
@@ -166,8 +166,7 @@ export default function SignUpModal({
             </div>
           </div>
         </Modal>
-        }
-      </div>
-    );
-  
+      )}
+    </div>
+  );
 }
