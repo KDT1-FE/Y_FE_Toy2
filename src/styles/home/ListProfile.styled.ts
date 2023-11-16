@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import styled from 'styled-components';
 
 interface Props {
@@ -81,20 +82,12 @@ export const UserName = styled.div`
   margin-right: 14px;
 `;
 
-export const SendMessage = styled.button`
+export const SendMessage = styled(Button)`
   width: 120px;
-  height: 30px;
-
-  border: none;
-  outline: none;
-  background-color: var(--color-primary);
   border-radius: 5px;
 
   font-size: 15px;
   font-weight: 600;
-  color: var(--color-gray);
-
-  cursor: pointer;
 `;
 
 export const Language = styled.div`

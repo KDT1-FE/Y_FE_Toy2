@@ -8,6 +8,15 @@ export const ChatsWrapper = styled('div')({
   borderRight: '1px solid #dbdbdb',
   width: '440px',
   height: '100vh',
+
+  overflowY: 'scroll',
+  '&::-webkit-scrollbar': {
+    width: '10px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#1D3557',
+    borderRadius: '25px',
+  },
 });
 
 export const NewMessageWrapper = styled('div')({
