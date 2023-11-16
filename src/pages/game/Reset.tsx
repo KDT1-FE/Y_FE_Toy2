@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from '@styles/pages/reset.module.scss';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getGameData, patchGameResult } from '@/api/vote';
 
 const Reset = () => {
   const [searchParams] = useSearchParams();
@@ -9,12 +10,28 @@ const Reset = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      navigate(`/chat?chatId=${chatId}&pocketId=${pocketId}`);
-    }, 3000);
+    const setGame = async () => {
+      try {
+        const gameData = await getGameData(pocketId as string);
+        const newData = [...gameData.vote].map((user) => ({
+          ...user,
+          count: 0,
+        }));
+        await patchGameResult(pocketId as string, {
+          ...gameData,
+          vote: newData,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-    return clearTimeout(timerId);
+    setGame();
+    setTimeout(() => {
+      navigate(`/chat?chatId=${chatId}&pocketId=${pocketId}`);
+    }, 4000);
   }, []);
+
   return (
     <div className={styles.reset}>
       <p>
