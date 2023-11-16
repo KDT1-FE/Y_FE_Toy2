@@ -40,21 +40,6 @@ export default function HostListPage() {
   }, []);
 
   useEffect(() => {
-    function handleScroll() {
-      const { scrollY } = window;
-      setIsScrolling(scrollY > 0);
-    }
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const headerClass = `${styles.header} ${
-    isScrolling ? styles.scrollHeader : ''
-  }`;
-  useEffect(() => {
     const fetchHosts = async () => {
       try {
         const fetchedHosts = await Promise.all(
@@ -68,6 +53,21 @@ export default function HostListPage() {
 
     fetchHosts();
   }, []);
+
+  useEffect(() => {
+    function handleScroll() {
+      const { scrollY } = window;
+      setIsScrolling(scrollY > 0);
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  const headerClass = `${styles.header} ${
+    isScrolling ? styles.scrollHeader : ''
+  }`;
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -104,6 +104,17 @@ export default function HostListPage() {
     }
   };
 
+  const handleClearSearch = () => {
+    setFilteredHosts(hosts);
+    setLocationsToShow([...locations]);
+    setSearchQuery('');
+  };
+  useEffect(() => {
+    if (!searchQuery) {
+      handleClearSearch();
+    }
+  }, [searchQuery]);
+
   const handleOpenModal = (host: Host) => {
     setSelectedHostDetails(host);
     setIsModalOpen(true);
@@ -122,9 +133,7 @@ export default function HostListPage() {
     }
   };
   const handleShowAll = () => {
-    setFilteredHosts(hosts);
-    setLocationsToShow([...locations]);
-    setSearchQuery('');
+    handleClearSearch();
     scrollToLocation('host-list');
   };
   const displayHosts = searchQuery ? filteredHosts : hosts;
