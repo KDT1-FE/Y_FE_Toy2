@@ -1,12 +1,5 @@
 import axios from 'axios';
 
-type ItemsType = {
-  title: string;
-  link: string;
-  description: string;
-  thumbnail: string;
-}[];
-
 const search = async (word: string): Promise<boolean> => {
   try {
     const response = await axios.get(
