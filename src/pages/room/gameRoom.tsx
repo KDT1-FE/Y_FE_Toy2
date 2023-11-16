@@ -8,17 +8,28 @@ import {
   chattingIdState,
   myMessageState,
   roomIdState,
+  userRoomState,
   submitState,
   usersInRoom,
+  userState,
 } from '../../states/atom';
 import styled from 'styled-components';
 import GameChatting from '../../components/template/GameChatting';
 import { controlBack } from '../../hooks/leaveHandle';
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
-import CheckNums from '../../util/checkNums';
-import { gameSocket } from '../../api/socket';
+import { sortCreatedAt } from '../../util/util';
+import {
+  Chat,
+  ChatResponse,
+  OnlyResponse,
+  User,
+} from '../../interfaces/interface';
+import { getAllGameRooms, getOnlyGameRoom } from '../../api';
+import { AxiosResponse } from 'axios';
 import AnswerForm from '../../components/template/AnswerForm';
 import { ResponsiveValue } from '@chakra-ui/react';
+import CheckNums from '../../util/checkNums';
+import { gameSocket } from '../../api/socket';
 import { getCookie } from '../../util/util';
 import {
   Alert,
@@ -48,6 +59,10 @@ const GameRoom: React.FC = () => {
   }, [showAlert.active]);
 
   const { id } = useParams<{ id: string }>();
+  const [chat, setChat] = useRecoilState(chattingIdState);
+  const userNumber = useRecoilValue(userState);
+  const [roomNumber, setRoomNumber] = useState<number | null>(null);
+
   const [roomId, setRoomId] = useRecoilState(chattingIdState);
   const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
   const [answer, setAnswer] = useState<string>(''); // 답 지정하기
@@ -64,6 +79,13 @@ const GameRoom: React.FC = () => {
 
   const lastMessage = messages[messages.length - 1];
   const myId = getCookie('userId');
+  const [userRoomUser, setUserRoomUser] = useState(0);
+
+  useEffect(() => {
+    setUserRoomUser(userNumber);
+  }, [roomNumber]);
+  const check = CheckNums();
+
 
   const [answerModalOpen, setAnswerModalOpen] = useState(false);
 
@@ -76,8 +98,39 @@ const GameRoom: React.FC = () => {
   useEffect(() => {
     if (id) {
       setRoomId(id.substring(1));
+
+      fetchRoomNumber();
     }
   }, [id, setRoomId]);
+
+  const fetchRoomNumber = async () => {
+    try {
+      if (id) {
+        const allRoomsData = await getAllGameRooms();
+        const createAtData: Chat[] = await sortCreatedAt(allRoomsData);
+        // 방번호 넣기
+        const plusIndex = createAtData.map((chat, index) => ({
+          ...chat,
+          index: index + 1,
+        }));
+
+        console.log(plusIndex);
+
+        const findIndex = async (chatId: string): Promise<number | null> => {
+          const foundChat = await plusIndex.find((chat) => chat.id === chatId);
+          if (foundChat) {
+            return foundChat.index;
+          }
+          return null;
+        };
+
+        const roomData = await findIndex(id.substring(1));
+        setRoomNumber(roomData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // 게임로직 소켓
   useEffect(() => {
@@ -171,10 +224,6 @@ const GameRoom: React.FC = () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);
     };
   }, [roomId, gameSocket, userMessage]);
-
-  const roomNum = useRecoilValue(roomIdState);
-  const users = useRecoilValue(usersInRoom);
-
   return (
     <Game>
       <AnswerModal
@@ -185,9 +234,9 @@ const GameRoom: React.FC = () => {
       <RoomHeader>
         <RoomInfo>
           <RoomInformation>방 번호</RoomInformation>
-          <RoomInformation>{roomNum}</RoomInformation>
+          <RoomInformation>{roomNumber}</RoomInformation>
           <RoomInformation>인원 수 </RoomInformation>
-          <RoomInformation>{users} / 4</RoomInformation>
+          <RoomInformation>{userRoomUser} / 4</RoomInformation>
           {/* 인원수 추가 */}
         </RoomInfo>
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}

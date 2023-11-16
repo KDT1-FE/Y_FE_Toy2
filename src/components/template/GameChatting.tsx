@@ -62,7 +62,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   }
 
   const userId = getUserIdFromCookie();
-  console.log(userId);
+  //console.log(userId);
   // const myUserData: any = useRecoilValue(myUserDataState);
   const [currentMessageObject, setCurrentMessageObject] =
     useRecoilState(myMessageState);

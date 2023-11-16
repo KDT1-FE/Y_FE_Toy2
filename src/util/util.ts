@@ -1,6 +1,7 @@
 import { NavigateFunction } from 'react-router';
 import { getAllUsers, leaveGameRoom, postRefresh, getUserData } from '../api';
 import { disconnectChattingSocket } from '../api/socket';
+import { Chat, ChatResponse } from '../interfaces/interface';
 
 export const setCookies = async (
   accessToken: string,
@@ -116,4 +117,15 @@ export const randomNameFunc = () => {
   const randomIndex = Math.floor(Math.random() * data.length);
   const randomPick = data[randomIndex];
   return randomPick;
+};
+
+// 방생성 기준 최신순 정렬
+export const sortCreatedAt = (roomData: ChatResponse): Chat[] => {
+  return roomData.chats.sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+
+    // 최신순으로 정렬
+    return dateA.getTime() - dateB.getTime();
+  });
 };

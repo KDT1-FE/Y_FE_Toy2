@@ -50,10 +50,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         color="gray.500"
         width="220px"
         height="150px"
-        marginRight={10}
         position={'relative'}
         top={0}
-        right={-610}
+        right={-590}
         boxShadow="lg"
         border="1px solid #E2E8F0"
         borderRadius={15}>

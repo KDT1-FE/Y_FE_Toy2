@@ -49,12 +49,13 @@ const OnlineUserList = () => {
   const allOnlineUsers = onLine.users || [];
   const userId = getCookie('userId');
   const allChatState = useRecoilValue(allRoomNumberState);
-  const setRoomId = useSetRecoilState(roomIdState);
-  const setUsersInRoom = useSetRecoilState(usersInRoom);
+
+  console.log(onLine);
 
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
   });
+
   const chathandler = async (element: User) => {
     if (userId === element.id) {
       swal({ title: '본인입니다.', icon: 'info' });
@@ -69,13 +70,16 @@ const OnlineUserList = () => {
 
       // 이미 해당 id와 생성된 방이 있는지 필터
       const matchingChat = privateChatArray.find((chat: Chat) =>
-        chat.users.some((user: User) => user.id === element.id),
+        chat.users.some(
+          (user: User) => user.id === element.id && userId !== user.id,
+        ),
       );
 
       const chatId = matchingChat ? matchingChat.id : null;
       if (chatId) {
         //navigate(`/room/:${chatId}`);
       } else {
+        console.log('만들기');
         const chat = await createGameRooms(element.id, [element.id], true);
         //navigate(`/room/:${chat.id}`);
       }
@@ -88,10 +92,6 @@ const OnlineUserList = () => {
       swal({ title: '본인입니다.', icon: 'info' });
     } else {
       const chat = await createGameRooms(random, [element.id], false);
-      const chatLength = allChatState.chats.length;
-      console.log(chat);
-      setRoomId(chatLength + 1);
-      setUsersInRoom(2);
       navigate(`/room/:${chat.id}`);
     }
   };
@@ -134,12 +134,12 @@ const OnlineUserList = () => {
                   justifyContent={'center'}>
                   <Heading
                     as="h4"
-                    fontSize="14px"
+                    fontSize="15px"
                     color={'gray.700'}
                     fontWeight={600}>
                     {element.name}
                   </Heading>
-                  <Text fontSize="12px" color={'gray.400'} paddingTop="3px">
+                  <Text fontSize="14px" color={'gray.400'} paddingTop="3px">
                     {element.id}
                   </Text>
                 </Flex>

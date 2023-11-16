@@ -145,7 +145,7 @@ export const inviteGameRoom = async (chatId: string, users: string[]) => {
 };
 
 export const getOnlyGameRoom = async (chatId: string) => {
-  const res = await client.get(`/chat/only?chatId=${chatId}`);
+  const res = await client.get(`chat/only?chatId=${chatId}`);
   console.log(res);
   return res;
 };
