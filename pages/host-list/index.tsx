@@ -10,14 +10,15 @@ import {
 import Search from '@/components/HostList/Search';
 import HostDetailsModal from '@/components/HostList/HostDetailsModal';
 import styles from '@/components/HostList/hostList.module.scss';
-import { Host, HostUser } from '@/components/HostList/hostList.types';
+import { FirebaseData, Host } from '@/components/HostList/hostList.types';
 
 export default function HostListPage() {
-  const [hostData, setHostData] = useState<HostUser[]>([]);
+  const [hostData, setHostData] = useState<Host[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedHostDetails, setSelectedHostDetails] =
-    useState<HostUser | null>(null);
-  const [filteredHosts, setFilteredHosts] = useState<HostUser[]>([]);
+  const [selectedHostDetails, setSelectedHostDetails] = useState<Host | null>(
+    null,
+  );
+  const [filteredHosts, setFilteredHosts] = useState<Host[]>([]);
   const [searchQuery, setSearchQuery] = useState<string | null>('');
   const [locationsToShow, setLocationsToShow] = useState<string[]>([]);
 
@@ -34,16 +35,18 @@ export default function HostListPage() {
         ]);
 
         // 데이터 합치기
-        const combinedData: HostUser[] = hostDataResponse.map((host: Host) => {
-          const hostUserData = userDataResponse.find(
-            user => user.id === host.id,
-          );
-          return {
-            ...host,
-            name: hostUserData ? hostUserData.name : '',
-            picture: hostUserData ? hostUserData.picture : '',
-          };
-        });
+        const combinedData: Host[] = hostDataResponse.map(
+          (host: FirebaseData) => {
+            const hostUserData = userDataResponse.find(
+              user => user.id === host.id,
+            );
+            return {
+              ...host,
+              name: hostUserData ? hostUserData.name : '',
+              picture: hostUserData ? hostUserData.picture : '',
+            };
+          },
+        );
         setHostData(combinedData);
       } catch (error) {
         console.error('데이터 불러오기 오류:', error);
@@ -147,7 +150,7 @@ export default function HostListPage() {
     }
   }, [searchQuery, handleClearSearch]);
 
-  const handleOpenModal = (host: HostUser) => {
+  const handleOpenModal = (host: Host) => {
     setSelectedHostDetails(host);
     setIsModalOpen(true);
   };

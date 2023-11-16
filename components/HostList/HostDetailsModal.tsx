@@ -8,11 +8,11 @@ import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
 import styles from '@/components/HostList/HostDetailsModal.module.scss';
-import { HostUser } from '@/components/HostList/hostList.types';
+import { Host } from '@/components/HostList/hostList.types';
 
 interface HostDetailsModalProps {
   onClose: () => void;
-  hostDetails: HostUser;
+  hostDetails: Host;
 }
 
 export default function HostDetailsModal({

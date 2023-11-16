@@ -2,10 +2,10 @@
 
 import styles from '@/components/HostList/HostListItem.module.scss';
 import Button from '@/components/HostList/Button';
-import { HostUser } from '@/components/HostList/hostList.types';
+import { Host } from '@/components/HostList/hostList.types';
 
 interface HostListItemProps {
-  host: HostUser;
+  host: Host;
   openModal: () => void;
 }
 export default function HostListItem({ host, openModal }: HostListItemProps) {
