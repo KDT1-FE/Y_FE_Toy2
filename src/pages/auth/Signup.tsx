@@ -36,6 +36,7 @@ const Signup = () => {
       const validId = await idCheck(user.id);
       console.log(validId);
       if (!validId && character) {
+        console.log(character);
         await signup(id, password, name, character);
         navigate('/');
       } else {

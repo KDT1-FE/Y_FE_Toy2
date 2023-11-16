@@ -3,8 +3,10 @@ export const signup = async (id, password, name, character) => {
     id: id,
     password: password,
     name: name,
-    character: character,
+    picture: character,
   };
+
+  console.log(data);
   try {
     const response = await fetch('https://fastcampus-chat.net/signup', {
       method: 'POST',
