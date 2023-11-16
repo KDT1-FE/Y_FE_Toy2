@@ -1,22 +1,3 @@
-/**
- * 시민을 제외한 특수 직업을 부여받을 user의 index를 결정한다.
- */
-const setRole = (usersLength: number) => {
-  const mafiaNum = Math.floor(usersLength / 3);
-  const doctorNum = 1;
-  const specialIndex: number[] = [];
+const checkMafiaIndex = () => Math.floor(Math.random() * 4);
 
-  for (let i = 0; i < mafiaNum + doctorNum; i++) {
-    const randomNumber = Math.floor(Math.random() * usersLength);
-
-    if (specialIndex.includes(randomNumber)) {
-      i--;
-    } else {
-      specialIndex.push(randomNumber);
-    }
-  }
-
-  return specialIndex;
-};
-
-export default setRole;
+export default checkMafiaIndex;

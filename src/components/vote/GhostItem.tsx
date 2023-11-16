@@ -1,8 +1,14 @@
 import styles from '@styles/components/ghostItem.module.scss';
 import { Ghost } from '@/pages/game/Vote';
 
-const GhostItem = ({ ghost, isSelected, handleIsSelected }: GhostProps) => {
+const GhostItem = ({
+  ghost,
+  isSelected,
+  handleIsSelected,
+  disabled,
+}: GhostProps) => {
   const handleClick = () => {
+    if (disabled) return;
     handleIsSelected(ghost.id);
   };
 
@@ -28,4 +34,5 @@ type GhostProps = {
   ghost: Ghost;
   isSelected: boolean;
   handleIsSelected: (id: string) => void;
+  disabled: boolean;
 };

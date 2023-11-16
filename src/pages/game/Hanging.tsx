@@ -20,7 +20,7 @@ const Hanging = () => {
         ]);
         break;
       case 'doctor':
-        setMessage(['의사', '나를 살릴걸!! 나를 살릴거얼!!']);
+        setMessage(['의로운 의사', '나를 살릴걸!! 나를 살릴거얼!!']);
         break;
       default:
     }
