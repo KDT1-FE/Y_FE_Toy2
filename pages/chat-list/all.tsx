@@ -9,7 +9,7 @@ import {
   AllChatListItem,
 } from '@/components/ChatList';
 import chatListAPI from '../../apis/chatListAPI';
-import styles from './ChatList.module.scss';
+import styles from '../../components/ChatList/ChatList.module.scss';
 
 export default function AllChatList() {
   const [allChatList, setAllChatList] = useState<Chat[]>([]);

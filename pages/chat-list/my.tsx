@@ -5,7 +5,7 @@ import MyChatListItem from '@/components/ChatList/MyChatListItem';
 import Header from '@/components/Common/Header/Header';
 import { IoIosChatbubbles } from 'react-icons/io';
 import chatListAPI from '../../apis/chatListAPI';
-import styles from './ChatList.module.scss';
+import styles from '../../components/ChatList/ChatList.module.scss';
 
 export default function MyChatList() {
   const [myHostChatList, setMyHostChatList] = useState<Chat[]>([]);
