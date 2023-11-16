@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
 import styles from '@/components/HostList/HostDetailsModal.module.scss';
 import { Host } from '@/components/HostList/hostList.types';
-import Image from 'next/image';
 
 interface HostDetailsModalProps {
   onClose: () => void;
@@ -64,12 +63,13 @@ export default function HostDetailsModal({
     <>
       <div className={styles.dim} />
       <Modal>
-        <div className={styles.ModalBox} ref={ref}>
+        <div id={styles.ModalBox} ref={ref}>
           <BsXCircle className={styles['close-icon']} onClick={onClose} />
-          <Image
-            className={styles['host-img']}
-            src={hostDetails.picture}
-            alt={hostDetails.name}
+          <div
+            className={styles['img-box']}
+            style={{
+              backgroundImage: `url(${hostDetails.picture})`,
+            }}
           />
           <div className={styles['flex-row']}>
             <h4 className={styles.title}>{hostDetails.name}</h4>
