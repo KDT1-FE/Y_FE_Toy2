@@ -96,29 +96,28 @@ const GameRoom: React.FC = () => {
 
   const fetchRoomNumber = async () => {
     try {
-      const allRoomsData = await getAllGameRooms();
-      const createAtData: Chat[] = await sortCreatedAt(allRoomsData);
-      // 방번호 넣기
-      const plusIndex = {
-        ...createAtData,
-        chats: createAtData.map((chat, index) => ({
+      if (id) {
+        const allRoomsData = await getAllGameRooms();
+        const createAtData: Chat[] = await sortCreatedAt(allRoomsData);
+        // 방번호 넣기
+        const plusIndex = createAtData.map((chat, index) => ({
           ...chat,
           index: index + 1,
-        })),
-      };
+        }));
 
-      const findIndex = async (chatId: string): Promise<number | null> => {
-        const foundChat = await plusIndex?.chats.find(
-          (chat) => chat.id === chatId,
-        );
-        if (foundChat) {
-          return foundChat.index;
-        }
-        return null;
-      };
+        console.log(plusIndex);
 
-      const roomData = await findIndex(chat);
-      setRoomNumber(roomData);
+        const findIndex = async (chatId: string): Promise<number | null> => {
+          const foundChat = await plusIndex.find((chat) => chat.id === chatId);
+          if (foundChat) {
+            return foundChat.index;
+          }
+          return null;
+        };
+
+        const roomData = await findIndex(id.substring(1));
+        setRoomNumber(roomData);
+      }
     } catch (error) {
       console.log(error);
     }
