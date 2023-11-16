@@ -25,7 +25,7 @@ const Hanging = () => {
           setUser(usersWithMaxCount[0]);
           setTimeout(() => {
             navigate(`/result?result=${usersWithMaxCount[0].role}`);
-          }, 3000);
+          }, 4000);
         } else {
           navigate(`/reset?pocketId=${pocketId}&chatId=${chatId}`);
         }
@@ -39,23 +39,27 @@ const Hanging = () => {
 
   return (
     <div className={styles.hanging}>
-      <p
-        className={
-          user.role === 'mafia'
-            ? `${styles.hanging__result} ${styles.mafia}`
-            : `${styles.hanging__result}`
-        }>
-        {user.name} 님은 <br />
-        <span>
-          {user.role === 'mafia' ? messageArray[0][0] : messageArray[1][0]}
-        </span>
-        입니다!!
-      </p>
-      <p className={styles.hanging__message}>
-        {user.role === 'mafia' ? messageArray[0][1] : messageArray[1][1]}
-      </p>
-      <div className={styles.hanging__tree}></div>
-      <div className={styles.hanging__leaves}></div>
+      {user.name && (
+        <>
+          <p
+            className={
+              user.role === 'mafia'
+                ? `${styles.hanging__result} ${styles.mafia}`
+                : `${styles.hanging__result}`
+            }>
+            {user.name} 님은 <br />
+            <span>
+              {user.role === 'mafia' ? messageArray[0][0] : messageArray[1][0]}
+            </span>
+            입니다!!
+          </p>
+          <p className={styles.hanging__message}>
+            {user.role === 'mafia' ? messageArray[0][1] : messageArray[1][1]}
+          </p>
+          <div className={styles.hanging__tree}></div>
+          <div className={styles.hanging__leaves}></div>
+        </>
+      )}
       {user.role === 'mafia' && <div className={styles.hanging__dancing}></div>}
     </div>
   );
