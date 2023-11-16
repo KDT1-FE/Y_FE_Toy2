@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io } from 'socket.io-client';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import MyChat from '@/components/chat/mychat';
-import OtherChat from '@/components/chat/otherchat';
-import EntryNotice from '@/components/chat/entryNotice';
-import ExitNotice from '@/components/chat/exitNotice';
-import ChatAlert from '@/components/chat/chatAlert';
+import MyChat from '@/components/Chat/mychat';
+import OtherChat from '@/components/Chat/otherchat';
+import EntryNotice from '@/components/Chat/entryNotice';
+import ExitNotice from '@/components/Chat/exitNotice';
+import ChatAlert from '@/components/Chat/chatAlert';
 import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
 import { showNavigationState } from '@/recoil/atoms/showNavigationState';
-import Loading from '@/components/chat/Loading';
+import Loading from '@/components/Chat/Loading';
 import { CLIENT_URL } from '../../apis/constant';
 import styles2 from '../../components/chat/Chat.module.scss';
-import ChatroomHeader from '../../components/chat/header';
+import ChatroomHeader from '../../components/Chat/header';
 import chatAPI from '../../apis/chatAPI';
 
 interface MessageArray {
@@ -217,8 +217,8 @@ export default function Chatting() {
                     <MyChat key={msg.id} msg={msg} />
                   ) : (
                     <OtherChat key={msg.id} msg={msg} prevUserId={prevUserId} />
-                );
-              })}
+                  );
+                })}
               </div>
               {showEntryNotice && <EntryNotice joiner={enterName} />}
               {showExitNotice && <ExitNotice leaver={exitName} />}

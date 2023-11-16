@@ -12,7 +12,7 @@ import { useRef, useState } from 'react';
 import { BsCameraFill, BsFillTrash3Fill } from 'react-icons/bs';
 import styles from './SignUpModal.module.scss';
 import Loading from './Loading';
-import Modal from '../common/Modal';
+import Modal from '../Common/Modal';
 
 interface RequestBody {
   id: string;

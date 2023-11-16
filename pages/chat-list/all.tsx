@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Chat } from '@/@types/types';
 import { sortChatList } from '@/utils/chatList';
 import useConnectServerSocket from '@/hooks/useConnectServerSocket';
-import Header from '@/components/common/Header/Header';
+import Header from '@/components/Common/Header/Header';
 import {
   ChatListModal,
   CreateChatButton,
@@ -47,7 +47,7 @@ export default function AllChatList() {
   }, [serverSocket]);
 
   return (
-    <div >
+    <div>
       <Header pageName="All" />
       <ul className={styles.list_container}>
         {allChatList.map(chat => (
@@ -56,8 +56,6 @@ export default function AllChatList() {
       </ul>
       <CreateChatButton setIsModal={setIsModal} />
       {isModal && <ChatListModal handleModal={handleModal} />}
-    
     </div>
-    
   );
 }

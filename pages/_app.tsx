@@ -1,6 +1,6 @@
 import { RecoilRoot, RecoilEnv } from 'recoil';
 import type { AppProps } from 'next/app';
-import Navigation from '@/components/common/Navigation/Navigation';
+import Navigation from '@/components/Common/Navigation/Navigation';
 import '@/styles/normalize.scss';
 import '@/styles/fonts.scss';
 

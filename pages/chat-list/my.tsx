@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Chat } from '@/@types/types';
 import { sortChatList, filterPrivateChat } from '@/utils/chatList';
 import MyChatListItem from '@/components/ChatList/MyChatListItem';
-import Header from '@/components/common/Header/Header';
+import Header from '@/components/Common/Header/Header';
 import { IoIosChatbubbles } from 'react-icons/io';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';

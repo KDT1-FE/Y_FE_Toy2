@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { BsXCircle } from 'react-icons/bs';
 import Button from '@/components/HostList/Button';
-import Modal from '@/components/common/Modal';
+import Modal from '@/components/Common/Modal';
 import useOnClickOutside from '@/hooks/useOnClickOustside';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';

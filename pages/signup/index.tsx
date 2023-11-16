@@ -1,5 +1,5 @@
 import instance from '@/apis/axios';
-import SignUpModal from '@/components/signup/SignUpModal';
+import SignUpModal from '@/components/Signup/SignUpModal';
 import app from '@/utils/firebaseConfig';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import Image from 'next/image';
