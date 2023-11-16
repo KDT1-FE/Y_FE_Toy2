@@ -26,6 +26,13 @@ export interface User {
   chats: string[]; // chat id만 속합니다.
   username: string;
 }
+
+export interface EnterChatRoomModalProps {
+  isOpen: boolean;
+  selectedChat: Chat | null;
+  onEnterClick: () => void;
+  onCancelClick: () => void;
+}
 // 서버에 있는 모든 채팅방 정보 조회
 export const allChatsState = atom<Chat[]>({
   key: 'allChatsState',
