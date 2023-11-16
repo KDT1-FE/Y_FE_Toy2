@@ -10,13 +10,14 @@
 
 ## :clap: 10조 Contributors
 
-<table>
+ <table align="center">
     <tr>
         <td align="center"><img alt="avatar" src="https://github.com/jseo9732.png" width="100"></td>
         <td align="center"><img alt="avatar" src="https://github.com/moana16.png" width="100"></td>
         <td align="center"><img alt="avatar" src="https://github.com/junkue20.png" width="100"></td>
         <td align="center"><img alt="avatar" src="https://github.com/Eojoonhyuk.png" width="100"></td>
         <td align="center"><img alt="avatar" src="https://github.com/developer-jyyun.png" width="100"></td>
+<td align="center"><img alt="avatar" src="https://camo.githubusercontent.com/7e27cc9db91da1be5f90f1fc376d8ee6c30702133e16a8227975a0802d613fa6/68747470733a2f2f63612e736c61636b2d656467652e636f6d2f54303537584a50345433342d55303546364546383447352d3061386338333635393838322d353132" width="100"></td>
     </tr>
     <tr>
         <td align="center"><a href="https://github.com/jseo9732">서지수</a></td>
@@ -24,8 +25,9 @@
         <td align="center"><a href="https://github.com/junkue20">박준규</a></td>
         <td align="center"><a href="https://github.com/Eojoonhyuk">어준혁</a></td>
         <td align="center"><a href="https://github.com/Eojoonhyuk">윤지영</a></td>
+        <td align="center"><a href="https://github.com/marshallku">구영표 멘토님</a></td>
     </tr>
-</table>
+ </table>
 
 ## :computer: 커밋 컨벤션
 
@@ -48,8 +50,14 @@
 │  ├─ assets - 이미지
 │  ├─ components - 공통 컴포넌트 (nav, sidebar...)
 │  ├─ pages - 페이지별 컴포넌트
-│  │  └─ MainPage
-│  │  └─ ...
+│  │  ├─ /api
+│  │  ├─ /chat
+│  │  ├─ /chat-list
+│  │  ├─ _app.tsx
+│  │  ├─ _document.tsx
+│  │  ├─ index.tsx
+│  │  ├─ login.tsx
+│  │  └─ signup.tsx
 │  ├─ recoil - 상태관리 파일 폴더
 │  │  ├─ atoms
 │  │  └─ selectors
@@ -174,32 +182,94 @@ console.log('hello, world!');
 <!-- -------------------------- 준규 자리 -------------------------- -->
 
 <details>
-<summary>박준규</summary>
+<summary>박준규</summary>.
 
-## 작업 세부내용
+## 수행 역할
 
-- ~~설정.
-- ~~시도.
+- 채팅방 UI 구성 및 컴포넌트 퍼블리싱
+- 채팅방 유저 출입 알림기능 구현
+- 실시간 채팅참여 인원 조회기능 Dropdown Menu 구현
 
-## ~~ 기능 구현
+|                                          채팅방 입장 시 알림 메세지                                           |                                          채팅방 퇴장 시 알림 메세지                                          |
+| :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
+| ![entryNotice](https://github.com/Toy2-team10/Talkhaja/assets/122848687/ddae2d89-460a-4f52-8b69-703bbbcfe0b9) | ![exitNotice](https://github.com/Toy2-team10/Talkhaja/assets/122848687/316b8380-3689-4aec-b6bf-2f434a87711c) |
 
-- ~~ 할 수 있는 기능 추가.
-
-|                                     로그인 시 publicRouter 이동 방지                                     |                                   로그아웃 시 privateRouter 이동 방지                                   |
-| :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
-| ![privateRouter](https://github.com/wowba/Wikinity/assets/87873821/972183ef-3738-425c-9506-dc4d7b1d0ed6) | ![publicRouter](https://github.com/wowba/Wikinity/assets/87873821/47618172-79df-4404-bfd2-3adaf381df6e) |
+|                                     채팅 참여 인원 발생시 Dropdown Menu                                      |                                     채팅이탈 인원 발생시 Dropdown Menu                                      |
+| :----------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
+| ![entryModal](https://github.com/Toy2-team10/Talkhaja/assets/122848687/113beff4-d438-4e87-b778-98262a6b6750) | ![exitModal](https://github.com/Toy2-team10/Talkhaja/assets/122848687/de0cc274-0ac3-4162-b0bf-90b9d00cf663) |
 
 ## 발생했었던 이슈
 
-~가 발생했는데, ~로 고쳤다!
+- 입, 퇴장 메세지 기능을 구현하는 중 다른사람이 퇴장했는데도 계속해서 똑같은 사람의 이름이 표시되는 오류가 발생했었다.
 
-```javascript
-console.log('hello, world!');
+```tsx
+socket.on('join', (messageObject: JoinersData) => {
+  console.log(messageObject, '채팅방 입장');
+  setJoiners(prevJoiners => [...prevJoiners, ...messageObject.joiners]);
+});
+
+socket.on('leave', (messageObject: LeaverData) => {
+  console.log(messageObject, '채팅방 퇴장');
+  setLeavers(prevLeavers => [...prevLeavers, messageObject.leaver]);
+});
 ```
 
-## 후기
+위와 같이 소켓을 통해 받아온 데이터였는데, 초반에 `Join`을 통해 받아오는 데이터는 `leave`의 데이터들과 달리 api에 불필요한 더미 데이터들이 같이 전송되어 필요한 부분만 추출하여 사용함에 있어서 애를 먹기도 했었지만 데이터는 성공적으로 받아 왔는데, 원인을 알고나니 스스로 기본기가 정말 많이 부족함을 느꼈다..
 
-후기후기-
+```tsx
+useEffect(() => {
+  if (enterName) {
+    setShowEntryNotice(true);
+
+    const entryTimer = setTimeout(() => {
+      setShowEntryNotice(false);
+      setEnterName(''); // 이부분..
+    }, 3000);
+    return () => clearTimeout(entryTimer);
+  }
+}, [enterName]);
+
+useEffect(() => {
+  if (exitName) {
+    setShowExitNotice(true);
+
+    const exitTimer = setTimeout(() => {
+      setShowExitNotice(false);
+      setExitName(''); // 이부분..
+    }, 3000);
+
+    return () => clearTimeout(exitTimer);
+  }
+}, [exitName]);
+```
+
+useState를 사용함에 있어서 사용이 끝난 직후 state값을 초기화 해주는 작업을 제외하고 작업을 진행하다 보니, 예상과는 다른 값들이 도출되어 문제가 발생했던 것이다. 이후 값을 초기화해주는 코드를 넣고 작업을 진행했는데, 다행히 정상동작함을 확인할 수 있었다.
+
+이 이후에도 채팅방에서 특정 유저를 조회하여 해당 유저의 사진정보와 이름 등을 받아오는데 원인모를 문제때문에 6시간이 넘도록 앉아있기도 했었는데, 결국은 `api를 요청하는 주소의 오타`때문인 것을 알고 난 뒤에는 정말이지 그렇게 허무할 수 없었다..ㅠㅠ
+
+다행히 그렇게 큰 이슈는 아니었지만,
+`console.log를 찍어서 잘 보내고 잘 받아오는지 확인하기`,
+`외부 데이터를 사용할때는 오타가 있는지 확인하기` 등 개발을 함에 있어서 항상 내가 올바르게 하고 있는지 수시로 확인 할 필요가 있음을 뼈저리게 느끼게 되었다.
+
+## 회고
+
+이번 기간동안 가급적 많은 도전과 시도를 통해서 많은 공부를 해야했던 좋은 기회였음에도 불구하고,
+그러지 못했음에 다소 아쉬움이 남았다.
+
+2주라는 짧은 기간에 Next.js나 recoil(이번 프로젝트때 한번도 사용해보진 못했지만..) socket 등의 기술들을 가지고 결과물을 만들어내는것이 쉬운 일도 아니었을 뿐더러, 특히 우리조의 API-key에 이슈가 있어 개발도중 난항을 겪기도 했었지만
+부단하게 노력하며 밤을 지새우면서까지 나를 가르쳐준 우리 조장과 팀원들 덕에 결국 프로젝트를 마무리할 수 있게 되었다.
+
+사실 이번 프로젝트 기간동안 약간의 슬럼프가 찾아오기도 했었다.
+`'지금까지 달려왔는데도 실력도 크게 늘지않고, 도통 어떻게 해야할지 잘 모르겠다'`는 생각도 자주 들었었고,
+`'이런 간단한 것 조차도 구현하는데 있어서 많은 시간이 걸리는걸 보니, 나는 사실 개발에 재능이 없을지도 모르겠다'`
+는 생각도 들고, `'미니 프로젝트를 진행하기 이전에 개발자를 포기해야하나'` 라고 혼자 고민을 하기도 했었다.
+
+하지만 구현한 기능이 아무리 적더라도 성공적으로 구현하는데 목표를 두고 도전해보라며 격려해주시던 유영매니저님과 팀원들, 그리고 스터디그룹원들의 응원 덕분에 다시금 키보드를 잡고 오랜만에 꺼져가던 열정에 다시 숨을 불어넣었고,
+목표했던 기능들의 구현을 성공적으로 마칠 수 있었다.
+
+어찌보면 항상 강의장에서 다른 수강생들과 함께 머리를 맞대며 공부를 이어나가는 수강생들과는 달리 4개월이 넘는 시간동안 어두컴컴한 방에 틀어박혀 작은 글씨들을 보고 있으니 몸과 마음이 지칠만도 하다. 게다가 새로운 기술을 배우는데 있어 남들보다 조금 더 천천히 내가 원하는대로 뜯어보며 배워가는 타입이다 보니, 빠르게 성장하는 다른 팀원들의 모습에 자존심도 상하고, 조바심이 나기도 했었다.
+
+하지만 이번 프로젝트를 말미암아 내 스스로 어떤 공부를 해야하는지, 현재 내가 어떤 상황에 놓였는지에 대해서 조금 더 진지하게 생각할 수 있었던 계기가 된 것 같다. 지금 당장은 가파른 성장을 이루지 못하더라도, 언젠간 깊은 뿌리를 내려 큰 결실을 맺을 수 있는 거목같은 개발자가 되리라고 스스로 다짐해본다.
 
 </details>
 
