@@ -124,7 +124,7 @@ const UserProfileModal = ({ clickModal, user }: UserProfileModalProps) => {
           <UserInfo>
             <UserName>{name}</UserName>
             <UserState>
-              <BiSolidCircle size="13" color={ConnectUserIdList.users.includes(id) ? '#00956e' : '#950000'} />
+              <BiSolidCircle size="13" color={connectUserIdList.users.includes(id) ? '#00956e' : '#950000'} />
               {connectUserIdList.users.includes(id) ? (
                 <UserStateTextBlack>online</UserStateTextBlack>
               ) : (
