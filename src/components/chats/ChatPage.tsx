@@ -31,7 +31,7 @@ const MyChats = ({ userType }: { userType: string }) => {
 
   const navigateToUserSelection = () => {
     router.push('userSelect');
-};
+  };
 
   // 채팅방 들어갈 때 새 유저면 채팅방에 새로 참여시키고 기존 유저는 그냥 들어가기
   const enterChatRoom = (chat: Chat) => {
@@ -51,7 +51,7 @@ const MyChats = ({ userType }: { userType: string }) => {
     if (selectedChat && selectedChat.id) {
       partChats(selectedChat.id);
       setChatModalOpen(false);
-      router.push(`/chating/${selectedChat.id}`);
+      router.push(`/chatting/${selectedChat.id}`);
       console.log('새로 입장 성공');
     } else {
       alert('입장 실패');
