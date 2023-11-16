@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Chat } from '@/@types/types';
 import { sortChatList } from '@/utils/chatList';
 import useConnectServerSocket from '@/hooks/useConnectServerSocket';
-import Header from '@/components/Header/Header';
+import Header from '@/components/common/Header/Header';
 import {
   ChatListModal,
   CreateChatButton,
