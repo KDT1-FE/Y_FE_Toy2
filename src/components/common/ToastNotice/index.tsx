@@ -99,11 +99,13 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast, socket }) => {
 
   const handleAccept = () => {
     getChat.refresh();
-    socket.emit("message-to-server", `${user.id}:${roomData.id}:!#%&(`);
-    const users = [...roomData.users, user.id];
-    fireFetch.updateData("game", roomData.id, { users: users });
-    join.refresh();
-    navigate(`/game?gameId=${roomData.id}`);
+    fireFetch.get("game", "id", roomData.id).then((res: any) => {
+      socket.emit("message-to-server", `${user.id}:${roomData.id}:!#%&(`);
+      const users = [...res[0].users, user.id];
+      fireFetch.updateData("game", roomData.id, { users: users });
+      join.refresh();
+      navigate(`/game?gameId=${roomData.id}`);
+    });
   };
 
   return (

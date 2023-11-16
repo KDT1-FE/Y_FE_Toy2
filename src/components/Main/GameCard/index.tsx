@@ -63,10 +63,13 @@ const GameCard = ({
 
   // 게임 입장 함수
   const joinGame = () => {
-    socket.emit("message-to-server", `${user.id}:${id}:!#%&(`);
-    join.refresh();
-    fireFetch.updateData("game", id, { users: [...users, user.id] });
-    navigate(`/game?gameId=${id}`);
+    fireFetch.get("game", "id", id).then((res: any) => {
+      socket.emit("message-to-server", `${user.id}:${id}:!#%&(`);
+      const users = [...res[0].users, user.id];
+      fireFetch.updateData("game", id, { users: users });
+      join.refresh();
+      navigate(`/game?gameId=${id}`);
+    });
   };
 
   return (
