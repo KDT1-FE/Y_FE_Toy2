@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io } from 'socket.io-client';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
@@ -11,8 +10,8 @@ import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 import { getStorage } from '@/utils/loginStorage';
-// import chatSocket from '@/apis/socket';
 import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import Loading from '@/components/chat/Loading';
 import { CLIENT_URL } from '../../apis/constant';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
@@ -21,6 +20,9 @@ import chatAPI from '../../apis/chatAPI';
 export default function Chatting() {
   const router = useRouter();
   const { chatId } = router.query;
+  const currentChatId: string = Array.isArray(chatId)
+    ? chatId[0]
+    : chatId || '';
 
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -48,18 +50,18 @@ export default function Chatting() {
   const accessToken = getStorage('accessToken');
 
   const socket = useMemo(() => {
-    return io(`${CLIENT_URL}?chatId=${chatId}`, {
+    return io(`${CLIENT_URL}?chatId=${currentChatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
         serverId: process.env.NEXT_PUBLIC_API_KEY!,
       },
     });
-  }, [chatId, accessToken]);
+  }, [currentChatId, accessToken]);
 
   useEffect(() => {
     const fetchChatData = async () => {
       try {
-        const response = await chatAPI.getChatInfo(chatId);
+        const response = await chatAPI.getChatInfo(currentChatId);
         const chatInfo: Chat = response.data.chat;
         await setChatData(chatInfo);
       } catch (error) {
@@ -67,10 +69,10 @@ export default function Chatting() {
       }
     };
 
-    if (chatId) {
+    if (currentChatId) {
       fetchChatData();
     }
-  }, [chatId]);
+  }, [currentChatId]);
 
   useEffect(() => {
     if (socket) {
@@ -82,12 +84,14 @@ export default function Chatting() {
       });
       socket.emit('fetch-messages');
 
-      socket.on('messages-to-client', (messageArray: Message[]) => {
+      socket.on('messages-to-client', messageArray => {
         setMessages(messageArray.messages);
       });
 
       socket.on('message-to-client', (messageObject: Message) => {
+        // setIsLoading(true);
         setMessages(prevMessages => [...prevMessages, messageObject]);
+        // setIsLoading(false);
       });
 
       socket.emit('fetch-messages');
@@ -107,7 +111,7 @@ export default function Chatting() {
         setChatData((prevChatData): Chat => {
           const updatedUsers = [...prevChatData!.users, userData];
           return {
-            ...prevChatData,
+            ...prevChatData!,
             users: updatedUsers,
           };
         });
@@ -124,7 +128,7 @@ export default function Chatting() {
             user => user.id !== userData.id,
           );
           return {
-            ...prevChatData,
+            ...prevChatData!,
             users: updatedUsers,
           };
         });
@@ -139,22 +143,20 @@ export default function Chatting() {
       socket.off('leave');
       socket.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]); // 이제 chatId와 accessToken이 변경될 때
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (enterName) {
-      setShowEntryNotice(true); // Show entry notice
+    setShowEntryNotice(true); // Show entry notice
 
-      const entryTimer = setTimeout(() => {
-        setShowEntryNotice(false); // Hide entry notice after 3 seconds
-        setEnterName('');
-      }, 3000);
-
-      return () => clearTimeout(entryTimer);
-    }
+    const entryTimer = setTimeout(() => {
+      setShowEntryNotice(false); // Hide entry notice after 3 seconds
+      setEnterName('');
+    }, 3100);
+    return () => clearTimeout(entryTimer);
   }, [enterName]);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (exitName) {
       setShowExitNotice(true); // Show exit notice
@@ -202,35 +204,43 @@ export default function Chatting() {
       {chatData && <ChatroomHeader chatData={chatData} />}
       <div className={styles2.container}>
         <div className={styles2.container}>
-          <div>
-            {messages.map(msg =>
-              msg.userId === userId ? (
-                <MyChat key={msg.id} msg={msg} />
-              ) : (
-                <OtherChat key={msg.id} msg={msg} />
-              ),
-            )}
-          </div>
-          {showEntryNotice && <EntryNotice joiner={enterName} />}
-          {showExitNotice && <ExitNotice leaver={exitName} />}
-          <div ref={messagesEndRef} />
-          {showAlert && <ChatAlert />}
+          {!chatData ? (
+            <Loading />
+          ) : (
+            <>
+              <div>
+                {messages.map(msg =>
+                  msg.userId === userId ? (
+                    <MyChat key={msg.id} msg={msg} />
+                  ) : (
+                    <OtherChat key={msg.id} msg={msg} />
+                  ),
+                )}
+              </div>
+              {showEntryNotice && <EntryNotice joiner={enterName} />}
+              {showExitNotice && <ExitNotice leaver={exitName} />}
+              <div ref={messagesEndRef} />
+              {showAlert && <ChatAlert />}
+            </>
+          )}
         </div>
       </div>
-      <form className={styles2.footer} onSubmit={handleSendMessage}>
-        <input
-          type="text"
-          placeholder="대화를 시작해보세요!"
-          className={styles2.chatInput}
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
-        <button
-          className={styles2.triangle_button}
-          type="submit"
-          aria-label="Submit"
-        />
-      </form>
+      {chatData ? (
+        <form className={styles2.footer} onSubmit={handleSendMessage}>
+          <input
+            type="text"
+            placeholder="대화를 시작해보세요!"
+            className={styles2.chatInput}
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
+          <button
+            className={styles2.triangle_button}
+            type="submit"
+            aria-label="Submit"
+          />
+        </form>
+      ) : null}
     </>
   );
 }
