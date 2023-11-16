@@ -31,7 +31,7 @@ export const useInviteData = () => {
       if (!messages) return;
       const chatName = fetchInviteChannelName(messages.responseChat.name);
       toastIdRef.current = toast({
-        description: `${chatName} 방이 내 채팅에 추가되었습니다.`,
+        description: `${chatName} 방이 추가되었습니다.`,
       });
 
       const newMyChannelList = await getMyChannels();

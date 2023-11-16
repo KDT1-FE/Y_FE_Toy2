@@ -29,6 +29,10 @@ const MyChannelItem = ({ myChannelName, isPrivate, channelId }: Props) => {
         my="2px"
         p="4px"
         borderRadius="md"
+        _hover={{
+          bg: isActive ? 'blue.400' : 'blue.100',
+          cursor: 'pointer',
+        }}
         fontWeight={isActive ? 'bold' : 'normal'}
         bg={isActive ? 'blue.400' : 'gray.50'}
         color={isActive ? 'white' : 'black'}
