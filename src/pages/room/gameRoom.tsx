@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
@@ -123,7 +123,6 @@ const GameRoom: React.FC = () => {
         console.log('누군가 정답 맞춤');
         alert('끝');
         console.log('끝');
-
       }
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
