@@ -10,7 +10,7 @@ import {
   RateBox,
   ScoreName,
   TimerBox,
-} from './boardStyle';
+} from '../../../styles/game/boardStyle';
 import Notice from './Notice';
 import StartBtn from './timer/StartBtn';
 import {
