@@ -4,9 +4,11 @@ import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
+  btnState,
   chattingIdState,
   myMessageState,
   roomIdState,
+  submitState,
   usersInRoom,
 } from '../../states/atom';
 import styled from 'styled-components';
@@ -18,9 +20,30 @@ import { gameSocket } from '../../api/socket';
 import AnswerForm from '../../components/template/AnswerForm';
 import { ResponsiveValue } from '@chakra-ui/react';
 import { getCookie } from '../../util/util';
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Box,
+  Fade,
+} from '@chakra-ui/react';
 
 const GameRoom: React.FC = () => {
   const [isQuizMaster, setIsQuizMaster] = useState(false);
+  const [showAlert, setShowAlert] = useState({
+    active: false,
+    message: '',
+  });
+
+  useEffect(() => {
+    if (showAlert.active) {
+      const timer = setTimeout(() => {
+        setShowAlert({ active: false, message: '' });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert.active]);
 
   const { id } = useParams<{ id: string }>();
   const [roomId, setRoomId] = useRecoilState(chattingIdState);
@@ -39,7 +62,10 @@ const GameRoom: React.FC = () => {
 
   const lastMessage = messages[messages.length - 1];
   const myId = getCookie('userId');
+  const check = CheckNums();
 
+  const [btnVisible, setBtnVisible] = useState(true);
+  const [submitVisible, setSubmitVisible] = useState(false);
   useEffect(() => {
     if (lastMessage.text !== '') {
       setUserMessage(lastMessage);
@@ -64,12 +90,22 @@ const GameRoom: React.FC = () => {
       if (true) {
         if (myId === quizMasterId) {
           // alert('당신은 출제자 입니다!');
-          console.log('당신은 출제자 입니다');
+          setShowAlert({
+            active: true,
+            message: '당신은 출제자 입니다!',
+          });
+
+          setSubmitVisible(true);
         } else {
-          // alert('새로운 출제자가 선정되었습니다!');
-          console.log('새로운 출제자가 선정되었습니다');
+          setShowAlert({
+            active: true,
+            message: '새로운 출제자가 선정되었습니다!',
+          });
+
+          setSubmitVisible(false);
         }
         setIsQuizMasterAlertShown(true);
+        setBtnVisible(false);
       }
     });
 
@@ -81,6 +117,7 @@ const GameRoom: React.FC = () => {
   const startGame = () => {
     gameSocket.emit('start_game', { roomId, myId });
     setIsQuizMasterAlertShown(false); // 게임이 시작될 때마다 상태를 초기화
+    setBtnVisible(false);
   };
 
   const handleSetAnswerChange = (
@@ -97,8 +134,11 @@ const GameRoom: React.FC = () => {
   useEffect(() => {
     gameSocket.on('alert_all', (message: string) => {
       if (message) {
-        // alert('문제 출제 끝');
-        console.log('문제 출제 끝');
+        setShowAlert({
+          active: true,
+          message: '문제가 출제되었습니다!',
+        });
+        setSubmitVisible(false);
       }
     });
     return () => {
@@ -115,31 +155,28 @@ const GameRoom: React.FC = () => {
     const handleCorrectAnswer = (data: { winner: string }) => {
       console.log(data.winner, myId);
       if (data.winner === myId) {
-        alert('축하합니다! 정답입니다!');
-        console.log('정답');
-        alert('끝');
-
-        console.log('끝');
-        // gameSocket.emit('end_game', { roomId: roomId });
+        setShowAlert({
+          active: true,
+          message: '축하합니다! 정답입니다! 게임이 종료되었습니다.',
+        });
       } else if (data.winner !== myId) {
-        alert('누군가 정답을 맞췄습니다!');
-        console.log('누군가 정답 맞춤');
-        alert('끝');
-        console.log('끝');
+        setShowAlert({
+          active: true,
+          message: '유저가 정답을 맞췄습니다! 게임이 종료되었습니다.',
+        });
       }
+      setBtnVisible(true);
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
-    gameSocket.emit('end_game', { roomId: roomId });
 
     return () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);
-      gameSocket.off('end_game');
     };
   }, [roomId, gameSocket, userMessage]);
 
   const roomNum = useRecoilValue(roomIdState);
   const users = useRecoilValue(usersInRoom);
-
+  // console.log('here', users, btnVisible);
   return (
     <Game>
       <RoomHeader>
@@ -153,15 +190,19 @@ const GameRoom: React.FC = () => {
         {/* <InviteGameRoom chatId={chat}></InviteGameRoom> */}
         <BtnGroup>
           <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-          <button onClick={startGame}>start game</button>
-          <div>
-            <input
-              type="text"
-              value={answer}
-              onChange={handleSetAnswerChange}
-            />
-            <button onClick={submitSetAnswer}>Submit Answer</button>
-          </div>
+          {check && btnVisible && (
+            <button onClick={startGame}>Start Game</button>
+          )}
+          {submitVisible && (
+            <div>
+              <input
+                type="text"
+                value={answer}
+                onChange={handleSetAnswerChange}
+              />
+              <button onClick={submitSetAnswer}>Submit Answer</button>
+            </div>
+          )}
           {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>
       </RoomHeader>
@@ -179,9 +220,25 @@ const GameRoom: React.FC = () => {
         <GameChatting chatId={roomId} />
       </RoomMain>
 
-      <UserList>
-        <CheckUsersInGameRoom chatId={roomId}></CheckUsersInGameRoom>
-      </UserList>
+      <CheckUsersInGameRoom chatId={roomId} />
+
+      <Fade in={showAlert.active}>
+        <Alert
+          bg={'#4FD1C5'}
+          color={'white'}
+          marginTop={5}
+          marginBottom={3}
+          status="success"
+          width={400}
+          height={70}
+          borderRadius={10}>
+          <AlertIcon color={'white'} />
+          <Box>
+            <AlertTitle mr={2}>GameRoom</AlertTitle>
+            <AlertDescription>{showAlert.message}</AlertDescription>
+          </Box>
+        </Alert>
+      </Fade>
     </Game>
   );
 };

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, AxiosResponse } from 'react';
 import { useRecoilState } from 'recoil';
-import { onlineUserStateInGameRoom } from '../../states/atom';
+import { nowProfiles, onlineUserStateInGameRoom } from '../../states/atom';
 import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../../constant';
 import { getCookie } from '../../util/util';
 import styled from 'styled-components';
-import { getUserData } from '../../api';
+import { getOnlyGameRoom, getUserData } from '../../api';
+import { OnlyResponse } from '../../interfaces/interface';
 
 interface ChattingDetailProps {
   chatId: string;
@@ -25,6 +26,64 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     onlineUserStateInGameRoom,
   );
   const [profiles, setProfiles] = useState<ResponseValue[]>([]);
+  const [now, setNow] = useRecoilState(nowProfiles);
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    const setUsers = async () => {
+      try {
+        const response: AxiosResponse<OnlyResponse> | null =
+          await getOnlyGameRoom(id?.substring(1));
+        console.log('첫 응답', response.data);
+
+        if (response && response.data) {
+          const foundChats = response.data;
+          const chatData: any = foundChats.chat;
+
+          const users: User[] | null = chatData.users;
+          const profilesArray: ResponseValue[] = [];
+          if (users) {
+            for (const user of users) {
+              const res = await getUserData(user.id);
+              profilesArray.push(res);
+            }
+            setProfiles(profilesArray);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setUsers();
+  }, []);
+
+  useEffect(() => {
+    const setUsers = async () => {
+      try {
+        const response: AxiosResponse<OnlyResponse> | null =
+          await getOnlyGameRoom(chatId);
+        console.log('첫 응답', response.data);
+
+        if (response && response.data) {
+          const foundChats = response.data;
+          const chatData: any = foundChats.chat;
+
+          const users: User[] | null = chatData.users;
+          const profilesArray: ResponseValue[] = [];
+          if (users) {
+            for (const user of users) {
+              const res = await getUserData(user.id);
+              profilesArray.push(res);
+            }
+            setProfiles(profilesArray);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setUsers();
+  }, []);
 
   useEffect(() => {
     try {
@@ -36,20 +95,22 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       });
 
       socket.on('connect', () => {
+        console.log('에밋');
         socket?.emit('users');
       });
 
       socket.on('users-to-client', (data) => {
+        console.log('불러오기 발동');
         setUsersInGameRoom(data.users);
       });
 
       socket.on('leave', (data) => {
-        console.log(data);
+        console.log('나가기 발동');
         setUsersInGameRoom(data.users);
       });
 
       socket.on('join', (data) => {
-        console.log(data);
+        console.log('조인 발동');
         setUsersInGameRoom(data.users);
       });
 
@@ -77,8 +138,9 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
     };
 
     fetchUserProfiles();
-  }, [UsersInGameRoom, setProfiles]);
+  }, [UsersInGameRoom]);
   console.log(profiles);
+  setNow(profiles.length);
 
   const MAX_USERS = 4;
 
@@ -182,3 +244,35 @@ const TextBox = styled.div`
 `;
 
 export default CheckUsersInGameRoom;
+
+// useEffect(() => {
+//   const fetchFirstUserProfiles = async () => {
+//     try {
+//       const res = await getOnlyGameRoom(chatId);
+//       UsersInGameRoom.push(res.data.chat.users);
+//       // const users: User[] = console.log(users[0]);
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   };
+//   fetchFirstUserProfiles();
+// }, []);
+
+// useEffect(() => {
+//   const fetchUserProfiles = async () => {
+//     const profilesArray = []; // 타입을 명시하지 않고 배열 초기화
+
+//     for (const userId of UsersInGameRoom) {
+//       try {
+//         const res = await getUserData(userId);
+//         profilesArray.push(res); // 결과를 배열에 저장
+//       } catch (error) {
+//         console.error('Error fetching user data:', error);
+//       }
+//     }
+
+//     setProfiles(profilesArray); // 배열을 상태로 설정
+//   };
+
+//   fetchUserProfiles();
+// }, [UsersInGameRoom]);
