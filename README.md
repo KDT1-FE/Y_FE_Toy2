@@ -1179,8 +1179,7 @@ CHWIMIMATE
 ├── tsconfig.json
 ├── tsconfig.node.json
 ├── vercel.json
-├── vite.config.ts
-└── ...
+└── vite.config.ts
 ```
 
 <br/>
