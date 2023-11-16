@@ -9,10 +9,12 @@
     <img src="https://img.shields.io/badge/배포 repository-212125?style=for-the-badge&logoColor=white" alt="배포 레포"/>
   </a>
   <br/>
-  <span>Test ID : cat</span>
-  <br/>
-  <span>Test PW : 0000</span>
 </p>
+
+```
+Test ID : cat
+Test PW : 00000
+```
 
 ## 🧑🏻‍💻 프로젝트 소개
 
@@ -1170,11 +1172,11 @@ interface ResponseData {
 
 ## 🧑🏻‍💻 Contributor
 
-> @[TaePoong719](https://github.com/TaePoong719) (최우혁) :  
-> @[LikeFireAndSky](https://github.com/LikeFireAndSky) (김민섭) :  
-> @[hhjs2](https://github.com/hhjs2) (정효주) :  
-> @[JitHoon](https://github.com/JitHoon) (최지훈) : 검색, 채팅 기능 구현  
-> @[syb0127](https://github.com/syb0127) (서예빈) :
+> @[TaePoong719](https://github.com/TaePoong719) (최우혁) : 유저 목록, 참여한 채팅 및 유저 검색  
+> @[LikeFireAndSky](https://github.com/LikeFireAndSky) (김민섭) : 채팅 목록 구현, 클라우디너리 연동, 퍼블리싱  
+> @[hhjs2](https://github.com/hhjs2) (정효주) : 로그인, 회원가입, 채팅 기능 구현  
+> @[JitHoon](https://github.com/JitHoon) (최지훈) : 채팅 검색, 채팅 기능 구현  
+> @[syb0127](https://github.com/syb0127) (서예빈) : 로그아웃, 푸터 구현 및 디자인 작업
 
 <br/>
 
@@ -1232,10 +1234,15 @@ $ npm run dev
 
 ### Userflow
 
-![유저플로우1]()
-![유저플로우2]()
-![유저플로우3]()
-![유저플로우4]()
+|||
+|---|---|
+| ![유저플로우1](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/a6f2ca7b-877c-470a-93d1-e4ece03f7ffc) | ![유저플로우2](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/70658e8f-6f97-4bb6-8554-1b995ee01add) |
+| ![유저플로우3](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/f39218d5-2a8d-4d2d-a5ce-d53cbca550ae) | ![유저플로우4](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/ae4266f7-f450-4c73-aca1-14edbc413a9e) |
+| ![유저플로우5](https://github.com/MOVIEJOJO7/cat-talk/assets/98576512/15fc4e7b-458f-435e-8752-696943c17420) |
+
+### 디자인 프로토타입
+
+<img width="1146" alt="image" src="https://github.com/MOVIEJOJO7/cat-talk/assets/102405617/41a2d804-95ea-4d5e-9ac5-0ad051ab0739">
 
 <br/>
 
@@ -1273,32 +1280,32 @@ $ npm run dev
   <tr>
     <td align="center" width="150px">
       <a href="https://github.com/TaePoong719" target="_blank">
-        <img src="" alt="최우혁 프로필" />
+        <img src=" https://avatars.githubusercontent.com/u/98576512?v=4" alt="최우혁 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/LikeFireAndSky" target="_blank">
-        <img src="" alt="김민섭 프로필" />
+        <img src="https://avatars.githubusercontent.com/u/107862297?v=4" alt="김민섭 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/hhjs2" target="_blank">
-        <img src="" alt="정효주 프로필" />
+        <img src="https://github.com/MOVIEJOJO7/cat-talk/assets/102405617/4c79f630-d84a-4a33-a7a9-ccf2df68305a" alt="정효주 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/JitHoon" target="_blank">
-        <img src="" alt="최지훈 프로필" />
+        <img src="https://avatars.githubusercontent.com/u/101972330?v=4" alt="최지훈 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/syb0127" target="_blank">
-        <img src="" alt="서예빈 프로필" />
+        <img src="https://github.com/MOVIEJOJO7/cat-talk/assets/57075876/b094f8b2-322f-47f5-989e-2f4bf6e76b15" alt="서예빈 프로필" />
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/minsoo-web" target="_blank">
-        <img src="" alt="김민수 멘토님" />
+        <img src="https://avatars.githubusercontent.com/u/57122180?v=4" alt="김민수 멘토님" />
       </a>
     </td>
   </tr>
