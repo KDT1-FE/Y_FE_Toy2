@@ -1,25 +1,23 @@
 import { useRef } from 'react';
 import { BsXCircle } from 'react-icons/bs';
 import Button from '@/components/HostList/Button';
+import Modal from '@/components/common/Modal';
 import useOnClickOutside from '@/hooks/useOnClickOustside';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
 import styles from '@/components/HostList/HostDetailsModal.module.scss';
-import { Host, UserList } from '@/components/HostList/hostList.types';
+import { Host } from '@/components/HostList/hostList.types';
 import Image from 'next/image';
-import Modal from '../common/Modal';
 
 interface HostDetailsModalProps {
   onClose: () => void;
   hostDetails: Host;
-  userData: UserList[];
 }
 
 export default function HostDetailsModal({
   onClose,
   hostDetails,
-  userData,
 }: HostDetailsModalProps) {
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => {
@@ -70,25 +68,19 @@ export default function HostDetailsModal({
       <Modal>
         <div className={styles.ModalBox} ref={ref}>
           <BsXCircle className={styles['close-icon']} onClick={onClose} />
-          {findUser && (
-            <>
-              <Image
-                className={styles['host-img']}
-                src={findUser.picture}
-                alt={findUser.name}
-                width={360}
-                height={360}
-              />
-              <div className={styles['flex-row']}>
-                <h4 className={styles.title}>{findUser.name}</h4>
-                <Button
-                  className="fill-btn"
-                  text="문의하기"
-                  onClick={createHostChat}
-                />
-              </div>
-            </>
-          )}
+          <Image
+            className={styles['host-img']}
+            src={hostDetails.picture}
+            alt={hostDetails.name}
+          />
+          <div className={styles['flex-row']}>
+            <h4 className={styles.title}>{hostDetails.name}</h4>
+            <Button
+              className="fill-btn"
+              text="문의하기"
+              onClick={createHostChat}
+            />
+          </div>
           <p className={styles.text}>
             <b>주소 :</b> {hostDetails.location} {hostDetails.address}
           </p>
