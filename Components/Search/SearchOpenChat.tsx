@@ -25,29 +25,22 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 
 	return (
 		<>
-			<div className="relative flex items-center pt-3">
-				<Link href={'/open'}>
-					<Image
-						width={25}
-						height={25}
-						src="/icon_back.svg"
-						alt="뒤로 가기"
-						className="mr-3"
-					/>
-				</Link>
+			<div className="relative flex items-center pt-3 mb-5 px-3">
 				<Input
 					onChange={getUserInput}
 					onKeyPress={handleKeyPress}
-					label="검색 Input"
+					label="원하는 오픈 채팅방을 검색하세요"
 					crossOrigin={undefined}
 					value={userInput}
+					color="pink"
+					className="px-3 text-primary"
 				/>
 				<Image
 					width={20}
 					height={20}
 					src="/icon_cancel.svg"
 					alt="검색 취소하기"
-					className="absolute right-2"
+					className="absolute right-5"
 					onClick={() => {
 						setUserInput('');
 						setSearchedChats(allOpenChat);
@@ -55,9 +48,7 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 				/>
 			</div>
 			{searchedChats.length ? (
-				<>
-					<strong className="mt-5">오픈 채팅방</strong>
-
+				<div className="w-full px-3 h-fit mb-14 overflow-y-scroll">
 					{searchedChats.map((chat) => (
 						<Link
 							href={{
@@ -66,12 +57,12 @@ const SearchOpenChat = ({ allOpenChat }: { allOpenChat: Chat[] }) => {
 							}}
 							key={chat.id}
 						>
-							<li className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer">
+							<div className="w-full flex justify-between hover:bg-gray-300 rounded-t-md py-3 border-b-[0.5px] border-bgfill border-opacity-20 cursor-pointer">
 								<ShowAllOpenChat key={chat.id} chat={chat} />
-							</li>
+							</div>
 						</Link>
 					))}
-				</>
+				</div>
 			) : (
 				<h1 className="m-auto">검색 결과가 없습니다.</h1>
 			)}

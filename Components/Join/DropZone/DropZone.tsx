@@ -74,7 +74,7 @@ const DropZone = ({ setFn, baseImageUrl }: DropZoneProps) => {
 						className="w-full h-full"
 					/>
 				) : (
-					<div className="w-full h-full flex flex-col justify-center items-center bg-white "></div>
+					<div className="w-full h-full flex flex-col justify-center items-center bg-bglight "></div>
 				)}
 			</div>
 			<Image

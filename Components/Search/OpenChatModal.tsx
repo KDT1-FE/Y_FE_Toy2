@@ -2,12 +2,13 @@
 
 import { Chat } from '@/types';
 import { getCookie } from '@/Components/Login/Cookie';
-import OpenChatText from './OpenChatText';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Typography } from '@material-tailwind/react';
+import icon_left from '@/public/icon_arrow_left.svg';
+import { timeForToday } from '@/app/search/search.utils';
 
 const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
-	const TEXT_SIZE = 'text-2xl';
 	const router = useRouter();
 	const accessToken = getCookie('accessToken');
 
@@ -26,8 +27,10 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 		router.push(`/chat/${modalChat.id}?isPrivate=false`);
 	};
 
+	const fewMinutesAgo = timeForToday(modalChat.updatedAt);
+
 	return (
-		<section className="relative w-full h-full bg-black overflow-hidden">
+		<section className="relative w-full h-full overflow-hidden">
 			<Image
 				src={modalChat.users[0]?.picture}
 				alt="user picture"
@@ -36,30 +39,30 @@ const OpenChatModal = ({ modalChat }: { modalChat: Chat }) => {
 				priority={true}
 				style={{ opacity: 0.5 }}
 			/>
-
 			<button
-				className="absolute right-5 top-5 text-white text-lg"
+				type="button"
+				className="absolute left-5 top-5 text-white text-lg"
 				onClick={() => router.back()}
 			>
-				<Image
-					src="/icon_cancel_normal.svg"
-					width={20}
-					height={20}
-					alt="취소 버튼"
-				/>
+				<Image src={icon_left} width={20} height={20} alt="취소 버튼" />
+				{''}
 			</button>
-
-			<div className="h-1/6 bg-black"></div>
-			<div className="absolute flex flex-col justify-end w-full h-2/5 bottom-0 left-0">
-				<div className="h-4/6 ml-5 text-white">
-					<OpenChatText openChat={modalChat} textSize={TEXT_SIZE} />
+			<div className="absolute flex flex-col justify-center items-center w-full h-1/5 bottom-24 left-0 ">
+				<div className="w-4/5">
+					<Typography variant="h5">{modalChat.name}</Typography>
+					<div className="flex flex-row gap-4 text-bgfill">
+						<p>{modalChat.users.length}명 참여중</p>
+						<p>{fewMinutesAgo.toString()}</p>
+					</div>
 				</div>
-				<button className="h-1/6 bg-yellow-500 font-medium" onClick={joinChat}>
-					오픈 채팅방 참여하기
-				</button>
-
-				<div className="h-1/6 bg-black"></div>
 			</div>
+			<button
+				type="button"
+				className="w-full h-24 rounded-none bg-text text-2xl text-white opacity-100 hover:bg-opacity-75 transition duration-500 ease-linear font-thin absolute bottom-0"
+				onClick={joinChat}
+			>
+				오픈 채팅방 참여하기
+			</button>
 		</section>
 	);
 };

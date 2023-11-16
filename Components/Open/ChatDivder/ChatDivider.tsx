@@ -43,41 +43,36 @@ const ChatDivder = ({ myChatList }: ChatListProps) => {
 	const { PersonalChat, MultiChat } = filterChat(chatList.chats);
 	return (
 		<>
-			<Tabs
-				value="personal"
-				className="overflow-y-scroll flex flex-col items-center w-full"
-			>
-				<div className="w-[95%] shadow-md">
-					<TabsHeader className=" w-72 bg-white">
-						{data.map((item) => (
-							<Tab
-								key={item.value}
-								value={item.value}
-								activeClassName="text-blue-500"
-							>
-								<div className="w-full flex items-center gap-2">
-									<Image
-										src={item.svg}
-										alt="candice"
-										width={10}
-										height={10}
-										className="rounded-full w-4 h-4 object-contain"
-									/>
-									<p>{item.label}</p>
-								</div>
-							</Tab>
-						))}
-					</TabsHeader>
-				</div>
+			<Tabs value="personal" className="h-full px-3">
+				<TabsHeader>
+					{data.map((item) => (
+						<Tab
+							key={item.value}
+							value={item.value}
+							activeClassName="text-blue-500"
+						>
+							<div className="w-full flex items-center gap-2">
+								<Image
+									src={item.svg}
+									alt="candice"
+									width={10}
+									height={10}
+									className="rounded-full w-4 h-4 object-contain"
+								/>
+								<p>{item.label}</p>
+							</div>
+						</Tab>
+					))}
+				</TabsHeader>
 				<TabsBody className="h-full">
-					<TabPanel value="personal" className="min-h-[calc(80vh)]">
+					<TabPanel value="personal" className="h-full overflow-y-scroll">
 						{PersonalChat.length ? (
 							<ChatList myChatList={PersonalChat} accessToken={accessToken} />
 						) : (
 							<h1 className="mx-auto my-2">개인 채팅방이 없습니다.</h1>
 						)}
 					</TabPanel>
-					<TabPanel value="multi" className="min-h-[calc(80vh)]">
+					<TabPanel value="multi" className="h-full overflow-y-scroll">
 						{MultiChat.length ? (
 							<ChatList myChatList={MultiChat} accessToken={accessToken} />
 						) : (

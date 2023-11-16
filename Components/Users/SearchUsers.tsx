@@ -37,8 +37,8 @@ const SearchOpenChat = ({
 	};
 
 	return (
-		<>
-			<div className="relative flex items-center pt-3">
+		<div className="h-[calc(100vh-56px)]">
+			<div className="relative h-16 flex w-full px-3 items-center bg-bglight">
 				<Image
 					width={25}
 					height={25}
@@ -56,7 +56,8 @@ const SearchOpenChat = ({
 				<Input
 					onChange={getUserInput}
 					onKeyPress={handleKeyPress}
-					label="검색 Input"
+					label="검색"
+					color="pink"
 					crossOrigin={undefined}
 					value={userInput}
 				/>
@@ -65,7 +66,7 @@ const SearchOpenChat = ({
 					height={20}
 					src="/icon_cancel.svg"
 					alt="검색 취소하기"
-					className="absolute right-2"
+					className="absolute right-6 rounded-2xl"
 					onClick={() => {
 						setUserInput('');
 						setSearchedChats(myChats);
@@ -73,54 +74,63 @@ const SearchOpenChat = ({
 					}}
 				/>
 			</div>
+			<div className="px-3 mt-5 flex flex-col h-full">
+				{isShowMore && (
+					<>
+						<strong className="mt-5">내 친구 찾기</strong>
+						<FriendProfiles allUsers={searchedUsers} />
+					</>
+				)}
+				{!isShowMore && (
+					<>
+						<strong className="mt-5">내 친구 찾기</strong>
+						{searchedUsers.length ? (
+							<ShowSearchedFriend
+								setIsShowMore={setIsShowMore}
+								searchedUsers={searchedUsers as User[]}
+							/>
+						) : (
+							<h1 className="mx-auto my-2">검색된 내 친구가 없습니다.</h1>
+						)}
 
-			{isShowMore && (
-				<>
-					<strong className="mt-5">내 친구 찾기</strong>
-					<FriendProfiles allUsers={searchedUsers} />
-				</>
-			)}
-			{!isShowMore && (
-				<>
-					<strong className="mt-5">내 친구 찾기</strong>
-					{searchedUsers.length ? (
-						<ShowSearchedFriend
-							setIsShowMore={setIsShowMore}
-							searchedUsers={searchedUsers as User[]}
-						/>
-					) : (
-						<h1 className="mx-auto my-2">검색된 내 친구가 없습니다.</h1>
-					)}
-
-					<strong className="mt-5">내 채팅방 찾기</strong>
-					{searchedChats.length ? (
-						<>
-							{searchedChats.map((chat) => (
-								<Link
-									href={{
-										pathname: `/chat/${chat.id}`,
-										query: { isPrivate: true },
-									}}
-									key={chat.id}
-								>
-									<li className="w-full flex justify-between py-3 border-b-2 border-black cursor-pointer">
-										<ShowAllOpenChat key={chat.id} chat={chat} />
-									</li>
-								</Link>
-							))}
-						</>
-					) : (
-						<>
-							<h1 className="mx-auto my-2">검색된 내 채팅이 없습니다. </h1>
-							<Link href="/search" className="mx-auto underline">
-								오픈채팅방 보러가기
-							</Link>
-						</>
-					)}
-				</>
-			)}
+						<strong className="mt-5">내 채팅방 찾기</strong>
+						<div className="h-[calc(100%-270px)] overflow-y-scroll">
+							{searchedChats.length ? (
+								<>
+									{searchedChats.map((chat) => (
+										<Link
+											href={{
+												pathname: `/chat/${chat.id}`,
+												query: { isPrivate: true },
+											}}
+											key={chat.id}
+										>
+											<div className="w-full flex justify-between py-3 border-b-[0.5px] border-opacity-20 cursor-pointer">
+												<ShowAllOpenChat key={chat.id} chat={chat} />
+											</div>
+										</Link>
+									))}
+								</>
+							) : (
+								<div className="w-full flex flex-col items-center gap-3 mt-4">
+									<h1 className="mx-auto w-full text-center">
+										검색된 내 채팅이 없습니다.{' '}
+									</h1>
+									<Link
+										href="/search"
+										passHref
+										className="mx-auto bg-secondary p-3 rounded-md text-white shadow-lg hover:bg-primary transition duration-200 ease-linear"
+									>
+										오픈채팅방 보러가기
+									</Link>
+								</div>
+							)}
+						</div>
+					</>
+				)}
+			</div>
 			<Footer />
-		</>
+		</div>
 	);
 };
 

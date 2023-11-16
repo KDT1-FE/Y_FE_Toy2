@@ -43,20 +43,20 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 							<div className="flex flex-row">
 								<Typography
 									variant="h6"
-									className="whitespace-normal text-chat mr-2"
+									className="whitespace-normal text-xs text-chat mr-2"
 								>
 									{chat.name}
 								</Typography>
 								<Typography
 									color="gray"
-									className=" flex gap-1 items-center text-xs font-thin"
+									className=" flex gap-1 items-center text-[8px] font-thin"
 								>
 									<Image
 										src={icon_people}
 										alt="candice"
 										width={10}
 										height={10}
-										className="rounded-full w-4 h-4 object-contain"
+										className="rounded-full w-3 h-3 object-contain"
 									/>
 									{`${chat.users.length}명 참여`}
 								</Typography>
@@ -64,12 +64,12 @@ const ChatItem = ({ chat }: ChatItemProps) => {
 							<Typography
 								variant="small"
 								color="gray"
-								className="font-normal truncate"
+								className="font-normal truncate text-xs"
 							>
 								{`${koreanTime(chat.updatedAt)}`}
 							</Typography>
 						</div>
-						<Typography variant="h6" className="font-normal text-chat">
+						<Typography variant="h6" className="font-normal text-xs text-chat">
 							{chat.latestMessage
 								? chat.latestMessage.text
 								: '아직 채팅이 없습니다.'}
