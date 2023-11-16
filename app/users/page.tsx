@@ -15,7 +15,7 @@ const Users = async () => {
 	const allUsersExceptMe = allUsers.filter((user) => user.id !== myUser.id);
 
 	return (
-		<section className="w-full h-full bg-white">
+		<section className="w-full h-full bg-white overflow-y-scroll">
 			<Header />
 			<div className="px-4">
 				<MyProfile user={myUser} />
