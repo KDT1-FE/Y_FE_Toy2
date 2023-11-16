@@ -74,28 +74,25 @@ function MainContents() {
               <br /> 관심사를 가진 멤버들
             </span>
             <Gallery>
-              {
-                profile && profile.slice(0, 6).map((item) => (
+              {profile &&
+                profile.slice(0, 6).map((item) => (
                   <GalleryItem to={`/profiles/${item.id}`}>
-                  <Photo>
-                    <div className="photo-inner">
-                      <img src={item.profileImgUrl} alt="프로필" />
-                    </div>
-                  </Photo>
-                  <UserInfo>
-                    <div className="userName">{item.name}</div>
-                    <div className="userInfo">
-                      {item.introText}
-                    </div>
-                    <div className="hobby">
-                    {item.hobby.slice(0, 5).map((h, index) => (
-                      <div key={index}>{h}</div>
-                    ))}
-                    </div>
-                  </UserInfo>
-                </GalleryItem>
-                ))
-              }
+                    <Photo>
+                      <div className="photo-inner">
+                        <img src={item.profileImgUrl} alt="프로필" />
+                      </div>
+                    </Photo>
+                    <UserInfo>
+                      <div className="userName">{item.name}</div>
+                      <div className="userInfo">{item.introText}</div>
+                      <div className="hobby">
+                        {item.hobby.slice(0, 5).map((h, index) => (
+                          <div key={index}>{h}</div>
+                        ))}
+                      </div>
+                    </UserInfo>
+                  </GalleryItem>
+                ))}
             </Gallery>
             <MoreInfoBtn to={"/profiles"}>
               더보기 <img src={ArrowChevron} alt="화살표" />
@@ -176,7 +173,7 @@ const GalleryItem = styled(Link)`
   gap: 1em;
   margin: 0 5px;
   margin-bottom: 10px;
-  text-decoration:none;
+  text-decoration: none;
   color: #373535;
 `;
 const Photo = styled.div`

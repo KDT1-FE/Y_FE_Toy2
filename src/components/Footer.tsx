@@ -120,7 +120,7 @@ const RightWrapper = styled.div`
   }
   a {
     text-decoration: none;
-    color: ${({ theme }) => (theme === darkTheme ? "white" : "#373636")};
+    color: black;
     &:hover {
       text-decoration: underline;
       color: #f43530;
