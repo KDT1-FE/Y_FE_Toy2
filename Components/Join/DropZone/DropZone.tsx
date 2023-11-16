@@ -45,16 +45,12 @@ const DropZone = ({ setFn, baseImageUrl }: DropZoneProps) => {
 		[setFn],
 	);
 
-	const { getRootProps, getInputProps, isDragAccept } = useDropzone({
+	const { getRootProps, getInputProps } = useDropzone({
 		accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.svg'] },
 		maxFiles: 1,
 		maxSize: 1024 * 1024,
 		onDrop,
 	});
-
-	if (isDragAccept) {
-		console.log('isDragAccept');
-	}
 
 	return (
 		<div className="relative w-fit h-fit">

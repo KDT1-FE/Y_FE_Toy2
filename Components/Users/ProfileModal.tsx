@@ -137,7 +137,6 @@ const ProfileModal = ({
 				setUserInput({ ...userInput, picture: base64DataUrl });
 			};
 			if (invalidImageType.includes(file.type.split('/')[1])) {
-				console.log(file.type.split('/')[1]);
 				reader.readAsDataURL(file);
 			} else {
 				Swal.fire({
