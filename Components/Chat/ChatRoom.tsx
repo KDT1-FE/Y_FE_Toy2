@@ -8,6 +8,7 @@ import ChatHeader from '@/Components/Chat/ChatHeader';
 import RenderChats from '@/Components/Chat/RenderChats';
 import Image from 'next/image';
 import Swal from 'sweetalert2';
+import { getCookie } from '../Login/Cookie';
 
 const ChatRoom = ({
 	socket,
@@ -24,6 +25,7 @@ const ChatRoom = ({
 	const [newMessage, setNewMessage] = useState('');
 	const [chatUsers, setChatUsers] = useState<User[]>([]);
 	const [chatName, setChatName] = useState('');
+	const userId = getCookie('userId');
 
 	// 채팅 참여 유저 블러오기
 	useEffect(() => {
@@ -85,7 +87,10 @@ const ChatRoom = ({
 		if (socket?.connected) {
 			socket.on('join', (responseData) => {
 				setChatUsers([...chatUsers, ...responseData.users]);
-				Swal.fire(`${responseData.users[0]} 님이 입장하셨습니다.`);
+
+				if (responseData.users[0] !== userId) {
+					Swal.fire(`${responseData.leaver} 님이 퇴장하셨습니다.`);
+				}
 			});
 		}
 
@@ -100,7 +105,10 @@ const ChatRoom = ({
 		if (socket?.connected) {
 			socket.on('leave', (responseData) => {
 				setChatUsers([...chatUsers, ...responseData.users]);
-				Swal.fire(`${responseData.leaver} 님이 퇴장하셨습니다.`);
+
+				if (responseData.leaver !== userId) {
+					Swal.fire(`${responseData.leaver} 님이 퇴장하셨습니다.`);
+				}
 			});
 		}
 
