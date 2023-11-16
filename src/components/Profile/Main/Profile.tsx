@@ -24,7 +24,7 @@ const ProfileContainer = styled.div`
 `;
 const ProfileHeaderImg = styled.div`
   width: 100%;
-  height: 492px;
+  height: 350px;
 
   position: relative;
 
@@ -39,8 +39,6 @@ const ProfileBodyContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  padding-top: 50px;
   padding-bottom: 190px;
 `;
 const ModalStyle: ReactModal.Styles = {

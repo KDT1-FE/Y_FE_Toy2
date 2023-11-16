@@ -68,7 +68,7 @@ function MainContents() {
             <Gallery>
               {
                 profile && profile.slice(0, 6).map((item) => (
-                  <GalleryItem>
+                  <GalleryItem to={`/profiles/${item.id}`}>
                   <Photo>
                     <div className="photo-inner">
                       <img src={item.profileImgUrl} alt="프로필" />
@@ -157,7 +157,7 @@ const Gallery = styled.div`
   margin-right: -5px;
   margin-top:2em;
 `;
-const GalleryItem = styled.div`
+const GalleryItem = styled(Link)`
   background-color: white;
   padding: 1em;
   border-radius: 2em;
@@ -166,6 +166,8 @@ const GalleryItem = styled.div`
   gap:1em;
   margin: 0 5px;
   margin-bottom: 10px;
+  text-decoration:none;
+  color: #373535;
 `;
 const Photo = styled.div`
   flex: 1 0 30%;

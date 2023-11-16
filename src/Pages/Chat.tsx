@@ -179,7 +179,6 @@ export default Chat;
 
 const ChatWrapper = styled.div`
   display: flex;
-  border-top: 1px solid #e8e8e8;
   border-left: 1px solid #e8e8e8;
   height: 100%;
   max-width: 850px;
@@ -190,6 +189,8 @@ const ChatWrapper = styled.div`
 const ChatInner = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1 0 30%;
+  max-width: 30%;
 `
 
 const ChatCategory = styled.ul`

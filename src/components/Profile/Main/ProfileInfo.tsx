@@ -6,9 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ProfileInfoWrap = styled.div`
   width: 1200px;
 
-  padding: 90px 75px 36px 150px;
-
-  margin-bottom: 96px;
+  padding: 50px 75px 40px 150px;
 `;
 const ProfileInfoImgWrap = styled.div`
   position: relative;
@@ -62,7 +60,7 @@ const ProfileInfoUserTagsWrap = styled.div`
   }
 `;
 const Tag = styled.span`
-  padding: 3px 9px;
+  padding: 5px 12px;
 
   text-align: center;
 

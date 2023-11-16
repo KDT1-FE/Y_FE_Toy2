@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const ProfileFeedContainer = styled.div`
   width: 1200px;
-  border-top: 2px solid #e1e1e1;
+  border-top: 1px solid #e1e1e1;
   padding-top: 46px;
 `;
 const ProfileFeedImageWrap = styled.div`

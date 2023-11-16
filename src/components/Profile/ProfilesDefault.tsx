@@ -5,15 +5,18 @@ import { db } from "../../firebase/firebase";
 import { Link } from "react-router-dom";
 
 const BodyContainer = styled.div`
-padding: 150px 128px;
-
+  max-width:1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 100px;
 `;
 
 const ProfileContainer = styled.div`
   width: 100%;
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 70px;
+  gap: 30px;
   * {
   text-decoration: none;
   color: inherit;
@@ -22,6 +25,7 @@ const ProfileContainer = styled.div`
 `;
 
 const UserContainer = styled.div<UserContainerProps>`
+  position: relative;
   width: 555px;
   height: 465px;
   padding-bottom: 56px;
@@ -39,7 +43,10 @@ const UserContainer = styled.div<UserContainerProps>`
   }
 
   .profileImgWrap {
-    position: relative;
+    position: absolute;
+    width: 100%;
+    left: 20px;
+    z-index: 20;
 
     .img {
       position: absolute;
@@ -59,21 +66,22 @@ const UserContainer = styled.div<UserContainerProps>`
       left: 120px;
       font-size: 20px;
       font-weight: 700;
-      color: black;
+      color: #383535;
     }
   }
 
   .contentWrap {
     height: 70%;
     padding-top: 72px;
-    padding-left: 24px;
+    padding-left: 20px;
+    padding-right: 20px;
     border-radius: 0px 0px 24px 24px;
     background-color: white;
 
     .introText {
       height: 90px;
       font-size: 18px;
-      font-weight: 700;
+      font-weight: 500;
       color: #999696;
       margin-bottom: 40px;
     }

@@ -93,7 +93,8 @@ const HamButton = styled.button`
 
 const ButtonWrap = styled.div`
   position: absolute;
-  background-color: red;
+  top: 40px;
+  left: -70px;
   display: flex;
   flex-direction: column;
   border-top: 1px solid #e4e4e4;

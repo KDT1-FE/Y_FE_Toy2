@@ -278,7 +278,7 @@ const ChatRoomWrap = styled.div`
       padding-bottom: 0;
       font-size: 0.9rem;
       overflow-y: scroll;
-      height: 400px;
+      height: 468px;
       .date {
         display: flex;
         align-items: center;
