@@ -264,4 +264,4 @@ https://github.com/pepero-1/liar-game/assets/125336070/4799414e-e679-4734-96fa-0
 - 개인 발언이 끝나면 40초간 자유 채팅을 할 수 있는 시간을 주고 끝이 나면 투표버튼이 활성화되고, 투표할 수 있게 됩니다.
 - 투표가 끝나면 결과가 화면에 표시됩니다.
   
-https://github.com/pepero-1/liar-game/assets/125336070/13fd3c5e-5510-4bc9-b69a-3f8ae3567032
+https://github.com/pepero-1/liar-game/assets/125336070/88665f9d-23a6-4637-a45d-141d2ccd642a
