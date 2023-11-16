@@ -13,6 +13,7 @@ import Image from 'next/image';
 import useAsyncLoading from '@/hooks/Open/useAsyncLoading';
 import { IFormInput } from './Login.types';
 import icon_cat from '@/public/icon_cat.svg';
+import icon_cat_words from '@/public/icon_cat_words.svg';
 
 const LoginForm = () => {
 	const loadingControl = useAsyncLoading();
@@ -97,9 +98,14 @@ const LoginForm = () => {
 					</div>
 				</Link>
 			</form>
-			<Typography variant="h3" className="absolute bottom-8">
-				CatTalk
-			</Typography>
+
+			<Image
+				src={icon_cat_words}
+				alt="logo"
+				width={50}
+				height={50}
+				className="absolute bottom-3 w-24"
+			/>
 		</div>
 	);
 };

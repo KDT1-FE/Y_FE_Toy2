@@ -16,7 +16,7 @@ const Loading = () => {
 					height={100}
 					className="w-32 h-32"
 				/>
-				<div className=" w-56 h-20 flex flex-col items-center justify-center rounded-md bg-white">
+				<div className=" w-56 h-20 flex flex-col items-center justify-center rounded-md ">
 					<PageSpinner />
 					<h1>Loading...</h1>
 				</div>

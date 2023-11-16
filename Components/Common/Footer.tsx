@@ -23,7 +23,7 @@ const Footer = () => {
 	};
 
 	return (
-		<div className="w-full sm:w-[425px] h-14 flex justify-around items-center bg-primary mx-auto absolute inset-x-0 bottom-0">
+		<div className="w-full sm:w-[425px] h-14 flex justify-around items-center bg-footer mx-auto absolute inset-x-0 bottom-0">
 			<Tooltip
 				content="유저들 👋"
 				animate={{
@@ -95,7 +95,7 @@ const Footer = () => {
 			<Button
 				type="button"
 				onClick={handleLogout}
-				className="flex justify-center items-center bg-secondary text-chat"
+				className="flex justify-center items-center bg-send text-white"
 			>
 				로그아웃
 			</Button>
