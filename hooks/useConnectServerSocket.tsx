@@ -1,4 +1,3 @@
-import { SERVER_URL } from '@/apis/constant';
 import { getCookie } from 'cookies-next';
 import { useEffect, useMemo } from 'react';
 import { io } from 'socket.io-client';
@@ -7,7 +6,7 @@ export default function useConnectServerSocket() {
   const accessToken = getCookie('accessToken');
 
   const serverSocket = useMemo(() => {
-    return io(`${SERVER_URL}`, {
+    return io(`${process.env.NEXT_PUBLIC_SERVER_URL}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
         serverId: process.env.NEXT_PUBLIC_API_KEY!,

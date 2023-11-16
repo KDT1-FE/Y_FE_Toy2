@@ -12,7 +12,6 @@ import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
 // import chatSocket from '@/apis/socket';
 import { getCookie } from 'cookies-next';
-import { CLIENT_URL } from '../../apis/constant';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
 import chatAPI from '../../apis/chatAPI';
@@ -55,7 +54,7 @@ export default function Chatting() {
   const accessToken = getCookie('accessToken');
 
   const socket = useMemo(() => {
-    return io(`${CLIENT_URL}?chatId=${chatId}`, {
+    return io(`${process.env.NEXT_PUBLIC_CHAT_URL}?chatId=${chatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
         serverId: process.env.NEXT_PUBLIC_API_KEY,
