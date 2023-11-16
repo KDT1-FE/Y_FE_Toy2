@@ -9,6 +9,7 @@ interface Props {
 
 const ChannelModalUserList = ({ setUsers }: Props) => {
   const { data: users, isLoading, addUser, userSet } = useUsers();
+  const myId = localStorage.getItem('userId') as string;
 
   useEffect(() => {
     setUsers(Array.from(userSet));
@@ -32,14 +33,16 @@ const ChannelModalUserList = ({ setUsers }: Props) => {
         {isLoading ? (
           <div>로딩중...</div>
         ) : (
-          users?.map((user) => (
-            <ChannelModalUser
-              key={user.id}
-              user={user}
-              addUser={addUser}
-              isIncluded={isIncluded}
-            />
-          ))
+          users
+            ?.filter((user) => user.id !== myId)
+            .map((user) => (
+              <ChannelModalUser
+                key={user.id}
+                user={user}
+                addUser={addUser}
+                isIncluded={isIncluded}
+              />
+            ))
         )}
       </Flex>
     </>
