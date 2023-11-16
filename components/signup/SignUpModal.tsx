@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { BsCameraFill, BsFillTrash3Fill } from 'react-icons/bs';
-import Modal from '../common/Modal';
+import Modal from '../Common/Modal';
 import styles from './SignUpModal.module.scss';
 import Loading from './Loading';
 

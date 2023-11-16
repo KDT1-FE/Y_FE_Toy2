@@ -1,43 +1,10 @@
 @import '@/styles/index.scss';
-
-.uploadDb,
-.uploadApi {
-  position: fixed;
-  bottom: 20vh;
-  right: 0;
-  padding: 10px;
-}
-.uploadApi {
-  bottom: 28vh;
-}
 .container {
   @include container;
   height: 100%;
   padding: 2rem;
   padding-bottom: 10rem;
   margin-top: 5rem;
-  .hash {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 2rem 1rem;
-    margin: 2rem 0 1rem;
-
-    li {
-      display: inline-block;
-      button {
-        cursor: pointer;
-        padding: 0.6rem 1.2rem;
-        background: rgba(1, 82, 204, 0.1);
-        border-radius: 18px;
-        color: #0152cc;
-        font-size: small;
-        font-weight: 600;
-        border: none;
-      }
-    }
-  }
 
   .title {
     color: $black;
@@ -45,9 +12,47 @@
     font-size: $font-size-lg;
     border-bottom: 1px solid $light-pink;
     padding: 1rem;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .header {
+    position: sticky;
+    background: #fff;
+    width: 100%;
+    top: 0;
+    padding: 1rem 0;
+    transition: top 0.5s ease-in-out;
+    z-index: 10;
+
+    &.scrollHeader {
+      @include shadow-bottom;
+    }
+    .inner {
+      max-width: $max-width;
+    }
+    .hash {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem 1rem;
+      margin: 2rem 0 1rem;
+      li {
+        display: inline-block;
+        button {
+          cursor: pointer;
+          padding: 0.6rem 1.2rem;
+          background: rgba(1, 82, 204, 0.1);
+          border-radius: 18px;
+          color: #0152cc;
+          font-size: small;
+          font-weight: 600;
+          border: none;
+        }
+      }
+    }
   }
   .location {
     display: inline-block;
