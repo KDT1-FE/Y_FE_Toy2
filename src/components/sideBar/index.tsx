@@ -9,14 +9,12 @@ import {
   Center,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { EditIcon, ChatIcon } from '@chakra-ui/icons';
+import { ChatIcon } from '@chakra-ui/icons';
 import MyChannelItem from './MyChannelItem';
 import { useMyChannels } from '../../hooks/useMyChannels';
 import { useInviteData } from '../../hooks/useInviteData';
 
 const SideBar = () => {
-  const [myChannels, setmyChannels] = useState([]);
-
   const { data: channels, isLoading } = useMyChannels();
   const { myChannelList } = useInviteData();
 
@@ -24,7 +22,7 @@ const SideBar = () => {
     if (isLoading) {
       return <Center>내 채팅 목록을 불러오는 중입니다.</Center>;
     }
-    if (myChannelList?.length === 0 || channels?.length === 0) {
+    if (myChannelList?.length === 0 && channels?.length === 0) {
       return <Center>현재 참여중인 채팅방이 없습니다.</Center>;
     }
     return (myChannelList || channels)?.map((channel) => (
