@@ -142,7 +142,7 @@ export default function Chatting() {
       socket.off('leave');
       socket.disconnect();
     };
-  }, [socket]); // 이제 chatId와 accessToken이 변경될 때
+  }, [socket]);
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {

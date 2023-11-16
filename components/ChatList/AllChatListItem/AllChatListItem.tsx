@@ -33,7 +33,7 @@ export default function AllChatListItem({ chat }: Props) {
   const { timeDiffText, className } = formatTime(chat.updatedAt);
 
   return (
-    <li>
+    <li className={styles.itemContainer}>
       <JudgeWrapper isincluded={isincluded} chatId={chat.id}>
         <Image
           alt={`${chat.users[0].username}의 프로필 사진`}

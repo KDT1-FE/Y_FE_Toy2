@@ -47,15 +47,17 @@ export default function AllChatList() {
   }, [serverSocket]);
 
   return (
-    <div className={styles.allContainer}>
+    <div >
       <Header pageName="All" />
-      <ul>
+      <ul className={styles.list_container}>
         {allChatList.map(chat => (
           <AllChatListItem key={chat.id} chat={chat} />
         ))}
       </ul>
       <CreateChatButton setIsModal={setIsModal} />
       {isModal && <ChatListModal handleModal={handleModal} />}
+    
     </div>
+    
   );
 }

@@ -1,7 +1,6 @@
-'use client';
-
 import styles from '@/components/HostList/HostListItem.module.scss';
 import Button from '@/components/HostList/Button';
+import Image from 'next/image';
 import { Host } from '@/components/HostList/hostList.types';
 
 interface HostListItemProps {
@@ -12,10 +11,12 @@ export default function HostListItem({ host, openModal }: HostListItemProps) {
   if (host) {
     return (
       <li className={styles.item} key={host.id}>
-        <img
+        <Image
           className={styles['host-img']}
           src={host.picture}
           alt={host.name}
+          width={50}
+          height={50}
         />
         <div>
           <p className={styles.name}>{host.name}</p>

@@ -1,4 +1,4 @@
-import styles from './Search.module.scss'; // Import your appropriate styles file
+import styles from './Search.module.scss';
 
 interface SearchProps {
   onSearch: (query: string) => void;
