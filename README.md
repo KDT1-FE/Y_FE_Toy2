@@ -22,7 +22,7 @@
 | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
 | <img src="https://avatars.githubusercontent.com/u/121215024?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/59966217?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/121606131?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/95364951?s=60&v=4" width="100" style="max-width: 100%;" /> |
 |                                [@Yamyam-code](https://github.com/Yamyam-code)                                 |                                    [@skyeome](https://github.com/skyeome)                                    |                                  [@JiHongkyu](https://github.com/JiHongkyu)                                   |                                  [@lilviolie](https://github.com/lilviolie)                                  |
-|                        <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |                 <ul><li>레이아웃</li><li>로그인/회원가입 기능</li><li>오픈채팅기능</li></ul>                 |          <ul><li>초기셋팅</li><li>웹소켓 연결/실시간 채팅 로직 구현</li><li>1대1채팅 기능</li></ul>           |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |
+|       <ul><li>유저 랭킹 리스팅</li><li>네이버 API 기반 단어 유효성 검사</li><li>끝말잇기 로직</li></ul>       |                 <ul><li>레이아웃</li><li>로그인/회원가입 기능</li><li>오픈채팅기능</li></ul>                 |          <ul><li>초기셋팅</li><li>웹소켓 연결/실시간 채팅 로직 구현</li><li>1대1채팅 기능</li></ul>           |                       <ul><li>기능개발1</li><li>기능개발2</li><li>기능개발3</li></ul>                        |
 
 ## 기술 스택 및 라이브러리
 
@@ -172,8 +172,20 @@
 
 ### 주요 구현사항 설명
 
-![게임 페이지](public/images/game-page.png)
+## 랭킹
 
+![ranking](https://github.com/TOY2-12/LangChat/assets/121215024/873ba9ef-089a-48c2-914e-9b48d8c48030)
+
+- 각 유저의 최고 점수를 기반으로 랭킹을 나열합니다.
+- 기본적으로 유저의 등수를 보여주며 호버 시 그 유저의 점수를 표기합니다.
+
+## 끝말잇기 게임
+
+![submit](https://github.com/TOY2-12/LangChat/assets/121215024/9c3cf96c-e4a8-4903-8f83-bb1009db5975)
+
+- 네이버 API의 사전 검색 및 정규식을 활용하여 단어 유효성 검사
+- 남은 시간 게이지바로 표시
+- 효과음 사용
 </div>
 </details>
 
