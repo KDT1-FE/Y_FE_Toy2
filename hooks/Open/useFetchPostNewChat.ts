@@ -2,8 +2,12 @@
 
 import { Inputs } from '@/Components/Open/ChatGenerator/ChatGenerator.type';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import useAsyncLoading from './useAsyncLoading';
 
 export const useFetchPostNewChat = (token: string) => {
+	const loadingControl = useAsyncLoading();
+	const router = useRouter();
 	const mutation = useMutation({
 		mutationFn: (data: Inputs) =>
 			fetch('https://fastcampus-chat.net/chat', {
@@ -20,7 +24,8 @@ export const useFetchPostNewChat = (token: string) => {
 			// console.log response url
 			const response = await data.json();
 			const chatId = response.id;
-			window.location.href = `/chat/${chatId}?isPrivate=${response.isPrivate}`;
+			loadingControl(false);
+			router.push(`/chat/${chatId}?isPrivate=${response.isPrivate}`);
 		},
 	});
 
