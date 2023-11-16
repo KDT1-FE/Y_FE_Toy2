@@ -8,7 +8,7 @@ interface Props {
 
 const Timer = ({ current, setCurrent }: Props) => {
   const [isRunning, setIsRunning] = useState(false);
-  const [seconds, setSeconds] = useState(5);
+  const [seconds, setSeconds] = useState(40);
 
   useEffect(() => {
     if (current === "자유발언") setIsRunning(true);

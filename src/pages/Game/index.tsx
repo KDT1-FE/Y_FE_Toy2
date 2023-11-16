@@ -88,6 +88,7 @@ const Game = () => {
 
   useEffect(() => {
     setSpeaking(users[0]);
+    console.log(users);
   }, [users]);
 
   useEffect(() => {
@@ -116,6 +117,16 @@ const Game = () => {
     start: false,
   });
 
+  const leaveGame = () => {
+    leave.refresh();
+    const newUsers = users.filter((value) => value !== user.id);
+    socketMain.emit("message-to-server", `${user.id}:${gameId}:)*^$@`);
+    fireFetch.updateData("game", gameId as string, {
+      users: newUsers,
+    });
+    navigate("/main");
+  };
+
   const handleGameInfoReceived = (gameInfo: GameInfo) => {
     setCategory(gameInfo.category);
     setKeyword(gameInfo.keyword);
@@ -142,7 +153,7 @@ const Game = () => {
   }
 
   return (
-    <Flex direction="column" mx="50px">
+    <Flex direction="column" px="100px">
       {current === "자유발언" && (
         <Timer current={current} setCurrent={setCurrent} />
       )}
@@ -159,18 +170,7 @@ const Game = () => {
             h="100%"
             mr="20px"
             colorScheme="facebook"
-            onClick={() => {
-              const newUsers = users.filter((value) => value !== user.id);
-              socketMain.emit(
-                "message-to-server",
-                `${user.id}:${gameId}:)*^$@`,
-              );
-              fireFetch.updateData("game", gameId as string, {
-                users: newUsers,
-              });
-              leave.refresh();
-              navigate("/gameLists");
-            }}
+            onClick={leaveGame}
           >
             뒤로가기
           </Button>
@@ -232,6 +232,7 @@ const Game = () => {
             speaking={speaking}
             num={num}
             player={users}
+            setPlayer={setUsers}
             setNum={setNum}
             setSpeaking={setSpeaking}
             onGameInfoReceived={handleGameInfoReceived}

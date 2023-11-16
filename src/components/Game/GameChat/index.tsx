@@ -30,6 +30,7 @@ interface GameChatProps {
   num: number;
   player: string[];
   liar: string;
+  setPlayer: React.Dispatch<React.SetStateAction<string[]>>;
   setNum: React.Dispatch<React.SetStateAction<number>>;
   setSpeaking: React.Dispatch<React.SetStateAction<string>>;
   onGameInfoReceived: (gameInfo: {
@@ -55,6 +56,7 @@ const GameChat: React.FC<GameChatProps> = ({
   player,
   num,
   liar,
+  setPlayer,
   setNum,
   setSpeaking,
   onGameInfoReceived,
@@ -160,6 +162,8 @@ const GameChat: React.FC<GameChatProps> = ({
         const systemMessage = `${joinId} 님이 입장했습니다.`;
         setMessages([...messages, { id: "system", text: systemMessage }]);
         setUsers(responseData.users);
+        setPlayer([...player, joinId]);
+        // console.log(player);
       }
     });
 
@@ -168,6 +172,9 @@ const GameChat: React.FC<GameChatProps> = ({
       const systemMessage = `${responseData.leaver} 님이 퇴장했습니다.`;
       setMessages([...messages, { id: "system", text: systemMessage }]);
       setUsers(responseData.users);
+      const copy = [...player];
+      const newPlayer = copy.filter((player) => player !== responseData.leaver);
+      setPlayer(newPlayer);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -82,12 +82,6 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast, socket }) => {
 
   const user = useRecoilValue(userState);
 
-  const getChat = useFetch({
-    url: `https://fastcampus-chat.net/chat/only?chatId=${roomData.id}`,
-    method: "GET",
-    start: false,
-  });
-
   const join = useFetch({
     url: "https://fastcampus-chat.net/chat/participate",
     method: "PATCH",
@@ -98,7 +92,6 @@ const ToastNotice: React.FC<Props> = ({ roomData, setToast, socket }) => {
   });
 
   const handleAccept = () => {
-    getChat.refresh();
     fireFetch.get("game", "id", roomData.id).then((res: any) => {
       socket.emit("message-to-server", `${user.id}:${roomData.id}:!#%&(`);
       const users = [...res[0].users, user.id];
