@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
 import styles from '@/components/HostList/HostDetailsModal.module.scss';
 import { Host } from '@/components/HostList/hostList.types';
+import Image from 'next/image';
 
 interface HostDetailsModalProps {
   onClose: () => void;
@@ -71,14 +72,13 @@ export default function HostDetailsModal({
       <Modal>
         <div className={styles.ModalBox} ref={ref}>
           <BsXCircle className={styles['close-icon']} onClick={onClose} />
-
-          <img
+          <Image
             className={styles['host-img']}
-            src={hostDetails?.picture}
-            alt={hostDetails?.name}
+            src={hostDetails.picture}
+            alt={hostDetails.name}
           />
           <div className={styles['flex-row']}>
-            <h4 className={styles.title}>{hostDetails?.name}</h4>
+            <h4 className={styles.title}>{hostDetails.name}</h4>
             <Button
               className="fill-btn"
               text="문의하기"
