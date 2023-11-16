@@ -12,7 +12,7 @@ const FriendProfiles = ({ allUsers }: { allUsers: User[] | undefined }) => {
 		<div>
 			{allUsers?.map((user) => {
 				return (
-					<li key={user.id} className="list-none cursor-pointer">
+					<div key={user.id} className="list-none cursor-pointer">
 						<Link
 							href={{
 								pathname: `/profile/${user.id}`,
@@ -21,7 +21,7 @@ const FriendProfiles = ({ allUsers }: { allUsers: User[] | undefined }) => {
 						>
 							<FriendProfile user={user} />
 						</Link>
-					</li>
+					</div>
 				);
 			})}
 		</div>
@@ -33,28 +33,20 @@ export const FriendProfile = ({ user }: { user: User | UserHasOnline }) => {
 	const isUserOnline = 'isOnline' in user;
 
 	return (
-		<div className="flex w-full align-center mb-1">
+		<div className="flex items-center w-full align-center mt-3 p-1 hover:bg-gray-300 transition duration-200 ease-linear rounded-md">
 			<div>
-				<div className="relative">
-					<div className="relative w-12 h-12 mr-5">
+				<div className="relative w-fit h-fit">
+					<div className="relative w-12 h-12 shadow-md rounded-lg flex flex-col items-center justify-center">
 						<Image
-							fill={true}
 							alt={user.name}
 							src={picture}
-							className="absolute top-0 left-0 rounded-3xl border-black my-2 mx-auto"
-							style={{
-								filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-								objectFit: 'cover',
-							}}
+							width={50}
+							height={50}
+							className="rounded-3xl w-10 h-10"
 						/>
 					</div>
 					{isUserOnline && (
-						<span
-							className="absolute top-2"
-							style={{
-								left: '55%',
-							}}
-						>
+						<span className="absolute -top-1 -right-1">
 							<div
 								className={`w-3.5 h-3.5 rounded-full bg-${
 									user.isOnline ? 'primary' : 'gray-500'
@@ -64,7 +56,7 @@ export const FriendProfile = ({ user }: { user: User | UserHasOnline }) => {
 					)}
 				</div>
 			</div>
-			<h4 className="w-1/2 py-4 mx-4 text-l">{user.name}</h4>
+			<p className="w-full ml-3">{user.name}</p>
 		</div>
 	);
 };
