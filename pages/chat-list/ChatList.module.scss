@@ -14,7 +14,7 @@
 .titleContainer {
   @include container;
   @include flex-center-row;
-  justify-content: start;
+  justify-content: flex-start;
   color : $brand-pink;
   font-size: 1.7rem;
   p {

@@ -29,15 +29,12 @@ export default function MyChatListItem({ chat }: Props) {
           <div className={styles.chatWrap}>
             <div className={styles.chatNameWrap}>
               <div className={styles.chatName}>{chat.name}</div>
-              <span>{chat.users.length}</span>
+              <span className={styles['user-length']}>{chat.users.length}</span>
             </div>
             <div className={styles.chatLastestMesaage}>
               {chat.latestMessage?.text}
             </div>
           </div>
-          {/* <div>
-                  <div className={styles.chat_updated}>{chat.updatedAt}</div>
-                </div> */}
           <div className={styles.chat_updated}>
             {isToday === dateString ? formattedTime : `${dateString}`}
           </div>
