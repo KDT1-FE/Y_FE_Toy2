@@ -10,6 +10,7 @@ const Profile = async ({ params }: { params: { id: string } }) => {
 	const myChats: Chat[] = await fetchMyChats(accessToken);
 	const existPrivateChat: Chat | undefined = myChats.filter(
 		(chat) =>
+			chat.isPrivate &&
 			chat.users.length === 2 &&
 			(chat.users[0].id === params.id || chat.users[1].id === params.id),
 	)[0];
