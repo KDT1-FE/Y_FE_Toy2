@@ -58,18 +58,6 @@ export default function ChatingPage() {
         setLoading(false);
         setMessages(messageObject.messages.reverse());
         clearInterval(FetchMessagesInterval);
-
-        // 유저 입장 억지로..
-        if (users.length > 2 && userId) {
-          let isEnter = true;
-          for (let i = 0; i < messageObject.messages.length; i++) {
-            if (messageObject.messages[i].userId == userId) {
-              isEnter = true;
-            }
-          }
-          const userName = findUserName(userId);
-          if (isEnter) socket.emit('message-to-server', `notice09:${userName}님이 채팅방에 입장하였습니다.`);
-        }
       });
 
       socket.on('message-to-client', (messageObject) => {
@@ -175,7 +163,7 @@ export default function ChatingPage() {
     const date = new Date(createdAt);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
-    const day = date.getDate();
+    const day = date.getDate() + 1;
     return `${year}년 ${month}월 ${day}일`;
   };
 
@@ -193,56 +181,49 @@ export default function ChatingPage() {
               ? messages.map((message: Message, i: number) =>
                   message.text.split(':')[0] == 'notice09' ? (
                     <>
-                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i - 1]?.createdAt) ? (
-                        <NoticeMessageWrapper>
-                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
-                        </NoticeMessageWrapper>
-                      ) : (
-                        ''
-                      )}
                       <NoticeMessageWrapper>
                         <NoticeText>{message.text.split(':')[1]}</NoticeText>
                       </NoticeMessageWrapper>
-                    </>
-                  ) : userId == message.userId || userId == message.userId ? (
-                    <>
-                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i - 1]?.createdAt) ? (
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
                         <NoticeMessageWrapper>
                           <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
                         </NoticeMessageWrapper>
                       ) : (
                         ''
                       )}
+                    </>
+                  ) : userId == message.userId || userId == message.userId ? (
+                    <>
                       <MyMessageWrapper key={message.id}>
                         <MyMessageText>{message.text}</MyMessageText>
                         <MyMessageTime>{formatCreatedAt(message.createdAt)}</MyMessageTime>
                       </MyMessageWrapper>
-                    </>
-                  ) : messages[i].userId == messages[i + 1]?.userId || messages[i].userId == messages[i + 1]?.userId ? (
-                    <>
-                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i - 1]?.createdAt) ? (
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
                         <NoticeMessageWrapper>
                           <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
                         </NoticeMessageWrapper>
                       ) : (
                         ''
                       )}
+                    </>
+                  ) : messages[i].userId == messages[i + 1]?.userId || messages[i].userId == messages[i + 1]?.userId ? (
+                    <>
                       <YourMessageWrapper key={message.id}>
                         <YourMessageTextWrapper>
                           <YourMessageText>{message.text}</YourMessageText>
                           <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
                         </YourMessageTextWrapper>
                       </YourMessageWrapper>
-                    </>
-                  ) : (
-                    <>
-                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i - 1]?.createdAt) ? (
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
                         <NoticeMessageWrapper>
                           <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
                         </NoticeMessageWrapper>
                       ) : (
                         ''
                       )}
+                    </>
+                  ) : (
+                    <>
                       <YourMessageWrapper key={message.id}>
                         <YourMessageNameWrapper>
                           <YourMessagePicture
@@ -258,6 +239,13 @@ export default function ChatingPage() {
                           <YourMessageTime>{formatCreatedAt(message.createdAt)}</YourMessageTime>
                         </YourMessageTextWrapper>
                       </YourMessageWrapper>
+                      {formatGetDay(messages[i].createdAt) != formatGetDay(messages[i + 1]?.createdAt) ? (
+                        <NoticeMessageWrapper>
+                          <NoticeText>{formatGetFullDay(message.createdAt)}</NoticeText>
+                        </NoticeMessageWrapper>
+                      ) : (
+                        ''
+                      )}
                     </>
                   ),
                 )
