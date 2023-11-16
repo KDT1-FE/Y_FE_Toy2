@@ -100,8 +100,20 @@
 
 ### 주요 구현사항 설명
 
-![게임 페이지](public/images/game-page.png)
+## 랭킹
 
+![ranking](https://github.com/TOY2-12/LangChat/assets/121215024/873ba9ef-089a-48c2-914e-9b48d8c48030)
+
+- 각 유저의 최고 점수를 기반으로 랭킹을 나열합니다.
+- 기본적으로 유저의 등수를 보여주며 호버 시 그 유저의 점수를 표기합니다.
+
+## 끝말잇기 게임
+
+![submit](https://github.com/TOY2-12/LangChat/assets/121215024/9c3cf96c-e4a8-4903-8f83-bb1009db5975)
+
+- 네이버 API의 사전 검색 및 정규식을 활용하여 단어 유효성 검사
+- 남은 시간 게이지바로 표시
+- 효과음 사용
 </div>
 </details>
 
