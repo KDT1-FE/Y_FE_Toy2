@@ -4,7 +4,7 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { fetchLogin } from '../../app/login/login.utils';
 import { setCookie } from '@/Components/Login/Cookie';
-import { Button, Typography } from '@material-tailwind/react';
+import { Button } from '@material-tailwind/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
