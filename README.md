@@ -152,24 +152,24 @@ console.log('hello, world!');
 
 ## :thought_balloon: 채팅 주요 기능
 
-#### 소켓 연결
 
-#### 채팅 보내기, 채팅 받기
+|                                     소켓 연결,         채팅 보내기, 채팅 받기     이전 채팅 가져오기                       |                                  채팅 나가기                             |
+| :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| ![chatting](https://github.com/Toy2-team10/Talkhaja/assets/65649035/8d137c4a-2935-47d8-a07d-6c864546ac40) | ![chat_out](https://github.com/Toy2-team10/Talkhaja/assets/65649035/9fb496ad-8287-428e-addf-c5772d06d7f0)|
+| 처음 채팅방에 들어오면 이전 대화 목록들을 모두 받습니다. 소켓 연결로 실시간 채팅이 가능합니다| 채탱방 나가기 버튼을 누르면 해당 방에서 나가지고 목록으로 돌아갑니다 |
 
-#### 이전 채팅 가져오기
-
-#### 채팅 데이터 수정하기
-
-#### 채팅 나가기
 
 ## :art: 디자인
 
-#### 헤더
-#### 채팅방 목록
+|                                     헤더                      |                                 채팅방 목록                        |
+| :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| ![header_1](https://github.com/Toy2-team10/Talkhaja/assets/65649035/c5ce2ae9-4c24-48bb-a4c1-36414e8f23d5) | ![chat_list_style](https://github.com/Toy2-team10/Talkhaja/assets/65649035/9292d052-0d7f-4cfd-9778-73720bcbdcaa) |
+| 스크롤 위치에 따라 헤더의 크기가 달라지게 구현하였습니다. | 전체적인 채팅방목록을 디자인하고 목록을 호버하면 해당 채팅방의 배경색을 바꿔주었습니다. 또한 채팅 더하기 버튼을 누르면 모달창이 뜨도록 하였습니다. 모달창에서는 채팅 제목을 15자 이상으로 제한하였습니다. |
+
 
 ## :bomb: 트러블 슈팅
 
-:x: 오류
+#### :x:오류
 
 Duplicate atom key "userIdState". This is a FATAL ERROR in production. But it is safe to ignore this warning if it occurred because of
 hot module replacement.
@@ -177,39 +177,48 @@ hot module replacement.
 분명 atom은 하나인데 자꾸 이런 오류가 떴습니다.
 찾아보니 Next.js에서 build를 하면 atom을 저장해두는데 이것 때문에 두개로 중복된다고 Next.js에서 판단한다는 유명한 오류였습니다.;;
 
-:heavy_check_mark: 해결
+#### :heavy_check_mark: 해결
+
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 .App.js 파일 상단에 추가하니 오류가 사라졌습니다!
 
-:x: 오류
+--
+
+#### :x:오류
 
 socket을 두번씩 생성되는 오류가 있었습니다. 이 때문에 소켓 connect가 제대로 이루어지지 않았습니다.
 
-:heavy_check_mark: 해결
+#### :heavy_check_mark: 해결
 
 next.config.js 파일에서 reactStrictMode: false 를 해주었습니다.
 react에서는 reactStrictMode: true이면 render가 강제적으로 두번씩 된다고 합니다!
 또한 무한 소켓 연결을 막기 위해 useMemo를 사용하여 소켓을 생성해주었습니다
 
-:x: 오류
+--
+
+#### :x:오류
 
 socke을 connect 했음에도 불구하고 fetch-messages가 서버로 전송되지 않는 에러
 
-:heavy_check_mark: 해결
+#### :heavy_check_mark: 해결
 
 setTimeout을 사용해 소켓에 요청이 들어갈때까지 요청을 보냈습니다.
 
-:x: 오류
+--
+
+#### :x:오류
 채팅방에서 text를 작성해 onChange 이벤트가 발생하면 상관없는 userId API를 호출하는 오류
 
-:heavy_check_mark: 해결
-userId API를 useEffect로 감싸서 의존성 배열에 instance,chatId를 줬었는데 chatId로만 의존성 배열을 변경하였습니다. 
+#### :heavy_check_mark: 해결
+userId API를 useEffect로 감싸서 의존성 배열에 chatId로만  변경하였습니다. 
 
-:x: 오류
+--
+
+#### :x:오류
 Image is missing required "src" property: 
 
-:heavy_check_mark: 해결
+#### :heavy_check_mark: 해결
 소켓에서 받아오는 대화정보는 userId만 받아와서 해당 userID의 정보를 API요청으로 받아줄때
 유저 이미지를 useState('')값으로 초기화를 했더니 발생한 오류였읍니다.
 src 에userImage의 경로가 들어가긴 하지만 Nextjs에서 제공하는 Image태그는 src값을 절대 빈값으로 받지않아 발생는 오류였습니다. 따라서 response로 받아오는 이미지 url값이 있을때만 해당 Image 태그를 반환하게 수정하였더니 해결되었습니다
