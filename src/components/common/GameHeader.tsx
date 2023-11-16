@@ -12,7 +12,7 @@ const GameHeader = ({ title, timer, next, pocketId }: GameHeaderProps) => {
 
       if (time === 0) {
         clearInterval(intervalId);
-        navigate(`/${next}?pocketId=w19vtn7w7ff3ocb${pocketId}`);
+        navigate(`/${next}?pocketId=${pocketId}`);
       }
     }, 1000);
 

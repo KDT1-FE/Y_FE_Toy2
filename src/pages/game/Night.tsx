@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 const Night = () => {
   const [searchParams] = useSearchParams();
   const pocketId = searchParams.get('pocketId');
+  console.log(pocketId);
   return (
     <div className={styles.night}>
       <GameHeader title="" timer={10} pocketId={pocketId} next="hanging" />
