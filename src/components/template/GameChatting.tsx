@@ -174,8 +174,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   return (
     <Chat>
       <ChatHeader>
-        <ChatHeaderIcon src={InfoImg} alt="ChatInfo" />
-        <ChatHeaderWarn>게임이 시작되었습니다.</ChatHeaderWarn>
+        <ChatHeaderWarn>1조 짱짱맨ㅋ</ChatHeaderWarn>
       </ChatHeader>
       <Chatting ref={chatContainerRef}>
         {/* 이전 채팅 불러오기 */}
@@ -257,8 +256,10 @@ const ChatHeaderIcon = styled.img`
 
 const ChatHeaderWarn = styled.div`
   position: absolute;
+  font-size: 18px;
+  font-weight: 600;
   top: 12px;
-  left: 130px;
+  left: 180px;
   color: #fff;
 `;
 

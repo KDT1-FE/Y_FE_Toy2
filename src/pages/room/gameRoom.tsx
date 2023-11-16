@@ -43,7 +43,7 @@ import {
 import AnswerModal from '../../components/layout/anwerModal.tsx';
 
 const GameRoom: React.FC = () => {
-  const [isQuizMaster, setIsQuizMaster] = useState(false);
+  const [isQuizMaster, setIsQuizMaster] = useState(true);
   const [showAlert, setShowAlert] = useState({
     active: false,
     message: '',
@@ -85,6 +85,7 @@ const GameRoom: React.FC = () => {
     setUserRoomUser(userNumber);
   }, [roomNumber]);
   const check = CheckNums();
+
 
   const [answerModalOpen, setAnswerModalOpen] = useState(false);
 
@@ -166,6 +167,7 @@ const GameRoom: React.FC = () => {
     gameSocket.emit('start_game', { roomId, myId });
     setIsQuizMasterAlertShown(false);
     setAnswerModalOpen(true);
+    setIsQuizMaster(false);
   };
 
   const submitSetAnswer = (modalInputValue: string) => {
@@ -216,6 +218,7 @@ const GameRoom: React.FC = () => {
       }
     };
     gameSocket.on('correct_answer', handleCorrectAnswer);
+    setIsQuizMaster(true);
 
     return () => {
       gameSocket.off('correct_answer', handleCorrectAnswer);
@@ -272,7 +275,10 @@ const GameRoom: React.FC = () => {
 
         <GameChatting chatId={roomId} />
       </RoomMain>
-      <CheckUsersInGameRoom chatId={roomId} />
+      <UsersInGameRoom>
+        <CheckUsersInGameRoom chatId={roomId} />
+      </UsersInGameRoom>
+
       <Fade in={showAlert.active}>
         <Alert
           bg={'#4FD1C5'}
@@ -348,7 +354,7 @@ const RoomMain = styled.div`
   margin-top: 20px;
 `;
 
-const UserList = styled.div`
+const UsersInGameRoom = styled.div`
   margin-top: 30px;
   margin-bottom: 30px;
 `;
