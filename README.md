@@ -17,6 +17,11 @@
 
 저희 참교6조는 Toy Project2 프로젝트에서 `CHWIMIMATE`라는 사이트를 개발하였으며 본 사이트는 취미가 맞는사람들끼리 채팅을 하여 친목을 쌓는 프로그램입니다.
 
+### 🔐 테스트 계정 id, pw
+> id: admin
+> /
+> pw: test1234
+
 ### [필수 구현사항]
 
 ✅ useState 또는 useReducer를 활용한 상태 관리 구현 <br />
@@ -1165,8 +1170,8 @@ interface ResponseData {
 
 ## 🧑🏻‍💻 Contributor
 
-> @[YongYong21](https://github.com/YongYong21) (박용희) : 프로필 레이아웃 <br />
-> @[KittelLee](https://github.com/KittelLee) (이진욱) : 모달, 채팅 <br />
+> @[YongYong21](https://github.com/YongYong21) (박용희) : 프로필 레이아웃+파이어베이스설계 <br />
+> @[KittelLee](https://github.com/KittelLee) (이진욱) : 모달+레이아웃, 채팅 <br />
 > @[tkyoun0421](https://github.com/tkyoun0421) (윤태관) : 채팅, 로그인, 회원가입 <br />
 > @[furaha707](https://github.com/furaha707) (이예인) : 레이아웃, 채팅 <br />
 > @[mysdpy30s](https://github.com/mysdpy30s) (김미정) : 컴포넌트 레이아웃, 채팅 <br />
@@ -1204,7 +1209,7 @@ interface ResponseData {
 ### Deploy
 
 <div style="display: flex;">
- 
+ <img src="https://img.shields.io/badge/vercel-000000.svg?style=for-the-badge&logo=vercel&logoColor=white" />
 </div>
 
 ### Communication
