@@ -12,146 +12,6 @@ import StyledButton from "../../../style/ButtonStyle";
 import useUserData from "../useUserData";
 import { ThemeContext } from "../../../App";
 
-const ProfileContainer = styled.div`
-  width: 100%;
-
-  position: relative;
-`;
-const ProfileHeaderImg = styled.div`
-  width: 100%;
-  height: 350px;
-
-  position: relative;
-
-  background-image: url("https://images.pexels.com/photos/3974145/pexels-photo-3974145.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-`;
-
-const ProfileBodyContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 190px;
-`;
-const ModalStyle: ReactModal.Styles = {
-  overlay: {
-    backgroundColor: " rgba(0, 0, 0, 0.4)",
-    width: "100%",
-    height: "100vh",
-    zIndex: "10",
-    position: "fixed",
-    top: "0",
-    left: "0"
-  },
-  content: {
-    width: "40%",
-    height: "500px",
-
-    zIndex: "100",
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-
-    borderRadius: "10px",
-
-    backgroundColor: "white",
-    justifyContent: "center",
-    overflow: "auto"
-  }
-};
-const TitleText = styled.div`
-  text-align: center;
-
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.3;
-
-  margin-bottom: 20px;
-
-  color: black;
-`;
-const ModalAddFeedContainer = styled.div`
-  display: flex;
-  gap: 16px;
-
-  input {
-    width: 100%;
-    color: black;
-  }
-`;
-const ModalAddFeedPreview = styled.div`
-  width: 100%;
-  height: 100%;
-
-  background-image: url("https://images.pexels.com/photos/18968296/pexels-photo-18968296.jpeg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-`;
-const ModalAddFeedLeftContainer = styled.div`
-  flex: 1 0 140px;
-  width: 140px;
-  height: 175px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-`;
-const ModalAddFeedRightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  span {
-    color: black;
-    font-size: 24px;
-    display: block;
-    font-size: 18px;
-    margin-bottom: 15px;
-    margin-top: 20px;
-  }
-
-  textarea {
-    width: 100%;
-    height: 220px;
-
-    padding: 20px;
-
-    resize: none;
-
-    border-radius: 10px;
-
-    box-sizing: border-box;
-
-    color: #999696;
-    border-color: #bfbfbf;
-
-    font-family: "Pretendard";
-    font-size: 16px;
-  }
-  textarea:focus {
-    border-color: ${theme.blueColor};
-    outline: none;
-  }
-`;
-const ModalAddFeedWrap = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-
-  button {
-    margin-right: 16px;
-
-    &:last-of-type {
-      background-color: #efefef;
-    }
-    &:last-of-type:hover {
-      background-color: #ddd;
-    }
-  }
-`;
-
 function Profile() {
   const [modalPreview, setModalPreview] = useState(
     "https://firebasestorage.googleapis.com/v0/b/toy-project2-85c0e.appspot.com/o/Users%2Fdefault.jpg?alt=media&token=81c126bd-3510-457d-b049-281a66b6f286"
@@ -328,3 +188,143 @@ function Profile() {
 }
 
 export default Profile;
+
+const ProfileContainer = styled.div`
+  width: 100%;
+
+  position: relative;
+`;
+const ProfileHeaderImg = styled.div`
+  width: 100%;
+  height: 350px;
+
+  position: relative;
+
+  background-image: url("https://images.pexels.com/photos/3974145/pexels-photo-3974145.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
+const ProfileBodyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 190px;
+`;
+const ModalStyle: ReactModal.Styles = {
+  overlay: {
+    backgroundColor: " rgba(0, 0, 0, 0.4)",
+    width: "100%",
+    height: "100vh",
+    zIndex: "10",
+    position: "fixed",
+    top: "0",
+    left: "0"
+  },
+  content: {
+    width: "40%",
+    height: "500px",
+
+    zIndex: "100",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+
+    borderRadius: "10px",
+
+    backgroundColor: "white",
+    justifyContent: "center",
+    overflow: "auto"
+  }
+};
+const TitleText = styled.div`
+  text-align: center;
+
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+
+  margin-bottom: 20px;
+
+  color: black;
+`;
+const ModalAddFeedContainer = styled.div`
+  display: flex;
+  gap: 16px;
+
+  input {
+    width: 100%;
+    color: black;
+  }
+`;
+const ModalAddFeedPreview = styled.div`
+  width: 100%;
+  height: 100%;
+
+  background-image: url("https://images.pexels.com/photos/18968296/pexels-photo-18968296.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+const ModalAddFeedLeftContainer = styled.div`
+  flex: 1 0 140px;
+  width: 140px;
+  height: 175px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+`;
+const ModalAddFeedRightContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  span {
+    color: black;
+    font-size: 24px;
+    display: block;
+    font-size: 18px;
+    margin-bottom: 15px;
+    margin-top: 20px;
+  }
+
+  textarea {
+    width: 100%;
+    height: 220px;
+
+    padding: 20px;
+
+    resize: none;
+
+    border-radius: 10px;
+
+    box-sizing: border-box;
+
+    color: #999696;
+    border-color: #bfbfbf;
+
+    font-family: "Pretendard";
+    font-size: 16px;
+  }
+  textarea:focus {
+    border-color: ${theme.blueColor};
+    outline: none;
+  }
+`;
+const ModalAddFeedWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  button {
+    margin-right: 16px;
+
+    &:last-of-type {
+      background-color: #efefef;
+    }
+    &:last-of-type:hover {
+      background-color: #ddd;
+    }
+  }
+`;

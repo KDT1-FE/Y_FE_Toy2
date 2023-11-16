@@ -159,17 +159,17 @@ function Chat() {
             <ModalPlus addNewChatRoom={addNewChatRoom} loginUser={loginUser} />
           </CatePlus>
         </ChatInner>
-        {isShowRoom ? (
-          chatRoom.length !== 0 ? (
+        {chatRoom.length !== 0 ? (
+          isShowRoom ? (
             <ChatRoom
               roomId={roomId}
               setChatRoom={setChatRoom}
               setIsShowRoom={setIsShowRoom}
             />
-          ) : (
-            <NoneChat></NoneChat>
-          )
-        ) : null}
+          ) : null
+        ) : (
+          <NoneChat></NoneChat>
+        )}
       </ChatWrapper>
     </>
   );
@@ -185,6 +185,8 @@ const ChatWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   background-color: ${({ theme }) => (theme === darkTheme ? "black" : "white")};
+
+  margin-top: 160px;
 `;
 
 const ChatInner = styled.div`
@@ -201,7 +203,7 @@ const ChatCategory = styled.ul`
   max-width: 30%; */
   border-right: 1px solid #e8e8e8;
   height: 540px;
-  overflow-y: scroll;
+  overflow-y: auto;
   position: relative;
 `;
 
