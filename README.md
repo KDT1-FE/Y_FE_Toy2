@@ -86,9 +86,45 @@
 <summary style="font-size: 1.125rem">김성겸 : 인증관련, 오픈채팅 페이지</summary>
 <div markdown="1">
 
-### 주요 구현사항 설명
+### 유저 인증 / 회원가입
 
-![오픈채팅 페이지](public/images/openchat-page.png)
+**회원가입**
+
+- 아이디 - 중복 아이디 체크 기능
+- 비밀번호 - 5글자 이하인지 유효성 검사
+- 프로필 사진을 정사작형으로 잘라주는 에디터 추가
+- 관심사 선택
+- 언어, 수준 선택
+
+![회원가입 페이지](public/images/signup-page.png)
+
+**로그인**
+
+- 로그인시 오류 발생하면 에러 메시지를 toast로 보여주는 기능
+- 이미 로그인 되어있으면 로그인 페이지로 갈수 없습니다.
+
+![로그인 페이지](public/images/login-page.png)
+
+### 오픈 채팅
+
+- 오픈채팅방 생성 기능
+- 로딩시 skeleton UI 적용
+- 추천친구/대화방 보여주는 기능
+- 채팅방 참여, 나가기, 초대 기능
+
+<br />
+  
+**오픈채팅방 생성**
+![오픈채팅 생성](public/images/openchat-new.gif)
+
+**오픈채팅방 초대**
+![오픈채팅 초대](public/images/openchat-invite.gif)
+
+**실시간 오픈채팅**
+![실시간 오픈채팅](public/images/openchat-chatting.gif)
+
+**오픈채팅 나가기**
+![실시간 오픈채팅](public/images/openchat-leave.gif)
 
 </div>
 </details>
