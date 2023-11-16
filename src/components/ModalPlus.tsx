@@ -5,6 +5,7 @@ import "../style/Modal.css";
 import useApi from "../hooks/useApi";
 import { AuthContext } from "../hooks/useAuth";
 import { Socket, io } from "socket.io-client";
+import PlusIcon from "../assets/images/plus-ico.png";
 
 export interface User {
   id: string;
@@ -138,9 +139,8 @@ const ModalExample: React.FC<
 
   return (
     <ChatTestWrap>
-      <h1>모든 유저 정보</h1>
       <PlusButton onClick={openModal}>
-        <img src="./src/assets/images/plus-ico.png" alt="플러스" />
+        <img src={PlusIcon} alt="플러스" />
       </PlusButton>
       <Modal
         style={customStyles}
@@ -186,7 +186,6 @@ export default ModalExample;
 
 const ChatTestWrap = styled.div`
   width: 100%;
-  background-color: #fff;
 `;
 
 const SmallImg = styled.img`
@@ -205,24 +204,28 @@ const TopTitle = styled.h1`
   font-size: 24px;
   font-weight: bold;
   margin: 30px 0 50px 0;
+  text-align:center;
 `;
 
 const SubTitle = styled.h5`
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 500;
   margin: 10px 0 8px 0;
+  color: black;
 `;
 
 const InputArea = styled.input`
   &::placeholder {
     font-size: 16px;
+    color: #999696;
   }
+  width:90%;
   border: 1px solid lightgray;
   border-radius: 6px;
   font-size: 20px;
   padding: 5px 20px;
   margin-bottom: 6px;
-  width: 80%;
+  color: #999696;
 `;
 
 const InputBtn = styled.button`
@@ -235,24 +238,28 @@ const InputBtn = styled.button`
   border-radius: 6px;
   padding: 8px 20px;
   margin-bottom: 6px;
-  width: 90%;
+  width: 100%;
   background-color: #fff;
+  color: #999696;
+  text-align:left;
 `;
 
 const MemberBox = styled.div`
   display: none;
-  width: 90%;
+  width: 100%;
   height: 30%;
   border: 1px solid lightgray;
-  margin-top: 20px;
+  margin-top: 10px;
   overflow-y: scroll;
+  color: black;
 `;
 
 const BoxContent = styled.div`
-  display: flex;
-  align-items: center;
-  height: 34%;
-  margin-bottom: 1px solid lightgray;
+  > li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+  }
 `;
 
 const SubmitBtn = styled.button`
@@ -268,7 +275,7 @@ const SubmitBtn = styled.button`
   color: #fff;
   font-weight: bold;
   border: none;
-  border-radius: 20px;
+  border-radius: 30px;
   padding: 16px 60px;
 `;
 

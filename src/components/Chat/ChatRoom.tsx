@@ -13,6 +13,7 @@ import { ChatI } from "../../pages/Chat";
 import SearchInput from "../SearchInput/SearchInput";
 import UserCount from "./UserCount";
 import RoomName from "./RoomName";
+import { darkTheme } from "../../style/theme";
 
 export interface User {
   id: string;
@@ -22,8 +23,6 @@ export interface User {
 
 interface ChatRoomProps {
   roomId: string;
-  roomName: string;
-  selectedUsers: User[];
   setChatRoom: React.Dispatch<React.SetStateAction<ChatI[]>>;
   setIsShowRoom: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -213,7 +212,9 @@ function ChatRoom({ roomId, setChatRoom, setIsShowRoom }: ChatRoomProps) {
             //   }
             // }}
           />
-          <input type="submit" value={"전송"}></input>
+          <button type="submit">
+            <img src="src/assets/images/up-arrow-ico.png" width="20"/>
+          </button>
         </form>
       </div>
     </ChatRoomWrap>
@@ -232,50 +233,38 @@ const ChatRoomWrap = styled.div`
       justify-content: space-between;
       align-items: center;
       background-color: #f5f5f5;
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
       padding: 10px 20px;
       .tit-bx {
         display: flex;
         align-items: center;
-        gap: 10px;
-        .img {
-          width: 70px;
-          border-radius: 50%;
-          display: block;
-          position: relative;
-          overflow: hidden;
-          img {
-            display: block;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: auto;
-            height: auto;
-            min-width: 1000%;
-            min-height: 1000%;
-            max-width: none;
-            max-height: none;
-            -webkit-transform: translate(-50%, -50%) scale(0.1);
-            transform: translate(-50%, -50%) scale(0.1);
-          }
-          &:after {
-            content: "";
-            display: block;
-            padding-bottom: 100%;
-          }
+        img {
+          display:block;
+          filter: brightness(0.8);
+          margin-left: 10px;
         }
-        .count {
-          display: inline-flex;
-          align-items: flex-start;
-          gap: 5px;
-          color: #b3b3b3;
-          img {
-            filter: brightness(0.7);
-          }
+        .num {
+          font-weight: 400;
+          color: #cecece;
+          margin-left:3px;
         }
       }
       .util-bx {
         display: flex;
         align-items: center;
+        gap: 5px;
+        form {
+          position: relative;
+          input[type="submit"]{
+            position: absolute;
+            right:5px;
+          }
+          input[type="text"]{
+            padding-left:10px;
+            padding-right:30px;
+            border-radius:20px;
+          }
+        }
       }
     }
     &__body {
@@ -283,16 +272,17 @@ const ChatRoomWrap = styled.div`
       padding-bottom: 0;
       font-size: 0.9rem;
       overflow-y: scroll;
-      height: 400px;
+      height: 468px;
       .date {
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 10px 0;
         h3 {
-          padding: 15px;
-          border-radius: 10px;
+          padding: 10px 20px;
+          border-radius: 20px;
           background-color: #eeeeee;
+          color: #999696;
         }
       }
       .message {
@@ -393,6 +383,7 @@ const ChatRoomWrap = styled.div`
       }
     }
     &__send {
+      box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 2px 0px;
       padding: 20px;
       display: flex;
       gap: 10px;
@@ -402,26 +393,28 @@ const ChatRoomWrap = styled.div`
         flex-grow: 1;
         gap: 10px;
       }
-      input {
+      input[type="text"] {
         flex-grow: 1;
-        background-color: #ececec;
+        height: 3em;
+        background-color: ${({ theme }) =>
+          theme === darkTheme ? "#ececec" : "#FEEBE9"};
         border: none;
         outline: none;
         border-radius: 20px;
         padding: 0 20px;
         color: #999696;
+        height:40px;
       }
       button {
-        padding: 0;
-        flex-shrink: 0;
-        background-color: #bab6b5;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
+        background-color: #BAB6B5;
+        display:inline-flex;
         justify-content: center;
         align-items: center;
+        outline:none;
+        border:none;
+        border-radius:50%;
+        width:40px;
+        height:40px;
       }
     }
   }

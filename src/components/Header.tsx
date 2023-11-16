@@ -6,6 +6,8 @@ import Logout from "./Logout";
 import { ThemeContext } from "../App";
 import { lightTheme } from "../style/theme";
 import useApi from "../hooks/useApi";
+import SunIcon from "../assets/images/sun.svg";
+import MoonIcon from "../assets/images/moon.svg";
 
 interface MenuListItem {
   key: number;
@@ -99,16 +101,16 @@ const Header = () => {
             </>
           ) : (
             <UserProfile>
-              <StyledLink to={"/login"}>로그인</StyledLink> |{" "}
+              <StyledLink to={"/login"}>로그인</StyledLink>{" "}
               <StyledLink to={"/signup"}>회원가입</StyledLink>
             </UserProfile>
           )}
         </UserInfo>
         <ToggleBtn onClick={toggleTheme}>
           {theme === lightTheme ? (
-            <img src="/src/assets/images/sun.svg" alt="light mode" />
+            <img src={SunIcon} alt="light mode" />
           ) : (
-            <img src="/src/assets/images/moon.svg" alt="dark mode" />
+            <img src={MoonIcon} alt="dark mode" />
           )}
         </ToggleBtn>
       </UserBar>
@@ -124,6 +126,7 @@ const NavBar = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1em 13em;
+  border-bottom: 1px solid #e8e8e8;
 `;
 const SubMenu = styled.div`
   display: flex;
@@ -148,8 +151,21 @@ const Menu = styled.ul`
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
+  padding: 0 5px;
   &:hover {
     color: #f43630;
+  }
+  &:nth-child(2){
+    position: relative;
+    &:before{
+      content: "";
+      left: -4px;
+      height: 0.8em;
+      top: 50%;
+      margin-top: -0.4em;
+      position: absolute;
+      border-left: 1px solid #b3b3b3;
+    }
   }
 `;
 const StyledSubLink = styled(Link)`

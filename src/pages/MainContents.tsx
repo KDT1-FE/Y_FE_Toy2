@@ -4,6 +4,9 @@ import { db } from "../firebase/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PcMannerScore from "../assets/images/pc_mannerscore.webp";
+import ArrowChevron from "../assets/images/arrow-chevron.svg";
+import GuideDesktop from "../assets/images/guide-desktop.webp";
 
 interface ProfileI {
   name: string;
@@ -59,7 +62,7 @@ function MainContents() {
               나와 취향이 통하는지 확인할 수 있어요.
             </span>
           </TextSection>
-          <img src="/src/assets/images/pc_mannerscore.webp" alt="이미지" />
+          <img src={PcMannerScore} alt="이미지" />
         </div>
       </FirstContent>
       <SecondContent>
@@ -71,36 +74,38 @@ function MainContents() {
               <br /> 관심사를 가진 멤버들
             </span>
             <Gallery>
-              {profile &&
-                profile.map((item) => (
-                  <GalleryItem>
-                    <Photo>
-                      <div className="photo-inner">
-                        <img src={item.profileImgUrl} alt="프로필" />
-                      </div>
-                    </Photo>
-                    <UserInfo>
-                      <div className="userName">{item.name}</div>
-                      <div className="userInfo">{item.introText}</div>
-                      <div className="hobby">
-                        {item.hobby.slice(0, 5).map((h, index) => (
-                          <div key={index}>{h}</div>
-                        ))}
-                      </div>
-                    </UserInfo>
-                  </GalleryItem>
-                ))}
+              {
+                profile && profile.slice(0, 6).map((item) => (
+                  <GalleryItem to={`/profiles/${item.id}`}>
+                  <Photo>
+                    <div className="photo-inner">
+                      <img src={item.profileImgUrl} alt="프로필" />
+                    </div>
+                  </Photo>
+                  <UserInfo>
+                    <div className="userName">{item.name}</div>
+                    <div className="userInfo">
+                      {item.introText}
+                    </div>
+                    <div className="hobby">
+                    {item.hobby.slice(0, 5).map((h, index) => (
+                      <div key={index}>{h}</div>
+                    ))}
+                    </div>
+                  </UserInfo>
+                </GalleryItem>
+                ))
+              }
             </Gallery>
             <MoreInfoBtn to={"/profiles"}>
-              더보기{" "}
-              <img src="/src/assets/images/arrow-chevron.svg" alt="화살표" />
+              더보기 <img src={ArrowChevron} alt="화살표" />
             </MoreInfoBtn>
           </TextSection>
         </div>
       </SecondContent>
       <ThirdContent>
         <div className="inner">
-          <img src="/src/assets/images/guide-desktop.webp" alt="이미지" />
+          <img src={GuideDesktop} alt="이미지" />
           <div className="title-wrap">
             <p className="tit">
               언제나 어디서나
@@ -109,8 +114,7 @@ function MainContents() {
             <p className="text">취미메이트에서 취향이 통하는 친구를 만나요.</p>
             <p className="btn-wrap">
               <MoreInfoBtn to={"/chat"} className="left">
-                채팅하기{" "}
-                <img src="/src/assets/images/arrow-chevron.svg" alt="화살표" />
+                채팅하기 <img src={ArrowChevron} alt="화살표" />
               </MoreInfoBtn>
             </p>
           </div>
@@ -163,7 +167,7 @@ const Gallery = styled.div`
   margin-right: -5px;
   margin-top: 2em;
 `;
-const GalleryItem = styled.div`
+const GalleryItem = styled(Link)`
   background-color: white;
   padding: 1em;
   border-radius: 2em;
@@ -172,6 +176,8 @@ const GalleryItem = styled.div`
   gap: 1em;
   margin: 0 5px;
   margin-bottom: 10px;
+  text-decoration:none;
+  color: #373535;
 `;
 const Photo = styled.div`
   flex: 1 0 30%;
@@ -224,6 +230,7 @@ const UserInfo = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: #373535;
   }
   .userInfo {
     width: 90%;
@@ -231,6 +238,7 @@ const UserInfo = styled.div`
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: #373535;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -250,6 +258,7 @@ const TextSection = styled.div`
     font-size: 2.3rem;
     font-weight: 700;
     line-height: 2.6rem;
+    color: #373535;
   }
   .text {
     font-size: 1rem;
@@ -276,6 +285,7 @@ const ThirdContent = styled.div`
       font-size: 2.3rem;
       font-weight: 700;
       line-height: 2.6rem;
+      color: #373535;
     }
     .text {
       font-size: 1rem;

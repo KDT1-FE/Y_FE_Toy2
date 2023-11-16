@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Message } from "../Chat/ChatRoom";
+import SearchImg from "../../assets/images/search.png";
 
 function SearchInput({
   searchText,
@@ -105,9 +106,8 @@ const Input = styled.input`
 const SearchBtn = styled.input`
   cursor: pointer;
   width: 20px;
-  background: url("/src/assets/images/search.png") white no-repeat;
-  background-size: cover;
-  background-position: 90% center;
+  background: url(${SearchImg}) white no-repeat;
+  background-size: contain;
   border: none;
   background-color: transparent;
   margin-left: 5px;
