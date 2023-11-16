@@ -30,6 +30,18 @@ interface Victory {
   num?: number;
 }
 
+interface ChatRoom {
+  users: (string | null)[];
+  id: any;
+  host: string | null;
+  createdAt: FieldValue;
+  bg: string;
+  status: string;
+  name: string;
+  isPrivate?: boolean | undefined;
+  num: number;
+}
+
 const useFireFetch = () => {
   const useGetAll = (
     initialCollection: string,
@@ -120,7 +132,7 @@ const useFireFetch = () => {
   const usePostData = (
     initialCollection: string,
     id: string,
-    data: Notice | Victory,
+    data: Notice | Victory | ChatRoom,
     callback: (() => void) | null = null,
   ) => {
     const post = async () => {
@@ -178,7 +190,34 @@ const useFireFetch = () => {
     update();
   };
 
-  return { useGetAll, useGetSome, usePostData, deleteById, updateData };
+  const get = async (
+    initialCollection: string,
+    key: string,
+    value: string,
+    order: OrderByDirection = "desc",
+  ) => {
+    try {
+      const Ref = collection(db, initialCollection);
+      const q = query(
+        Ref,
+        where(key, "==", value),
+        orderBy("createdAt", order),
+      );
+      const querySnapshot = await getDocs(q);
+      const getData: DocumentData[] = [];
+
+      querySnapshot.forEach((doc) => {
+        getData.push(doc.data());
+      });
+
+      console.log("good");
+      return getData;
+    } catch (error) {
+      console.error("bad: ", error);
+    }
+  };
+
+  return { useGetAll, useGetSome, usePostData, deleteById, updateData, get };
 };
 
 export default useFireFetch;

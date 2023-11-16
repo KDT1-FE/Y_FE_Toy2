@@ -1,15 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import AdminMain from "./pages/Main/user";
 import Login from "./pages/Login";
-import Example from "./pages/Example";
+import Game from "./pages/Game";
+import GameLists from "./components/Main/GameLists";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/main" element={<AdminMain />} />
-        <Route path="/example" element={<Example />} />
+        <Route path="/main" element={<GameLists />} />
+        <Route path="/game" element={<Game />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </>
   );
