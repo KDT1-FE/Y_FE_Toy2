@@ -47,6 +47,8 @@
     cursor: pointer;
     margin: 0 2rem;
     &.right {
+      border: none;
+      background-color: white;
       position: relative;
       font-size: 1.8rem;
     }
@@ -87,11 +89,17 @@
     max-height: 20rem; /* 목록의 최대 높이 */
     overflow-y: auto; /* 내용이 넘칠 경우 스크롤을 생성 */
   }
+
+  .counter {
+    text-align: left;
+  }
   li {
     padding: 0.8rem 0;
+
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
     cursor: pointer;
 
     &:hover {

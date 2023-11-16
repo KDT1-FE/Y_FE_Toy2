@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import { User, Message } from '@/@types/types';
+import Image from 'next/image';
 import styles from './Chat.module.scss';
 import Jwtinterceptors from '../../apis/Jwtinterceptors';
 
@@ -38,21 +39,29 @@ function OtherMessage({ msg }: { msg: Message }) {
 
   return (
     <div className={styles.otherFlex}>
-      <div className={styles.userInfo}>
-        <img
-          src="https://avatars.githubusercontent.com/u/66263916?v=4"
-          className={styles.profileImage}
-        />
-        <span className={styles.username}>{userName}</span>
-      </div>
-      <div className={styles.otherMessage}>
-        <div className={styles.content}>{msg.text}</div>
-        <span>
-          {isToday === dateString
-            ? `${formattedTime}`
-            : `${dateString} ${formattedTime}`}
-        </span>
-      </div>
+      {userPicture && (
+        <>
+          <div className={styles.userInfo}>
+            <Image
+              width={35}
+              height={35}
+              src={userPicture}
+              className={styles.profileImage}
+              alt="유저사진"
+            />
+
+            <span className={styles.username}>{userName}</span>
+          </div>
+          <div className={styles.otherMessage}>
+            <div className={styles.content}>{msg.text}</div>
+            <span>
+              {isToday === dateString
+                ? `${formattedTime}`
+                : `${dateString} ${formattedTime}`}
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 }
