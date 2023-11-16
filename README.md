@@ -1186,7 +1186,7 @@ interface ResponseData {
   <tr>
     <td align="center" width="150px">
       <a href="https://github.com/YongYong21" target="_blank">
-        <img src="#" alt="박용희" />
+        <img src="https://avatars.githubusercontent.com/u/90038848?v=4" alt="박용희" />
       </a>
     </td>
     <td align="center" width="150px">
