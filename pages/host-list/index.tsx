@@ -6,11 +6,10 @@ import {
   getFirebaseData,
   fetchAllUsers,
 } from '@/utils/hostsStorage';
-
 import Search from '@/components/HostList/Search';
 import HostDetailsModal from '@/components/HostList/HostDetailsModal';
-import styles from '@/components/HostList/hostList.module.scss';
 import { FirebaseData, Host } from '@/components/HostList/hostList.types';
+import styles from './hostList.module.scss';
 
 export default function HostListPage() {
   const [hostData, setHostData] = useState<Host[]>([]);

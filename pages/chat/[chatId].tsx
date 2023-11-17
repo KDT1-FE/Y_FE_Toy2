@@ -9,10 +9,10 @@ import ChatAlert from '@/components/chat/chatAlert';
 import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
-import { getStorage } from '@/utils/loginStorage';
+import { getCookie } from 'cookies-next';
+import { GetServerSidePropsContext } from 'next';
 import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import Loading from '@/components/chat/Loading';
-import { CLIENT_URL } from '../../apis/constant';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
 import chatAPI from '../../apis/chatAPI';
@@ -51,10 +51,10 @@ export default function Chatting() {
 
   const userId = useRecoilValue(userIdState);
 
-  const accessToken = getStorage('accessToken');
+  const accessToken = getCookie('ACCESS_TOKEN');
 
   const socket = useMemo(() => {
-    return io(`${CLIENT_URL}?chatId=${currentChatId}`, {
+    return io(`${process.env.NEXT_PUBLIC_CHAT_URL}?chatId=${chatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
         serverId: process.env.NEXT_PUBLIC_API_KEY!,
@@ -217,8 +217,8 @@ export default function Chatting() {
                     <MyChat key={msg.id} msg={msg} />
                   ) : (
                     <OtherChat key={msg.id} msg={msg} prevUserId={prevUserId} />
-                );
-              })}
+                  );
+                })}
               </div>
               {showEntryNotice && <EntryNotice joiner={enterName} />}
               {showExitNotice && <ExitNotice leaver={exitName} />}
@@ -247,3 +247,22 @@ export default function Chatting() {
     </>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+  // eslint-disable-next-line consistent-return
+) => {
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
+
+  if (!refreshToken) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};

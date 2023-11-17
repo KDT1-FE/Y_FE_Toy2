@@ -1,17 +1,21 @@
-import { useEffect, useState } from 'react';
 import { Chat } from '@/@types/types';
-import { sortChatList } from '@/utils/chatList';
 import useConnectServerSocket from '@/hooks/useConnectServerSocket';
+import authorizeFetch from '@/utils/authorizeFetch';
+import { sortChatList } from '@/utils/chatList';
+import { GetServerSidePropsContext } from 'next';
+import { useEffect, useState } from 'react';
 import Header from '@/components/common/Header/Header';
 import {
   ChatListModal,
   CreateChatButton,
   AllChatListItem,
 } from '@/components/ChatList';
-import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
+import chatListAPI from '../../apis/chatListAPI';
 
-export default function AllChatList() {
+export default function AllChatList({ userData }) {
+  console.log(userData.user.id);
+
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
 
   const getAllChat = async () => {
@@ -47,7 +51,7 @@ export default function AllChatList() {
   }, [serverSocket]);
 
   return (
-    <div >
+    <div>
       <Header pageName="All" />
       <ul className={styles.list_container}>
         {allChatList.map(chat => (
@@ -56,8 +60,35 @@ export default function AllChatList() {
       </ul>
       <CreateChatButton setIsModal={setIsModal} />
       {isModal && <ChatListModal handleModal={handleModal} />}
-    
     </div>
-    
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const accessToken = context.req.cookies.ACCESS_TOKEN;
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
+
+  if (accessToken && refreshToken) {
+    const response = await authorizeFetch({
+      accessToken,
+      refreshToken,
+    });
+    return {
+      props: { userData: response.data },
+    };
+  }
+  if (!refreshToken) {
+    // accessToken이 없으면 로그인 페이지로 리다이렉트
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};

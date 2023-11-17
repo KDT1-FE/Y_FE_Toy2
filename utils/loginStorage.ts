@@ -1,10 +1,5 @@
 const storage = typeof window !== 'undefined' ? localStorage : null;
 
-export const isLoginStorage = () => {
-  const state = storage ? storage.login : null;
-  return !!state;
-};
-
 export const getStorage = (key: string, defaultValue = undefined) => {
   try {
     const storedValue = storage?.getItem(key);

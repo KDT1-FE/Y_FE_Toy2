@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { HiArrowLongLeft } from 'react-icons/hi2';
 import { IoMdMenu } from 'react-icons/io';
+import Jwtinterceptor from '@/apis/JwtInterceptor';
+import { getAccessToken } from '@/utils/tokenManager';
 import { Chat } from '@/@types/types';
 import Image from 'next/image';
 import styles from './Chat.module.scss';
-import Jwtinterceptors from '../../apis/Jwtinterceptors';
 
 interface Props {
   chatData: Chat;
@@ -14,9 +15,9 @@ interface Props {
 export default function ChatroomHeader({ chatData }: Props) {
   const router = useRouter();
 
-  const { instance } = Jwtinterceptors();
+  const { instance } = Jwtinterceptor();
 
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken: string = getAccessToken();
 
   const [menuOpen, setMenuOpen] = useState(false);
 
