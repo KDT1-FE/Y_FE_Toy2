@@ -81,7 +81,6 @@ const LobbyListTop: React.FC = () => {
           fontSize={16}
           onChange={(e) => {
             setSortSelect(e.target.value);
-            console.log('작동');
           }}
           value={select}>
           <option value="all">모든 게임방 보기</option>

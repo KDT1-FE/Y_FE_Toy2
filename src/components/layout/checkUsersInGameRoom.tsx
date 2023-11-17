@@ -45,7 +45,6 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
         if (id) {
           const response: AxiosResponse<OnlyResponse> | null =
             await getOnlyGameRoom(id.substring(1));
-          console.log('첫 응답', response.data);
 
           if (response && response.data) {
             const foundChats = response.data;
@@ -65,7 +64,7 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
           }
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     setUsers();
@@ -81,22 +80,18 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
       });
 
       socket.on('connect', () => {
-        console.log('에밋');
         socket?.emit('users');
       });
 
       socket.on('users-to-client', (data) => {
-        console.log('불러오기 발동');
         setUsersInGameRoom(data.users);
       });
 
       socket.on('leave', (data) => {
-        console.log('나가기 발동');
         setUsersInGameRoom(data.users);
       });
 
       socket.on('join', (data) => {
-        console.log('조인 발동');
         setUsersInGameRoom(data.users);
       });
 
@@ -126,7 +121,6 @@ const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
 
     fetchUserProfiles();
   }, [UsersInGameRoom]);
-  console.log(profiles);
 
   const MAX_USERS = 4;
 

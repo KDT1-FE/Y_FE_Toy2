@@ -18,7 +18,6 @@ export const createSeparatedTime = (createdAt: Date) => {
 
 // 이전 채팅의 날짜와 시간을 비교하여 같은 날짜라면 date 값 null로 반환
 export const modifyDate = (SeparatedTime: any) => {
-  // console.log(SeparatedTime);
   return SeparatedTime.map((element: any, index: any) => {
     // 초기값은 그대로 반환
     if (index === 0) {

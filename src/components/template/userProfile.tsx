@@ -80,7 +80,7 @@ const UserProfile = () => {
       navigate('/lobby');
       onClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -91,7 +91,7 @@ const UserProfile = () => {
       swal({ title: '로그아웃에 성공했습니다.', icon: 'success' });
       navigate('/');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       swal({ title: '로그아웃 중 오류가 발생했습니다.', icon: 'error' });
     }
   };
@@ -101,7 +101,7 @@ const UserProfile = () => {
       <Flex
         width={450}
         height={160}
-        backgroundImage={'src/assets/icons/card.png'}
+        backgroundImage={'/assets/icons/card.png'}
         borderRadius={10}
         alignItems={'center'}
         justifyContent={'center'}

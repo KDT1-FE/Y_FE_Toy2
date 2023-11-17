@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import InfoImg from '../../assets/icons/info.png';
-import sendImg from '../../assets/icons/send.png';
+import sendImg from '/assets/icons/send.png';
 import { useEffect, useRef, useState } from 'react';
 import { chatSocket } from '../../api/socket';
 import {
@@ -15,7 +14,6 @@ import {
   privateChatNew,
   onlineUserStateInGameRoom,
   myMessageState,
-  roomIdState,
   usersInRoom,
 } from '../../states/atom';
 import { getCookie } from '../../util/util';
@@ -62,7 +60,6 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   }
 
   const userId = getUserIdFromCookie();
-  //console.log(userId);
   // const myUserData: any = useRecoilValue(myUserDataState);
   const [currentMessageObject, setCurrentMessageObject] =
     useRecoilState(myMessageState);
@@ -73,7 +70,6 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
-        // console.log('Fetched messages:', messageData.messages);
 
         // createdAt을 기준으로 시간순서 정렬
         const sortedMessages = sortCreatedAt(messageData.messages);
@@ -125,13 +121,11 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
       });
 
       newSocket.on('join', (data) => {
-        console.log('들어온거 작동');
         setUsersInGameRoom(data.users);
         setUsersInRoom(usersInRoomData + 1);
       });
 
       newSocket.on('leave', (data) => {
-        console.log('나간거 작동');
         setUsersInGameRoom(data.users);
         if (usersInRoomData > 0) {
           setUsersInRoom(usersInRoomData - 1);

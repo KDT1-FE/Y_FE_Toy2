@@ -97,12 +97,11 @@ const NewPrivateChat = () => {
         if (chatId) {
           setOpenNewChatDetail(true);
         } else {
-          console.log('만들기');
           await createGameRooms(element.id, [element.id], true);
           setOpenNewChatDetail(true);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };

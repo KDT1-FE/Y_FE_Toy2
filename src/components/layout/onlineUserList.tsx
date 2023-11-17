@@ -50,8 +50,6 @@ const OnlineUserList = () => {
   const userId = getCookie('userId');
   const allChatState = useRecoilValue(allRoomNumberState);
 
-  console.log(onLine);
-
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
   });
@@ -79,7 +77,6 @@ const OnlineUserList = () => {
       if (chatId) {
         //navigate(`/room/:${chatId}`);
       } else {
-        console.log('만들기');
         const chat = await createGameRooms(element.id, [element.id], true);
         //navigate(`/room/:${chat.id}`);
       }

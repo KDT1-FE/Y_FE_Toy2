@@ -8,11 +8,13 @@ import {
   Img,
   Flex,
   Switch,
+  useColorMode,
 } from '@chakra-ui/react';
 import { getCookie } from '../../util/util';
 import { disconnectLoginSocket } from '../../api/socket';
 import { removeCookies } from '../../util/util';
 import swal from 'sweetalert';
+
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,6 +23,7 @@ interface LoginModalProps {
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const refreshToken = getCookie('refreshToken');
+  const { toggleColorMode } = useColorMode();
 
   const handleClick = async () => {
     if (refreshToken) {
@@ -32,7 +35,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
         navigate('/');
       } catch (error) {
-        console.log(error);
+        console.error(error);
         swal({ title: '로그아웃 중 오류가 발생했습니다', icon: 'error' });
       } finally {
         onClose();
@@ -51,7 +54,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         width="220px"
         height="150px"
         position={'relative'}
-        top={0}
+        top={2.5}
         right={-590}
         boxShadow="lg"
         border="1px solid #E2E8F0"
@@ -98,6 +101,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             <Img src="/assets/moon.svg" width="18px" height="18px" />
             <Text marginRight={9}>다크모드</Text>
             <Switch
+              onClick={toggleColorMode}
               sx={{
                 '.css-p27qcy[data-checked]': {
                   // 활성화 상태에서의 트랙 색상

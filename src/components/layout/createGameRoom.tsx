@@ -13,7 +13,6 @@ const CreateGameRoom = () => {
 
   const onChange = (e: React.ChangeEvent<any>) => {
     const { value, name } = e.target;
-    // console.log(value, name);
     setIsPrivate(value === 'Private');
   };
 

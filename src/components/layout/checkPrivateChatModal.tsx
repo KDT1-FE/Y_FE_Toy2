@@ -161,7 +161,7 @@ const CheckPrivateChat = ({ isOpen, onClose }: LoginModalProps) => {
           width="300px"
           height="420px"
           position={'relative'}
-          top={0}
+          top={2.5}
           right={-505}
           boxShadow="lg"
           border="1px solid #E2E8F0"

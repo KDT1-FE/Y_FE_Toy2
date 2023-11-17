@@ -25,8 +25,6 @@ const Drawing = () => {
       ? pathParts[2].substring(1)
       : pathParts[2];
     setRoomId(newRoomId);
-    console.log(roomId);
-
     const canvas = canvasRef.current;
     if (canvas && !contextRef.current) {
       canvas.width = 940;

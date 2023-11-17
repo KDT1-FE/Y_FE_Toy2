@@ -12,7 +12,7 @@ import {
 
 import { Flex, Text } from '@chakra-ui/layout';
 import { Img } from '@chakra-ui/image';
-import { User } from './checkPrivateChat';
+import { User } from './checkPrivateChatModal';
 import { IconButton } from '@chakra-ui/button';
 
 import { randomNameFunc } from '../../util/util';

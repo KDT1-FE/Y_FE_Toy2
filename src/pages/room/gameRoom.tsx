@@ -4,31 +4,19 @@ import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  btnState,
   chattingIdState,
   myMessageState,
-  roomIdState,
-  userRoomState,
-  submitState,
-  usersInRoom,
   userState,
+  allRoomState,
 } from '../../states/atom';
 import styled from 'styled-components';
 import GameChatting from '../../components/template/GameChatting';
-import { controlBack } from '../../hooks/leaveHandle';
+
 import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
 import { sortCreatedAt } from '../../util/util';
-import {
-  Chat,
-  ChatResponse,
-  OnlyResponse,
-  User,
-} from '../../interfaces/interface';
-import { getAllGameRooms, getOnlyGameRoom } from '../../api';
-import { AxiosResponse } from 'axios';
-import AnswerForm from '../../components/template/AnswerForm';
-import { ResponsiveValue } from '@chakra-ui/react';
-import CheckNums from '../../util/checkNums';
+import { Chat } from '../../interfaces/interface';
+import { getAllGameRooms } from '../../api';
+
 import { gameSocket } from '../../api/socket';
 import { getCookie } from '../../util/util';
 import {
@@ -43,6 +31,8 @@ import {
 import AnswerModal from '../../components/layout/anwerModal.tsx';
 
 const GameRoom: React.FC = () => {
+  const [allRooms, setAllRooms] = useRecoilState(allRoomState);
+  console.log(allRooms);
   const [isQuizMaster, setIsQuizMaster] = useState(true);
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -84,8 +74,6 @@ const GameRoom: React.FC = () => {
   useEffect(() => {
     setUserRoomUser(userNumber);
   }, [roomNumber]);
-  const check = CheckNums();
-
 
   const [answerModalOpen, setAnswerModalOpen] = useState(false);
 
@@ -114,8 +102,6 @@ const GameRoom: React.FC = () => {
           index: index + 1,
         }));
 
-        console.log(plusIndex);
-
         const findIndex = async (chatId: string): Promise<number | null> => {
           const foundChat = await plusIndex.find((chat) => chat.id === chatId);
           if (foundChat) {
@@ -128,7 +114,7 @@ const GameRoom: React.FC = () => {
         setRoomNumber(roomData);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -139,7 +125,6 @@ const GameRoom: React.FC = () => {
     gameSocket.emit('joinRoom', roomId);
 
     gameSocket.on('quiz_master_set', (quizMasterId: string) => {
-      console.log(myId, quizMasterId);
       setIsQuizMaster(myId === quizMasterId);
       if (true) {
         if (myId === quizMasterId) {
@@ -204,7 +189,6 @@ const GameRoom: React.FC = () => {
       }
     }
     const handleCorrectAnswer = (data: { winner: string }) => {
-      console.log(data.winner, myId);
       if (data.winner === myId) {
         setShowAlert({
           active: true,

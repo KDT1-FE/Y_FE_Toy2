@@ -12,7 +12,6 @@ export const useLoginSocket = () => {
 
   useEffect(() => {
     if (accessToken) {
-      console.log('소켓자동연결 커스텀훅 발동!');
       loginSocket(accessToken, (data) => {
         setOnlineUsers(data); // Recoil 상태 업데이트
       });

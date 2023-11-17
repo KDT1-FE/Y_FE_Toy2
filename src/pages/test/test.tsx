@@ -9,7 +9,7 @@ import OfflineUserList from '../../components/layout/offlineUserList';
 import OnlineUserList from '../../components/layout/onlineUserList';
 import UserList from '../../components/template/userList';
 import UserLogout from '../login/userLogout';
-import CheckPrivateChat from '../../components/layout/checkPrivateChat';
+import CheckPrivateChat from '../../components/layout/checkPrivateChatModal';
 import MyUserData from '../../components/layout/MyUserData';
 
 const GameLobby = () => {

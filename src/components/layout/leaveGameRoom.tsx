@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // import { useRecoilValue } from 'recoil';
 import { leaveGameRoom } from '../../api';
 import styled from 'styled-components';
-import inviteImg from '../../assets/icons/leaveRoom.png';
+import inviteImg from '/assets/icons/leaveRoom.png';
 
 const LeaveGameRoom = (chatId: any) => {
   const navigate = useNavigate();
@@ -13,7 +13,6 @@ const LeaveGameRoom = (chatId: any) => {
     try {
       await leaveGameRoom(id);
     } catch (error) {
-      // console.log(error);
     } finally {
       disconnectChattingSocket();
       navigate('/lobby');

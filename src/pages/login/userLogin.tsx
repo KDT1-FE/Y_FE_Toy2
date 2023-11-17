@@ -83,7 +83,6 @@ function UserLogin() {
 
     if (accessToken || refreshToken) {
       navigate('/lobby');
-      console.log('리디렉션됨');
     }
   }, []);
 

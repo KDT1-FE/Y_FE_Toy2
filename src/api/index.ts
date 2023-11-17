@@ -33,7 +33,6 @@ client.interceptors.response.use(
       const refreshToken = getCookie('refreshToken');
       if (refreshToken) {
         try {
-          console.log('응답 인터셉터 실행');
           const res = await postRefresh(refreshToken);
           setAccessToken(res.data.accessToken);
           return axios(error.config); // 원래 요청을 재시도
@@ -131,7 +130,6 @@ export const getAllMyChat = async () => {
 
 export const leaveGameRoom = async (chatId: string) => {
   const res = await client.patch(`chat/leave`, { chatId: chatId });
-  console.log(res);
   return res;
 };
 
@@ -140,12 +138,10 @@ export const inviteGameRoom = async (chatId: string, users: string[]) => {
     chatId: chatId,
     users: users,
   });
-  console.log(res);
   return res;
 };
 
 export const getOnlyGameRoom = async (chatId: string) => {
   const res = await client.get(`chat/only?chatId=${chatId}`);
-  console.log(res);
   return res;
 };

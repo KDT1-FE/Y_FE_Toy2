@@ -50,7 +50,6 @@ export const removeCookies = async () => {
 export const getAllUsersData = async () => {
   try {
     const res = await getAllUsers();
-    console.log(res);
     return res;
   } catch (e) {
     console.error(e);
@@ -62,7 +61,6 @@ export const getAllUsersData = async () => {
 export const getMyUserData = async (userId: string) => {
   try {
     const res = await getUserData(userId);
-    console.log(res);
     return res;
   } catch (e) {
     console.error(e);
@@ -73,7 +71,6 @@ export const getMyUserData = async (userId: string) => {
 export const postRefreshToken = async (refreshToken: string) => {
   try {
     const res = await postRefresh(refreshToken);
-    console.log(res.data);
     alert('토큰 재발급에 성공했습니다.');
   } catch (e) {
     console.error(e);
@@ -91,7 +88,7 @@ export const titleAction = async (navigate: NavigateFunction, id: string) => {
     try {
       await leaveGameRoom(id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       disconnectChattingSocket();
       navigate('/lobby');

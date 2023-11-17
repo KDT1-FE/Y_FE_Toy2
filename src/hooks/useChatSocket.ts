@@ -11,7 +11,6 @@ export const useChatSocket = () => {
   const [chatId, setChatId] = useRecoilState(chattingIdState);
   useEffect(() => {
     if (accessToken && chatId) {
-      console.log('useChatSocket 커스텀훅 발동!');
       chatSocket(accessToken, chatId);
     }
 
