@@ -1,4 +1,4 @@
-export const validateUser = (user) => {
+export const validateUser = (user: User) => {
   const newErrors: {
     id?: string;
     password?: string;
@@ -29,3 +29,12 @@ export const validateUser = (user) => {
 
   return newErrors;
 };
+
+
+interface User {
+  id: string,
+  name: string,
+  password: string,
+  assurer: string,
+  picture: string,
+}
