@@ -1,6 +1,6 @@
 import React from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
-import styles from './Chat.module.scss';
+import styles from './Chat1.module.scss';
 import { Message } from '../../@types/types';
 
 export default function MyMessage({ msg }: { msg: Message }) {

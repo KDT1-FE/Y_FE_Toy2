@@ -1,4 +1,4 @@
-import styles from './Chat.module.scss';
+import styles from './Chat1.module.scss';
 
 export default function EntryNotice({ joiner }: { joiner: string }) {
   return (

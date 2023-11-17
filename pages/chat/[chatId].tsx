@@ -22,7 +22,7 @@ import {
   OtherMessage,
 } from '@/components/Chat';
 import authorizeFetch from '@/utils/authorizeFetch';
-import styles from '../../components/chat/Chat.module.scss';
+import styles from '../../components/chat/Chat1.module.scss';
 import chatAPI from '../../apis/chatAPI';
 
 interface MessageArray {
