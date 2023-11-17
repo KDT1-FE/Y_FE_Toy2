@@ -2,18 +2,30 @@
 @use '../base' as *;
 
 .header {
-  @include flex-center-row();
-  padding: 1rem;
+  padding: 3rem 2rem;
+  display: flex;
   justify-content: space-between;
   background-color: $bg-purple-80;
   color: $white;
   font-size: $font-base;
   font-family: $font-main;
-}
-.p {
-  font-size: $font-lg;
-}
 
-.button {
-  font-size: $font-lg;
+  p {
+    min-width: 6em;
+    margin: 0;
+  }
+
+  span {
+    padding: 1rem;
+  }
+
+  &__text {
+    font-weight: $font-bold700;
+    font-family: $font-logo;
+    font-size: $font-lg;
+  }
+
+  span {
+    padding: 1rem;
+  }
 }

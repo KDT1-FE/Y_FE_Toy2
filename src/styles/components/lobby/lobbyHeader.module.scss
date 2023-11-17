@@ -48,5 +48,18 @@
         box-shadow: 0 0 100px #eee;
       }
     }
+
+    &__userImg {
+      @include flex-center-row;
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      background-color: $profile-wrap;
+
+      img {
+        width: 80%;
+        height: 80%;
+      }
+    }
   }
 }

@@ -7,13 +7,8 @@ import Pagination from '@/components/lobby/Pagination';
 import Room from '@/components/lobby/Room';
 import CreateModal from '@/components/lobby/CreateModal';
 import fastRequest from '@/api/fastRequest';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { getUserInfo } from '@/store/getUserSlice';
 
 const Lobby = (): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const userId = useAppSelector((state) => state.userId);
-
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [page, setPage] = useState(1);
   const [rooms, setRooms] = useState([]);
@@ -22,19 +17,6 @@ const Lobby = (): JSX.Element => {
 
   const toggleModal = () => {
     setIsModalOpened(!isModalOpened);
-  };
-
-  const getSelfInfo = async () => {
-    try {
-      const response = await fastRequest.searchUserInfo(
-        userId,
-        localStorage.getItem('access_token') as string,
-      );
-
-      dispatch(getUserInfo(response));
-    } catch (error) {
-      console.error('error');
-    }
   };
 
   const getAllChat = async () => {
@@ -49,7 +31,6 @@ const Lobby = (): JSX.Element => {
   };
 
   useEffect(() => {
-    getSelfInfo();
     getAllChat();
   }, []);
 
