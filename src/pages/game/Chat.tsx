@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import ChatHeader from '@/components/ChatHeader';
+import ChatHeader from '@/components/chat/ChatHeader';
 import GameHeader from '@components/common/GameHeader';
 import styles from '@styles/pages/chat.module.scss';
-import ChatItem from '../../components/ChatItem';
+import ChatItem from '../../components/chat/ChatItem';
 import { Socket, io } from 'socket.io-client';
 import fastRequest from '@/api/fastRequest';
 
@@ -96,7 +96,12 @@ const ChatPage: React.FC = () => {
           pocketId={pocketId}
         />
       ) : (
-        <ChatHeader currentPlayers={currentPlayers} totalPlayers={4} />
+        <ChatHeader
+          currentPlayers={currentPlayers}
+          totalPlayers={4}
+          chatId={chatId}
+          pocketId={pocketId}
+        />
       )}
       <div className={styles.chatEx}>
         <div className={styles.chatItems}>
