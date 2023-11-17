@@ -32,7 +32,10 @@
   &__players {
     font-size: 2.5rem;
     font-weight: 600;
-    padding: 0.7rem;
+
+    li {
+      padding: 0.7rem;
+    }
   }
 
   &__victory_team {
@@ -53,9 +56,16 @@
     bottom: 10rem;
     right: 15rem;
 
-    & a {
+    button {
+      background-color: transparent;
+      border: none;
       color: white;
       letter-spacing: 0.2rem;
+
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
     }
   }
 }

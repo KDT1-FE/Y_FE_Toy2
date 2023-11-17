@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@styles/pages/result.module.scss';
-import { Link, useSearchParams } from 'react-router-dom';
-
-// 플레이한 모든 유저의 정보: 닉네임(이름)과 역할
-
-// 게임 결과
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getGameData } from '@/api/vote';
+import { Ghost } from './Vote';
 
 const Result = () => {
   const [show, setShow] = useState(false);
   const [victory, setVictory] = useState(true);
+  const [players, setPlayers] = useState<Ghost[]>([]);
+
   const [searchParams] = useSearchParams();
   const result = searchParams.get('result');
+  const pocketId = searchParams.get('pocketId');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,6 +29,25 @@ const Result = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const gameData = await getGameData(pocketId as string);
+        const users = gameData.vote;
+        setPlayers(users);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleClick = () => {
+    //채팅방 나가는 로직 추가
+    navigate('/lobby');
+  };
+
   return (
     <div className={styles.result}>
       <div className={styles.result__contents}>
@@ -35,7 +56,14 @@ const Result = () => {
           style={{ color: `${victory ? 'red' : 'blue'}` }}>
           Credits
         </h1>
-        <div className={styles.result__players}>players</div>
+        <ul className={styles.result__players}>
+          {players.map((player) => (
+            <li>
+              {player.role === 'magia' ? '잔혹한 마피아' : '무고한 시민'}{' '}
+              {player.name}
+            </li>
+          ))}
+        </ul>
         <h1
           className={styles.result__victory_team}
           style={{ color: `${victory ? 'red' : 'blue'}` }}>
@@ -61,7 +89,7 @@ const Result = () => {
         </div>
       </div>
       <div className={styles.result__goback}>
-        {show && <Link to="/lobby">돌아가기</Link>}
+        {show && <button onClick={handleClick}>돌아가기</button>}
       </div>
     </div>
   );
