@@ -1,90 +1,194 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
-import MyChat from '@/components/chat/mychat';
-// import OtherChat from '@/components/chat/otherchat';
-import EntryNotice from '@/components/chat/entryNotice';
-import ExitNotice from '@/components/chat/exitNotice';
-import ChatAlert from '@/components/chat/chatAlert';
-import { JoinersData, LeaverData, Message } from '@/@types/types';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { io } from 'socket.io-client';
+import { useSetRecoilState } from 'recoil';
+import {
+  Chat,
+  IsValidAuth,
+  JoinersData,
+  LeaverData,
+  Message,
+} from '@/@types/types';
 import { useRouter } from 'next/router';
-import { CLIENT_URL } from '../../apis/constant';
-import styles from '../../styles/pages/Chat.module.scss';
-import styles2 from '../../components/chat/Chat.module.scss';
-import ChatroomHeader from '../../components/chat/header';
+import { getCookie } from 'cookies-next';
+import { GetServerSidePropsContext } from 'next';
+import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import {
+  ChatAlert,
+  ChatLoading,
+  ChatroomHeader,
+  EntryNotice,
+  ExitNotice,
+  MyMessage,
+  OtherMessage,
+} from '@/components/Chat';
+import authorizeFetch from '@/utils/authorizeFetch';
+import styles from '../../components/chat/Chat.module.scss';
+import chatAPI from '../../apis/chatAPI';
 
-interface MessagesToClient {
+interface MessageArray {
   messages: Message[];
 }
 
-export default function Chat() {
+export default function Chatting({ authData }: IsValidAuth) {
   const router = useRouter();
   const { chatId } = router.query;
+  const currentChatId: string = Array.isArray(chatId)
+    ? chatId[0]
+    : chatId || '';
 
-  const [, setIsConnected] = useState(false);
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const setShowNavigation = useSetRecoilState(showNavigationState);
+  useEffect(() => {
+    setShowNavigation(false);
+    return () => {
+      setShowNavigation(true);
+    };
+  }, []);
+
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const socketRef = useRef<Socket | null>(null);
+  const [chatData, setChatData] = useState<Chat | null>();
 
-  const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2ZiMTExZTp1c2VyMyIsImlhdCI6MTY5OTUzMzExMiwiZXhwIjoxNzAwMTM3OTEyfQ.4eslctzcBGQAwkcKT97IbF0i-9-MZ0kvhjY4A6sK8Wo';
+  const [showEntryNotice, setShowEntryNotice] = useState(false);
+  const [showExitNotice, setShowExitNotice] = useState(false);
 
-  useEffect(() => {
-    socketRef.current = io(`${CLIENT_URL}?chatId=${chatId}`, {
+  const [enterName, setEnterName] = useState<string>('');
+  const [exitName, setExitName] = useState<string>('');
+
+  const userId = authData.user.id;
+
+  const accessToken = getCookie('ACCESS_TOKEN');
+
+  const socket = useMemo(() => {
+    return io(`${process.env.NEXT_PUBLIC_CHAT_URL}?chatId=${chatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
         serverId: process.env.NEXT_PUBLIC_API_KEY!,
       },
     });
+  }, [currentChatId, accessToken]);
 
-    socketRef.current.on('connect', () => {
-      console.log('Connected to chat server');
-      setIsConnected(true);
-      console.log(socketRef.current);
-    });
+  useEffect(() => {
+    const fetchChatData = async () => {
+      try {
+        const response = await chatAPI.getChatInfo(currentChatId);
+        const chatInfo: Chat = response.data.chat;
+        await setChatData(chatInfo);
+      } catch (error) {
+        console.error('Error fetching chat data:', error);
+      }
+    };
 
-    socketRef.current.emit('fetch-messages');
+    if (currentChatId) {
+      fetchChatData();
+    }
+  }, [currentChatId]);
 
-    socketRef.current.on(
-      'messages-to-client',
-      (messageArray: MessagesToClient) => {
-        setMessages(messageArray.messages.reverse());
-      },
-    );
+  useEffect(() => {
+    if (socket) {
+      socket.on('connect', () => {
+        console.log('Connected from server');
+        setTimeout(() => {
+          socket.emit('fetch-messages');
+        }, 500);
+      });
+      socket.on('messages-to-client', (messageArray: MessageArray) => {
+        setMessages(messageArray.messages);
+      });
 
-    socketRef.current.on('message-to-client', (messageObject: Message) => {
-      console.log(messageObject);
-      setMessages(prevMessages => [...prevMessages, messageObject]);
-    });
+      socket.on('message-to-client', (messageObject: Message) => {
+        setMessages(prevMessages => [...prevMessages, messageObject]);
+      });
 
-    socketRef.current.on('join', (messageObject: JoinersData) => {
-      console.log(messageObject, '123123123');
-    });
+      socket.on('join', async (messageObject: JoinersData) => {
+        console.log(messageObject, '채팅방 입장');
+        const joinUserInfo = await chatAPI.getUserInfo(
+          messageObject.joiners[0],
+        );
 
-    socketRef.current.on('leave', (messageObject: LeaverData) => {
-      console.log(messageObject, '123123123');
-    });
+        let userData = joinUserInfo.data.user;
+        setEnterName(userData.name);
+
+        // 이름 속성명 변경
+        userData = { ...userData, username: userData.name };
+        delete userData.name; // 기존의 이름 속성 삭제
+
+        setChatData((prevChatData): Chat => {
+          const updatedUsers = [...prevChatData!.users, userData];
+          return {
+            ...prevChatData!,
+            users: updatedUsers,
+          };
+        });
+      });
+
+      socket.on('leave', async (messageObject: LeaverData) => {
+        console.log(messageObject, '채팅방 퇴장');
+        const exitUserInfo = await chatAPI.getUserInfo(messageObject.leaver);
+        const userData = exitUserInfo.data.user;
+        setExitName(userData.name);
+
+        setChatData((prevChatData): Chat => {
+          const updatedUsers = prevChatData!.users.filter(
+            user => user.id !== userData.id,
+          );
+          return {
+            ...prevChatData!,
+            users: updatedUsers,
+          };
+        });
+      });
+    }
 
     return () => {
-      socketRef.current?.off('connect');
-      socketRef.current?.off('messages-to-client');
-      socketRef.current?.off('message-to-client');
-      socketRef.current?.disconnect();
+      socket.off('connect');
+      socket.off('messages-to-client');
+      socket.off('message-to-client');
+      socket.off('join');
+      socket.off('leave');
+      socket.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatId]); // 이제 chatId와 accessToken이 변경될 때
+  }, [socket]);
+
+  useEffect(() => {
+    if (enterName) {
+      setShowEntryNotice(true);
+    }
+    const entryTimer = setTimeout(() => {
+      setShowEntryNotice(false);
+      setEnterName('');
+    }, 3000);
+
+    return () => clearTimeout(entryTimer);
+  }, [enterName]);
+
+  useEffect(() => {
+    if (exitName) {
+      setShowExitNotice(true);
+    }
+    const exitTimer = setTimeout(() => {
+      setShowExitNotice(false);
+      setExitName('');
+    }, 3000);
+
+    return () => clearTimeout(exitTimer);
+  }, [exitName]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({
+        behavior: 'smooth',
+      });
     }
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    setTimeout(() => {
+      scrollToBottom();
+    }, 500);
+  }, [messages, showEntryNotice, showExitNotice]);
 
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
@@ -97,42 +201,88 @@ export default function Chat() {
       return;
     }
 
-    if (socketRef.current?.connected) {
-      socketRef.current.emit('message-to-server', message);
-      setMessage('');
-    }
+    socket.emit('message-to-server', message);
+    setMessage('');
   };
 
   return (
     <>
-      {typeof chatId === 'string' && <ChatroomHeader chatId={chatId} />}
+      {chatData && <ChatroomHeader chatData={chatData} />}
       <div className={styles.container}>
         <div className={styles.container}>
-          <EntryNotice />
-          <ExitNotice />
-          <div>
-            {messages.map(msg => (
-              <MyChat key={msg.id} msg={msg} />
-            ))}
-          </div>
+          {!chatData ? (
+            <ChatLoading />
+          ) : (
+            <>
+              <div>
+                {messages.map((msg, index) => {
+                  const prevUserId =
+                    index > 0 ? messages[index - 1].userId : null;
+                  return msg.userId === userId ? (
+                    <MyMessage key={msg.id} msg={msg} />
+                  ) : (
+                    <OtherMessage
+                      key={msg.id}
+                      msg={msg}
+                      prevUserId={prevUserId}
+                    />
+                  );
+                })}
+              </div>
+              {showEntryNotice && <EntryNotice joiner={enterName} />}
+              {showExitNotice && <ExitNotice leaver={exitName} />}
+              {showAlert && <ChatAlert />}
+            </>
+          )}
           <div ref={messagesEndRef} />
-          {showAlert && <ChatAlert />}
         </div>
       </div>
-      <form className={styles2.footer} onSubmit={handleSendMessage}>
-        <input
-          type="text"
-          placeholder="대화를 시작해보세요!"
-          className={styles2.chatInput}
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
-        <button
-          className={styles2.triangle_button}
-          type="submit"
-          aria-label="Submit"
-        />
-      </form>
+      {chatData ? (
+        <form className={styles.footer} onSubmit={handleSendMessage}>
+          <input
+            type="text"
+            placeholder="대화를 시작해보세요!"
+            className={styles.chatInput}
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+            autoFocus
+          />
+          <button
+            className={styles.triangle_button}
+            type="submit"
+            aria-label="Submit"
+          />
+        </form>
+      ) : null}
     </>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const accessToken = context.req.cookies.ACCESS_TOKEN;
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
+
+  if (accessToken && refreshToken) {
+    const response = await authorizeFetch({
+      accessToken,
+      refreshToken,
+    });
+    return {
+      props: { authData: response.data },
+    };
+  }
+  if (!refreshToken) {
+    // accessToken이 없으면 로그인 페이지로 리다이렉트
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};

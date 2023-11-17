@@ -1,0 +1,86 @@
+@import '../styles/mixin';
+
+.login_container {
+  @include flex-center-row;
+  height: 100vh;
+
+  .login_box {
+    padding: 0 1rem;
+    @include flex-center-col;
+    h2 {
+      font-size: 3rem;
+      margin-top: 0;
+      margin-bottom: 4rem;
+    }
+  }
+
+  .input_box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 2rem;
+
+    input {
+      width: 40rem;
+      height: 4rem;
+      padding: 0.2rem 1rem;
+      outline: none;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      font-size: 1.4rem;
+
+      &::placeholder {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .button_box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+
+    .horizontalLine {
+      width: 100%;
+      border: 1px solid #d1cfcf;
+    }
+
+    button {
+      width: 100%;
+      background-color: #ff5991;
+      border: none;
+      color: #ffff;
+      cursor: pointer;
+      height: 4rem;
+      border-radius: 5px;
+      font-size: 1.4rem;
+
+      &:hover {
+        background-color: #ff3478;
+        transition: 0.3s;
+      }
+    }
+
+    .signUp_link {
+      width: 100%;
+      height: 4rem;
+      background-color: #ff5991;
+      @include flex-center-row;
+      border-radius: 5px;
+      cursor: pointer;
+      &:hover {
+        background-color: #ff3478;
+        transition: 0.3s;
+      }
+
+      a {
+        @include flex-center-row;
+        width: 100%;
+        color: #ffff;
+        font-size: 1.4rem;
+        text-decoration: none;
+      }
+    }
+  }
+}

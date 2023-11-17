@@ -1,88 +1,96 @@
-import Link from 'next/link';
+import { Chat, IsValidAuth } from '@/@types/types';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { Chat } from '@/@types/types';
-import Image from 'next/image';
-import CreateChat from '@/components/ChatList/CreateChat';
+import { sortChatList } from '@/utils/chatList';
+import useConnectServerSocket from '@/hooks/useConnectServerSocket';
+import { Header } from '@/components/Common';
+import {
+  AllChatListItem,
+  ChatListModal,
+  CreateChatButton,
+} from '@/components/ChatList';
+import { GetServerSidePropsContext } from 'next';
+import authorizeFetch from '@/utils/authorizeFetch';
 import chatListAPI from '../../apis/chatListAPI';
-import styles from '../../styles/pages/ChatList.module.scss';
+import styles from '../../components/ChatList/ChatList.module.scss';
 
-export default function AllChatList() {
-  const router = useRouter();
-
+export default function AllChatList({ authData }: IsValidAuth) {
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
+
   const getAllChat = async () => {
-    const chatAllList = await chatListAPI.getAllChatList();
-    setAllChatList(chatAllList.data.chats);
+    const allChats: Chat[] = (await chatListAPI.getAllChatList()).data.chats;
+    const sortedAllChatList = sortChatList(allChats);
+    setAllChatList(sortedAllChatList);
   };
+
+  // 30초마다 채팅방 목록 재요청
   useEffect(() => {
     getAllChat();
+    const timer = setInterval(() => {
+      getAllChat();
+    }, 30000);
+
+    return () => clearInterval(timer);
   }, []);
 
-  const participateChat = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (e.target instanceof HTMLButtonElement) {
-      await chatListAPI.participateChat(e.target.name);
-      router.push(`/chat/${e.target.name}`);
-    }
+  const [isModal, setIsModal] = useState(false);
+
+  const handleModal = () => {
+    setIsModal(!isModal);
   };
 
-  const checkIncluded = (element: { id: string }) => {
-    //  TODO|서지수 use3 기준이 아닌 로그인 유저 기능으로 수정하기
-    if (element.id === 'user3') {
-      return true;
-    }
-    return false;
-  };
+  const serverSocket = useConnectServerSocket();
+  useEffect(() => {
+    serverSocket.on('new-chat', ({ responseChat }) => {
+      setAllChatList(preState => [responseChat, ...preState]);
+    });
+    return () => {
+      serverSocket.off('new-chat');
+    };
+  }, [serverSocket]);
 
-  const routerChat = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-  };
   return (
-    <ul>
-      <CreateChat />
-      {allChatList.map(chat => {
-        const isincluded = chat.users.some(checkIncluded);
-        return (
-          <li key={chat.id}>
-            <Link
-              href={`/chat/${chat.id}`}
-              className={styles.container}
-              onClick={isincluded ? undefined : routerChat}
-            >
-              <Image
-                alt={`${chat.users[0].username}의 프로필 사진`}
-                src={chat.users[0].picture}
-                width={45}
-                height={45}
-                className={styles.user_profile}
-              />
-              <div className={styles.chatInfo}>
-                <div className={styles.chatWrap}>
-                  <div className={styles.chatNameWrap}>
-                    <div className={styles.chatName}>{chat.name}</div>
-                    <span>{chat.users.length}</span>
-                  </div>
-                  <div className={styles.chatLastestMesaage}>
-                    {chat.latestMessage?.text}
-                  </div>
-                </div>
-                <div>
-                  <div className={styles.chat_updated}>{chat.updatedAt}</div>
-                  {!isincluded && (
-                    <button
-                      type="button"
-                      name={chat.id}
-                      onClick={participateChat}
-                    >
-                      참여
-                    </button>
-                  )}
-                </div>
-              </div>
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
+    <div>
+      <Header pageName="오픈채팅" />
+      <ul className={styles.list_container}>
+        {allChatList.map(chat => (
+          <AllChatListItem
+            key={chat.id}
+            chat={chat}
+            userId={authData.user.id}
+          />
+        ))}
+      </ul>
+      <CreateChatButton setIsModal={setIsModal} />
+      {isModal && <ChatListModal handleModal={handleModal} />}
+    </div>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const accessToken = context.req.cookies.ACCESS_TOKEN;
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
+
+  if (accessToken && refreshToken) {
+    const response = await authorizeFetch({
+      accessToken,
+      refreshToken,
+    });
+    return {
+      props: { authData: response.data },
+    };
+  }
+  if (!refreshToken) {
+    // accessToken이 없으면 로그인 페이지로 리다이렉트
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};

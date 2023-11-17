@@ -1,27 +1,29 @@
-import instance from './axios';
-
-interface UserLogin {
-  id: string;
-  password: string;
-}
-
-interface UserLoginResponse {
-  accessToken: string; // 사용자 접근 토큰
-  refreshToken: string; // access token 발급용 토큰
-}
+import { UserLogin } from '@/@types/user';
+import { userIdState } from '@/recoil/atoms/userIdState';
+import { setStorage } from '@/utils/loginStorage';
+import { useRouter } from 'next/router';
+import { useSetRecoilState } from 'recoil';
+import Jwtinterceptor from './JwtInterceptor';
 
 const Auth = () => {
+  const { instance } = Jwtinterceptor();
+  const router = useRouter();
+  const setUserId = useSetRecoilState(userIdState);
+
   // 로그인 (로그인유지)
   const login = async (userLogin: UserLogin) => {
     try {
-      const response: UserLoginResponse = await instance.post(
-        '/login',
-        userLogin,
-      );
+      const response = await instance.post('/login', userLogin);
+      console.log(response);
+      setStorage('accessToken', response.data.accessToken);
+      setStorage('refreshToken', response.data.refreshToken);
+      setUserId(userLogin.id);
+      router.push('/');
     } catch (error) {
       console.log(error);
     }
   };
+
   return { login };
 };
 

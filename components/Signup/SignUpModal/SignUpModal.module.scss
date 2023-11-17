@@ -1,0 +1,71 @@
+@import '../../../styles/mixin';
+
+.dim {
+  @include dim;
+}
+
+.signUpModalBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  width: 50rem;
+
+  h2 {
+    font-size: 2rem;
+    margin-top: 4rem;
+  }
+
+  .userImgBox {
+    position: relative;
+    border: 1px solid #dee2e6;
+    border-radius: 50%;
+    width: 15rem;
+    height: 15rem;
+    @include flex-center-row;
+
+    .camaraIcon {
+      position: absolute;
+      bottom: 0;
+      font-size: 3rem;
+      right: -1rem;
+      color: #000;
+      cursor: pointer;
+    }
+
+    .resetIcon {
+      position: absolute;
+      bottom: 0;
+      font-size: 3rem;
+      left: -1rem;
+      color: #000;
+      cursor: pointer;
+    }
+  }
+
+  .actionButtonsWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+
+    button {
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border: none;
+      width: 10rem;
+      height: 3.5rem;
+      font-size: 1.4rem;
+      border-radius: 0.5rem;
+      background-color: #ff5991;
+      color: #ffff;
+      &:hover {
+        background-color: #ff3478;
+        transition: 0.3s;
+      }
+    }
+  }
+  input {
+    display: none;
+  }
+}

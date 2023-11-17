@@ -1,0 +1,30 @@
+@import '@/styles/index.scss';
+
+.search {
+  width: 100%;
+  @include flex-center-row;
+  align-items: center;
+  gap: 0.2rem;
+  box-sizing: border-box;
+  input {
+    width: 80%;
+    border-radius: 5px;
+    border: 2px solid $light-blue;
+    transition: border-color 0.3s ease;
+    outline: none;
+    padding: 1rem;
+    box-sizing: border-box;
+    &:focus {
+      border-color: $light-pink;
+    }
+  }
+  .fill-btn {
+    width: 20%;
+    text-align: center;
+    @include fill-btn;
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin: 0;
+    height: 4.1rem;
+  }
+}

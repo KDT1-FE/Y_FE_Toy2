@@ -1,0 +1,17 @@
+@import '@/styles/index.scss';
+@import '../../../../styles/_variables';
+
+.container {
+  @include container;
+  display: flex;
+  padding: 1rem;
+  padding: 1.7rem;
+  border-radius: 2rem;
+
+  button {
+    @include fill-btn;
+    margin: 0;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+}
