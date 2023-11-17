@@ -12,6 +12,7 @@
 ### 배포 주소
 
 🌐 배포링크 : [https://langchat-464b7--pr65-t1-61-feature-game-tf29m3fe.web.app/](https://langchat-464b7--pr65-t1-61-feature-game-tf29m3fe.web.app/)
+🔒 테스트 계정 - ID: test0000 PW: 123123
 
 ### 팀원 소개
 
@@ -22,8 +23,7 @@
 | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
 | <img src="https://avatars.githubusercontent.com/u/121215024?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/59966217?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/121606131?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/95364951?s=60&v=4" width="100" style="max-width: 100%;" /> |
 |                                [@Yamyam-code](https://github.com/Yamyam-code)                                 |                                    [@skyeome](https://github.com/skyeome)                                    |                                  [@JiHongkyu](https://github.com/JiHongkyu)                                   |                                  [@lilviolie](https://github.com/lilviolie)                                  |
-|    <ul><li>유저 랭킹 리스팅</li><li>네이버 API 기반<br/> 단어 유효성 검사</li><li>끝말잇기 로직</li></ul>     |                 <ul><li>레이아웃</li><li>회원인증<br/>로그인/회원가입</li><li>오픈채팅기능</li></ul>                 |        <ul><li>초기셋팅</li><li>웹소켓 연결/실시간<br/> 채팅 로직 구현</li><li>1대1채팅 기능</li></ul>        |                       <ul><li>홈 화면 개발</li><li>프로필 수정기능</li></ul>                        |
-
+|    <ul><li>유저 랭킹 리스팅</li><li>네이버 API 기반<br/> 단어 유효성 검사</li><li>끝말잇기 로직</li></ul>     |             <ul><li>레이아웃</li><li>회원인증<br/>로그인/회원가입</li><li>오픈채팅기능</li></ul>             |        <ul><li>초기셋팅</li><li>웹소켓 연결/실시간<br/> 채팅 로직 구현</li><li>1대1채팅 기능</li></ul>        |                            <ul><li>홈 화면 개발</li><li>프로필 수정기능</li></ul>                            |
 
 ## 기술 스택 및 라이브러리
 
@@ -66,12 +66,15 @@
 ### 주요 구현사항 설명
 
 #### 홈페이지
+
 ![홈페이지](https://github.com/TOY2-12/LangChat/assets/95364951/6229e4b7-944f-4d72-8dbb-e835e03c6148)
+
 - 상단의 select box에서 선택한 언어에 해당하는 유저 리스트 표시
 - 소켓 연결을 통해 유저 접속 여부 표시
 - 유저 선택 시 나타나는 프로필 모달 구현
 
 ![프로필](https://github.com/TOY2-12/LangChat/assets/95364951/04df5f9e-8185-48a7-aad1-5c73d5137573)
+
 - 유저가 본인의 정보를 수정할 수 있는 프로필 페이지 구현
 
 </div>
