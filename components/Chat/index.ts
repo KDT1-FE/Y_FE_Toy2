@@ -1,5 +1,5 @@
 import ChatLoading from './ChatLoading/ChatLoading';
-import ChatAlert from './chatAlert';
+import ChatAlert from './ChatAlert';
 import ChatroomHeader from './ChatroomHeader';
 import EntryNotice from './EntryNotice1';
 import ExitNotice from './ExitNotice1';
