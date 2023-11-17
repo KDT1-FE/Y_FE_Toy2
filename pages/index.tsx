@@ -1,5 +1,5 @@
 import Header from '@/components/Common/Header/Header';
-import HostList from '../components/HostList/HostList';
+import HostList from '@/components/HostList/HostList';
 import authorizeFetch from '@/utils/authorizeFetch';
 import { GetServerSidePropsContext } from 'next';
 
@@ -18,6 +18,15 @@ export const getServerSideProps = async (
   const accessToken = context.req.cookies.ACCESS_TOKEN;
   const refreshToken = context.req.cookies.REFRESH_TOKEN;
 
+  if (accessToken && refreshToken) {
+    const response = await authorizeFetch({
+      accessToken,
+      refreshToken,
+    });
+    return {
+      props: { authData: response.data },
+    };
+  }
   if (!refreshToken) {
     // accessToken이 없으면 로그인 페이지로 리다이렉트
     return {
@@ -27,14 +36,7 @@ export const getServerSideProps = async (
       },
     };
   }
-
-  if (accessToken && refreshToken) {
-    const { data: hostsData } = await authorizeFetch({
-      accessToken,
-      refreshToken,
-    });
-    return {
-      props: { data: hostsData },
-    };
-  }
+  return {
+    props: {},
+  };
 };

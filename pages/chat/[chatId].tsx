@@ -193,7 +193,7 @@ export default function Chatting({ authData }: IsValidAuth) {
   const handleSendMessage = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (message.trim()) {
+    if (!message.trim()) {
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
