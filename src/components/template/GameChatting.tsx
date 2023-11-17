@@ -15,6 +15,8 @@ import {
   onlineUserStateInGameRoom,
   myMessageState,
   usersInRoom,
+  allRoomState,
+  roomIdState,
 } from '../../states/atom';
 import { getCookie } from '../../util/util';
 
@@ -35,6 +37,11 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [lastDate, setLastDate] = useState<string | undefined>('');
   const [usersInRoomData, setUsersInRoom] = useRecoilState(usersInRoom);
   const accessToken: any = getCookie('accessToken');
+  const [allRooms, setAllRooms] = useRecoilState(allRoomState);
+  const [roomId, setRoomId] = useRecoilState(roomIdState);
+
+  const searchRoomTitle = allRooms.find((obj) => obj.id === roomId);
+  const roomTitle = searchRoomTitle ? searchRoomTitle.name : '';
 
   function getUserIdFromCookie() {
     // 쿠키 문자열을 세미콜론으로 분할하여 개별 쿠키를 배열로 변환
@@ -70,7 +77,6 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
-
         // createdAt을 기준으로 시간순서 정렬
         const sortedMessages = sortCreatedAt(messageData.messages);
 
@@ -168,7 +174,7 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   return (
     <Chat>
       <ChatHeader>
-        <ChatHeaderWarn>1조 짱짱맨ㅋ</ChatHeaderWarn>
+        <ChatHeaderWarn>{roomTitle}</ChatHeaderWarn>
       </ChatHeader>
       <Chatting ref={chatContainerRef}>
         {/* 이전 채팅 불러오기 */}

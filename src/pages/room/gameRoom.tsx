@@ -7,7 +7,7 @@ import {
   chattingIdState,
   myMessageState,
   userState,
-  allRoomState,
+  roomIdState,
 } from '../../states/atom';
 import styled from 'styled-components';
 import GameChatting from '../../components/template/GameChatting';
@@ -31,8 +31,7 @@ import {
 import AnswerModal from '../../components/layout/anwerModal.tsx';
 
 const GameRoom: React.FC = () => {
-  const [allRooms, setAllRooms] = useRecoilState(allRoomState);
-  console.log(allRooms);
+  const [roomId, setRoomId] = useRecoilState(roomIdState);
   const [isQuizMaster, setIsQuizMaster] = useState(true);
   const [showAlert, setShowAlert] = useState({
     active: false,
@@ -52,8 +51,6 @@ const GameRoom: React.FC = () => {
   const [chat, setChat] = useRecoilState(chattingIdState);
   const userNumber = useRecoilValue(userState);
   const [roomNumber, setRoomNumber] = useState<number | null>(null);
-
-  const [roomId, setRoomId] = useRecoilState(chattingIdState);
   const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
   const [answer, setAnswer] = useState<string>(''); // 답 지정하기
   const [messages, setMessages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
