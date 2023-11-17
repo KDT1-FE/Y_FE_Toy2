@@ -1,25 +1,20 @@
 @import '@/styles/index.scss';
 .dim {
   @include dim;
+  z-index: 15;
 }
 
-.ModalBox {
-  max-width: 40rem;
+#ModalBox {
+  width: 40rem;
   display: flex;
   flex-direction: column;
   padding: 2rem;
   box-sizing: border-box;
   @include shadow-bottom;
-  // transition:
-  //   opacity 0.3s,
-  //   transform 0.3s;
-  // opacity: 0;
-  // visibility: hidden;
-  // &.open {
-  //   opacity: 1;
-  //   visibility: visible;
-  //   transform: translate(-50%, -50%) scale(1);
-  // }
+  z-index: 20;
+  height: 100%;
+  font-size: $font-size-base;
+
   .close-icon {
     font-size: 2.4rem;
     position: absolute;
@@ -35,10 +30,14 @@
       margin: 0;
     }
   }
-  .host-img {
-    width: 100%;
-    border-radius: 1rem;
+  .img-box {
+    height: 20rem;
+    overflow-y: hidden;
+    background-position: center;
+    background-size: cover;
+    margin-top: 3rem;
   }
+
   .title {
     font-size: $font-size-lg;
   }
@@ -52,16 +51,11 @@
   }
 }
 @media screen and (min-width: 260px) and (max-width: 500px) {
-  .dim {
-    display: none;
-  }
-  .ModalBox {
+  #ModalBox {
+    z-index: 20;
     display: block;
-    width: 100vw;
-    height: 100%;
+    width: 90vw;
     overflow-y: scroll;
     border-radius: 0;
-    left: 0;
-    top: 0;
   }
 }

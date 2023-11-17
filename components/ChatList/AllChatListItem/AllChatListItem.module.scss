@@ -1,26 +1,5 @@
 @import '@/styles/index.scss';
-
-.list_container {
-  @include container; 
-  margin-top: 8rem;
-  margin-bottom: 5.6rem;
-}
-
-.titleContainer {
-  @include container;
-  @include flex-center-row;
-  justify-content: flex-start;
-  color : $brand-pink;
-  font-size: 1.7rem;
-  margin: 2rem auto;
-  p {
-    
-    font-weight: bold;
-    padding : 1rem;
-    margin: 0;
-  }
-
-}
+@import '../../../styles/_variables';
 
 .itemContainer {
   margin: 0;
@@ -32,38 +11,23 @@
   
 }
 
-.container {
-  @include container;
-  display: flex;
-  width: 100%;
-  padding: 1.7rem;
-  border-radius: 2rem;
-
-  button {
-    @include fill-btn;
-    margin: 0;
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-  }
-}
-
-.user_profile {
+.user-profile {
   margin-right: 1rem;
   border-radius: 100%;
 }
 
-.chatInfo {
+.chat-info {
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
-.chatWrap {
+.chat-wrap {
   display: flex;
   flex-direction: column;
 }
 
-.chatNameWrap {
+.chat-name-wrap {
   display: flex;
   .user-length {
     color: $gray;
@@ -71,13 +35,13 @@
   }
 }
 
-.chatName {
+.chat-name {
   font-size: $font-size-lg;
   margin-bottom: 1rem;
   font-weight: bolder;
 }
 
-.chatLastestMesaage {
+.chat-lastest-mesaage {
   font-size: $font-size-base;
 }
 
@@ -93,7 +57,7 @@
   @include time-diff($blue);
 }
 .time-hours-after {
-  @include time-diff(#c3adde);
+  @include time-diff($gray);
 }
 .time-days {
   @include time-diff($gray);

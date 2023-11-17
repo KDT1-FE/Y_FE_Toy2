@@ -1,4 +1,4 @@
-import Navigation from '@/components/Navigation/Navigation';
+import Navigation from '@/components/common/Navigation/Navigation';
 import type { AppContext, AppProps } from 'next/app';
 import { MutableSnapshot, RecoilEnv, RecoilRoot } from 'recoil';
 import '../assets/fonts/fonts.scss';

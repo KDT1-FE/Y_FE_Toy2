@@ -2,32 +2,27 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { HiArrowLongLeft } from 'react-icons/hi2';
 import { IoMdMenu } from 'react-icons/io';
-import { ChatUser } from '@/@types/types';
 import Jwtinterceptor from '@/apis/JwtInterceptor';
 import { getAccessToken } from '@/utils/tokenManager';
+import { Chat } from '@/@types/types';
+import Image from 'next/image';
 import styles from './Chat.module.scss';
 
 interface Props {
-  chatId: string;
-  name: string;
-  users: ChatUser[];
+  chatData: Chat;
 }
 
-export default function ChatroomHeader({ chatId, name, users }: Props) {
+export default function ChatroomHeader({ chatData }: Props) {
   const router = useRouter();
 
   const { instance } = Jwtinterceptor();
 
   const accessToken: string = getAccessToken();
 
-  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
+    setMenuOpen(!menuOpen);
   };
 
   const handleBackBtnClick = () => {
@@ -36,10 +31,10 @@ export default function ChatroomHeader({ chatId, name, users }: Props) {
 
   const handleOutBtnClick = async () => {
     try {
-      const response = await instance.patch(
+      await instance.patch(
         '/chat/leave',
         {
-          chatId, // API에 chatId 전달
+          chatId: chatData.id,
         },
         {
           headers: {
@@ -47,9 +42,7 @@ export default function ChatroomHeader({ chatId, name, users }: Props) {
           },
         },
       );
-      console.log(response);
       router.push('/chat-list/my');
-      // 채팅방 나가기 성공 후 추가적인 로직이 필요할 수 있습니다.
     } catch (error) {
       console.error(error);
     }
@@ -60,40 +53,45 @@ export default function ChatroomHeader({ chatId, name, users }: Props) {
       <div className={styles.left}>
         <HiArrowLongLeft onClick={handleBackBtnClick} />
       </div>
-      <h3 className={styles.chatTitle}>{name}</h3>
-      <div className={styles.right} onClick={toggleMenu}>
-        <IoMdMenu />
-        {/* Dropdown 메뉴 */}
-        {isMenuOpen && (
-          <div className={styles.dropdownMenu}>
-            <ul>
-              <div>
-                <p>현재 채팅인원 수</p>
-                <h6>{users.length}명</h6>
+      {chatData && (
+        <>
+          <h3 className={styles.chatTitle}>{chatData.name}</h3>
+          <button type="button" className={styles.right} onClick={toggleMenu}>
+            <IoMdMenu />
+            {menuOpen && (
+              <div className={styles.dropdownMenu}>
+                <ul>
+                  <div className={styles.counter}>
+                    <p>현재 채팅인원 수</p>
+                    <h6>{chatData.users.length}명</h6>
+                  </div>
+                  <div className={styles.userDiv}>
+                    {chatData.users.map(user => (
+                      <li key={user.id}>
+                        <Image
+                          width={35}
+                          height={35}
+                          src={user.picture}
+                          className={styles.profileImage}
+                          alt="User"
+                        />
+                        <span className={styles.username}>{user.username}</span>
+                      </li>
+                    ))}
+                  </div>
+                </ul>
+                <button
+                  type="submit"
+                  className={styles.exitButton}
+                  onClick={handleOutBtnClick}
+                >
+                  채팅방 나가기
+                </button>
               </div>
-              <div className={styles.userDiv}>
-                {users.map(user => (
-                  <li key={user.id}>
-                    <img
-                      src={user.picture}
-                      className={styles.profileImage}
-                      alt="User"
-                    />
-                    <span className={styles.username}>{user.username}</span>
-                  </li>
-                ))}
-              </div>
-            </ul>
-            <button
-              type="submit"
-              className={styles.exitButton}
-              onClick={handleOutBtnClick}
-            >
-              채팅방 나가기
-            </button>
-          </div>
-        )}
-      </div>
+            )}
+          </button>
+        </>
+      )}
     </div>
   );
 }

@@ -6,7 +6,6 @@ export default function useOnClickOutside(
 ) {
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent) => {
-      console.log(ref);
       if (!ref.current || ref.current.contains(event.target as Node)) {
         return;
       }

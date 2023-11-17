@@ -1,72 +1,153 @@
-import HostListItem from '@/components/host-list/HostListItem';
+import React, { useState, useEffect, useCallback } from 'react';
+import HostListItem from '@/components/HostList/HostListItem';
 import {
-  addHostsToFirestore,
   getHostsByLocation,
-  updateHostsInfo,
+  locations,
+  getFirebaseData,
+  fetchAllUsers,
 } from '@/utils/hostsStorage';
-import { useEffect, useState } from 'react';
-
-import HostDetailsModal from '@/components/host-list/HostDetailsModal';
-import Search from '@/components/host-list/Search';
-import { locations } from '@/utils/hostData';
+import Search from '@/components/HostList/Search';
+import HostDetailsModal from '@/components/HostList/HostDetailsModal';
+import { FirebaseData, Host } from '@/components/HostList/hostList.types';
 import styles from './hostList.module.scss';
-import { Host } from './hostList.types';
 
 export default function HostListPage() {
-  const [hosts, setHosts] = useState<Host[]>([]);
+  const [hostData, setHostData] = useState<Host[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedHostDetails, setSelectedHostDetails] = useState<Host | null>(
     null,
   );
   const [filteredHosts, setFilteredHosts] = useState<Host[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [locationsToShow, setLocationsToShow] = useState<string[]>(locations);
+  const [searchQuery, setSearchQuery] = useState<string | null>('');
+  const [locationsToShow, setLocationsToShow] = useState<string[]>([]);
+
   const [noResultsMessage, setNoResultsMessage] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [showAllButton, setShowAllButton] = useState(true);
 
   useEffect(() => {
-    const fetchHosts = async () => {
+    const fetchUserData = async () => {
       try {
-        const fetchedHosts = await Promise.all(
-          locations.map(getHostsByLocation),
+        const [userDataResponse, hostDataResponse] = await Promise.all([
+          fetchAllUsers(),
+          getFirebaseData(),
+        ]);
+
+        // 데이터 합치기
+        const combinedData: Host[] = hostDataResponse.map(
+          (host: FirebaseData) => {
+            const hostUserData = userDataResponse.find(
+              user => user.id === host.id,
+            );
+            return {
+              ...host,
+              name: hostUserData ? hostUserData.name : '',
+              picture: hostUserData ? hostUserData.picture : '',
+            };
+          },
         );
-        setHosts(fetchedHosts.flat());
+        setHostData(combinedData);
       } catch (error) {
-        console.error('호스트 정보 불러오기 오류:', error);
+        console.error('데이터 불러오기 오류:', error);
       }
     };
-
-    fetchHosts();
+    fetchUserData();
   }, []);
 
+  useEffect(() => {
+    const fetchLocationsToShow = async () => {
+      try {
+        const locationPromises = locations.map(getHostsByLocation);
+        const locationData = await Promise.all(locationPromises);
+        const uniqueLocations = Array.from(
+          new Set(locationData.flat().map(host => host.location)),
+        );
+        setLocationsToShow(uniqueLocations);
+      } catch (error) {
+        console.error('호스트 위치 데이터 가져오기 오류:', error);
+        // 에러 처리 또는 사용자에게 알림을 표시하는 등의 추가 작업 수행
+      }
+    };
+    fetchLocationsToShow();
+  }, []);
+
+  useEffect(() => {
+    function handleScroll() {
+      const { scrollY } = window;
+      setIsScrolling(scrollY > 0);
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  const headerClass = `${styles.header} ${
+    isScrolling ? styles.scrollHeader : ''
+  }`;
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    const filtered = query
-      ? hosts.filter(host =>
-          Object.values(host).some(
-            value =>
-              typeof value === 'string' &&
-              value.toLowerCase().includes(query.toLowerCase()),
-          ),
-        )
-      : hosts;
-    setFilteredHosts(filtered);
+    // 검색 쿼리가 변경되지 않았다면 캐시된 결과를 사용
+    if (query === '') {
+      setFilteredHosts(hostData);
+      setLocationsToShow([...locations]);
+      setShowAllButton(true);
+      return;
+    }
+    // 검색 필터링
+    const newFiltered = hostData.filter(host =>
+      Object.values(host).some(value => {
+        if (typeof value === 'string') {
+          // 호스트 데이터 속성 값이 문자열인 경우
+          return value.toLowerCase().includes(query.toLowerCase());
+        }
+        if (Array.isArray(value)) {
+          // 호스트 데이터 속성 값이 배열인 경우
+          return value.some(
+            item =>
+              typeof item === 'string' &&
+              item.toLowerCase().includes(query.toLowerCase()),
+          );
+        }
+        // 다른 데이터 유형에 대한 처리 추가
+        return false;
+      }),
+    );
 
-    // 검색 결과에 따라 locationsToShow를 업데이트합니다.
-    const newLocationsToShow = query
-      ? Array.from(new Set(filtered.map(host => host.location)))
-      : locations; // Array.from을 사용하여 Set을 배열로 변환합니다.
+    setFilteredHosts(newFiltered);
+
+    const newLocationsToShow = Array.from(
+      new Set(newFiltered.map(host => host.location)),
+    );
     setLocationsToShow(newLocationsToShow);
 
-    if (filtered.length === 0) {
+    if (newFiltered.length === 0) {
       setNoResultsMessage(true);
+      setShowAllButton(false);
+
       setTimeout(() => {
         setNoResultsMessage(false);
         setSearchQuery('');
-        setFilteredHosts(hosts); // 원본 목록으로 재설정
-        setLocationsToShow([...locations]); // 전체 지역 태그를 다시 보여줌
-      }, 2000);
+        setFilteredHosts(hostData);
+        setLocationsToShow([...locations]);
+        setShowAllButton(true);
+      }, 1000);
+    } else {
+      setShowAllButton(true);
     }
   };
+
+  const handleClearSearch = useCallback(() => {
+    setFilteredHosts(hostData);
+    setLocationsToShow([...locations]);
+    setSearchQuery('');
+  }, [hostData]);
+
+  useEffect(() => {
+    if (!searchQuery) {
+      handleClearSearch();
+    }
+  }, [searchQuery, handleClearSearch]);
 
   const handleOpenModal = (host: Host) => {
     setSelectedHostDetails(host);
@@ -81,83 +162,88 @@ export default function HostListPage() {
   const scrollToLocation = (location: string) => {
     const element = document.getElementById(location);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      const yOffset = element.getBoundingClientRect().top - 100;
+      window.scrollBy({ top: yOffset, behavior: 'smooth' });
     }
   };
-
-  const displayHosts = searchQuery ? filteredHosts : hosts;
+  const handleShowAll = () => {
+    handleClearSearch();
+    scrollToLocation('host-list');
+  };
+  const displayHosts = searchQuery ? filteredHosts : hostData;
 
   return (
-    <section className={styles.container}>
-      <h2 className={styles.title}>HOT PLACE ✨ 인기 지역 숙소 모음</h2>
-      <Search value={searchQuery} onSearch={handleSearch} />
-      <ul className={styles.hash}>
-        {locationsToShow.map(location => (
-          <li key={location}>
-            <button
-              type="button"
-              onClick={() => {
-                scrollToLocation(location);
-              }}
-            >{`#${location}`}</button>
-          </li>
-        ))}
-      </ul>
-      <div>
-        {locationsToShow.map(location => (
-          <div key={location} id={location}>
-            {(!searchQuery ||
-              displayHosts.some(host => host.location === location)) && (
-              <h3 className={styles.location}>{location} 숙소</h3>
-            )}
-            <ul className={styles.itemList}>
-              {searchQuery
-                ? displayHosts
-                    .filter(host => host.location === location)
-                    .map(host => (
-                      <HostListItem
-                        key={host.id}
-                        host={host}
-                        openModal={() => handleOpenModal(host)}
-                        isModalOpen={isModalOpen}
-                      />
-                    ))
-                : hosts
-                    .filter(host => host.location === location)
-                    .map(host => (
-                      <HostListItem
-                        key={host.id}
-                        host={host}
-                        openModal={() => handleOpenModal(host)}
-                        isModalOpen={isModalOpen}
-                      />
-                    ))}
+    <>
+      <section className={styles.container} id="host-list">
+        <h2 className={styles.title}>HOT PLACE ✨ 인기 지역 숙소 모음</h2>
+        <header className={headerClass}>
+          <div className={styles.inner}>
+            <Search
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onSearch={handleSearch}
+            />
+            <ul className={styles.hash}>
+              {showAllButton && (
+                <li>
+                  <button type="button" onClick={handleShowAll}>
+                    #전체
+                  </button>
+                </li>
+              )}
+              {locationsToShow.map(location => (
+                <li key={location}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      scrollToLocation(location);
+                    }}
+                  >{`#${location}`}</button>
+                </li>
+              ))}
             </ul>
           </div>
-        ))}
-      </div>
-      {noResultsMessage && <p>검색 결과가 없습니다.</p>}
-      <button
-        className={styles.uploadDb}
-        type="button"
-        onClick={addHostsToFirestore}
-      >
-        hostData업뎃
-      </button>
-      <button
-        className={styles.uploadApi}
-        type="button"
-        onClick={updateHostsInfo}
-      >
-        api 업뎃
-      </button>
+        </header>
+        <div>
+          {locationsToShow.map(location => (
+            <div key={location} id={location}>
+              {(!searchQuery ||
+                displayHosts.some(host => host.location === location)) && (
+                <h3 className={styles.location}>{location} 숙소</h3>
+              )}
+              <ul className={styles.itemList}>
+                {searchQuery
+                  ? displayHosts
+                      .filter(host => host.location === location)
+                      .map(host => (
+                        <HostListItem
+                          key={host.id}
+                          host={host}
+                          openModal={() => handleOpenModal(host)}
+                        />
+                      ))
+                  : hostData
+                      .filter(host => host.location === location)
+                      .map(host => (
+                        <HostListItem
+                          key={host.id}
+                          host={host}
+                          openModal={() => handleOpenModal(host)}
+                        />
+                      ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {noResultsMessage && <p>검색 결과가 없습니다.</p>}
+      </section>
       {isModalOpen && (
         <HostDetailsModal
           hostDetails={selectedHostDetails!}
           onClose={handleCloseModal}
-          isModalOpen={isModalOpen}
         />
       )}
-    </section>
+    </>
   );
 }

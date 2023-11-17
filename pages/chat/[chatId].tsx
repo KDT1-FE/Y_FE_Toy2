@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io } from 'socket.io-client';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import MyChat from '@/components/chat/mychat';
 import OtherChat from '@/components/chat/otherchat';
 import EntryNotice from '@/components/chat/entryNotice';
@@ -10,45 +9,45 @@ import ChatAlert from '@/components/chat/chatAlert';
 import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
 import { useRouter } from 'next/router';
 import { userIdState } from '@/recoil/atoms/userIdState';
-// import chatSocket from '@/apis/socket';
 import { getCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
+import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import Loading from '@/components/chat/Loading';
 import styles2 from '../../components/chat/Chat.module.scss';
 import ChatroomHeader from '../../components/chat/header';
 import chatAPI from '../../apis/chatAPI';
 
+interface MessageArray {
+  messages: Message[];
+}
+
 export default function Chatting() {
   const router = useRouter();
   const { chatId } = router.query;
-
-  const [chatData, setChatData] = useState<Chat | null>();
-
-  useEffect(() => {
-    const fetchChatData = async () => {
-      try {
-        if (chatId && typeof chatId === 'string') {
-          const response = await chatAPI.getChatInfo(chatId);
-          const chatInfo: Chat = response.data.chat;
-          setChatData(chatInfo);
-        }
-      } catch (error) {
-        console.error('Error fetching chat data:', error);
-      }
-    };
-
-    fetchChatData();
-  }, [chatId]);
+  const currentChatId: string = Array.isArray(chatId)
+    ? chatId[0]
+    : chatId || '';
 
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const setShowNavigation = useSetRecoilState(showNavigationState);
+  useEffect(() => {
+    setShowNavigation(false);
+    return () => {
+      setShowNavigation(true);
+    };
+  }, []);
+
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const [chatData, setChatData] = useState<Chat | null>();
 
   const [showEntryNotice, setShowEntryNotice] = useState(false);
   const [showExitNotice, setShowExitNotice] = useState(false);
 
-  const [joiners, setJoiners] = useState<string[]>([]);
-  const [leavers, setLeavers] = useState<string[]>([]);
+  const [enterName, setEnterName] = useState<string>('');
+  const [exitName, setExitName] = useState<string>('');
 
   const userId = useRecoilValue(userIdState);
 
@@ -58,10 +57,26 @@ export default function Chatting() {
     return io(`${process.env.NEXT_PUBLIC_CHAT_URL}?chatId=${chatId}`, {
       extraHeaders: {
         Authorization: `Bearer ${accessToken}`,
-        serverId: process.env.NEXT_PUBLIC_API_KEY,
+        serverId: process.env.NEXT_PUBLIC_API_KEY!,
       },
     });
-  }, [chatId, accessToken]);
+  }, [currentChatId, accessToken]);
+
+  useEffect(() => {
+    const fetchChatData = async () => {
+      try {
+        const response = await chatAPI.getChatInfo(currentChatId);
+        const chatInfo: Chat = response.data.chat;
+        await setChatData(chatInfo);
+      } catch (error) {
+        console.error('Error fetching chat data:', error);
+      }
+    };
+
+    if (currentChatId) {
+      fetchChatData();
+    }
+  }, [currentChatId]);
 
   useEffect(() => {
     if (socket) {
@@ -71,9 +86,7 @@ export default function Chatting() {
           socket.emit('fetch-messages');
         }, 500);
       });
-      socket.emit('fetch-messages');
-
-      socket.on('messages-to-client', (messageArray: Message[]) => {
+      socket.on('messages-to-client', (messageArray: MessageArray) => {
         setMessages(messageArray.messages);
       });
 
@@ -81,18 +94,46 @@ export default function Chatting() {
         setMessages(prevMessages => [...prevMessages, messageObject]);
       });
 
-      socket.emit('fetch-messages');
-
-      socket.on('join', (messageObject: JoinersData) => {
+      socket.on('join', async (messageObject: JoinersData) => {
         console.log(messageObject, '채팅방 입장');
-        setJoiners(prevJoiners => [...prevJoiners, ...messageObject.joiners]);
+        const joinUserInfo = await chatAPI.getUserInfo(
+          messageObject.joiners[0],
+        );
+
+        let userData = joinUserInfo.data.user;
+        setEnterName(userData.name);
+
+        // 이름 속성명 변경
+        userData = { ...userData, username: userData.name };
+        delete userData.name; // 기존의 이름 속성 삭제
+
+        setChatData((prevChatData): Chat => {
+          const updatedUsers = [...prevChatData!.users, userData];
+          return {
+            ...prevChatData!,
+            users: updatedUsers,
+          };
+        });
       });
 
-      socket.on('leave', (messageObject: LeaverData) => {
+      socket.on('leave', async (messageObject: LeaverData) => {
         console.log(messageObject, '채팅방 퇴장');
-        setLeavers(prevLeavers => [...prevLeavers, messageObject.leaver]);
+        const exitUserInfo = await chatAPI.getUserInfo(messageObject.leaver);
+        const userData = exitUserInfo.data.user;
+        setExitName(userData.name);
+
+        setChatData((prevChatData): Chat => {
+          const updatedUsers = prevChatData!.users.filter(
+            user => user.id !== userData.id,
+          );
+          return {
+            ...prevChatData!,
+            users: updatedUsers,
+          };
+        });
       });
     }
+
     return () => {
       socket.off('connect');
       socket.off('messages-to-client');
@@ -101,34 +142,34 @@ export default function Chatting() {
       socket.off('leave');
       socket.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket]); // 이제 chatId와 accessToken이 변경될 때
+  }, [socket]);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
-    if (joiners.length > 0) {
-      setShowEntryNotice(true); // Show entry notice
+    if (enterName) {
+      setShowEntryNotice(true);
 
       const entryTimer = setTimeout(() => {
-        setShowEntryNotice(false); // Hide entry notice after 3 seconds
-        setJoiners([]);
+        setShowEntryNotice(false);
+        setEnterName('');
       }, 3000);
-
       return () => clearTimeout(entryTimer);
     }
-  }, [joiners]);
+  }, [enterName]);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
-    if (leavers.length > 0) {
-      setShowExitNotice(true); // Show exit notice
+    if (exitName) {
+      setShowExitNotice(true);
 
       const exitTimer = setTimeout(() => {
-        setShowExitNotice(false); // Hide exit notice after 3 seconds
-        setLeavers([]);
+        setShowExitNotice(false);
+        setExitName('');
       }, 3000);
 
       return () => clearTimeout(exitTimer);
     }
-  }, [leavers]);
+  }, [exitName]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -161,48 +202,48 @@ export default function Chatting() {
 
   return (
     <>
-      {chatData ? (
-        <ChatroomHeader
-          name={chatData.name}
-          chatId={chatData.id}
-          users={chatData.users}
-        />
-      ) : null}
+      {chatData && <ChatroomHeader chatData={chatData} />}
       <div className={styles2.container}>
         <div className={styles2.container}>
-          <div>
-            {messages.map(msg =>
-              msg.userId === userId ? (
-                <MyChat key={msg.id} msg={msg} />
-              ) : (
-                <OtherChat key={msg.id} msg={msg} />
-              ),
-            )}
-          </div>
-          {joiners.length > 0 && showEntryNotice && (
-            <EntryNotice joiners={joiners} />
-          )}
-          {leavers.length > 0 && showExitNotice && (
-            <ExitNotice leaver={leavers[0]} />
+          {!chatData ? (
+            <Loading />
+          ) : (
+            <>
+              <div>
+                {messages.map((msg, index) => {
+                  const prevUserId =
+                    index > 0 ? messages[index - 1].userId : null;
+                  return msg.userId === userId ? (
+                    <MyChat key={msg.id} msg={msg} />
+                  ) : (
+                    <OtherChat key={msg.id} msg={msg} prevUserId={prevUserId} />
+                  );
+                })}
+              </div>
+              {showEntryNotice && <EntryNotice joiner={enterName} />}
+              {showExitNotice && <ExitNotice leaver={exitName} />}
+              {showAlert && <ChatAlert />}
+            </>
           )}
           <div ref={messagesEndRef} />
-          {showAlert && <ChatAlert />}
         </div>
       </div>
-      <form className={styles2.footer} onSubmit={handleSendMessage}>
-        <input
-          type="text"
-          placeholder="대화를 시작해보세요!"
-          className={styles2.chatInput}
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
-        <button
-          className={styles2.triangle_button}
-          type="submit"
-          aria-label="Submit"
-        />
-      </form>
+      {chatData ? (
+        <form className={styles2.footer} onSubmit={handleSendMessage}>
+          <input
+            type="text"
+            placeholder="대화를 시작해보세요!"
+            className={styles2.chatInput}
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
+          <button
+            className={styles2.triangle_button}
+            type="submit"
+            aria-label="Submit"
+          />
+        </form>
+      ) : null}
     </>
   );
 }

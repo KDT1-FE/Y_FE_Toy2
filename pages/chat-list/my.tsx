@@ -1,11 +1,12 @@
 /* eslint-disable consistent-return */
 import { Chat } from '@/@types/types';
 import MyChatListItem from '@/components/ChatList/MyChatListItem';
-import Header from '@/components/Header/Header';
 import { filterPrivateChat, sortChatList } from '@/utils/chatList';
 import { useEffect, useState } from 'react';
 import authorizeFetch from '@/utils/authorizeFetch';
 import { GetServerSidePropsContext } from 'next';
+import { IoIosChatbubbles } from 'react-icons/io';
+import Header from '@/components/common/Header/Header';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
@@ -29,16 +30,22 @@ export default function MyChatList() {
   }, []);
 
   return (
-    <div className={styles.allContainer}>
+    <div className={styles.headerWrapContainer}>
       <Header pageName="My" />
       <div className={styles.list_container}>
-        <div>숙소와 채팅</div>
+        <div className={styles.titleContainer}>
+          <p>숙소와 채팅</p>
+          <IoIosChatbubbles />
+        </div>
         <ul>
           {myHostChatList.map(chat => (
             <MyChatListItem key={chat.id} chat={chat} />
           ))}
         </ul>
-        <div>유저와 채팅</div>
+        <div className={styles.titleContainer}>
+          <p>유저와 채팅</p>
+          <IoIosChatbubbles />
+        </div>
         <ul>
           {myChatList.map(chat => (
             <MyChatListItem key={chat.id} chat={chat} />

@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 // import styles from '@/styles/Home.module.scss';
 
-import Header from '@/components/Header/Header';
+import Header from '@/components/common/Header/Header';
 import authorizeFetch from '@/utils/authorizeFetch';
 import { GetServerSidePropsContext } from 'next';
 import HostList from './host-list';
