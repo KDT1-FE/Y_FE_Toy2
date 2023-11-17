@@ -1,12 +1,9 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from '@styles/components/lobby/room.module.scss';
 import { useAppSelector } from '@/hooks/redux';
 
-import styles from '@styles/components/lobby/room.module.scss';
 import fastRequest from '@/api/fastRequest';
 import pocketRequest from '@/api/pocketRequest';
-
-// 방마다 최대 인원 정보를 서버에 저장하고 가져오는 로직을 추가해야된다.
 
 const Room = ({ chatId, name, users }: Props) => {
   const navigate = useNavigate();
@@ -15,21 +12,25 @@ const Room = ({ chatId, name, users }: Props) => {
 
   const joinRoom = async () => {
     try {
-      const gameInfo = await pocketRequest.get('game');
-      const pocketInfo = gameInfo.items.filter(
-        (el: Game) => el.chatId === chatId,
-      )[0];
+      const gameInfo = await pocketRequest.get(
+        'game',
+        '',
+        `&filter=(chatId='${chatId}')`,
+      );
+      const roomInfo = gameInfo.items[0];
 
-      if (pocketInfo.vote.length >= 4) return;
+      if (roomInfo.vote.length >= 4) {
+        alert('방이 가득 찼습니다.');
+      }
 
       const fastResponse = await fastRequest.joinChat(
-        { chatId: chatId },
+        { chatId },
         localStorage.getItem('access_token') as string,
       );
 
-      const pocketResponse = await pocketRequest.patch('game', pocketInfo.id, {
+      const pocketResponse = await pocketRequest.patch('game', roomInfo.id, {
         vote: [
-          ...pocketInfo.vote,
+          ...roomInfo.vote,
           {
             id: userId,
             name: userInfo.name,
@@ -40,14 +41,14 @@ const Room = ({ chatId, name, users }: Props) => {
         ],
       });
 
-      navigate(`/chat?chatId=${chatId}&pocketId=${pocketInfo.id}`);
+      navigate(`/chat?chatId=${chatId}&pocketId=${roomInfo.id}`);
 
       console.log(
         `fastResponse: ${fastResponse}`,
         `pocketResponse: ${pocketResponse}`,
       );
     } catch (error) {
-      console.error('getAllChat 오류');
+      console.error(error);
     }
   };
 

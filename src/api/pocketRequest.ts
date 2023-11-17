@@ -1,11 +1,11 @@
 const responseBody = (res: Response) => res.json();
 
 const pocketRequest = {
-  get: async (collection: string, chatId?: string) => {
+  get: async (collection: string, chatIdPath?: string, params?: string) => {
     return await fetch(
       `${import.meta.env.VITE_POCKET_API}/${collection}/records${
-        chatId ? `/${chatId}` : ''
-      }`,
+        chatIdPath ? `${chatIdPath}` : ''
+      }?perPage=1000${params ? `${params}` : ''}`,
       { cache: 'no-store' },
     ).then(responseBody);
   },
