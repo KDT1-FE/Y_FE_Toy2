@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import Jwtinterceptor from '@/apis/JwtInterceptor';
 import SIGNOUT_USER_STATE from '@/constants/userLoinState';
-import userTokenState from '@/recoil/atoms/userTokenState';
+import userTokenState from '@/stores/atoms/userTokenState';
 import authorizeFetch from '@/utils/authorizeFetch';
 import {
   getDownloadURL,

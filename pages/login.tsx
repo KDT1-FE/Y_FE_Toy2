@@ -7,9 +7,9 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import { GetServerSidePropsContext } from 'next';
 import { setToken } from '@/utils/tokenManager';
-import userTokenState from '@/recoil/atoms/userTokenState';
-import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import userTokenState from '@/stores/atoms/userTokenState';
 import styles from '@/components/login.module.scss';
+import showNavigationState from '@/stores/atoms/nav.atoms';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,

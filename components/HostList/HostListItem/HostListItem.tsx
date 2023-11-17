@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Host } from '@/components/HostList/HostList1.types';
+import { Host } from '@/components/HostList/HostList.types';
 import styles from './HostListItem.module.scss';
 import Button from './Button/Button';
 

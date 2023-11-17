@@ -11,7 +11,6 @@ import {
 import { useRouter } from 'next/router';
 import { getCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
-import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import {
   ChatAlert,
   ChatLoading,
@@ -24,6 +23,7 @@ import {
 import authorizeFetch from '@/utils/authorizeFetch';
 import chatAPI from '@/apis/chatAPI';
 import styles from '@/components/Chat/Chat.module.scss';
+import showNavigationState from '@/stores/atoms/nav.atoms';
 
 interface MessageArray {
   messages: Message[];

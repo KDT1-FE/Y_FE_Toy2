@@ -9,7 +9,7 @@ import App from 'next/app';
 import { removeTokenAll } from '@/utils/tokenManager';
 import { Navigation } from '@/components/Common';
 import authorizeFetch from '@/utils/authorizeFetch';
-import userTokenState from '@/recoil/atoms/userTokenState';
+import userTokenState from '@/stores/atoms/userTokenState';
 import SIGNOUT_USER_STATE from '@/constants/userLoinState';
 
 function MyApp({

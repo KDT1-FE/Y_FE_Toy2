@@ -5,7 +5,7 @@ import useOnClickOutside from '@/hooks/useOnClickOustside';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import { Chat } from '@/@types/types';
-import { Host } from '@/components/HostList/HostList1.types';
+import { Host } from '@/components/HostList/HostList.types';
 import styles from './HostDetailsModal.module.scss';
 import { Modal } from '../../Common';
 

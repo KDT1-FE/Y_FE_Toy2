@@ -1,4 +1,4 @@
-import Header from '@/components/Common/Header1/Header1';
+import Header from '@/components/Common/Header/Header';
 import HostList from '@/components/HostList/HostList';
 import authorizeFetch from '@/utils/authorizeFetch';
 import { GetServerSidePropsContext } from 'next';

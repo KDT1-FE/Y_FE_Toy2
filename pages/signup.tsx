@@ -6,9 +6,9 @@ import { GetServerSidePropsContext } from 'next';
 import { useSetRecoilState } from 'recoil';
 import Image from 'next/image';
 import instance from '@/apis/axios';
-import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import { SignUpModal } from '@/components/Signup';
 import styles from '@/components/signUp.module.scss';
+import showNavigationState from '@/stores/atoms/nav.atoms';
 
 interface RequestBody {
   id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
