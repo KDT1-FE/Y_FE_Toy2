@@ -141,7 +141,7 @@ export default function MyPage({ userData }: any) {
     <div className={styles.myPageWrapper}>
       <div className={styles.myPageBox}>
         <Image
-          src="/images/logo.png"
+          src="/images/Talkhaja.svg"
           alt="talkhaja_logo"
           width={250}
           height={100}
