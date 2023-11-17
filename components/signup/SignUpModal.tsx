@@ -103,9 +103,14 @@ export default function SignUpModal({
           picture: selectedImgUrl,
         };
         await instance.post('/signup', requestUserData);
-        // 회원가입 성공 알림
-        router.push('/login');
+      } else {
+        const requestUserData: UserRequestBody = {
+          ...userFormData,
+          picture: DEFAULT_IMAGE_URL,
+        };
+        await instance.post('/signup', requestUserData);
       }
+      router.push('/login');
     } catch (error) {
       console.log(error);
       // 에러 처리 알림
@@ -113,12 +118,12 @@ export default function SignUpModal({
       setIsLoading(false); // 로딩 종료
     }
   };
-  
- 
-    return (
-      <div className={styles.dim}>
-        {isLoading ? <Loading /> : 
-        
+
+  return (
+    <div className={styles.dim}>
+      {isLoading ? (
+        <Loading />
+      ) : (
         <Modal>
           <div className={styles.signUpModalBox}>
             <h2>프로필 사진 설정</h2>
@@ -162,8 +167,7 @@ export default function SignUpModal({
             </div>
           </div>
         </Modal>
-        }
-      </div>
-    );
-  
+      )}
+    </div>
+  );
 }

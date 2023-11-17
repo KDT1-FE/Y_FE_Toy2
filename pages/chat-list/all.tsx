@@ -1,19 +1,21 @@
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+/* eslint-disable consistent-return */
 import { Chat } from '@/@types/types';
-import Image from 'next/image';
-import { useRecoilValue } from 'recoil';
-import { userIdState } from '@/recoil/atoms/userIdState';
-import formatTime from '@/utils/timeFormat';
 import ChatListModal from '@/components/ChatList/ChatListModal';
-import { sortChatList } from '@/utils/chatList';
-import useConnectServerSocket from '@/hooks/useConnectServerSocket';
 import Header from '@/components/Header/Header';
+import useConnectServerSocket from '@/hooks/useConnectServerSocket';
+import authorizeFetch from '@/utils/authorizeFetch';
+import { sortChatList } from '@/utils/chatList';
+import formatTime from '@/utils/timeFormat';
+import { GetServerSidePropsContext } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from './ChatList.module.scss';
 
-export default function AllChatList() {
+export default function AllChatList({ userData }) {
+  console.log(userData.user.id);
   const router = useRouter();
   const [isModal, setIsModal] = useState(false);
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
@@ -41,7 +43,7 @@ export default function AllChatList() {
     }
   };
 
-  const userId = useRecoilValue(userIdState);
+  const userId = userData.user.id;
   const checkIncluded = (element: { id: string }) => {
     if (element.id === userId) {
       return true;
@@ -137,3 +139,32 @@ export default function AllChatList() {
     </div>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const accessToken = context.req.cookies.ACCESS_TOKEN;
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
+
+  if (accessToken && refreshToken) {
+    const response = await authorizeFetch({
+      accessToken,
+      refreshToken,
+    });
+    return {
+      props: { userData: response.data },
+    };
+  }
+  if (!refreshToken) {
+    // accessToken이 없으면 로그인 페이지로 리다이렉트
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};

@@ -1,53 +1,42 @@
-import { userIdState } from '@/recoil/atoms/userIdState';
-import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+/* eslint-disable consistent-return */
 import app from '@/utils/firebaseConfig';
+import { removeTokenAll } from '@/utils/tokenManager';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import Jwtinterceptor from '@/apis/JwtInterceptor';
+import SIGNOUT_USER_STATE from '@/constants/userLoinState';
+import userTokenState from '@/recoil/atoms/userTokenState';
+import authorizeFetch from '@/utils/authorizeFetch';
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadString,
 } from 'firebase/storage';
-import Jwtinterceptor from '@/apis/JwtInterceptor';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import logout from '@/apis/etc';
-import { getCookie } from 'cookies-next';
-import { GetServerSideProps } from 'next';
 import styles from './MyPage.module.scss';
-
-type UserResponseValue = {
-  user: User;
-};
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
 
 interface PatchResponseValue {
   messgae: string;
 }
 
 const { instance } = Jwtinterceptor();
-export default function MyPage() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function MyPage({ userData }: any) {
   const router = useRouter();
-  const userId = useRecoilValue(userIdState);
   const imageRef = useRef<HTMLInputElement>(null);
   const imageStyle = {
     borderRadius: '50%',
   };
-  const [userData, setUserData] = useState<User>({
-    id: '',
-    name: '',
-    picture: '',
-  });
   const DEFAULT_IMAGE_URL =
     'https://firebasestorage.googleapis.com/v0/b/talk-eaae8.appspot.com/o/images%2Fdefault.jpg?alt=media&token=6ca482c2-bcb0-48cc-b673-76ad2b4ce943';
-  const { id, name, picture } = userData;
+  const { id, name, picture } = userData.user;
   const [pictureName, setPictureName] = useState('default.jpg');
-  const [selectedImg, setSelectedImg] = useState<string | null>(null);
-  const [userName, setUserName] = useState('');
+  const [selectedImg, setSelectedImg] = useState<string>(picture);
+  const [userName, setUserName] = useState(name);
+  const setUser = useSetRecoilState(userTokenState);
   const handleInputClick = () => {
     if (imageRef.current) {
       imageRef.current.click();
@@ -143,27 +132,12 @@ export default function MyPage() {
   const handleLogoutClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (window.confirm('로그아웃 하시겠습니까?')) {
-      logout();
-      // router.push('/login');
+      setUser(SIGNOUT_USER_STATE);
+      removeTokenAll();
+      router.push('/login');
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await instance.get<UserResponseValue>(
-          `/user?userId=${userId}`,
-        );
-        setUserData(data.user);
-        setUserName(data.user.name);
-        setSelectedImg(data.user.picture);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [userId]);
   return (
     <div className={styles.myPageWrapper}>
       <div className={styles.myPageBox}>
@@ -233,12 +207,9 @@ export default function MyPage() {
             </div>
           </div>
         </form>
-        <div className={styles.buttonWrapper}>
-          <button type="button">홈으로 가기</button>
-        </div>
         <button
           type="button"
-          className={styles.logutButton}
+          className={styles.logoutButton}
           onClick={handleLogoutClick}
         >
           로그아웃
@@ -248,13 +219,22 @@ export default function MyPage() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const cookies = context.req.headers.cookie || ''; // 쿠키 문자열을 가져옴
-  const accessTokenCookie = cookies
-    .split(';')
-    .find(cookie => cookie.trim().startsWith('accessToken='));
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const accessToken = context.req.cookies.ACCESS_TOKEN;
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
 
-  if (!accessTokenCookie) {
+  if (accessToken && refreshToken) {
+    const response = await authorizeFetch({
+      accessToken,
+      refreshToken,
+    });
+    return {
+      props: { userData: response.data },
+    };
+  }
+  if (!refreshToken) {
     // accessToken이 없으면 로그인 페이지로 리다이렉트
     return {
       redirect: {
@@ -263,8 +243,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   }
-
-  // accessToken이 있다면 홈 페이지로 이동
   return {
     props: {},
   };

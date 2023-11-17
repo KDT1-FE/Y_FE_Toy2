@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { io } from 'socket.io-client';
 
 export default function useConnectServerSocket() {
-  const accessToken = getCookie('accessToken');
+  const accessToken = getCookie('ACCESS_TOKEN');
 
   const serverSocket = useMemo(() => {
     return io(`${process.env.NEXT_PUBLIC_SERVER_URL}`, {

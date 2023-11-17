@@ -82,12 +82,8 @@
         align-items: center;
         gap: 3rem;
         margin-bottom: 2rem;
-        .userImgBox {
-        }
-        .imageButtonContainer {
-          .deleteImageButton {
-          }
 
+        .imageButtonContainer {
           .updateImageButton {
             background-color: $light-pink;
             &:hover {
@@ -106,15 +102,9 @@
       }
     }
 
-    .buttonWrapper {
+    .logoutButton {
       width: 100%;
-
-      button {
-        width: 100%;
-      }
-    }
-    .logutButton {
-      width: 100%;
+      height: 5rem;
     }
   }
 }

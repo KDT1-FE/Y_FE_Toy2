@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
 import HostListItem from '@/components/host-list/HostListItem';
 import {
   addHostsToFirestore,
   getHostsByLocation,
   updateHostsInfo,
 } from '@/utils/hostsStorage';
+import { useEffect, useState } from 'react';
 
-import { locations } from '@/utils/hostData';
-import Search from '@/components/host-list/Search';
 import HostDetailsModal from '@/components/host-list/HostDetailsModal';
+import Search from '@/components/host-list/Search';
+import { locations } from '@/utils/hostData';
 import styles from './hostList.module.scss';
 import { Host } from './hostList.types';
 

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import instance from '@/apis/axios';
 import SignUpModal from '@/components/signup/SignUpModal';
 import Image from 'next/image';
@@ -5,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { GetServerSidePropsContext } from 'next';
 import styles from './signUp.module.scss';
 
 interface RequestBody {
@@ -209,3 +211,21 @@ export default function SignUp() {
     </>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
+
+  if (refreshToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};

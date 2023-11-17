@@ -4,6 +4,7 @@ import { HiArrowLongLeft } from 'react-icons/hi2';
 import { IoMdMenu } from 'react-icons/io';
 import { ChatUser } from '@/@types/types';
 import Jwtinterceptor from '@/apis/JwtInterceptor';
+import { getAccessToken } from '@/utils/tokenManager';
 import styles from './Chat.module.scss';
 
 interface Props {
@@ -17,7 +18,7 @@ export default function ChatroomHeader({ chatId, name, users }: Props) {
 
   const { instance } = Jwtinterceptor();
 
-  const accessToken: string = localStorage.getItem('accessToken');
+  const accessToken: string = getAccessToken();
 
   const [isMenuOpen, setMenuOpen] = useState(false);
 

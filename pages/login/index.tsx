@@ -1,11 +1,23 @@
+/* eslint-disable consistent-return */
+import userTokenState from '@/recoil/atoms/userTokenState';
+import { setToken } from '@/utils/tokenManager';
 import axios from 'axios';
-import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { useSetRecoilState } from 'recoil';
+import { GetServerSidePropsContext } from 'next';
 import styles from './login.module.scss';
 
+const instance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    serverId: process.env.NEXT_PUBLIC_API_KEY,
+    withCredentials: true,
+  },
+});
 export default function Login() {
   const {
     register,
@@ -13,12 +25,33 @@ export default function Login() {
     formState: { isSubmitting },
   } = useForm();
   const router = useRouter();
+  const setUser = useSetRecoilState(userTokenState);
   const handleLoginClick: SubmitHandler<FieldValues> = async data => {
-    const id = data.id.trim() as string;
+    const loginId = data.id.trim() as string;
     const password = data.password.trim() as string;
-    if (id && password) {
+    if (loginId && password) {
       try {
-        await axios.post('/api/login', { id, password });
+        // await axios.post('/api/login', { id, password });
+        const res = await instance.post('/login', {
+          id: loginId,
+          password,
+        });
+        const { accessToken, refreshToken } = res.data;
+
+        setToken('ACCESS_TOKEN', accessToken);
+        setToken('REFRESH_TOKEN', refreshToken);
+        const userResponse = await axios.get(
+          'https://fastcampus-chat.net/auth/me',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              serverId: 'cb7fb111e',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+        const { id, name, picture } = userResponse.data.user;
+        setUser({ id, name, picture, isLoggedIn: true });
         router.push('/');
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -71,14 +104,12 @@ export default function Login() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const cookies = context.req.headers.cookie || ''; // 쿠키 문자열을 가져옴
-  const accessTokenCookie = cookies
-    .split(';')
-    .find(cookie => cookie.trim().startsWith('accessToken='));
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
 
-  if (accessTokenCookie) {
-    // accessToken이 없으면 로그인 페이지로 리다이렉트
+  if (refreshToken) {
     return {
       redirect: {
         destination: '/',
@@ -86,8 +117,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   }
-
-  // accessToken이 있다면 홈 페이지로 이동
   return {
     props: {},
   };
