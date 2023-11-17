@@ -54,9 +54,13 @@ export const chatSocket = (accessToken: any, chatId: string) => {
   return chattingSocket;
 };
 
-export const drawSocket = io(BACKEND_ID);
+export const drawSocket = io(BACKEND_ID, {
+  withCredentials: true,
+});
 
-export const gameSocket = io(BACKEND_ID);
+export const gameSocket = io(BACKEND_ID, {
+  withCredentials: true,
+});
 
 export const disconnectLoginSocket = () => {
   if (serverSocket) {
