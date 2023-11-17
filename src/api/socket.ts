@@ -1,5 +1,5 @@
 import { io, Socket } from 'socket.io-client';
-import { SERVER_URL, SERVER_ID } from '../constant';
+import { SERVER_URL, SERVER_ID, BACKEND_ID } from '../constant';
 let serverSocket: Socket | null = null;
 let chattingSocket: Socket | null = null;
 
@@ -49,21 +49,14 @@ export const chatSocket = (accessToken: any, chatId: string) => {
     // 여기에 연결 오류 처리 로직을 추가하세요
   });
 
-  chattingSocket.on('disconnect', () => {
-  });
+  chattingSocket.on('disconnect', () => {});
 
   return chattingSocket;
 };
 
+export const drawSocket = io(BACKEND_ID);
 
-export const drawSocket = io(
-  'https://fastmindserver-7da746e63a7f.herokuapp.com/',
-);
-
-export const gameSocket = io(
-  'https://fastmindserver-7da746e63a7f.herokuapp.com/',
-);
-
+export const gameSocket = io(BACKEND_ID);
 
 export const disconnectLoginSocket = () => {
   if (serverSocket) {
