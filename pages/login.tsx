@@ -8,8 +8,8 @@ import { useSetRecoilState } from 'recoil';
 import { GetServerSidePropsContext } from 'next';
 import { setToken } from '@/utils/tokenManager';
 import userTokenState from '@/stores/atoms/userTokenState';
-import { showNavigationState } from '@/stores/atoms/nav.atoms';
 import styles from '@/components/login.module.scss';
+import showNavigationState from '@/stores/atoms/nav.atoms';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,

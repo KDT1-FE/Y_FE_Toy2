@@ -1,8 +1,8 @@
 import { UserLogin } from '@/@types/user';
-import { userIdState } from '@/stores/atoms/user.atoms';
 import { setStorage } from '@/utils/loginStorage';
 import { useRouter } from 'next/router';
 import { useSetRecoilState } from 'recoil';
+import userIdState from '@/stores/atoms/user.atoms';
 import Jwtinterceptor from './JwtInterceptor';
 
 const Auth = () => {
