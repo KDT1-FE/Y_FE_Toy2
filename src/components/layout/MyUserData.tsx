@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { myUserDataState } from '../../states/atom';
 import { getUserData } from '../../api';
-import { getCookie } from '../../util/util';
 
 const MyUserData = () => {
   const [myData, setMyData] = useRecoilState(myUserDataState);

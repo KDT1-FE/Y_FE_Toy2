@@ -1,5 +1,5 @@
 import { getAllUsers } from '../../api';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { allUserState } from '../../states/atom';
 import usePollingData from './usePollingData';
 

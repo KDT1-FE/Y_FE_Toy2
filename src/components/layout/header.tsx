@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { titleAction } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
-import { useDisclosure } from '@chakra-ui/hooks';
 import { ChatIcon, HamburgerIcon } from '@chakra-ui/icons';
 import LoginModal from './loginModal';
 import { useRecoilValue } from 'recoil';

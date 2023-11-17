@@ -3,12 +3,7 @@ import { useParams } from 'react-router-dom';
 import Drawing from '../../components/template/drawing';
 import LeaveGameRoom from '../../components/layout/leaveGameRoom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  chattingIdState,
-  myMessageState,
-  userState,
-  roomIdState,
-} from '../../states/atom';
+import { myMessageState, userState, roomIdState } from '../../states/atom';
 import styled from 'styled-components';
 import GameChatting from '../../components/template/GameChatting';
 
@@ -48,12 +43,11 @@ const GameRoom: React.FC = () => {
   }, [showAlert.active]);
 
   const { id } = useParams<{ id: string }>();
-  const [chat, setChat] = useRecoilState(chattingIdState);
   const userNumber = useRecoilValue(userState);
   const [roomNumber, setRoomNumber] = useState<number | null>(null);
-  const [isQuizMasterAlertShown, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
-  const [answer, setAnswer] = useState<string>(''); // 답 지정하기
-  const [messages, setMessages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
+  const [, setIsQuizMasterAlertShown] = useState(false); //출제자 확인알람 추가
+  const [, setAnswer] = useState<string>(''); // 답 지정하기
+  const [messages] = useRecoilState(myMessageState); // 채팅창 메세지 받기
   const [userMessage, setUserMessage] = useState<{
     chatId: string;
     text: string;

@@ -8,7 +8,7 @@ import { getCookie } from '../util/util';
 
 export const useLoginSocket = () => {
   const accessToken = getCookie('accessToken');
-  const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
+  const [, setOnlineUsers] = useRecoilState(onlineUserState);
 
   useEffect(() => {
     if (accessToken) {

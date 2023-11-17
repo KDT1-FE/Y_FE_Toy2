@@ -1,12 +1,6 @@
-import {
-  privateChatDetail,
-  privateChatNew,
-  openChatDetailState,
-  openNewChatState,
-  allUserState,
-} from '../../states/atom';
+import { openNewChatState, allUserState } from '../../states/atom';
 
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import {
   Modal,
@@ -15,47 +9,23 @@ import {
   ModalHeader,
   ModalCloseButton,
 } from '@chakra-ui/react';
-import {
-  createSeparatedTime,
-  sortCreatedAt,
-  modifyDate,
-} from '../template/useChattingSort';
-import { Img, Flex, Text, IconButton, Input } from '@chakra-ui/react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import { Flex, Text } from '@chakra-ui/react';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getAllMyChat, createGameRooms } from '../../api';
 import { Chat, User } from '../../interfaces/interface';
 import Select, { StylesConfig } from 'react-select';
 import DetailChatLayout from './detailChatLayout';
 
-interface UserIdOption {
-  value: string;
-  label: string;
-}
-
-interface Message {
-  id: string;
-  text: string;
-  userId: string; // 메세지를 보낸 사람의 id
-  createdAt: Date;
-}
-
 const NewPrivateChat = () => {
   const [openNewChat, setOpenNewChat] = useRecoilState(openNewChatState);
   const [openNewChatDetail, setOpenNewChatDetail] = useState(false);
-  const [postData, setPostData] = useState('');
-  const [searchUserId, setSearchUserId] = useState('');
-  const [selectId, setSelectId] = useState<User | null>(null);
+  const [, setSearchUserId] = useState('');
+  const [, setSelectId] = useState<User | null>(null);
   const [selectChatId, setSelectChatId] = useState<string | null>(null);
 
   const onClose = () => {
     setOpenNewChat(false);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPostData(e.target.value);
   };
 
   const all = useRecoilValue(allUserState);
@@ -107,7 +77,7 @@ const NewPrivateChat = () => {
   };
 
   const customStyles: StylesConfig = {
-    control: (provided, state) => ({
+    control: (provided) => ({
       ...provided,
       width: '180px', // 원하는 넓이로 설정
       border: '1px solid #E2E8F0',

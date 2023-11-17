@@ -13,13 +13,6 @@ import {
 } from '@chakra-ui/react';
 import { createGameRooms } from '../../api';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import {
-  allRoomState,
-  roomIdState,
-  usersInRoom,
-  allRoomNumberState,
-} from '../../states/atom';
 import swal from 'sweetalert';
 
 interface ModalProps {

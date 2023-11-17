@@ -1,10 +1,7 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import {
   allUserState,
   onlineUserState,
-  allRoomNumberState,
-  roomIdState,
-  usersInRoom,
 } from '../../states/atom';
 import userList from '../template/userList';
 import { Card, Flex, Heading, Image, Text, IconButton } from '@chakra-ui/react';
@@ -15,10 +12,6 @@ import { createGameRooms, getAllMyChat } from '../../api';
 import { randomNameFunc, getCookie } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
-
-interface ResponseValue {
-  chat: Chat;
-}
 
 interface Chat {
   id: string;
@@ -48,7 +41,6 @@ const OnlineUserList = () => {
   const all = useRecoilValue(allUserState);
   const allOnlineUsers = onLine.users || [];
   const userId = getCookie('userId');
-  const allChatState = useRecoilValue(allRoomNumberState);
 
   const onlineUserListData = all.filter((element) => {
     return allOnlineUsers.includes(element.id);
@@ -77,7 +69,7 @@ const OnlineUserList = () => {
       if (chatId) {
         //navigate(`/room/:${chatId}`);
       } else {
-        const chat = await createGameRooms(element.id, [element.id], true);
+        // const chat = await createGameRooms(element.id, [element.id], true);
         //navigate(`/room/:${chat.id}`);
       }
     }

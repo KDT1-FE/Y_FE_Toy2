@@ -2,7 +2,7 @@ import { AddIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { Button, Flex, Select, Icon, useDisclosure } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import NewGameRoomModal from './newGameRoomModal';
-import { getAllGameRooms, participateGameRoom } from '../../api';
+import { participateGameRoom } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { randomNameFunc } from '../../util/util';
 import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';

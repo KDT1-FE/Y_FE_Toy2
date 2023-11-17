@@ -8,7 +8,7 @@ import { getCookie } from '../util/util';
 
 export const useChatSocket = () => {
   const accessToken = getCookie('accessToken');
-  const [chatId, setChatId] = useRecoilState(chattingIdState);
+  const [chatId] = useRecoilState(chattingIdState);
   useEffect(() => {
     if (accessToken && chatId) {
       chatSocket(accessToken, chatId);

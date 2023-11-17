@@ -70,7 +70,7 @@ export const getMyUserData = async (userId: string) => {
 
 export const postRefreshToken = async (refreshToken: string) => {
   try {
-    const res = await postRefresh(refreshToken);
+    await postRefresh(refreshToken);
     alert('토큰 재발급에 성공했습니다.');
   } catch (e) {
     console.error(e);

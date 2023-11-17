@@ -18,7 +18,6 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { Flex, Text } from '@chakra-ui/layout';
 import { IconButton } from '@chakra-ui/button';
 import { Input } from '@chakra-ui/react';
-import { User } from '../../interfaces/interface';
 
 interface Message {
   id: string;
@@ -26,10 +25,6 @@ interface Message {
   userId: string; // 메세지를 보낸 사람의 id
   createdAt: Date;
 }
-
-type UserProps = {
-  userData: User[];
-};
 
 const DetailChatLayout = ({ userData }: any) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +41,7 @@ const DetailChatLayout = ({ userData }: any) => {
   const [socket, setSocket] = useState<any>(null);
   const [fetchChat, setFetchChat] = useRecoilState(privateChatDetail);
   const [newChat, setNewChat] = useRecoilState(privateChatNew);
-  const [lastDate, setLastDate] = useState('');
+  const [, setLastDate] = useState('');
   const accessToken: any = getCookie('accessToken');
   const myUserId: string | undefined = getCookie('userId');
   const openChatDetail = useRecoilValue(openChatDetailState);
@@ -62,7 +57,6 @@ const DetailChatLayout = ({ userData }: any) => {
       setSocket(newSocket);
 
       newSocket.on('messages-to-client', (messageData) => {
-
         if (messageData.messages.length > 0) {
           // createdAt을 기준으로 시간순서 정렬
           const sortedMessages = sortCreatedAt(messageData.messages);

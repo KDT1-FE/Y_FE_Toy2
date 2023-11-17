@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getAllMyChat } from '../../api';
 import {
-  myUserDataState,
   privateChatState,
   onlineUserState,
   openChatDetailState,
@@ -47,8 +46,7 @@ const CheckPrivateChat = ({ isOpen, onClose }: LoginModalProps) => {
 
   const [openChatDetail, setOpenChatDetail] =
     useRecoilState(openChatDetailState);
-  const [inputValue, setInputValue] = useState('');
-  const [openNewChat, setOpenNewChat] = useRecoilState(openNewChatState);
+  const [_, setOpenNewChat] = useRecoilState(openNewChatState);
   const [chatUserData, setchatUserData] = useState<User[]>([
     {
       chatId: '',

@@ -17,17 +17,13 @@ import {
   Box,
   Fade,
 } from '@chakra-ui/react';
-import { useRecoilState } from 'recoil';
-import { onlineUserState } from '../../states/atom';
-import { loginSocket } from '../../api/socket';
 import { postLogin } from '../../api/index';
 import { setCookies, getCookie, removeCookies } from '../../util/util';
 import swal from 'sweetalert';
 
 function UserLogin() {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useRecoilState(onlineUserState);
+  const [, setIsLogin] = useState(false);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [showAlert, setShowAlert] = useState({

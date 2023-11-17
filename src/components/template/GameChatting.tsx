@@ -37,8 +37,8 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   const [lastDate, setLastDate] = useState<string | undefined>('');
   const [usersInRoomData, setUsersInRoom] = useRecoilState(usersInRoom);
   const accessToken: any = getCookie('accessToken');
-  const [allRooms, setAllRooms] = useRecoilState(allRoomState);
-  const [roomId, setRoomId] = useRecoilState(roomIdState);
+  const [allRooms] = useRecoilState(allRoomState);
+  const [roomId] = useRecoilState(roomIdState);
 
   const searchRoomTitle = allRooms.find((obj) => obj.id === roomId);
   const roomTitle = searchRoomTitle ? searchRoomTitle.name : '';
@@ -248,11 +248,6 @@ const ChatHeader = styled.div`
   position: relative;
 `;
 
-const ChatHeaderIcon = styled.img`
-  position: absolute;
-  top: 11px;
-  left: 96px;
-`;
 
 const ChatHeaderWarn = styled.div`
   position: absolute;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import {
   onlineUserStateInGameRoom,
-  userRoomState,
   userState,
   nowProfiles,
 } from '../../states/atom';
@@ -10,10 +9,9 @@ import { io } from 'socket.io-client';
 import { SERVER_URL, SERVER_ID } from '../../constant';
 import { getCookie } from '../../util/util';
 import styled from 'styled-components';
-import { getOnlyGameRoom, getUserData, getAllGameRooms } from '../../api';
-import { OnlyResponse, Chat } from '../../interfaces/interface';
+import { getOnlyGameRoom, getUserData } from '../../api';
+import { OnlyResponse } from '../../interfaces/interface';
 import { useParams } from 'react-router-dom';
-import { sortCreatedAt } from '../template/useChattingSort';
 import { AxiosResponse } from 'axios';
 
 interface ChattingDetailProps {
@@ -30,13 +28,12 @@ interface User {
 }
 const CheckUsersInGameRoom: React.FC<ChattingDetailProps> = ({ chatId }) => {
   const accessToken: any = getCookie('accessToken');
-  const [roomNumber, setRoomNumber] = useRecoilState(userRoomState);
-  const [roomUser, setRoomUser] = useRecoilState(userState);
+  const [, setRoomUser] = useRecoilState(userState);
   const [UsersInGameRoom, setUsersInGameRoom] = useRecoilState<string[]>(
     onlineUserStateInGameRoom,
   );
   const [profiles, setProfiles] = useState<ResponseValue[]>([]);
-  const [now, setNow] = useRecoilState(nowProfiles);
+  const [, setNow] = useRecoilState(nowProfiles);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {

@@ -1,15 +1,8 @@
-import { useState } from 'react';
-
 import CreateGameRoom from '../../components/layout/createGameRoom';
 import CheckGameRoom from '../../components/layout/checkGameRoom';
-import { Button } from '@chakra-ui/react';
-
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import OfflineUserList from '../../components/layout/offlineUserList';
 import OnlineUserList from '../../components/layout/onlineUserList';
-import UserList from '../../components/template/userList';
 import UserLogout from '../login/userLogout';
-import CheckPrivateChat from '../../components/layout/checkPrivateChatModal';
 import MyUserData from '../../components/layout/MyUserData';
 
 const GameLobby = () => {
