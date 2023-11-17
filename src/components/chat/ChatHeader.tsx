@@ -18,10 +18,12 @@ const ChatHeader = ({
 
   return (
     <header className={styles.header}>
-      <p className={styles.p}>
+      <span>
         현재인원: {currentPlayers} / {totalPlayers}
+      </span>
+      <p className={styles.header__text}>
+        {totalPlayers - currentPlayers}명의 플레이어를 기다리는중..
       </p>
-      <p>{totalPlayers - currentPlayers}의 플레이어를 기다리는중..</p>
     </header>
   );
 };
