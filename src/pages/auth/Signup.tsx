@@ -52,7 +52,8 @@ const Signup = () => {
       : `url("/src/assets/images/profile.jpeg")`,
   };
 
-  const handleModal = () => {
+
+  const handleModal: () => void = () => {
     setIsModalOpen(false);
   };
 
