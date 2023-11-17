@@ -1,6 +1,5 @@
 <div align="center">
 
-
 <img src="https://github.com/LeHiHo/FastMind/assets/37584686/6e7fe4ca-ff6d-4a4d-b572-20e799a8c2c7" width=300>
 
 ### 패스트캠퍼스 토이프로젝트2 한조팀의 FastMind 게임 💻 프론트엔드
@@ -213,7 +212,6 @@ originalMousePosition: {
 
 ## 🧑‍🎓 역할
 <div>
-  장호진  
   
 </div>
 
