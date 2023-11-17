@@ -23,12 +23,31 @@ TEST용 PASSWORD: ivegaeul
 
 <br/>
 
+## ✔️ 요구 사항
+
+### 필수 구현 사항
+- [x] `useState` 또는 `useReducer`를 활용한 상태 관리 구현
+- [x] `Sass`, `styled-component`, `emotion`, `Chakra UI`, `tailwind CSS` 등을 활용한 스타일 구현
+- [x] `react` 상태를 통한 CRUD 구현
+- [x] 상태에 따라 달라지는 스타일 구현
+- [x] `custom hook`을 통한 비동기 처리 구현
+- [x] 유저인증 시스템(로그인, 회원가입) 구현
+- [x] `jwt`등의 유저 인증 시스템 (로그인, 회원가입 기능)
+- [x] 소켓을 이용한 채팅 구현
+
+### 선택 구현 사항
+- [x] `typescript`를 활용한 앱 구현
+
+<br/>
+
 ## 🛠️ 기술 스택
 
-## FrontEnd  
+### FrontEnd  
+
+#### Language
 <img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white"> 
 
-### Development
+#### Development
 
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) 
 ![Chakra](https://img.shields.io/badge/chakra-%234ED1C5.svg?style=for-the-badge&logo=chakraui&logoColor=white) 
@@ -37,132 +56,84 @@ TEST용 PASSWORD: ivegaeul
 ![Axios](https://img.shields.io/badge/axios-671ddf?&style=for-the-badge&logo=axios&logoColor=white)
 
 
-### CI/CD
+#### CI/CD
 ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
-### Design
+#### Design
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 
-## Chatting BackEnd
+<br>
 
-### Language
+### Chatting BackEnd
+
+#### Language
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 
-### Framework
+#### Framework
 ![Express](https://img.shields.io/badge/Express-000000.svg?style=for-the-badge&logo=Express&logoColor=white)
 
 
-### DB
+#### DB
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 
-### Infra
+#### Infra
 ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
 ![Mongoose](https://img.shields.io/badge/Mongoose-880000.svg?style=for-the-badge&logo=Mongoose&logoColor=white)
 
-### CI/CD
+#### CI/CD
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white) 
 ![Amazon EC2](https://img.shields.io/badge/Amazon%20EC2-FF9900.svg?style=for-the-badge&logo=Amazon-EC2&logoColor=white)
 
-## Game BackEnd
+<br>
 
-### Language
+### Game BackEnd
+
+#### Language
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 
-### Framework
+#### Framework
 ![Express](https://img.shields.io/badge/Express-000000.svg?style=for-the-badge&logo=Express&logoColor=white)
 
-### Infra
+#### Infra
 ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
 ![Babel](https://img.shields.io/badge/Babel-F9DC3e?style=for-the-badge&logo=babel&logoColor=black)
+
+#### CI/CD
+![Heroku](https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white)
 
 <br/>
 
 ## 📚 주요 기능
-
-### 로그인/회원가입
-
-#### **보안 및 사용자 인증**
-
-본 프로젝트의 로그인 및 회원가입 기능은 엑세스 토큰과 리프레시 토큰을 쿠키를 통해 관리하여 사용자 인증의 안전성을 강화했습니다.
-
-#### **회원가입 기능**
-
-회원가입 과정에서는 다음과 같은 검증 로직을 적용하여 사용자 경험의 질을 향상시켰습니다:
-
-- **아이디 검증**: 사용자의 아이디는 알파벳만 사용 가능하며, 특정 길이 제한을 충족해야 합니다.
-- **비밀번호 확인**: 사용자가 입력한 비밀번호의 일치 여부를 검증하고 특정 길이 제한을 충족해야 합니다.
-- **아이디 중복 체크**: 이미 가입된 아이디는 사용할 수 없도록 하여, 중복 가입을 방지합니다.
-
-회원가입 과정 중 발생할 수 있는 다양한 에러(예: 네트워크 에러, 이미지 파일명 및 용량 관련 에러)는 사용자에게 명확한 피드백을 제공합니다.
-
-#### **로그아웃 기능**
-
-사용자가 로그아웃할 때, 보안을 위해 관련 쿠키를 삭제하는 로직을 구현하여, 사용자의 세션 정보를 안전하게 관리합니다.
-
-### 방 만들기
-
-- **방 생성 로직**: 사용자가 새로운 게임방을 만들 때, 리코일 상태 관리를 통해 생성된 방이 리코일 배열에 저장됩니다.
-- **방 이름 설정**: 방을 만드는 사용자는 방의 이름을 직접 지정하거나, 랜덤으로 생성된 이름을 사용할 수 있습니다. 이는 사용자에게 유연성을 제공합니다.
-- **고유 ID 및 경로 이동**: 생성된 방은 고유한 ID를 부여받으며, 사용자는 **`/room/:방 고유 id`** 경로로 이동하여 해당 방에 접근할 수 있습니다.
-
-### 게임방 목록
-
-- **목록 표시**: 생성된 모든 방은 배열을 사용하여 화면에 나열됩니다. **`map`** 함수를 활용하여 각 방의 정보가 목록으로 표시됩니다.
-- **페이지네이션**: 방이 많아질 경우를 대비하여, 목록에는 페이지네이션 기능이 구현되어 있습니다. 이를 통해 사용자는 페이지 당 최대 10개의 방을 볼 수 있습니다.
-- **방 정보 표시**: 각 방 목록에는 방 번호, 방 제목, 현재 참가하고 있는 인원 수가 표시됩니다.
-- **입장 제한**: 각 방은 최대 4명까지 참여할 수 있으며, 이 인원이 채워지면 더 이상의 입장은 불가능합니다.
-
-### 온라인 유저 리스트
-
-### 프로필
-
-- **프로필 사진 변경**: 사용자는 자신의 프로필에서 사진을 업로드하거나 변경할 수 있습니다. (없다면 기본 이미지)
-- **닉네임 변경**: 사용자는 프로필에서 자신의 닉네임을 원하는 대로 설정하거나 변경할 수 있습니다.
-- **로그아웃**: 사용자는 언제든지 안전하게 로그아웃할 수 있습니다. 로그아웃 시 쿠키가 삭제됩니다.
-
-### 채팅
-
-### 그림판
-
-- **Canvas API**: 본 프로젝트의 그림판 기능은 HTML5의 Canvas API를 활용하여 구현되었습니다.
-- **실시간 통신**: 실시간 사용자 상호작용을 위해 [Socket.io](http://socket.io/)를 사용하였으며, 사용자 간의 그림 데이터 공유 및 통신을 위해 자체적으로 구축한 백엔드 서버에 연결합니다.
-- **서버 배포**: 프로젝트의 백엔드 서버는 Heroku를 통해 배포되었습니다. node.js/Express/Babel 등을 사용했습니다.
-
-#### 주요 기능
-
-- **색상 선택**: 사용자는 다양한 색상 팔레트에서 마음대로 색을 선택할 수 있습니다.
-- **그리기 도구**: 부분 지우개와 전체 지우기 기능을 통해 사용자는 쉽게 그림을 수정할 수 있습니다.
-- **굵기 조절**: 사용자는 선의 굵기를 자유롭게 조절하여 다양한 표현을 할 수 있습니다.
-
-그림판에서의 사용자 작업은 다음과 같은 형식으로 서버로 전송됩니다.
-
-```tsx
-originalMousePosition: {
-  x: number;
-  y: number;
-};
-  newMousePosition: {
-  x: number;
-  y: number;
-};
-  option: {
-    color: string;
-    lineWidth: number;
-    roomId: string;
-  };
-```
-
-- **`originalMousePosition`**: 현재 마우스 위치 (x, y 좌표)
-- **`newMousePosition`**: 새로운 마우스 위치 (x, y 좌표)
-- **`option`**: 작업 옵션 (선택된 색상, 선의 굵기, 방 ID)
-
-### 게임 로직
+<div align="center">
+  <table>
+    <tr align="center">
+      <th>게임방 화면</th>
+      <th>게임 화면</th>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/dslov89/Agricola/assets/71018440/62fe59ca-7aae-4e94-b4b7-99b24c702f5d" alt="gif-main-page" width="370"></td>
+      <td><img src="https://github.com/dslov89/Agricola/assets/71018440/64b0fcf7-bac5-4895-9ea6-3e6d37763d0a"alt="gif-function1" width="370"></td>
+    </tr>
+    <tr align="center">
+      <th>농장</th>
+      <th>카드</th>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/dslov89/Agricola/assets/71018440/0e566f6c-c82f-43c7-86d4-776a860caaa8" alt="gif-function2" width="370"></td>
+      <td><img src= "https://github.com/dslov89/Agricola/assets/71018440/e522d12b-a2ab-47a8-bc5a-e222067da7b6"alt="gif-function3" width="370"></td>
+    </tr>
+  </table>
+</div>
 
 ## 🖌️ 프로젝트 아키텍처
 
+<div align="center">
+  
 <img src="https://github.com/LeHiHo/FastMind/assets/37584686/26f7fbcb-9141-4aec-980f-83af4ccc0b27"/>
+
+</div>
 
 <br/>
 
@@ -204,14 +175,48 @@ originalMousePosition: {
 
 <br/>
 
-## 🧑🏻‍💻 팀 소개
-| 장호진 (FE & BE) | 양재혁 (FE & BE) | 신하연 (FE) | 소유나 (FE & BE) | 이교헌 멘토님 (BE) |
+## 🧑🏻‍💻 팀 소개 및 역할
+| 장호진 (FE & BE)  <br> 팀장 | 양재혁 (FE & BE) <br> 팀원 | 신하연 (FE) <br> 팀원 | 소유나 (FE & BE)  <br> 팀원 | 이교헌 멘토님 (BE) <br> 멘토님|
 |:---------------------:|:-----------------------:|:---------------------:|:-----------------------:|:---------------------:|
 | <img height="100" src="https://avatars.githubusercontent.com/leHiHo" width="100"/> | <img height="100" src="https://avatars.githubusercontent.com/yangjaehyuk" width="100"/> | <img height="100" src="https://avatars.githubusercontent.com/gkdus2217" width="100"/> | <img height="100" src="https://avatars.githubusercontent.com/seacrab808" width="100"/> | <img height="100" src="https://avatars.githubusercontent.com/GyoHeon" width="100"/> |
 | [leHiHo](https://github.com/leHiHo) | [yangjaehyuk](https://github.com/yangjaehyuk) | [gkdus2217](https://github.com/gkdus2217) | [seacrab808](https://github.com/seacrab808) | [GyoHeon](https://github.com/GyoHeon) |
 |<ul><li>인증 인가</li><li>게임 서버 구현</li><li>게임 로직 구현</li><li>배포</li></ul> | <ul><li>REST API 연결</li><li>서버 소켓 연결</li><li>게임 서버 구현</li><li>게임 로직 구현</li><li>게임방 유저 목록 구현</li><li>방 만들기 구현</li><li>폴링 로직 구현</li><li>온라인 유저 목록 구현</li></ul> | <ul><li>채팅 소켓 연결</li><li>1대1 채팅 구현</li><li>게임방 채팅 구현</li><li>검색 기능 구현</li><li>페이지네이션</li><li>로비 및 헤더 UI</li><li>방 목록 정렬</li></ul> | <ul><li>그림판 구현</li><li>그림판 소켓 연결</li><li>게임 서버 구현</li><li>게임 서버 배포</li><li>게임방 UI</li></ul>  | <ul><li>채팅 서버 구현</li><li>채팅 서버 배포</li></ul> |
 
 <br/>
+
+## ✍️ 회고 
+
+### 장호진  
+프로젝트 초기에 2주만에 게임을 만들 수 있을까라는 생각이 들었지만, 유나님은 그림판 구현경험이있고, 재혁님은 게임 구현경험, 하연님은 웹소켓 경험이 있어서 믿고 열심히 할 수 있었습니다!!  
+재혁님 유나님과 함께한 게임로직, 백엔드 소켓 로직, 백엔드 배포를 수행하면서 기존 프론트엔드에서 경험하지 못했던것들을 경험 할 수 있어서 좋았습니다.  
+하연님의 전문적인 퍼블리싱으로 초기 UI를 엄청나게 업그레이드 시켜주셔서 구현하며서 이런게 현업의 감각이구나 라는걸 느꼈습니다.  
+4명임에도 불구하고 완성도높은 결과물을 위해 다들 새벽까지 개발 하시느라 고생하셨습니다!🏹  
+
+### 양재혁  
+이전에 SockJS와 Stomp를 이용하여 웹 게임 구현 경험이 있어 수월할 줄 알았으나 게임 로직을 구현하면서 백엔드 팀원이 없어 게임 개발에 난항을 겪었습니다.  
+결국 백엔드 공부도 따로 하며 직접 백엔드를 구현하고 배포하게 되었습니다.  
+이번 프로젝트에서 저희 팀원들 모두가 열심히 해주셔서 감사합니다.  
+2주 안에 채팅과 게임 솔직히 못 할 줄 알았는데 우리 팀원들 대단하신 것 같습니다!  
+다음 프로젝트도 이번 팀처럼 열정적이고 능력 있는 분들이랑 하고 싶습니다 ^~^  
+
+### 소유나  
+캐치마인드에 진심이었지만 서비스가 종료되어서 저희가 직접 만들기로 했다 ^!^ 🏹  
+이번 과제 특성 상 역할 분배가 어려워서 조금 아쉬웠지만 이번 기회로 리액트를 확실하게 배운 것 같고 소켓과 백엔드까지 관심을 갖게 되었다. 🎇  
+컨셉충인 나는 내가 좋아하는 것을 만드는게 조금 더 욕심과 열정을 갖고 만들 수 있다는 것을 다시 깨달았다. 😉  
+이번 프로젝트에서 가장 많이 얻어 가는 것은 공부 의지와 욕심이다❗    
+모두 잠도 안 자고 매일 새벽까지 밤 새서 기능 구현에 힘썼는데, 그런 열정을 다음 프로젝트에 계속 이어나갈 수 있을 것 같다. 💪   
+주어진 과제 이상으로 게임 로직과 백엔드 구현까지 경험해서 정말 뜻깊은 2주였다. 🐤  
+
+### 신하연  
+지나고 보니 정신없이 달려온 2주였던 것 같습니다.   
+처음에 역할 분배를 했지만, 역할 분배가 어려워 난항을 겪었고, 정해진 역할 분배와 다르게 기능을 구현한 감이 있어서 그 부분은 아쉽습니다.   
+초기 디자인 UI를 피그마로 제작했으나, 뜻하지 않게 디자인과 다르게 구현된 부분도 있어 디자이너로의 욕심을 내려놓는 법을 조금이나마 배운 것 같습니다.  
+다들 새벽, 주말 가리지 않고 열심히 작업했으며, 서로 화이팅하려는 분위기를 만들려고 조원들 모두가 힘썼습니다.  
+배포 직전 채팅 소켓 오류 디버깅으로 꽤나 골치를 썩었고, 그런 디버깅을 하면서 소켓 연결과 리액트에 이해가 높아진 것 같아 많이 배웠다는 생각이 듭니다.  
+모두 고생하셨습니다.  
+
+<br>
+
 
 ## 📆 기간
   `2023.11.06 ~ 2023.11.17`
