@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PocketBase from 'pocketbase';
 import { getCharacters } from '@store/ghostSlice';
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
@@ -7,15 +7,15 @@ import styles from '@styles/components/signupModal.module.scss';
 
 const pb = new PocketBase('https://full-oil.pockethost.io');
 
-const SignupModal = ({ handleModal }) => {
+const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
   const dispatch = useAppDispatch();
-  const ghosts = useAppSelector((state) => state.ghosts);
+  const ghosts: Ghost[] = useAppSelector((state) => state.ghosts);
 
   const [currentPage, setCurrentPage] = useState(1);
   const limit: number = 4;
   const offset = (currentPage - 1) * limit;
 
-  const fetchURL = async (id, field) => {
+  const fetchURL = async (id: string, field: string) => {
     try {
       const fileUrl = await fetchFileUrl(id, field);
 
@@ -30,7 +30,7 @@ const SignupModal = ({ handleModal }) => {
     }
   };
 
-  const fetchFileUrl = async (recordId, filename) => {
+  const fetchFileUrl = async (recordId: string, filename: string) => {
     try {
       const record = await pb.collection('ghosts').getOne(recordId);
 
@@ -49,7 +49,7 @@ const SignupModal = ({ handleModal }) => {
 
   // 모든 고스트 데이터
 
-  const getGhosts = async (): Promise<GhostRecord[]> => {
+  const getGhosts = async () => {
     try {
       const response = await fetch(
         `https://full-oil.pockethost.io/api/collections/ghosts/records`,
@@ -60,7 +60,8 @@ const SignupModal = ({ handleModal }) => {
         throw new Error(`Failed to fetch data. Status: ${response.status}`);
       }
 
-      const data: GhostRecord[] = await response.json();
+      const data = await response.json();
+      console.log(data);
       return data;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -78,7 +79,7 @@ const SignupModal = ({ handleModal }) => {
       }
     };
 
-    const getURLs = async (records) => {
+    const getURLs = async (records: GhostRecord[]) => {
       try {
         await Promise.all(
           records.map(
@@ -93,7 +94,7 @@ const SignupModal = ({ handleModal }) => {
     fetchData();
   }, []);
 
-  const chooseGhost = (event) => {
+  const chooseGhost = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setCharacter(event.target.value));
   };
 
@@ -161,3 +162,18 @@ const SignupModal = ({ handleModal }) => {
 };
 
 export default SignupModal;
+
+type SignupModalProps = {
+  handleModal: () => void;
+};
+
+interface GhostRecord { 
+  id: string, 
+  filename: string,
+  field: string,
+}
+
+interface Ghost {
+  id: string;
+  fileUrl: string;
+}
