@@ -5,7 +5,7 @@ import {
   getFirebaseData,
   fetchAllUsers,
 } from '@/utils/hostsStorage';
-import styles from '@/components/HostList/HostList1.module.scss';
+import styles from '@/components/HostList/HostList.module.scss';
 import Search from './Search/Search';
 import HostListItem from './HostListItem/HostListItem';
 import HostDetailsModal from './HostDetailsModal/HostDetailsModal';
