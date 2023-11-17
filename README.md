@@ -131,7 +131,8 @@ TEST용 PASSWORD: ivegaeul
 
 <div align="center">
   
-<img src="https://github.com/LeHiHo/FastMind/assets/37584686/26f7fbcb-9141-4aec-980f-83af4ccc0b27"/>
+<img src="https://github.com/LeHiHo/FastMind/assets/37584686/1198325a-aefd-4749-a578-2f75e2ee2f18" />
+
 
 </div>
 
