@@ -245,7 +245,6 @@ export default function Chatting({ authData }: IsValidAuth) {
             className={styles.chatInput}
             value={message}
             onChange={e => setMessage(e.target.value)}
-            autoFocus
           />
           <button
             className={styles.triangle_button}
