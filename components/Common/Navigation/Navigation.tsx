@@ -7,7 +7,7 @@ import {
   BsChatSquareQuote,
 } from 'react-icons/bs';
 import { useRecoilValue } from 'recoil';
-import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import { showNavigationState } from '@/stores/atoms/nav.atoms';
 import styles from './Navigation.module.scss';
 
 function Navigation() {

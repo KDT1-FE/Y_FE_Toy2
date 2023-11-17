@@ -1,5 +1,5 @@
 import { UserLogin } from '@/@types/user';
-import { userIdState } from '@/recoil/atoms/userIdState';
+import { userIdState } from '@/stores/atoms/user.atoms';
 import { setStorage } from '@/utils/loginStorage';
 import { useRouter } from 'next/router';
 import { useSetRecoilState } from 'recoil';

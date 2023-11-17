@@ -1,5 +1,5 @@
-import Header from './Header1/Header1';
+import Header from './Header/Header';
 import Modal from './Modal/Modal';
-import Navigation from './Navigation1/Navigation1';
+import Navigation from './Navigation/Navigation';
 
 export { Header, Modal, Navigation };

@@ -11,7 +11,7 @@ import {
 import { useRouter } from 'next/router';
 import { getCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
-import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import { showNavigationState } from '@/stores/atoms/nav.atoms';
 import {
   ChatAlert,
   ChatLoading,

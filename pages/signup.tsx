@@ -6,7 +6,7 @@ import { GetServerSidePropsContext } from 'next';
 import { useSetRecoilState } from 'recoil';
 import Image from 'next/image';
 import instance from '@/apis/axios';
-import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import { showNavigationState } from '@/stores/atoms/nav.atoms';
 import { SignUpModal } from '@/components/Signup';
 import styles from '@/components/signUp.module.scss';
 
