@@ -1,25 +1,12 @@
 import React from 'react';
-import {
-  Avatar,
-  AvatarBadge,
-  Box,
-  Divider,
-  Flex,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Avatar, Box, Divider, Flex, Stack, Text } from '@chakra-ui/react';
 import { useUserData } from '../../hooks/useUserData';
 
 const AllUserBar = () => {
   const userData = useUserData();
 
   return (
-    <Box
-      position="fixed"
-      top="50%"
-      left="85%"
-      transform="translate(-50%, -50%)"
-    >
+    <Box position="fixed" h="full" overflow={'auto'} bg="gray.50">
       <Flex>
         <Stack direction="row" h="100vh">
           <Divider mt="12" orientation="vertical" borderColor={'gray.400'} />
@@ -30,7 +17,7 @@ const AllUserBar = () => {
           </Text>
           <Divider mt="4" borderColor={'gray.500'} />
           <Flex mt="4" align="center">
-            <Stack direction="column" spacing="0">
+            <Stack direction="column" spacing="0" h="100vh">
               {userData.userNames.map((userName, index) => (
                 <Flex key={index} mt="4">
                   <Avatar

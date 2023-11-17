@@ -13,8 +13,8 @@ const ChannelPage = () => {
   };
 
   return (
-    <Grid gridTemplateColumns={'1fr 250px'}>
-      <GridItem p={20}>
+    <Grid gridTemplateColumns={'1fr 250px'} gap={4}>
+      <GridItem display="flex" flexDirection="column" p={20}>
         <Flex gap="4">
           <Heading as="h1" fontSize="2xl" opacity={handleNavBarStyle('/')}>
             <Link to="/">전체 채팅</Link>

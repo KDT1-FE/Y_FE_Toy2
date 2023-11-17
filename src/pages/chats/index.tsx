@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import ChatList from '../../components/chats/ChatList';
 import ChatInput from '../../components/chats/ChatInput';
 import ChannelMemberSideBar from '../../components/channelMemberSideBar';
@@ -9,8 +9,8 @@ const Chats = () => {
   const navigate = useNavigate();
   if (!id) return <></>;
   return (
-    <Flex>
-      <Box flex="3" h="100vh">
+    <Grid gridTemplateColumns={'1fr 250px'} gap={4}>
+      <GridItem>
         <Flex
           alignItems="center"
           borderBottom="1px solid #E2E8F0"
@@ -32,11 +32,11 @@ const Chats = () => {
           <ChatList chatId={id} />
           <ChatInput chatId={id} />
         </Box>
-      </Box>
-      <Box flex="1" h="100vh">
+      </GridItem>
+      <GridItem>
         <ChannelMemberSideBar />
-      </Box>
-    </Flex>
+      </GridItem>
+    </Grid>
   );
 };
 

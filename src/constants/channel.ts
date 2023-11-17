@@ -12,6 +12,16 @@ export const CATEGORIES = [
   { name: '백엔드', value: '백엔드' },
   { name: '알고리즘', value: '알고리즘' },
   { name: '산책', value: '산책' },
+  { name: '진로', value: '진로' },
+  { name: '잡담', value: '잡담' },
+  { name: '개발', value: '개발' },
+  { name: '코테', value: '코테' },
+  { name: '게임', value: '게임' },
+  { name: '취업', value: '취업' },
+  { name: '공부', value: '공부' },
+  { name: '요리', value: '요리' },
+  { name: '해외', value: '해외' },
+  { name: '여행', value: '여행' },
 ];
 
 export const CATEGORY_BADGE_COLOR_SCHEMES: { [key: string]: string } = {
@@ -25,6 +35,16 @@ export const CATEGORY_BADGE_COLOR_SCHEMES: { [key: string]: string } = {
   백엔드: 'purple',
   알고리즘: 'pink',
   산책: 'gray',
+  진로: 'green',
+  잡담: 'blue',
+  개발: 'messenger',
+  취업: 'purple',
+  코테: 'pink',
+  게임: 'gray',
+  공부: 'red',
+  요리: 'orange',
+  해외: 'teal',
+  여행: 'black',
 };
 
 export const CATEGORY_COLOR_SCHEMES: { [key: string]: string } = {
@@ -38,4 +58,10 @@ export const CATEGORY_COLOR_SCHEMES: { [key: string]: string } = {
   백엔드: '#E9D8FD',
   알고리즘: '#FED7E2',
   산책: '#EDF2F7',
+  진로: 'green',
+  잡담: 'blue',
+  개발: 'messenger',
+  취업: 'purple',
+  코테: 'pink',
+  게임: 'gray',
 };
