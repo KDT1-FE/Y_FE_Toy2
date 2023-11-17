@@ -1,5 +1,3 @@
-import styles from '../../components/ChatList/ChatList.module.scss';
-import chatListAPI from '../../apis/chatListAPI';
 import { Chat } from '@/@types/types';
 import { useEffect, useState } from 'react';
 import { sortChatList } from '@/utils/chatList';
@@ -12,10 +10,10 @@ import {
 } from '@/components/ChatList';
 import { GetServerSidePropsContext } from 'next';
 import authorizeFetch from '@/utils/authorizeFetch';
+import chatListAPI from '../../apis/chatListAPI';
+import styles from '../../components/ChatList/ChatList.module.scss';
 
-export default function AllChatList({ userData }) {
-  console.log(userData.user.id);
-
+export default function AllChatList() {
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
 
   const getAllChat = async () => {

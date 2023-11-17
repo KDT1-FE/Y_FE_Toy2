@@ -6,7 +6,7 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
-import { FirebaseData, ApiData } from '@/components/HostList/HostList.types';
+import { FirebaseData, ApiData } from '@/components/HostList/HostList1.types';
 import userListAPI from '@/apis/userListAPI';
 import app from './firebaseConfig';
 

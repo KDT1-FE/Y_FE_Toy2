@@ -7,6 +7,7 @@ import { filterPrivateChat, sortChatList } from '@/utils/chatList';
 import { Header } from '@/components/Common';
 import MyChatListItem from '@/components/ChatList/MyChatListItem';
 import authorizeFetch from '@/utils/authorizeFetch';
+import styles from '../../components/ChatList/ChatList.module.scss';
 
 export default function MyChatList() {
   const [myHostChatList, setMyHostChatList] = useState<Chat[]>([]);

@@ -37,3 +37,10 @@ export interface LeaverData {
   users: string[]; // 참여자들 id
   leaver: string; // 나간 사용자 id
 }
+
+export interface IsValidAuth {
+  authData: {
+    auth: boolean;
+    user: User;
+  };
+}

@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { io } from 'socket.io-client';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Chat, JoinersData, LeaverData, Message } from '@/@types/types';
+import { useSetRecoilState } from 'recoil';
+import {
+  Chat,
+  IsValidAuth,
+  JoinersData,
+  LeaverData,
+  Message,
+} from '@/@types/types';
 import { useRouter } from 'next/router';
-import { userIdState } from '@/recoil/atoms/userIdState';
 import { getCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 import { showNavigationState } from '@/recoil/atoms/showNavigationState';
@@ -16,6 +21,7 @@ import {
   MyMessage,
   OtherMessage,
 } from '@/components/Chat';
+import authorizeFetch from '@/utils/authorizeFetch';
 import styles from '../../components/chat/Chat.module.scss';
 import chatAPI from '../../apis/chatAPI';
 
@@ -23,7 +29,7 @@ interface MessageArray {
   messages: Message[];
 }
 
-export default function Chatting() {
+export default function Chatting({ authData }: IsValidAuth) {
   const router = useRouter();
   const { chatId } = router.query;
   const currentChatId: string = Array.isArray(chatId)
@@ -51,7 +57,7 @@ export default function Chatting() {
   const [enterName, setEnterName] = useState<string>('');
   const [exitName, setExitName] = useState<string>('');
 
-  const userId = useRecoilValue(userIdState);
+  const userId = authData.user.id;
 
   const accessToken = getCookie('ACCESS_TOKEN');
 
@@ -253,11 +259,21 @@ export default function Chatting() {
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
-  // eslint-disable-next-line consistent-return
 ) => {
+  const accessToken = context.req.cookies.ACCESS_TOKEN;
   const refreshToken = context.req.cookies.REFRESH_TOKEN;
 
+  if (accessToken && refreshToken) {
+    const response = await authorizeFetch({
+      accessToken,
+      refreshToken,
+    });
+    return {
+      props: { authData: response.data },
+    };
+  }
   if (!refreshToken) {
+    // accessToken이 없으면 로그인 페이지로 리다이렉트
     return {
       redirect: {
         destination: '/login',
