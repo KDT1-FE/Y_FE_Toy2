@@ -1,7 +1,5 @@
 import Image from 'next/image';
 import { Chat } from '@/@types/types';
-import { useRecoilValue } from 'recoil';
-import { userIdState } from '@/recoil/atoms/userIdState';
 import chatListAPI from '@/apis/chatListAPI';
 import { useRouter } from 'next/router';
 import formatTime from '@/utils/timeFormat';
@@ -10,10 +8,10 @@ import JudgeWrapper from './JudgeWrapper/JudgeWrapper';
 
 interface Props {
   chat: Chat;
+  userId: string;
 }
 
-export default function AllChatListItem({ chat }: Props) {
-  const userId = useRecoilValue(userIdState);
+export default function AllChatListItem({ chat, userId }: Props) {
   const checkIncluded = (element: { id: string }) => {
     if (element.id === userId) {
       return true;

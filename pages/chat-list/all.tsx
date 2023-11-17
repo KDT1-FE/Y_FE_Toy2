@@ -1,4 +1,4 @@
-import { Chat } from '@/@types/types';
+import { Chat, IsValidAuth } from '@/@types/types';
 import { useEffect, useState } from 'react';
 import { sortChatList } from '@/utils/chatList';
 import useConnectServerSocket from '@/hooks/useConnectServerSocket';
@@ -13,7 +13,7 @@ import authorizeFetch from '@/utils/authorizeFetch';
 import chatListAPI from '../../apis/chatListAPI';
 import styles from '../../components/ChatList/ChatList.module.scss';
 
-export default function AllChatList() {
+export default function AllChatList({ authData }: IsValidAuth) {
   const [allChatList, setAllChatList] = useState<Chat[]>([]);
 
   const getAllChat = async () => {
@@ -53,7 +53,11 @@ export default function AllChatList() {
       <Header pageName="오픈채팅" />
       <ul className={styles.list_container}>
         {allChatList.map(chat => (
-          <AllChatListItem key={chat.id} chat={chat} />
+          <AllChatListItem
+            key={chat.id}
+            chat={chat}
+            userId={authData.user.id}
+          />
         ))}
       </ul>
       <CreateChatButton setIsModal={setIsModal} />
@@ -74,7 +78,7 @@ export const getServerSideProps = async (
       refreshToken,
     });
     return {
-      props: { userData: response.data },
+      props: { authData: response.data },
     };
   }
   if (!refreshToken) {
