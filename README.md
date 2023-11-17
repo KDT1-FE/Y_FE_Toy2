@@ -70,8 +70,7 @@ react-hook-form을 이용하여 id,password,name 모두 유효성 검사를 진�
 <br>
 
 ### 채팅방 목록 / 채팅방 만들기
-
-![Nov-16-2023 23-50-16.gif](https://prod-files-secure.s3.us-west-2.amazonaws.com/3ef8dbd9-414c-4cf5-813d-32ecb943cc67/313e3091-532e-4802-be89-f5205cc62bd1/Nov-16-2023_23-50-16.gif)
+![Nov-16-2023 23-50-16](https://github.com/Chatting-App-FE/Chatting-App-FE/assets/123650056/7806a998-0f81-4883-b8dc-2f0654ce9a93)
 
 - 채팅방 이름을 #을 기준으로 나누어 제목과 카테고리로 분리하였습니다. 이를 통해, 이름과 카테고리로 검색이 가능하게 만들었습니다.
 - react query를 사용하여 채팅방 목록과 모달 내부의 유저 리스트를 캐싱하였고, 채팅방을 만들면 전체 채팅방 목록을 다시 받아오게 하였습니다.
