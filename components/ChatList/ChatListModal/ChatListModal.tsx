@@ -22,8 +22,8 @@ export default function ChatListModal({ handleModal }: ChatListModalProps) {
 
   const createChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (newChatName.length > 10) {
-      alert('10글자 이내로 이름을 작성해주세요!');
+    if (newChatName.length > 15) {
+      alert('15글자 이내로 이름을 작성해주세요!');
       setNewChatName('');
       return;
     }
@@ -45,7 +45,7 @@ export default function ChatListModal({ handleModal }: ChatListModalProps) {
               name="chat_name"
               value={newChatName}
               onChange={e => setNewChatName(e.target.value)}
-              placeholder="10글자 이내에 작성해주세요."
+              placeholder="15글자 이내에 작성해주세요."
             />
             <button type="submit">완료</button>
           </form>
