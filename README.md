@@ -206,14 +206,9 @@ originalMousePosition: {
 |:---------------------:|:-----------------------:|:---------------------:|:-----------------------:|:---------------------:|
 | <img height="100" src="https://avatars.githubusercontent.com/leHiHo" width="100"/> | <img height="100" src="https://avatars.githubusercontent.com/yangjaehyuk" width="100"/> | <img height="100" src="https://avatars.githubusercontent.com/gkdus2217" width="100"/> | <img height="100" src="https://avatars.githubusercontent.com/seacrab808" width="100"/> | <img height="100" src="https://avatars.githubusercontent.com/GyoHeon" width="100"/> |
 | [leHiHo](https://github.com/leHiHo) | [yangjaehyuk](https://github.com/yangjaehyuk) | [gkdus2217](https://github.com/gkdus2217) | [seacrab808](https://github.com/seacrab808) | [GyoHeon](https://github.com/GyoHeon) |
-| `인증 인가`, `게임 서버 구현`, `게임 로직 구현`, `배포` | `REST API 연결`, `서버 소켓 연결`, `게임 서버 구현`, `게임 로직 구현`, `게임방 유저 목록 구현`, `방 만들기 구현`, `폴링 로직 구현`, `온라인 유저 목록 구현` | `채팅 소켓 연결`, `1대1 채팅 구현`, `게임방 채팅 구현`, `검색 기능 구현`, `페이지네이션`, `로비 및 헤더 UI`, `방 목록 정렬` | `그림판 구현 및 소켓 연결`, `게임 서버 구현 및 배포`, `게임방 UI 담당`  | `채팅 백엔드` |
+|<ul><li>인증 인가</li><li>게임 서버 구현</li><li>게임 로직 구현</li><li>배포</li></ul> | <ul><li>REST API 연결</li><li>서버 소켓 연결</li><li>게임 서버 구현</li><li>게임 로직 구현</li><li>게임방 유저 목록 구현</li><li>방 만들기 구현</li><li>폴링 로직 구현</li><li>온라인 유저 목록 구현</li></ul> | <ul><li>채팅 소켓 연결</li><li>1대1 채팅 구현</li><li>게임방 채팅 구현</li><li>검색 기능 구현</li><li>페이지네이션</li><li>로비 및 헤더 UI</li><li>방 목록 정렬</li></ul> | <ul><li>그림판 구현</li><li>그림판 소켓 연결</li><li>게임 서버 구현</li><li>게임 서버 배포</li><li>게임방 UI</li></ul>  | <ul><li>채팅 서버 구현 및 배포</li></ul> |
 
 <br/>
-
-## 🧑‍🎓 역할
-<div>
-  
-</div>
 
 ## 📆 기간
   `2023.11.06 ~ 2023.11.17`
