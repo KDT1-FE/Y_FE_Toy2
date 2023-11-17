@@ -14,6 +14,7 @@ import { userState } from '../../../atoms';
 import { updateRate } from '../../../utils/utils';
 import checkWord from './checkWord';
 import soundPlay from '../sound/soundPlay';
+import search from './searchWord';
 
 type Props = WordsType &
   CurrentRateType &
@@ -77,6 +78,7 @@ export default function InputWord({
 }: Props) {
   const user = useRecoilValue(userState);
 
+  // 정답을 맞히면 남은 시간을 5초로 초기화 하고 제한시간이 종료될 시 현재 기록과 최고 기록이 같다면 현재 기록을 서버에 기록 후 랭킹리스트 재랜더링
   useEffect(() => {
     const interval = setInterval(() => {
       setTime((prev) => prev - 1);
@@ -104,11 +106,22 @@ export default function InputWord({
     };
   }, [time]);
 
+  // 현재 기록이 최고 기록 보다 클 경우 최고 기록을 현재 기록으로 증가시킴
   useEffect(() => {
     if (currentRate > rate && start) {
       setRate(currentRate);
     }
   }, [currentRate]);
+
+  // 프록시 서버의 수면상태를 해제하여 첫 번째 정답 딜레이 방지
+  useEffect(() => {
+    const fetchData = async () => {
+      const ready = await search('start');
+      console.log(ready);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <InputBox

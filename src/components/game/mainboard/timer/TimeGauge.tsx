@@ -21,6 +21,7 @@ export default function TimeGauge({ time }: PropsType) {
           width: '100%',
         }}
         animate={{
+          // 제한시간 5초를 구현 하기 위해서는 수치 상으로 * 20을 해야하지만 28.5로 했을 때 화면 상에서 게이지가 5초에 가장 근접했음
           width: `${(time - 1) * 28.5}%`,
         }}
         transition={{
