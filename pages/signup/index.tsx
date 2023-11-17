@@ -1,15 +1,14 @@
-/* eslint-disable consistent-return */
-import instance from '@/apis/axios';
-import SignUpModal from '@/components/signup/SignUpModal';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
 import { useSetRecoilState } from 'recoil';
-import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import Image from 'next/image';
 import styles from './signUp.module.scss';
+import instance from '@/apis/axios';
+import { showNavigationState } from '@/recoil/atoms/showNavigationState';
+import { SignUpModal } from '@/components/Signup';
 
 interface RequestBody {
   id: string; // 사용자 아이디 (필수!, 영어와 숫자만)

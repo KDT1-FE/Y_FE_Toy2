@@ -3,7 +3,7 @@ import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import styles from './Chat.module.scss';
 import { Message } from '../../@types/types';
 
-function MyMessage({ msg }: { msg: Message }) {
+export default function MyMessage({ msg }: { msg: Message }) {
   const today = new Date();
   const isToday = today.toISOString().split('T')[0];
   const dateString = todayDate(msg.createdAt);
@@ -22,5 +22,3 @@ function MyMessage({ msg }: { msg: Message }) {
     </div>
   );
 }
-
-export default MyMessage;

@@ -1,15 +1,12 @@
-/* eslint-disable consistent-return */
-// import styles from '@/styles/Home.module.scss';
-
-import Header from '@/components/common/Header/Header';
+import Header from '@/components/Common/Header/Header';
+import HostList from '../components/HostList/HostList';
 import authorizeFetch from '@/utils/authorizeFetch';
 import { GetServerSidePropsContext } from 'next';
-import HostList from './host-list';
 
 export default function Home() {
   return (
     <>
-      <Header />
+      <Header pageName="" />
       <HostList />
     </>
   );

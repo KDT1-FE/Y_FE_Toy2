@@ -1,14 +1,12 @@
-/* eslint-disable consistent-return */
-import { Chat } from '@/@types/types';
-import MyChatListItem from '@/components/ChatList/MyChatListItem';
-import { filterPrivateChat, sortChatList } from '@/utils/chatList';
 import { useEffect, useState } from 'react';
-import authorizeFetch from '@/utils/authorizeFetch';
-import { GetServerSidePropsContext } from 'next';
 import { IoIosChatbubbles } from 'react-icons/io';
-import Header from '@/components/common/Header/Header';
-import chatListAPI from '../../apis/chatListAPI';
-import styles from './ChatList.module.scss';
+import { GetServerSidePropsContext } from 'next';
+import { Chat } from '@/@types/types';
+import chatListAPI from '@/apis/chatListAPI';
+import { filterPrivateChat, sortChatList } from '@/utils/chatList';
+import { Header } from '@/components/Common';
+import MyChatListItem from '@/components/ChatList/MyChatListItem';
+import authorizeFetch from '@/utils/authorizeFetch';
 
 export default function MyChatList() {
   const [myHostChatList, setMyHostChatList] = useState<Chat[]>([]);
@@ -31,7 +29,7 @@ export default function MyChatList() {
 
   return (
     <div className={styles.headerWrapContainer}>
-      <Header pageName="My" />
+      <Header pageName="나의 채팅" />
       <div className={styles.list_container}>
         <div className={styles.titleContainer}>
           <p>숙소와 채팅</p>

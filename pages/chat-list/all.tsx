@@ -1,17 +1,17 @@
+import styles from '../../components/ChatList/ChatList.module.scss';
+import chatListAPI from '../../apis/chatListAPI';
 import { Chat } from '@/@types/types';
-import useConnectServerSocket from '@/hooks/useConnectServerSocket';
-import authorizeFetch from '@/utils/authorizeFetch';
-import { sortChatList } from '@/utils/chatList';
-import { GetServerSidePropsContext } from 'next';
 import { useEffect, useState } from 'react';
-import Header from '@/components/common/Header/Header';
+import { sortChatList } from '@/utils/chatList';
+import useConnectServerSocket from '@/hooks/useConnectServerSocket';
+import { Header } from '@/components/Common';
 import {
+  AllChatListItem,
   ChatListModal,
   CreateChatButton,
-  AllChatListItem,
 } from '@/components/ChatList';
-import styles from './ChatList.module.scss';
-import chatListAPI from '../../apis/chatListAPI';
+import { GetServerSidePropsContext } from 'next';
+import authorizeFetch from '@/utils/authorizeFetch';
 
 export default function AllChatList({ userData }) {
   console.log(userData.user.id);
@@ -52,7 +52,7 @@ export default function AllChatList({ userData }) {
 
   return (
     <div>
-      <Header pageName="All" />
+      <Header pageName="오픈채팅" />
       <ul className={styles.list_container}>
         {allChatList.map(chat => (
           <AllChatListItem key={chat.id} chat={chat} />

@@ -1,15 +1,15 @@
-import Navigation from '@/components/common/Navigation/Navigation';
-import type { AppContext, AppProps } from 'next/app';
-import { MutableSnapshot, RecoilEnv, RecoilRoot } from 'recoil';
-import '../assets/fonts/fonts.scss';
-import '../styles/normalize.scss';
+import { RecoilRoot, RecoilEnv, MutableSnapshot } from 'recoil';
+import type { AppProps, AppContext } from 'next/app';
+import '@/styles/normalize.scss';
+import '@/styles/fonts.scss';
 import { useRouter } from 'next/router';
-import userTokenState from '@/recoil/atoms/userTokenState';
 import { useEffect } from 'react';
 import cookies from 'next-cookies';
-import authorizeFetch from '@/utils/authorizeFetch';
-import { removeTokenAll } from '@/utils/tokenManager';
 import App from 'next/app';
+import { removeTokenAll } from '@/utils/tokenManager';
+import { Navigation } from '@/components/Common';
+import authorizeFetch from '@/utils/authorizeFetch';
+import userTokenState from '@/recoil/atoms/userTokenState';
 import SIGNOUT_USER_STATE from '@/constants/userLoinState';
 
 function MyApp({

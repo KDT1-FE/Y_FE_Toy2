@@ -3,7 +3,7 @@ import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import styles from '../../pages/chat-list/ChatList.module.scss';
+import styles from './ChatList.module.scss';
 
 interface Props {
   chat: Chat;
