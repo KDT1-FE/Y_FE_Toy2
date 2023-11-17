@@ -10,8 +10,8 @@ import {
 } from '@/components/ChatList';
 import { GetServerSidePropsContext } from 'next';
 import authorizeFetch from '@/utils/authorizeFetch';
-import chatListAPI from '../../apis/chatListAPI';
-import styles from '../../components/ChatList/ChatList.module.scss';
+import chatListAPI from '@/apis/chatListAPI';
+import styles from '@/components/ChatList/ChatList.module.scss';
 
 export default function AllChatList({ authData }: IsValidAuth) {
   const [allChatList, setAllChatList] = useState<Chat[]>([]);

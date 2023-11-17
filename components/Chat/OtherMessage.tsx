@@ -3,7 +3,7 @@ import { formattingTime, todayDate } from '@/utils/formattedTimeData';
 import { Message } from '@/@types/types';
 import Image from 'next/image';
 import chatAPI from '@/apis/chatAPI';
-import styles from './Chat1.module.scss';
+import styles from './Chat.module.scss';
 
 export default function OtherMessage({
   msg,

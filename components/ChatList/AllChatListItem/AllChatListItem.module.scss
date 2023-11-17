@@ -1,14 +1,12 @@
 @import '@/styles/index.scss';
-@import '../../../styles/_variables';
+@import '@/styles/_variables';
 
 .itemContainer {
   margin: 0;
   border-radius: 40rem;
   :hover {
     background-color: #ececec;
-    
   }
-  
 }
 
 .user-profile {

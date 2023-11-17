@@ -1,4 +1,4 @@
-import styles from './Chat1.module.scss';
+import styles from './Chat.module.scss';
 
 export default function ExitNotice({ leaver }: { leaver: string }) {
   return (

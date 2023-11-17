@@ -1,7 +1,7 @@
 import React from 'react';
 import { formattingTime, todayDate } from '@/utils/formattedTimeData';
-import styles from './Chat1.module.scss';
-import { Message } from '../../@types/types';
+import { Message } from '@/@types/types';
+import styles from './Chat.module.scss';
 
 export default function MyMessage({ msg }: { msg: Message }) {
   const today = new Date();

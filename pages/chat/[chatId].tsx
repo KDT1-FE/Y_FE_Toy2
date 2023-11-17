@@ -22,8 +22,8 @@ import {
   OtherMessage,
 } from '@/components/Chat';
 import authorizeFetch from '@/utils/authorizeFetch';
-import styles from '../../components/chat/Chat1.module.scss';
-import chatAPI from '../../apis/chatAPI';
+import chatAPI from '@/apis/chatAPI';
+import styles from '@/components/Chat/Chat.module.scss';
 
 interface MessageArray {
   messages: Message[];

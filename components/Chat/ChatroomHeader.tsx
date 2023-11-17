@@ -6,7 +6,7 @@ import Jwtinterceptor from '@/apis/JwtInterceptor';
 import { getAccessToken } from '@/utils/tokenManager';
 import { Chat } from '@/@types/types';
 import Image from 'next/image';
-import styles from './Chat1.module.scss';
+import styles from './Chat.module.scss';
 
 interface Props {
   chatData: Chat;

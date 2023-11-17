@@ -15,7 +15,7 @@ import {
 } from 'firebase/storage';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import styles from '../../components/MyPage.module.scss';
+import styles from '@/components/MyPage.module.scss';
 
 interface PatchResponseValue {
   messgae: string;

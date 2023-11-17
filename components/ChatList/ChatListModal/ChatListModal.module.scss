@@ -1,5 +1,5 @@
-@import '../../../styles/mixin';
-@import '../../../styles/_variables';
+@import '@/styles/mixin';
+@import '@/styles/_variables';
 
 .dim {
   @include dim;
