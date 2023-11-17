@@ -1,6 +1,6 @@
-import Jwtinterceptors from './Jwtinterceptors';
+import Jwtinterceptor from './JwtInterceptor';
 
-const { instance } = Jwtinterceptors();
+const { instance } = Jwtinterceptor();
 
 const chatAPI = {
   // 특정 채팅방 정보조회

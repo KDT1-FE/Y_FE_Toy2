@@ -1,15 +1,14 @@
-import instance from '@/apis/axios';
-import app from '@/utils/firebaseConfig';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { GetServerSidePropsContext } from 'next';
 import { useSetRecoilState } from 'recoil';
+import Image from 'next/image';
+import styles from './signUp.module.scss';
+import instance from '@/apis/axios';
 import { showNavigationState } from '@/recoil/atoms/showNavigationState';
 import { SignUpModal } from '@/components/Signup';
-import styles from './signUp.module.scss';
 
 interface RequestBody {
   id: string; // 사용자 아이디 (필수!, 영어와 숫자만)
@@ -38,17 +37,8 @@ export default function SignUp() {
     password: '',
     name: '',
   });
-  const [defaultImgUrl, setDefaultImgUrl] = useState<string | null>(null);
   const [checkId, setCheckId] = useState(false);
   const [checkIdMessage, setCheckIdMessage] = useState('');
-  const storage = getStorage(app);
-
-  const getDefaultImageUrl = async () => {
-    const defaultImageRef = ref(storage, 'images/default.jpg');
-    await getDownloadURL(defaultImageRef).then(url => {
-      return setDefaultImgUrl(url);
-    });
-  };
 
   const checkDuplicateId = async (
     id: string,
@@ -76,10 +66,6 @@ export default function SignUp() {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    getDefaultImageUrl();
-  }, []);
 
   useEffect(() => {
     setPotalElement(document.getElementById('modal-root'));
@@ -227,14 +213,28 @@ export default function SignUp() {
       </div>
       {isModal && portalElement
         ? createPortal(
-            <SignUpModal
-              handleModal={handleModal}
-              formData={formData}
-              defaultImgUrl={defaultImgUrl}
-            />,
+            <SignUpModal handleModal={handleModal} formData={formData} />,
             portalElement,
           )
         : null}
     </>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const refreshToken = context.req.cookies.REFRESH_TOKEN;
+
+  if (refreshToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
