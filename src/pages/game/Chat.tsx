@@ -103,29 +103,26 @@ const ChatPage: React.FC = () => {
           pocketId={pocketId}
         />
       )}
-      <div className={styles.chatEx}>
-        <div className={styles.chatItems}>
-          {chats.map((chatItem) => (
-            <ChatItem
-              key={chatItem.id}
-              chatingUserId={chatItem.userId}
-              text={chatItem.text}
-            />
-          ))}
+      <div className={styles.chat__list}>
+        {chats.map((chatItem) => (
+          <ChatItem
+            key={chatItem.id}
+            chatingUserId={chatItem.userId}
+            text={chatItem.text}
+          />
+        ))}
 
-          <div ref={messageEndRef}></div>
-        </div>
-
-        <form className={styles.form} onSubmit={handleSumbit}>
-          <input
-            className={styles.input}
-            placeholder="텍스트를 입력해주세요"
-            type="text"
-            value={inputText}
-            onChange={handleChange}></input>
-          <button className={styles.button}>전송</button>
-        </form>
+        <div ref={messageEndRef}></div>
       </div>
+      <form className={styles.form} onSubmit={handleSumbit}>
+        <input
+          className={styles.form__input}
+          placeholder="텍스트를 입력해주세요"
+          type="text"
+          value={inputText}
+          onChange={handleChange}></input>
+        <button className={styles.form__button}>전송</button>
+      </form>
     </div>
   );
 };

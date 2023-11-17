@@ -1,50 +1,47 @@
 @use '../abstracts' as *;
 @use '../base' as *;
 
-* {
-  font-size: 2.8rem;
-}
 .chat {
-  height: 100vh;
-}
-
-.chatEx {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background-color: black;
-}
+  height: 100vh;
+  background-color: $bg-black;
+  font-size: $font-base;
 
-.chatItems {
-  height: 80rem;
-  overflow: scroll;
-}
+  &__list {
+    height: 80%;
+    flex-direction: column;
+    overflow: scroll;
+  }
 
-.form {
-  width: 100%;
-  display: flex;
-  height: 9rem;
-  margin-bottom: 4rem;
-}
-.input {
-  flex: 1 0 auto;
-  font-size: 3cqmin;
-  padding: 0.7rem 1rem 0 3rem;
-  border: none;
-  outline: none;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-}
+  .form {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
 
-.button {
-  cursor: pointer;
-  background-color: #7c28e3;
-  color: var(--color-white);
-  font-size: 3rem;
-  padding: 0 2rem;
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-.button:hover {
-  filter: brightness(125%);
+    &__input {
+      width: 85%;
+      padding: 1rem;
+      border: none;
+      outline: none;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+
+    &__button {
+      width: 15%;
+      background-color: $bg-purple-80;
+      color: $white;
+      font-size: $font-lg;
+      font-family: $font-logo;
+      padding: 0 2.5rem;
+      border: none;
+      border-radius: 0 1rem 1rem 0;
+
+      &:hover {
+        cursor: pointer;
+        filter: brightness(125%);
+      }
+    }
+  }
 }
