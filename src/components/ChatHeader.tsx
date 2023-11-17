@@ -4,7 +4,6 @@ import styles from '@styles/components/chatHeader.module.scss';
 const ChatHeader: React.FC<HeaderProps> = ({
   currentPlayers,
   totalPlayers,
-  onStartGame,
 }) => {
   return (
     <header className={styles.header}>
@@ -13,7 +12,6 @@ const ChatHeader: React.FC<HeaderProps> = ({
       </p>
       <button
         className={styles.button}
-        onClick={onStartGame}
         disabled={currentPlayers < totalPlayers}>
         게임 시작
       </button>
@@ -26,5 +24,4 @@ export default ChatHeader;
 interface HeaderProps {
   currentPlayers: number;
   totalPlayers: number;
-  onStartGame: () => void;
 }
