@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import app from '@/utils/firebaseConfig';
 import { removeTokenAll } from '@/utils/tokenManager';
 import Image from 'next/image';
@@ -16,7 +15,7 @@ import {
 } from 'firebase/storage';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import styles from './MyPage.module.scss';
+import styles from '../../components/MyPage.module.scss';
 
 interface PatchResponseValue {
   messgae: string;

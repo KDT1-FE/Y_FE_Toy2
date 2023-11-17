@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import { getAccessToken } from '@/utils/tokenManager';
 import axios from 'axios';
 
