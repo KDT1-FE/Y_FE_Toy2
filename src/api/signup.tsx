@@ -1,4 +1,9 @@
-export const signup = async (id, password, name, character) => {
+export const signup = async (
+  id: string,
+  password: string,
+  name: string,
+  character: string,
+) => {
   const data = {
     id: id,
     password: password,

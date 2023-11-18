@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@styles/components/chatItem.module.scss';
 import fastRequest from '@api/fastRequest';
 import { useAppSelector } from '@/hooks/redux';

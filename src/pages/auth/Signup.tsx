@@ -16,7 +16,7 @@ const Signup = () => {
   const [password, onChangePassword] = useForm();
   const [assurer, onChangeAssurer] = useForm();
   const [errors, setErrors] = useState<Errors>({});
-  const [profileError, setProfileError] = useState("")
+  const [profileError, setProfileError] = useState('');
   const [invalidId, setInvalidId] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const character = useAppSelector((state) => state.selectedGhost);
@@ -37,7 +37,7 @@ const Signup = () => {
       const validId = await idCheck(user.id);
       // console.log(validId);
       if (character === '') {
-        setProfileError("프로필 캐릭터를 선택해주세요.")
+        setProfileError('프로필 캐릭터를 선택해주세요.');
       } else if (!validId && character) {
         await signup(id, password, name, character);
         navigate('/');
@@ -54,7 +54,6 @@ const Signup = () => {
       : `url("/src/assets/images/profile.jpeg")`,
   };
 
-
   const handleModal: () => void = () => {
     setIsModalOpen(false);
   };
@@ -68,8 +67,8 @@ const Signup = () => {
           className={styles.signup__profile}></button>
         <p>프로필 선택</p>
         {profileError && (
-            <span className={styles.signup__form_error}>{profileError}</span>
-          )}
+          <span className={styles.signup__form_error}>{profileError}</span>
+        )}
       </div>
       <div className={styles.signup__container}>
         <form className={styles.signup__form}>
@@ -83,7 +82,9 @@ const Signup = () => {
             <span className={styles.signup__form_error}>{errors?.id}</span>
           )}
           {invalidId && (
-            <span className={styles.signup__form_error}>이미 존재하는 아이디입니다.</span>
+            <span className={styles.signup__form_error}>
+              이미 존재하는 아이디입니다.
+            </span>
           )}
           <input
             type="text"
@@ -101,7 +102,9 @@ const Signup = () => {
             onChange={onChangePassword}
           />
           {errors?.password && (
-            <span className={styles.signup__form_error}>{errors?.password}</span>
+            <span className={styles.signup__form_error}>
+              {errors?.password}
+            </span>
           )}
           <input
             type="password"

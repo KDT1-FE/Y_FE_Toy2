@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const getGhosts = createSlice({
-  name: "ghosts",
-  initialState: [],
+  name: 'ghosts',
+  initialState: [] as ghost,
   reducers: {
     getCharacters: (state, action) => {
       state.push(action.payload);
@@ -12,3 +12,10 @@ const getGhosts = createSlice({
 
 export const { getCharacters } = getGhosts.actions;
 export default getGhosts.reducer;
+
+type ghost = Ghost[];
+
+interface Ghost {
+  id: string;
+  fileUrl: string;
+}
