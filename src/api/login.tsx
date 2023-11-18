@@ -1,4 +1,4 @@
-export const login = async (id, password) => {
+export const login = async (id: string, password: string) => {
   const data = {
     id: id,
     password: password,
@@ -17,8 +17,7 @@ export const login = async (id, password) => {
       const json = await response.json();
       return json;
     } else {
-      const errorJson = await response.json();
-      console.error('Login failed:', errorJson);
+      await response.json();
       return { error: '아이디와 비밀번호를 다시 확인해주세요.' };
     }
   } catch (error) {
