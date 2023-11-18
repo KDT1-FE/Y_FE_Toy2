@@ -1,4 +1,4 @@
-export const idCheck = async (id) => {
+export const idCheck = async (id: string) => {
   const result = await fetch('https://fastcampus-chat.net/check/id', {
     method: 'POST',
     headers: {
@@ -11,4 +11,4 @@ export const idCheck = async (id) => {
   const res = response.isDuplicated;
 
   return res;
-}
+};

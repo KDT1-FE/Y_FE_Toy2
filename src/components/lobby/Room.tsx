@@ -72,27 +72,8 @@ interface Props {
   users: User[];
 }
 
-// interface UserInfo {
-//   user: User;
-// }
-
 interface User {
   id: string;
   name: string;
   picture: string;
-}
-
-interface Game {
-  id: string;
-  chatId: string;
-  mafia: number;
-  vote: Vote[];
-}
-
-interface Vote {
-  count: number;
-  id: string;
-  name: string;
-  picture: string;
-  role: string;
 }
