@@ -1,5 +1,10 @@
 import { Box, Typography, styled } from '@mui/material';
 
+export const Wrapper = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+});
+
 export const MessageContainer = styled('li')({
   display: 'flex',
   flexDirection: 'column',
