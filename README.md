@@ -113,16 +113,16 @@ TEST용 PASSWORD: ivegaeul
       <th>채팅/게임</th>
     </tr>
     <tr>      
-      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/3630dfaa-5ec0-420a-8ba3-000c5c2bdedb" alt="chatting/painting" width="370"></td>
-      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/dfb1c25e-656f-4719-8d48-968713e04168"alt="chatting/game" width="370"></td>      
-    </tr>    
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/589887ff-4530-484e-870e-29df2ec11271" alt="chatting/painting" width="370"></td>
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/98f4aa75-d96f-453d-8c3d-c51f26c1a129"alt="chatting/game" width="370"></td>      
+    </tr>      
     <tr align="center">
       <th>1대1채팅</th>
       <th>리다이렉션</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/af662986-5109-4d29-a10f-4aaea577c1ab" alt="1:1chatting" width="370"></td>      
-      <td><img src= "https://github.com/LeHiHo/FastMind/assets/134940630/4402ff5e-fd4a-4c42-ba5d-22780a410ee7"alt="
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/f29dc190-4b3a-495e-be88-fa98cee49df9" alt="1:1chatting" width="370"></td>      
+      <td><img src= "https://github.com/LeHiHo/FastMind/assets/134940630/d1babdca-960f-41e5-9588-9cc29ebbdd4e"alt="
 redirection" width="370"></td>      
     </tr>
   </table>
