@@ -36,7 +36,9 @@ const ChatItem = ({
         <img className={styles.chatItemImage} src={userInfo?.picture} />
         <p className={styles.chatItemNickname}>{userInfo?.name}</p>
       </div>
-      <span className={styles.chatItemText}>{text}</span>
+      <p className={Mymsg ? styles.selfChatItemText : styles.chatItemText}>
+        {text}
+      </p>
     </div>
   );
 };
