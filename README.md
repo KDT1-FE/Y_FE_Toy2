@@ -7,6 +7,7 @@
 ![image](https://github.com/noSPkeepgoing/Mafia-team4/assets/100336573/be782887-8921-4eaf-ac74-2e5d5f3779be)
 
 [💿 Win x64 게임 파일 설치 링크](https://drive.google.com/file/d/1Hrq-l6EoEaIVnmpMBdsXLwkJ8z03APIw/view?usp=drive_link)
+[💿 Mac 게임 파일 설치 링크](https://drive.google.com/file/d/1VQrNbMlapkXwOkMHjgPVjtX1PcYUzBUR/view?usp=share_link)
 
 ❗ win x64버전과 mac 버전이 따로 구분되어 있습니다. os에 맞는 파일을 실행하셔야 정상적으로 작동합니다.
 
