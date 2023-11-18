@@ -206,8 +206,8 @@
 
 ## ➡️ 유저 흐름(flow) 이미지
 
-<img width="600" alt="LangChat UserFlow" src="https://github.com/TOY2-12/LangChat/assets/121215024/92e6561f-3183-4507-b75b-1001d3ca54f0">
 <!-- 유저 플로우 생성 -->
+<img width="600" alt="LangChat UserFlow" src="https://github.com/TOY2-12/LangChat/assets/121215024/92e6561f-3183-4507-b75b-1001d3ca54f0">
 
 ## 📂 폴더 구조
 
