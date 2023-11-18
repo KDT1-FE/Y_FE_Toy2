@@ -35,7 +35,7 @@
 
 ### 협업툴
 
-![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) ![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=zoom&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) ![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=zoom&logoColor=white) ![Jira](https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white)
 
 ## 🎯 주요 구현 사항
 
@@ -187,16 +187,18 @@
 
 ![ranking](https://github.com/TOY2-12/LangChat/assets/121215024/873ba9ef-089a-48c2-914e-9b48d8c48030)
 
-- 각 유저의 최고 점수를 기반으로 랭킹을 나열합니다.
-- 기본적으로 유저의 등수를 보여주며 호버 시 그 유저의 점수를 표기합니다.
+- 각 유저의 최고 점수를 기반으로 랭킹을 나열
+- 기본적으로 유저의 등수를 보여주며 호버 시 그 유저의 점수를 표기
+- 게임 플레이 중 최고 점수 갱신를 갱신하면 게임 종료 시 랭킹 리렌더링
 
 ## 끝말잇기 게임
 
 ![submit](https://github.com/TOY2-12/LangChat/assets/121215024/9c3cf96c-e4a8-4903-8f83-bb1009db5975)
 
-- 네이버 API의 사전 검색 및 정규식을 활용하여 단어 유효성 검사
-- 배포서버 API CROS 이슈 API GATEWAY 사용하여 해결
-- 남은 시간 게이지바로 표시
+- 네이버 지식백과 API 및 정규식을 활용하여 단어 유효성 검사
+- 배포서버 API CROS 이슈 AWS API GATEWAY 사용하여 해결(해당 방법이 api 딜레이가 가장 적고 https 프로토콜을 사용)
+- useState와 FRAMER 활용 남은 시간 게이지바로 표시
+- 정답 시 현재 점수를 +1 하며 현재 점수가 최고 점수를 넘어갈 경우 최고 점수 = 현재 점수
 - 효과음 사용
 </div>
 </details>

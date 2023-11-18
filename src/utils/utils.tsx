@@ -7,11 +7,9 @@ import {
   getDoc,
   getDocs,
   updateDoc,
-  onSnapshot,
 } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Dispatch } from 'react';
-import { setTimeout } from 'timers/promises';
 import { db, storage } from '../firebaseSDK';
 
 export interface UserData {
