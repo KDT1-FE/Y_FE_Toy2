@@ -63,7 +63,7 @@ const Result = () => {
         <ul className={styles.result__players}>
           {players.map((player) => (
             <li>
-              {player.role === 'magia' ? '잔혹한 마피아' : '무고한 시민'}{' '}
+              {player.role === 'mafia' ? '잔혹한 마피아' : '무고한 시민'}{' '}
               {player.name}
             </li>
           ))}
