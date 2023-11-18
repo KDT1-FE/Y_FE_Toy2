@@ -35,7 +35,6 @@ const Signin = () => {
     const result = await login(id, password);
     const { accessToken, refreshToken } = result;
     const user = await getSelfInfo(id);
-    console.log(user);
 
     if (result.error) {
       setErrors(result.error);
@@ -51,7 +50,6 @@ const Signin = () => {
     <div className={styles.signin}>
       <div>
         <h1>Mafia</h1>
-        {/* <img style={{width: 100, height: 100}} src="https://full-oil.pockethost.io/api/files/5who7j8fggfy5vg/eu5yc2nn8kv9d61/ghost01_3mNsoBR2XJ.svg" alt="" /> */}
       </div>
       <div className={styles.signin__container}>
         <form className={styles.signin__form} action="">

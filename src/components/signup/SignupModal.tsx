@@ -42,12 +42,10 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
         return null;
       }
     } catch (error) {
-      console.error('Error fetching file URL:', error);
+      // console.error('Error fetching file URL:', error);
       return null;
     }
   };
-
-  // 모든 고스트 데이터
 
   const getGhosts = async () => {
     try {
@@ -61,7 +59,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
       }
 
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -114,7 +111,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
     }
   };
 
-
   return (
     <div className={styles.singupModal}>
       <div className={styles.singupModal__container}>
@@ -122,7 +118,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
           <span
             onClick={() => goPrevious()}
             className="material-symbols-outlined">
-            arrow_left
+            ◀
           </span>
         </div>
         <div className={styles.singupModal__carousel_container}>
@@ -148,7 +144,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
         </div>
         <div className={styles.singupModal__right_btn}>
           <span onClick={() => goNext()} className="material-symbols-outlined">
-            arrow_right
+          ▶
           </span>
         </div>
       </div>
