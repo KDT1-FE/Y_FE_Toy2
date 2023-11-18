@@ -11,7 +11,7 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react';
-import { createGameRooms } from '../../api';
+import { createGameRooms } from '../../../api';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 

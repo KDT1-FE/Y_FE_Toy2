@@ -7,7 +7,7 @@ import {
   openChatDetailState,
   openNewChatState,
 } from '../../states/atom';
-import usePollingData from '../template/usePollingData';
+import usePollingData from '../../util/pollingData';
 import ChattingDetail from './chattingDetail';
 import styled from 'styled-components';
 import {
@@ -23,7 +23,7 @@ import { getCookie } from '../../util/util';
 import { Flex, Text } from '@chakra-ui/layout';
 import { Img } from '@chakra-ui/image';
 import { IconButton } from '@chakra-ui/button';
-import NewPrivateChat from './newPrivateChat';
+import NewPrivateChat from '../template/lobby/newPrivateChat';
 
 interface LoginModalProps {
   isOpen: boolean;

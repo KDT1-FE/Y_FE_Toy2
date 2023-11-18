@@ -10,9 +10,9 @@ import {
   Switch,
   useColorMode,
 } from '@chakra-ui/react';
-import { getCookie } from '../../util/util';
-import { disconnectLoginSocket } from '../../api/socket';
-import { removeCookies } from '../../util/util';
+import { getCookie } from '../../../util/util';
+import { disconnectLoginSocket } from '../../../api/socket';
+import { removeCookies } from '../../../util/util';
 import swal from 'sweetalert';
 
 interface LoginModalProps {

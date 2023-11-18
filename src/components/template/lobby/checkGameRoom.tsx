@@ -9,7 +9,7 @@ import {
   roomIdState,
   allRoomNumberState,
   sortSelect,
-} from '../../states/atom';
+} from '../../../states/atom';
 
 import {
   getAllGameRooms,
@@ -17,9 +17,9 @@ import {
   // getOnlyGameRoom,
   participateGameRoom,
   getAllMyChat,
-} from '../../api';
+} from '../../../api';
 import { useNavigate } from 'react-router-dom';
-import usePollingData from '../template/usePollingData';
+import usePollingData from '../../../util/pollingData';
 import Pagination from 'react-js-pagination';
 import {
   Flex,
@@ -37,7 +37,7 @@ import {
 import styled from 'styled-components';
 import LobbyListTop from './lobbyListTop';
 import { useSetRecoilState } from 'recoil';
-import Spiner from '../template/Spiner';
+import Spiner from '../../layout/Spiner';
 
 const CheckGameRoom = () => {
   const navigate = useNavigate();
@@ -150,7 +150,6 @@ const CheckGameRoom = () => {
         }
       } finally {
         // const res = await getOnlyGameRoom(chatId);
-
       }
     }
   };

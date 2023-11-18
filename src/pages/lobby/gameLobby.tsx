@@ -1,10 +1,10 @@
-import UserProfile from '../../components/template/userProfile';
-import OnlineUserList from '../../components/layout/onlineUserList';
+import UserProfile from '../../components/template/lobby/userProfile';
+import OnlineUserList from '../../components/template/lobby/onlineUserList';
 
 import { Flex } from '@chakra-ui/react';
 import styled from 'styled-components';
-import CheckGameRoom from '../../components/layout/checkGameRoom';
-import { controlLobbyReload, controlBack } from '../../hooks/leaveHandle';
+import CheckGameRoom from '../../components/template/lobby/checkGameRoom';
+import { controlLobbyReload, controlBack } from '../../hooks/useleaveHandle';
 
 const GameLobby = () => {
   controlLobbyReload();

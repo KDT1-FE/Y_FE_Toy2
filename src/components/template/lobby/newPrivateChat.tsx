@@ -1,4 +1,4 @@
-import { openNewChatState, allUserState } from '../../states/atom';
+import { openNewChatState, allUserState } from '../../../states/atom';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -12,10 +12,10 @@ import {
 import { Flex, Text } from '@chakra-ui/react';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { useState } from 'react';
-import { getAllMyChat, createGameRooms } from '../../api';
-import { Chat, User } from '../../interfaces/interface';
+import { getAllMyChat, createGameRooms } from '../../../api';
+import { Chat, User } from '../../../interfaces/interface';
 import Select, { StylesConfig } from 'react-select';
-import DetailChatLayout from './detailChatLayout';
+import DetailChatLayout from '../../layout/detailChatLayout';
 
 const NewPrivateChat = () => {
   const [openNewChat, setOpenNewChat] = useRecoilState(openNewChatState);

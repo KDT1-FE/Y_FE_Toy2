@@ -1,7 +1,7 @@
-import { disconnectChattingSocket } from '../../api/socket';
+import { disconnectChattingSocket } from '../../../api/socket';
 import { useNavigate } from 'react-router-dom';
 // import { useRecoilValue } from 'recoil';
-import { leaveGameRoom } from '../../api';
+import { leaveGameRoom } from '../../../api';
 import styled from 'styled-components';
 import inviteImg from '/assets/icons/leaveRoom.png';
 

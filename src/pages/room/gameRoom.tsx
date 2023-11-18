@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Drawing from '../../components/template/drawing';
-import LeaveGameRoom from '../../components/layout/leaveGameRoom';
+import Drawing from '../../components/template/room/drawing.tsx';
+import LeaveGameRoom from '../../components/template/room/leaveGameRoom.tsx';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { myMessageState, userState, roomIdState } from '../../states/atom';
 import styled from 'styled-components';
-import GameChatting from '../../components/template/GameChatting';
+import GameChatting from '../../components/template/room/GameChatting.tsx';
 
-import CheckUsersInGameRoom from '../../components/layout/checkUsersInGameRoom';
+import CheckUsersInGameRoom from '../../components/template/room/checkUsersInGameRoom.tsx';
 import { sortCreatedAt } from '../../util/util';
 import { Chat } from '../../interfaces/interface';
 import { getAllGameRooms } from '../../api';
@@ -23,7 +23,7 @@ import {
   Fade,
   Img,
 } from '@chakra-ui/react';
-import AnswerModal from '../../components/layout/anwerModal.tsx';
+import AnswerModal from '../../components/template/room/anwerModal.tsx.tsx';
 
 const GameRoom: React.FC = () => {
   const [roomId, setRoomId] = useRecoilState(roomIdState);
@@ -228,13 +228,6 @@ const GameRoom: React.FC = () => {
             게임 시작
           </Button>
           <LeaveGameRoom chatId={roomId}></LeaveGameRoom>
-
-          {/* {check && btnVisible && (
-            
-    
-          )} */}
-
-          {/* {submitVisible && <AnswerForm onSubmit={handleSubmit} />} */}
         </BtnGroup>
       </RoomHeader>
 

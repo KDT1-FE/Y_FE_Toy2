@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createGameRooms } from '../../api';
+import { createGameRooms } from '../../../api';
 import { useRecoilState } from 'recoil';
-import { allRoomState } from '../../states/atom';
+import { allRoomState } from '../../../states/atom';
 import swal from 'sweetalert';
 
 const CreateGameRoom = () => {
