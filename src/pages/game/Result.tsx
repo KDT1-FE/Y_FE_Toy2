@@ -48,7 +48,7 @@ const Result = () => {
   }, []);
 
   const handleClick = async () => {
-    await fastRequest.leaveChat(chatId as string, accessToken);
+    await fastRequest.leaveChat(chatId as string, accessToken as string);
     navigate('/lobby');
   };
 
