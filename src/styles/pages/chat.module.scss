@@ -19,8 +19,10 @@
   }
 
   .form {
-    width: 100%;
-    flex-grow: 1;
+    width: 95%;
+    height: 7%;
+    margin-bottom: 2rem;
+    align-self: center;
     display: flex;
 
     &__input {

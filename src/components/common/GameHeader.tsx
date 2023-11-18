@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@styles/components/gameHeader.module.scss';
 import { useNavigate } from 'react-router-dom';
 

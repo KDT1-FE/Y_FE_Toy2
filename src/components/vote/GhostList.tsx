@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@styles/components/ghostList.module.scss';
 import { Ghost } from '@/pages/game/Vote';
 import GhostItem from '@components/vote/GhostItem';
