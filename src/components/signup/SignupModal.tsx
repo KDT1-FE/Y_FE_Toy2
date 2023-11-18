@@ -42,7 +42,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
         return null;
       }
     } catch (error) {
-      console.error('Error fetching file URL:', error);
+      // console.error('Error fetching file URL:', error);
       return null;
     }
   };
