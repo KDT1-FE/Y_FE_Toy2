@@ -1,7 +1,7 @@
 import pocketRequest from './pocketRequest';
 
 const getGameData = async (id: string) => {
-  const gameData = await pocketRequest.get('game', id);
+  const gameData = await pocketRequest.get('game', `/${id}`);
   return gameData;
 };
 

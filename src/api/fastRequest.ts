@@ -24,6 +24,20 @@ const fastRequest = {
     }).then(responseBody);
   },
 
+  searchChat: async (chatId: string, accessToken: string) => {
+    return await fetch(
+      `https://fastcampus-chat.net/chat/only?chatId=${chatId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          serverId: import.meta.env.VITE_FAST_KEY,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    ).then(responseBody);
+  },
+
   createChat: async (data: object, accessToken: string) => {
     return await fetch('https://fastcampus-chat.net/chat', {
       method: 'POST',
