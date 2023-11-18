@@ -142,32 +142,33 @@ redirection" width="370"></td>
 ## 📂 폴더 구조
 ```
   📦src
- ┣ 📂api ➡️ API 요청관련 코드
- ┣ 📂assets/icons ➡️ 이미지 파일/아이콘
- ┣ 📂components ➡️ 재사용가능 코드
- ┃ ┣ 📂layout ➡️ 레이아웃 컴포넌트(ex. header, footer, navigator)
- ┃ ┗ 📂template ➡️ 특정 페이지에서 사용되는 컴포넌트
- ┣ 📂hooks  ➡️ Custom Hooks 관련코드
- ┣ 📂interfaces ➡️ TypeScript 인터페이스,타입 관련 코드
+ ┣ 📂api
+ ┃ ┣ 📜index.ts
+ ┃ ┗ 📜socket.ts
+ ┣ 📂components
+ ┃ ┣ 📂layout
+ ┃ ┗ 📂template
+ ┃ ┃ ┣ 📂lobby
+ ┃ ┃ ┣ 📂login
+ ┃ ┃ ┗ 📂room
+ ┣ 📂hooks
+ ┃ ┣ 📜useChatSocket.ts
+ ┃ ┣ 📜useLoginSocket.ts
+ ┃ ┗ 📜useleaveHandle.ts
+ ┣ 📂interfaces
  ┣ 📂pages
- ┃ ┣ 📂lobby ➡️ 로비
+ ┃ ┣ 📂lobby
  ┃ ┃ ┗ 📜gameLobby.tsx
- ┃ ┣ 📂login ➡️로그인
+ ┃ ┣ 📂login
  ┃ ┃ ┣ 📜userJoin.tsx
- ┃ ┃ ┣ 📜userLogin.tsx
- ┃ ┃ ┗ 📜userLogout.tsx
- ┃ ┗ 📂room ➡️ 게임룸
+ ┃ ┃ ┗ 📜userLogin.tsx
+ ┃ ┗ 📂room
  ┃ ┃ ┗ 📜gameRoom.tsx
- ┣ 📂provider ➡️ 전역상태관리 관련 코드
- ┃ ┣ 📜authContext.tsx
- ┃ ┗ 📜authProvider.tsx
  ┣ 📂router
- ┃ ┗ 📜MainRouter.tsx ➡️ 라우팅
+ ┃ ┗ 📜MainRouter.tsx
  ┣ 📂states
- ┃ ┗ 📜atom.ts ➡️ recoil 관리 코드
+ ┃ ┗ 📜atom.ts
  ┣ 📂util
- ┃ ┣ 📜checkNums.tsx
- ┃ ┗ 📜util.ts
  ┣ 📜App.tsx
  ┣ 📜constant.ts
  ┣ 📜index.css
