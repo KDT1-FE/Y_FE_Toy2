@@ -2,14 +2,15 @@
 @use '../base' as *;
 
 .chatItemImage {
-  width: 7rem;
-  height: 7rem;
+  width: 4rem;
+  height: 4rem;
 }
 .chatItemContainer {
-  padding: 1rem;
+  margin: -3rem 0 2rem 0;
 }
 .selfChatItemContainer {
   text-align: end;
+  margin: -3rem 0 -2rem 0;
 
   .chatItem {
     display: flex;
@@ -23,9 +24,10 @@
     margin-right: 2rem;
   }
   .chatItemText {
-    margin: -2rem 12rem 2rem 0;
+    margin: -3rem 9rem 2rem 0;
   }
 }
+
 .chatItem {
   display: flex;
   margin: 3rem;
@@ -35,17 +37,17 @@
   justify-content: end;
 }
 .chatItemNickname {
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: #d9d9d9;
   margin-left: 2rem;
 }
 .chatItemText {
   display: inline-flex;
   align-items: center;
-  font-size: 2rem;
-  padding: 1rem 3rem;
+  font-size: 1.5rem;
+  padding: 0 3rem;
   color: black;
-  margin: -2rem 0 2rem 12rem;
+  margin: -3rem 0 2rem 9rem;
   vertical-align: middle;
   background-color: #d9d9d9;
   height: 6rem;
