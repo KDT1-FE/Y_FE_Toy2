@@ -1,0 +1,61 @@
+@import '@/styles/index.scss';
+.dim {
+  @include dim;
+  z-index: 15;
+}
+
+#ModalBox {
+  width: 40rem;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  box-sizing: border-box;
+  @include shadow-bottom;
+  z-index: 20;
+  height: 100%;
+  font-size: $font-size-base;
+
+  .close-icon {
+    font-size: 2.4rem;
+    position: absolute;
+    right: 1rem;
+    font-weight: bold;
+  }
+
+  .flex-row {
+    @include flex-center-row;
+    gap: 2rem;
+    button,
+    p {
+      margin: 0;
+    }
+  }
+  .img-box {
+    height: 20rem;
+    overflow-y: hidden;
+    background-position: center;
+    background-size: cover;
+    margin-top: 3rem;
+  }
+
+  .title {
+    font-size: $font-size-lg;
+  }
+  .text {
+    margin-top: 0;
+    line-height: 1.8rem;
+    b {
+      display: inline-block;
+      margin-bottom: 0.4rem;
+    }
+  }
+}
+@media screen and (min-width: 260px) and (max-width: 500px) {
+  #ModalBox {
+    z-index: 20;
+    display: block;
+    width: 90vw;
+    overflow-y: scroll;
+    border-radius: 0;
+  }
+}
