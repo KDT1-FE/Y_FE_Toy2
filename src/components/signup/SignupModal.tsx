@@ -144,7 +144,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
         </div>
         <div className={styles.singupModal__right_btn}>
           <span onClick={() => goNext()} className="material-symbols-outlined">
-          ▶
+            ▶
           </span>
         </div>
       </div>
@@ -163,10 +163,10 @@ type SignupModalProps = {
   handleModal: () => void;
 };
 
-interface GhostRecord { 
-  id: string, 
-  filename: string,
-  field: string,
+interface GhostRecord {
+  id: string;
+  filename: string;
+  field: string;
 }
 
 interface Ghost {

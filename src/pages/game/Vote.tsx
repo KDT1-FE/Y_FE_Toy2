@@ -1,4 +1,3 @@
-import React from 'react';
 import GameHeader from '@/components/common/GameHeader';
 import styles from '@styles/pages/vote.module.scss';
 import GhostList from '@/components/vote/GhostList';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@styles/pages/result.module.scss';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getGameData } from '@/api/vote';
@@ -48,7 +48,7 @@ const Result = () => {
   }, []);
 
   const handleClick = async () => {
-    await fastRequest.leaveChat(chatId as string, accessToken);
+    await fastRequest.leaveChat(chatId as string, accessToken as string);
     navigate('/lobby');
   };
 

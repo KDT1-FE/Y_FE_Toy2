@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@styles/components/chatItem.module.scss';
 import fastRequest from '@api/fastRequest';
 import { useAppSelector } from '@/hooks/redux';
@@ -36,7 +36,9 @@ const ChatItem = ({
         <img className={styles.chatItemImage} src={userInfo?.picture} />
         <p className={styles.chatItemNickname}>{userInfo?.name}</p>
       </div>
-      <span className={styles.chatItemText}>{text}</span>
+      <p className={Mymsg ? styles.selfChatItemText : styles.chatItemText}>
+        {text}
+      </p>
     </div>
   );
 };

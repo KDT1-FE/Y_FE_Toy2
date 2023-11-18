@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from '@styles/pages/night.module.scss';
 import GameHeader from '@components/common/GameHeader';
 import { useSearchParams } from 'react-router-dom';
