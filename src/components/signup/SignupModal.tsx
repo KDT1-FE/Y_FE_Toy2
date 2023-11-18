@@ -59,7 +59,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
       }
 
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -119,7 +118,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
           <span
             onClick={() => goPrevious()}
             className="material-symbols-outlined">
-            arrow_left
+            ◀
           </span>
         </div>
         <div className={styles.singupModal__carousel_container}>
@@ -145,7 +144,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
         </div>
         <div className={styles.singupModal__right_btn}>
           <span onClick={() => goNext()} className="material-symbols-outlined">
-            arrow_right
+          ▶
           </span>
         </div>
       </div>

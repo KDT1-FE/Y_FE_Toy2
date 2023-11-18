@@ -35,7 +35,6 @@ const Signin = () => {
     const result = await login(id, password);
     const { accessToken, refreshToken } = result;
     const user = await getSelfInfo(id);
-    console.log(user);
 
     if (result.error) {
       setErrors(result.error);
