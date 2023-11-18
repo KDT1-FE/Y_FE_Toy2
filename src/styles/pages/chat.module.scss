@@ -12,6 +12,10 @@
     height: 80%;
     flex-direction: column;
     overflow: scroll;
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome , Safari , Opera */
+    }
   }
 
   .form {
