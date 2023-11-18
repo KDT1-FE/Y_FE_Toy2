@@ -1,1040 +1,239 @@
-# 🍋 소켓 기반 채팅앱
+# LANGCHAT: 언어 학습을 위한 채팅 앱
 
-주어진 API와 소켓을 분석해 어떤 프로젝트를 진행/완성할 것인지 팀 단위로 자유롭게 결정하고 만들어보세요.  
-과제 수행 및 리뷰 기간은 별도 공지를 참고하세요!
+패스트캠퍼스 X 야놀자 프론트엔드 부트캠프 토이프로젝트2 12조
 
-## 과제 수행 및 제출 방법
+### 프로젝트 소개
 
-```
-Y_FE_Toy2_{팀명}
+제작기간 : 2023.11.06 ~ 2023.11.16
+제작인원 : 4명
 
-E.g, Y_FE_Toy2_GYOHEON
-```
+<!-- 이부분은 추후에 링크 확정되면 수정필요 -->
 
-1. 현재 저장소를 로컬에 클론(Clone)합니다.
-1. 자신의 팀명으로 브랜치를 생성합니다.(구분 가능하도록 팀명을 꼭 파스칼케이스로 표시하세요, `git branch Y_FE_Toy2_Team13`)
-1. 자신의 팀명 브랜치에서 과제를 수행합니다.
-1. 과제 수행이 완료되면, 자신의 팀명 브랜치를 원격 저장소에 푸시(Push)합니다.(`main` 브랜치에 푸시하지 않도록 꼭 주의하세요, `git push origin Y_FE_Toy2_Team13`)
-1. 저장소에서 `main` 브랜치를 대상으로 Pull Request 생성하면, 과제 제출이 완료됩니다!(E.g, `main` <== `Y_FE_Toy2_Team13`)
-1. Pull Request 링크를 LMS로도 제출해 주셔야 합니다.
-1. main 혹은 다른 사람의 브랜치로 절대 병합하지 않도록 주의하세요!
-1. Pull Request에서 보이는 설명을 다른 사람들이 이해하기 쉽도록 꼼꼼하게 작성하세요!
+### 배포 주소
 
-- 과제 수행 및 제출 과정에서 문제가 발생한 경우, 바로 담당 멘토나 강사에게 얘기하세요!
+🌐 배포링크 : [https://langchat-464b7.web.app/](https://langchat-464b7.web.app/)
 
-- 백엔드 서버에 문제가 생겼을 경우, 바로 슬랙의 GyoHeon Lee에게 연락하세요!
+🔒 테스트 계정 - ID: test0000 PW: 123123
 
-## 필수 구현 사항
-- [ ] `useState` 또는 `useReducer`를 활용한 상태 관리 구현
-- [ ] `Sass`, `styled-component`, `emotion`, `Chakra UI`, `tailwind CSS` 등을 활용한 스타일 구현
-- [ ] `react` 상태를 통한 CRUD 구현
-- [ ] 상태에 따라 달라지는 스타일 구현
-- [ ] `custom hook`을 통한 비동기 처리 구현
-- [ ] 유저인증 시스템(로그인, 회원가입) 구현
-- [ ] `jwt`등의 유저 인증 시스템 (로그인, 회원가입 기능)
-- [ ] 소켓을 이용한 채팅 구현
+### 팀원 소개
+
+<!-- 가나다순으로 일단 정렬 -->
+<!-- 기능 개발하신 부분을 작성해주세요! -->
+
+|                                                 팀장 - 백상원                                                 |                                                팀원 - 김성겸                                                 |                                                 팀원 - 지홍규                                                 |                                                팀원 - 한은지                                                 |
+| :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
+| <img src="https://avatars.githubusercontent.com/u/121215024?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/59966217?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/121606131?s=60&v=4" width="100" style="max-width: 100%;" /> | <img src="https://avatars.githubusercontent.com/u/95364951?s=60&v=4" width="100" style="max-width: 100%;" /> |
+|                                [@Yamyam-code](https://github.com/Yamyam-code)                                 |                                    [@skyeome](https://github.com/skyeome)                                    |                                  [@JiHongkyu](https://github.com/JiHongkyu)                                   |                                  [@lilviolie](https://github.com/lilviolie)                                  |
+|                         <ul><li>유저 랭킹 리스팅</li><li>영어 끝말잇기 구현</li></ul>                         |             <ul><li>레이아웃</li><li>회원인증<br/>로그인/회원가입</li><li>오픈채팅기능</li></ul>             |        <ul><li>초기셋팅</li><li>웹소켓 연결/실시간<br/> 채팅 로직 구현</li><li>1대1채팅 기능</li></ul>        |                            <ul><li>홈 화면 개발</li><li>프로필 수정기능</li></ul>                            |
+
+## 기술 스택 및 라이브러리
+
+### 사용 기술
+
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101) ![Recoil](https://img.shields.io/badge/Recoil-3578E5?style=for-the-badge&logo=Recoil&logoColor=white) ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white) ![FIREBASE](https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white) ![Framer](https://img.shields.io/badge/Framer-black?style=for-the-badge&logo=framer&logoColor=blue) ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=fff&style=for-the-badge)
+![Eslint](https://img.shields.io/badge/Eslint-4B32C3?logo=eslint&logoColor=fff&style=for-the-badge)
+
+### 협업툴
+
+![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) ![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=zoom&logoColor=white) ![Jira](https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white)
+
+## 🎯 주요 구현 사항
+
+- [x] `useState` 또는 `useReducer`를 활용한 상태 관리 구현
+- [x] `Sass`, `styled-component`, `emotion`, `Chakra UI`, `tailwind CSS` 등을 활용한 스타일 구현
+- [x] `react` 상태를 통한 CRUD 구현
+- [x] 상태에 따라 달라지는 스타일 구현
+- [x] `custom hook`을 통한 비동기 처리 구현
+- [x] 유저인증 시스템(로그인, 회원가입) 구현
+- [x] `jwt`등의 유저 인증 시스템 (로그인, 회원가입 기능)
+- [x] 소켓을 이용한 채팅 구현
 
 ## 선택 구현 사항
+
 - [ ] `Next.js`를 활용한 서버 사이드 렌더링 구현
-- [ ] `typescript`를 활용한 앱 구현
+- [x] `typescript`를 활용한 앱 구현
 - [ ] `storybook`을 활용한 디자인 시스템 구현
 - [ ] `jest`를 활용한 단위 테스트 구현
 
-## 추가 사항
-- api들의 응답 데이터들을 일부러 파편화 해두었습니다!
-- api들 간의 데이터를 조합하여 이상적인 구조를 만들어보세요.
+## 😀 팀원별 상세 구현 사항
 
-## 예시 프로젝트
+<!-- 순서는 일단 네비게이션 목록 순서로 정렬 -->
+<!-- 은지님 구현 사항 -->
+<details>
+<summary style="font-size: 1.125rem">한은지 : 첫 화면, 프로필 페이지</summary>
+<div markdown="1">
 
-![private-messaging-part-1-chat-ab610e9e03738ad37f7b0fb55c771087](https://github.com/KDT1-FE/Y_FE_Toy2/assets/66263916/c5247dde-2ca6-4285-a60e-8dcf23326d0e)
+### 주요 구현사항 설명
 
-## API 사용법
+#### 홈페이지
 
-- 모든 network 요청(Request) `headers`에 아래 정보가 꼭 포함돼야 합니다!  
-- serverId는 팀마다 개별 전달됩니다.
-- 확인할 수 없는 사용자나 팀의 DB 정보는 임의로 삭제될 수 있습니다!
+![홈페이지](https://github.com/TOY2-12/LangChat/assets/95364951/6229e4b7-944f-4d72-8dbb-e835e03c6148)
 
-```json
-{
-  "content-type": "application/json",
-  "serverId": "nREmPe9B",
-}
-```
+- 상단의 select box에서 선택한 언어에 해당하는 유저 리스트 표시
+- 소켓 연결을 통해 유저 접속 여부 표시
+- 유저 선택 시 나타나는 프로필 모달 구현
 
-## 기본 데이터 구조
-### user
-```ts
-interface User {
-  id: string;
-  password: string;
-  name: string;
-  picture: string;
-  chats: string[]; // chat id만 속합니다.
-}
-```
-### chat
-```ts
-interface Chat {
-  id: string;
-  name: string;
-  isPrivate: boolean;
-  users: string[];
-  messages: Message[]; // message 객체가 속합니다.
+![프로필](https://github.com/TOY2-12/LangChat/assets/95364951/04df5f9e-8185-48a7-aad1-5c73d5137573)
+
+- 유저가 본인의 정보를 수정할 수 있는 프로필 페이지 구현
+
+</div>
+</details>
+
+<!-- 홍규님 구현 사항 -->
+<details>
+<summary style="font-size: 1.125rem">지홍규 : 메시지 페이지</summary>
+<div markdown="1">
+
+### 주요 구현사항 설명
+
+**메시지 보내기 보달**
+
+- 모든 유저 리스트 표시
+- 자음, 모음으로 유저 이름 검색
+- 유저 선택 시 보내기 버튼 활성화
+- 메시지 보내면 기존 채팅방 유무 확인 후 채팅방 생성 or 채팅방 이동
+
+![모달창](https://github.com/TOY2-12/LangChat/assets/121606131/bd9bbc3e-11fc-4a2f-a422-9c54fa2188f8)
+
+**채팅리스트**
+
+- 로그인 유저가 포함된 채팅 리스트 표시
+- 상대방의 프로필 사진과 이름 표시
+- 해당 채팅방의 마지막 메시지와 경과 시간 표시
+- 로딩 시 채팅 리스트 Skeleton UI 적용
+
+![채팅리스트](https://github.com/TOY2-12/LangChat/assets/121606131/2e22fea0-0354-4658-9eb0-53e2cc006ff5)
+
+**모든 채팅 가져오기**
+
+- 채팅방 클릭 시 해당 채팅방의 대화 내용 모두 가져오기
+
+![모든 채팅가져오기](https://github.com/TOY2-12/LangChat/assets/121606131/f903e45f-73e2-4481-a489-2644902b1aeb)
+
+**1대1채팅**
+
+- 로그인한 유저와 대화상대방의 메시지 레이아웃 구분
+- 같은 시간에 보낸 메시지는 마지막 메시지에 한 번만 표시
+- 웹 소켓 연결 및 실시간 통신 로직 구현
+
+![채팅방](https://github.com/TOY2-12/LangChat/assets/121606131/ecf2b3b3-5615-4eed-9118-6164fc91bbf0)
+
+**로그아웃**
+
+- 로그아웃 시 `localStorage` 값과 `accessTokenState` 값 초기화 후 로그인 페이지로 이동
+
+![로그아웃](https://github.com/TOY2-12/LangChat/assets/121606131/fa0d3670-a19e-49d4-a757-ee49f3d84e80)
+
+</div>
+</details>
+
+<!-- 유저 인증/오픈채팅 구현 사항 -->
+<details>
+<summary style="font-size: 1.125rem">김성겸 : 인증관련, 오픈채팅 페이지</summary>
+<div markdown="1">
+
+### 유저 인증 / 회원가입
+
+**회원가입**
+
+- 아이디 - 중복 아이디 체크 기능
+- 비밀번호 - 5글자 이하인지 유효성 검사
+- 프로필 사진을 정사작형으로 잘라주는 에디터 추가
+- 관심사 선택
+- 언어, 수준 선택
+
+![회원가입 페이지](public/images/signup-page.png)
+
+**로그인**
+
+- 로그인시 오류 발생하면 에러 메시지를 toast로 보여주는 기능
+- 이미 로그인 되어있으면 로그인 페이지로 갈수 없습니다.
+
+![로그인 페이지](public/images/login-page.png)
+
+### 오픈 채팅
+
+- 오픈채팅방 생성 기능
+- 로딩시 skeleton UI 적용
+- 추천친구/대화방 보여주는 기능
+- 채팅방 참여, 나가기, 초대 기능
+
+<br />
   
-  updatedAt: Date;
-}
-```
-### message
-```ts
-interface Message {
-  id: string;
-  text: string;
-  userId: string;
-
-  createdAt: Date;
-}
-```
-## 회원
-
-### 회원가입
-
-사용자가 `id`에 종속되어 회원가입합니다.
-
-- 사용자 비밀번호는 암호화해 저장합니다.
-- 프로필 이미지는 url or base64 형식이어야 합니다.
-- 프로필 이미지는 1MB 이하여야 합니다.
-
-```curl
-curl https://fastcampus-chat.net/signup
-  \ -X 'POST'
-```
-
-요청 데이터 타입 및 예시:
-
-```ts
-interface RequestBody {
-  id: string // 사용자 아이디 (필수!, 영어와 숫자만)
-  password: string // 사용자 비밀번호, 5자 이상 (필수!)
-  name: string // 사용자 이름, 20자 이하 (필수!)
-  picture?: string // 사용자 이미지(url or base64, under 1MB)
-}
-```
-
-```json
-{
-  "id": "abcd",
-  "password": "********",
-  "name": "GyoHeon",
-  "picture": "https://avatars.githubusercontent.com/u/66263916?v=4"
-}
-```
-
-응답 데이터 타입 및 예시:
-
-```ts
-interface ResponseValue {
-  message: title
-}
-```
-
-```json
-{
-  "message": "User created"
-}
-```
-
-### id 중복 체크
-
-`id` 중복 체크를 합니다.
-
-```curl
-curl https://fastcampus-chat.net/check/id
-  \ -X 'POST'
-```
-
-요청 데이터 타입 및 예시:
-
-```ts
-interface RequestBody {
-  id: string // 사용자 아이디 (필수!, 영어와 숫자만)
-}
-```
-
-```json
-{
-  "id": "abcd",
-}
-```
-
-응답 데이터 타입 및 예시:
-
-```ts
-interface ResponseValue {
-  isDuplicated: boolean
-}
-```
-
-```json
-{
-  "isDuplicated": false
-}
-```
-
-### 로그인
-
-- 발급된 `accessToken`은 7일 후 만료됩니다.
-
-```curl
-curl https://fastcampus-chat.net/login
-  \ -X 'POST'
-```
-
-요청 데이터 타입 및 예시:
-
-```ts
-interface RequestBody {
-  id: string // 사용자 아이디 (필수!)
-  password: string // 사용자 비밀번호 (필수!)
-}
-```
-
-```json
-{
-  "id": "abcd",
-  "password": "********"
-}
-```
-
-응답 데이터 타입 및 예시:
-
-```ts
-interface ResponseValue {
-  accessToken: string // 사용자 접근 토큰
-  refreshToken: string // access token 발급용 토큰
-}
-```
-
-```json
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlQS3I...(생략)",
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlQS3I...(생략)"
-}
-```
-
-### 인증 확인
-
-`id` 중복 체크를 합니다.
-
-```curl
-curl https://fastcampus-chat.net/auth/me
-  \ -X 'GET'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-
-요청 데이터 타입 및 예시:
-- 없음
-
-응답 데이터 타입 및 예시:
-
-```ts
-interface ResponseValue {
-  auth: boolean;
-  user?: User;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-```
-
-```json
-{
-  "auth": true,
-  "user": {
-    "id": "test1",
-    "name": "abcde",
-    "picture": "https://avatars.githubusercontent.com/u/42333366?v=4"    
-  }
-}
-```
-
-### 토큰 재발급
-
-```curl
-curl https://fastcampus-chat.net/refresh
-  \ -X 'POST'
-```
-
-요청 데이터 타입 및 예시:
-
-```ts
-interface RequestBody {
-  refreshToken: string // access token 발급용 토큰
-}
-```
-
-```json
-{
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlQS3I...(생략)"
-}
-```
-
-응답 데이터 타입 및 예시:
-
-```ts
-interface ResponseValue {
-  accessToken: string // 사용자 접근 토큰
-}
-```
-
-```json
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlQS3I...(생략)",
-}
-```
-
-### 사용자 정보 수정
-
-- 프로필 이미지는 url or base64 형식이어야 합니다.
-- 프로필 이미지는 1MB 이하여야 합니다.
-
-```curl
-curl https://fastcampus-chat.net/user
-  \ -X 'PATCH'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-
-요청 데이터 타입 및 예시:
-
-```ts
-interface RequestBody {
-  name?: string // 새로운 표시 이름
-  picture?: string // 사용자 프로필 이미지(url or base64)
-}
-```
-
-```json
-{
-  "name": "abcde",
-  "picture": "https://avatars.githubusercontent.com/u/42333366?v=4"
-}
-```
-
-응답 데이터 타입 및 예시:
-
-```ts
-interface ResponseValue {
-  messgae: string
-}
-```
-
-```json
-{
-  "message": "User updated"
-}
-```
-
-## 채팅
-### 특정 유저 조회
-- 특정 유저를 조회합니다.
-```curl
-curl https://fastcampus-chat.net/user?userId=${userId}
-  \ -X 'GET'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-요청 데이터 타입 및 예시:
-- 없음
-- 조회하고 싶은 id는 query string으로 사용합니다.
-
-응답 데이터 타입 및 예시:
-```ts
-type ResponseValue = {
-  user: User;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-```
-
-```json
-{
-  "user": {
-    "id": "user1",
-    "name": "lgh",
-    "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-  }
-}
-```
-
-### 모든 유저 조회
-- 현재 존재하는 모든 유저를 조회합니다.
-```curl
-curl https://fastcampus-chat.net/users
-  \ -X 'GET'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-요청 데이터 타입 및 예시:
-- 없음
-
-응답 데이터 타입 및 예시:
-```ts
-type ResponseValue = User[]
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-```
-
-```json
-[
-  {
-    "id": "user1",
-    "name": "lgh",
-    "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-  },
-  {
-    "id": "user2",
-    "name": "ldj",
-    "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-   }
-]
-```
-
-### 채팅 생성하기
-
-```curl
-curl https://fastcampus-chat.net/chat
-  \ -X 'POST'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-
-요청 데이터 타입 및 예시:
-```ts
-interface RequestBody{
-  name: string, // chat 이름
-  users: string[], // 참가자들 id(자신 미포함)
-  isPrivate?: boolean // 공개 비공개
-}
-```
-
-```json
-{
-  "name": "test chat",
-  "users": ["user1", "user2"]
-}
-```
-
-응답 데이터 타입 및 예시:
-```ts
-interface ResponseValue {
-  id: string,
-  name: string,
-  users: User[], // 자신을 포함한 참가자들 정보
-  isPrivate: boolean,
-  updatedAt: Date
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-```
-
-```json
-{
-  "id": "fasgadsfdsghssdlsdafasd",
-  "name": "test chat",
-  "users": [
-    {
-      "id": "user1",
-      "name": "lgh",
-      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-    },
-    {
-      "id": "user2",
-      "name": "ldj",
-      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-     }
-  ],
-  "isPrivate": false,
-  "updatedAt": "2023-11-01T08:23:39.850Z"
-}
-```
-
-### 특정 채팅 조회
-- 특정 id의 채팅을 조회합니다.
-- isPrivate: true인 채팅방은 해당 채팅방 참가자만 볼 수 있습니다.
-
-```curl
-curl https://fastcampus-chat.net/chat/only?chatId=${chatId}
-  \ -X 'GET'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-
-요청 데이터 타입 및 예시:
-- 없음
-
-응답 데이터 타입 및 예시:
-```ts
-interface ResponseValue {
-  chat: Chat;
-}
-
-interface Chat {
-  id: string;
-  name: string;
-  users: User[]; // 속한 유저 정보
-  isPrivate: boolean;
-  latestMessage: Message | null;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-
-interface Message {
-  id: string;
-  text: string;
-  userId: string;
-  createAt: Date;
-}
-```
-
-```json
-{
-  chat: {
-    "id": "f189ab25-5644-4d72-bd7c-0170ee9c8ede",
-    "name": "chat room 1",
-    "users": [
-    {
-      "id": "user1",
-      "name": "lgh",
-      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-    },
-    {
-      "id": "user2",
-      "name": "ldj",
-      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-    }
-    ],
-    "isPrivate": false,
-    "updatedAt": "2023-10-31T13:18:38.216Z",
-    "latestMessage": null
-  }
-}
-```
-
-### 모든 채팅 조회
-- 현재 존재하는 모든 채팅을 조회합니다.
-- isPrivate: true인 채팅방은 보이지 않습니다.
-
-```curl
-curl https://fastcampus-chat.net/chat/all
-  \ -X 'GET'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-
-요청 데이터 타입 및 예시:
-- 없음
-
-응답 데이터 타입 및 예시:
-```ts
-type ResponseValue = Chat[]
-
-interface Chat {
-  id: string;
-  name: string;
-  users: User[]; // 속한 유저 정보
-  isPrivate: boolean;
-  latestMessage: Message | null;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-
-interface Message {
-  id: string;
-  text: string;
-  userId: string;
-  createAt: Date;
-}
-```
-
-```json
-[
-  {
-    "id": "f189ab25-5644-4d72-bd7c-0170ee9c8ede",
-    "name": "chat room 1",
-    "users": [
-    {
-      "id": "user1",
-      "name": "lgh",
-      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-    },
-    {
-      "id": "user2",
-      "name": "ldj",
-      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-    }
-  ],
-    "isPrivate": false,
-    "updatedAt": "2023-10-31T13:18:38.216Z",
-    "latestMessage": null
-  },
-  {
-    "id": "f189ab25-5644-4d72-bd7c-0170ee9c8edj",
-    "name": "chat room 2",
-    "users": [
-    {
-      "id": "user1",
-      "name": "lgh",
-      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-    },
-    {
-      "id": "user2",
-      "name": "ldj",
-      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-    }
-  ],
-    "isPrivate": false,
-    "updatedAt": "2023-10-31T15:18:38.216Z",
-    "latestMessage": {
-      "id": "8f7f67bb-f1ab-4792-9678-0b8546adcb6f",
-      "text": "testtest444",
-      "userId": "test:test6",
-      "createdAt": "2023-11-06T11:15:50.588+00:00"
-    }
-  }
-]
-```
-
-### 나의 채팅 조회
-```curl
-curl https://fastcampus-chat.net/chat
-  \ -X 'GET'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-- 내가 속한 모든 채팅을 조회합니다.
-- isPrivate: true인 채팅방도 모두 보이게 됩니다.
-
-요청 데이터 타입 및 예시:
-- 없음
-
-응답 데이터 타입 및 예시:
-```ts
-type ResponseValue = Chat[]
-
-interface Chat {
-  id: string;
-  name: string;
-  users: User[]; // 속한 유저 id
-  isPrivate: boolean;
-  latestMessage: Message | null;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-
-interface Message {
-  id: string;
-  text: string;
-  userId: string;
-  createAt: Date;
-}
-```
-
-```json
-[
-  {
-    "id": "f189ab25-5644-4d72-bd7c-0170ee9c8ede",
-    "name": "chat room 1",
-    "users": [
-    {
-      "id": "user1",
-      "name": "lgh",
-      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-    },
-    {
-      "id": "user2",
-      "name": "ldj",
-      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-    }
-  ],
-    "isPrivate": true,
-    "updatedAt": "2023-10-31T13:18:38.216Z",
-    "latestMessage": null
-  },
-  {
-    "id": "f189ab25-5644-4d72-bd7c-0170ee9c8edj",
-    "name": "chat room 2",
-    "users": [
-      {
-        "id": "user1",
-        "name": "lgh",
-        "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-      },
-      {
-        "id": "user2",
-        "name": "ldj",
-        "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-      }
-    ],
-    "isPrivate": false,
-    "updatedAt": "2023-10-31T15:18:38.216Z",
-    "latestMessage": {
-      "id": "8f7f67bb-f1ab-4792-9678-0b8546adcb6f",
-      "text": "testtest444",
-      "userId": "test:test6",
-      "createdAt": "2023-11-06T11:15:50.588+00:00"
-    }
-  }
-]
-```
-
-## 채팅 참여하기
-
-```curl
-curl https://fastcampus-chat.net/chat/participate
-  \ -X 'PATCH'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-
-요청 데이터 타입 및 예시:
-```ts
-interface RequestBody {
-  chatId: string;
-}
-```
-
-```json
-{
-  "chatId": "f189ab25-5644-4d72-bd7c-0170ee9c8ede"
-}
-```
-
-응답 데이터 타입 및 예시:
-```ts
-interface ResponseValue{
-  id: string;
-  name: string;
-  users: User[]; // 속한 유저 id
-  isPrivate: boolean;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-```
-
-```json
-{
-  "id": "f189ab25-5644-4d72-bd7c-0170ee9c8ede",
-  "name": "chat room 1",
-  "users": [
-    {
-      "id": "user1",
-      "name": "lgh",
-      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-    },
-    {
-      "id": "user2",
-      "name": "ldj",
-      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-    }
-  ],
-  "isPrivate": true,
-  "updatedAt": "2023-10-31T13:18:38.216Z"
-}
-```
-
-## 채팅 나가기
-
-```curl
-curl https://fastcampus-chat.net/chat/leave
-  \ -X 'PATCH'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-
-요청 데이터 타입 및 예시:
-```ts
-interface RequestBody {
-  chatId: string;
-}
-```
-
-```json
-{
-  "chatId": "f189ab25-5644-4d72-bd7c-0170ee9c8ede"
-}
-```
-
-응답 데이터 타입 및 예시:
-```ts
-interface ResponseValue {
-  message: string;
-}
-```
-
-```json
-{
-  "message": "Leave success"
-}
-```
-
-## 채팅 초대하기
-
-```curl
-curl https://fastcampus-chat.net/chat/invite
-  \ -X 'PATCH'
-  \ -H 'Authorization: Bearer <accessToken>'
-```
-
-요청 데이터 타입 및 예시:
-```ts
-interface RequestBody {
-  chatId: string;
-  users: string[]; // 초대할 유저 id
-}
-```
-
-```json
-{
-  "chatId": "f189ab25-5644-4d72-bd7c-0170ee9c8ede",
-  "users": ["user1", "user2"]
-}
-```
-
-응답 데이터 타입 및 예시:
-```ts
-interface ResponseValue{
-  id: string;
-  name: string;
-  users: User[]; // 속한 유저 정보
-  isPrivate: boolean;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  picture: string;
-}
-```
-
-```json
-{
-  "id": "f189ab25-5644-4d72-bd7c-0170ee9c8ede",
-  "name": "chat room 1",
-  "users": [
-    {
-      "id": "user1",
-      "name": "lgh",
-      "picture": "https://gravatar.com/avatar/c274467c5ef4fe381b154a20c5e7ce26?s=200&d=retro"
-    },
-    {
-      "id": "user2",
-      "name": "ldj",
-      "picture": "https://gravatar.com/avatar/d94869409b4e94903723612a4f93a6f9?s=200&d=retro"
-    }
-  ],
-  "isPrivate": true,
-  "updatedAt": "2023-10-31T13:18:38.216Z"
-}
-```
-
-# Socket
-- socket.io 의 사용을 추천드립니다.
-- Socket 연결시에도 headers는 유지해야 합니다.
-## 기본 연결
-```ts
-io(`https://fastcampus-chat.net/chat?chatId=${chatId}`,
-  {
-    extraHeaders: {
-      Authorization: "Bearer <accessToken>",
-      serverId: "test",
-    },
-  })
-```
-
-## emit Event(client -> server)
-### example
-```ts
-socket.emit('message-to-server', text)
-```
-### message-to-server
-- 같은 방에 있는 사람들에게 메세지를 전달합니다.
-
-요청 데이터
-```ts
-type RequestData: string;
-```
-### fetch-messages
-- 이전 대화 목록을 불러옵니다.
-- `messages-to-client`로 데이터를 받을 수 있습니다.
-
-요청 데이터
-- 없음
-### users
-- 접속 상태인 유저 목록을 불러옵니다.
-- `users-to-client`로 데이터를 받을 수 있습니다.
-
-요청 데이터
-- 없음 
-
-## on Event(server -> client)
-### example
-```ts
-socket.on('message-to-client', (messageObject) => {
-  console.log(messageObject);
-})
-```
-### message-to-client
-- 같은 방에 있는 사람들에게 메세지를 전달합니다.
-
-응답 데이터
-```ts
-interface ResponseData {
-  id: string;
-  text: string;
-  userId: string; // 메세지를 보낸 사람의 id
-  createdAt: Date;
-}
-```
-### messages-to-client
-- 이전 대화 목록을 불러옵니다.
-
-응답 데이터
-```ts
-interface Message {
-  id: string;
-  text: string;
-  userId: string; // 메세지를 보낸 사람의 id
-  createdAt: Date;
-}
-
-interface ResponseData {
-  messages: Message[];
-}
-```
-### join
-- 같은 방에 새로운 사람이 들어오면 모든 유저의 정보를 다시 받습니다.
-
-응답 데이터
-```ts
-interface ResponseData {
-  users: string[]; // 참여자들 id
-  joiners: string[]; // 새로운 참여자 id
-}
-```
-### leave
-- 같은 방에 사람이 나가면 모든 유저의 정보를 다시 받습니다.
-
-응답 데이터
-```ts
-interface ResponseData {
-  users: string[]; // 참여자들 id
-  leaver: string; // 나간 사용자 id
-}
-```
-
-### users-to-client
-- 접속 상태인 유저 목록을 불러옵니다.
-
-응답 데이터
-```ts
-interface ResponseData {
-  user: string[]; // 참가자들 id
-}
-```
-
-## server 연결
-```ts
-io(`https://fastcampus-chat.net/server`,
-  {
-    extraHeaders: {
-      Authorization: "Bearer <accessToken>",
-      serverId: "test",
-    },
-  })
-```
-
-## emit Event(client -> server)
-### example
-```ts
-socket.emit('users-server')
-```
-### users-server
-- 같은 serverId를 사용하는 online 사용자를 불러옵니다.
-- `users-server-to-client`로 데이터를 받을 수 있습니다.
-
-요청 데이터
-- 없음
-
-## on Event(server -> client)
-### example
-```ts
-socket.on('message-to-client', (messageObject) => {
-  console.log(messageObject);
-})
-```
-
-### users-server-to-client
-- 같은 serverId를 사용하는 접속 상태인 유저 목록을 불러옵니다.
-
-응답 데이터
-```ts
-interface ResponseData {
-  user: string[]; // 참가자들 id
-}
-```
-
-### invite
-- 새로운 채팅방 생성시 해당 채팅방 유저에게 채팅방 정보를 전송합니다.
-- 기존 채팅방에 유저 초대시 초대된 유저에게 채팅방 정보를 전송합니다.
-
-응답 데이터
-```ts
-interface ResponseData {
-  id: string;
-  name: string;
-  users: string[]; // 참여자들 id
-  isPrivate: boolean;
-  updatedAt: Date;
-}
-```
-
-### new-chat
-- 새로운 대화방이 생긴 경우 (not private) 서버(팀에서 사용하는 serverId)의 참여자들에게 이를 전달합니다.
-
-응답 데이터
-```ts
-interface ResponseData {
-  id: string;
-  name: string;
-  users: string[]; // 참여자들 id
-  isPrivate: boolean;
-  updatedAt: Date;
-}
+**오픈채팅방 생성**  
+![오픈채팅 생성](public/images/openchat-new.gif)
+
+**오픈채팅방 초대**  
+![오픈채팅 초대](public/images/openchat-invite.gif)
+
+**실시간 오픈채팅**  
+![실시간 오픈채팅](public/images/openchat-chatting.gif)
+
+**오픈채팅 나가기**  
+![실시간 오픈채팅](public/images/openchat-leave.gif)
+
+</div>
+</details>
+
+<!-- 상원님 구현 사항 -->
+<details>
+<summary style="font-size: 1.125rem">백상원 : 게임 페이지</summary>
+<div markdown="1">
+
+### 주요 구현사항 설명
+
+## 랭킹
+
+![ranking](https://github.com/TOY2-12/LangChat/assets/121215024/873ba9ef-089a-48c2-914e-9b48d8c48030)
+
+- 각 유저의 최고 점수를 기반으로 랭킹을 나열
+- 기본적으로 유저의 등수를 보여주며 호버 시 그 유저의 점수를 표기
+- 게임 플레이 중 최고 점수 갱신를 갱신하면 게임 종료 시 랭킹 리렌더링
+
+## 끝말잇기 게임
+
+![submit](https://github.com/TOY2-12/LangChat/assets/121215024/9c3cf96c-e4a8-4903-8f83-bb1009db5975)
+
+- 네이버 지식백과 API 및 정규식을 활용하여 단어 유효성 검사
+- 배포서버 API CROS 이슈 AWS API GATEWAY 사용하여 해결(해당 방법이 api 딜레이가 가장 적고 https 프로토콜을 사용)
+- useState와 FRAMER 활용 남은 시간 게이지바로 표시
+- 정답 시 현재 점수를 +1 하며 현재 점수가 최고 점수를 넘어갈 경우 최고 점수 = 현재 점수
+- 효과음 사용
+</div>
+</details>
+
+## ➡️ 유저 흐름(flow) 이미지
+
+<!-- 유저 플로우 생성 -->
+<img width="600" alt="LangChat UserFlow" src="https://github.com/TOY2-12/LangChat/assets/121215024/92e6561f-3183-4507-b75b-1001d3ca54f0">
+
+## 📂 폴더 구조
+
+```
+📦 LangChat
+├─ node_modules/
+├─ public/
+│  ├─ index.html
+│  ├─ favicon.ico
+│  └─ manifest.json
+├─ src/
+│  ├─ components
+│  │  ├─ common/
+│  │  ├─ todo.../
+│  │  └─ …/
+│  ├─ assets/
+│  ├─ common/
+│  ├─ pages/
+│  ├─ utils/
+│  ├─ hooks/
+│  ├─ styles/
+│  ├─ types/
+│  ├─ reducer/
+│  ├─ App.js (라우팅까지)
+│  └─ index.js
+├─ package.json
+├─ package-lock.json
+└─ README.md
 ```
