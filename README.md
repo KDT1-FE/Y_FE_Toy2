@@ -109,20 +109,21 @@ TEST용 PASSWORD: ivegaeul
 <div align="center">
   <table>
     <tr align="center">
-      <th>게임방 화면</th>
-      <th>게임 화면</th>
+      <th>채팅/그림</th>
+      <th>채팅/게임</th>
     </tr>
-    <tr>
-      <td><img src="https://github.com/dslov89/Agricola/assets/71018440/62fe59ca-7aae-4e94-b4b7-99b24c702f5d" alt="gif-main-page" width="370"></td>
-      <td><img src="https://github.com/dslov89/Agricola/assets/71018440/64b0fcf7-bac5-4895-9ea6-3e6d37763d0a"alt="gif-function1" width="370"></td>
+    <tr>      
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/a011c313-253b-4e83-96f3-ab10c6fc0843" alt="chatting/painting" width="370"></td>
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/b61e1c69-5f2e-419a-95a5-3b920abdc87b"alt="chatting/game" width="370"></td>      
     </tr>
     <tr align="center">
-      <th>농장</th>
-      <th>카드</th>
+      <th>1대1채팅</th>
+      <th>리다이렉션</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/dslov89/Agricola/assets/71018440/0e566f6c-c82f-43c7-86d4-776a860caaa8" alt="gif-function2" width="370"></td>
-      <td><img src= "https://github.com/dslov89/Agricola/assets/71018440/e522d12b-a2ab-47a8-bc5a-e222067da7b6"alt="gif-function3" width="370"></td>
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/43dc9798-c47e-4d72-af1c-f3adf9c6e0f2" alt="1:1chatting" width="370"></td>      
+      <td><img src= "https://github.com/LeHiHo/FastMind/assets/134940630/71436b52-cb9b-45b8-9461-d8283d97bf62"alt="
+redirection" width="370"></td>
     </tr>
   </table>
 </div>
