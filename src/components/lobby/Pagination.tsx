@@ -1,5 +1,3 @@
-import React from 'react';
-
 import refresh from '@assets/images/refresh.png';
 import styles from '@styles/components/lobby/pagination.module.scss';
 
