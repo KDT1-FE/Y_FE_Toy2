@@ -113,17 +113,17 @@ TEST용 PASSWORD: ivegaeul
       <th>채팅/게임</th>
     </tr>
     <tr>      
-      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/a011c313-253b-4e83-96f3-ab10c6fc0843" alt="chatting/painting" width="370"></td>
-      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/b61e1c69-5f2e-419a-95a5-3b920abdc87b"alt="chatting/game" width="370"></td>      
-    </tr>
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/3630dfaa-5ec0-420a-8ba3-000c5c2bdedb" alt="chatting/painting" width="370"></td>
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/dfb1c25e-656f-4719-8d48-968713e04168"alt="chatting/game" width="370"></td>      
+    </tr>    
     <tr align="center">
       <th>1대1채팅</th>
       <th>리다이렉션</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/43dc9798-c47e-4d72-af1c-f3adf9c6e0f2" alt="1:1chatting" width="370"></td>      
-      <td><img src= "https://github.com/LeHiHo/FastMind/assets/134940630/71436b52-cb9b-45b8-9461-d8283d97bf62"alt="
-redirection" width="370"></td>
+      <td><img src="https://github.com/LeHiHo/FastMind/assets/134940630/af662986-5109-4d29-a10f-4aaea577c1ab" alt="1:1chatting" width="370"></td>      
+      <td><img src= "https://github.com/LeHiHo/FastMind/assets/134940630/4402ff5e-fd4a-4c42-ba5d-22780a410ee7"alt="
+redirection" width="370"></td>      
     </tr>
   </table>
 </div>
