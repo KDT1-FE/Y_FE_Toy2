@@ -11,7 +11,7 @@ import {
   createSeparatedTime,
   sortCreatedAt,
   modifyDate,
-} from '../template/useChattingSort';
+} from '../../util/chattingSort';
 import { getCookie } from '../../util/util';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';

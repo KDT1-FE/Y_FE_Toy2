@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import sendImg from '/assets/icons/send.png';
 import { useEffect, useRef, useState } from 'react';
-import { chatSocket } from '../../api/socket';
+import { chatSocket } from '../../../api/socket';
 import {
   sortCreatedAt,
   createSeparatedTime,
   modifyDate,
-} from './useChattingSort';
+} from '../../../util/chattingSort';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import {
@@ -17,8 +17,8 @@ import {
   usersInRoom,
   allRoomState,
   roomIdState,
-} from '../../states/atom';
-import { getCookie } from '../../util/util';
+} from '../../../states/atom';
+import { getCookie } from '../../../util/util';
 
 interface ChattingDetailProps {
   chatId: string;
@@ -67,7 +67,6 @@ const GameChatting = ({ chatId }: ChattingDetailProps) => {
   }
 
   const userId = getUserIdFromCookie();
-  // const myUserData: any = useRecoilValue(myUserDataState);
   const [currentMessageObject, setCurrentMessageObject] =
     useRecoilState(myMessageState);
 
@@ -247,7 +246,6 @@ const ChatHeader = styled.div`
   border-radius: 15px 15px 0 0;
   position: relative;
 `;
-
 
 const ChatHeaderWarn = styled.div`
   position: absolute;

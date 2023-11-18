@@ -1,15 +1,12 @@
 import { useRecoilValue } from 'recoil';
-import {
-  allUserState,
-  onlineUserState,
-} from '../../states/atom';
-import userList from '../template/userList';
+import { allUserState, onlineUserState } from '../../../states/atom';
+import userList from '../../../util/userList';
 import { Card, Flex, Heading, Image, Text, IconButton } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { createGameRooms, getAllMyChat } from '../../api';
-import { randomNameFunc, getCookie } from '../../util/util';
+import { createGameRooms, getAllMyChat } from '../../../api';
+import { randomNameFunc, getCookie } from '../../../util/util';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 

@@ -4,13 +4,13 @@ import {
   onlineUserStateInGameRoom,
   userState,
   nowProfiles,
-} from '../../states/atom';
+} from '../../../states/atom';
 import { io } from 'socket.io-client';
-import { SERVER_URL, SERVER_ID } from '../../constant';
-import { getCookie } from '../../util/util';
+import { SERVER_URL, SERVER_ID } from '../../../constant';
+import { getCookie } from '../../../util/util';
 import styled from 'styled-components';
-import { getOnlyGameRoom, getUserData } from '../../api';
-import { OnlyResponse } from '../../interfaces/interface';
+import { getOnlyGameRoom, getUserData } from '../../../api';
+import { OnlyResponse } from '../../../interfaces/interface';
 import { useParams } from 'react-router-dom';
 import { AxiosResponse } from 'axios';
 

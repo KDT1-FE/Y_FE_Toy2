@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { drawSocket } from '../../api/socket';
+import { drawSocket } from '../../../api/socket';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faTrash } from '@fortawesome/free-solid-svg-icons';
 

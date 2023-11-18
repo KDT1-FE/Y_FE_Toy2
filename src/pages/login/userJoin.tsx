@@ -230,7 +230,7 @@ const UserJoin = () => {
                   justifyContent="center"
                   alignItems="center">
                   <Img
-                    src="public/assets/trashBin.svg"
+                    src="/assets/trashBin.svg"
                     alt="Delete"
                     width="24px"
                     height="24px"

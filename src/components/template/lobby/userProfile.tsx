@@ -16,10 +16,10 @@ import {
   Text,
   Button,
 } from '@chakra-ui/react';
-import { getUserData, patchUserData } from '../../api';
-import { disconnectLoginSocket } from '../../api/socket';
+import { getUserData, patchUserData } from '../../../api';
+import { disconnectLoginSocket } from '../../../api/socket';
 import { useNavigate } from 'react-router-dom';
-import { getCookie, removeCookies } from '../../util/util';
+import { getCookie, removeCookies } from '../../../util/util';
 import swal from 'sweetalert';
 
 const UserProfile = () => {
@@ -207,7 +207,7 @@ const UserProfile = () => {
                       justifyContent="center"
                       alignItems="center">
                       <Img
-                        src="public/assets/trashBin.svg" // 쓰레기통 이미지 경로
+                        src="/assets/trashBin.svg" // 쓰레기통 이미지 경로
                         alt="Delete"
                         width="24px"
                         height="24px"

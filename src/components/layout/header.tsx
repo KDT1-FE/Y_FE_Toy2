@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { titleAction } from '../../util/util';
 import { useNavigate } from 'react-router-dom';
 import { ChatIcon, HamburgerIcon } from '@chakra-ui/icons';
-import LoginModal from './loginModal';
+import LoginModal from '../template/login/loginModal';
 import { useRecoilValue } from 'recoil';
 import { chattingIdState } from '../../states/atom';
 import CheckPrivateChat from './checkPrivateChatModal';
