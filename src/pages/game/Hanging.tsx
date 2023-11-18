@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@styles/pages/hanging.module.scss';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getGameData } from '@/api/vote';

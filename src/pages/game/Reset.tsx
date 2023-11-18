@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import styles from '@styles/pages/reset.module.scss';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getGameData, patchGameResult } from '@/api/vote';
