@@ -3,6 +3,7 @@ import styles from '@styles/pages/result.module.scss';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getGameData } from '@/api/vote';
 import { Ghost } from './Vote';
+import fastRequest from '@/api/fastRequest';
 
 const Result = () => {
   const [show, setShow] = useState(false);
@@ -12,7 +13,10 @@ const Result = () => {
   const [searchParams] = useSearchParams();
   const result = searchParams.get('result');
   const pocketId = searchParams.get('pocketId');
+  const chatId = searchParams.get('chatId');
   const navigate = useNavigate();
+
+  const accessToken = localStorage.getItem('access_token');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -43,8 +47,8 @@ const Result = () => {
     fetchData();
   }, []);
 
-  const handleClick = () => {
-    //채팅방 나가는 로직 추가
+  const handleClick = async () => {
+    await fastRequest.leaveChat(chatId as string, accessToken);
     navigate('/lobby');
   };
 

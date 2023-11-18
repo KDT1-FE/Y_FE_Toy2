@@ -61,6 +61,18 @@ const fastRequest = {
       body: JSON.stringify(data),
     }).then(responseBody);
   },
+
+  leaveChat: async (chatId: string, accessToken: string) => {
+    return await fetch('https://fastcampus-chat.net/chat/leave', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        serverId: import.meta.env.VITE_FAST_KEY,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ chatId }),
+    }).then(responseBody);
+  },
 };
 
 export default fastRequest;

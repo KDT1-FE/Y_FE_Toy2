@@ -26,7 +26,7 @@ const Hanging = () => {
           setUser(usersWithMaxCount[0]);
           setTimeout(() => {
             navigate(
-              `/result?result=${usersWithMaxCount[0].role}&pocketId=${pocketId}`,
+              `/result?result=${usersWithMaxCount[0].role}&pocketId=${pocketId}&chatId=${chatId}`,
             );
           }, 4000);
         } else {
