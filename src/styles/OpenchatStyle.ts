@@ -238,6 +238,17 @@ export const OpenchatMessageWrap = React.memo(
   })),
 );
 
+export const OpenchatMessageByDate = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+}));
+
+export const OpenchatMessageDateWrap = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  marginTop: '1rem',
+}));
+
 export const OpenchatMessageItemWrap = styled(Box)<{ isme: string }>(
   ({ theme, isme }) => ({
     padding: '1rem 0',

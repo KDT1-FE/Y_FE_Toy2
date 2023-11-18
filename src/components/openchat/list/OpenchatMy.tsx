@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import OpenchatMyItem from './OpenchatMyItem';
-import { Openchat } from '../../../types/Openchat';
+import { Openchat } from '../../../types/OpenchatType';
 import OpenchatItemSkeleton from './OpenchatItemSkeleton';
 
 interface OpenchatMyProps {

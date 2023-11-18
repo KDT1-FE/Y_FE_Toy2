@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { isAxiosError } from 'axios';
 import { privateApi } from '../libs/axios';
-import { Chat } from '../types/Openchat';
+import { Chat } from '../types/OpenchatType';
 import { User } from '../types/User';
 import { filterOpenChatsUser } from '../utils/filterOpenChats';
 

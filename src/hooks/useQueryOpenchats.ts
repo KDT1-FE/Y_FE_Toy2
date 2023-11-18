@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { privateApi } from '../libs/axios';
 import { db } from '../firebaseSDK';
 import { ChatInfo, ChatInfoConverter } from '../libs/firestoreChatConverter';
-import { Chat, Chats } from '../types/Openchat';
+import { Chat, Chats } from '../types/OpenchatType';
 import filterOpenChats, {
   filterAllOpenchats,
   filterOpenChatsNotMychat,
