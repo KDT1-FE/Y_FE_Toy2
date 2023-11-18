@@ -36,14 +36,14 @@
   }
 
   &__carousel_container {
-    width: 80%;
+    width: 75%;
     overflow: scroll;
   }
     
   &__radio_container {
     display: flex;
     justify-content: start;
-    width: 900px;
+    width: 950px;
   }
 
   &__radio_item {
@@ -51,7 +51,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 30px;
+    margin: 45px;
 
     & input {
       appearance: none;
@@ -70,8 +70,8 @@
 .character {
   background-position: center;
   background-size: cover;
-  width: 220px;
-  height: 220px;
+  width: 240px;
+  height: 240px;
   border-radius: 20px;
 }
 
