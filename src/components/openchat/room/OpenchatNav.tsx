@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Cycle, motion } from 'framer-motion';
 import { Box, Button, Typography } from '@mui/material';
 import { User } from '../../../types/User';
-import { Chat } from '../../../types/Openchat';
+import { Chat } from '../../../types/OpenchatType';
 import OpenchatNavUsers from './OpenchatNavUsers';
 import styles from './OpenchatNav.module.css';
 import useMutationOpenchatPatchs from '../../../hooks/useMutationOpenchatPatchs';

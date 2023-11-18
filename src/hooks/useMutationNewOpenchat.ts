@@ -10,7 +10,7 @@ import { newChatValidationSchema } from '../utils/validateSchema';
 import { privateApi } from '../libs/axios';
 import dataUrlToFile from '../utils/dataUrltoFile';
 import { ChatInfoConverter } from '../libs/firestoreChatConverter';
-import { Chat } from '../types/Openchat';
+import { Chat } from '../types/OpenchatType';
 
 type ChatNewInfo = Omit<Chat, 'latestMessage'>;
 

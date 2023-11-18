@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { OpenchatRoom } from '../../../styles/OpenchatStyle';
 import OpenchatAvatar from '../common/OpenchatAvatar';
-import { Openchat } from '../../../types/Openchat';
+import { Openchat } from '../../../types/OpenchatType';
 import { formatDate } from '../../../utils/formatDate';
 
 interface OpenchatMyItemProps {

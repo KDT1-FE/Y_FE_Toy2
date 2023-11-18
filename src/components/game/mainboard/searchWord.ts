@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// aws api gateway로 요청을 보내어 람다함수를 실행한 결과를 받아옵니다.
 const search = async (word: string): Promise<boolean> => {
   try {
     const response = await axios.get(

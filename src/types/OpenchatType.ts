@@ -1,4 +1,6 @@
 import { ChatInfo } from '../libs/firestoreChatConverter';
+import { MessageType } from './MessageType';
+import { User, UserSimple } from './User';
 
 export const hobby = [
   '음악감상',
@@ -43,3 +45,17 @@ export type ChatInfoWithId = ChatInfo & {
   id: string;
 };
 export type Openchat = ChatInfo & Chat;
+
+export type MessageByDateType = {
+  [date: string]: MessageType[];
+};
+
+export interface OpenchatDateGroupProps {
+  messages: MessageType[];
+  users: User[];
+  myInfo: UserSimple;
+}
+
+export type DateGroupProps = OpenchatDateGroupProps & {
+  date: string;
+};

@@ -16,7 +16,7 @@ import {
   filterCateOpenChats,
   filterFriendsNotMe,
 } from '../../utils/filterOpenChats';
-import { animal, hobby, sports } from '../../types/Openchat';
+import { animal, hobby, sports } from '../../types/OpenchatType';
 import OpenchatMy from '../../components/openchat/list/OpenchatMy';
 import OpenchatFriends from '../../components/openchat/list/OpenchatFriends';
 import OpenchatTopAppbar from '../../components/openchat/list/OpenchatTopAppbar';

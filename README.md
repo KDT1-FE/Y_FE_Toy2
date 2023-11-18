@@ -11,7 +11,8 @@
 
 ### 배포 주소
 
-🌐 배포링크 : [https://langchat-464b7--pr65-t1-61-feature-game-tf29m3fe.web.app/](https://langchat-464b7--pr65-t1-61-feature-game-tf29m3fe.web.app/)
+🌐 배포링크 : [https://langchat-464b7.web.app/](https://langchat-464b7.web.app/)
+
 🔒 테스트 계정 - ID: test0000 PW: 123123
 
 ### 팀원 소개
