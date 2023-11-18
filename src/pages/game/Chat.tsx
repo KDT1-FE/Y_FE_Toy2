@@ -85,7 +85,7 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className={styles.chat}>
-      {currentPlayers === 4 ? (
+      {role ? (
         <GameHeader
           timer={210}
           title={`당신의 직업은 "${
