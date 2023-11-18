@@ -46,6 +46,13 @@ const Role = () => {
         });
 
         setRole('mafia');
+        setTimeout(() => {
+          navigate(`/chat?chatId=${chatId}&pocketId=${pocketId}&role=mafia`);
+        }, 6000);
+      } else {
+        setTimeout(() => {
+          navigate(`/chat?chatId=${chatId}&pocketId=${pocketId}&role=citizen`);
+        }, 6000);
       }
     } catch (error) {
       console.error('check mafia error');
@@ -55,9 +62,6 @@ const Role = () => {
   useEffect(() => {
     setMafia();
     setTimeout(() => setIsLoding(false), 3000);
-    setTimeout(() => {
-      navigate(`/chat?chatId=${chatId}&pocketId=${pocketId}&role=${role}`);
-    }, 6000);
   }, []);
 
   return (
