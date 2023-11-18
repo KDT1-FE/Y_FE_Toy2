@@ -47,8 +47,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
     }
   };
 
-  // 모든 고스트 데이터
-
   const getGhosts = async () => {
     try {
       const response = await fetch(
@@ -113,7 +111,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ handleModal }) => {
       setCurrentPage(currentPage - 1);
     }
   };
-
 
   return (
     <div className={styles.singupModal}>
