@@ -21,6 +21,7 @@ import MenuToggle from '../../components/openchat/room/MenuToggle';
 import useSocketConnect from '../../hooks/useSocketConnect';
 import OpenchatInviteModal from '../../components/openchat/invite/OpenchatInviteModal';
 import { searchUsersByName } from '../../utils/filterOpenChats';
+import OpenchatDateGroup from '../../components/openchat/room/OpenchatDateGroup';
 
 function OpenchatRoom() {
   const { chatId = '' } = useParams();
@@ -138,15 +139,20 @@ function OpenchatRoom() {
             <p>{isQuering || data?.name}</p>
           </div>
         </OpenchatRoomAppbar>
-        <Box px={4} sx={{ display: 'flex', flexDirection: 'column' }}>
-          {messages.sort(sortByDate).map((message) => (
+        <Box px={4}>
+          <OpenchatDateGroup
+            messages={messages.sort(sortByDate)}
+            users={users}
+            myInfo={user}
+          />
+          {/* {messages.sort(sortByDate).map((message) => (
             <OpenchatMessage
               key={message.createdAt}
               isMe={message.userId === user.id}
               msg={message}
               user={users.find((user) => user.id === message.userId)}
             />
-          ))}
+          ))} */}
         </Box>
       </OpenchatMessageWrap>
       {!isOpen && (

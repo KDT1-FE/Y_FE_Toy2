@@ -1,4 +1,4 @@
-import { ChatUser } from '../types/Openchat';
+import { ChatUser } from '../types/OpenchatType';
 import { User } from '../types/User';
 
 interface MyObject {
