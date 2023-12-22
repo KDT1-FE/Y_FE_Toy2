@@ -6,9 +6,23 @@
 
 ### <p align="center">Talkhaja에서 유저들과 함께 여러분들의 여정을 공유하고 즐기세요.</p>
 
-##
+<p align="center">
+  <a href="https://talkhaja-i2wpceq8m-jseo9732.vercel.app">
+    <img src="https://img.shields.io/badge/Talkhaja-FF3478?style=for-the-badge&logoColor=white" alt="Talkhaja Link"/>
+  </a>
+  <a href="https://github.com/teamTalkhaja/Talkhaja">
+    <img src="https://img.shields.io/badge/배포 repository-212125?style=for-the-badge&logoColor=white" alt="배포 레포"/>
+  </a>
+  <br/>
+</p>
 
-## :clap: 10조 Contributors
+### 🔐 테스트 계정
+>ID: test5  
+>PW: 11111
+
+### 🗓️ 개발 기간: `2주(13일) 23.11.06 ~ 23.11.16`
+
+## :clap: Contributors
 
  <table align="center">
     <tr>
@@ -28,102 +42,6 @@
         <td align="center"><a href="https://github.com/marshallku">구영표 멘토님</a></td>
     </tr>
  </table>
-
-## :computer: 커밋 컨벤션
-
-| Feat | 새로운 기능 추가 |
-| --- | --- |
-| Design | CSS 등 사용자 UI 디자인 변경 |
-| Fix | 버그 수정 |
-| Docs | 문서 수정 |
-| Style | 코드 포맷팅, 세미콜론 누락 |
-| Refactor | 코드 리팩토링 |
-| Test | 테스트 코드, 리팩토링 테스트코드 추가 |
-| Chore | 빌드 업무 수정, 패키지 매니저 수정 |
-| Comment | 필요한 주석 추가 및 변경 |
-| Rename | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우 |
-| Remove | 파일을 삭제하는 작업만 수행한 경우 |
-
-## :file_folder: 폴더 구조
-
-```
-📦Talkhaja
- ┣ 📂@types
- ┃ ┣ 📜types.ts
- ┃ ┗ 📜user.ts
- ┣ 📂apis
- ┃ ┣ 📜Auth.ts
- ┃ ┣ ...
- ┃ ┗ 📜userListAPI.ts
- ┣ 📂components
- ┃ ┣ 📂Chat
- ┃ ┃ ┣ 📂ChatLoading
- ┃ ┃ ┃ ┣ 📜ChatLoading.module.scss
- ┃ ┃ ┃ ┗ 📜ChatLoading.tsx
- ┃ ┃ ┣ ...
- ┃ ┃ ┗ 📜index.ts
- ┃ ┣ 📂Common
- ┃ ┃ ┣ 📂Header
- ┃ ┃ ┃ ┣ 📜Header.module.scss
- ┃ ┃ ┃ ┗ 📜Header.tsx
- ┃ ┃ ┣ ...
- ┃ ┃ ┗ 📜index.ts
- ┣ 📂constants
- ┃ ┗ 📜userLoinState.ts
- ┣ 📂hooks
- ┃ ┣ 📜useConnectServerSocket.tsx
- ┃ ┗ 📜useOnClickOustside.tsx
- ┣ 📂pages
- ┃ ┣ 📂chat
- ┃ ┃ ┗ 📜[chatId].tsx
- ┃ ┣ 📂chat-list
- ┃ ┃ ┣ 📜all.tsx
- ┃ ┃ ┗ 📜my.tsx
- ┃ ┣ 📜_app.tsx
- ┃ ┣ 📜_document.tsx
- ┃ ┣ 📜index.tsx
- ┃ ┣ 📜login.tsx
- ┃ ┣ 📜mypage.tsx
- ┃ ┗ 📜signup.tsx
- ┣ 📂public
- ┃ ┣ 📂fonts
- ┃ ┃ ┣ 📜NotoSansKR-Bold.ttf
- ┃ ┃ ┣ ...
- ┃ ┃ ┗ 📜fonts.css
- ┃ ┣ 📂images
- ┃ ┃ ┣ 📜Spin-1s-200px.gif
- ┃ ┃ ┣ 📜Talkhaja.svg
- ┃ ┃ ┗ 📜logo.png
- ┃ ┣ 📜favicon.ico
- ┃ ┣ 📜next.svg
- ┃ ┗ 📜vercel.svg
- ┣ 📂stores
- ┃ ┗ 📂atoms
- ┃ ┃ ┣ 📜nav.atoms.ts
- ┃ ┃ ┣ 📜user.atoms.ts
- ┃ ┃ ┗ 📜userTokenState.ts
- ┣ 📂styles
- ┃ ┣ 📜_mixin.scss
- ┃ ┣ 📜_variables.scss
- ┃ ┣ 📜fonts.scss
- ┃ ┣ 📜index.scss
- ┃ ┗ 📜normalize.scss
- ┣ 📂utils
- ┃ ┣ 📜authorizeFetch.ts
- ┃ ┣ ...
- ┃ ┗ 📜tokenManager.ts
- ┣ 📜.env
- ┣ 📜.eslintrc.json
- ┣ 📜.gitignore
- ┣ 📜.prettierrc
- ┣ 📜README.md
- ┣ 📜next-env.d.ts
- ┣ 📜next.config.js
- ┣ 📜package-lock.json
- ┣ 📜package.json
- ┗ 📜tsconfig.json
-
-```
 
 ## 🛢️ Stack
 
@@ -164,13 +82,13 @@
   <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black"/>
 </p>
 
-## Git Branches
+## 💾 Git Branches
 
 - main: 배포용 브랜치
 - develop : 개발용 브랜치
 - TALK 개별 개발용 브랜치
 
-## 요구 사항
+## ✅ 요구 사항
 ### 필수 구현 사항
 
 ✅ `useState`, `useReducer`를 활용한 상태 관리 구현 <br/>
@@ -187,9 +105,102 @@
 ✅ `Next.js`를 활용한 서버 사이드 렌더링 구현 <br/>
 ✅ `typescript`를 활용한 앱 구현
 
-## 개인별 작업 내용
 
-<!-- -------------------------- 지수님 자리 -------------------------- -->
+## :computer: 커밋 컨벤션
+
+| Feat | 새로운 기능 추가 |
+| --- | --- |
+| Design | CSS 등 사용자 UI 디자인 변경 |
+| Fix | 버그 수정 |
+| Docs | 문서 수정 |
+| Style | 코드 포맷팅, 세미콜론 누락 |
+| Refactor | 코드 리팩토링 |
+| Test | 테스트 코드, 리팩토링 테스트코드 추가 |
+| Chore | 빌드 업무 수정, 패키지 매니저 수정 |
+| Comment | 필요한 주석 추가 및 변경 |
+| Rename | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우 |
+| Remove | 파일을 삭제하는 작업만 수행한 경우 |
+
+## :file_folder: 폴더 구조
+  ```
+  📦Talkhaja
+   ┣ 📂@types
+   ┃ ┣ 📜types.ts
+   ┃ ┗ 📜user.ts
+   ┣ 📂apis
+   ┃ ┣ 📜Auth.ts
+   ┃ ┣ ...
+   ┃ ┗ 📜userListAPI.ts
+   ┣ 📂components
+   ┃ ┣ 📂Chat
+   ┃ ┃ ┣ 📂ChatLoading
+   ┃ ┃ ┃ ┣ 📜ChatLoading.module.scss
+   ┃ ┃ ┃ ┗ 📜ChatLoading.tsx
+   ┃ ┃ ┣ ...
+   ┃ ┃ ┗ 📜index.ts
+   ┃ ┣ 📂Common
+   ┃ ┃ ┣ 📂Header
+   ┃ ┃ ┃ ┣ 📜Header.module.scss
+   ┃ ┃ ┃ ┗ 📜Header.tsx
+   ┃ ┃ ┣ ...
+   ┃ ┃ ┗ 📜index.ts
+   ┣ 📂constants
+   ┃ ┗ 📜userLoinState.ts
+   ┣ 📂hooks
+   ┃ ┣ 📜useConnectServerSocket.tsx
+   ┃ ┗ 📜useOnClickOustside.tsx
+   ┣ 📂pages
+   ┃ ┣ 📂chat
+   ┃ ┃ ┗ 📜[chatId].tsx
+   ┃ ┣ 📂chat-list
+   ┃ ┃ ┣ 📜all.tsx
+   ┃ ┃ ┗ 📜my.tsx
+   ┃ ┣ 📜_app.tsx
+   ┃ ┣ 📜_document.tsx
+   ┃ ┣ 📜index.tsx
+   ┃ ┣ 📜login.tsx
+   ┃ ┣ 📜mypage.tsx
+   ┃ ┗ 📜signup.tsx
+   ┣ 📂public
+   ┃ ┣ 📂fonts
+   ┃ ┃ ┣ 📜NotoSansKR-Bold.ttf
+   ┃ ┃ ┣ ...
+   ┃ ┃ ┗ 📜fonts.css
+   ┃ ┣ 📂images
+   ┃ ┃ ┣ 📜Spin-1s-200px.gif
+   ┃ ┃ ┣ 📜Talkhaja.svg
+   ┃ ┃ ┗ 📜logo.png
+   ┃ ┣ 📜favicon.ico
+   ┃ ┣ 📜next.svg
+   ┃ ┗ 📜vercel.svg
+   ┣ 📂stores
+   ┃ ┗ 📂atoms
+   ┃ ┃ ┣ 📜nav.atoms.ts
+   ┃ ┃ ┣ 📜user.atoms.ts
+   ┃ ┃ ┗ 📜userTokenState.ts
+   ┣ 📂styles
+   ┃ ┣ 📜_mixin.scss
+   ┃ ┣ 📜_variables.scss
+   ┃ ┣ 📜fonts.scss
+   ┃ ┣ 📜index.scss
+   ┃ ┗ 📜normalize.scss
+   ┣ 📂utils
+   ┃ ┣ 📜authorizeFetch.ts
+   ┃ ┣ ...
+   ┃ ┗ 📜tokenManager.ts
+   ┣ 📜.env
+   ┣ 📜.eslintrc.json
+   ┣ 📜.gitignore
+   ┣ 📜.prettierrc
+   ┣ 📜README.md
+   ┣ 📜next-env.d.ts
+   ┣ 📜next.config.js
+   ┣ 📜package-lock.json
+   ┣ 📜package.json
+   ┗ 📜tsconfig.json
+  ```
+
+## 💭 개인별 작업 내용
 <details>
 <summary>서지수</summary>
 
@@ -301,10 +312,8 @@ axios를 사용해서 API 연결했는데 처음에는 에러 코드가 너무 �
 
 </details>
 
-<!-- -------------------------- 준규 자리 -------------------------- -->
-
 <details>
-<summary>박준규</summary>.
+<summary>박준규</summary>
 
 ## 수행 역할
 
@@ -395,8 +404,6 @@ useState를 사용함에 있어서 사용이 끝난 직후 state값을 초기화
 
 </details>
 
-<!-- -------------------------- 준혁님 자리 -------------------------- -->
-
 <details>
 <summary>어준혁</summary>
 
@@ -428,7 +435,6 @@ useState를 사용함에 있어서 사용이 끝난 직후 state값을 초기화
 
 </details>
 
-<!-- -------------------------- 지영님 자리 -------------------------- -->
 <details>
 <summary>윤지영</summary>
 
